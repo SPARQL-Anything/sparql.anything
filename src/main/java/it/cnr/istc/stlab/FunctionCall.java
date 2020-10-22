@@ -36,6 +36,7 @@ public class FunctionCall {
 			
 			System.out.println(ResultSetFormatter.asText(qexec.execSelect()));
 			
+			
 
 			
 		} catch (ConfigurationException e) {

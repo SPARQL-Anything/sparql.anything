@@ -57,5 +57,11 @@
 			<version>1.7.7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>eu.spice</groupId>
+			<artifactId>json2rdf</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+
 	</dependencies>
 </project>
