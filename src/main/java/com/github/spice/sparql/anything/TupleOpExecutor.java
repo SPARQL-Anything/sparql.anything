@@ -1,4 +1,4 @@
-package it.cnr.istc.stlab.executor;
+package com.github.spice.sparql.anything;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -7,7 +7,7 @@ import java.net.URL;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.sparql.algebra.op.OpGraph;
+import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.main.OpExecutor;
@@ -21,14 +21,16 @@ public class TupleOpExecutor extends OpExecutor {
 		super(execCxt);
 	}
 
-	protected QueryIterator execute(final OpGraph opGraph, QueryIterator input) {
-		if (opGraph.getNode().isURI()) {
-			if (detectTupleURI(opGraph.getNode().getURI())) {
-				MimeType mime = detectMimeType(opGraph.getNode().getURI());
+	protected QueryIterator execute(final OpService opGraph, QueryIterator input) {
+		
+		if (opGraph.getService().isURI()) {
+			if (detectTupleURI(opGraph.getService().getURI())) {
+				MimeType mime = detectMimeType(opGraph.getService().getURI());
 				switch (mime) {
 				case JSON:
 					try {
-						Graph g = DatasetFactory.create(tuplifyJSON(getFileURL(opGraph.getNode().getURI())))
+						//TODO caching
+						Graph g = DatasetFactory.create(tuplifyJSON(getFileURL(opGraph.getService().getURI())))
 								.asDatasetGraph().getDefaultGraph();
 						ExecutionContext cxt2 = new ExecutionContext(execCxt, g);
 						return QC.execute(opGraph.getSubOp(), input, cxt2);

@@ -1,4 +1,4 @@
-package it.cnr.istc.stlab.executor;
+package com.github.spice.sparql.anything;
 
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;

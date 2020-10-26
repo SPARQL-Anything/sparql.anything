@@ -1,4 +1,4 @@
-package it.cnr.istc.stlab.executor;
+package com.github.spice.sparql.anything;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
