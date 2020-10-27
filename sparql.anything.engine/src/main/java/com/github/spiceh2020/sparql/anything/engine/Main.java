@@ -1,4 +1,4 @@
-package com.github.spiceh2020.sparql.anything;
+package com.github.spiceh2020.sparql.anything.engine;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -18,7 +18,10 @@ import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.engine.main.QC;
 
-public class MainTest {
+import com.github.spiceh2020.json2rdf.transformers.JSONTransformer;
+import com.github.spiceh2020.sparql.anything.model.Format;
+
+public class Main {
 
 	private static void uriScheme() {
 		Dataset kb = DatasetFactory.createGeneral(); // createMem = deprecated
@@ -36,13 +39,15 @@ public class MainTest {
 
 		QC.setFactory(ARQ.getContext(), customExecutorFactory);
 
+		TriplifierRegister.getInstance().registerTriplifierForFormat(Format.JSON, JSONTransformer.class);
+
 		// @f:off
 		String query = ""
-				+ "PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/src/main/resources/test.json/>"
+				+ "PREFIX source: <https://w3id.org/spice/properties/>"
 				+ "SELECT DISTINCT * {"
-				+ "SERVICE <tuple://https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/src/main/resources/test.json> "
+				+ "SERVICE <tuple:propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/src/main/resources/test.json> "
 				+ " {"
-				+ "?s source:a ?o"
+				+ "?s ?p ?o"
 				+ "}" 
 				+ "}";
 		// @f:on

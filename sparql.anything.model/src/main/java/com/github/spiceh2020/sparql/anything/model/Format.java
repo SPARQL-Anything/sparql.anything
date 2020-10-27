@@ -1,8 +1,10 @@
-package com.github.spiceh2020.sparql.anything;
+package com.github.spiceh2020.sparql.anything.model;
 
 public final class Format {
 
 	private String identifier;
+
+	public final static Format JSON = new Format("json");
 
 	public Format(String identifier) {
 		super();

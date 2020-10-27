@@ -4,9 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.spice-h2020</groupId>
-	<artifactId>sparql.anything</artifactId>
+	<artifactId>sparql.anything.parent</artifactId>
 	<version>0.0.1</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>sparql.anything.engine</module>
+		<module>sparql.anything.model</module>
+	</modules>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
@@ -20,7 +25,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-
 	</build>
 
 	<dependencies>
@@ -57,11 +61,7 @@
 			<version>1.7.7</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>json2rdf</artifactId>
-			<version>0.0.1</version>
-		</dependency>
+
 
 	</dependencies>
 </project>

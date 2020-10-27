@@ -1,4 +1,5 @@
-/target/
-/log/
-/.classpath
-/.project
+.DS_Store
+.gitignore
+.classpath
+.project
+.settings/
