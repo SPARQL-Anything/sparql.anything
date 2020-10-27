@@ -1,4 +1,4 @@
-package com.github.spice.sparql.anything;
+package com.github.spiceh2020.sparql.anything;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

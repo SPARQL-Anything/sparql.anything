@@ -1,4 +1,4 @@
-package com.github.spice.sparql.anything;
+package com.github.spiceh2020.sparql.anything;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -13,7 +13,7 @@ import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
 
-import eu.spice.json2rdf.transformers.JSONTransformer;
+import com.github.spiceh2020.json2rdf.transformers.JSONTransformer;
 
 public class TupleOpExecutor extends OpExecutor {
 

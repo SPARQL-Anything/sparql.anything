@@ -1,4 +1,4 @@
-package com.github.spice.sparql.anything;
+package com.github.spiceh2020.sparql.anything;
 
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
