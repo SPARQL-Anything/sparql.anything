@@ -241,7 +241,10 @@ public class TupleURLParser extends Parser {
 	}
 
 	public static class KeyValueContext extends ParserRuleContext {
-		public TerminalNode IDENTIFIER() { return getToken(TupleURLParser.IDENTIFIER, 0); }
+		public TerminalNode IDENTIFIER(int i) {
+			return getToken(TupleURLParser.IDENTIFIER, i);
+		}
+		public List<TerminalNode> IDENTIFIER() { return getTokens(TupleURLParser.IDENTIFIER); }
 		public TerminalNode LITERAL() { return getToken(TupleURLParser.LITERAL, 0); }
 		public KeyValueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -260,12 +263,18 @@ public class TupleURLParser extends Parser {
 	public final KeyValueContext keyValue() throws RecognitionException {
 		KeyValueContext _localctx = new KeyValueContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_keyValue);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(26); match(IDENTIFIER);
 			setState(27); match(T__0);
-			setState(28); match(LITERAL);
+			setState(28);
+			_la = _input.LA(1);
+			if ( !(_la==IDENTIFIER || _la==LITERAL) ) {
+			_errHandler.recoverInline(this);
+			}
+			consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -283,12 +292,12 @@ public class TupleURLParser extends Parser {
 		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\13!\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\3\2\3\3\3\3\3\3\7\3\22\n\3\f\3\16\3\25"+
 		"\13\3\3\4\3\4\5\4\31\n\4\3\5\3\5\3\6\3\6\3\6\3\6\3\6\2\2\7\2\4\6\b\n\2"+
-		"\2\35\2\f\3\2\2\2\4\16\3\2\2\2\6\30\3\2\2\2\b\32\3\2\2\2\n\34\3\2\2\2"+
-		"\f\r\5\4\3\2\r\3\3\2\2\2\16\23\5\6\4\2\17\20\7\3\2\2\20\22\5\4\3\2\21"+
-		"\17\3\2\2\2\22\25\3\2\2\2\23\21\3\2\2\2\23\24\3\2\2\2\24\5\3\2\2\2\25"+
-		"\23\3\2\2\2\26\31\5\b\5\2\27\31\5\n\6\2\30\26\3\2\2\2\30\27\3\2\2\2\31"+
-		"\7\3\2\2\2\32\33\7\6\2\2\33\t\3\2\2\2\34\35\7\5\2\2\35\36\7\4\2\2\36\37"+
-		"\7\6\2\2\37\13\3\2\2\2\4\23\30";
+		"\3\3\2\5\6\35\2\f\3\2\2\2\4\16\3\2\2\2\6\30\3\2\2\2\b\32\3\2\2\2\n\34"+
+		"\3\2\2\2\f\r\5\4\3\2\r\3\3\2\2\2\16\23\5\6\4\2\17\20\7\3\2\2\20\22\5\4"+
+		"\3\2\21\17\3\2\2\2\22\25\3\2\2\2\23\21\3\2\2\2\23\24\3\2\2\2\24\5\3\2"+
+		"\2\2\25\23\3\2\2\2\26\31\5\b\5\2\27\31\5\n\6\2\30\26\3\2\2\2\30\27\3\2"+
+		"\2\2\31\7\3\2\2\2\32\33\7\6\2\2\33\t\3\2\2\2\34\35\7\5\2\2\35\36\7\4\2"+
+		"\2\36\37\t\2\2\2\37\13\3\2\2\2\4\23\30";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

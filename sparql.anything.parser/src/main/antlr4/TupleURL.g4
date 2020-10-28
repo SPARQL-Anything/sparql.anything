@@ -30,7 +30,7 @@ url
 
 keyValue
 :
-	IDENTIFIER '=' LITERAL
+	IDENTIFIER '=' (LITERAL|IDENTIFIER)
 ;
 
 /*

@@ -44,7 +44,7 @@ public class Main {
 		String query1 = ""
 				+ "PREFIX source: <https://w3id.org/spice/properties/>"
 				+ "SELECT DISTINCT * {"
-				+ "SERVICE <tuple:propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json> "
+				+ "SERVICE <tuple:useBlankNodes=false,uriRoot=https://w3id.org/spice/resource/root,propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json> "
 				+ " {"
 				+ "?s ?p ?o"
 				+ "}" 

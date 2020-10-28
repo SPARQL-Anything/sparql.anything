@@ -10,7 +10,7 @@ public class App {
 	}
 	
 	private static void testParam() {
-		String tupleURL = "tuple:propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json";
+		String tupleURL = "tuple:useBlankNodes=true,propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json";
 		TupleURLParser p = new TupleURLParser(tupleURL);
 		System.out.println(p.getProperties().toString());
 	}
