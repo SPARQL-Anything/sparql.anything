@@ -2,10 +2,10 @@ package com.github.spiceh2020.sparql.anything.engine;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
@@ -14,7 +14,6 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.github.spiceh2020.sparql.anything.model.Format;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import com.github.spiceh2020.sparql.anything.tupleurl.ParameterListener;
 import com.github.spiceh2020.sparql.anything.tupleurl.TupleURLParser;
@@ -22,6 +21,8 @@ import com.github.spiceh2020.sparql.anything.tupleurl.TupleURLParser;
 public class TupleOpExecutor extends OpExecutor {
 
 	private TriplifierRegister triplifierRegister;
+	public final static String MIME_TYPE = "mimeType";
+	public final static String TRIPLIFIER = "triplifier";
 
 	private static final Logger logger = LogManager.getLogger(TupleOpExecutor.class);
 
@@ -33,22 +34,29 @@ public class TupleOpExecutor extends OpExecutor {
 	protected QueryIterator execute(final OpService opGraph, QueryIterator input) {
 
 		if (opGraph.getService().isURI()) {
-			if (detectTupleURI(opGraph.getService().getURI())) {
+			if (isTupleURI(opGraph.getService().getURI())) {
 
-				Format f = guessFormat(opGraph.getService().getURI());
-				Triplifier t;
 				try {
-					t = triplifierRegister.getTriplifierForFormat(f).getConstructor().newInstance();
-
+					Triplifier t;
 					Properties p = getProperties(opGraph.getService().getURI());
 					logger.trace("Properties extracted " + p.toString());
+
 					String urlLocation = p.getProperty(ParameterListener.LOCATION);
-					t.setParameters(p);
+
+					if (p.containsKey(TRIPLIFIER)) {
+						t = (Triplifier) Class.forName(p.getProperty(TRIPLIFIER)).getConstructor().newInstance();
+					} else if (p.containsKey(MIME_TYPE)) {
+						t = triplifierRegister.getTriplifierForMimeType(p.getProperty(MIME_TYPE));
+					} else {
+						t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
+					}
+
 					ExecutionContext cxt2;
-					cxt2 = new ExecutionContext(execCxt, t.triplify(getFileURL(urlLocation)));
+					cxt2 = new ExecutionContext(execCxt, t.triplify(new URL(urlLocation), p));
 					return QC.execute(opGraph.getSubOp(), input, cxt2);
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException | NoSuchMethodException | SecurityException | IOException e) {
+				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
+						| IllegalAccessException | InvocationTargetException | NoSuchMethodException
+						| ClassNotFoundException e) {
 					e.printStackTrace();
 				}
 			}
@@ -56,27 +64,16 @@ public class TupleOpExecutor extends OpExecutor {
 		return super.execute(opGraph, input);
 	}
 
-	protected URL getFileURL(String s) throws MalformedURLException {
-		return new URL(s.replace("tuple:", ""));
-	}
-
 	private Properties getProperties(String url) {
 		TupleURLParser p = new TupleURLParser(url);
 		return p.getProperties();
 	}
 
-	protected boolean detectTupleURI(String uri) {
+	protected boolean isTupleURI(String uri) {
 		if (uri.startsWith("tuple:")) {
 			return true;
 		}
 		return false;
-	}
-
-	protected Format guessFormat(String uri) {
-		if (uri.endsWith(".json")) {
-			return Format.JSON;
-		}
-		return null;
 	}
 
 }
