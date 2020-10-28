@@ -8,12 +8,12 @@
 	<artifactId>sparql.anything.parent</artifactId>
 	<version>0.0.2</version>
 	<packaging>pom</packaging>
-	
+
 	<name>sparql.anything</name>
 	<description>An opinionated approach to SPARQL any file</description>
 	<url>https://github.com/spice-h2020/sparql.everything</url>
-	
-	
+
+
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -21,7 +21,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<developers>
 		<developer>
 			<name>Luigi Asprino</name>
@@ -30,13 +30,13 @@
 			<organizationUrl>https://ficlit.unibo.it/it</organizationUrl>
 		</developer>
 	</developers>
-	
+
 	<scm>
 		<connection>scm:git:git://github.com/spice-h2020/sparql.anything.git</connection>
 		<developerConnection>scm:git:ssh://github.com:spice-h2020/sparql.anything.git</developerConnection>
 		<url>http://github.com/spice-h2020/sparql.anything/tree/main</url>
 	</scm>
-	
+
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -48,6 +48,7 @@
 		<module>sparql.anything.engine</module>
 		<module>sparql.anything.model</module>
 		<module>sparql.anything.parser</module>
+		<module>sparql.anything.json</module>
 	</modules>
 
 	<build>

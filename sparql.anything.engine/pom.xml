@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.github.spice-h2020</groupId>
 		<artifactId>sparql.anything.parent</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.2</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -19,18 +19,19 @@
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.model</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>json2rdf</artifactId>
-			<version>0.0.3</version>
+			<version>0.0.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.parser</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.github.spice-h2020</groupId>
+			<artifactId>sparql.anything.json</artifactId>
+			<version>0.0.2</version>
 		</dependency>
 
 	</dependencies>

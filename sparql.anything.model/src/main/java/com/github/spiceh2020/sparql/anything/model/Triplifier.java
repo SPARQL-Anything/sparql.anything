@@ -3,12 +3,16 @@ package com.github.spiceh2020.sparql.anything.model;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.jena.graph.Graph;
 
 public interface Triplifier {
 
-	public Graph triplify(URL url) throws IOException;
+	public Graph triplify(URL url, Properties properties) throws IOException;
 
-	public void setParameters(Properties properties);
+	public Set<String> getMimeTypes();
+
+	public Set<String> getExtensions();
+
 }
