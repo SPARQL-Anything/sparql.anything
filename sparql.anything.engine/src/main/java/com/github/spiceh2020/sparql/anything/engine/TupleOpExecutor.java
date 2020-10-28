@@ -21,7 +21,7 @@ import com.github.spiceh2020.sparql.anything.tupleurl.TupleURLParser;
 public class TupleOpExecutor extends OpExecutor {
 
 	private TriplifierRegister triplifierRegister;
-	public final static String CONTENT_TYPE = "content-type";
+	public final static String MIME_TYPE = "mimeType";
 	public final static String TRIPLIFIER = "triplifier";
 
 	private static final Logger logger = LogManager.getLogger(TupleOpExecutor.class);
@@ -45,8 +45,8 @@ public class TupleOpExecutor extends OpExecutor {
 
 					if (p.containsKey(TRIPLIFIER)) {
 						t = (Triplifier) Class.forName(p.getProperty(TRIPLIFIER)).getConstructor().newInstance();
-					} else if (p.containsKey(CONTENT_TYPE)) {
-						t = triplifierRegister.getTriplifierForMimeType(p.getProperty(CONTENT_TYPE));
+					} else if (p.containsKey(MIME_TYPE)) {
+						t = triplifierRegister.getTriplifierForMimeType(p.getProperty(MIME_TYPE));
 					} else {
 						t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
 					}
