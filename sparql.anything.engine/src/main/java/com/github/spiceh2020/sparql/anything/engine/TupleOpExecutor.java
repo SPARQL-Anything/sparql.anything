@@ -11,14 +11,19 @@ import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import com.github.spiceh2020.sparql.anything.model.Format;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import com.github.spiceh2020.sparql.anything.tupleurl.ParameterListener;
+import com.github.spiceh2020.sparql.anything.tupleurl.TupleURLParser;
 
 public class TupleOpExecutor extends OpExecutor {
 
 	private TriplifierRegister triplifierRegister;
-	public static final String LOCATION = "location";
+
+	private static final Logger logger = LogManager.getLogger(TupleOpExecutor.class);
 
 	protected TupleOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
@@ -36,7 +41,8 @@ public class TupleOpExecutor extends OpExecutor {
 					t = triplifierRegister.getTriplifierForFormat(f).getConstructor().newInstance();
 
 					Properties p = getProperties(opGraph.getService().getURI());
-					String urlLocation = p.getProperty(LOCATION);
+					logger.trace("Properties extracted " + p.toString());
+					String urlLocation = p.getProperty(ParameterListener.LOCATION);
 					t.setParameters(p);
 					ExecutionContext cxt2;
 					cxt2 = new ExecutionContext(execCxt, t.triplify(getFileURL(urlLocation)));
@@ -55,14 +61,8 @@ public class TupleOpExecutor extends OpExecutor {
 	}
 
 	private Properties getProperties(String url) {
-		Properties p = new Properties();
-		String[] parameterPairs = url.substring("tuple:".length()).split(",");
-		for (String pair : parameterPairs) {
-			String[] kv = pair.split("=");
-			p.setProperty(kv[0], kv[1]);
-		}
-
-		return p;
+		TupleURLParser p = new TupleURLParser(url);
+		return p.getProperties();
 	}
 
 	protected boolean detectTupleURI(String uri) {

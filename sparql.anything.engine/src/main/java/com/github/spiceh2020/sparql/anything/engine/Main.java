@@ -42,19 +42,31 @@ public class Main {
 		TriplifierRegister.getInstance().registerTriplifierForFormat(Format.JSON, JSONTransformer.class);
 
 		// @f:off
-		String query = ""
+		String query1 = ""
 				+ "PREFIX source: <https://w3id.org/spice/properties/>"
 				+ "SELECT DISTINCT * {"
-				+ "SERVICE <tuple:propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/src/main/resources/test.json> "
+				+ "SERVICE <tuple:propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json> "
 				+ " {"
 				+ "?s ?p ?o"
 				+ "}" 
 				+ "}";
 		// @f:on
 
-		QueryExecution qexec = QueryExecutionFactory.create(QueryFactory.create(query), kb);
+		// @f:off
+				String query2 = ""
+						+ "PREFIX source: <https://w3id.org/spice/properties/>"
+						+ "SELECT DISTINCT * {"
+						+ "SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json> "
+						+ " {"
+						+ "?s ?p ?o"
+						+ "}" 
+						+ "}";
+				// @f:on
 
-		System.out.println(ResultSetFormatter.asText(qexec.execSelect()));
+		System.out.println(
+				ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query1), kb).execSelect()));
+		System.out.println(
+				ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query2), kb).execSelect()));
 	}
 
 	public static void main(String[] args) throws MalformedURLException, IOException {
