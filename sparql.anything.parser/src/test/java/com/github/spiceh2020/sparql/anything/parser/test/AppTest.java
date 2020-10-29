@@ -22,7 +22,7 @@ public class AppTest {
 		Properties p = new TupleURLParser(uri).getProperties();
 		Assert.assertTrue(((Properties) p).containsKey("location"));
 		Assert.assertFalse(((Properties) p).containsKey("foo"));
-		Assert.assertEquals(p.get("location"), "http://myfile.json?foo\\=bar");
+		Assert.assertEquals(p.get("location"), "http://myfile.json?foo=bar");
 	}
 
 	@Test
@@ -31,7 +31,7 @@ public class AppTest {
 		Properties p = new TupleURLParser(uri).getProperties();
 		Assert.assertFalse(((Properties) p).containsKey("foo"));
 		Assert.assertFalse(((Properties) p).containsKey("tab"));
-		Assert.assertEquals(p.get("location"), "http://myfile.json?foo\\=bar&tab\\=goal");
+		Assert.assertEquals(p.get("location"), "http://myfile.json?foo=bar&tab=goal");
 	}
 
 	@Test
