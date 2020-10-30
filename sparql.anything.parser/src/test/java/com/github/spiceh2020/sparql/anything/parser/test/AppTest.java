@@ -18,7 +18,7 @@ public class AppTest {
 
 	@Test
 	public void testArgsInLocation1() {
-		String uri = "tuple:mimeType=application/json,location=http://myfile.json?foo\\=bar";
+		String uri = "tuple:mimeType=application/json,location=http://myfile.json?foo=bar";
 		Properties p = new TupleURLParser(uri).getProperties();
 		Assert.assertTrue(((Properties) p).containsKey("location"));
 		Assert.assertFalse(((Properties) p).containsKey("foo"));
@@ -27,7 +27,7 @@ public class AppTest {
 
 	@Test
 	public void testArgsInLocation2() {
-		String uri = "tuple:mimeType=application/json,location=http://myfile.json?foo\\=bar&tab\\=goal";
+		String uri = "tuple:mimeType=application/json,location=http://myfile.json?foo=bar&tab=goal";
 		Properties p = new TupleURLParser(uri).getProperties();
 		Assert.assertFalse(((Properties) p).containsKey("foo"));
 		Assert.assertFalse(((Properties) p).containsKey("tab"));
@@ -36,9 +36,10 @@ public class AppTest {
 
 	@Test
 	public void testArgsInLocation3() {
-		String uri = "tuple:mimeType=application/json,location=http://myfile.json?foo\\=bar&tab\\=goal,same=other";
+		String uri = "tuple:mimeType=application/json,location=http://myfile.json?foo=bar&tab=goal,same=other";
 		Properties p = new TupleURLParser(uri).getProperties();
 		Assert.assertEquals(p.get("same"), "other");
+		Assert.assertEquals(p.get("location"), "http://myfile.json?foo=bar&tab=goal");
 	}
 
 	@Test
@@ -57,15 +58,23 @@ public class AppTest {
 
 	@Test
 	public void testArgsInLocation6() {
-		String uri = "tuple:mimeType=application/json,location=https://myfile.json?foo\\=bar&tab\\=goal#hack,same=other";
+		String uri = "tuple:mimeType=application/json,location=https://myfile.json?foo=bar&tab=goal#hack,same=other";
 		Properties p = new TupleURLParser(uri).getProperties();
 		Assert.assertEquals(p.get("same"), "other");
 	}
 
 	@Test
 	public void testArgsInLocation7() {
-		String uri = "tuple:mimeType=application/json,location=https://myfile.json?foo\\=bar&tab\\=goal#hack,same=other";
+		String uri = "tuple:mimeType=application/json,location=https://myfile.json?foo=bar&tab=goal#hack,same=other";
 		Properties p = new TupleURLParser(uri).getProperties();
 		Assert.assertTrue(p.size() == 3);
+	}
+	
+	@Test
+	public void testArgsInLocation8() {
+		String uri = "tuple:mimeType=application/json,location=https://myfile.json?fo\\,o=bar&tab=goal#hack,same=other";
+		Properties p = new TupleURLParser(uri).getProperties();
+		Assert.assertTrue(p.size() == 3);
+		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
 	}
 }

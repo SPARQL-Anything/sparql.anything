@@ -33,7 +33,8 @@ public class ParameterListener extends TupleURLBaseListener {
 		String result = s;
 		for (char escaped : ESCAPED) {
 
-			result = result.replace(CharBuffer.wrap(new char[] { ESCAPE, escaped }),
+			result = result
+					.replace(CharBuffer.wrap(new char[] { ESCAPE, escaped }),
 					CharBuffer.wrap(new char[] { escaped }));
 		}
 		return result;
