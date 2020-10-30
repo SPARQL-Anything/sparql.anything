@@ -74,10 +74,4 @@ public class TupleURLParser {
 		return sb.toString();
 	}
 
-	public static void main(String[] args) {
-		TupleURLParser p = new TupleURLParser(null);
-		String s = "mimeType=application/json,location=http://myfile.json?foo=bar";
-		System.out.println(p.escape(s));
-	}
-
 }
