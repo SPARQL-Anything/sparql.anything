@@ -30,15 +30,13 @@ url
 
 keyValue
 :
-	IDENTIFIER '=' (LITERAL|IDENTIFIER)
+	IDENTIFIER '='
+	(
+		LITERAL
+		| IDENTIFIER
+	)
 ;
 
-/*
-scheme
-:
-	'tuple:'
-;
- */
 IDENTIFIER
 :
 	(
@@ -51,33 +49,14 @@ IDENTIFIER
 LITERAL
 :
 	(
-		LETTER
-		| DIGIT
-		| '-'
-		| '/'
-		| '#'
-		| '@'
-		| '&'
-		| '.'
-		| '+'
-		| '%'
-		| '!'
-		| '?'
-		| ';'
-		| '$'
-		| '_'
-		| '~'
-		| '*'
-		| '\\'
-		| '\''
-		| ')'
-		| '('
-		| ':'
-		| '['
-		| ']'
-		| '"'
+		NOTESCAPED
 		| ESCAPED
 	)+
+;
+
+NOTESCAPED
+:
+	~( '=' | ',' )
 ;
 
 ESCAPED

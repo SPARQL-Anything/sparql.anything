@@ -77,4 +77,12 @@ public class AppTest {
 		Assert.assertTrue(p.size() == 3);
 		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
 	}
+	
+	@Test
+	public void specialCharsArgs() {
+		String uri = "tuple:mimeType=application/json,location=https://myfile.json?fo\\,o=bar&tab=goal#hack,same=汉字";
+		Properties p = new TupleURLParser(uri).getProperties();
+		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
+		Assert.assertEquals(p.get("same"), "汉字");
+	}
 }
