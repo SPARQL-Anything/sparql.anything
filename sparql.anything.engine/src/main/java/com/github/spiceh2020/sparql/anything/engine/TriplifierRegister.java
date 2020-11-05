@@ -43,6 +43,20 @@ public final class TriplifierRegister {
 
 	}
 
+	public void removeTriplifier(Triplifier t) {
+		for (String ext : t.getExtensions()) {
+			if (extension.containsKey(ext) && extension.get(ext).getClass().equals(t.getClass())) {
+				extension.remove(ext);
+			}
+		}
+
+		for (String mimeType : t.getMimeTypes()) {
+			if (this.mimeType.containsKey(mimeType) && this.mimeType.get(mimeType).getClass().equals(t.getClass())) {
+				this.mimeType.remove(mimeType);
+			}
+		}
+	}
+
 	public Triplifier getTriplifierForMimeType(String f) {
 		return this.mimeType.get(f);
 	}
