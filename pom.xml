@@ -13,6 +13,11 @@
 	<description>An opinionated approach to SPARQL any file</description>
 	<url>https://github.com/spice-h2020/sparql.everything</url>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
 
 	<licenses>
 		<license>
@@ -28,6 +33,12 @@
 			<email>luigi.asprino@unibo.it</email>
 			<organization>FICLIT</organization>
 			<organizationUrl>https://ficlit.unibo.it/it</organizationUrl>
+		</developer>
+		<developer>
+			<name>Enrico Daga</name>
+			<email>enrico.daga@open.ac.uk</email>
+			<organization>The Open University</organization>
+			<organizationUrl>https://kmi.open.ac.uk</organizationUrl>
 		</developer>
 	</developers>
 
@@ -49,6 +60,8 @@
 		<module>sparql.anything.model</module>
 		<module>sparql.anything.parser</module>
 		<module>sparql.anything.json</module>
+		<module>sparql.anything.xml</module>
+		<module>sparql.anything.csv</module>
 	</modules>
 
 	<build>
