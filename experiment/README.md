@@ -44,7 +44,7 @@ WHERE{
 
 #### CQ2: What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
 
-#### SPARQL Generate
+##### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -62,7 +62,7 @@ WHERE{
 
 #### CQ3: What are the titles of the artworks created in the 1935?
 
-#### SPARQL Generate
+##### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -109,7 +109,7 @@ What are the identifiers of the artworks sharing the
 
 #### CQ4: What are the identifiers of the artworks made of "bronzo"?
 
-#### SPARQL Generate
+##### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -129,7 +129,7 @@ WHERE{
 
 #### CQ4: What are the identifiers of the artworks whose subject is "manifattura Hochst"?
 
-#### SPARQL Generate
+##### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>

@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.main.OpExecutor;
@@ -31,14 +32,14 @@ public class TupleOpExecutor extends OpExecutor {
 		triplifierRegister = TriplifierRegister.getInstance();
 	}
 
-	protected QueryIterator execute(final OpService opGraph, QueryIterator input) {
+	protected QueryIterator execute(final OpService opService, QueryIterator input) {
 
-		if (opGraph.getService().isURI()) {
-			if (isTupleURI(opGraph.getService().getURI())) {
+		if (opService.getService().isURI()) {
+			if (isTupleURI(opService.getService().getURI())) {
 
 				try {
 					Triplifier t;
-					Properties p = getProperties(opGraph.getService().getURI());
+					Properties p = getProperties(opService.getService().getURI());
 					logger.trace("Properties extracted " + p.toString());
 
 					String urlLocation = p.getProperty(ParameterListener.LOCATION);
@@ -50,10 +51,11 @@ public class TupleOpExecutor extends OpExecutor {
 					} else {
 						t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
 					}
-
-					ExecutionContext cxt2;
-					cxt2 = new ExecutionContext(execCxt, t.triplify(new URL(urlLocation), p));
-					return QC.execute(opGraph.getSubOp(), input, cxt2);
+					
+					DatasetGraph dg = t.triplify(new URL(urlLocation), p);
+					
+					return QC.execute(opService.getSubOp(), input,
+							new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
 						| IllegalAccessException | InvocationTargetException | NoSuchMethodException
 						| ClassNotFoundException e) {
@@ -61,7 +63,7 @@ public class TupleOpExecutor extends OpExecutor {
 				}
 			}
 		}
-		return super.execute(opGraph, input);
+		return super.execute(opService, input);
 	}
 
 	private Properties getProperties(String url) {

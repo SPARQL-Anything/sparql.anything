@@ -83,7 +83,36 @@ public class Main {
 				ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query2), kb).execSelect()));
 	}
 
+	private static void testDatasetGraph() {
+		Dataset kb = DatasetFactory.createGeneral(); // createMem = deprecated
+		OpExecutorFactory customExecutorFactory = new OpExecutorFactory() {
+			@Override
+			public OpExecutor create(ExecutionContext execCxt) {
+				return new TupleOpExecutor(execCxt);
+			}
+		};
+		QC.setFactory(ARQ.getContext(), customExecutorFactory);
+
+		// @f:off
+		String query0 = ""
+				+ "PREFIX source: <https://w3id.org/spice/properties/> "
+				+ "PREFIX resource: <https://w3id.org/spice/resource/> "
+				+ "SELECT DISTINCT * {"
+				+ "SERVICE <tuple:triplifier=com.github.spiceh2020.sparql.anything.json.JSONTriplifier,useBlankNodes=false,uriRoot=https://w3id.org/spice/resource/root,propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json> "
+				+ " {"
+				+ "GRAPH ?g {?s ?p ?o}"
+				+ "}" 
+				+ "}";
+		// @f:on
+
+		System.out.println(QueryFactory.create(query0).toString(Syntax.syntaxSPARQL_11));
+		System.out.println(
+				ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query0), kb).execSelect()));
+	}
+
 	public static void main(String[] args) throws Exception {
 		uriScheme();
+		testDatasetGraph();
+
 	}
 }
