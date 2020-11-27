@@ -2,7 +2,7 @@
 
 Objective: Assessing the
 
-### Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
+## Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
 
 ### Structure of the input files
 
@@ -24,7 +24,7 @@ Objective: Assessing the
 
 ### Competency questions
 
-#### What are the titles of the artworks attributed to "ANONIMO"?
+#### CQ1: What are the titles of the artworks attributed to "ANONIMO"?
 
 ##### SPARQL Generate
 
@@ -42,7 +42,9 @@ WHERE{
 ```
 
 
-#### What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
+#### CQ2: What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
+
+#### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -58,7 +60,9 @@ WHERE{
 
 ```
 
-What are the titles of the artworks created in the 1935?
+#### CQ3: What are the titles of the artworks created in the 1935?
+
+#### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -77,7 +81,7 @@ WHERE{
 What are the identifiers of the artworks sharing the
 
 
-### Soruce [4](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json)
+## Source [4](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json)
 
 
 ### Structure of the input files
@@ -101,7 +105,11 @@ What are the identifiers of the artworks sharing the
 
 ```
 
-What are the identifiers of the artworks made of "bronzo"?
+### Competency questions
+
+#### CQ4: What are the identifiers of the artworks made of "bronzo"?
+
+#### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -119,7 +127,9 @@ WHERE{
 
 
 
-What are the identifiers of the artworks whose subject is "manifattura Hochst"?
+#### CQ4: What are the identifiers of the artworks whose subject is "manifattura Hochst"?
+
+#### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
