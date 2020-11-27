@@ -1,12 +1,30 @@
-# Competency Questions
+# Experiment
 
 Objective: Assessing the
 
 ## SPARQL Generate
 
-### Sources: [1](http://arco.istc.cnr.it/linked-data-hub-notebooks/COLLEZIONI_FONDO_GABINIO_MARZO_2017.json) [2](http://arco.istc.cnr.it/linked-data-hub-notebooks/COLLEZIONI_GAM.json) [3](http://arco.istc.cnr.it/linked-data-hub-notebooks/COLLEZIONI_MAO.json)
+### Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
 
+### Structure of the input files
 
+```
+[
+...
+ {
+   "Autore": "GABINIO MARIO",
+   "Titolo": "TORINO/ MONUMENTO A CARLO ALBERTO, PIAZZA CARLO ALBERTO, VISTA LATERALE DESTRA",
+   "Datazione": "19/10/1923",
+   "Tecnica": "STAMPA ALLA CELLOIDINA",
+   "Dimensioni": "229X169",
+   "Immagine": "http://93.62.170.226/foto/gabinio/001B1.jpg"
+ },
+ ...
+]
+
+```
+
+### Competency questions
 
 What are the titles of the artworks attributed to "ANONIMO"?
 
@@ -15,10 +33,12 @@ PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
-
 SELECT DISTINCT ?titolo
-ITERATOR ite:JSONPath(<http://arco.istc.cnr.it/linked-data-hub-notebooks/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Autore","$.Titolo") AS ?obj ?autore ?titolo
-WHERE{FILTER(REGEX(?autore,".*ANONIMO.*","i"))}
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Autore","$.Titolo") AS ?obj ?autore ?titolo
+WHERE{
+	FILTER(REGEX(?autore,".*ANONIMO.*","i"))
+}
+
 ```
 
 
@@ -31,8 +51,11 @@ PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
 
 SELECT DISTINCT ?titolo
-ITERATOR ite:JSONPath(<http://arco.istc.cnr.it/linked-data-hub-notebooks/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Tecnica","$.Titolo") AS ?obj ?technique ?titolo
-WHERE{FILTER(REGEX(?technique,".*STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO.*","i"))}
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Tecnica","$.Titolo") AS ?obj ?technique ?titolo
+WHERE{
+  FILTER(REGEX(?technique,".*STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO.*","i"))
+}
+
 ```
 
 What are the titles of the artworks created in the 1935?
@@ -44,14 +67,39 @@ PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
 
 SELECT DISTINCT ?titolo
-ITERATOR ite:JSONPath(<http://arco.istc.cnr.it/linked-data-hub-notebooks/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Datazione","$.Titolo") AS ?obj ?date ?titolo
-WHERE{FILTER(REGEX(?date,".*1935.*","i"))}
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Datazione","$.Titolo") AS ?obj ?date ?titolo
+WHERE{
+  FILTER(REGEX(?date,".*1935.*","i"))
+}
+
 ```
 
 What are the identifiers of the artworks sharing the
 
 
-### COLLEZIONI_PALAZZO_MADAMA_MARZO_2017.json
+### Soruce [4](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json)
+
+
+### Structure of the input files
+
+```
+[
+...
+{
+	"Inventario": "1110/B",
+	"Autore": "Ignoto",
+	"Ambito culturale": "",
+	"Datazione":
+	"inizio XVI secolo",
+	"Titolo-soggetto": "Abramo con tre angeli",
+	"Materiali": "bronzo",
+	"Immagine": "http://93.62.170.226/foto/1110_B.jpg",
+	"lsreferenceby": "http://www.palazzomadamatorino.it/it/node/24055"
+}
+...
+]
+
+```
 
 What are the identifiers of the artworks made of "bronzo"?
 
@@ -62,8 +110,11 @@ PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
 
 SELECT DISTINCT ?id
-ITERATOR ite:JSONPath(<http://arco.istc.cnr.it/linked-data-hub-notebooks/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Materiali") AS ?obj ?id ?material
-WHERE{FILTER(REGEX(?material,".*bronzo.*","i"))}
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Materiali") AS ?obj ?id ?material
+WHERE{
+  FILTER(REGEX(?material,".*bronzo.*","i"))
+}
+
 ```
 
 
@@ -77,13 +128,8 @@ PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
 
 SELECT DISTINCT ?id
-ITERATOR ite:JSONPath(<http://arco.istc.cnr.it/linked-data-hub-notebooks/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.['Ambito culturale']") AS ?obj ?id ?subject
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.['Ambito culturale']") AS ?obj ?id ?subject
 WHERE{
 	FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
 }
 ```
-
-
-
-
-- No cleansing, no normalization, no reenginering of input data
