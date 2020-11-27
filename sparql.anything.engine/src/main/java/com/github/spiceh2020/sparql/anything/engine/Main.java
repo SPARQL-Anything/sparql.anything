@@ -8,6 +8,7 @@ import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.query.Syntax;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -35,11 +36,10 @@ public class Main {
 
 		QC.setFactory(ARQ.getContext(), customExecutorFactory);
 
-//		TriplifierRegister.getInstance().registerTriplifier(new JSONTransformer());
-		
 		// @f:off
 				String query0 = ""
-						+ "PREFIX source: <https://w3id.org/spice/properties/>"
+						+ "PREFIX source: <https://w3id.org/spice/properties/> "
+						+ "PREFIX resource: <https://w3id.org/spice/resource/> "
 						+ "SELECT DISTINCT * {"
 						+ "SERVICE <tuple:triplifier=com.github.spiceh2020.sparql.anything.json.JSONTriplifier,useBlankNodes=false,uriRoot=https://w3id.org/spice/resource/root,propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json> "
 						+ " {"
@@ -47,21 +47,26 @@ public class Main {
 						+ "}" 
 						+ "}";
 				// @f:on
-				
-				System.out.println(
-						ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query0), kb).execSelect()));
+
+		System.out.println(QueryFactory.create(query0).toString(Syntax.syntaxSPARQL_11));
+		System.out.println(
+				ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query0), kb).execSelect()));
 
 		TriplifierRegister.getInstance().registerTriplifier(new JSONTriplifier());
 		// @f:off
 		String query1 = ""
 				+ "PREFIX source: <https://w3id.org/spice/properties/>"
 				+ "SELECT DISTINCT * {"
-				+ "SERVICE <tuple:useBlankNodes=false,uriRoot=https://w3id.org/spice/resource/root,propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json> "
+				+ "SERVICE <tuple:mimeType=application/json,useBlankNodes=false,uriRoot=https://w3id.org/spice/resource/root,propertyPrefix=https://w3id.org/spice/properties/,location=https://raw.githubusercontent.com/spice-h2020/sparql.everything/main/sparql.anything.engine/src/main/resources/test.json> "
 				+ " {"
 				+ "?s ?p ?o"
 				+ "}" 
 				+ "}";
 		// @f:on
+
+		System.out.println(QueryFactory.create(query1).toString(Syntax.syntaxSPARQL_11));
+		System.out.println(
+				ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query1), kb).execSelect()));
 
 		// @f:off
 				String query2 = ""
@@ -73,9 +78,7 @@ public class Main {
 						+ "}" 
 						+ "}";
 				// @f:on
-
-		System.out.println(
-				ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query1), kb).execSelect()));
+		System.out.println(QueryFactory.create(query2).toString(Syntax.syntaxSPARQL_11));
 		System.out.println(
 				ResultSetFormatter.asText(QueryExecutionFactory.create(QueryFactory.create(query2), kb).execSelect()));
 	}
