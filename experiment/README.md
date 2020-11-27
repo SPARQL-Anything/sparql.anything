@@ -2,8 +2,6 @@
 
 Objective: Assessing the
 
-## SPARQL Generate
-
 ### Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
 
 ### Structure of the input files
@@ -26,7 +24,9 @@ Objective: Assessing the
 
 ### Competency questions
 
-What are the titles of the artworks attributed to "ANONIMO"?
+#### What are the titles of the artworks attributed to "ANONIMO"?
+
+##### SPARQL Generate
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -42,7 +42,7 @@ WHERE{
 ```
 
 
-What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
+#### What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
