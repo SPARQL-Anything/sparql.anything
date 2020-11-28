@@ -87,6 +87,307 @@ WHERE{
 
 </details>
 
+### RDF Generation
+
+#### Target model
+
+```
+@prefix ex: <http://example.org/> .
+_:0 ex:Autore "GABINIO MARIO";
+  ex:Datazione "19/10/1923";
+  ex:Dimensioni "229X169";
+  ex:Immagine "http://93.62.170.226/foto/gabinio/001B1.jpg";
+  ex:Tecnica "STAMPA ALLA CELLOIDINA";
+  ex:Titolo "TORINO/ MONUMENTO A CARLO ALBERTO, PIAZZA CARLO ALBERTO, VISTA LATERALE DESTRA" .
+```
+
+<details><summary>SPARQL generate for source 1</summary>
+	
+```
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+PREFIX ex: <http://exmaple.org/>
+
+
+GENERATE {
+[] ex:Autore ?autore ;
+	 ex:Datazione ?datazione ;
+	 ex:Titolo ?titolo ;
+   ex:Tecnica ?tecnica ;
+	 ex:Immagine ?immagine ;
+	 ex:Dimensioni ?dimensioni .
+}
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Autore","$.Datazione","$.Titolo","$.Tecnica","$.Immagine","$.Dimensioni") AS ?obj ?autore ?datazione ?titolo  ?tecnica ?immagine ?dimensioni
+
+```
+	
+</details>
+
+<details><summary>SPARQL generate for source 2</summary>
+	
+```
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+PREFIX ex: <http://exmaple.org/>
+
+
+GENERATE {
+[] ex:Autore ?autore ;
+	 ex:Datazione ?datazione ;
+	 ex:Titolo ?titolo ;
+   ex:Tecnica ?tecnica ;
+	 ex:Immagine ?immagine ;
+	 ex:Dimensioni ?dimensioni .
+}
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json>,"$[*]","$.Autore","$.Datazione","$.Titolo","$.Tecnica","$.Immagine","$.Dimensioni") AS ?obj ?autore ?datazione ?titolo  ?tecnica ?immagine ?dimensioni
+
+
+```
+	
+</details>
+
+<details><summary>SPARQL generate for source 3</summary>
+	
+```
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+PREFIX ex: <http://exmaple.org/>
+
+
+GENERATE {
+[] ex:Autore ?autore ;
+	 ex:Datazione ?datazione ;
+	 ex:Titolo ?titolo ;
+   ex:Tecnica ?tecnica ;
+	 ex:Immagine ?immagine ;
+	 ex:Dimensioni ?dimensioni .
+}
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json>,"$[*]","$.Autore","$.Datazione","$.Titolo","$.Tecnica","$.Immagine","$.Dimensioni") AS ?obj ?autore ?datazione ?titolo  ?tecnica ?immagine ?dimensioni
+
+
+
+```
+	
+</details>
+
+<details><summary>RML for source 1</summary>
+	
+```
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix : <http://example.org/rules/> .
+@prefix ex: <http://example.org/> .
+
+:TriplesMap a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$.[*]"
+  ].
+
+:TriplesMap rr:subjectMap [
+  rr:termType rr:BlankNode
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Autore ;
+  rr:objectMap [
+  rml:reference "Autore"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Datazione ;
+  rr:objectMap [
+  rml:reference "Datazione"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Titolo ;
+  rr:objectMap [
+  rml:reference "Titolo"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Tecnica ;
+  rr:objectMap [
+  rml:reference "Tecnica"
+ ]
+].
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Immagine ;
+  rr:objectMap [
+  rml:reference "Immagine"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Dimensioni ;
+  rr:objectMap [
+  rml:reference "Dimensioni"
+ ]
+].
+
+
+```
+	
+</details>
+
+
+<details><summary>RML for source 2</summary>
+	
+```
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix : <http://example.org/rules/> .
+@prefix ex: <http://example.org/> .
+
+:TriplesMap a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$.[*]"
+  ].
+
+:TriplesMap rr:subjectMap [
+  rr:termType rr:BlankNode
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Autore ;
+  rr:objectMap [
+  rml:reference "Autore"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Datazione ;
+  rr:objectMap [
+  rml:reference "Datazione"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Titolo ;
+  rr:objectMap [
+  rml:reference "Titolo"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Tecnica ;
+  rr:objectMap [
+  rml:reference "Tecnica"
+ ]
+].
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Immagine ;
+  rr:objectMap [
+  rml:reference "Immagine"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Dimensioni ;
+  rr:objectMap [
+  rml:reference "Dimensioni"
+ ]
+].
+
+
+
+```
+	
+</details>
+
+<details><summary>RML for source 3</summary>
+	
+```
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix : <http://example.org/rules/> .
+@prefix ex: <http://example.org/> .
+
+:TriplesMap a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$.[*]"
+  ].
+
+:TriplesMap rr:subjectMap [
+  rr:termType rr:BlankNode
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Autore ;
+  rr:objectMap [
+  rml:reference "Autore"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Datazione ;
+  rr:objectMap [
+  rml:reference "Datazione"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Titolo ;
+  rr:objectMap [
+  rml:reference "Titolo"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Tecnica ;
+  rr:objectMap [
+  rml:reference "Tecnica"
+ ]
+].
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Immagine ;
+  rr:objectMap [
+  rml:reference "Immagine"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Dimensioni ;
+  rr:objectMap [
+  rml:reference "Dimensioni"
+ ]
+].
+
+
+
+
+```
+	
+</details>
+
+
 
 
 
@@ -216,6 +517,134 @@ WHERE{
 
 ```
 
+</details>
+
+
+### RDF Generation
+
+#### Target model
+
+```
+@prefix ex: <http://example.org/> .
+
+_:0 ex:Ambito_culturale "";
+  ex:Autore "Ignoto";
+  ex:Datazione "inizio XVI secolo";
+  ex:Immagine "http://93.62.170.226/foto/1110_B.jpg";
+  ex:Inventario "1110/B";
+  ex:Materiali "bronzo";
+  ex:Titolo-soggetto "Abramo con tre angeli";
+  ex:lsreferenceby "http://www.palazzomadamatorino.it/it/node/24055" .
+```
+
+<details><summary>SPARQL generate for source 4</summary>
+	
+```
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+PREFIX ex: <http://exmaple.org/>
+
+
+GENERATE {
+[] ex:Inventario ?id ;
+   ex:Autore ?autore ;
+	 ex:Ambito_Culturale ?ambito_culturale ;
+	 ex:Datazione ?datazione ;
+	 ex:Titolo-soggetto ?titolo ;
+   ex:Materiali ?material ;
+	 ex:Immagine ?immagine ;
+	 ex:lsreferenceby ?lsreferenceby .
+}
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Autore","$['Ambito Culturale']","$.Datazione","$.Titolo-soggetto","$.Materiali","$.Immagine","$.lsreferenceby") AS ?obj ?id ?autore ?ambito_culturale ?datazione ?titolo  ?material ?immagine ?lsreferenceby
+
+
+```
+	
+</details>
+
+
+<details><summary>RML for source 4</summary>
+	
+```
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix : <http://example.org/rules/> .
+@prefix ex: <http://example.org/> .
+
+:TriplesMap a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$.[*]"
+  ].
+
+:TriplesMap rr:subjectMap [
+  rr:termType rr:BlankNode 
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Inventario ;
+  rr:objectMap [
+  rml:reference "Inventario"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Autore ;
+  rr:objectMap [
+  rml:reference "Autore"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Ambito_culturale ;
+  rr:objectMap [
+  rml:reference "Ambito culturale"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Datazione ;
+  rr:objectMap [
+  rml:reference "Datazione"
+ ]
+].
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Titolo-soggetto ;
+  rr:objectMap [
+  rml:reference "Titolo-soggetto"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Materiali ;
+  rr:objectMap [
+  rml:reference "Materiali"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Immagine ;
+  rr:objectMap [
+  rml:reference "Immagine" ;
+ ]
+].
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:lsreferenceby ;
+  rr:objectMap [
+  rml:reference "lsreferenceby"
+ ]
+].
+```
+	
 </details>
 
 
