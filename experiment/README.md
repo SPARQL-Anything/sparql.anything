@@ -90,7 +90,7 @@ WHERE{
 
 </details>
 
-What are the identifiers of the artworks sharing the
+
 
 
 ## Source [4](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json)
@@ -106,8 +106,7 @@ What are the identifiers of the artworks sharing the
 	"Inventario": "1110/B",
 	"Autore": "Ignoto",
 	"Ambito culturale": "",
-	"Datazione":
-	"inizio XVI secolo",
+	"Datazione": "inizio XVI secolo",
 	"Titolo-soggetto": "Abramo con tre angeli",
 	"Materiali": "bronzo",
 	"Immagine": "http://93.62.170.226/foto/1110_B.jpg",
@@ -163,3 +162,12 @@ WHERE{
 ```
 
 </details>
+
+
+#### CQ6: How many artworks are made of bronzo?
+
+#### CQ7: How many artworks each author has made?
+
+#### CQ8: What is the average number of artworks per author?
+
+
