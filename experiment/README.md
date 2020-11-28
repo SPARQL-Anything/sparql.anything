@@ -26,9 +26,8 @@ Objective: **TODO**
 
 #### CQ1: What are the titles of the artworks attributed to "ANONIMO"?
 
-##### SPARQL Generate
 
-<details>
+<details><summary>SPARQL Generate</summary>
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -48,9 +47,8 @@ WHERE{
 
 #### CQ2: What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
 
-##### SPARQL Generate
 
-<details>
+<details><summary>SPARQL Generate</summary>
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -70,9 +68,8 @@ WHERE{
 
 #### CQ3: What are the titles of the artworks created in the 1935?
 
-##### SPARQL Generate
 
-<details>
+<details><summary>SPARQL Generate</summary>
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -121,10 +118,8 @@ WHERE{
 
 #### CQ4: What are the identifiers of the artworks made of "bronzo"?
 
-##### SPARQL Generate
 
-<details>
-
+<details><summary>SPARQL Generate</summary>
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -144,9 +139,7 @@ WHERE{
 
 #### CQ5: What are the identifiers of the artworks whose subject is "manifattura Hochst"?
 
-##### SPARQL Generate
-
-<details>
+<details><summary>SPARQL Generate</summary>
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
