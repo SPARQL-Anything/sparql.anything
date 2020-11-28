@@ -161,8 +161,62 @@ WHERE{
 
 #### CQ6: How many artworks are made of bronzo?
 
+
+<details><summary>SPARQL Generate</summary>
+
+```
+
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+
+
+SELECT  (count(DISTINCT ?id) AS ?numberOfMadeArtworksMadeOfBronzo)
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Materiali") AS ?obj ?id ?material
+WHERE{
+  FILTER(REGEX(?material,".*bronzo.*","i"))
+}
+
+```
+
+</details>
+
+
 #### CQ7: How many artworks each author has made?
 
+<details><summary>SPARQL Generate</summary>
+
+```
+
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+
+
+SELECT  ?author (count(DISTINCT ?id) AS ?numberOfWorks)
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Autore") AS ?obj ?id ?author
+WHERE{
+
+} GROUP BY ?author
+
+
+```
+
+</details>
+
+
 #### CQ8: What is the average number of artworks per author?
+
+<details><summary>SPARQL Generate</summary>
+
+```
+
+???
+
+
+```
+
+</details>
+
 
 
