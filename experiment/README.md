@@ -1,6 +1,6 @@
 # Experiment
 
-Objective: Assessing the
+Objective: **TODO**
 
 ## Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
 
@@ -29,6 +29,7 @@ Objective: Assessing the
 ##### SPARQL Generate
 
 <details>
+	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -41,6 +42,7 @@ WHERE{
 }
 
 ```
+
 </details>
 
 
@@ -49,6 +51,7 @@ WHERE{
 ##### SPARQL Generate
 
 <details>
+	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -62,6 +65,7 @@ WHERE{
 }
 
 ```
+
 </details>
 
 #### CQ3: What are the titles of the artworks created in the 1935?
@@ -69,6 +73,7 @@ WHERE{
 ##### SPARQL Generate
 
 <details>
+	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -82,6 +87,7 @@ WHERE{
 }
 
 ```
+
 </details>
 
 What are the identifiers of the artworks sharing the
@@ -133,6 +139,7 @@ WHERE{
 }
 
 ```
+
 </details>
 
 
@@ -154,4 +161,5 @@ WHERE{
 	FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
 }
 ```
+
 </details>
