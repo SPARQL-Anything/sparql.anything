@@ -28,6 +28,7 @@ Objective: Assessing the
 
 ##### SPARQL Generate
 
+<details>
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -40,12 +41,14 @@ WHERE{
 }
 
 ```
+</details>
 
 
 #### CQ2: What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
 
 ##### SPARQL Generate
 
+<details>
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -59,11 +62,13 @@ WHERE{
 }
 
 ```
+</details>
 
 #### CQ3: What are the titles of the artworks created in the 1935?
 
 ##### SPARQL Generate
 
+<details>
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -77,6 +82,7 @@ WHERE{
 }
 
 ```
+</details>
 
 What are the identifiers of the artworks sharing the
 
@@ -85,6 +91,7 @@ What are the identifiers of the artworks sharing the
 
 
 ### Structure of the input files
+
 
 ```
 [
@@ -111,6 +118,8 @@ What are the identifiers of the artworks sharing the
 
 ##### SPARQL Generate
 
+<details>
+
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -124,12 +133,14 @@ WHERE{
 }
 
 ```
+</details>
 
 
-
-#### CQ4: What are the identifiers of the artworks whose subject is "manifattura Hochst"?
+#### CQ5: What are the identifiers of the artworks whose subject is "manifattura Hochst"?
 
 ##### SPARQL Generate
+
+<details>
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -143,3 +154,4 @@ WHERE{
 	FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
 }
 ```
+</details>
