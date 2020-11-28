@@ -120,7 +120,9 @@ WHERE{
 
 
 <details><summary>SPARQL Generate</summary>
+	
 ```
+	
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
