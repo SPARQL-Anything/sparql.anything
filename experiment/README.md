@@ -45,6 +45,27 @@ WHERE{
 </details>
 
 
+
+
+<details><summary>SPARQL Anything</summary>
+	
+```
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json/>
+
+SELECT DISTINCT ?titolo
+WHERE{
+
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+		?s source:Autore "ANONIMO" .
+		?s source:Titolo ?titolo .
+	}
+}
+
+```
+
+</details>
+
+
 #### CQ2: What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
 
 
@@ -66,6 +87,27 @@ WHERE{
 
 </details>
 
+<details><summary>SPARQL Anything</summary>
+	
+```
+
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json/>
+
+SELECT DISTINCT ?titolo
+WHERE{
+
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+		?s source:Tecnica ?technique .
+		?s source:Titolo ?titolo .
+		FILTER(REGEX(?technique,".*STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO.*","i"))
+	}
+}
+
+
+```
+
+</details>
+
 #### CQ3: What are the titles of the artworks created in the 1935?
 
 
@@ -82,6 +124,27 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 WHERE{
   FILTER(REGEX(?date,".*1935.*","i"))
 }
+
+```
+
+</details>
+
+<details><summary>SPARQL Anything</summary>
+	
+```
+
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json/>
+
+SELECT DISTINCT ?titolo
+WHERE{
+
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+		?s source:Datazione ?date .
+		?s source:Titolo ?titolo .
+		FILTER(REGEX(?date,".*1935.*","i"))
+	}
+}
+
 
 ```
 
@@ -122,6 +185,8 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 	
 </details>
 
+
+
 <details><summary>SPARQL generate for source 2</summary>
 	
 ```
@@ -144,6 +209,8 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 	
 </details>
 
+
+
 <details><summary>SPARQL generate for source 3</summary>
 	
 ```
@@ -165,6 +232,59 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 
 ```
 	
+</details>
+
+<details><summary>SPARQL Anything for source 1</summary>
+	
+```
+
+CONSTRUCT {
+	?s ?p ?o
+} WHERE {
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+		?s ?p ?o .
+	}
+}
+
+
+```
+
+</details>
+
+<details><summary>SPARQL Anything for source 2</summary>
+	
+```
+
+
+CONSTRUCT {
+	?s ?p ?o
+} WHERE {
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json> {
+		?s ?p ?o .
+	}
+}
+
+
+```
+
+</details>
+
+<details><summary>SPARQL Anything for source 3</summary>
+	
+```
+
+
+CONSTRUCT {
+	?s ?p ?o
+} WHERE {
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json> {
+		?s ?p ?o .
+	}
+}
+
+
+```
+
 </details>
 
 <details><summary>RML for source 1</summary>
@@ -439,6 +559,27 @@ WHERE{
 
 </details>
 
+<details><summary>SPARQL Anything</summary>
+	
+```
+
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
+
+SELECT DISTINCT ?id
+WHERE{
+
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+		?s source:Materiali ?material .
+		?s source:Inventario ?id .
+		FILTER(REGEX(?material,".*bronzo.*","i"))
+	}
+}
+
+
+```
+
+</details>
+
 
 #### CQ5: What are the identifiers of the artworks whose subject is "manifattura Hochst"?
 
@@ -458,6 +599,29 @@ WHERE{
 ```
 
 </details>
+
+<details><summary>SPARQL Anything</summary>
+	
+```
+
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
+
+SELECT DISTINCT ?id
+WHERE{
+
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+		?s ?p ?subject .
+		?s source:Inventario ?id .
+		FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
+		FILTER(str(?p) = "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/Ambito culturale")
+	}
+}
+
+
+```
+
+</details>
+
 
 
 #### CQ6: How many artworks are made of bronzo?
@@ -482,6 +646,29 @@ WHERE{
 
 </details>
 
+<details><summary>SPARQL Anything</summary>
+	
+```
+
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
+
+SELECT DISTINCT ?id
+WHERE{
+
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+		?s source:Materiali ?material .
+		?s source:Inventario ?id .
+		FILTER(REGEX(?material,".*bronzo.*","i"))
+	}
+}
+
+
+
+```
+
+</details>
+
+
 
 #### CQ7: How many artworks each author has made?
 
@@ -505,6 +692,28 @@ WHERE{
 
 </details>
 
+<details><summary>SPARQL Anything</summary>
+	
+```
+
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
+
+SELECT DISTINCT ?author (count(DISTINCT ?id) AS ?numberOfWorks)
+WHERE{
+
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+		?s source:Autore ?author .
+		?s source:Inventario ?id .
+	}
+} GROUP BY ?author
+
+
+
+```
+
+</details>
+
+
 
 #### CQ8: What is the average number of artworks per author?
 
@@ -518,6 +727,32 @@ WHERE{
 ```
 
 </details>
+
+<details><summary>SPARQL Anything</summary>
+	
+```
+
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
+
+SELECT (AVG(?numberOfWorks) AS ?averageNumberOfWorksPerAuthor) { 
+	{
+		SELECT DISTINCT ?author (count(DISTINCT ?id) AS ?numberOfWorks)
+		WHERE{
+
+			SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+				?s source:Autore ?author .
+				?s source:Inventario ?id .
+			}
+		} GROUP BY ?author
+	}
+}
+
+
+
+```
+
+</details>
+
 
 
 ### RDF Generation
@@ -560,6 +795,25 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 ```
 	
 </details>
+
+<details><summary>SPARQL Anything for source 4</summary>
+	
+```
+
+CONSTRUCT {
+	?s ?p ?o
+} WHERE {
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+		?s ?p ?o .
+	}
+}
+
+
+
+```
+
+</details>
+
 
 
 <details><summary>RML for source 4</summary>
