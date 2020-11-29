@@ -241,10 +241,11 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 CONSTRUCT {
 	?s ?p ?o
 } WHERE {
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
 		?s ?p ?o .
 	}
 }
+
 
 
 ```
@@ -256,13 +257,15 @@ CONSTRUCT {
 ```
 
 
+
 CONSTRUCT {
 	?s ?p ?o
 } WHERE {
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json> {
+	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json> {
 		?s ?p ?o .
 	}
 }
+
 
 
 ```
@@ -274,13 +277,15 @@ CONSTRUCT {
 ```
 
 
+
 CONSTRUCT {
 	?s ?p ?o
 } WHERE {
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json> {
+	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json> {
 		?s ?p ?o .
 	}
 }
+
 
 
 ```
@@ -803,10 +808,11 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 CONSTRUCT {
 	?s ?p ?o
 } WHERE {
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 		?s ?p ?o .
 	}
 }
+
 
 
 
