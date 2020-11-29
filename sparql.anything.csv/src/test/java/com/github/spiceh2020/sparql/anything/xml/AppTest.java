@@ -1,4 +1,4 @@
-package com.github.spiceh2020.sparql.anything.json.test;
+package com.github.spiceh2020.sparql.anything.xml;
 
 
 public class AppTest{
