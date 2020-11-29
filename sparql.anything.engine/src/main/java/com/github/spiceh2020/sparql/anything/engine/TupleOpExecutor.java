@@ -45,10 +45,13 @@ public class TupleOpExecutor extends OpExecutor {
 					String urlLocation = p.getProperty(ParameterListener.LOCATION);
 
 					if (p.containsKey(TRIPLIFIER)) {
+						logger.trace("Triplifier enforced");
 						t = (Triplifier) Class.forName(p.getProperty(TRIPLIFIER)).getConstructor().newInstance();
 					} else if (p.containsKey(MIME_TYPE)) {
+						logger.trace("MimeType enforced");
 						t = triplifierRegister.getTriplifierForMimeType(p.getProperty(MIME_TYPE));
 					} else {
+						logger.trace("Guess triplifier using file extension "+FilenameUtils.getExtension(urlLocation));
 						t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
 					}
 					
