@@ -1,0 +1,8 @@
+
+CONSTRUCT {
+	?s ?p ?o
+} WHERE {
+	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json> {
+		?s ?p ?o .
+	}
+}
