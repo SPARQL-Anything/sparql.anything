@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.jena.graph.Graph;
 import org.apache.jena.sparql.core.DatasetGraph;
 
 public interface Triplifier {
