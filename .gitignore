@@ -4,6 +4,7 @@
 .project
 .settings/
 **/.idea
+**/**.iml
 .java-version
 **/target/
 log.txt
