@@ -3,4 +3,7 @@
 .classpath
 .project
 .settings/
-target/
+**/target/
+**/*.iml
+**/.idea
+.java-version
