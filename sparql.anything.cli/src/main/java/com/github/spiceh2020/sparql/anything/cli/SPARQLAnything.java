@@ -29,10 +29,12 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.github.spiceh2020.sparql.anything.csv.CSVTriplifier;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegister;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
 import com.github.spiceh2020.sparql.anything.engine.TupleOpExecutor;
 import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
+import com.github.spiceh2020.sparql.anything.xml.XMLTriplifier;
 
 public class SPARQLAnything {
 
@@ -76,6 +78,8 @@ public class SPARQLAnything {
 
 		QC.setFactory(ARQ.getContext(), customExecutorFactory);
 		TriplifierRegister.getInstance().registerTriplifier(new JSONTriplifier());
+		TriplifierRegister.getInstance().registerTriplifier(new CSVTriplifier());
+		TriplifierRegister.getInstance().registerTriplifier(new XMLTriplifier());
 	}
 
 	private static void executeQuery(String query, PrintStream pw, String format) {

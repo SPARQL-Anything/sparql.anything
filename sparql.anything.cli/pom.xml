@@ -16,19 +16,31 @@
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.model</artifactId>
-			<version>0.0.2</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.json</artifactId>
-			<version>0.0.2</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.engine</artifactId>
-			<version>0.0.2</version>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.github.spice-h2020</groupId>
+			<artifactId>sparql.anything.csv</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.github.spice-h2020</groupId>
+			<artifactId>sparql.anything.xml</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 
