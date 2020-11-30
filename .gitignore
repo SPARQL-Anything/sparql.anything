@@ -3,7 +3,7 @@
 .classpath
 .project
 .settings/
-**/target/
-**/*.iml
 **/.idea
 .java-version
+**/target/
+log.txt

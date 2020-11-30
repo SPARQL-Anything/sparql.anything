@@ -1,0 +1,12 @@
+PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
+
+SELECT DISTINCT ?id
+WHERE{
+
+	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+		?s ?p ?subject .
+		?s source:Inventario ?id .
+		FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
+		FILTER(str(?p) = "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/Ambito culturale")
+	}
+}

@@ -1,0 +1,78 @@
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix : <http://example.org/rules/> .
+@prefix ex: <http://example.org/> .
+
+:TriplesMap a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json";
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$.[*]"
+  ].
+
+:TriplesMap rr:subjectMap [
+  rr:termType rr:BlankNode 
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Inventario ;
+  rr:objectMap [
+  rml:reference "Inventario"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Autore ;
+  rr:objectMap [
+  rml:reference "Autore"
+ ]
+].
+
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Ambito_culturale ;
+  rr:objectMap [
+  rml:reference "Ambito culturale"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Datazione ;
+  rr:objectMap [
+  rml:reference "Datazione"
+ ]
+].
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Titolo-soggetto ;
+  rr:objectMap [
+  rml:reference "Titolo-soggetto"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Materiali ;
+  rr:objectMap [
+  rml:reference "Materiali"
+ ]
+].
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:Immagine ;
+  rr:objectMap [
+  rml:reference "Immagine" ;
+ ]
+].
+
+
+:TriplesMap rr:predicateObjectMap [
+  rr:predicate ex:lsreferenceby ;
+  rr:objectMap [
+  rml:reference "lsreferenceby"
+ ]
+].
