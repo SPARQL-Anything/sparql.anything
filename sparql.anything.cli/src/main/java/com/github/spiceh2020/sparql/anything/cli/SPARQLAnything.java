@@ -1,4 +1,4 @@
-package com.github.spiceh2020.sparql.anything.engine;
+package com.github.spiceh2020.sparql.anything.cli;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,6 +29,9 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.github.spiceh2020.sparql.anything.engine.TriplifierRegister;
+import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
+import com.github.spiceh2020.sparql.anything.engine.TupleOpExecutor;
 import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 
 public class SPARQLAnything {

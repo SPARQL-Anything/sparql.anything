@@ -27,7 +27,7 @@ public class TupleOpExecutor extends OpExecutor {
 
 	private static final Logger logger = LogManager.getLogger(TupleOpExecutor.class);
 
-	protected TupleOpExecutor(ExecutionContext execCxt) {
+	public TupleOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
 		triplifierRegister = TriplifierRegister.getInstance();
 	}
