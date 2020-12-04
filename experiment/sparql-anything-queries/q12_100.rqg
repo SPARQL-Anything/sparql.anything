@@ -1,8 +1,20 @@
-
+PREFIX ex: <http://exmaple.org/>
 CONSTRUCT {
-	?s ?p ?o
+	_:b  ex:Autore     ?a ;
+            ex:Datazione  ?d ;
+           ex:Dimensioni ?dim ;
+            ex:Immagine   ?im ;
+            ex:Tecnica    ?s ;
+            ex:Titolo    ?t .
 } WHERE {
 	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=file:///Users/lgu/workspace/spice/sparql.anything/experiment/data/increasing_size_experiment/100.json> {
-		?s ?p ?o .
+		?arr ?p _:b .
+		_:b  ex:Autore     ?a ;
+            ex:Datazione  ?d ;
+            ex:Dimensioni ?dim ;
+            ex:Immagine   ?im ;
+            ex:Tecnica    ?s ;
+           ex:Titolo    ?t .
 	}
 }
+

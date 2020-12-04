@@ -1,7 +1,24 @@
+PREFIX ex: <http://exmaple.org/>
 CONSTRUCT {
-	?s ?p ?o
+	_:b ex:Inventario ?in .
+		_:b ex:Autore ?a .
+		_:b <http://exmaple.org/Ambito_culturale> ?ac .
+		_:b ex:Datazione ?d .
+		_:b ex:Titolo-soggetto ?t .
+		_:b ex:Materiali ?m .
+		_:b ex:Immagine ?i .
+		_:b ex:lsreferenceby ?ref .
 } WHERE {
 	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
-		?s ?p ?o .
+		?arr ?p  _:b .
+		_:b ex:Inventario ?in .
+		_:b ex:Autore ?a .
+		_:b ?acp ?ac .
+		_:b ex:Datazione ?d .
+		_:b ex:Titolo-soggetto ?t .
+		_:b ex:Materiali ?m .
+		_:b ex:Immagine ?i .
+		_:b ex:lsreferenceby ?ref .
+		FILTER(str(?acp)="http://exmaple.org/Ambito culturale")
 	}
 }
