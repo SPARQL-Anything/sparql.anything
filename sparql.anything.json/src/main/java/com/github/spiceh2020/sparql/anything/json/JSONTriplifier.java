@@ -19,12 +19,12 @@ import com.github.spiceh2020.sparql.anything.model.Triplifier;
 public class JSONTriplifier implements Triplifier {
 
 	public final static String propertyPrefix = "propertyPrefix", uriRoot = "uriRoot";
-	
+
 	private static Logger logger = LogManager.getLogger(JSONTriplifier.class);
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		logger.trace("Triplifying "+url.toString());
+		logger.trace("Triplifying " + url.toString());
 		JSONTransformer jt;
 		if (properties.containsKey(propertyPrefix)) {
 			logger.trace("Property prefix provided");
@@ -38,7 +38,7 @@ public class JSONTriplifier implements Triplifier {
 		}
 
 		Model m = jt.transformJSONFromURL(url);
-		logger.trace("Number of triples "+m.size());
+		logger.trace("Number of triples " + m.size());
 		DatasetGraph dg = DatasetFactory.create(m).asDatasetGraph();
 		dg.addGraph(NodeFactory.createURI(url.toString()), dg.getDefaultGraph());
 		return dg;

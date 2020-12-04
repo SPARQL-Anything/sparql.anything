@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>json2rdf</artifactId>
-			<version>0.0.4</version>
+			<version>0.0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
