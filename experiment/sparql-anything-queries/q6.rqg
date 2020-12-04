@@ -3,7 +3,7 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?id
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 		?s source:Materiali ?material .
 		?s source:Inventario ?id .
 		FILTER(REGEX(?material,".*bronzo.*","i"))

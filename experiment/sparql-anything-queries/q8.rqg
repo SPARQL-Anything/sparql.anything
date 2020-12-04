@@ -1,11 +1,11 @@
 PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
 
-SELECT (AVG(?numberOfWorks) AS ?averageNumberOfWorksPerAuthor) { 
+SELECT (AVG(?numberOfWorks) AS ?averageNumberOfWorksPerAuthor) {
 	{
 		SELECT DISTINCT ?author (count(DISTINCT ?id) AS ?numberOfWorks)
 		WHERE{
 
-			SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+			SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 				?s source:Autore ?author .
 				?s source:Inventario ?id .
 			}

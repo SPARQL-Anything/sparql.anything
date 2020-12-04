@@ -3,7 +3,7 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?titolo
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
 		?s source:Autore "ANONIMO" .
 		?s source:Titolo ?titolo .
 	}
