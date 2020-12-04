@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Properties;
+import java.util.Set;
 
-import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
@@ -20,15 +21,15 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.core.DatasetGraph;
-
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
+
 public class CSVTriplifier implements Triplifier {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
-	public final static String PROPERTY_NAMESPACE = "namespace", PROPERTY_ROOT = "root";
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
 
 	@Override
@@ -44,7 +45,7 @@ public class CSVTriplifier implements Triplifier {
 		}
 		String root = null;
 		try{
-			root = properties.getProperty("root");
+			root = properties.getProperty(IRIArgument.ROOT.toString());
 			if (root == null || root.trim().equals("")) {
 				throw new Exception();
 			}
@@ -54,7 +55,7 @@ public class CSVTriplifier implements Triplifier {
 
 		String namespace = null;
 		try{
-			root = properties.getProperty("root");
+			root = properties.getProperty(IRIArgument.ROOT.toString());
 			if (root == null || root.trim().equals("")) {
 				throw new Exception();
 			}

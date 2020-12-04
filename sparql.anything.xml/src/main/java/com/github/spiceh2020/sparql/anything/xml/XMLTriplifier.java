@@ -9,6 +9,7 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.*;
 
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.vocabulary.RDF;
@@ -25,13 +26,12 @@ import javax.xml.stream.events.XMLEvent;
 
 public class XMLTriplifier implements Triplifier {
 
-	public final static String PROPERTY_NAMESPACE = "namespace", PROPERTY_ROOT = "root";
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		String namespace = properties.getProperty(PROPERTY_NAMESPACE, url.toString() + "#");
-		String root = properties.getProperty(PROPERTY_ROOT, url.toString() + "#");
+		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), url.toString() + "#");
+		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
 
 		Model model = ModelFactory.createDefaultModel();
 		//
@@ -40,7 +40,7 @@ public class XMLTriplifier implements Triplifier {
 		XMLEventReader eventReader;
 		//
 		Deque<Resource> stack = new ArrayDeque<Resource>();
-		Map<Resource, Integer> members = new HashMap<Resource,Integer>();
+		Map<Resource, Integer> members = new HashMap<Resource, Integer>();
 		String path = "";
 		StringBuilder charBuilder = null;
 		//
@@ -57,10 +57,10 @@ public class XMLTriplifier implements Triplifier {
 				path = path.substring(0, path.lastIndexOf('/'));
 
 				// Collect data if available
-				if(charBuilder != null){
+				if (charBuilder != null) {
 					String value = charBuilder.toString();
 					log.trace("collecting char stream: {}", value);
-					if(stack.peekLast() != null && value != null && !value.trim().equals("")) {
+					if (stack.peekLast() != null && value != null && !value.trim().equals("")) {
 						stack.peekLast().addProperty(RDF.value, value);
 					}
 					charBuilder = null;
@@ -74,16 +74,15 @@ public class XMLTriplifier implements Triplifier {
 			} catch (XMLStreamException e) {
 				throw new IOException("Journey interrupted.", e);
 			}
-			log.trace("event: {}",event);
+			log.trace("event: {}", event);
 			if (event.isStartElement()) {
 				StartElement se = event.asStartElement();
-				String name = se.getName().getPrefix() + ":"
-						+ se.getName().getLocalPart();
+				String name = se.getName().getPrefix() + ":" + se.getName().getLocalPart();
 				path += "/" + name;
 				log.trace("element open: {} [{}]", path, stack.size());
 
 				int member = 0;
-				if (stack.size() > 0){
+				if (stack.size() > 0) {
 					Resource parent = stack.peekLast();
 					member = members.get(parent) + 1;
 					members.put(parent, member);
@@ -93,29 +92,28 @@ public class XMLTriplifier implements Triplifier {
 				resource = model.createResource();
 				// XXX Type is element name
 				resource.addProperty(RDF.type, ResourceFactory.createResource(toIRI(se.getName(), namespace)));
-				if(!members.containsKey(resource)){
+				if (!members.containsKey(resource)) {
 					members.put(resource, 0);
 				}
 				// Link it with the container membership property
-				if (stack.size() > 0){
+				if (stack.size() > 0) {
 					Resource parent = stack.peekLast();
 					Property property = RDF.li(member);
 					parent.addProperty(property, resource);
 				}
 				// Attributes
 				Iterator attributes = se.getAttributes();
-				while(attributes.hasNext()){
+				while (attributes.hasNext()) {
 					Attribute attribute = (Attribute) attributes.next();
 					log.trace("attribute: {}", attribute);
 					Property property = model.createProperty(toIRI(attribute.getName(), namespace));
 					resource.addProperty(property, attribute.getValue());
 				}
 				stack.add(resource);
-			}
-			else if (event.isCharacters()){
+			} else if (event.isCharacters()) {
 				// Characters
 				log.trace("character: {}", event);
-				if(charBuilder == null) {
+				if (charBuilder == null) {
 					charBuilder = new StringBuilder();
 				}
 				charBuilder.append(event.asCharacters().getData().trim());
@@ -126,9 +124,10 @@ public class XMLTriplifier implements Triplifier {
 		return dg;
 	}
 
-	private String toIRI(QName qname, String namespace){
-		return (qname.getNamespaceURI().equals("")?namespace:qname.getNamespaceURI()) + qname.getLocalPart();
+	private String toIRI(QName qname, String namespace) {
+		return (qname.getNamespaceURI().equals("") ? namespace : qname.getNamespaceURI()) + qname.getLocalPart();
 	}
+
 	@Override
 	public Set<String> getMimeTypes() {
 		return Sets.newHashSet("application/xml");
