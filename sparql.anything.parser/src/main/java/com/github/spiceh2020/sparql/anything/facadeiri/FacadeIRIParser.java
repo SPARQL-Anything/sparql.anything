@@ -1,4 +1,4 @@
-package com.github.spiceh2020.sparql.anything.tupleurl;
+package com.github.spiceh2020.sparql.anything.facadeiri;
 
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -9,15 +9,15 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import com.github.spiceh2020.sparql.anything.tupleurl.antlr.TupleURLLexer;
+import com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRILexer;
 
-public class TupleURLParser {
+public class FacadeIRIParser {
 
 	private String tupleURL;
-	private final static String tupleURLScheme = "tuple:";
+	private final static String tupleURLScheme = "facade-x:";
 	private final static Pattern key = Pattern.compile("^[a-zA-Z0-9-]+");
 
-	public TupleURLParser(String tupleURL) {
+	public FacadeIRIParser(String tupleURL) {
 		super();
 		this.tupleURL = tupleURL;
 	}
@@ -31,10 +31,10 @@ public class TupleURLParser {
 	}
 
 	public Properties getProperties() {
-		TupleURLLexer lexer = new TupleURLLexer(
+		FacadeIRILexer lexer = new FacadeIRILexer(
 				CharStreams.fromString(escape(tupleURL.substring(tupleURLScheme.length()))));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		com.github.spiceh2020.sparql.anything.tupleurl.antlr.TupleURLParser parser = new com.github.spiceh2020.sparql.anything.tupleurl.antlr.TupleURLParser(
+		com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRIParser parser = new com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRIParser(
 				tokens);
 		ParseTree tree = parser.basicURL();
 		ParseTreeWalker walker = new ParseTreeWalker();

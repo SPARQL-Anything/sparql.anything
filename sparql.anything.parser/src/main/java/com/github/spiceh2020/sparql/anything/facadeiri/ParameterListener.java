@@ -1,19 +1,20 @@
-package com.github.spiceh2020.sparql.anything.tupleurl;
+package com.github.spiceh2020.sparql.anything.facadeiri;
 
 import java.nio.CharBuffer;
 import java.util.Properties;
 
-import com.github.spiceh2020.sparql.anything.tupleurl.antlr.TupleURLBaseListener;
-import com.github.spiceh2020.sparql.anything.tupleurl.antlr.TupleURLParser;
+import com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRIBaseListener;
+import com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRIParser;
 
-public class ParameterListener extends TupleURLBaseListener {
+
+public class ParameterListener extends FacadeIRIBaseListener{
 
 	private Properties properties = new Properties();
 	public static final String LOCATION = "location";
 	public static final char ESCAPE = '\\';
 	public static final char[] ESCAPED = { '=', ',' };
 
-	public void enterParameter(TupleURLParser.ParameterContext ctx) {
+	public void enterParameter(FacadeIRIParser.ParameterContext ctx) {
 		if (ctx.url() != null) {
 			properties.setProperty(LOCATION, ctx.url().LITERAL().getText());
 		}

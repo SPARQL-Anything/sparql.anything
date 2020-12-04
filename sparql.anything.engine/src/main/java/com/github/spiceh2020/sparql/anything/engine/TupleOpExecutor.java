@@ -15,9 +15,9 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.github.spiceh2020.sparql.anything.facadeiri.ParameterListener;
+import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
-import com.github.spiceh2020.sparql.anything.tupleurl.ParameterListener;
-import com.github.spiceh2020.sparql.anything.tupleurl.TupleURLParser;
 
 public class TupleOpExecutor extends OpExecutor {
 
@@ -70,12 +70,12 @@ public class TupleOpExecutor extends OpExecutor {
 	}
 
 	private Properties getProperties(String url) {
-		TupleURLParser p = new TupleURLParser(url);
+		FacadeIRIParser p = new FacadeIRIParser(url);
 		return p.getProperties();
 	}
 
 	protected boolean isTupleURI(String uri) {
-		if (uri.startsWith("tuple:")) {
+		if (uri.startsWith("facade-x:")) {
 			return true;
 		}
 		return false;
