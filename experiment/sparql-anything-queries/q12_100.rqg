@@ -1,0 +1,8 @@
+
+CONSTRUCT {
+	?s ?p ?o
+} WHERE {
+	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=file:///Users/lgu/workspace/spice/sparql.anything/experiment/data/increasing_size_experiment/100.json> {
+		?s ?p ?o .
+	}
+}
