@@ -15,15 +15,13 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.github.spiceh2020.sparql.anything.facadeiri.ParameterListener;
 import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class TupleOpExecutor extends OpExecutor {
 
 	private TriplifierRegister triplifierRegister;
-	public final static String MIME_TYPE = "mimeType";
-	public final static String TRIPLIFIER = "triplifier";
 
 	private static final Logger logger = LogManager.getLogger(TupleOpExecutor.class);
 
@@ -42,14 +40,14 @@ public class TupleOpExecutor extends OpExecutor {
 					Properties p = getProperties(opService.getService().getURI());
 					logger.trace("Properties extracted " + p.toString());
 
-					String urlLocation = p.getProperty(ParameterListener.LOCATION);
+					String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 
-					if (p.containsKey(TRIPLIFIER)) {
+					if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
 						logger.trace("Triplifier enforced");
-						t = (Triplifier) Class.forName(p.getProperty(TRIPLIFIER)).getConstructor().newInstance();
-					} else if (p.containsKey(MIME_TYPE)) {
+						t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString())).getConstructor().newInstance();
+					} else if (p.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
 						logger.trace("MimeType enforced");
-						t = triplifierRegister.getTriplifierForMimeType(p.getProperty(MIME_TYPE));
+						t = triplifierRegister.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString()));
 					} else {
 						logger.trace("Guess triplifier using file extension "+FilenameUtils.getExtension(urlLocation));
 						t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));

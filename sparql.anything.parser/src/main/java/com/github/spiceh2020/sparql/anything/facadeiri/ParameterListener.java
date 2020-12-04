@@ -5,18 +5,18 @@ import java.util.Properties;
 
 import com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRIBaseListener;
 import com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRIParser;
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 
 
 public class ParameterListener extends FacadeIRIBaseListener{
 
 	private Properties properties = new Properties();
-	public static final String LOCATION = "location";
 	public static final char ESCAPE = '\\';
 	public static final char[] ESCAPED = { '=', ',' };
 
 	public void enterParameter(FacadeIRIParser.ParameterContext ctx) {
 		if (ctx.url() != null) {
-			properties.setProperty(LOCATION, ctx.url().LITERAL().getText());
+			properties.setProperty(IRIArgument.LOCATION.toString(), ctx.url().LITERAL().getText());
 		}
 
 		if (ctx.keyValue() != null) {

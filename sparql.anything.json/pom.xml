@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.model</artifactId>
-			<version>0.0.2</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

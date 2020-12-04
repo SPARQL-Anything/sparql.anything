@@ -14,11 +14,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.github.spiceh2020.json2rdf.transformers.JSONTransformer;
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class JSONTriplifier implements Triplifier {
-
-	public final static String propertyPrefix = "propertyPrefix", uriRoot = "uriRoot";
 
 	private static Logger logger = LogManager.getLogger(JSONTriplifier.class);
 
@@ -26,15 +25,26 @@ public class JSONTriplifier implements Triplifier {
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
 		logger.trace("Triplifying " + url.toString());
 		JSONTransformer jt;
-		if (properties.containsKey(propertyPrefix)) {
+		if (properties.containsKey(IRIArgument.NAMESPACE.toString())) {
 			logger.trace("Property prefix provided");
-			jt = new JSONTransformer(properties.getProperty(propertyPrefix));
+			jt = new JSONTransformer(properties.getProperty(IRIArgument.NAMESPACE.toString()));
 		} else {
 			logger.trace("Property prefix not provided");
 			jt = new JSONTransformer(url.toString() + "/");
 		}
-		if (properties.containsKey(uriRoot)) {
-			jt.setURIRoot(properties.getProperty(uriRoot));
+
+		boolean blank_nodes = true;
+		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
+			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
+		}
+
+		String root = url.toString();
+		if (properties.containsKey(IRIArgument.ROOT.toString())) {
+			root = properties.getProperty(IRIArgument.ROOT.toString());
+		}
+
+		if (!blank_nodes) {
+			jt.setURIRoot(root);
 		}
 
 		Model m = jt.transformJSONFromURL(url);
