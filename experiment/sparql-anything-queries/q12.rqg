@@ -7,7 +7,7 @@ CONSTRUCT {
             ex:Tecnica    ?s ;
             ex:Titolo    ?t .
 } WHERE {
-	SERVICE <facade-x:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json> {
+	SERVICE <facade-x:namespace=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json> {
 		?arr ?p _:b .
 		_:b  ex:Autore     ?a ;
             ex:Datazione  ?d ;
