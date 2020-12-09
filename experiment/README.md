@@ -1,6 +1,9 @@
 # Experiment
 
-Objective: **TODO**
+*Objective*: The objective of the experiment is to compare sparql.anything with [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) and [RML](https://rml.io/) frameworks in terms of usability and learnability of the approach. Specifically,  from the data sources of the SPICE project  we selected four non-RDF resources and for each resource we defined two kinds of tests: one aimed at assessing the usability and learnability of sparql.anything and [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) in retrieving data, the other meant at evaluating  the usability and learnability of three approaches   in generating data. 
+
+*Approach*: As far as retrieval tests is concerned, we inspected the resources in order to identify a set of possible competency questions a user may want to ask. Then, for each competency question we defined the corresponding query according to sparql.anything and [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) frameworks.
+Concerning the generation tests, for each resource we defined a target RDF model for exporting the data and the rules needed for transforming the data according to each of the compared frameworks.
 
 ## Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
 
@@ -31,14 +34,13 @@ Objective: **TODO**
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
 SELECT DISTINCT ?titolo
 ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Autore","$.Titolo") AS ?obj ?autore ?titolo
 WHERE{
 	FILTER(REGEX(?autore,".*ANONIMO.*","i"))
 }
+
 
 ```
 
@@ -55,11 +57,12 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?titolo
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
 		?s source:Autore "ANONIMO" .
 		?s source:Titolo ?titolo .
 	}
 }
+
 
 ```
 
@@ -73,8 +76,6 @@ WHERE{
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
 
 SELECT DISTINCT ?titolo
@@ -82,6 +83,7 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 WHERE{
   FILTER(REGEX(?technique,".*STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO.*","i"))
 }
+
 
 ```
 
@@ -96,12 +98,13 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?titolo
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
 		?s source:Tecnica ?technique .
 		?s source:Titolo ?titolo .
 		FILTER(REGEX(?technique,".*STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO.*","i"))
 	}
 }
+
 
 
 ```
@@ -115,15 +118,13 @@ WHERE{
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-
 
 SELECT DISTINCT ?titolo
 ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Datazione","$.Titolo") AS ?obj ?date ?titolo
 WHERE{
   FILTER(REGEX(?date,".*1935.*","i"))
 }
+
 
 ```
 
@@ -138,12 +139,13 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?titolo
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
 		?s source:Datazione ?date .
 		?s source:Titolo ?titolo .
 		FILTER(REGEX(?date,".*1935.*","i"))
 	}
 }
+
 
 
 ```
@@ -228,8 +230,6 @@ GENERATE {
 }
 ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json>,"$[*]","$.Autore","$.Datazione","$.Titolo","$.Tecnica","$.Immagine","$.Dimensioni") AS ?obj ?autore ?datazione ?titolo  ?tecnica ?immagine ?dimensioni
 
-
-
 ```
 	
 </details>
@@ -238,15 +238,25 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 	
 ```
 
+PREFIX ex: <http://exmaple.org/>
 CONSTRUCT {
-	?s ?p ?o
+	_:b  ex:Autore     ?a ;
+            ex:Datazione  ?d ;
+           ex:Dimensioni ?dim ;
+            ex:Immagine   ?im ;
+            ex:Tecnica    ?s ;
+            ex:Titolo    ?t .
 } WHERE {
-	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
-		?s ?p ?o .
+	SERVICE <facade-x:namespace=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json> {
+		?arr ?p _:b .
+		_:b  ex:Autore     ?a ;
+            ex:Datazione  ?d ;
+            ex:Dimensioni ?dim ;
+            ex:Immagine   ?im ;
+            ex:Tecnica    ?s ;
+           ex:Titolo    ?t .
 	}
 }
-
-
 
 ```
 
@@ -255,18 +265,25 @@ CONSTRUCT {
 <details><summary>SPARQL Anything for source 2</summary>
 	
 ```
-
-
-
+PREFIX ex: <http://exmaple.org/>
 CONSTRUCT {
-	?s ?p ?o
+	_:b  ex:Autore     ?a ;
+            ex:Datazione  ?d ;
+           ex:Dimensioni ?dim ;
+            ex:Immagine   ?im ;
+            ex:Tecnica    ?s ;
+            ex:Titolo    ?t .
 } WHERE {
-	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json> {
-		?s ?p ?o .
+	SERVICE <facade-x:namespace=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json> {
+		?arr ?p _:b .
+		_:b  ex:Autore     ?a ;
+            ex:Datazione  ?d ;
+            ex:Dimensioni ?dim ;
+            ex:Immagine   ?im ;
+            ex:Tecnica    ?s ;
+           ex:Titolo    ?t .
 	}
 }
-
-
 
 ```
 
@@ -275,18 +292,25 @@ CONSTRUCT {
 <details><summary>SPARQL Anything for source 3</summary>
 	
 ```
-
-
-
+PREFIX ex: <http://exmaple.org/>
 CONSTRUCT {
-	?s ?p ?o
+	_:b  ex:Autore     ?a ;
+            ex:Datazione  ?d ;
+           ex:Dimensioni ?dim ;
+            ex:Immagine   ?im ;
+            ex:Tecnica    ?s ;
+            ex:Titolo    ?t .
 } WHERE {
-	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json> {
-		?s ?p ?o .
+	SERVICE <facade-x:namespace=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json> {
+		?arr ?p _:b .
+		_:b  ex:Autore     ?a ;
+            ex:Datazione  ?d ;
+            ex:Dimensioni ?dim ;
+            ex:Immagine   ?im ;
+            ex:Tecnica    ?s ;
+           ex:Titolo    ?t .
 	}
 }
-
-
 
 ```
 
@@ -550,9 +574,6 @@ CONSTRUCT {
 ```
 	
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-
 
 SELECT DISTINCT ?id
 ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Materiali") AS ?obj ?id ?material
@@ -573,12 +594,13 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?id
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 		?s source:Materiali ?material .
 		?s source:Inventario ?id .
 		FILTER(REGEX(?material,".*bronzo.*","i"))
 	}
 }
+
 
 
 ```
@@ -592,15 +614,13 @@ WHERE{
 
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-
 
 SELECT DISTINCT ?id
 ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.['Ambito culturale']") AS ?obj ?id ?subject
 WHERE{
 	FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
 }
+
 ```
 
 </details>
@@ -614,13 +634,14 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?id
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 		?s ?p ?subject .
 		?s source:Inventario ?id .
 		FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
 		FILTER(str(?p) = "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/Ambito culturale")
 	}
 }
+
 
 
 ```
@@ -637,15 +658,13 @@ WHERE{
 ```
 
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-
 
 SELECT  (count(DISTINCT ?id) AS ?numberOfMadeArtworksMadeOfBronzo)
 ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Materiali") AS ?obj ?id ?material
 WHERE{
   FILTER(REGEX(?material,".*bronzo.*","i"))
 }
+
 
 ```
 
@@ -660,7 +679,7 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?id
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 		?s source:Materiali ?material .
 		?s source:Inventario ?id .
 		FILTER(REGEX(?material,".*bronzo.*","i"))
@@ -682,15 +701,13 @@ WHERE{
 ```
 
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-
 
 SELECT  ?author (count(DISTINCT ?id) AS ?numberOfWorks)
 ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Autore") AS ?obj ?id ?author
 WHERE{
 
 } GROUP BY ?author
+
 
 
 ```
@@ -706,12 +723,11 @@ PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/ma
 SELECT DISTINCT ?author (count(DISTINCT ?id) AS ?numberOfWorks)
 WHERE{
 
-	SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+	SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 		?s source:Autore ?author .
 		?s source:Inventario ?id .
 	}
 } GROUP BY ?author
-
 
 
 ```
@@ -725,9 +741,15 @@ WHERE{
 <details><summary>SPARQL Generate</summary>
 
 ```
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
-???
+SELECT (AVG(?averageOfWorksPerAuthor) AS ?averageOfWorksPerAuthor)
+ITERATOR <sparql-generate-queries/q7.rqg>() AS ?author ?id ?numberOfWorks
+WHERE {
 
+}
 
 ```
 
@@ -739,20 +761,18 @@ WHERE{
 
 PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
 
-SELECT (AVG(?numberOfWorks) AS ?averageNumberOfWorksPerAuthor) { 
+SELECT (AVG(?numberOfWorks) AS ?averageNumberOfWorksPerAuthor) {
 	{
 		SELECT DISTINCT ?author (count(DISTINCT ?id) AS ?numberOfWorks)
 		WHERE{
 
-			SERVICE <tuple:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+			SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 				?s source:Autore ?author .
 				?s source:Inventario ?id .
 			}
 		} GROUP BY ?author
 	}
 }
-
-
 
 ```
 
@@ -784,6 +804,10 @@ PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 PREFIX ex: <http://exmaple.org/>
 
 
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+PREFIX ex: <http://exmaple.org/>
+
+
 GENERATE {
 [] ex:Inventario ?id ;
    ex:Autore ?autore ;
@@ -805,16 +829,30 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 	
 ```
 
+PREFIX ex: <http://exmaple.org/>
 CONSTRUCT {
-	?s ?p ?o
+	_:b ex:Inventario ?in .
+		_:b ex:Autore ?a .
+		_:b <http://exmaple.org/Ambito_culturale> ?ac .
+		_:b ex:Datazione ?d .
+		_:b ex:Titolo-soggetto ?t .
+		_:b ex:Materiali ?m .
+		_:b ex:Immagine ?i .
+		_:b ex:lsreferenceby ?ref .
 } WHERE {
-	SERVICE <tuple:propertyPrefix=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
-		?s ?p ?o .
+	SERVICE <facade-x:namespace=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+		?arr ?p  _:b .
+		_:b ex:Inventario ?in .
+		_:b ex:Autore ?a .
+		_:b ?acp ?ac .
+		_:b ex:Datazione ?d .
+		_:b ex:Titolo-soggetto ?t .
+		_:b ex:Materiali ?m .
+		_:b ex:Immagine ?i .
+		_:b ex:lsreferenceby ?ref .
+		FILTER(str(?acp)="http://exmaple.org/Ambito culturale")
 	}
 }
-
-
-
 
 ```
 
