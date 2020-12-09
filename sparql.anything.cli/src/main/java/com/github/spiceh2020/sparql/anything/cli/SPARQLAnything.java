@@ -35,6 +35,7 @@ import com.github.spiceh2020.sparql.anything.engine.TriplifierRegister;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
 import com.github.spiceh2020.sparql.anything.engine.TupleOpExecutor;
 import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
+import com.github.spiceh2020.sparql.anything.text.TextTriplifier;
 import com.github.spiceh2020.sparql.anything.xml.XMLTriplifier;
 
 public class SPARQLAnything {
@@ -82,6 +83,7 @@ public class SPARQLAnything {
 		TriplifierRegister.getInstance().registerTriplifier(new CSVTriplifier());
 		TriplifierRegister.getInstance().registerTriplifier(new XMLTriplifier());
 		TriplifierRegister.getInstance().registerTriplifier(new BinaryTriplifier());
+		TriplifierRegister.getInstance().registerTriplifier(new TextTriplifier());
 	}
 
 	private static void executeQuery(String query, PrintStream pw, String format) {

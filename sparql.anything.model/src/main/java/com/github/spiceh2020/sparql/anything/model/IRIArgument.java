@@ -2,7 +2,8 @@ package com.github.spiceh2020.sparql.anything.model;
 
 public enum IRIArgument {
 
-	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace"), ROOT("root"), BLANK_NODES("blank-nodes"), TRIPLIFIER("triplifier");
+	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace"), ROOT("root"), BLANK_NODES("blank-nodes"),
+	TRIPLIFIER("triplifier"), CHARSET("charset");
 
 	private String s;
 
