@@ -30,7 +30,7 @@ public class TextTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(TextTriplifier.class);
 
-	public static final String REGEX = "regex", GROUP = "group", TOKENS = "tokens";
+	public static final String REGEX = "regex", GROUP = "group";
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
