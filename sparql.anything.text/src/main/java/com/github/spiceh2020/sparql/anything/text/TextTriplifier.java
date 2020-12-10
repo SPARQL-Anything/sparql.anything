@@ -6,6 +6,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -52,24 +54,67 @@ public class TextTriplifier implements Triplifier {
 
 		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
 
-		Node n;
+		Node rootResource;
 		if (!blank_nodes) {
 			if (root == null) {
-				n = NodeFactory.createURI(url.toString());
+				rootResource = NodeFactory.createURI(url.toString());
 			} else {
-				n = NodeFactory.createURI(root);
+				rootResource = NodeFactory.createURI(root);
 			}
 
 		} else {
-			n = NodeFactory.createBlankNode();
+			rootResource = NodeFactory.createBlankNode();
 		}
 
 		String value = readFromURL(url, charset);
 
-		// TODO Regex
-		// TODO Tokenizer
+		Pattern pattern = null;
+		if (properties.containsKey(REGEX)) {
+			String regexString = properties.getProperty(REGEX);
+			try {
+				pattern = Pattern.compile(regexString);
+				// TODO flags
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				pattern = null;
+			}
 
-		g.add(new Triple(n, RDF.value.asNode(), NodeFactory.createLiteralByValue(value, XSDDatatype.XSDstring)));
+		}
+
+		int group = -1;
+		if (properties.contains(GROUP)) {
+			try {
+				int gr = Integer.parseInt(properties.getProperty(GROUP));
+				if (gr >= 0) {
+					group = gr;
+				} else {
+					logger.warn("Group number is supposed to be a positive integer, using default (group 0)");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+			}
+		}
+
+		if (pattern != null) {
+			Matcher m = pattern.matcher(value);
+			int count = 1;
+			while (m.find()) {
+				if (group > 1) {
+					g.add(new Triple(rootResource, RDF.li(count).asNode(),
+							NodeFactory.createLiteralByValue(m.group(group), XSDDatatype.XSDstring)));
+				} else {
+					g.add(new Triple(rootResource, RDF.li(count).asNode(),
+							NodeFactory.createLiteralByValue(m.group(), XSDDatatype.XSDstring)));
+
+				}
+				count++;
+			}
+		} else {
+			g.add(new Triple(rootResource, RDF.value.asNode(),
+					NodeFactory.createLiteralByValue(value, XSDDatatype.XSDstring)));
+		}
 
 		dg.addGraph(NodeFactory.createURI(url.toString()), g);
 		dg.setDefaultGraph(g);
@@ -86,11 +131,11 @@ public class TextTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/octet-stream");
+		return Sets.newHashSet("text/plain");
 	}
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("bin", "dat");
+		return Sets.newHashSet("txt");
 	}
 }
