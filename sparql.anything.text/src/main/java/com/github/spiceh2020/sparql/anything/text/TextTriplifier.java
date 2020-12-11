@@ -112,7 +112,7 @@ public class TextTriplifier implements Triplifier {
 				count++;
 			}
 		} else {
-			g.add(new Triple(rootResource, RDF.value.asNode(),
+			g.add(new Triple(rootResource, RDF.li(1).asNode(),
 					NodeFactory.createLiteralByValue(value, XSDDatatype.XSDstring)));
 		}
 

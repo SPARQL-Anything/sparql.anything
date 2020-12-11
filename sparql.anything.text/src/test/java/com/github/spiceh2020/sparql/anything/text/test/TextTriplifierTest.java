@@ -31,7 +31,7 @@ public class TextTriplifierTest {
 		try {
 			DatasetGraph dg = tt.triplify(url, new Properties());
 			Graph expectedGraph = GraphFactory.createGraphMem();
-			expectedGraph.add(new Triple(NodeFactory.createBlankNode(), RDF.value.asNode(),
+			expectedGraph.add(new Triple(NodeFactory.createBlankNode(), RDF.li(1).asNode(),
 					NodeFactory.createLiteral("this is a test", XSDDatatype.XSDstring)));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));

@@ -90,7 +90,7 @@ public class BinaryTriplifier implements Triplifier {
 			break;
 		}
 
-		g.add(new Triple(n, RDF.value.asNode(), NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary)));
+		g.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary)));
 
 		dg.addGraph(NodeFactory.createURI(url.toString()), g);
 		dg.setDefaultGraph(g);

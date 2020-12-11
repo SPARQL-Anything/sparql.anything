@@ -29,7 +29,7 @@ public class BinaryTriplifierTest {
 		try {
 			DatasetGraph dg = bt.triplify(url, new Properties());
 			Graph expectedGraph = GraphFactory.createGraphMem();
-			expectedGraph.add(new Triple(NodeFactory.createBlankNode(), RDF.value.asNode(),
+			expectedGraph.add(new Triple(NodeFactory.createBlankNode(), RDF.li(1).asNode(),
 					NodeFactory.createLiteral("dGhpcyBpcyBhIHRlc3Q=", XSDDatatype.XSDbase64Binary)));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
