@@ -61,7 +61,12 @@ public class XMLTriplifier implements Triplifier {
 					String value = charBuilder.toString();
 					log.trace("collecting char stream: {}", value);
 					if (stack.peekLast() != null && value != null && !value.trim().equals("")) {
-						stack.peekLast().addProperty(RDF.value, value);
+						Resource resource = stack.peekLast();
+						if (!members.containsKey(resource)) {
+							members.put(resource, 0);
+						}
+						int member = member = members.get(resource) + 1;
+						resource.addProperty(RDF.li(member), value);
 					}
 					charBuilder = null;
 				}
