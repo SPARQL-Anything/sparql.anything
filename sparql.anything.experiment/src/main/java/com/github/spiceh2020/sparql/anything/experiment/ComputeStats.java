@@ -41,6 +41,8 @@ public class ComputeStats {
 
 	public static void processFolder(String folder, String filename, int[] n, String extension) throws IOException {
 		System.out.println(folder);
+		System.out.println(
+				"\tCompetency Question\tNumber of Distinct Tokens\tNumber of Tokens");
 		for (int i = 0; i < n.length; i++) {
 			File f = new File(folder + "/" + filename + n[i] + "." + extension);
 			if (!f.getName().contains("_") && FilenameUtils.getExtension(f.getName()).equals(extension)) {
@@ -51,10 +53,10 @@ public class ComputeStats {
 	}
 
 	public static void main(String[] args) throws IOException {
+		String experimentFolder = args[0];
 		int[] n = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-		processFolder("/Users/lgu/workspace/spice/sparql.anything/experiment/sparql-anything-queries", "q", n, "rqg");
-		processFolder("/Users/lgu/workspace/spice/sparql.anything/experiment/sparql-generate-queries", "q", n, "rqg");
-		processFolder("/Users/lgu/workspace/spice/sparql.anything/experiment/rml-mappings", "m",
-				new int[] { 1, 2, 3, 4 }, "ttl");
+		processFolder(experimentFolder + "sparql-anything-queries", "q", n, "rqg");
+		processFolder(experimentFolder + "sparql-generate-queries", "q", n, "rqg");
+		processFolder(experimentFolder + "rml-mappings", "m", new int[] { 1, 2, 3, 4 }, "ttl");
 	}
 }
