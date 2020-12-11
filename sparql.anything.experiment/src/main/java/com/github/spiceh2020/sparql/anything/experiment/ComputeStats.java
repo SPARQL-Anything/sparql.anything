@@ -53,7 +53,7 @@ public class ComputeStats {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String experimentFolder = args[0];
+		String experimentFolder = args[0]+"/";
 		int[] n = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 		processFolder(experimentFolder + "sparql-anything-queries", "q", n, "rqg");
 		processFolder(experimentFolder + "sparql-generate-queries", "q", n, "rqg");

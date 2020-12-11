@@ -14,7 +14,7 @@ public class TestDataCreator {
 
 	public static void main(String[] args) throws MalformedURLException, IOException {
 
-		String outfolder = args[0];
+		String outfolder = args[0]+"/";
 		new File(outfolder).mkdir();
 
 		JSONArray arr = new JSONArray();
