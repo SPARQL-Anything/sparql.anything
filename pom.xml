@@ -65,7 +65,7 @@
 		<module>sparql.anything.cli</module>
 		<module>sparql.anything.metadata</module>
 		<module>sparql.anything.binary</module>
-		<module>>sparql.anything.text</module>
+		<module>sparql.anything.text</module>
 	</modules>
 
 	<build>
