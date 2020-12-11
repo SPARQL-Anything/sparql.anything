@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -16,6 +17,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
+import com.github.spiceh2020.sparql.anything.metadata.MetadataTriplifier;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
@@ -24,6 +26,8 @@ public class TupleOpExecutor extends OpExecutor {
 	private TriplifierRegister triplifierRegister;
 
 	private static final Logger logger = LogManager.getLogger(TupleOpExecutor.class);
+	private MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
+	public static String METADATA_GRAPH_IRI = "facade-x:metadata";
 
 	public TupleOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
@@ -38,25 +42,35 @@ public class TupleOpExecutor extends OpExecutor {
 				try {
 					Triplifier t;
 					Properties p = getProperties(opService.getService().getURI());
+
 					logger.trace("Properties extracted " + p.toString());
 
 					String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 
 					if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
 						logger.trace("Triplifier enforced");
-						t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString())).getConstructor().newInstance();
+						t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString()))
+								.getConstructor().newInstance();
 					} else if (p.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
 						logger.trace("MimeType enforced");
-						t = triplifierRegister.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString()));
+						t = triplifierRegister
+								.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString()));
 					} else {
-						logger.trace("Guess triplifier using file extension "+FilenameUtils.getExtension(urlLocation));
+						logger.trace(
+								"Guess triplifier using file extension " + FilenameUtils.getExtension(urlLocation));
 						t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
 					}
-					
-					DatasetGraph dg = t.triplify(new URL(urlLocation), p);
-					
-					return QC.execute(opService.getSubOp(), input,
-							new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+
+					URL url = new URL(urlLocation);
+					DatasetGraph dg = t.triplify(url, p);
+
+					if (triplifyMetadata(p)) {
+						dg.addGraph(NodeFactory.createURI(METADATA_GRAPH_IRI),
+								metadataTriplifier.triplify(url, p).getDefaultGraph());
+					}
+
+					return QC.execute(opService.getSubOp(), input, new ExecutionContext(execCxt.getContext(),
+							dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
 						| IllegalAccessException | InvocationTargetException | NoSuchMethodException
 						| ClassNotFoundException e) {
@@ -70,6 +84,18 @@ public class TupleOpExecutor extends OpExecutor {
 	private Properties getProperties(String url) {
 		FacadeIRIParser p = new FacadeIRIParser(url);
 		return p.getProperties();
+	}
+
+	private boolean triplifyMetadata(Properties p) {
+		boolean result = false;
+		if (p.contains(IRIArgument.METADATA.toString())) {
+			try {
+				result = Boolean.parseBoolean(p.getProperty(IRIArgument.METADATA.toString()));
+			} catch (Exception e) {
+				result = false;
+			}
+		}
+		return result;
 	}
 
 	protected boolean isTupleURI(String uri) {
