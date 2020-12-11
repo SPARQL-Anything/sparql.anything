@@ -28,7 +28,7 @@ public class BinaryTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(BinaryTriplifier.class);
 
-	public static final String ENCODING = "encoding";
+	public static final String ENCODING = "bin.encoding";
 
 	public static enum Encoding {
 		BASE64
