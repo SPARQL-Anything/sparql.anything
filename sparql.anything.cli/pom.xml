@@ -48,10 +48,16 @@
 			<artifactId>sparql.anything.binary</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.text</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.spice-h2020</groupId>
+			<artifactId>sparql.anything.html</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
@@ -61,6 +67,12 @@
 			<groupId>commons-cli</groupId>
 			<artifactId>commons-cli</artifactId>
 			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.spice-h2020</groupId>
+			<artifactId>sparql.anything.html</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
+			<scope>compile</scope>
 		</dependency>
 
 

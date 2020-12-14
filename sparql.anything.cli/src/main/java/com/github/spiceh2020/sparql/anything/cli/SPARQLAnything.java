@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import com.github.spiceh2020.sparql.anything.html.HTMLTriplifier;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -84,6 +85,7 @@ public class SPARQLAnything {
 		TriplifierRegister.getInstance().registerTriplifier(new XMLTriplifier());
 		TriplifierRegister.getInstance().registerTriplifier(new BinaryTriplifier());
 		TriplifierRegister.getInstance().registerTriplifier(new TextTriplifier());
+		TriplifierRegister.getInstance().registerTriplifier(new HTMLTriplifier());
 	}
 
 	private static void executeQuery(String query, PrintStream pw, String format) {
