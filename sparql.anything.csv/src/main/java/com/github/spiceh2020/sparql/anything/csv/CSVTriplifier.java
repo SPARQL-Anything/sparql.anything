@@ -38,9 +38,9 @@ public class CSVTriplifier implements Triplifier {
 		// TODO Support all flavour of csv types
 		CSVFormat format;
 		try{
-			format = CSVFormat.valueOf(properties.getProperty("csv.format", "DEFAULT"));
+			format = CSVFormat.valueOf(properties.getProperty(PROPERTY_FORMAT, "DEFAULT"));
 		}catch(Exception e){
-			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty("csv.format"));
+			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
 		String root = null;
@@ -65,9 +65,9 @@ public class CSVTriplifier implements Triplifier {
 		}
 		boolean headers;
 		try{
-			headers = Boolean.valueOf(properties.getProperty("csv.headers", "false"));
+			headers = Boolean.valueOf(properties.getProperty(PROPERTY_HEADERS, "false"));
 		}catch(Exception e){
-			log.warn("Unsupported value for csv.headers: '{}', using default (false).", properties.getProperty("csv.headers"));
+			log.warn("Unsupported value for csv.headers: '{}', using default (false).", properties.getProperty(PROPERTY_HEADERS));
 			headers = false;
 		}
 		Reader in = null;

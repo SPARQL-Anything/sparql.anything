@@ -21,15 +21,15 @@ import com.github.spiceh2020.sparql.anything.metadata.MetadataTriplifier;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
-public class TupleOpExecutor extends OpExecutor {
+public class FacadeXOpExecutor extends OpExecutor {
 
 	private TriplifierRegister triplifierRegister;
 
-	private static final Logger logger = LogManager.getLogger(TupleOpExecutor.class);
+	private static final Logger logger = LogManager.getLogger(FacadeXOpExecutor.class);
 	private MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
 	public static String METADATA_GRAPH_IRI = "facade-x:metadata";
 
-	public TupleOpExecutor(ExecutionContext execCxt) {
+	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
 		triplifierRegister = TriplifierRegister.getInstance();
 	}

@@ -22,6 +22,7 @@ public class HTMLTriplifierTest {
     private String getTestLocation(String fileName) throws URISyntaxException {
         return getClass().getClassLoader().getResource(fileName + ".html").toURI().toString();
     }
+
     @Test
     public void test1() throws URISyntaxException, IOException {
         DatasetGraph dataset = html2rdf.triplify(new URL(getTestLocation(name.getMethodName())), new Properties());

@@ -34,7 +34,7 @@ import com.github.spiceh2020.sparql.anything.binary.BinaryTriplifier;
 import com.github.spiceh2020.sparql.anything.csv.CSVTriplifier;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegister;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
-import com.github.spiceh2020.sparql.anything.engine.TupleOpExecutor;
+import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
 import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 import com.github.spiceh2020.sparql.anything.text.TextTriplifier;
 import com.github.spiceh2020.sparql.anything.xml.XMLTriplifier;
@@ -75,7 +75,7 @@ public class SPARQLAnything {
 		OpExecutorFactory customExecutorFactory = new OpExecutorFactory() {
 			@Override
 			public OpExecutor create(ExecutionContext execCxt) {
-				return new TupleOpExecutor(execCxt);
+				return new FacadeXOpExecutor(execCxt);
 			}
 		};
 

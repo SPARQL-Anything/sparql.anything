@@ -67,6 +67,7 @@
 		<module>sparql.anything.binary</module>
 		<module>sparql.anything.text</module>
 		<module>sparql.anything.html</module>
+		<module>sparql.anything.it</module>
 	</modules>
 
 	<build>
