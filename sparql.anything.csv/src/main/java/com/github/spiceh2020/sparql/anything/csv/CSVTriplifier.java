@@ -71,11 +71,11 @@ public class CSVTriplifier implements Triplifier {
 			headers = false;
 		}
 		Reader in = null;
-//		try {
-			in = new FileReader(new File(url.toString()));
-//		} catch (URISyntaxException e) {
-//			throw new IOException(e);
-//		}
+		try {
+			in = new FileReader(new File(url.toURI()));
+		} catch (URISyntaxException e) {
+			throw new IOException(e);
+		}
 		Model model = ModelFactory.createDefaultModel();
 
 		Resource document;
