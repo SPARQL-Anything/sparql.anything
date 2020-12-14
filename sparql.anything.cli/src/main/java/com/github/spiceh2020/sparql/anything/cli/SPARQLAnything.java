@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 import com.github.spiceh2020.sparql.anything.html.HTMLTriplifier;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -72,14 +73,7 @@ public class SPARQLAnything {
 	}
 
 	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
-		OpExecutorFactory customExecutorFactory = new OpExecutorFactory() {
-			@Override
-			public OpExecutor create(ExecutionContext execCxt) {
-				return new FacadeXOpExecutor(execCxt);
-			}
-		};
-
-		QC.setFactory(ARQ.getContext(), customExecutorFactory);
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		TriplifierRegister.getInstance().registerTriplifier(new JSONTriplifier());
 		TriplifierRegister.getInstance().registerTriplifier(new CSVTriplifier());
 		TriplifierRegister.getInstance().registerTriplifier(new XMLTriplifier());
