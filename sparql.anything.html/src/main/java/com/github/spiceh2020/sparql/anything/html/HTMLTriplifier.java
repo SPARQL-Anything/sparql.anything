@@ -1,0 +1,96 @@
+package com.github.spiceh2020.sparql.anything.html;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+
+import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.rdf.model.*;
+
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.vocabulary.RDF;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class HTMLTriplifier implements Triplifier {
+
+	private static final Logger log = LoggerFactory.getLogger(HTMLTriplifier.class);
+	private static final String PROPERTY_SELECTOR = "html.selector";
+	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
+
+	@Override
+	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), url.toString() + "#");
+		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
+		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
+		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
+
+		// If location is a http or https
+		Document doc = Jsoup.parse(url.openStream(), charset, url.toString());
+
+		Model model = ModelFactory.createDefaultModel();
+		//log.info(doc.title());
+		Elements elements = doc.select(selector);
+		Resource rootResource = null;
+		if(elements.size() > 1){
+			// Create a root container
+			rootResource = model.createResource(root);
+		}
+		int counter = 0;
+		for (Element element : elements) {
+			counter++;
+			if(elements.size() > 1){
+				// link to root container
+				Resource elResource = toResource(model, element);
+				rootResource.addProperty(RDF.li(counter), elResource);
+			}
+			populate(model, element, namespace);
+		}
+		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
+		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
+		return dg;
+	}
+
+	private void populate(Model model, Element element, String namespace){
+
+		String tagName = element.tagName(); // tagname is the type
+		Resource resource = toResource(model, element);
+		resource.addProperty(RDF.type, ResourceFactory.createResource(HTML_NS + tagName));
+		// attributes
+		for (Attribute attribute : element.attributes()){
+			String key = attribute.getKey();
+			String value = attribute.getValue();
+			resource.addProperty(ResourceFactory.createProperty(HTML_NS + key), model.createLiteral(value));
+		}
+		// Children
+		int counter = 0;
+		for (Element child: element.children()){
+			counter++;
+			resource.addProperty(RDF.li(counter), toResource(model, child));
+			populate(model, child, namespace);
+		}
+	}
+
+	private Resource toResource(Model model, Element element){
+		return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
+	}
+
+	@Override
+	public Set<String> getMimeTypes() {
+		return Sets.newHashSet("text/html");
+	}
+
+	@Override
+	public Set<String> getExtensions() {
+		return Sets.newHashSet("html");
+	}
+}
