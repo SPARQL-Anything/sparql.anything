@@ -45,7 +45,7 @@ public final class FacadeX {
 
                 @Override
                 public Set<String> getMimeTypes() {
-                    Collections.unmodifiableSet(new HashSet(Arrays.asList(
+                    return Collections.unmodifiableSet(new HashSet(Arrays.asList(
                             ".png",".jpeg",".jpg",".bmp",".tiff",".tif", ".ico"
                     )));
                 }

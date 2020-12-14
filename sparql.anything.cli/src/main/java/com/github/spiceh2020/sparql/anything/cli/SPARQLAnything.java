@@ -74,12 +74,6 @@ public class SPARQLAnything {
 
 	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-		TriplifierRegister.getInstance().registerTriplifier(new JSONTriplifier());
-		TriplifierRegister.getInstance().registerTriplifier(new CSVTriplifier());
-		TriplifierRegister.getInstance().registerTriplifier(new XMLTriplifier());
-		TriplifierRegister.getInstance().registerTriplifier(new BinaryTriplifier());
-		TriplifierRegister.getInstance().registerTriplifier(new TextTriplifier());
-		TriplifierRegister.getInstance().registerTriplifier(new HTMLTriplifier());
 	}
 
 	private static void executeQuery(String query, PrintStream pw, String format) {
