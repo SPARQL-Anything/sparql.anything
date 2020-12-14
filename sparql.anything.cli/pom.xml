@@ -68,14 +68,6 @@
 			<artifactId>commons-cli</artifactId>
 			<version>1.4</version>
 		</dependency>
-		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.html</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-
-
 	</dependencies>
 
 	<build>
@@ -100,7 +92,7 @@
 					<execution>
 						<id>sparql-anything</id>
 						<configuration>
-							<outputFile>target/sparql-anything-${version}.jar</outputFile>
+							<outputFile>target/sparql-anything-${project.version}.jar</outputFile>
 							<shadedArtifactAttached>false</shadedArtifactAttached>
 							<transformers>
 								<transformer
