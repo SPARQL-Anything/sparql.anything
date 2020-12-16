@@ -63,8 +63,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 					}
 					// If triplifier is null, return an empty graph
 					DatasetGraph dg;
+					URL url = new URL(urlLocation);
 					if (t != null) {
-						URL url = new URL(urlLocation);
 						 dg = t.triplify(url, p);
 					}else{
 						logger.error("No triplifier available for the input format!");
