@@ -1,0 +1,15 @@
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+
+SELECT (AVG(?averageOfWorksPerAuthor) AS ?averageOfWorksPerAuthor)
+ITERATOR <sparql-generate-queries/q7.rqg>() AS ?author ?id ?numberOfWorks
+WHERE {
+
+}
+PREFIX ite: <http://w3id.org/sparql-generate/iter/>
+
+
+SELECT  ?author (count(DISTINCT ?id) AS ?numberOfWorks)
+ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Autore") AS ?obj ?id ?author
+WHERE{
+
+} GROUP BY ?author
