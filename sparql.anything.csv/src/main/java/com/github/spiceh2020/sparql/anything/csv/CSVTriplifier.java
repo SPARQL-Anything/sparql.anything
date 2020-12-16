@@ -97,7 +97,7 @@ public class CSVTriplifier implements Triplifier {
 				while(columns.hasNext()){
 					colid++;
 					String colstring = columns.next();
-					String colname = colstring;
+					String colname = colstring.trim();
 					int c = 0;
 					while (headers_map.containsValue(colname)){
 						c++;
