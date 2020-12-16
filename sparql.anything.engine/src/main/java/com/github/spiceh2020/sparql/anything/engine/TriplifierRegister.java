@@ -28,7 +28,7 @@ public final class TriplifierRegister {
 	}
 
 	public void registerTriplifier(Triplifier t) throws TriplifierRegisterException {
-		log.trace("{} registering {}", this, t);
+		log.trace("Registering {}", t);
 		for (String ext : t.getExtensions()) {
 			if (extension.containsKey(ext)) {
 				throw new TriplifierRegisterException(
@@ -64,12 +64,10 @@ public final class TriplifierRegister {
 	}
 
 	public Triplifier getTriplifierForMimeType(String f) {
-		log.trace("{}.getTriplifierForMimeType", this);
 		return this.mimeType.get(f);
 	}
 
 	public Triplifier getTriplifierForExtension(String f) {
-		log.trace("{}.getTriplifierForExtension", this);
 		return this.extension.get(f);
 	}
 
