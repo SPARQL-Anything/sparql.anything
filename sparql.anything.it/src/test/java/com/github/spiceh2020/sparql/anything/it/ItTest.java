@@ -101,7 +101,7 @@ public class ItTest {
     }
 
     @Test
-    public void JPG1()throws URISyntaxException {
+    public void JPG1() throws URISyntaxException {
         // A01009_8.jpg
         Dataset kb = DatasetFactory.createGeneral();
         QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
@@ -115,6 +115,36 @@ public class ItTest {
             Assert.assertTrue(qs.get("s").asNode().isBlank());
             Assert.assertTrue(qs.get("p").toString().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#_1"));
             Assert.assertTrue(qs.get("o").isLiteral());
+        }
+    }
+
+    @Test
+    public void NestedTest1() throws URISyntaxException {
+        String location = getClass().getClassLoader().getResource("tate-gallery/artwork_data.csv").toURI().toString();
+        String queryStr = "" +
+                "prefix ex: <http://www.example.org#> " +
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+                "SELECT ?accession ?thumbnail ?image {" +
+                "BIND (IRI(CONCAT(\"facade-x:\", ?thumbnail )) AS ?embed ) . " +
+                "SERVICE <facade-x:csv.headers=true,namespace=http://www.example.org#,location=" + location + "> {" +
+                "FILTER (?accession = \"A01009\") . " +
+                "[] ex:accession ?accession ; ex:thumbnailUrl ?thumbnail " +
+                "}" +
+                "" +
+                "SERVICE ?embed { [] rdf:_1 ?image } . " +
+                "} LIMIT 1";
+        log.info("\n{}\n", queryStr);
+
+        Dataset kb = DatasetFactory.createGeneral();
+        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+        Query query = QueryFactory.create(queryStr);
+        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        while(rs.hasNext()){
+            QuerySolution qs = rs.next();
+            Assert.assertTrue(qs.get("accession").isLiteral());
+            Assert.assertTrue(qs.get("thumbnail").isLiteral());
+            Assert.assertTrue(qs.get("image").isLiteral());
+            Assert.assertTrue(qs.get("image").asNode().getLiteralDatatypeURI().equals("http://www.w3.org/2001/XMLSchema#base64Binary"));
         }
     }
 }
