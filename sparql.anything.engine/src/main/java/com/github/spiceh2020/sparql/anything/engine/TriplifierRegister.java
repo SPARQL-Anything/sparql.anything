@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class TriplifierRegister {
+	private static final Logger log = LoggerFactory.getLogger(TriplifierRegister.class);
 
 	private static TriplifierRegister instance;
 
@@ -25,11 +28,13 @@ public final class TriplifierRegister {
 	}
 
 	public void registerTriplifier(Triplifier t) throws TriplifierRegisterException {
+		log.trace("{} registering {}", this, t);
 		for (String ext : t.getExtensions()) {
 			if (extension.containsKey(ext)) {
 				throw new TriplifierRegisterException(
 						"A triplifier for " + ext + " extension has been already registered!");
 			}
+			log.trace("Registering triplifier for extension {} : {}", ext, t);
 			extension.put(ext, t);
 		}
 
@@ -38,6 +43,7 @@ public final class TriplifierRegister {
 				throw new TriplifierRegisterException(
 						"A triplifier for " + mimeType + " mime has been already registered!");
 			}
+			log.trace("Registering triplifier for mime-type {} : {}", mimeType, t);
 			this.mimeType.put(mimeType, t);
 		}
 
@@ -58,10 +64,12 @@ public final class TriplifierRegister {
 	}
 
 	public Triplifier getTriplifierForMimeType(String f) {
+		log.trace("{}.getTriplifierForMimeType", this);
 		return this.mimeType.get(f);
 	}
 
 	public Triplifier getTriplifierForExtension(String f) {
+		log.trace("{}.getTriplifierForExtension", this);
 		return this.extension.get(f);
 	}
 

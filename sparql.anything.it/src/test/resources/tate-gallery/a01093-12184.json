@@ -1,0 +1,202 @@
+{
+  "acno": "A01093", 
+  "acquisitionYear": 1946, 
+  "all_artists": "Helen Beatrix Potter", 
+  "catalogueGroup": {
+    "accessionRanges": "A01089-A01110", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65490, 
+    "shortTitle": "Illustrations for 'The Tailor of Gloucester'"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1866, 
+      "date": "1866\u20131943", 
+      "displayOrder": 1, 
+      "fc": "Helen Beatrix Potter", 
+      "gender": "Female", 
+      "id": 1794, 
+      "mda": "Potter, Helen Beatrix", 
+      "role": "artist", 
+      "startLetter": "P"
+    }
+  ], 
+  "creditLine": "Presented by Capt. K.W.G. Duke RN 1946", 
+  "dateRange": {
+    "endYear": 1902, 
+    "startYear": 1902, 
+    "text": "c.1902"
+  }, 
+  "dateText": "c.1902", 
+  "depth": "", 
+  "dimensions": "support: 111 x 92 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Illustrations for 'The Tailor of Gloucester'", 
+  "height": "92", 
+  "id": 12184, 
+  "inscription": null, 
+  "medium": "Ink, watercolour and gouache on paper", 
+  "movementCount": 0, 
+  "subjectCount": 11, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2803, 
+                "name": "England"
+              }
+            ], 
+            "id": 113, 
+            "name": "UK countries and regions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 6470, 
+                "name": "Gloucester - non-specific"
+              }
+            ], 
+            "id": 115, 
+            "name": "UK cities, towns and villages"
+          }, 
+          {
+            "children": [
+              {
+                "id": 4108, 
+                "name": "Gloucestershire"
+              }
+            ], 
+            "id": 114, 
+            "name": "UK counties"
+          }
+        ], 
+        "id": 106, 
+        "name": "places"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 6456, 
+                "name": "Potter, Beatrix, 'The Tailor of Gloucester'"
+              }
+            ], 
+            "id": 58, 
+            "name": "literature (not Shakespeare)"
+          }
+        ], 
+        "id": 55, 
+        "name": "literature and fiction"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 775, 
+                "name": "cat"
+              }
+            ], 
+            "id": 67, 
+            "name": "animals: mammals"
+          }, 
+          {
+            "children": [
+              {
+                "id": 218, 
+                "name": "snow"
+              }
+            ], 
+            "id": 77, 
+            "name": "weather"
+          }
+        ], 
+        "id": 60, 
+        "name": "nature"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 465, 
+                "name": "church"
+              }
+            ], 
+            "id": 25, 
+            "name": "religious"
+          }, 
+          {
+            "children": [
+              {
+                "id": 213, 
+                "name": "house"
+              }
+            ], 
+            "id": 26, 
+            "name": "residential"
+          }, 
+          {
+            "children": [
+              {
+                "id": 209, 
+                "name": "street"
+              }
+            ], 
+            "id": 28, 
+            "name": "townscapes, man-made features"
+          }
+        ], 
+        "id": 13, 
+        "name": "architecture"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1134, 
+                "name": "man, old"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 5004, 
+                "name": "tailor"
+              }
+            ], 
+            "id": 124, 
+            "name": "industrial and crafts"
+          }
+        ], 
+        "id": 116, 
+        "name": "work and occupations"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01093_8.jpg", 
+  "title": "The Tailor Returning Home", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/potter-the-tailor-returning-home-a01093", 
+  "width": "111"
+}

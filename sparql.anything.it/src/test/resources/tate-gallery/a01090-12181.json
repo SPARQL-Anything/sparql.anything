@@ -1,0 +1,196 @@
+{
+  "acno": "A01090", 
+  "acquisitionYear": 1946, 
+  "all_artists": "Helen Beatrix Potter", 
+  "catalogueGroup": {
+    "accessionRanges": "A01089-A01110", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65490, 
+    "shortTitle": "Illustrations for 'The Tailor of Gloucester'"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1866, 
+      "date": "1866\u20131943", 
+      "displayOrder": 1, 
+      "fc": "Helen Beatrix Potter", 
+      "gender": "Female", 
+      "id": 1794, 
+      "mda": "Potter, Helen Beatrix", 
+      "role": "artist", 
+      "startLetter": "P"
+    }
+  ], 
+  "creditLine": "Presented by Capt. K.W.G. Duke RN 1946", 
+  "dateRange": {
+    "endYear": 1902, 
+    "startYear": 1902, 
+    "text": "c.1902"
+  }, 
+  "dateText": "c.1902", 
+  "depth": "", 
+  "dimensions": "support: 111 x 92 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Illustrations for 'The Tailor of Gloucester'", 
+  "height": "92", 
+  "id": 12181, 
+  "inscription": null, 
+  "medium": "Ink, watercolour and gouache on paper", 
+  "movementCount": 0, 
+  "subjectCount": 11, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 6456, 
+                "name": "Potter, Beatrix, 'The Tailor of Gloucester'"
+              }
+            ], 
+            "id": 58, 
+            "name": "literature (not Shakespeare)"
+          }
+        ], 
+        "id": 55, 
+        "name": "literature and fiction"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 264, 
+                "name": "bowl"
+              }
+            ], 
+            "id": 170, 
+            "name": "vessels and containers"
+          }, 
+          {
+            "children": [
+              {
+                "id": 2475, 
+                "name": "clothing"
+              }
+            ], 
+            "id": 88, 
+            "name": "clothing and personal effects"
+          }, 
+          {
+            "children": [
+              {
+                "id": 3578, 
+                "name": "cupboard"
+              }
+            ], 
+            "id": 82, 
+            "name": "furnishings"
+          }, 
+          {
+            "children": [
+              {
+                "id": 4760, 
+                "name": "iron"
+              }
+            ], 
+            "id": 83, 
+            "name": "domestic"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1219, 
+                "name": "legs crossed"
+              }, 
+              {
+                "id": 694, 
+                "name": "sitting"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 195, 
+                "name": "man"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 4627, 
+                "name": "mouse"
+              }
+            ], 
+            "id": 67, 
+            "name": "animals: mammals"
+          }
+        ], 
+        "id": 60, 
+        "name": "nature"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 5004, 
+                "name": "tailor"
+              }
+            ], 
+            "id": 124, 
+            "name": "industrial and crafts"
+          }
+        ], 
+        "id": 116, 
+        "name": "work and occupations"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 450, 
+                "name": "workshop"
+              }
+            ], 
+            "id": 46, 
+            "name": "workspaces"
+          }
+        ], 
+        "id": 40, 
+        "name": "interiors"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01090_8.jpg", 
+  "title": "The Tailor of Gloucester at Work", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/potter-the-tailor-of-gloucester-at-work-a01090", 
+  "width": "111"
+}

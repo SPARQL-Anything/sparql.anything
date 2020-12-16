@@ -1,0 +1,178 @@
+{
+  "acno": "A01061", 
+  "acquisitionYear": 1957, 
+  "all_artists": "Reg Butler", 
+  "catalogueGroup": {}, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1913, 
+      "date": "1913\u20131981", 
+      "displayOrder": 1, 
+      "fc": "Reg Butler", 
+      "gender": "Male", 
+      "id": 844, 
+      "mda": "Butler, Reg", 
+      "role": "artist", 
+      "startLetter": "B"
+    }
+  ], 
+  "creditLine": "Presented by the Contemporary Art Society 1957", 
+  "dateRange": {
+    "endYear": 1952, 
+    "startYear": 1951, 
+    "text": "1951-2"
+  }, 
+  "dateText": "1951\u20132", 
+  "depth": "", 
+  "dimensions": "support: 264 x 203 mm\r\nframe: 500 x 947 x 32 mm", 
+  "foreignTitle": null, 
+  "groupTitle": null, 
+  "height": "203", 
+  "id": 1870, 
+  "inscription": "date inscribed", 
+  "medium": "Graphite, crayon and watercolour on paper", 
+  "movementCount": 1, 
+  "movements": [
+    {
+      "era": {
+        "id": 415, 
+        "name": "20th century post-1945"
+      }, 
+      "id": 424, 
+      "name": "Geometry of Fear"
+    }
+  ], 
+  "subjectCount": 10, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 18218, 
+                "name": "Butler, Reg, 'The Unknown Political Prisoner'"
+              }
+            ], 
+            "id": 10639, 
+            "name": "fine art and design, named works"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 221, 
+                "name": "figure"
+              }
+            ], 
+            "id": 189, 
+            "name": "from recognisable sources"
+          }
+        ], 
+        "id": 184, 
+        "name": "abstraction"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 232, 
+                "name": "freedom"
+              }, 
+              {
+                "id": 2470, 
+                "name": "persecution"
+              }
+            ], 
+            "id": 158, 
+            "name": "social comment"
+          }, 
+          {
+            "children": [
+              {
+                "id": 231, 
+                "name": "political prisoner"
+              }
+            ], 
+            "id": 155, 
+            "name": "government and politics"
+          }
+        ], 
+        "id": 145, 
+        "name": "society"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 793, 
+                "name": "grimacing"
+              }
+            ], 
+            "id": 177, 
+            "name": "actions: expressive"
+          }, 
+          {
+            "children": [
+              {
+                "id": 615, 
+                "name": "head / face"
+              }
+            ], 
+            "id": 93, 
+            "name": "body"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1106, 
+                "name": "looking / watching"
+              }
+            ], 
+            "id": 175, 
+            "name": "actions: processes and functions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1696, 
+                "name": "looking up"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 167, 
+                "name": "woman"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": "\u00a9 The estate of Reg Butler", 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01061_8.jpg", 
+  "title": "Study for Head of Watcher", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/butler-study-for-head-of-watcher-a01061", 
+  "width": "264"
+}

@@ -1,0 +1,158 @@
+{
+  "acno": "A01019", 
+  "acquisitionYear": 1927, 
+  "all_artists": "Philip Webb", 
+  "catalogueGroup": {}, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1831, 
+      "date": "1831\u20131915", 
+      "displayOrder": 1, 
+      "fc": "Philip Webb", 
+      "gender": "Male", 
+      "id": 589, 
+      "mda": "Webb, Philip", 
+      "role": "artist", 
+      "startLetter": "W"
+    }
+  ], 
+  "creditLine": "Bequeathed by J.R. Holliday 1927", 
+  "dateRange": {
+    "endYear": 1863, 
+    "startYear": 1863, 
+    "text": "1863"
+  }, 
+  "dateText": "1863", 
+  "depth": "", 
+  "dimensions": "support: 356 x 530 mm", 
+  "foreignTitle": null, 
+  "groupTitle": null, 
+  "height": "530", 
+  "id": 16044, 
+  "inscription": null, 
+  "medium": "Watercolour, ink and graphite on paper", 
+  "movementCount": 0, 
+  "subjectCount": 9, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1467, 
+                "name": "St Mark"
+              }, 
+              {
+                "id": 1466, 
+                "name": "St Matthew"
+              }
+            ], 
+            "id": 136, 
+            "name": "Saints"
+          }, 
+          {
+            "children": [
+              {
+                "id": 5733, 
+                "name": "angel"
+              }
+            ], 
+            "id": 5731, 
+            "name": "universal religious imagery"
+          }
+        ], 
+        "id": 132, 
+        "name": "religion and belief"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2755, 
+                "name": "St Mark - lion"
+              }, 
+              {
+                "id": 2753, 
+                "name": "St Matthew - angel"
+              }
+            ], 
+            "id": 165, 
+            "name": "religious"
+          }
+        ], 
+        "id": 162, 
+        "name": "symbols & personifications"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 927, 
+                "name": "book - non-specific"
+              }
+            ], 
+            "id": 174, 
+            "name": "reading, writing, printed matter"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 3119, 
+                "name": "lion"
+              }
+            ], 
+            "id": 67, 
+            "name": "animals: mammals"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1573, 
+                "name": "wing"
+              }
+            ], 
+            "id": 64, 
+            "name": "animals: features"
+          }
+        ], 
+        "id": 60, 
+        "name": "nature"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 4306, 
+                "name": "window, stained glass"
+              }
+            ], 
+            "id": 17, 
+            "name": "features"
+          }
+        ], 
+        "id": 13, 
+        "name": "architecture"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01019_8.jpg", 
+  "title": "Emblems of Saints Matthew and Mark", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/webb-emblems-of-saints-matthew-and-mark-a01019", 
+  "width": "356"
+}

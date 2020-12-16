@@ -1,0 +1,286 @@
+{
+  "acno": "A01041", 
+  "acquisitionYear": 1941, 
+  "all_artists": "Sir Max Beerbohm", 
+  "catalogueGroup": {
+    "accessionRanges": "A01038-A01060", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65258, 
+    "shortTitle": "Rossetti and his Friends"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1872, 
+      "date": "1872\u20131956", 
+      "displayOrder": 1, 
+      "fc": "Sir Max Beerbohm", 
+      "gender": "Male", 
+      "id": 722, 
+      "mda": "Beerbohm, Sir Max", 
+      "role": "artist", 
+      "startLetter": "B"
+    }
+  ], 
+  "creditLine": "Bequeathed by Sir Hugh Walpole 1941", 
+  "dateRange": {
+    "endYear": 1916, 
+    "startYear": 1916, 
+    "text": "1916"
+  }, 
+  "dateText": "1916", 
+  "depth": "", 
+  "dimensions": "support: 451 x 298 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Rossetti and his Friends", 
+  "height": "298", 
+  "id": 853, 
+  "inscription": "date inscribed", 
+  "medium": "Graphite and watercolour on paper", 
+  "movementCount": 0, 
+  "subjectCount": 20, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2803, 
+                "name": "England"
+              }
+            ], 
+            "id": 113, 
+            "name": "UK countries and regions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1722, 
+                "name": "Oxford, Oxford University"
+              }
+            ], 
+            "id": 115, 
+            "name": "UK cities, towns and villages"
+          }, 
+          {
+            "children": [
+              {
+                "id": 654, 
+                "name": "Oxfordshire"
+              }
+            ], 
+            "id": 114, 
+            "name": "UK counties"
+          }
+        ], 
+        "id": 106, 
+        "name": "places"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1089, 
+                "name": "Jowett, Benjamin"
+              }, 
+              {
+                "id": 1170, 
+                "name": "Rossetti, Dante Gabriel"
+              }
+            ], 
+            "id": 102, 
+            "name": "named individuals"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20169, 
+                "name": "Pre-Raphaelite Brotherhood"
+              }
+            ], 
+            "id": 103, 
+            "name": "named groups"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20115, 
+                "name": "groups"
+              }
+            ], 
+            "id": 20114, 
+            "name": "portraits"
+          }, 
+          {
+            "children": [
+              {
+                "id": 195, 
+                "name": "man"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 4634, 
+                "name": "Malory, Thomas, Sir, 'Le Morte d'Arthur'"
+              }
+            ], 
+            "id": 58, 
+            "name": "literature (not Shakespeare)"
+          }
+        ], 
+        "id": 55, 
+        "name": "literature and fiction"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2793, 
+                "name": "artist, painter"
+              }
+            ], 
+            "id": 118, 
+            "name": "arts and entertainment"
+          }, 
+          {
+            "children": [
+              {
+                "id": 5908, 
+                "name": "professor"
+              }
+            ], 
+            "id": 121, 
+            "name": "educational and scientific"
+          }
+        ], 
+        "id": 116, 
+        "name": "work and occupations"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 847, 
+                "name": "caricature"
+              }
+            ], 
+            "id": 158, 
+            "name": "social comment"
+          }
+        ], 
+        "id": 145, 
+        "name": "society"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 5730, 
+                "name": "hall"
+              }
+            ], 
+            "id": 44, 
+            "name": "public and municipal"
+          }
+        ], 
+        "id": 40, 
+        "name": "interiors"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 458, 
+                "name": "ladder"
+              }
+            ], 
+            "id": 86, 
+            "name": "tools and machinery"
+          }, 
+          {
+            "children": [
+              {
+                "id": 2950, 
+                "name": "mahlstick"
+              }, 
+              {
+                "id": 624, 
+                "name": "mural"
+              }, 
+              {
+                "id": 2835, 
+                "name": "paintbrush"
+              }, 
+              {
+                "id": 9364, 
+                "name": "painting materials"
+              }
+            ], 
+            "id": 80, 
+            "name": "fine arts and music"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1087, 
+                "name": "painting"
+              }
+            ], 
+            "id": 51, 
+            "name": "art and craft"
+          }
+        ], 
+        "id": 47, 
+        "name": "leisure and pastimes"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 529, 
+                "name": "window"
+              }
+            ], 
+            "id": 17, 
+            "name": "features"
+          }
+        ], 
+        "id": 13, 
+        "name": "architecture"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": "\u00a9 The estate of Max Beerbohm", 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01041_8.jpg", 
+  "title": "The Sole Remark Likely to Have Been Made by Benjamin Jowett about the Mural Paintings at the Oxford Union", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/beerbohm-the-sole-remark-likely-to-have-been-made-by-benjamin-jowett-about-the-mural-a01041", 
+  "width": "451"
+}

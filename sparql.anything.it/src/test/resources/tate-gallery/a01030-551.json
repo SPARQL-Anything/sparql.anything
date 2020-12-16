@@ -1,0 +1,86 @@
+{
+  "acno": "A01030", 
+  "acquisitionYear": 1940, 
+  "all_artists": "Edward Ardizzone", 
+  "catalogueGroup": {
+    "accessionRanges": "A01029-A01033", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65614, 
+    "shortTitle": "The Rake's Progress"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1900, 
+      "date": "1900\u20131979", 
+      "displayOrder": 1, 
+      "fc": "Edward Ardizzone", 
+      "gender": "Male", 
+      "id": 659, 
+      "mda": "Ardizzone, Edward", 
+      "role": "artist", 
+      "startLetter": "A"
+    }
+  ], 
+  "creditLine": "Purchased 1940", 
+  "dateRange": {
+    "endYear": 1931, 
+    "startYear": 1931, 
+    "text": "1931"
+  }, 
+  "dateText": "1931", 
+  "depth": "", 
+  "dimensions": "support: 190 x 159 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "The Rake's Progress", 
+  "height": "159", 
+  "id": 551, 
+  "inscription": "date inscribed", 
+  "medium": "Watercolour and ink on paper", 
+  "movementCount": 0, 
+  "subjectCount": 3, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 195, 
+                "name": "man"
+              }, 
+              {
+                "id": 167, 
+                "name": "woman"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }, 
+          {
+            "children": [
+              {
+                "id": 270, 
+                "name": "standing"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": "\u00a9 Tate", 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01030_8.jpg", 
+  "title": "The Meeting", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/ardizzone-the-meeting-a01030", 
+  "width": "190"
+}

@@ -1,0 +1,168 @@
+{
+  "acno": "A01096", 
+  "acquisitionYear": 1946, 
+  "all_artists": "Helen Beatrix Potter", 
+  "catalogueGroup": {
+    "accessionRanges": "A01089-A01110", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65490, 
+    "shortTitle": "Illustrations for 'The Tailor of Gloucester'"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1866, 
+      "date": "1866\u20131943", 
+      "displayOrder": 1, 
+      "fc": "Helen Beatrix Potter", 
+      "gender": "Female", 
+      "id": 1794, 
+      "mda": "Potter, Helen Beatrix", 
+      "role": "artist", 
+      "startLetter": "P"
+    }
+  ], 
+  "creditLine": "Presented by Capt. K.W.G. Duke RN 1946", 
+  "dateRange": {
+    "endYear": 1902, 
+    "startYear": 1902, 
+    "text": "c.1902"
+  }, 
+  "dateText": "c.1902", 
+  "depth": "", 
+  "dimensions": "support: 111 x 92 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Illustrations for 'The Tailor of Gloucester'", 
+  "height": "92", 
+  "id": 12187, 
+  "inscription": null, 
+  "medium": "Ink, watercolour and gouache on paper", 
+  "movementCount": 0, 
+  "subjectCount": 10, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 6456, 
+                "name": "Potter, Beatrix, 'The Tailor of Gloucester'"
+              }
+            ], 
+            "id": 58, 
+            "name": "literature (not Shakespeare)"
+          }
+        ], 
+        "id": 55, 
+        "name": "literature and fiction"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1546, 
+                "name": "bending forward"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1134, 
+                "name": "man, old"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 750, 
+                "name": "chair"
+              }, 
+              {
+                "id": 4945, 
+                "name": "dresser"
+              }
+            ], 
+            "id": 82, 
+            "name": "furnishings"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1886, 
+                "name": "clock"
+              }
+            ], 
+            "id": 172, 
+            "name": "scientific and measuring"
+          }, 
+          {
+            "children": [
+              {
+                "id": 19657, 
+                "name": "cup / mug"
+              }, 
+              {
+                "id": 1296, 
+                "name": "plate"
+              }
+            ], 
+            "id": 84, 
+            "name": "kitchen"
+          }, 
+          {
+            "children": [
+              {
+                "id": 2076, 
+                "name": "jug"
+              }
+            ], 
+            "id": 170, 
+            "name": "vessels and containers"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 5004, 
+                "name": "tailor"
+              }
+            ], 
+            "id": 124, 
+            "name": "industrial and crafts"
+          }
+        ], 
+        "id": 116, 
+        "name": "work and occupations"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01096_8.jpg", 
+  "title": "The Tailor Hears Noises", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/potter-the-tailor-hears-noises-a01096", 
+  "width": "111"
+}

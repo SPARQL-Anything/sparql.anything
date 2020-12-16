@@ -1,0 +1,72 @@
+{
+  "acno": "A01022", 
+  "acquisitionYear": 1896, 
+  "all_artists": "Sir David Wilkie", 
+  "catalogueGroup": {}, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1785, 
+      "date": "1785\u20131841", 
+      "displayOrder": 1, 
+      "fc": "Sir David Wilkie", 
+      "gender": "Male", 
+      "id": 600, 
+      "mda": "Wilkie, Sir David", 
+      "role": "artist", 
+      "startLetter": "W"
+    }
+  ], 
+  "creditLine": "Bequeathed by Miss Julia Emily Gordon 1896", 
+  "dateRange": null, 
+  "dateText": "date not known", 
+  "depth": "", 
+  "dimensions": "support: 121 x 83 mm", 
+  "foreignTitle": null, 
+  "groupTitle": null, 
+  "height": "83", 
+  "id": 16167, 
+  "inscription": null, 
+  "medium": "Ink and watercolour on paper", 
+  "movementCount": 0, 
+  "subjectCount": 2, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 615, 
+                "name": "head / face"
+              }
+            ], 
+            "id": 93, 
+            "name": "body"
+          }, 
+          {
+            "children": [
+              {
+                "id": 167, 
+                "name": "woman"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01022_8.jpg", 
+  "title": "Head and Shoulders of a Woman and Another Head", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/wilkie-head-and-shoulders-of-a-woman-and-another-head-a01022", 
+  "width": "121"
+}

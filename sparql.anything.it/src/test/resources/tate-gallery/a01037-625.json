@@ -1,0 +1,50 @@
+{
+  "acno": "A01037", 
+  "acquisitionYear": 1961, 
+  "all_artists": "Frank Auerbach", 
+  "catalogueGroup": {
+    "accessionRanges": "A01034-A01037", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65253, 
+    "shortTitle": "Four Studies for 'Oxford Street Building Site I'"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1931, 
+      "date": "born 1931", 
+      "displayOrder": 1, 
+      "fc": "Frank Auerbach", 
+      "gender": "Male", 
+      "id": 676, 
+      "mda": "Auerbach, Frank", 
+      "role": "artist", 
+      "startLetter": "A"
+    }
+  ], 
+  "creditLine": "Presented by the artist 1961", 
+  "dateRange": {
+    "endYear": 1959, 
+    "startYear": 1959, 
+    "text": "1959"
+  }, 
+  "dateText": "1959", 
+  "depth": "", 
+  "dimensions": null, 
+  "foreignTitle": null, 
+  "groupTitle": "Four Studies for 'Oxford Street Building Site I'", 
+  "height": "", 
+  "id": 625, 
+  "inscription": null, 
+  "medium": "Graphite on paper", 
+  "movementCount": 0, 
+  "subjectCount": 0, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": null, 
+  "title": "[title not known]", 
+  "units": "", 
+  "url": "http://www.tate.org.uk/art/artworks/auerbach-title-not-known-a01037", 
+  "width": ""
+}

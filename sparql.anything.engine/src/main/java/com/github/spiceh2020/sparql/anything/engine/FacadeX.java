@@ -9,6 +9,8 @@ import com.github.spiceh2020.sparql.anything.xml.XMLTriplifier;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class FacadeX {
+    private static final Logger log = LoggerFactory.getLogger(FacadeX.class);
     public final static OpExecutorFactory ExecutorFactory = new OpExecutorFactory() {
         @Override
         public OpExecutor create(ExecutionContext execCxt) {
@@ -27,6 +30,7 @@ public final class FacadeX {
 
     static {
         try {
+            log.trace("Registering standard triplifiers");
             Registry.registerTriplifier(new XMLTriplifier());
             Registry.registerTriplifier(new CSVTriplifier());
             Registry.registerTriplifier(new HTMLTriplifier());

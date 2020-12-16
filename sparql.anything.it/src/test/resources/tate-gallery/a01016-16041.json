@@ -1,0 +1,130 @@
+{
+  "acno": "A01016", 
+  "acquisitionYear": 1927, 
+  "all_artists": "Philip Webb", 
+  "catalogueGroup": {}, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1831, 
+      "date": "1831\u20131915", 
+      "displayOrder": 1, 
+      "fc": "Philip Webb", 
+      "gender": "Male", 
+      "id": 589, 
+      "mda": "Webb, Philip", 
+      "role": "artist", 
+      "startLetter": "W"
+    }
+  ], 
+  "creditLine": "Bequeathed by J.R. Holliday 1927", 
+  "dateRange": {
+    "endYear": 1893, 
+    "startYear": 1893, 
+    "text": "1893"
+  }, 
+  "dateText": "1893", 
+  "depth": "", 
+  "dimensions": "support: 165 x 157 mm", 
+  "foreignTitle": null, 
+  "groupTitle": null, 
+  "height": "157", 
+  "id": 16041, 
+  "inscription": null, 
+  "medium": "Watercolour, ink and graphite on paper", 
+  "movementCount": 0, 
+  "subjectCount": 5, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2063, 
+                "name": "artist's notes"
+              }
+            ], 
+            "id": 166, 
+            "name": "inscriptions"
+          }
+        ], 
+        "id": 162, 
+        "name": "symbols & personifications"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 7757, 
+                "name": "coat of arms"
+              }
+            ], 
+            "id": 169, 
+            "name": "religious and ceremonial"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 9329, 
+                "name": "diagrammatic"
+              }
+            ], 
+            "id": 6729, 
+            "name": "formal qualities"
+          }
+        ], 
+        "id": 29, 
+        "name": "emotions, concepts and ideas"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 3119, 
+                "name": "lion"
+              }
+            ], 
+            "id": 67, 
+            "name": "animals: mammals"
+          }
+        ], 
+        "id": 60, 
+        "name": "nature"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 4306, 
+                "name": "window, stained glass"
+              }
+            ], 
+            "id": 17, 
+            "name": "features"
+          }
+        ], 
+        "id": 13, 
+        "name": "architecture"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01016_8.jpg", 
+  "title": "Study for Heraldic Glass", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/webb-study-for-heraldic-glass-a01016", 
+  "width": "165"
+}
