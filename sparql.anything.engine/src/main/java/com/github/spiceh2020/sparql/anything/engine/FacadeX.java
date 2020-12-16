@@ -43,14 +43,14 @@ public final class FacadeX {
                 @Override
                 public Set<String> getExtensions() {
                     return Collections.unmodifiableSet(new HashSet(Arrays.asList(
-                            "image/png","image/jpeg","image/bmp", "image/tiff", "image/vnd.microsoft.icon"
+                            "png","jpeg","jpg","bmp","tiff","tif", "ico"
                     )));
                 }
 
                 @Override
                 public Set<String> getMimeTypes() {
                     return Collections.unmodifiableSet(new HashSet(Arrays.asList(
-                            "png","jpeg","jpg","bmp","tiff","tif", "ico"
+                            "image/png","image/jpeg","image/bmp", "image/tiff", "image/vnd.microsoft.icon"
                     )));
                 }
             });
