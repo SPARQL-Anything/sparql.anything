@@ -1,11 +1,10 @@
 package com.github.spiceh2020.sparql.anything.csv;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Properties;
@@ -13,6 +12,7 @@ import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
@@ -43,6 +43,14 @@ public class CSVTriplifier implements Triplifier {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
+		Charset charset = null;
+		try{
+			charset = Charset.forName(properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8"));
+		}catch(Exception e){
+			log.warn("Unsupported charset format: '{}', using UTF-8.", properties.getProperty(IRIArgument.CHARSET.toString()));
+			charset = StandardCharsets.UTF_8;
+		}
+
 		String root = null;
 		try{
 			root = properties.getProperty(IRIArgument.ROOT.toString());
@@ -72,7 +80,7 @@ public class CSVTriplifier implements Triplifier {
 		}
 		Reader in = null;
 		try {
-			in = new FileReader(new File(url.toURI()));
+			in = new InputStreamReader(new BOMInputStream(new FileInputStream(new File(url.toURI()))), charset);
 		} catch (URISyntaxException e) {
 			throw new IOException(e);
 		}
@@ -97,12 +105,14 @@ public class CSVTriplifier implements Triplifier {
 				while(columns.hasNext()){
 					colid++;
 					String colstring = columns.next();
-					String colname = colstring.trim();
+					String colname = colstring.strip();
+
 					int c = 0;
 					while (headers_map.containsValue(colname)){
 						c++;
 						colname += "_" + String.valueOf(c);
 					}
+					log.trace("adding colname >{}<", colname);
 					headers_map.put(colid, colname);
 				}
 
