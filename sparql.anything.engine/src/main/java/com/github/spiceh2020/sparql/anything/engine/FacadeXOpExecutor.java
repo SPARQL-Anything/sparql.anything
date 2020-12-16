@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -60,10 +61,15 @@ public class FacadeXOpExecutor extends OpExecutor {
 								"Guess triplifier using file extension " + FilenameUtils.getExtension(urlLocation));
 						t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
 					}
-
+					// If triplifier is null, return an empty graph
+					DatasetGraph dg;
 					URL url = new URL(urlLocation);
-					DatasetGraph dg = t.triplify(url, p);
-
+					if (t != null) {
+						 dg = t.triplify(url, p);
+					}else{
+						logger.error("No triplifier available for the input format!");
+						dg = DatasetFactory.create().asDatasetGraph();
+					}
 					if (triplifyMetadata(p)) {
 						dg.addGraph(NodeFactory.createURI(METADATA_GRAPH_IRI),
 								metadataTriplifier.triplify(url, p).getDefaultGraph());

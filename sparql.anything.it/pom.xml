@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.model</artifactId>
+			<artifactId>sparql.anything.engine</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
