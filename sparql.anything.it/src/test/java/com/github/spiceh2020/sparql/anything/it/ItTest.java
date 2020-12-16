@@ -1,13 +1,17 @@
 package com.github.spiceh2020.sparql.anything.it;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.*;
 
@@ -139,12 +143,32 @@ public class ItTest {
         QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
         Query query = QueryFactory.create(queryStr);
         ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
-        while(rs.hasNext()){
+        while(rs.hasNext()) {
             QuerySolution qs = rs.next();
             Assert.assertTrue(qs.get("accession").isLiteral());
             Assert.assertTrue(qs.get("thumbnail").isLiteral());
             Assert.assertTrue(qs.get("image").isLiteral());
             Assert.assertTrue(qs.get("image").asNode().getLiteralDatatypeURI().equals("http://www.w3.org/2001/XMLSchema#base64Binary"));
         }
+    }
+
+    @Test
+    public void TriplifyTateGalleryArtworkData() throws IOException, URISyntaxException {
+        InputStream is = getClass().getClassLoader().getResourceAsStream("tate-gallery1.sparql");
+        String location = getClass().getClassLoader().getResource("tate-gallery/artwork_data.csv").toURI().toString();
+        String queryStr = IOUtils.toString(is, "UTF-8").replace("%%artwork_data%%", location);
+        log.info(queryStr);
+        Dataset kb = DatasetFactory.createGeneral();
+        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+        Query query = QueryFactory.create(queryStr);
+        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        while(rs.hasNext()) {
+            QuerySolution qs = rs.next();
+            log.info("{}}", qs);
+        }
+//        Model model = QueryExecutionFactory.create(query, kb).execConstruct();
+//        log.info("Produced {} triples", model.size());
+//        // Write as Turtle via model.write
+//        model.write(System.out, "TTL") ;
     }
 }
