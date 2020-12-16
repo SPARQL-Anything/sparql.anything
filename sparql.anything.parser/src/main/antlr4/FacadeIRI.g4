@@ -43,6 +43,7 @@ IDENTIFIER
 		LETTER
 		| DIGIT
 		| '-'
+		| '.'
 	)+
 ;
 
