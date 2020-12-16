@@ -55,12 +55,12 @@ public class CSVTriplifier implements Triplifier {
 
 		String namespace = null;
 		try{
-			root = properties.getProperty(IRIArgument.ROOT.toString());
-			if (root == null || root.trim().equals("")) {
+			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
+			if (namespace == null || namespace.trim().equals("")) {
 				throw new Exception();
 			}
 		}catch(Exception e){
-			log.warn("Unsupported parameter value for 'root': '{}', using default (location}).", url);
+			log.warn("Unsupported parameter value for 'namespace': '{}', using default (location}).", url);
 			namespace = url.toString() + "#";
 		}
 		boolean headers;
