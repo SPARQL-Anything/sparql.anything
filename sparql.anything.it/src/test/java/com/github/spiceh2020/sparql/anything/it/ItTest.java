@@ -79,6 +79,32 @@ public class ItTest {
         }
     }
 
+
+    @Test
+    public void CSV1headersDefaultNS() throws URISyntaxException {
+        Dataset kb = DatasetFactory.createGeneral();
+        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+        String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
+        log.info("{}", location);
+        Query query = QueryFactory.create("SELECT distinct ?p WHERE { SERVICE <facade-x:csv.headers=true,location=" + location + "> { ?s ?p ?o }} ORDER BY ?p");
+        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        Map<Integer,String> expected = new HashMap<Integer,String>();
+
+        expected.put(3,"urn:facade-x:ns#A");
+        expected.put(4,"urn:facade-x:ns#B");
+        expected.put(5,"urn:facade-x:ns#C");
+        expected.put(6,"urn:facade-x:ns#D");
+        expected.put(1,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_1");
+        expected.put(2,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_2");
+
+        while (rs.hasNext()){
+            int rowId = rs.getRowNumber() + 1;
+            QuerySolution qs = rs.next();
+            log.trace("{} {} {}", rowId, qs.get("p").toString(), expected.get(rowId));
+            Assert.assertTrue(expected.get(rowId).equals(qs.get("p").toString()));
+        }
+    }
+
     @Test
     public void JSON1() throws URISyntaxException {
         // a01009-14709.json

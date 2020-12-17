@@ -14,19 +14,19 @@ import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
 import com.github.spiceh2020.sparql.anything.metadata.MetadataTriplifier;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FacadeXOpExecutor extends OpExecutor {
 
 	private TriplifierRegister triplifierRegister;
 
-	private static final Logger logger = LogManager.getLogger(FacadeXOpExecutor.class);
+	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
 	private MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
 	public static String METADATA_GRAPH_IRI = "facade-x:metadata";
 	public static String FACADE_X_NAMESPACE_IRI = "urn:facade-x:ns#";
@@ -95,9 +95,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		// namespace <urn:facade-x/ns#>
 		if(!properties.containsKey(IRIArgument.NAMESPACE.toString())){
+			logger.trace("Setting default value for namespace: {}", FACADE_X_NAMESPACE_IRI);
 			properties.setProperty(IRIArgument.NAMESPACE.toString(), FACADE_X_NAMESPACE_IRI);
 		}
-		return p.getProperties();
+		return properties;
 	}
 
 	private boolean triplifyMetadata(Properties p) {
