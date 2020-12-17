@@ -29,6 +29,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private static final Logger logger = LogManager.getLogger(FacadeXOpExecutor.class);
 	private MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
 	public static String METADATA_GRAPH_IRI = "facade-x:metadata";
+	public static String FACADE_X_NAMESPACE_IRI = "urn:facade-x:ns#";
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
@@ -89,6 +90,13 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private Properties getProperties(String url) {
 		FacadeIRIParser p = new FacadeIRIParser(url);
+		Properties properties = p.getProperties();
+		// Setting defaults
+
+		// namespace <urn:facade-x/ns#>
+		if(!properties.containsKey(IRIArgument.NAMESPACE.toString()){
+			properties.setProperty(IRIArgument.NAMESPACE.toString(), FACADE_X_NAMESPACE_IRI);
+		}
 		return p.getProperties();
 	}
 
