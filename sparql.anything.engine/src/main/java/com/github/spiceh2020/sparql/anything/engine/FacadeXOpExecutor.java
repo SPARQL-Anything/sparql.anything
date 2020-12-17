@@ -94,7 +94,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		// Setting defaults
 
 		// namespace <urn:facade-x/ns#>
-		if(!properties.containsKey(IRIArgument.NAMESPACE.toString()){
+		if(!properties.containsKey(IRIArgument.NAMESPACE.toString())){
 			properties.setProperty(IRIArgument.NAMESPACE.toString(), FACADE_X_NAMESPACE_IRI);
 		}
 		return p.getProperties();
