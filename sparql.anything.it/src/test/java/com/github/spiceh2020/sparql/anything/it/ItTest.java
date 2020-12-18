@@ -197,4 +197,24 @@ public class ItTest {
 //        // Write as Turtle via model.write
 //        model.write(System.out, "TTL") ;
     }
+
+    @Test
+    public void TriplifyTateGalleryArtworkJSON() throws IOException, URISyntaxException {
+        InputStream is = getClass().getClassLoader().getResourceAsStream("tate-gallery2.sparql");
+        String location = getClass().getClassLoader().getResource("tate-gallery/A01003-14703.json").toURI().toString();
+        String queryStr = IOUtils.toString(is, "UTF-8").replace("%%artwork_json%%", location);
+        log.info(queryStr);
+        Dataset kb = DatasetFactory.createGeneral();
+        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+        Query query = QueryFactory.create(queryStr);
+        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        while(rs.hasNext()) {
+            QuerySolution qs = rs.next();
+            log.info("{}}", qs);
+        }
+//        Model model = QueryExecutionFactory.create(query, kb).execConstruct();
+//        log.info("Produced {} triples", model.size());
+//        // Write as Turtle via model.write
+//        model.write(System.out, "TTL") ;
+    }
 }
