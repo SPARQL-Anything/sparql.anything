@@ -1,4 +1,4 @@
-PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
+PREFIX source: <urn:facade-x:ns#>
 
 SELECT DISTINCT ?id
 WHERE{

@@ -5,15 +5,12 @@ if [[ ! -e "bin" ]]; then
 	cd bin/
 	curl -OL  https://github.com/sparql-generate/sparql-generate/releases/download/2.0.1/sparql-generate-2.0.1.jar
 	curl -OL https://github.com/RMLio/rmlmapper-java/releases/download/v4.9.0/rmlmapper.jar
+	curl -OL https://github.com/spice-h2020/sparql.anything/releases/download/v0.0.2/sparql-anything-0.0.2.jar
 	cd ..
 fi
 if [[ ! -e "generated-data" ]]; then
 	mkdir generated-data
 fi
-
-mvn -f ../pom.xml clean install
-cp ../sparql.anything.cli/target/sparql-anything-$SPARQL_ANYTHING_VERSION.jar bin/
-
 
 function m() {
 	

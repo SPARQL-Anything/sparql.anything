@@ -1,4 +1,4 @@
-PREFIX source: <https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/>
+PREFIX source: <urn:facade-x:ns#>
 
 SELECT DISTINCT ?id
 WHERE{
@@ -7,6 +7,6 @@ WHERE{
 		?s ?p ?subject .
 		?s source:Inventario ?id .
 		FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
-		FILTER(str(?p) = "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json/Ambito culturale")
+		FILTER(str(?p) = "urn:facade-x:ns#Ambito culturale")
 	}
 }
