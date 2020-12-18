@@ -8,10 +8,15 @@ import java.util.Properties;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
+import org.apache.jena.sparql.engine.binding.Binding;
+import org.apache.jena.sparql.engine.iterator.QueryIterDefaulting;
+import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
+import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
 
@@ -37,10 +42,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
-
+		logger.trace("SERVICE uri: {}", opService.getService());
 		if (opService.getService().isURI()) {
-			if (isTupleURI(opService.getService().getURI())) {
-
+			logger.trace("is uri: {}", opService.getService());
+			if (isFacadeXURI(opService.getService().getURI())) {
+				logger.trace("Facade-X uri: {}", opService.getService());
 				try {
 					Triplifier t;
 					Properties p = getProperties(opService.getService().getURI());
@@ -81,10 +87,29 @@ public class FacadeXOpExecutor extends OpExecutor {
 				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
 						| IllegalAccessException | InvocationTargetException | NoSuchMethodException
 						| ClassNotFoundException e) {
-					e.printStackTrace();
+					logger.error("An error occurred", e);
 				}
+			} else {
+				// Pass to parent
+				logger.trace("not a facade-x uri: {}", opService.getService());
+				return super.execute(opService, input);
 			}
+		} else if(opService.getService().isVariable()){
+			logger.trace("is variable: {}", opService.getService());
+			// Postpone to next iteration
+			return new QueryIterRepeatApply(input, execCxt){
+
+				@Override
+				protected QueryIterator nextStage(Binding binding) {
+					Op op2 = QC.substitute(opService, binding);
+					QueryIterator thisStep = QueryIterSingleton.create(binding, this.getExecContext());
+					QueryIterator cIter = QC.execute(op2, thisStep, super.getExecContext());
+					cIter = new QueryIterDefaulting(cIter, binding, this.getExecContext());
+					return cIter;
+				}
+			};
 		}
+		logger.trace("Not a Variable and not a IRI: {}", opService.getService());
 		return super.execute(opService, input);
 	}
 
@@ -113,7 +138,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return result;
 	}
 
-	protected boolean isTupleURI(String uri) {
+	protected boolean isFacadeXURI(String uri) {
 		if (uri.startsWith("facade-x:")) {
 			return true;
 		}
