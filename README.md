@@ -134,7 +134,7 @@ By default, these formats are transformed as follows.
 
 |Input File|Output|
 |---|---|
-|<pre></pre> | <pre></pre> |
+|<pre>laura@example.com,2070,Laura,Grey<br/>craig@example.com,4081,Craig,Johnson<br/>mary@example.com,9346,Mary,Jenkins<br/>jamie@example.com,5079,Jamie,Smith<br/></pre> | <pre>@prefix rdf:   &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .<br/><br/>[ rdf:_1  [ rdf:_1  "laura@example.com" ;<br/>            rdf:_2  "2070" ;<br/>            rdf:_3  "Laura" ;<br/>            rdf:_4  "Grey"<br/>          ] ;<br/>  rdf:_2  [ rdf:_1  "craig@example.com" ;<br/>            rdf:_2  "4081" ;<br/>            rdf:_3  "Craig" ;<br/>            rdf:_4  "Johnson"<br/>          ] ;<br/>  rdf:_3  [ rdf:_1  "mary@example.com" ;<br/>            rdf:_2  "9346" ;<br/>            rdf:_3  "Mary" ;<br/>            rdf:_4  "Jenkins"<br/>          ] ;<br/>  rdf:_4  [ rdf:_1  "jamie@example.com" ;<br/>            rdf:_2  "5079" ;<br/>            rdf:_3  "Jamie" ;<br/>            rdf:_4  "Smith"<br/>          ]<br/>] .<br/></pre> |
 
 </details>
 
