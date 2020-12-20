@@ -116,6 +116,50 @@ These formats are transformed as follows.
 
 <details><summary>HTML</summary>
 
+|Input File|Output|
+|---|---|
+|<pre></pre> | <pre></pre> |
+
+</details>
+
+<details><summary>XML</summary>
+
+|Input File|Output|
+|---|---|
+|<pre></pre> | <pre></pre> |
+
+</details>
+
+<details><summary>CSV</summary>
+
+|Input File|Output|
+|---|---|
+|<pre></pre> | <pre></pre> |
+
+</details>
+
+<details><summary>BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO </summary>
+
+|Input File|Output|
+|---|---|
+|<pre></pre> | <pre></pre> |
+
+</details>
+
+<details><summary>TXT</summary>
+
+|Input File|Output|
+|---|---|
+|<pre></pre> | <pre></pre> |
+
+</details>
+
+<details><summary>Metadata</summary>
+
+|Input File|Output|
+|---|---|
+|<pre></pre> | <pre></pre> |
+
 </details>
 
 ## IRI schema
