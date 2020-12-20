@@ -100,7 +100,7 @@ and get this result without caring of transforming JSON to RDF.
 ## Supported Formats
 Currently, sparql.anything supports the following formats: "json", "html", "xml", "csv", "bin", "png","jpeg","jpg","bmp","tiff","tif", "ico", "txt" ... but the possibilities are limitless!
 
-These formats are transformed as follows.
+By default, these formats are transformed as follows.
 
 <details><summary>JSON</summary>
     
