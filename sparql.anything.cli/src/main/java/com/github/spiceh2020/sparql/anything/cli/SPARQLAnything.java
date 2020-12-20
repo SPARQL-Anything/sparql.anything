@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import com.github.spiceh2020.sparql.anything.engine.FacadeX;
-import com.github.spiceh2020.sparql.anything.html.HTMLTriplifier;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -24,21 +22,12 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.riot.Lang;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.main.OpExecutor;
-import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.github.spiceh2020.sparql.anything.binary.BinaryTriplifier;
-import com.github.spiceh2020.sparql.anything.csv.CSVTriplifier;
-import com.github.spiceh2020.sparql.anything.engine.TriplifierRegister;
+import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
-import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
-import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
-import com.github.spiceh2020.sparql.anything.text.TextTriplifier;
-import com.github.spiceh2020.sparql.anything.xml.XMLTriplifier;
 
 public class SPARQLAnything {
 
@@ -106,7 +95,7 @@ public class SPARQLAnything {
 			return commandLine.getOptionValue(FORMAT);
 		}
 
-		return Lang.RDFXML.toString();
+		return Lang.TTL.toString();
 	}
 
 	public static void main(String[] args) throws Exception {

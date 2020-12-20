@@ -43,7 +43,7 @@ public class MetadataTriplifier implements Triplifier {
 		String defaultNamespace = url.toString() + "/";
 		String namespace = null;
 
-		if (properties.contains(IRIArgument.NAMESPACE.toString())) {
+		if (properties.containsKey(IRIArgument.NAMESPACE.toString())) {
 			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
 			if (namespace.trim().length() == 0) {
 				logger.warn("Unsupported parameter value for 'namespace', using default (no location+/).");

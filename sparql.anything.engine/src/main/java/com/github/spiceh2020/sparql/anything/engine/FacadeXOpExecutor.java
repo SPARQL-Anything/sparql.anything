@@ -72,8 +72,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 					DatasetGraph dg;
 					URL url = new URL(urlLocation);
 					if (t != null) {
-						 dg = t.triplify(url, p);
-					}else{
+						dg = t.triplify(url, p);
+					} else {
 						logger.error("No triplifier available for the input format!");
 						dg = DatasetFactory.create().asDatasetGraph();
 					}
@@ -94,10 +94,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 				logger.trace("not a facade-x uri: {}", opService.getService());
 				return super.execute(opService, input);
 			}
-		} else if(opService.getService().isVariable()){
+		} else if (opService.getService().isVariable()) {
 			logger.trace("is variable: {}", opService.getService());
 			// Postpone to next iteration
-			return new QueryIterRepeatApply(input, execCxt){
+			return new QueryIterRepeatApply(input, execCxt) {
 
 				@Override
 				protected QueryIterator nextStage(Binding binding) {
@@ -119,7 +119,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		// Setting defaults
 
 		// namespace <urn:facade-x/ns#>
-		if(!properties.containsKey(IRIArgument.NAMESPACE.toString())){
+		if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
 			logger.trace("Setting default value for namespace: {}", FACADE_X_NAMESPACE_IRI);
 			properties.setProperty(IRIArgument.NAMESPACE.toString(), FACADE_X_NAMESPACE_IRI);
 		}
@@ -128,7 +128,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private boolean triplifyMetadata(Properties p) {
 		boolean result = false;
-		if (p.contains(IRIArgument.METADATA.toString())) {
+		if (p.containsKey(IRIArgument.METADATA.toString())) {
 			try {
 				result = Boolean.parseBoolean(p.getProperty(IRIArgument.METADATA.toString()));
 			} catch (Exception e) {

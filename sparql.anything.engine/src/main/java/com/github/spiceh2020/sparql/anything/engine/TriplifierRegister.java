@@ -71,4 +71,10 @@ public final class TriplifierRegister {
 		return this.extension.get(f);
 	}
 
+	public void printMediaTypes() {
+		this.mimeType.keySet().forEach(mt -> {
+			System.out.println(mt);
+		});
+	}
+
 }
