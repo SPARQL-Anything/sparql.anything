@@ -165,10 +165,44 @@ By default, these formats are triplified as follows.
 
 ## IRI schema
 
+sparql.anything will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
+In order to instruct the query processor to delegate the execution to facade-x, you must use the  following URI-schema within SERVICE clauses.
 
-### General purpose arguments
+```
+facade-x ':' ([option] ('=' [value])? ','?)+
+```
 
-### Format specific arguments
+A minimal URI that uses only the resource locator is also possible.
+
+```
+facade-x ':' URL
+```
+
+In this case sparql.anything guesses the data source type from the file extension.
+
+
+### General purpose options
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|location|The URI of the data source.|Any valid URI.|Mandatory|
+|root|The IRI of generated root resource.|Any valid IRI.|No value (a blank node will be generated).|
+|media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml,image/png,text/html,application/octet-stream,application/json,image/jpeg,image/tiff,image/bmp,text/csv,image/vnd.microsoft.icon,text/plain|No value (the media-type will be guessed from the the file extension)|
+|namespace|The namespace prefix for the properties that will be generated.|Any valid namespace prefix.|urn:facade-x:ns#|
+|blank-nodes|It tells sparql.anything to generate blank nodes or not.|true/false|true|
+|triplifier|It forces sparql.anything to use a specific triplifier for transforming the data source|A canonical name of a Java class|No value|
+|charset|The charset of the data source.|Any charset.|UTF-8|
+|metadata|It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;facade-x:metadata&gt;  |true/false|false|
+
+
+### Format specific options
+
+<details><summary>TXT</summary>
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+
+</details>
+
 
 ### Licence
 
