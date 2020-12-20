@@ -88,14 +88,14 @@ WHERE {
 }
 ```
 
-and get this result 
+and get this result without caring of transforming JSON to RDF. 
 
 | seriesName    |
 |---------------|
 | "Cougar Town" |
 | "Friends"     |
 
-without caring of transforming JSON to RDF. 
+
 
 ## Supported Formats
 Currently, sparql.anything supports the following formats: "json", "html", "xml", "csv", "bin", "png","jpeg","jpg","bmp","tiff","tif", "ico", "txt" ... but the possibilities are limitless!
