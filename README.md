@@ -185,7 +185,7 @@ In this case sparql.anything guesses the data source type from the file extensio
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
-|location|The URL of the data source.|Any valid URI.|Mandatory|
+|location|The URL of the data source.|Any valid URL.|Mandatory|
 |root|The IRI of generated root resource.|Any valid IRI.|No value (a blank node will be generated).|
 |media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml,image/png,text/html,application/octet-stream,application/json,image/jpeg,image/tiff,image/bmp,text/csv,image/vnd.microsoft.icon,text/plain|No value (the media-type will be guessed from the the file extension)|
 |namespace|The namespace prefix for the properties that will be generated.|Any valid namespace prefix.|urn:facade-x:ns#|
