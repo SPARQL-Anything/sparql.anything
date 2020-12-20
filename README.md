@@ -150,7 +150,7 @@ By default, these formats are transformed as follows.
 
 |Input File|Output|
 |---|---|
-|<pre></pre> | <pre></pre> |
+|<pre>Hello World!</pre> | <pre>[ &lt;ttp://www.w3.org/1999/02/22-rdf-syntax-ns#_1&gt; "Hello World!" ] .</pre> |
 
 </details>
 
