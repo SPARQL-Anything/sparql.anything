@@ -243,12 +243,9 @@ The jar can be executed as follows:
 
 ```
 java -jar sparql.anything-[version].jar [arguments]
-```
-
-```
--q,--query <query>     The path to the file storing the query to execute or the query itself.
--f,--format <string>   OPTIONAL -  In case of CONSTRUCT queries, the ormat of the output file;  TTL, NT [Default: TTL]
--o,--output <file>     OPTIONAL - The path to the output file. [Default: STDOUT]
+    -q,--query <query>     The path to the file storing the query to execute or the query itself.
+    -f,--format <string>   OPTIONAL -  In case of CONSTRUCT queries, the ormat of the output file;  TTL, NT [Default: TTL]
+    -o,--output <file>     OPTIONAL - The path to the output file. [Default: STDOUT]
 ```
 
 
