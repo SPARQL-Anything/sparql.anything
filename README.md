@@ -26,7 +26,7 @@ This is a generic example of a Facade-X data object (more examples below):
 ## Querying anything
 sparql.anything extends the Apache Jena ARQ processors by *overloading* the SERVICE operator, as in the following example:
 
-Suppose having this JSON file as input available at ``https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/examples/example1.json`` 
+Suppose having this JSON file as input (also available at ``https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/examples/example1.json``)
 
 ```
 [
@@ -90,12 +90,10 @@ WHERE {
 
 and get this result 
 
------------------
 | seriesName    |
-=================
+|---------------|
 | "Cougar Town" |
 | "Friends"     |
------------------
 
 without caring of transforming JSON to RDF. 
 
