@@ -100,4 +100,30 @@ and get this result without caring of transforming JSON to RDF.
 ## Supported Formats
 Currently, sparql.anything supports the following formats: "json", "html", "xml", "csv", "bin", "png","jpeg","jpg","bmp","tiff","tif", "ico", "txt" ... but the possibilities are limitless!
 
+These formats are transformed as follows.
+
+<details><summary>JSON</summary>
+    
+    
+|Input File|Output|
+|---|---|
+|<pre>{<br>  "stringArg":"stringValue",<br>  "intArg":1,<br>  "booleanArg":true,<br>  "nullArg": null,<br>  "arr":[0,1]<br>}</pre> | <pre>@prefix fx:    &lt;urn:facade-x:ns#&gt; .<br>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .<br>@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .<br>[  <br>  fx:arr         [  <br>                   rdf:_0  "0"^^xsd:int ;<br>                   rdf:_1  "1"^^xsd:int<br>                 ] ;<br>  fx:booleanArg  true ;<br>  fx:intArg      "1"^^xsd:int ;<br>  fx:stringArg   "stringValue"<br>] .</pre> |
+
+
+    
+</details>
+
+
+<details><summary>HTML</summary>
+
+</details>
+
+## IRI schema
+
+
+### General purpose arguments
+
+### Format specific arguments
+
+### Licence
 
