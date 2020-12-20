@@ -197,12 +197,48 @@ In this case sparql.anything guesses the data source type from the file extensio
 
 ### Format specific options
 
-<details><summary>TXT</summary>
+<details><summary>HTML</summary>
+
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
+|html.selector|A CSS selector that restricts the HTML tags to consider for the triplification.|Any valid CSS selector.|No Value|
 
 </details>
 
 
+<details><summary>CSV</summary>
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|csv.format|The format of the input CSV file.|Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache's commons CSV library|DEFAULT|
+|csv.headers|It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.|true/false|false|
+
+</details>
+
+<details><summary>BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO</summary>
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|bin.encoding|The encoding to use for generating the value that will be generated.|BASE64|BASE64|
+
+</details>
+
+
+
+<details><summary>TXT</summary>
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|txt.regex|It tells sparql.anything to evaluate a regular expression on the data source. In this case the slots will be filled with the bindings of the regex.|Any valid regular expression|No value|
+|txt.group|It tells sparql.anything to generate slots by using a specific group of the regular expression.|Any integer|No value|
+
+</details>
+
+
+## Running sparql.anything
+
+
+
 ### Licence
 
+TBD
