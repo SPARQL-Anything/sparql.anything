@@ -187,7 +187,7 @@ In this case sparql.anything guesses the data source type from the file extensio
 |-|-|-|-|
 |location|The URL of the data source.|Any valid URL.|Mandatory|
 |root|The IRI of generated root resource.|Any valid IRI.|location + '#'|
-|media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml,image/png,text/html,application/octet-stream,application/json,image/jpeg,image/tiff,image/bmp,text/csv,image/vnd.microsoft.icon,text/plain|No value (the media-type will be guessed from the the file extension)|
+|media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml, image/png, text/html, application/octet-stream, application/json, image/jpeg, image/tiff, image/bmp, text/csv, image/vnd.microsoft.icon,text/plain |No value (the media-type will be guessed from the the file extension)|
 |namespace|The namespace prefix for the properties that will be generated.|Any valid namespace prefix.|urn:facade-x:ns#|
 |blank-nodes|It tells sparql.anything to generate blank nodes or not.|true/false|true|
 |triplifier|It forces sparql.anything to use a specific triplifier for transforming the data source|A canonical name of a Java class|No value|
