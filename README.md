@@ -219,7 +219,7 @@ In this case sparql.anything guesses the data source type from the file extensio
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
-|bin.encoding|The encoding to use for generating the value that will be generated.|BASE64|BASE64|
+|bin.encoding|The encoding to use for generating the representation of the file.|BASE64|BASE64|
 
 </details>
 
