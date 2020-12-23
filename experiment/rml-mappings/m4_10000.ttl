@@ -6,7 +6,7 @@
 
 :TriplesMap a rr:TriplesMap;
   rml:logicalSource [
-    rml:source "data/increasing_size_experiment/10000.json";
+    rml:source "10000.json";
     rml:referenceFormulation ql:JSONPath;
     rml:iterator "$.[*]"
   ].

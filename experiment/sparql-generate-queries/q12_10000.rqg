@@ -10,4 +10,4 @@ GENERATE {
 	 ex:Immagine ?immagine ;
 	 ex:Dimensioni ?dimensioni .
 }
-ITERATOR ite:JSONPath(<file:///Users/lgu/workspace/spice/sparql.anything/experiment/data/increasing_size_experiment/10000.json>,"$[*]","$.Autore","$.Datazione","$.Titolo","$.Tecnica","$.Immagine","$.Dimensioni") AS ?obj ?autore ?datazione ?titolo  ?tecnica ?immagine ?dimensioni
+ITERATOR ite:JSONPath(<10000.json>,"$[*]","$.Autore","$.Datazione","$.Titolo","$.Tecnica","$.Immagine","$.Dimensioni") AS ?obj ?autore ?datazione ?titolo  ?tecnica ?immagine ?dimensioni
