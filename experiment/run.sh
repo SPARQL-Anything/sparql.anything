@@ -1,10 +1,12 @@
+SPARQL_ANYTHING_VERSION=0.0.3-SNAPSHOT
 if [[ ! -e "bin" ]]; then
 	echo "bin not exists"
 	mkdir bin
 	cd bin/
 	curl -OL  https://github.com/sparql-generate/sparql-generate/releases/download/2.0.1/sparql-generate-2.0.1.jar
 	curl -OL https://github.com/RMLio/rmlmapper-java/releases/download/v4.9.0/rmlmapper.jar
-	curl -OL https://github.com/spice-h2020/sparql.anything/releases/download/v0.0.2/sparql-anything-0.0.2.jar
+	mvn -f ../../pom.xml clean install
+	cp ../../sparql.anything.cli/target/sparql-anything-$SPARQL_ANYTHING_VERSION.jar .
 	cd ..
 fi
 if [[ ! -e "generated-data" ]]; then
@@ -46,15 +48,15 @@ m "java $JVM_ARGS -jar bin/rmlmapper.jar -m rml-mappings/m2.ttl -s turtle -o gen
 m "java $JVM_ARGS -jar bin/rmlmapper.jar -m rml-mappings/m3.ttl -s turtle -o generated-data/rml-m3.ttl"
 m "java $JVM_ARGS -jar bin/rmlmapper.jar -m rml-mappings/m4.ttl -s turtle -o generated-data/rml-m4.ttl"
 
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q1.rqg"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q2.rqg"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q3.rqg"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q4.rqg"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q5.rqg"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q6.rqg"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q7.rqg"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q8.rqg"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q9.rqg -f TTL -o generated-data/sparql-anything-q9.ttl"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q10.rqg -f TTL -o generated-data/sparql-anything-q10.ttl"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q11.rqg -f TTL -o generated-data/sparql-anything-q11.ttl"
-m "java $JVM_ARGS -jar bin/sparql-anything-0.0.2.jar -q sparql-anything-queries/q12.rqg -f TTL -o generated-data/sparql-anything-q12.ttl"  
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q1.rqg"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q2.rqg"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q3.rqg"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q4.rqg"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q5.rqg"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q6.rqg"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q7.rqg"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q8.rqg"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q9.rqg -f TTL -o generated-data/sparql-anything-q9.ttl"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q10.rqg -f TTL -o generated-data/sparql-anything-q10.ttl"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q11.rqg -f TTL -o generated-data/sparql-anything-q11.ttl"
+m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q12.rqg -f TTL -o generated-data/sparql-anything-q12.ttl"  

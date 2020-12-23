@@ -1,7 +1,9 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -19,13 +21,13 @@ import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
 import com.github.spiceh2020.sparql.anything.metadata.MetadataTriplifier;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FacadeXOpExecutor extends OpExecutor {
 
@@ -70,7 +72,15 @@ public class FacadeXOpExecutor extends OpExecutor {
 					}
 					// If triplifier is null, return an empty graph
 					DatasetGraph dg;
-					URL url = new URL(urlLocation);
+
+					URL url;
+					try {
+						url = new URL(urlLocation);
+					} catch (MalformedURLException u) {
+						logger.trace("Malformed url interpreting as file");
+						url = new File(urlLocation).toURI().toURL();
+					}
+
 					if (t != null) {
 						dg = t.triplify(url, p);
 					} else {
