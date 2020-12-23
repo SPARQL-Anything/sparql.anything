@@ -1,15 +1,29 @@
-# Experiment
+# Cognitive Complexity Comparison
 
-*Objective*: The objective of the experiment is to compare sparql.anything with [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) and [RML](https://rml.io/) frameworks in terms of usability, learnability and performance of the frameworks. Specifically,  from the data sources of the SPICE project  we selected four non-RDF resources and for each resource we defined two kinds of tests: one aimed at assessing the usability and learnability of sparql.anything and [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) in retrieving data, the other meant at evaluating  the usability and learnability of three approaches   in generating data. 
+*Objective*: The objective of the experiment is to compare sparql.anything with [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) and [RML](https://rml.io/) frameworks in terms of usability and learnability of the frameworks. Specifically,  from the data sources of the SPICE project  we selected four non-RDF resources and for each resource we defined two kinds of tests: one aimed at assessing the usability and learnability of sparql.anything and [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) in retrieving data, the other meant at evaluating  the usability and learnability of three approaches   in generating data. 
 
 *Approach*: As far as retrieval tests is concerned, we inspected the resources in order to identify a set of possible competency questions a user may want to ask. Then, for each competency question we defined the corresponding query according to sparql.anything and [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) frameworks.
 Concerning the generation tests, for each resource we defined a target RDF model for exporting the data and the rules needed for transforming the data according to each of the compared frameworks.
 
 *Results*: One effective measure of complexity is the number of distinct items or variables that need to be combined within a query or expression [(Halford et al. 2004)](https://www.tandfonline.com/doi/pdf/10.1080/13546780442000033?casa_token=4fEYMB3PswAAAAAA:wfaeKgz51sDOGKdq2KWDn38Iu-Pah0iGmXxMoG6SJIu1Zxv9PR7fcTuFLCdGTnNgiyh8YhamfjeZ). Such a measure of complexity has previously been used to explain difficulties in the comprehensibility of Description Logic statements [(Warren et al. 2015)](https://dl.acm.org/doi/abs/10.1145/2814864.2814866?casa_token=BLtmqOwo4ZUAAAAA:DYqfYy_tnY2GebHD2aG7NBDt2MjT6raKKBNJsrQj1HPofuFnVaykpETzu-PA-YPaShIUT1cUujU). 
 Specifically, we counted the number of tokens needed for expressing a set of competency questions.
-The queries were tokenized (by using ``"(){},;{}\n\t\r `` as token delimiters) and we computed the total number of tokens  and the number of distinct tokens needed for each queries.
+The queries were tokenized (by using ``"(){},;{}\n\t\r `` as token delimiters) and we computed the total number of tokens  and the number of distinct tokens needed for each queries. 
+
+
 
 ![Number of Distinct Token per Query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/chart.png)![Number of Distinct Token per Query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/number_of_tokens.png)
+
+
+*Running the experiment*: The code implementing the tokenizer that has been used for the experiment can be found in the [sparql.anything.experiment module](https://github.com/spice-h2020/sparql.anything/tree/main/sparql.anything.experiment).
+The experiment can be run with following command:
+
+```
+./run_cog_experiment.sh
+```
+
+## Queries
+
+In the following the queries used for the experiment are reported.
 
 ## Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
 
@@ -172,7 +186,7 @@ _:0 ex:Autore "GABINIO MARIO";
   ex:Titolo "TORINO/ MONUMENTO A CARLO ALBERTO, PIAZZA CARLO ALBERTO, VISTA LATERALE DESTRA" .
 ```
 
-<details><summary>SPARQL generate for source 1</summary>
+<details><summary>SPARQL generate for source 1 (q10)</summary>
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -195,7 +209,7 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 
 
 
-<details><summary>SPARQL generate for source 2</summary>
+<details><summary>SPARQL generate for source 2 (q11)</summary>
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -219,7 +233,7 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 
 
 
-<details><summary>SPARQL generate for source 3</summary>
+<details><summary>SPARQL generate for source 3 (q12)</summary>
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -240,7 +254,7 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 	
 </details>
 
-<details><summary>SPARQL Anything for source 1</summary>
+<details><summary>SPARQL Anything for source 1 (q10)</summary>
 	
 ```
 
@@ -268,7 +282,7 @@ CONSTRUCT {
 
 </details>
 
-<details><summary>SPARQL Anything for source 2</summary>
+<details><summary>SPARQL Anything for source 2 (q11)</summary>
 	
 ```
 PREFIX ex: <http://exmaple.org/>
@@ -295,7 +309,7 @@ CONSTRUCT {
 
 </details>
 
-<details><summary>SPARQL Anything for source 3</summary>
+<details><summary>SPARQL Anything for source 3 (q12)</summary>
 	
 ```
 PREFIX ex: <http://exmaple.org/>
@@ -322,7 +336,7 @@ CONSTRUCT {
 
 </details>
 
-<details><summary>RML for source 1</summary>
+<details><summary>RML for source 1 (q10)</summary>
 	
 ```
 @prefix rml: <http://semweb.mmlab.be/ns/rml#> .
@@ -395,7 +409,7 @@ CONSTRUCT {
 </details>
 
 
-<details><summary>RML for source 2</summary>
+<details><summary>RML for source 2 (q11)</summary>
 	
 ```
 @prefix rml: <http://semweb.mmlab.be/ns/rml#> .
@@ -468,7 +482,7 @@ CONSTRUCT {
 	
 </details>
 
-<details><summary>RML for source 3</summary>
+<details><summary>RML for source 3 (q12)</summary>
 	
 ```
 @prefix rml: <http://semweb.mmlab.be/ns/rml#> .
@@ -803,7 +817,7 @@ _:0 ex:Ambito_culturale "";
   ex:lsreferenceby "http://www.palazzomadamatorino.it/it/node/24055" .
 ```
 
-<details><summary>SPARQL generate for source 4</summary>
+<details><summary>SPARQL generate for source 4 (q9)</summary>
 	
 ```
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
@@ -831,7 +845,7 @@ ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anyt
 	
 </details>
 
-<details><summary>SPARQL Anything for source 4</summary>
+<details><summary>SPARQL Anything for source 4 (q9)</summary>
 	
 ```
 
@@ -866,7 +880,7 @@ CONSTRUCT {
 
 
 
-<details><summary>RML for source 4</summary>
+<details><summary>RML for source 4 (q9)</summary>
 	
 ```
 @prefix rml: <http://semweb.mmlab.be/ns/rml#> .
