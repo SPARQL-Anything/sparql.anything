@@ -9,7 +9,7 @@ Concerning the generation tests, for each resource we defined a target RDF model
 Specifically, we counted the number of tokens needed for expressing a set of competency questions.
 The queries were tokenized (by using ``"(){},;{}\n\t\r `` as token delimiters) and we computed the total number of tokens  and the number of distinct tokens needed for each queries.
 
-|![Number of Distinct Token per Query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/chart.png)|![Number of Distinct Token per Query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/number_of_tokens.png)
+![Number of Distinct Token per Query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/chart.png)![Number of Distinct Token per Query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/number_of_tokens.png)
 
 ## Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
 
