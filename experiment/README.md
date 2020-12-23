@@ -1,4 +1,4 @@
-# Cognitive Complexity Comparison
+## Cognitive Complexity Comparison
 
 *Objective*: The objective of the experiment is to compare sparql.anything with [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) and [RML](https://rml.io/) frameworks in terms of usability and learnability of the frameworks. Specifically,  from the data sources of the SPICE project  we selected four non-RDF resources and for each resource we defined two kinds of tests: one aimed at assessing the usability and learnability of sparql.anything and [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) in retrieving data, the other meant at evaluating  the usability and learnability of three approaches   in generating data. 
 
@@ -21,13 +21,23 @@ The experiment can be run with following command:
 ./run_cog_experiment.sh
 ```
 
+
+## Performance Comparison
+
+You can can run the perfomance comparison with the following command:
+
+```
+./run_performance_experiment.sh
+```
+
+
 ## Queries
 
 In the following the queries used for the experiment are reported.
 
-## Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
+### Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
 
-### Structure of the input files
+#### Structure of the input files
 
 ```
 [
@@ -45,9 +55,9 @@ In the following the queries used for the experiment are reported.
 
 ```
 
-### Competency questions
+#### Competency questions
 
-#### CQ1: What are the titles of the artworks attributed to "ANONIMO"?
+##### CQ1: What are the titles of the artworks attributed to "ANONIMO"?
 
 
 <details><summary>SPARQL Generate</summary>
@@ -89,7 +99,7 @@ WHERE{
 </details>
 
 
-#### CQ2: What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
+##### CQ2: What are the titles of the artworks made with the technique named "STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO"?
 
 
 <details><summary>SPARQL Generate</summary>
@@ -131,7 +141,7 @@ WHERE{
 
 </details>
 
-#### CQ3: What are the titles of the artworks created in the 1935?
+##### CQ3: What are the titles of the artworks created in the 1935?
 
 
 <details><summary>SPARQL Generate</summary>
@@ -172,9 +182,9 @@ WHERE{
 
 </details>
 
-### RDF Generation
+#### RDF Generation
 
-#### Target model
+##### Target model
 
 ```
 @prefix ex: <http://example.org/> .
@@ -560,10 +570,10 @@ CONSTRUCT {
 
 
 
-## Source [4](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json)
+### Source [4](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json)
 
 
-### Structure of the input files
+#### Structure of the input files
 
 
 ```
@@ -584,9 +594,9 @@ CONSTRUCT {
 
 ```
 
-### Competency questions
+#### Competency questions
 
-#### CQ4: What are the identifiers of the artworks made of "bronzo"?
+##### CQ4: What are the identifiers of the artworks made of "bronzo"?
 
 
 <details><summary>SPARQL Generate</summary>
@@ -628,7 +638,7 @@ WHERE{
 </details>
 
 
-#### CQ5: What are the identifiers of the artworks whose subject is "manifattura Hochst"?
+##### CQ5: What are the identifiers of the artworks whose subject is "manifattura Hochst"?
 
 <details><summary>SPARQL Generate</summary>
 
@@ -670,7 +680,7 @@ WHERE{
 
 
 
-#### CQ6: How many artworks are made of bronzo?
+##### CQ6: How many artworks are made of bronzo?
 
 
 <details><summary>SPARQL Generate</summary>
@@ -714,7 +724,7 @@ WHERE{
 
 
 
-#### CQ7: How many artworks each author has made?
+##### CQ7: How many artworks each author has made?
 
 <details><summary>SPARQL Generate</summary>
 
@@ -756,7 +766,7 @@ WHERE{
 
 
 
-#### CQ8: What is the average number of artworks per author?
+##### CQ8: What is the average number of artworks per author?
 
 <details><summary>SPARQL Generate</summary>
 
@@ -800,9 +810,9 @@ SELECT (AVG(?numberOfWorks) AS ?averageNumberOfWorksPerAuthor) {
 
 
 
-### RDF Generation
+#### RDF Generation
 
-#### Target model
+##### Target model
 
 ```
 @prefix ex: <http://example.org/> .
@@ -964,6 +974,5 @@ CONSTRUCT {
 ```
 	
 </details>
-
 
 
