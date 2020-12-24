@@ -1,3 +1,7 @@
+# Evaluation
+
+We conduct a comparative evaluation of sparql.anything with respect to the state of art methods RML and SPARQL Generate.
+
 ## Cognitive Complexity Comparison
 
 *Objective*: The objective of the experiment is to compare sparql.anything with [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) and [RML](https://rml.io/) frameworks in terms of usability and learnability of the frameworks. Specifically,  from the data sources of the SPICE project  we selected four non-RDF resources and for each resource we defined two kinds of tests: one aimed at assessing the usability and learnability of sparql.anything and [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) in retrieving data, the other meant at evaluating  the usability and learnability of three approaches   in generating data. 
@@ -23,8 +27,24 @@ The experiment can be run with following command:
 
 
 ## Performance Comparison
+We assessed the performace of sparql.anything, [SPARQL generate](https://ci.mines-stetienne.fr/sparql-generate/) and [RML](https://rml.io/) frameworks in retrieving and generating RDF data.  All of the tests described below were run three times and the average time among the three executions is reported.
+The tests were executed on a MacBook Pro 2020 (CPU: i7 2.3 GHz, RAM: 32GB).
 
-You can can run the perfomance comparison with the following command:
+### Performace in retrieving RDF data
+The following Figure shows the time needed for evaluating the SELECT queries q1-q8 and for generating the RDF triples according to the CONSTRUCT queries/mapping rules q9-q12.
+
+![Execution time per  query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/execution_time_queries.png)
+
+### Performance in generating RDF data
+
+We also measured the performance in transforming input of increasing size. 
+To do so, we  repeatedly concatenated the data sources in order to obtain a JSON array containing 1M JSON objects and we cut this array at length 10, 100, 1K, 10K and 100K.
+We ran the query/mapping q12 on these files and we measured the execution time which is shown in the following figure:
+
+![Execution time per  query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/execution_time_increasing_input.png)
+
+
+All the perfomance comparisons can be run with the following command:
 
 ```
 ./run_performance_experiment.sh
