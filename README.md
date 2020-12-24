@@ -248,8 +248,9 @@ java -jar sparql.anything-[version].jar [arguments]
     -o,--output <file>     OPTIONAL - The path to the output file. [Default: STDOUT]
 ```
 
+## Evaluation
 
-
+We conducted a comparative [evaluation](experiment) of sparql.anything with respect to the state of art methods RML and SPARQL Generate.
 
 ## Licence
 
