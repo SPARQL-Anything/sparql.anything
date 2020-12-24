@@ -1,6 +1,6 @@
 # Evaluation
 
-We conduct a comparative evaluation of sparql.anything with respect to the state of art methods RML and SPARQL Generate.
+We conducted a comparative evaluation of sparql.anything with respect to the state of art methods RML and SPARQL Generate.
 
 ## Cognitive Complexity Comparison
 
