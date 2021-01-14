@@ -23,11 +23,11 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SPARQLAnything {
 
@@ -40,7 +40,7 @@ public class SPARQLAnything {
 	private static final String FORMAT = "f";
 	private static final String FORMAT_LONG = "format";
 
-	private static final Logger logger = LogManager.getLogger(SPARQLAnything.class);
+	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
 
 	private static String getQuery(String queryArgument) throws IOException {
 		String query = queryArgument;

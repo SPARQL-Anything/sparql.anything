@@ -10,16 +10,16 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import com.github.spiceh2020.json2rdf.transformers.JSONTransformer;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSONTriplifier implements Triplifier {
 
-	private static Logger logger = LogManager.getLogger(JSONTriplifier.class);
+	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
