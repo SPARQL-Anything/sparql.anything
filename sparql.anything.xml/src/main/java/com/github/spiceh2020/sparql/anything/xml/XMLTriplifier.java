@@ -30,7 +30,7 @@ public class XMLTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), url.toString() + "#");
+		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.FACADE_X_NAMESPACE_IRI);
 		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
 
 		Model model = ModelFactory.createDefaultModel();
@@ -49,7 +49,7 @@ public class XMLTriplifier implements Triplifier {
 		} catch (XMLStreamException e) {
 			throw new IOException(e);
 		}
-
+		boolean isRoot = true;
 		while (eventReader.hasNext()) {
 
 			if (event != null && event.isEndElement()) {
@@ -95,6 +95,12 @@ public class XMLTriplifier implements Triplifier {
 				// XXX Create an RDF resource
 				Resource resource;
 				resource = model.createResource();
+				// If this is the root
+				if(isRoot){
+					// Add type root
+					resource.addProperty(RDF.type, ResourceFactory.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+					isRoot = false;
+				}
 				// XXX Type is element name
 				resource.addProperty(RDF.type, ResourceFactory.createResource(toIRI(se.getName(), namespace)));
 				if (!members.containsKey(resource)) {
