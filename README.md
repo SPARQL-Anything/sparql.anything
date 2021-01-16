@@ -13,14 +13,15 @@ This is a generic example of a Facade-X data object (more examples below):
 
 ```
 @prefix fx: <urn:facade-x:ns#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 [] rdf:_1 [
     fx:someKey "some value" ;
     rdf:_1 "another value with unspecified key" ;
     rdf:_2 [
-        rdf:type fx:MyType
+        rdf:type fx:MyType ;
         rdf:_1 "another value" 
-    ]
+    ] 
+] .
 ```
 
 ## Querying anything
