@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -31,7 +32,9 @@ public class TextTriplifierTest {
 		try {
 			DatasetGraph dg = tt.triplify(url, new Properties());
 			Graph expectedGraph = GraphFactory.createGraphMem();
-			expectedGraph.add(new Triple(NodeFactory.createBlankNode(), RDF.li(1).asNode(),
+			Node n = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(new Triple(n, RDF.li(1).asNode(),
 					NodeFactory.createLiteral("this is a test", XSDDatatype.XSDstring)));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
@@ -51,6 +54,7 @@ public class TextTriplifierTest {
 			DatasetGraph dg = tt.triplify(url, p);
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(
 					new Triple(root, RDF.li(1).asNode(), NodeFactory.createLiteral("this", XSDDatatype.XSDstring)));
 			expectedGraph
