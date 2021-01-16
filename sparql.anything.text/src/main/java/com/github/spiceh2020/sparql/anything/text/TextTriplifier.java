@@ -65,6 +65,7 @@ public class TextTriplifier implements Triplifier {
 		} else {
 			rootResource = NodeFactory.createBlankNode();
 		}
+		g.add(new Triple(rootResource, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 
 		String value = readFromURL(url, charset);
 
