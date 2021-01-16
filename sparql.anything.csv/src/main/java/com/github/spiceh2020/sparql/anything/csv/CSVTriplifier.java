@@ -92,6 +92,8 @@ public class CSVTriplifier implements Triplifier {
 		}else{
 			document = model.createResource();
 		}
+		// Add type Root
+		document.addProperty(RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		Iterable<CSVRecord> records = format.parse(in);
 		int rown = 0;
 		LinkedHashMap<Integer,String> headers_map = new LinkedHashMap<Integer,String>();

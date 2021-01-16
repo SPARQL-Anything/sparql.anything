@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class ItTest {
         expected.put(2,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_2");
         expected.put(3,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_3");
         expected.put(4,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_4");
+        expected.put(5, RDF.type.getURI());
         while (rs.hasNext()){
             int rowId = rs.getRowNumber() + 1;
             QuerySolution qs = rs.next();
@@ -70,7 +72,7 @@ public class ItTest {
         expected.put(4,"http://www.example.org/csv#D");
         expected.put(5,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_1");
         expected.put(6,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_2");
-
+        expected.put(7, RDF.type.getURI());
         while (rs.hasNext()){
             int rowId = rs.getRowNumber() + 1;
             QuerySolution qs = rs.next();
@@ -90,12 +92,13 @@ public class ItTest {
         ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
         Map<Integer,String> expected = new HashMap<Integer,String>();
 
-        expected.put(3,"urn:facade-x:ns#A");
-        expected.put(4,"urn:facade-x:ns#B");
-        expected.put(5,"urn:facade-x:ns#C");
-        expected.put(6,"urn:facade-x:ns#D");
+        expected.put(4,"urn:facade-x:ns#A");
+        expected.put(5,"urn:facade-x:ns#B");
+        expected.put(6,"urn:facade-x:ns#C");
+        expected.put(7,"urn:facade-x:ns#D");
         expected.put(1,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_1");
         expected.put(2,"http://www.w3.org/1999/02/22-rdf-syntax-ns#_2");
+        expected.put(3, RDF.type.getURI());
 
         while (rs.hasNext()){
             int rowId = rs.getRowNumber() + 1;

@@ -35,8 +35,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
 	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
-	public static final String METADATA_GRAPH_IRI = "facade-x:metadata";
-	public static final String FACADE_X_NAMESPACE_IRI = "urn:facade-x:ns#";
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
@@ -88,7 +86,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 						dg = DatasetFactory.create().asDatasetGraph();
 					}
 					if (triplifyMetadata(p)) {
-						dg.addGraph(NodeFactory.createURI(METADATA_GRAPH_IRI),
+						dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI),
 								metadataTriplifier.triplify(url, p).getDefaultGraph());
 					}
 
@@ -130,8 +128,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		// namespace <urn:facade-x/ns#>
 		if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
-			logger.trace("Setting default value for namespace: {}", FACADE_X_NAMESPACE_IRI);
-			properties.setProperty(IRIArgument.NAMESPACE.toString(), FACADE_X_NAMESPACE_IRI);
+			logger.trace("Setting default value for namespace: {}", Triplifier.FACADE_X_NAMESPACE_IRI);
+			properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.FACADE_X_NAMESPACE_IRI);
 		}
 		return properties;
 	}

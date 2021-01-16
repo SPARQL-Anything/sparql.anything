@@ -1,5 +1,6 @@
 package com.github.spiceh2020.sparql.anything.fuseki;
 
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -75,7 +76,7 @@ public class Endpoint {
 		logger.info("The server will be listening on http://localhost:{}{}", port, path);
 		logger.info("The server will be available on http://localhost:{}{}", port, guipath);
 //		builder.staticFileBase("src/main/resources/static/");
-		builder.addServlet(this.guipath, new YASGUIServlet(FacadeXOpExecutor.FACADE_X_NAMESPACE_IRI, path));
+		builder.addServlet(this.guipath, new YASGUIServlet(Triplifier.FACADE_X_NAMESPACE_IRI, path));
 		server = builder.add(path, ds).build();
 		server.start();
 	}
