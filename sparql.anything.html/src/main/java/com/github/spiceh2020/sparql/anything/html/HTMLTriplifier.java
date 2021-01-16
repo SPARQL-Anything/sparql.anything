@@ -51,6 +51,7 @@ public class HTMLTriplifier implements Triplifier {
 		if (elements.size() > 1) {
 			// Create a root container
 			rootResource = model.createResource(root);
+			rootResource.addProperty(RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		}
 		int counter = 0;
 		for (Element element : elements) {
@@ -59,6 +60,9 @@ public class HTMLTriplifier implements Triplifier {
 				// link to root container
 				Resource elResource = toResource(model, element);
 				rootResource.addProperty(RDF.li(counter), elResource);
+			}else{
+				// Is root container
+				model.add(toResource(model, element), RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 			}
 			populate(model, element, namespace);
 		}
