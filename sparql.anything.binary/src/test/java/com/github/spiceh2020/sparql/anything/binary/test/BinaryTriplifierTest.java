@@ -8,8 +8,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -29,7 +31,9 @@ public class BinaryTriplifierTest {
 		try {
 			DatasetGraph dg = bt.triplify(url, new Properties());
 			Graph expectedGraph = GraphFactory.createGraphMem();
-			expectedGraph.add(new Triple(NodeFactory.createBlankNode(), RDF.li(1).asNode(),
+			Node n = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(n,RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(new Triple(n, RDF.li(1).asNode(),
 					NodeFactory.createLiteral("dGhpcyBpcyBhIHRlc3Q=", XSDDatatype.XSDbase64Binary)));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));

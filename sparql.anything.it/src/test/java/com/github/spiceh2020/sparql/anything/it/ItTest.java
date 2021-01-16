@@ -1,6 +1,7 @@
 package com.github.spiceh2020.sparql.anything.it;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
@@ -146,8 +147,8 @@ public class ItTest {
             int rowId = rs.getRowNumber() + 1;
             QuerySolution qs = rs.next();
             Assert.assertTrue(qs.get("s").asNode().isBlank());
-            Assert.assertTrue(qs.get("p").toString().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#_1"));
-            Assert.assertTrue(qs.get("o").isLiteral());
+            Assert.assertTrue(qs.get("p").toString().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#_1") || qs.get("p").toString().equals(RDF.type.getURI()));
+            Assert.assertTrue(qs.get("o").isLiteral() || qs.get("o").toString().equals(Triplifier.FACADE_X_TYPE_ROOT));
         }
     }
 

@@ -89,7 +89,9 @@ public class BinaryTriplifier implements Triplifier {
 			value = Base64.encodeBase64String(file);
 			break;
 		}
-
+		// Add root
+		g.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+		// Add content
 		g.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary)));
 
 		dg.addGraph(NodeFactory.createURI(url.toString()), g);
