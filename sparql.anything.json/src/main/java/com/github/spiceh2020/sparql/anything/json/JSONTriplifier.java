@@ -46,7 +46,7 @@ public class JSONTriplifier implements Triplifier {
 		if (!blank_nodes) {
 			jt.setURIRoot(root);
 		}
-
+		// TODO Add triple _:root rdf:type Triplifier.FACADE_X_TYPE_ROOT
 		Model m = jt.transformJSONFromURL(url);
 		logger.trace("Number of triples " + m.size());
 		DatasetGraph dg = DatasetFactory.create(m).asDatasetGraph();
