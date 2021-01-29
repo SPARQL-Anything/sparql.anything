@@ -29,4 +29,19 @@ public class XMLTriplifierTest {
         Iterator<Quad> iter = graph.find(null,null, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
         Assert.assertTrue(iter.hasNext());
     }
+
+
+    @Test
+    public void testBNodesFalse() throws IOException {
+        Properties properties = new Properties();
+        properties.setProperty("baseNamespace", "http://www.example.org#");
+        properties.setProperty("blank-nodes", "false");
+        URL xml1 = getClass().getClassLoader().getResource("./test1.xml");
+        DatasetGraph graph = triplifier.triplify(xml1, properties);
+        Iterator<Quad> iter = graph.find(null,null, null, null);
+        while(iter.hasNext()){
+            Assert.assertFalse(iter.next().getSubject().isBlank());
+        }
+
+    }
 }

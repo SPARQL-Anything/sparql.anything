@@ -33,6 +33,11 @@ public class XMLTriplifier implements Triplifier {
 		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.FACADE_X_NAMESPACE_IRI);
 		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
 
+		boolean blank_nodes = true;
+		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
+			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
+		}
+
 		Model model = ModelFactory.createDefaultModel();
 		//
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
@@ -94,7 +99,15 @@ public class XMLTriplifier implements Triplifier {
 				}
 				// XXX Create an RDF resource
 				Resource resource;
-				resource = model.createResource();
+				if(blank_nodes == false) {
+					if(isRoot){
+						resource = model.createResource(root);
+					}else{
+						resource = model.createResource(namespace + event.asStartElement().hashCode());
+					}
+				}else{
+					resource = model.createResource();
+				}
 				// If this is the root
 				if(isRoot){
 					// Add type root
