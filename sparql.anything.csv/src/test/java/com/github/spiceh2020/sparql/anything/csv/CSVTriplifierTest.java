@@ -45,4 +45,19 @@ public class CSVTriplifierTest {
             System.err.println(t);
         }
     }
+
+    @Test
+    public void testBNodesFalse() throws IOException {
+        Properties properties = new Properties();
+        properties.setProperty("namespace", "http://www.example.org#");
+        properties.setProperty("blank-nodes", "false");
+//        properties.setProperty("uriRoot", "http://www.example.org#");
+        URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
+        DatasetGraph graph = triplifier.triplify(csv1, properties);
+        Iterator<Quad> iter = graph.find(null,null,null,null);
+        while(iter.hasNext()){
+            Quad t = iter.next();
+            System.err.println(t);
+        }
+    }
 }
