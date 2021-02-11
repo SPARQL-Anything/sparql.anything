@@ -71,7 +71,7 @@ public class SPARQLAnything {
 		Query q = QueryFactory.create(query);
 
 		if (!q.isConstructType() && commandLine.hasOption(FORMAT)) {
-			logger.warn("Format provided as input ignored!");
+			logger.warn("Format provided as input will be ignored!");
 		}
 
 		if (q.isSelectType()) {
