@@ -65,10 +65,15 @@ public class SPARQLAnything {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
-	private static void executeQuery(String query, PrintStream pw, String format) {
+	private static void executeQuery(CommandLine commandLine, String query, PrintStream pw, String format) {
 		logger.trace("Executing Query: " + query);
 		Dataset kb = DatasetFactory.createGeneral();
 		Query q = QueryFactory.create(query);
+
+		if (!q.isConstructType() && commandLine.hasOption(FORMAT)) {
+			logger.warn("Format provided as input ignored!");
+		}
+
 		if (q.isSelectType()) {
 			pw.println(ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect()));
 		} else if (q.isConstructType()) {
@@ -90,7 +95,6 @@ public class SPARQLAnything {
 	}
 
 	private static String getFormat(CommandLine commandLine) throws FileNotFoundException {
-
 		if (commandLine.hasOption(FORMAT)) {
 			return commandLine.getOptionValue(FORMAT);
 		}
@@ -123,11 +127,11 @@ public class SPARQLAnything {
 
 			initSPARQLAnythingEngine();
 
-			executeQuery(query, getPrintWriter(commandLine), getFormat(commandLine));
+			executeQuery(commandLine, query, getPrintWriter(commandLine), getFormat(commandLine));
 
 		} catch (ParseException e) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("process", options);
+			formatter.printHelp("java -jar sparql.anything-<version> -q query [-f format] [-o filepath]", options);
 		}
 
 	}
