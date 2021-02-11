@@ -51,6 +51,11 @@ public class CSVTriplifier implements Triplifier {
 			charset = StandardCharsets.UTF_8;
 		}
 
+		boolean blank_nodes = true;
+		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
+			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
+		}
+
 		String root = null;
 		try{
 			root = properties.getProperty(IRIArgument.ROOT.toString());
@@ -87,8 +92,10 @@ public class CSVTriplifier implements Triplifier {
 		Model model = ModelFactory.createDefaultModel();
 
 		Resource document;
-		if(root !=null){
+		if(root != null){
 			document = model.createResource(root);
+		}else if (blank_nodes == false){
+			document = model.createResource(namespace + "root");
 		}else{
 			document = model.createResource();
 		}
@@ -123,7 +130,12 @@ public class CSVTriplifier implements Triplifier {
 			if(recordIterator.hasNext()) {
 				// Rows
 				rown++;
-				Resource row = model.createResource();
+				Resource row;
+				if(blank_nodes){
+					row = model.createResource();
+				} else{
+					row = model.createResource(namespace + rown);
+				}
 				document.addProperty(RDF.li(rown), row);
 				CSVRecord record = recordIterator.next();
 				Iterator<String> cells = record.iterator();
