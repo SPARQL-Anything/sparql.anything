@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img  src="https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/logo.svg">
+  <img  src="https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/logo.png">
 </p>
 
 sparql.anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
