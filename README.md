@@ -1,4 +1,6 @@
-![Logo](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/logo.svg)
+![Logo](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/logo.svg?style=centerme)
+
+
 sparql.anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
 ## Facade-X
