@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Properties;
+import java.util.*;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.NodeFactory;
@@ -21,6 +21,7 @@ import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.sparql.util.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +37,19 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
 	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
 
+	private Map<String, DatasetGraph> executedFacadeXIris;
+
+	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
+
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
 		triplifierRegister = TriplifierRegister.getInstance();
+
+		if(!execCxt.getContext().isDefined(inMemoryCache)) {
+			logger.trace("Initialising in-memory cache");
+			execCxt.getContext().set(inMemoryCache, new HashMap<String, DatasetGraph>());
+		}
+		executedFacadeXIris = execCxt.getContext().get(inMemoryCache);
 	}
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
@@ -47,49 +58,63 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.trace("is uri: {}", opService.getService());
 			if (isFacadeXURI(opService.getService().getURI())) {
 				logger.trace("Facade-X uri: {}", opService.getService());
+
+				// If the operation was already executed in a previous call, reuse the same in-memory graph
+				// XXX Future implementations may use a caching system
 				try {
-					Triplifier t;
-					Properties p = getProperties(opService.getService().getURI());
-
-					logger.trace("Properties extracted " + p.toString());
-
-					String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
-
-					if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
-						logger.trace("Triplifier enforced");
-						t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString()))
-								.getConstructor().newInstance();
-					} else if (p.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
-						logger.trace("MimeType enforced");
-						t = triplifierRegister
-								.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString()));
-					} else {
-						logger.trace(
-								"Guess triplifier using file extension " + FilenameUtils.getExtension(urlLocation));
-						t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
-					}
-					// If triplifier is null, return an empty graph
 					DatasetGraph dg;
+					if (executedFacadeXIris.containsKey(opService.getService().getURI())) {
+						logger.debug("Graph reloaded from in-memory cache");
+						dg = executedFacadeXIris.get(opService.getService().getURI());
+					}else{
+						Triplifier t;
+						Properties p = getProperties(opService.getService().getURI());
 
-					URL url;
-					try {
-						url = new URL(urlLocation);
-					} catch (MalformedURLException u) {
-						logger.trace("Malformed url interpreting as file");
-						url = new File(urlLocation).toURI().toURL();
-					}
+						logger.trace("Properties extracted " + p.toString());
 
-					if (t != null) {
-						dg = t.triplify(url, p);
-					} else {
-						logger.error("No triplifier available for the input format!");
-						dg = DatasetFactory.create().asDatasetGraph();
-					}
-					if (triplifyMetadata(p)) {
-						dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI),
-								metadataTriplifier.triplify(url, p).getDefaultGraph());
-					}
+						String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 
+						if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
+							logger.trace("Triplifier enforced");
+							t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString()))
+									.getConstructor().newInstance();
+						} else if (p.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
+							logger.trace("MimeType enforced");
+							t = triplifierRegister
+									.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString()));
+						} else {
+							logger.trace(
+									"Guess triplifier using file extension " + FilenameUtils.getExtension(urlLocation));
+							t = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
+						}
+						// If triplifier is null, return an empty graph
+
+
+						URL url;
+						try {
+							url = new URL(urlLocation);
+						} catch (MalformedURLException u) {
+							logger.trace("Malformed url interpreting as file");
+							url = new File(urlLocation).toURI().toURL();
+						}
+
+						if (t != null) {
+							dg = t.triplify(url, p);
+						} else {
+							logger.error("No triplifier available for the input format!");
+							dg = DatasetFactory.create().asDatasetGraph();
+						}
+						if (triplifyMetadata(p)) {
+							dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI),
+									metadataTriplifier.triplify(url, p).getDefaultGraph());
+						}
+
+						// Remember the triplified data
+						if (!executedFacadeXIris.containsKey(opService.getService().getURI())) {
+							executedFacadeXIris.put(opService.getService().getURI(), dg);
+							logger.debug("Graph added to in-memory cache");
+						}
+					}
 					return QC.execute(opService.getSubOp(), input, new ExecutionContext(execCxt.getContext(),
 							dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
