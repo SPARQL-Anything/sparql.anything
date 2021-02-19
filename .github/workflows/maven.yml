@@ -20,5 +20,5 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Build and test
+    - name: Clean, install, and test
       run: mvn clean install
