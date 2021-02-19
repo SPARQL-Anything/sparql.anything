@@ -205,7 +205,7 @@ public class ItTest {
     @Test
     public void TriplifyTateGalleryArtworkJSON() throws IOException, URISyntaxException {
         InputStream is = getClass().getClassLoader().getResourceAsStream("tate-gallery2.sparql");
-        String location = getClass().getClassLoader().getResource("tate-gallery/A01003-14703.json").toURI().toString();
+        String location = getClass().getClassLoader().getResource("tate-gallery/a01003-14703.json").toURI().toString();
         String queryStr = IOUtils.toString(is, "UTF-8").replace("%%artwork_json%%", location);
         log.info(queryStr);
         Dataset kb = DatasetFactory.createGeneral();
