@@ -87,7 +87,7 @@ public class SPARQLAnything {
 
 	private static PrintStream getPrintWriter(CommandLine commandLine) throws FileNotFoundException {
 
-		if (commandLine.hasOption(FORMAT) && commandLine.hasOption(OUTPUT)) {
+		if (commandLine.hasOption(OUTPUT)) {
 			return new PrintStream(new File(commandLine.getOptionValue(OUTPUT)));
 		}
 
