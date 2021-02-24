@@ -6,7 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
+import io.github.basilapi.basil.sparql.*;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -14,19 +17,17 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.sparql.engine.main.QC;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
+import org.apache.jena.update.UpdateRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +41,9 @@ public class SPARQLAnything {
 
 	private static final String FORMAT = "f";
 	private static final String FORMAT_LONG = "format";
+
+	private static final String INPUT = "i";
+	private static final String INPUT_LONG = "input";
 
 	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
 
@@ -85,8 +89,9 @@ public class SPARQLAnything {
 			}
 		} else if (q.isConstructType()) {
 			if(format.equals("JSON")) {
-				// JSON
-				QueryExecutionFactory.create(q, kb).execConstruct().write(pw, Lang.RDFJSON.toString());
+				// JSON-LD
+				Model m = QueryExecutionFactory.create(q, kb).execConstruct();
+				RDFDataMgr.write(pw, m, Lang.JSONLD) ;
 			}else if(format.equals("XML")){
 				// RDF/XML
 				QueryExecutionFactory.create(q, kb).execConstruct().write(pw, Lang.RDFXML.toString());
@@ -118,8 +123,9 @@ public class SPARQLAnything {
 		} else if (q.isDescribeType()) {
 
 			if(format.equals("JSON")) {
-				// JSON
-				QueryExecutionFactory.create(q, kb).execDescribe().write(pw, Lang.RDFJSON.toString());
+				// JSON-LD
+				Model m = QueryExecutionFactory.create(q, kb).execConstruct();
+				RDFDataMgr.write(pw, m, Lang.JSONLD) ;
 			}else if(format.equals("XML")){
 				// RDF/XML
 				QueryExecutionFactory.create(q, kb).execDescribe().write(pw, Lang.RDFXML.toString());
@@ -138,10 +144,10 @@ public class SPARQLAnything {
 		}
 	}
 
-	private static PrintStream getPrintWriter(CommandLine commandLine) throws FileNotFoundException {
+	private static PrintStream getPrintWriter(CommandLine commandLine, String fileName) throws FileNotFoundException {
 
-		if (commandLine.hasOption(OUTPUT)) {
-			return new PrintStream(new File(commandLine.getOptionValue(OUTPUT)));
+		if (fileName != null) {
+			return new PrintStream(new File(fileName));
 		}
 
 		return System.out;
@@ -164,6 +170,37 @@ public class SPARQLAnything {
 		return "TEXT";
 	}
 
+	public static Query bindParameters(Specification specification, QuerySolution qs){
+		VariablesBinder binder = new VariablesBinder(specification);
+
+		List<String> missing = new ArrayList<String>();
+		for (QueryParameter qp : specification.getParameters()) {
+			logger.trace("Looking into parameter {} ({})", qp.getName(), qp.isOptional());
+			logger.trace("Checking against qs {}", qs);
+			if (qs.contains("?" + qp.getName())) {
+
+				RDFNode value = qs.get("?" + qp.getName());
+				logger.debug("Setting {}->{}", qp.getName(), value.toString());
+				binder.bind(qp.getName(), value.toString());
+			} else if (!qp.isOptional()) {
+				logger.warn("Missing parameter: {}", qp);
+				missing.add(qp.getName());
+			}
+		}
+
+		if (!missing.isEmpty()) {
+			StringBuilder ms = new StringBuilder();
+			ms.append("Missing mandatory query parameters: ");
+			for (String p : missing) {
+				ms.append(p);
+				ms.append("\t");
+			}
+			ms.append("\n");
+			throw new RuntimeException(ms.toString());
+		}
+		return binder.toQuery();
+	}
+
 	public static void main(String[] args) throws Exception {
 		logger.info("SPARQL anything");
 		Options options = new Options();
@@ -175,8 +212,11 @@ public class SPARQLAnything {
 		options.addOption(Option.builder(OUTPUT).argName("file").hasArg()
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
+		options.addOption(Option.builder(INPUT).argName("input").hasArg()
+				.desc("OPTIONAL - The path to the input file.").longOpt(INPUT_LONG).build());
+
 		options.addOption(Option.builder(FORMAT).argName("string").hasArg()
-				.desc("OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ [Default: TEXT or TTL")
+				.desc("OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]")
 				.longOpt(FORMAT_LONG).build());
 
 		CommandLine commandLine = null;
@@ -189,14 +229,41 @@ public class SPARQLAnything {
 
 			initSPARQLAnythingEngine();
 
-			executeQuery(commandLine, query, getPrintWriter(commandLine));
-
+			String inputFile = commandLine.getOptionValue(INPUT);
+			String outputFileName = commandLine.getOptionValue(OUTPUT);
+			if(inputFile == null) {
+				logger.debug("No input file");
+				executeQuery(commandLine, query, getPrintWriter(commandLine, outputFileName));
+			} else {
+				logger.debug("Input file given");
+				// Load the file
+				ResultSet parameters = ResultSetFactory.load(inputFile);
+				// Specifications
+				Specification specification = SpecificationFactory.create("", query);
+				// Iterate over parameters
+				List<String> variables = parameters.getResultVars();
+				while(parameters.hasNext()){
+					QuerySolution qs = parameters.nextSolution();
+					Query q = bindParameters(specification, qs);
+					String outputFile = outputFileName;
+					if( outputFileName != null ){
+						outputFile = outputFileName + "-" + parameters.getRowNumber();
+					}
+					try {
+						executeQuery(commandLine, q.toString(), getPrintWriter(commandLine, outputFile));
+					}catch(Exception e1){
+						logger.error("Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+						if(logger.isDebugEnabled()){
+							logger.error("Details:", e1);
+						}
+					}
+				}
+			}
 		}catch(FileNotFoundException e){
 			logger.error("File not found: {}", e.getMessage());
 		} catch (ParseException e) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("java -jar sparql.anything-<version> -q query [-f format] [-o filepath]", options);
+			formatter.printHelp("java -jar sparql.anything-<version> -q query [-f format] [-i input] [-o filepath]", options);
 		}
-
 	}
 }

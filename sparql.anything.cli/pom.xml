@@ -60,7 +60,12 @@
 			<artifactId>sparql.anything.html</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>io.github.basilapi</groupId>
+			<artifactId>sparql</artifactId>
+			<version>0.8.0-SNAPSHOT</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
 		<dependency>
