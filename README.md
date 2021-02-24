@@ -249,10 +249,15 @@ The jar can be executed as follows:
 ```
 java -jar sparql.anything-[version].jar [arguments]
     -q,--query <query>     The path to the file storing the query to execute or the query itself.
-    -f,--format <string>   OPTIONAL -  In case of CONSTRUCT queries, the ormat of the output file;  TTL, NT [Default: TTL]
+    -f,--format <string>   OPTIONAL -  Format of the output file. Supported
+                        values: JSON, XML, CSV, TEXT, TTL, NT, NQ
+                        [Default: TEXT or TTL]
     -o,--output <file>     OPTIONAL - The path to the output file. [Default: STDOUT]
 ```
-
+Logging can be configured adding the following option (SLF4J):
+```
+-Dorg.slf4j.simpleLogger.defaultLogLevel=trace
+```
 ## Evaluation
 
 We conducted a comparative [evaluation](experiment) of sparql.anything with respect to the state of art methods RML and SPARQL Generate.
