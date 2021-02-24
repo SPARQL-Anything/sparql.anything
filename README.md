@@ -252,6 +252,7 @@ java -jar sparql.anything-[version].jar [arguments]
     -f,--format <string>   OPTIONAL -  Format of the output file. Supported
                         values: JSON, XML, CSV, TEXT, TTL, NT, NQ
                         [Default: TEXT or TTL]
+    -i,--input <file>     OPTIONAL - The path to a input file.
     -o,--output <file>     OPTIONAL - The path to the output file. [Default: STDOUT]
 ```
 Logging can be configured adding the following option (SLF4J):
