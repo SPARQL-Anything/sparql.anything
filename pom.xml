@@ -53,6 +53,16 @@
 		</snapshotRepository>
 	</distributionManagement>
 
+
+	<repositories>
+		<!-- need this temporarily until stable release goes to central -->
+		<repository>
+			<id>basil-snapshots</id>
+			<name>BASIL Snapshots (GitHub)</name>
+			<url>https://raw.github.com/basilapi/basil/mvn-repo/</url>
+		</repository>
+	</repositories>
+
 	<modules>
 		<module>sparql.anything.engine</module>
 		<module>sparql.anything.model</module>
