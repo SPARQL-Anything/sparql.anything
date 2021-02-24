@@ -22,6 +22,7 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.sparql.engine.main.QC;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
@@ -65,23 +66,75 @@ public class SPARQLAnything {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
-	private static void executeQuery(CommandLine commandLine, String query, PrintStream pw, String format) {
+	private static void executeQuery(CommandLine commandLine, String query, PrintStream pw) throws FileNotFoundException {
 		logger.trace("Executing Query: " + query);
 		Dataset kb = DatasetFactory.createGeneral();
 		Query q = QueryFactory.create(query);
-
-		if (!q.isConstructType() && commandLine.hasOption(FORMAT)) {
-			logger.warn("Format provided as input will be ignored!");
-		}
-
+		String format = getFormat(q, commandLine);
 		if (q.isSelectType()) {
-			pw.println(ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect()));
+			if(format.equals("JSON")) {
+				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execSelect());
+			}else if(format.equals("XML")){
+				ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(q, kb).execSelect());
+			}else if(format.equals("CSV")){
+				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execSelect());
+			}else if(format.equals("TEXT")){
+				pw.println(ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect()));
+			}else {
+				throw new RuntimeException("Unsupported format: " + format);
+			}
 		} else if (q.isConstructType()) {
-			QueryExecutionFactory.create(q, kb).execConstruct().write(pw, format);
+			if(format.equals("JSON")) {
+				// JSON
+				QueryExecutionFactory.create(q, kb).execConstruct().write(pw, Lang.RDFJSON.toString());
+			}else if(format.equals("XML")){
+				// RDF/XML
+				QueryExecutionFactory.create(q, kb).execConstruct().write(pw, Lang.RDFXML.toString());
+			}else if(format.equals("TTL")){
+				// TURTLE
+				QueryExecutionFactory.create(q, kb).execConstruct().write(pw, Lang.TTL.toString());
+			}else if(format.equals("NT")){
+				// N-Triples
+				QueryExecutionFactory.create(q, kb).execConstruct().write(pw, Lang.NT.toString());
+			}else if(format.equals("NQ")){
+				// N-Triples
+				QueryExecutionFactory.create(q, kb).execConstruct().write(pw, Lang.NQ.toString());
+			}else {
+				throw new RuntimeException("Unsupported format: " + format);
+			}
 		} else if (q.isAskType()) {
-			pw.println(QueryExecutionFactory.create(q, kb).execAsk());
+			if(format.equals("JSON")) {
+				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execAsk());
+			}else if(format.equals("XML")){
+				ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(q, kb).execAsk());
+			}else if(format.equals("CSV")){
+				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
+			}else if(format.equals("TEXT")){
+				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
+			}else {
+				throw new RuntimeException("Unsupported format: " + format);
+			}
+//			pw.println(QueryExecutionFactory.create(q, kb).execAsk());
 		} else if (q.isDescribeType()) {
-			QueryExecutionFactory.create(q, kb).execDescribe().write(pw, format);
+
+			if(format.equals("JSON")) {
+				// JSON
+				QueryExecutionFactory.create(q, kb).execDescribe().write(pw, Lang.RDFJSON.toString());
+			}else if(format.equals("XML")){
+				// RDF/XML
+				QueryExecutionFactory.create(q, kb).execDescribe().write(pw, Lang.RDFXML.toString());
+			}else if(format.equals("TTL")){
+				// TURTLE
+				QueryExecutionFactory.create(q, kb).execDescribe().write(pw, Lang.TTL.toString());
+			}else if(format.equals("NT")){
+				// N-Triples
+				QueryExecutionFactory.create(q, kb).execDescribe().write(pw, Lang.NT.toString());
+			}else if(format.equals("NQ")){
+				// N-Triples
+				QueryExecutionFactory.create(q, kb).execDescribe().write(pw, Lang.NQ.toString());
+			} else {
+				throw new RuntimeException("Unsupported format: " + format);
+			}
 		}
 	}
 
@@ -94,12 +147,21 @@ public class SPARQLAnything {
 		return System.out;
 	}
 
-	private static String getFormat(CommandLine commandLine) throws FileNotFoundException {
+	private static String getFormat(Query q, CommandLine commandLine) throws FileNotFoundException {
 		if (commandLine.hasOption(FORMAT)) {
-			return commandLine.getOptionValue(FORMAT);
+			return commandLine.getOptionValue(FORMAT).toUpperCase();
 		}
 
-		return Lang.TTL.toString();
+		// Set default format for query type and STDOUT or FILE
+		if(commandLine.getOptionValue(OUTPUT) != null ){
+			if(q.isAskType()|| q.isSelectType()) {
+				return "JSON";
+			}else if(q.isConstructType()|| q.isDescribeType()) {
+				return "TTL";
+			}
+		}
+		// STDOUT
+		return "TEXT";
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -114,7 +176,7 @@ public class SPARQLAnything {
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
 		options.addOption(Option.builder(FORMAT).argName("string").hasArg()
-				.desc("OPTIONAL -  Format of the output file;  TTL, NT for construct queries [Default: TTL]")
+				.desc("OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ [Default: TEXT or TTL")
 				.longOpt(FORMAT_LONG).build());
 
 		CommandLine commandLine = null;
@@ -127,8 +189,10 @@ public class SPARQLAnything {
 
 			initSPARQLAnythingEngine();
 
-			executeQuery(commandLine, query, getPrintWriter(commandLine), getFormat(commandLine));
+			executeQuery(commandLine, query, getPrintWriter(commandLine));
 
+		}catch(FileNotFoundException e){
+			logger.error("File not found: {}", e.getMessage());
 		} catch (ParseException e) {
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("java -jar sparql.anything-<version> -q query [-f format] [-o filepath]", options);
