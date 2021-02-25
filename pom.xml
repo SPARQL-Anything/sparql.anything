@@ -55,11 +55,15 @@
 
 
 	<repositories>
-		<!-- need this temporarily until stable release goes to central -->
 		<repository>
-			<id>basil-snapshots</id>
-			<name>BASIL Snapshots (GitHub)</name>
-			<url>https://raw.github.com/basilapi/basil/mvn-repo/</url>
+			<id>oss.sonatype.org-snapshot</id>
+			<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 
