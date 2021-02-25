@@ -247,13 +247,39 @@ An executable JAR can be obtained from the [Releases](https://github.com/spice-h
 The jar can be executed as follows:
 
 ```
-java -jar sparql.anything-[version].jar [arguments]
-    -q,--query <query>     The path to the file storing the query to execute or the query itself.
-    -f,--format <string>   OPTIONAL -  Format of the output file. Supported
-                        values: JSON, XML, CSV, TEXT, TTL, NT, NQ
-                        [Default: TEXT or TTL]
-    -i,--input <file>     OPTIONAL - The path to a input file.
-    -o,--output <file>     OPTIONAL - The path to the output file. [Default: STDOUT]
+usage: java -jar sparql.anything-<version> -q query [-f format] [-i
+            filepath]  [-l path] [-o filepath]
+ -f,--format <string>                  OPTIONAL -  Format of the output
+                                       file. Supported values: JSON, XML,
+                                       CSV, TEXT, TTL, NT, NQ. [Default:
+                                       TEXT or TTL]
+ -i,--input <input>                    OPTIONAL - The path to a SPARQL
+                                       result set file to be used as
+                                       input. When present, the query is
+                                       pre-processed by substituting
+                                       variable names with values from the
+                                       bindings provided. The query is
+                                       repeated for each set of bindings
+                                       in the input result set.
+ -l,--load <load>                      OPTIONAL - The path to one RDF file
+                                       or a folder including a set of
+                                       files to be loaded. When present,
+                                       the data is loaded in memory and
+                                       the query executed against it.
+ -o,--output <file>                    OPTIONAL - The path to the output
+                                       file. [Default: STDOUT]
+ -p,--output-pattern <outputPattern>   OPTIONAL - Output filename pattern,
+                                       e.g. 'myfile-?friendName.json'.
+                                       Variables should start with '?' and
+                                       refer to bindings from the input
+                                       file. This option can only be used
+                                       in combination with 'input' and is
+                                       ignored otherwise. This option
+                                       overrides 'output'.
+ -q,--query <query>                    The path to the file storing the
+                                       query to execute or the query
+                                       itself.
+
 ```
 Logging can be configured adding the following option (SLF4J):
 ```
