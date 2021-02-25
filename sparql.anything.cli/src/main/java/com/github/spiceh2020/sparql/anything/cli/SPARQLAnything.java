@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import io.github.basilapi.basil.sparql.*;
 import org.apache.commons.cli.CommandLine;
@@ -22,12 +24,10 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.sparql.engine.main.QC;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
-import org.apache.jena.update.UpdateRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +45,8 @@ public class SPARQLAnything {
 	private static final String INPUT = "i";
 	private static final String INPUT_LONG = "input";
 
+	private static final String OUTPUTPATTERN = "p";
+	private static final String OUTPUTPATTERN_LONG = "output-pattern";
 	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
 
 	private static String getQuery(String queryArgument) throws IOException {
@@ -201,6 +203,16 @@ public class SPARQLAnything {
 		return binder.toQuery();
 	}
 
+	public static String prepareOutputFromPattern(String template, QuerySolution qs){
+		Iterator<String> vars = qs.varNames();
+		while(vars.hasNext()){
+			String var = vars.next();
+			String v = "?" + var;
+			template = template.replace(v, qs.get(var).toString());
+		}
+		return template;
+	}
+
 	public static void main(String[] args) throws Exception {
 		logger.info("SPARQL anything");
 		Options options = new Options();
@@ -213,11 +225,14 @@ public class SPARQLAnything {
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
 		options.addOption(Option.builder(INPUT).argName("input").hasArg()
-				.desc("OPTIONAL - The path to the input file.").longOpt(INPUT_LONG).build());
+				.desc("OPTIONAL - The path to the input file (a SPARQL result set). When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.").longOpt(INPUT_LONG).build());
 
 		options.addOption(Option.builder(FORMAT).argName("string").hasArg()
 				.desc("OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]")
 				.longOpt(FORMAT_LONG).build());
+
+		options.addOption(Option.builder(OUTPUTPATTERN).argName("outputPattern").hasArg()
+				.desc("OPTIONAL - Output filename pattern, e.g. 'myfile-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.").longOpt(OUTPUTPATTERN_LONG).build());
 
 		CommandLine commandLine = null;
 
@@ -231,6 +246,10 @@ public class SPARQLAnything {
 
 			String inputFile = commandLine.getOptionValue(INPUT);
 			String outputFileName = commandLine.getOptionValue(OUTPUT);
+			String outputPattern = commandLine.getOptionValue(OUTPUTPATTERN);
+			if(outputPattern != null && outputFileName != null){
+				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
+			}
 			if(inputFile == null) {
 				logger.debug("No input file");
 				executeQuery(commandLine, query, getPrintWriter(commandLine, outputFileName));
@@ -245,9 +264,14 @@ public class SPARQLAnything {
 				while(parameters.hasNext()){
 					QuerySolution qs = parameters.nextSolution();
 					Query q = bindParameters(specification, qs);
-					String outputFile = outputFileName;
-					if( outputFileName != null ){
-						outputFile = outputFileName + "-" + parameters.getRowNumber();
+					String outputFile = null;
+					if(outputPattern != null){
+						outputFile = prepareOutputFromPattern(outputPattern, qs);
+					} else {
+						if( outputFileName != null ){
+							outputFile = outputFileName + "-" + parameters.getRowNumber();
+						}
+						// else stays null and output goes to STDOUT
 					}
 					try {
 						executeQuery(commandLine, q.toString(), getPrintWriter(commandLine, outputFile));
