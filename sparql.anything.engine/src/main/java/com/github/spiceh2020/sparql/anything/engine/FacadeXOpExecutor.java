@@ -121,6 +121,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 						| IllegalAccessException | InvocationTargetException | NoSuchMethodException
 						| ClassNotFoundException e) {
 					logger.error("An error occurred", e);
+					throw new RuntimeException(e);
 				}
 			} else {
 				// Pass to parent
