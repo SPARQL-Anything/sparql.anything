@@ -285,7 +285,7 @@ Logging can be configured adding the following option (SLF4J):
 ```
 -Dorg.slf4j.simpleLogger.defaultLogLevel=trace
 ```
-## Evaluation
+## Experiments
 
 We conducted a comparative [evaluation](experiment) of sparql.anything with respect to the state of art methods RML and SPARQL Generate.
 
@@ -293,7 +293,3 @@ We conducted a comparative [evaluation](experiment) of sparql.anything with resp
 
 sparql.anything is distributed under [Apache 2.0 License](LICENSE)
 
-
-## Reference
-
-TBD
