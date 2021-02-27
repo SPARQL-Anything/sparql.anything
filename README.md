@@ -293,7 +293,3 @@ We conducted a comparative [evaluation](experiment) of sparql.anything with resp
 
 sparql.anything is distributed under [Apache 2.0 License](LICENSE)
 
-
-## Reference
-
-TBD
