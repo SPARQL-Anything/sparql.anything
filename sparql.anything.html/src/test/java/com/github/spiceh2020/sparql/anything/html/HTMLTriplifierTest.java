@@ -35,4 +35,18 @@ public class HTMLTriplifierTest {
 		m.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		m.write(System.out, "TTL");
 	}
+
+	@Test
+	public void test2() throws URISyntaxException, IOException {
+		DatasetGraph dataset = html2rdf.triplify(new URL(getTestLocation(name.getMethodName())), new Properties());
+//        Iterator<Quad> iter = dataset.find(null,null,null,null);
+//        while(iter.hasNext()){
+//            Quad t = iter.next();
+//            System.err.println(t);
+//        }
+		Model m = ModelFactory.createModelForGraph(dataset.getDefaultGraph());
+		m.setNsPrefix("xhtml", "http://www.w3.org/1999/xhtml#");
+		m.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+		m.write(System.out, "TTL");
+	}
 }
