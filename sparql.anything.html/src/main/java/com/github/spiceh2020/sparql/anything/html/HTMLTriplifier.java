@@ -21,6 +21,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ public class HTMLTriplifier implements Triplifier {
 	private static final Logger log = LoggerFactory.getLogger(HTMLTriplifier.class);
 	private static final String PROPERTY_SELECTOR = "html.selector";
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
+	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
@@ -88,6 +90,12 @@ public class HTMLTriplifier implements Triplifier {
 
 		String tagName = element.tagName(); // tagname is the type
 		Resource resource = toResource(model, element);
+		String  innerHtml = element.html();
+		if(! innerHtml.trim().equals(""))
+			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerHTML"), innerHtml);
+		String innerText = element.select("*").text();
+		if(!innerText.trim().equals(""))
+			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerText"), innerText);
 		resource.addProperty(RDF.type, ResourceFactory.createResource(HTML_NS + tagName));
 		// attributes
 		for (Attribute attribute : element.attributes()) {
@@ -97,16 +105,25 @@ public class HTMLTriplifier implements Triplifier {
 		}
 		// Children
 		int counter = 0;
-		for (Element child : element.children()) {
+//		int childNodeSize = element.childNodeSize();
+//		System.err.println("Child nodes: " + childNodeSize);
+		for (Node child: element.childNodes()) {
+//			System.err.println(c);
+//			Node child = element.child(c);
+			if(child.outerHtml().trim().equals("")) continue;
 			counter++;
-			resource.addProperty(RDF.li(counter), toResource(model, child));
-			populate(model, child, namespace);
+			if(child instanceof Element) {
+				resource.addProperty(RDF.li(counter), toResource(model, (Element) child));
+				populate(model, (Element) child, namespace);
+			}else{
+				resource.addProperty(RDF.li(counter), child.outerHtml());
+			}
 		}
 
-		if (element.hasText() && element.ownText().length() > 0) {
-			counter++;
-			resource.addProperty(RDF.li(counter), element.ownText());
-		}
+//		if (element.hasText() && element.ownText().length() > 0) {
+//			counter++;
+//			resource.addProperty(RDF.li(counter), element.ownText());
+//		}
 	}
 
 	private Resource toResource(Model model, Element element) {
