@@ -88,7 +88,7 @@ public class JSONTriplifier implements Triplifier {
 		Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
 		m.add(root, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		getModel(arr,root, m);
+		getModel(arr, root, m);
 		return m;
 	}
 
@@ -153,17 +153,10 @@ public class JSONTriplifier implements Triplifier {
 		this.propertyPrefix = propertyPrefix;
 	}
 
-	public void setURIRoot(String uri) {
-		if (uri != null) {
-			this.uriRoot = uri;
-			useBlankNodes = false;
-		}
-	}
-
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
 		logger.trace("Triplifying " + url.toString());
-		
+
 		// FIXME It would be better to generalise control of arguments
 		if (properties.containsKey(IRIArgument.NAMESPACE.toString())) {
 			logger.trace("Property prefix provided");
@@ -172,6 +165,7 @@ public class JSONTriplifier implements Triplifier {
 			logger.trace("Property prefix not provided");
 			propertyPrefix = properties.getProperty(url.toString() + "/");
 		}
+
 		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
 			useBlankNodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
 		}
@@ -179,7 +173,7 @@ public class JSONTriplifier implements Triplifier {
 		String root = url.toString();
 		if (properties.containsKey(IRIArgument.ROOT.toString())) {
 			root = properties.getProperty(IRIArgument.ROOT.toString());
-			this.setURIRoot(root);
+			this.uriRoot = root;
 		}
 
 		Model m = transformJSONFromURL(url);
