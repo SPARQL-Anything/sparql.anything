@@ -6,7 +6,7 @@
 
 :TriplesMap a rr:TriplesMap;
   rml:logicalSource [
-    rml:source "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json";
+    rml:source "data/COLLEZIONI_MAO.json";
     rml:referenceFormulation ql:JSONPath;
     rml:iterator "$.[*]"
   ].

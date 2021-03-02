@@ -1,7 +1,7 @@
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 
 SELECT DISTINCT ?titolo
-ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json>,"$[*]","$.Autore","$.Titolo") AS ?obj ?autore ?titolo
+ITERATOR ite:JSONPath(<data/COLLEZIONI_FONDO_GABINIO_MARZO_2017.json>,"$[*]","$.Autore","$.Titolo") AS ?obj ?autore ?titolo
 WHERE{
 	FILTER(REGEX(?autore,".*ANONIMO.*","i"))
 }

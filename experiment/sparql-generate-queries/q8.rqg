@@ -1,7 +1,7 @@
 PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 
-SELECT (AVG(?averageOfWorksPerAuthor) AS ?averageOfWorksPerAuthor)
-ITERATOR <sparql-generate-queries/q7.rqg>() AS ?author ?id ?numberOfWorks
+SELECT (AVG(?numberOfWorks) AS ?averageOfWorksPerAuthor)
+ITERATOR <sparql-generate-queries/q7.rqg>() AS ?author  ?numberOfWorks
 WHERE {
 
 }

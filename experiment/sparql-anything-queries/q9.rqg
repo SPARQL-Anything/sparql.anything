@@ -9,7 +9,7 @@ CONSTRUCT {
 		_:b ex:Immagine ?i .
 		_:b ex:lsreferenceby ?ref .
 } WHERE {
-	SERVICE <facade-x:namespace=http://exmaple.org/,location=https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+	SERVICE <facade-x:namespace=http://exmaple.org/,location=data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 		?arr ?p  _:b .
 		_:b ex:Inventario ?in .
 		_:b ex:Autore ?a .

@@ -12,4 +12,4 @@ GENERATE {
 	 ex:Immagine ?immagine ;
 	 ex:lsreferenceby ?lsreferenceby .
 }
-ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Autore","$['Ambito Culturale']","$.Datazione","$.Titolo-soggetto","$.Materiali","$.Immagine","$.lsreferenceby") AS ?obj ?id ?autore ?ambito_culturale ?datazione ?titolo  ?material ?immagine ?lsreferenceby
+ITERATOR ite:JSONPath(<data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Autore","$['Ambito Culturale']","$.Datazione","$.Titolo-soggetto","$.Materiali","$.Immagine","$.lsreferenceby") AS ?obj ?id ?autore ?ambito_culturale ?datazione ?titolo  ?material ?immagine ?lsreferenceby

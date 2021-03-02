@@ -1,12 +1,13 @@
-SPARQL_ANYTHING_VERSION=0.0.3-SNAPSHOT
+SPARQL_ANYTHING_VERSION=0.0.3
 if [[ ! -e "bin" ]]; then
 	echo "bin not exists"
 	mkdir bin
 	cd bin/
 	curl -OL  https://github.com/sparql-generate/sparql-generate/releases/download/2.0.1/sparql-generate-2.0.1.jar
 	curl -OL https://github.com/RMLio/rmlmapper-java/releases/download/v4.9.0/rmlmapper.jar
-	mvn -f ../../pom.xml clean install
-	cp ../../sparql.anything.cli/target/sparql-anything-$SPARQL_ANYTHING_VERSION.jar .
+	#mvn -f ../../pom.xml clean install
+	#cp ../../sparql.anything.cli/target/sparql-anything-$SPARQL_ANYTHING_VERSION.jar .
+	curl -OL https://github.com/spice-h2020/sparql.anything/releases/download/v$SPARQL_ANYTHING_VERSION/sparql-anything-$SPARQL_ANYTHING_VERSION.jar
 	cd ..
 fi
 if [[ ! -e "generated-data" ]]; then
@@ -14,7 +15,7 @@ if [[ ! -e "generated-data" ]]; then
 fi
 
 function m() {
-	
+
 	total=0
 	for i in 1 2 3
 	do
@@ -22,11 +23,11 @@ function m() {
 	   	eval $($1 > /dev/null)
 	   	t1=$(gdate +%s%3N)
 	   	total=$(($total+$t1-$t0))
-	   	#echo "test $i $1 $(($t1-$t0))ms" 
+	   	#echo "test $i $1 $(($t1-$t0))ms"
 	done
 	echo "Average: $1 $(($total/3)) ms"
-} 
-JVM_ARGS=-Xmx10g 
+}
+JVM_ARGS=-Xmx10g
 m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar  -q sparql-anything-queries/q12_10.rqg -f TTL -o generated-data/sparql-anything-q12_10.ttl"
 m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar  -q sparql-anything-queries/q12_100.rqg -f TTL -o generated-data/sparql-anything-q12_100.ttl"
 m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar  -q sparql-anything-queries/q12_1000.rqg -f TTL -o generated-data/sparql-anything-q12_1000.ttl"

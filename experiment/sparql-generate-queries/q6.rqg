@@ -2,7 +2,7 @@ PREFIX ite: <http://w3id.org/sparql-generate/iter/>
 
 
 SELECT  (count(DISTINCT ?id) AS ?numberOfMadeArtworksMadeOfBronzo)
-ITERATOR ite:JSONPath(<https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Materiali") AS ?obj ?id ?material
+ITERATOR ite:JSONPath(<data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Materiali") AS ?obj ?id ?material
 WHERE{
   FILTER(REGEX(?material,".*bronzo.*","i"))
 }

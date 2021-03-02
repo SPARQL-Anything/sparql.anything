@@ -6,7 +6,7 @@
 
 :TriplesMap a rr:TriplesMap;
   rml:logicalSource [
-    rml:source "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json";
+    rml:source "data/COLLEZIONI_FONDO_GABINIO_MARZO_2017.json";
     rml:referenceFormulation ql:JSONPath;
     rml:iterator "$.[*]"
   ].

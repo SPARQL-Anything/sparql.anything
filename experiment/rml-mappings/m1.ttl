@@ -6,13 +6,13 @@
 
 :TriplesMap a rr:TriplesMap;
   rml:logicalSource [
-    rml:source "https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json";
+    rml:source "data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json";
     rml:referenceFormulation ql:JSONPath;
     rml:iterator "$.[*]"
   ].
 
 :TriplesMap rr:subjectMap [
-  rr:termType rr:BlankNode 
+  rr:termType rr:BlankNode
 ].
 
 :TriplesMap rr:predicateObjectMap [
