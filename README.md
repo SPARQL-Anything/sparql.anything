@@ -197,7 +197,7 @@ In this case sparql.anything guesses the data source type from the file extensio
 |blank-nodes|It tells sparql.anything to generate blank nodes or not.|true/false|true|
 |triplifier|It forces sparql.anything to use a specific triplifier for transforming the data source|A canonical name of a Java class|No value|
 |charset|The charset of the data source.|Any charset.|UTF-8|
-|metadata|It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;facade-x:metadata&gt;  |true/false|false|
+|metadata|It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;  |true/false|false|
 
 
 ### Format specific options
