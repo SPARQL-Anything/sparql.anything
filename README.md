@@ -174,13 +174,13 @@ sparql.anything will act as a virtual endpoint that can be queried exactly as a 
 In order to instruct the query processor to delegate the execution to facade-x, you must use the  following URI-schema within SERVICE clauses.
 
 ```
-facade-x ':' ([option] ('=' [value])? ','?)+
+x-sparql-anything ':' ([option] ('=' [value])? ','?)+
 ```
 
 A minimal URI that uses only the resource locator is also possible.
 
 ```
-facade-x ':' URL
+x-sparql-anything ':' URL
 ```
 
 In this case sparql.anything guesses the data source type from the file extension.
