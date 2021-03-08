@@ -173,7 +173,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected boolean isFacadeXURI(String uri) {
-		if (uri.startsWith("facade-x:")) {
+		if (uri.startsWith(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
 			return true;
 		}
 		return false;

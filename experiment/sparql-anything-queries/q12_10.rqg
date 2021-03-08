@@ -7,7 +7,7 @@ CONSTRUCT {
             ex:Tecnica    ?s ;
             ex:Titolo    ?t .
 } WHERE {
-	SERVICE <facade-x:namespace=http://exmaple.org/,location=10.json> {
+	SERVICE <x-sparql-anything:namespace=http://exmaple.org/,location=10.json> {
 		?arr ?p _:b .
 		_:b  ex:Autore     ?a ;
             ex:Datazione  ?d ;

@@ -14,7 +14,7 @@ import com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRILexer;
 public class FacadeIRIParser {
 
 	private String tupleURL;
-	private final static String tupleURLScheme = "facade-x:";
+	public final static String SPARQL_ANYTHING_URI_SCHEMA = "x-sparql-anything:";
 	private final static Pattern key = Pattern.compile("^[a-zA-Z0-9-]+");
 
 	public FacadeIRIParser(String tupleURL) {
@@ -32,7 +32,7 @@ public class FacadeIRIParser {
 
 	public Properties getProperties() {
 		FacadeIRILexer lexer = new FacadeIRILexer(
-				CharStreams.fromString(escape(tupleURL.substring(tupleURLScheme.length()))));
+				CharStreams.fromString(escape(tupleURL.substring(SPARQL_ANYTHING_URI_SCHEMA.length()))));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRIParser parser = new com.github.spiceh2020.sparql.anything.facadeiri.antlr.FacadeIRIParser(
 				tokens);

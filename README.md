@@ -84,7 +84,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SELECT ?seriesName
 WHERE {
 
-    SERVICE <facade-x:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/examples/example1.json> {
+    SERVICE <x-sparql-anything:https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/examples/example1.json> {
         ?tvSeries fx:name ?seriesName .
         ?tvSeries fx:stars ?star .
         ?star ?li "Courteney Cox" .

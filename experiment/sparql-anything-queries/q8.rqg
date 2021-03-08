@@ -5,7 +5,7 @@ SELECT (AVG(?numberOfWorks) AS ?averageNumberOfWorksPerAuthor) {
 		SELECT DISTINCT ?author (count(DISTINCT ?id) AS ?numberOfWorks)
 		WHERE{
 
-			SERVICE <facade-x:data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
+			SERVICE <x-sparql-anything:data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
 				?s source:Autore ?author .
 				?s source:Inventario ?id .
 			}

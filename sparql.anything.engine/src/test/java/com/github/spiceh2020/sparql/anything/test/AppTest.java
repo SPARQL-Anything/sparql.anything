@@ -85,7 +85,7 @@ public class AppTest {
 
 			Dataset kb = DatasetFactory.createGeneral();
 			Query q = QueryFactory
-					.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE<facade-x:http://example.org/file.test>{?s ?p ?o}}");
+					.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE<x-sparql-anything:http://example.org/file.test>{?s ?p ?o}}");
 
 			Model m = ModelFactory.createDefaultModel();
 			m.add(m.createResource(PREFIX + "s"), m.createProperty(PREFIX + "p"), m.createResource(PREFIX + "o"));
@@ -93,7 +93,7 @@ public class AppTest {
 			assertTrue(QueryExecutionFactory.create(q, kb).execConstruct().isIsomorphicWith(m));
 
 			Query select = QueryFactory.create(
-					"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<facade-x:http://example.org/file.test>{GRAPH ?g {?s ?p ?o}}}");
+					"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:http://example.org/file.test>{GRAPH ?g {?s ?p ?o}}}");
 			ResultSet rs = QueryExecutionFactory.create(select, kb).execSelect();
 			QuerySolution qs = rs.next();
 
@@ -151,7 +151,7 @@ public class AppTest {
 			Dataset kb = DatasetFactory.createGeneral();
 
 			Query select = QueryFactory.create(
-					"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<facade-x:media-type=test-mime2,location=src/main/resources/test.json> {GRAPH ?g {?s ?p ?o}}}");
+					"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:media-type=test-mime2,location=src/main/resources/test.json> {GRAPH ?g {?s ?p ?o}}}");
 
 			ResultSet rs = QueryExecutionFactory.create(select, kb).execSelect();
 			QuerySolution qs = rs.next();

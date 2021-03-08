@@ -3,7 +3,7 @@ PREFIX source: <urn:facade-x:ns#>
 SELECT DISTINCT ?titolo
 WHERE{
 
-	SERVICE <facade-x:data/COLLEZIONI_FONDO_GABINIO_MARZO_2017.json> {
+	SERVICE <x-sparql-anything:data/COLLEZIONI_FONDO_GABINIO_MARZO_2017.json> {
 		?s source:Tecnica ?technique .
 		?s source:Titolo ?titolo .
 		FILTER(REGEX(?technique,".*STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO.*","i"))

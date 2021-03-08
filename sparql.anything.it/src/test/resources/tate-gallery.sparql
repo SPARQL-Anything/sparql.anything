@@ -18,7 +18,7 @@ CONSTRUCT {
     BIND (IRI(CONCAT(STR(tate:), "artwork-", ?id )) AS ?artworkEntity) .
     BIND (IRI(CONCAT(STR(tate:), "artist-", ?id )) AS ?artistEntity) .
 
-    SERVICE <facade-x:csv.headers=true,namespace=https://github.com/tategallery/collection#,location=%%artwork_data%%> {
+    SERVICE <x-sparql-anything:csv.headers=true,namespace=https://github.com/tategallery/collection#,location=%%artwork_data%%> {
         []
             tate:id ?id ;
             tate:accession_number ?accession ;
