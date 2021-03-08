@@ -8,7 +8,7 @@ import java.util.Set;
 import org.apache.jena.sparql.core.DatasetGraph;
 
 public interface Triplifier {
-	String METADATA_GRAPH_IRI = "facade-x:metadata";
+	String METADATA_GRAPH_IRI = "http://sparql.xyz/facade-x/data/metadata";
 	String XYZ_NS = "http://sparql.xyz/facade-x/data/";
 	String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
 	String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
