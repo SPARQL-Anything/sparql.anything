@@ -23,7 +23,6 @@ import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class TextTriplifier implements Triplifier {
@@ -37,22 +36,26 @@ public class TextTriplifier implements Triplifier {
 		DatasetGraph dg = DatasetGraphFactory.create();
 		Graph g = GraphFactory.createGraphMem();
 
-		String root = null;
-
-		if (properties.contains(IRIArgument.ROOT.toString())) {
-			root = properties.getProperty(IRIArgument.ROOT.toString());
-			if (root.trim().length() == 0) {
-				logger.warn("Unsupported parameter value for 'root', using default (no value).");
-				root = null;
-			}
-		}
-
-		boolean blank_nodes = true;
-		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
-			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
-		}
-
-		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
+//		String root = null;
+//
+//		if (properties.contains(IRIArgument.ROOT.toString())) {
+//			root = properties.getProperty(IRIArgument.ROOT.toString());
+//			if (root.trim().length() == 0) {
+//				logger.warn("Unsupported parameter value for 'root', using default (no value).");
+//				root = null;
+//			}
+//		}
+//
+//		boolean blank_nodes = true;
+//		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
+//			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
+//		}
+//
+//		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
+		
+		String root = getRootArgument(properties, url);
+		Charset charset = getCharsetArgument(properties);
+		boolean blank_nodes = getBlankNodeArgument(properties);
 
 		Node rootResource;
 		if (!blank_nodes) {
@@ -67,7 +70,7 @@ public class TextTriplifier implements Triplifier {
 		}
 		g.add(new Triple(rootResource, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 
-		String value = readFromURL(url, charset);
+		String value = readFromURL(url, charset.toString());
 
 		Pattern pattern = null;
 		if (properties.containsKey(REGEX)) {

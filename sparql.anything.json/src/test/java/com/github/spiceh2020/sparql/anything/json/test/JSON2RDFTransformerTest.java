@@ -220,6 +220,7 @@ public class JSON2RDFTransformerTest {
 				DatasetGraph g1;
 				try {
 					g1 = jt.triplify(getClass().getClassLoader().getResource("./testarray.json"), properties);
+//					ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out,"TTL");
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
 					e.printStackTrace();

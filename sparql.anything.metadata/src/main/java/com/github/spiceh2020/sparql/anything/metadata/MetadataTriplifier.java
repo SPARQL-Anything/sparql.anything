@@ -20,38 +20,36 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.graph.GraphFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class MetadataTriplifier implements Triplifier {
-
-	private static Logger logger = LoggerFactory.getLogger(MetadataTriplifier.class);
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
 		DatasetGraph dg = DatasetGraphFactory.create();
 		Graph g = GraphFactory.createGraphMem();
 
-		String defaultNamespace = url.toString() + "/";
-		String namespace = null;
-
-		if (properties.containsKey(IRIArgument.NAMESPACE.toString())) {
-			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
-			if (namespace.trim().length() == 0) {
-				logger.warn("Unsupported parameter value for 'namespace', using default (no location+/).");
-				namespace = defaultNamespace;
-			}
-		} else {
-			namespace = defaultNamespace;
-		}
+//		String defaultNamespace = url.toString() + "/";
+//		String namespace = null;
+//
+//		if (properties.containsKey(IRIArgument.NAMESPACE.toString())) {
+//			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
+//			if (namespace.trim().length() == 0) {
+//				logger.warn("Unsupported parameter value for 'namespace', using default (no location+/).");
+//				namespace = defaultNamespace;
+//			}
+//		} else {
+//			namespace = defaultNamespace;
+//		}
+		
+		String namespace = url.toString() + "#";
+		
 		Node n = NodeFactory.createURI(url.toString());
 		File f = new File(FilenameUtils.getName(url.getFile()));
 		FileUtils.copyURLToFile(url, f);

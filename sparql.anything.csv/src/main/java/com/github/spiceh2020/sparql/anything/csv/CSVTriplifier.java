@@ -1,10 +1,13 @@
 package com.github.spiceh2020.sparql.anything.csv;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Properties;
@@ -25,7 +28,6 @@ import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class CSVTriplifier implements Triplifier {
@@ -43,39 +45,42 @@ public class CSVTriplifier implements Triplifier {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
-		Charset charset = null;
-		try{
-			charset = Charset.forName(properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8"));
-		}catch(Exception e){
-			log.warn("Unsupported charset format: '{}', using UTF-8.", properties.getProperty(IRIArgument.CHARSET.toString()));
-			charset = StandardCharsets.UTF_8;
-		}
-
-		boolean blank_nodes = true;
-		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
-			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
-		}
-
-		String root = null;
-		try{
-			root = properties.getProperty(IRIArgument.ROOT.toString());
-			if (root == null || root.trim().equals("")) {
-				throw new Exception();
-			}
-		}catch(Exception e){
-			log.warn("Unsupported parameter value for 'root', using default (no value).");
-		}
-
-		String namespace = null;
-		try{
-			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
-			if (namespace == null || namespace.trim().equals("")) {
-				throw new Exception();
-			}
-		}catch(Exception e){
-			log.warn("Unsupported parameter value for 'namespace': '{}', using default (location}).", url);
-			namespace = url.toString() + "#";
-		}
+//		Charset charset = null;
+//		try{
+//			charset = Charset.forName(properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8"));
+//		}catch(Exception e){
+//			log.warn("Unsupported charset format: '{}', using UTF-8.", properties.getProperty(IRIArgument.CHARSET.toString()));
+//			charset = StandardCharsets.UTF_8;
+//		}
+//		boolean blank_nodes = true;
+//		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
+//			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
+//		}
+//		String root = null;
+//		try{
+//			root = properties.getProperty(IRIArgument.ROOT.toString());
+//			if (root == null || root.trim().equals("")) {
+//				throw new Exception();
+//			}
+//		}catch(Exception e){
+//			log.warn("Unsupported parameter value for 'root', using default (no value).");
+//		}
+//		String namespace = null;
+//		try{
+//			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
+//			if (namespace == null || namespace.trim().equals("")) {
+//				throw new Exception();
+//			}
+//		}catch(Exception e){
+//			log.warn("Unsupported parameter value for 'namespace': '{}', using default (location}).", url);
+//			namespace = url.toString() + "#";
+//		}
+		
+		String root = getRootArgument(properties, url);
+		Charset charset = getCharsetArgument(properties);
+		boolean blank_nodes = getBlankNodeArgument(properties);
+		String namespace = getNamespaceArgument(properties, url);
+		
 		boolean headers;
 		try{
 			headers = Boolean.valueOf(properties.getProperty(PROPERTY_HEADERS, "false"));

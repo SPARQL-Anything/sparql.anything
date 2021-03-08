@@ -30,13 +30,17 @@ public class XMLTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
-		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
+//		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
+		String namespace = getNamespaceArgument(properties, url);
+//		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
 
-		boolean blank_nodes = true;
-		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
-			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
-		}
+		String root = getRootArgument(properties, url);
+
+//		boolean blank_nodes = true;
+//		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
+//			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
+//		}
+		boolean blank_nodes = getBlankNodeArgument(properties);
 
 		Model model = ModelFactory.createDefaultModel();
 		//
@@ -70,7 +74,7 @@ public class XMLTriplifier implements Triplifier {
 						if (!members.containsKey(resource)) {
 							members.put(resource, 0);
 						}
-						int member = member = members.get(resource) + 1;
+						int member = members.get(resource) + 1;
 						resource.addProperty(RDF.li(member), value);
 					}
 					charBuilder = null;
@@ -99,17 +103,17 @@ public class XMLTriplifier implements Triplifier {
 				}
 				// XXX Create an RDF resource
 				Resource resource;
-				if(blank_nodes == false) {
-					if(isRoot){
+				if (blank_nodes == false) {
+					if (isRoot) {
 						resource = model.createResource(root);
-					}else{
+					} else {
 						resource = model.createResource(namespace + event.asStartElement().hashCode());
 					}
-				}else{
+				} else {
 					resource = model.createResource();
 				}
 				// If this is the root
-				if(isRoot){
+				if (isRoot) {
 					// Add type root
 					resource.addProperty(RDF.type, ResourceFactory.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 					isRoot = false;

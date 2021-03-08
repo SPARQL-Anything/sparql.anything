@@ -21,7 +21,6 @@ import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class BinaryTriplifier implements Triplifier {
@@ -50,21 +49,11 @@ public class BinaryTriplifier implements Triplifier {
 		} else {
 			logger.warn("Using default encoding (Base64)");
 		}
-
-		String root = null;
-
-		if (properties.contains(IRIArgument.ROOT.toString())) {
-			root = properties.getProperty(IRIArgument.ROOT.toString());
-			if (root.trim().length() == 0) {
-				logger.warn("Unsupported parameter value for 'root', using default (no value).");
-				root = null;
-			}
-		}
-
-		boolean blank_nodes = true;
-		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
-			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
-		}
+		
+		String root = getRootArgument(properties, url);
+//		Charset charset = getCharsetArgument(properties);
+		boolean blank_nodes = getBlankNodeArgument(properties);
+//		String namespace = url.toString() + "#";
 
 		Node n;
 		if (!blank_nodes) {

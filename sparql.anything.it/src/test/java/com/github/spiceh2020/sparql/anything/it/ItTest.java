@@ -122,7 +122,7 @@ public class ItTest {
 		while (rs.hasNext()) {
 			int rowId = rs.getRowNumber() + 1;
 			QuerySolution qs = rs.next();
-			System.out.println(rowId+" "+qs.get("p").toString()+" "+expected.get(rowId));
+//			System.out.println(rowId+" "+qs.get("p").toString()+" "+expected.get(rowId));
 			log.trace("{} {} {}", rowId, qs.get("p").toString(), expected.get(rowId));
 			Assert.assertTrue(expected.get(rowId).equals(qs.get("p").toString()));
 		}

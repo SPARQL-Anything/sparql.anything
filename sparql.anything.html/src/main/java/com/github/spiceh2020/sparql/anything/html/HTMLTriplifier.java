@@ -3,6 +3,7 @@ package com.github.spiceh2020.sparql.anything.html;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
@@ -26,7 +27,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class HTMLTriplifier implements Triplifier {
@@ -38,9 +38,15 @@ public class HTMLTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), url.toString() + "#");
-		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
-		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
+//		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), url.toString() + "#");
+//		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
+//		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
+
+		String root = getRootArgument(properties, url);
+		Charset charset = getCharsetArgument(properties);
+		boolean blank_nodes = getBlankNodeArgument(properties);
+		String namespace = url.toString() + "#";
+
 		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
 
 		log.trace("namespace {}\n root {}\ncharset {}\nselector {}", namespace, root, charset, selector);
@@ -48,16 +54,16 @@ public class HTMLTriplifier implements Triplifier {
 		Document doc;
 		// If location is a http or https, raise exception if status is not 200
 		log.debug("Loading URL: {}", url);
-		if(url.getProtocol().equals("http") ||url.getProtocol().equals("https")) {
+		if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.connect();
 			log.debug("Response code: {}", conn.getResponseCode());
-			if(conn.getResponseCode() != 200){
+			if (conn.getResponseCode() != 200) {
 				throw new IOException(HttpStatus.getStatusText(conn.getResponseCode()));
 			}
-			doc = Jsoup.parse(conn.getInputStream(), charset, url.toString());
+			doc = Jsoup.parse(conn.getInputStream(), charset.toString(), url.toString());
 		} else {
-			doc = Jsoup.parse(url.openStream(), charset, url.toString());
+			doc = Jsoup.parse(url.openStream(), charset.toString(), url.toString());
 		}
 		Model model = ModelFactory.createDefaultModel();
 		// log.info(doc.title());
@@ -75,7 +81,7 @@ public class HTMLTriplifier implements Triplifier {
 				// link to root container
 				Resource elResource = toResource(model, element);
 				rootResource.addProperty(RDF.li(counter), elResource);
-			}else{
+			} else {
 				// Is root container
 				model.add(toResource(model, element), RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 			}
@@ -90,11 +96,11 @@ public class HTMLTriplifier implements Triplifier {
 
 		String tagName = element.tagName(); // tagname is the type
 		Resource resource = toResource(model, element);
-		String  innerHtml = element.html();
-		if(! innerHtml.trim().equals(""))
+		String innerHtml = element.html();
+		if (!innerHtml.trim().equals(""))
 			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerHTML"), innerHtml);
 		String innerText = element.select("*").text();
-		if(!innerText.trim().equals(""))
+		if (!innerText.trim().equals(""))
 			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerText"), innerText);
 		resource.addProperty(RDF.type, ResourceFactory.createResource(HTML_NS + tagName));
 		// attributes
@@ -107,15 +113,16 @@ public class HTMLTriplifier implements Triplifier {
 		int counter = 0;
 //		int childNodeSize = element.childNodeSize();
 //		System.err.println("Child nodes: " + childNodeSize);
-		for (Node child: element.childNodes()) {
+		for (Node child : element.childNodes()) {
 //			System.err.println(c);
 //			Node child = element.child(c);
-			if(child.outerHtml().trim().equals("")) continue;
+			if (child.outerHtml().trim().equals(""))
+				continue;
 			counter++;
-			if(child instanceof Element) {
+			if (child instanceof Element) {
 				resource.addProperty(RDF.li(counter), toResource(model, (Element) child));
 				populate(model, (Element) child, namespace);
-			}else{
+			} else {
 				resource.addProperty(RDF.li(counter), child.outerHtml());
 			}
 		}

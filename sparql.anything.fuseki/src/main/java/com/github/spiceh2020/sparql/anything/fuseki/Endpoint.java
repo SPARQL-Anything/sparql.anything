@@ -1,6 +1,5 @@
 package com.github.spiceh2020.sparql.anything.fuseki;
 
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -18,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
-import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class Endpoint {
 

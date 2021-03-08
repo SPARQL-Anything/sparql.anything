@@ -22,7 +22,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class JSONTriplifier implements Triplifier {
@@ -156,25 +155,11 @@ public class JSONTriplifier implements Triplifier {
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
 		logger.trace("Triplifying " + url.toString());
-
-		// FIXME It would be better to generalise control of arguments
-		if (properties.containsKey(IRIArgument.NAMESPACE.toString())) {
-			logger.trace("Property prefix provided");
-			propertyPrefix = properties.getProperty(IRIArgument.NAMESPACE.toString());
-		} else {
-			logger.trace("Property prefix not provided");
-			propertyPrefix = properties.getProperty(url.toString() + "/");
-		}
-
-		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
-			useBlankNodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
-		}
-
-		String root = url.toString();
-		if (properties.containsKey(IRIArgument.ROOT.toString())) {
-			root = properties.getProperty(IRIArgument.ROOT.toString());
-			this.uriRoot = root;
-		}
+		
+		this.uriRoot = getRootArgument(properties, url);
+//		Charset charset = getCharsetArgument(properties);
+		useBlankNodes = getBlankNodeArgument(properties);
+		propertyPrefix = getNamespaceArgument(properties, url);
 
 		Model m = transformJSONFromURL(url);
 		logger.trace("Number of triples " + m.size());
