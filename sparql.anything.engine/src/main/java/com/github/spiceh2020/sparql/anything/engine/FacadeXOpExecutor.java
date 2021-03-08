@@ -154,8 +154,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		// namespace <urn:facade-x/ns#>
 		if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
-			logger.trace("Setting default value for namespace: {}", Triplifier.FACADE_X_NAMESPACE_IRI);
-			properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.FACADE_X_NAMESPACE_IRI);
+			logger.trace("Setting default value for namespace: {}", Triplifier.XYZ_NS);
+			properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
 		}
 		return properties;
 	}

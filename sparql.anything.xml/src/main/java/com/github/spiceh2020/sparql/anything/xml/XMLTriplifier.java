@@ -30,7 +30,7 @@ public class XMLTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.FACADE_X_NAMESPACE_IRI);
+		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
 		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
 
 		boolean blank_nodes = true;
