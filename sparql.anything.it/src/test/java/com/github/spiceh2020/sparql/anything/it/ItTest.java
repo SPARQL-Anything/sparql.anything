@@ -245,9 +245,6 @@ public class ItTest {
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
-		while (rs.hasNext()) {
-			QuerySolution qs = rs.next();
-			log.info("{}}", qs);
-		}
+		Assert.assertTrue(rs.hasNext());
 	}
 }
