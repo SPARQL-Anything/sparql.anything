@@ -162,26 +162,12 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/vnd.ms-excel");
+		return Sets.newHashSet("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 	}
-
-	// .xlsx Microsoft Excel (OpenXML)
-	// application/vnd.openxmlformats-officedocument.spreadsheetml.sheet ??
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("xls");
+		return Sets.newHashSet("xls", "xlsx");
 	}
 
-	public static void main(String[] args) throws EncryptedDocumentException, IOException {
-		SpreadsheetTriplifier st = new SpreadsheetTriplifier();
-		logger.debug("test");
-		URL spreadsheet = st.getClass().getClassLoader().getResource("./testResources/Book1.xls");
-		Properties p = new Properties();
-		p.setProperty(IRIArgument.BLANK_NODES.toString(), String.valueOf(false));
-//		p.setProperty(IRIArgument.NAMESPACE.toString(), "file:/Users/lgu/workspace/spice/sparql.anything/sparql.anything.spreadsheets/target/classes/testResources/Book1.xls#");
-//		p.setProperty(PROPERTY_HEADERS, "true");
-		DatasetGraph dg = st.triplify(spreadsheet, p);
-		RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
-	}
 }
