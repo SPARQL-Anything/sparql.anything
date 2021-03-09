@@ -15,6 +15,7 @@ import com.github.spiceh2020.sparql.anything.binary.BinaryTriplifier;
 import com.github.spiceh2020.sparql.anything.csv.CSVTriplifier;
 import com.github.spiceh2020.sparql.anything.html.HTMLTriplifier;
 import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
+import com.github.spiceh2020.sparql.anything.spreadsheet.SpreadsheetTriplifier;
 import com.github.spiceh2020.sparql.anything.text.TextTriplifier;
 import com.github.spiceh2020.sparql.anything.xml.XMLTriplifier;
 
@@ -38,6 +39,7 @@ public final class FacadeX {
             Registry.registerTriplifier(new TextTriplifier());
             Registry.registerTriplifier(new BinaryTriplifier());
             Registry.registerTriplifier(new JSONTriplifier());
+            Registry.registerTriplifier(new SpreadsheetTriplifier());
 
             // Common image file types
             Registry.registerTriplifier(new BinaryTriplifier(){

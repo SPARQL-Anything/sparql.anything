@@ -70,6 +70,12 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.github.spice-h2020</groupId>
+			<artifactId>sparql.anything.spreadsheet</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 
 	</dependencies>

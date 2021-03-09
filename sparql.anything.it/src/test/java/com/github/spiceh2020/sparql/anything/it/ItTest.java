@@ -236,4 +236,18 @@ public class ItTest {
 //        // Write as Turtle via model.write
 //        model.write(System.out, "TTL") ;
 	}
+
+	@Test
+	public void triplifySpreadsheet() throws IOException, URISyntaxException {
+		String location = getClass().getClassLoader().getResource("Book1.xls").toURI().toString();
+		Query query = QueryFactory.create("SELECT distinct ?p WHERE { SERVICE <x-sparql-anything:location=" + location
+				+ "> { ?s ?p ?o }} ORDER BY ?p");
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+		while (rs.hasNext()) {
+			QuerySolution qs = rs.next();
+			log.info("{}}", qs);
+		}
+	}
 }

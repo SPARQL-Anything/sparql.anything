@@ -11,9 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import io.github.basilapi.basil.sparql.*;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -21,18 +19,32 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.jena.query.*;
+import org.apache.jena.query.ARQ;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFactory;
+import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import io.github.basilapi.basil.sparql.QueryParameter;
+import io.github.basilapi.basil.sparql.Specification;
+import io.github.basilapi.basil.sparql.SpecificationFactory;
+import io.github.basilapi.basil.sparql.VariablesBinder;
 
 public class SPARQLAnything {
 
