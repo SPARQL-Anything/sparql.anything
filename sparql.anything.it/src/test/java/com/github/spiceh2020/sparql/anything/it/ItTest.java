@@ -34,7 +34,7 @@ public class ItTest {
 	@Test
 	public void RegistryExtensionsTest() {
 		for (String ext : new String[] { "json", "html", "xml", "csv", "bin", "png", "jpeg", "jpg", "bmp", "tiff",
-				"tif", "ico", "txt" }) {
+				"tif", "ico", "txt", "xslx", "xls" }) {
 			Assert.assertNotNull(ext, FacadeX.Registry.getTriplifierForExtension(ext));
 		}
 	}
@@ -43,7 +43,8 @@ public class ItTest {
 	public void RegistryMimeTypesTest() {
 		for (String mt : new String[] { "application/json", "text/html", "application/xml", "text/csv",
 				"application/octet-stream", "image/png", "image/jpeg", "image/bmp", "image/tiff",
-				"image/vnd.microsoft.icon" }) {
+				"image/vnd.microsoft.icon", "application/vnd.ms-excel",
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }) {
 			Assert.assertNotNull(mt, FacadeX.Registry.getTriplifierForMimeType(mt));
 		}
 	}
