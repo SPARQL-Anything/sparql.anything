@@ -210,4 +210,75 @@ public class TestTriplifier {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void test5() {
+		SpreadsheetTriplifier st = new SpreadsheetTriplifier();
+		URL spreadsheet = st.getClass().getClassLoader().getResource("./testResources/Book1.xlsx");
+		Properties p = new Properties();
+		DatasetGraph dg;
+		try {
+			dg = st.triplify(spreadsheet, p);
+
+			String root = spreadsheet.toString() + "#";
+
+			Graph gs1 = GraphFactory.createGraphMem();
+			Node s1Root = NodeFactory.createBlankNode();
+			gs1.add(new Triple(s1Root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+
+			Node s1Row1 = NodeFactory.createBlankNode();
+			gs1.add(new Triple(s1Root, RDF.li(1).asNode(), s1Row1));
+			gs1.add(new Triple(s1Row1, RDF.li(1).asNode(), NodeFactory.createLiteral("A")));
+			gs1.add(new Triple(s1Row1, RDF.li(2).asNode(), NodeFactory.createLiteral("B")));
+			gs1.add(new Triple(s1Row1, RDF.li(3).asNode(), NodeFactory.createLiteral("C")));
+
+			Node s1Row2 = NodeFactory.createBlankNode();
+			gs1.add(new Triple(s1Root, RDF.li(2).asNode(), s1Row2));
+			gs1.add(new Triple(s1Row2, RDF.li(1).asNode(), NodeFactory.createLiteral("A1")));
+			gs1.add(new Triple(s1Row2, RDF.li(2).asNode(), NodeFactory.createLiteral("B1")));
+			gs1.add(new Triple(s1Row2, RDF.li(3).asNode(), NodeFactory.createLiteral("C1")));
+
+			Node s1Row3 = NodeFactory.createBlankNode();
+			gs1.add(new Triple(s1Root, RDF.li(3).asNode(), s1Row3));
+			gs1.add(new Triple(s1Row3, RDF.li(1).asNode(), NodeFactory.createLiteral("A2")));
+			gs1.add(new Triple(s1Row3, RDF.li(2).asNode(), NodeFactory.createLiteral("B2")));
+			gs1.add(new Triple(s1Row3, RDF.li(3).asNode(), NodeFactory.createLiteral("C2")));
+
+			Graph gs2 = GraphFactory.createGraphMem();
+			Node s2Root = NodeFactory.createBlankNode();
+			gs2.add(new Triple(s2Root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+
+			Node s2Row1 = NodeFactory.createBlankNode();
+			gs2.add(new Triple(s2Root, RDF.li(1).asNode(), s2Row1));
+			gs2.add(new Triple(s2Row1, RDF.li(1).asNode(), NodeFactory.createLiteral("A1")));
+			gs2.add(new Triple(s2Row1, RDF.li(2).asNode(), NodeFactory.createLiteral("B1")));
+			gs2.add(new Triple(s2Row1, RDF.li(3).asNode(), NodeFactory.createLiteral("C1")));
+
+			Node s2Row2 = NodeFactory.createBlankNode();
+			gs2.add(new Triple(s2Root, RDF.li(2).asNode(), s2Row2));
+			gs2.add(new Triple(s2Row2, RDF.li(1).asNode(), NodeFactory.createLiteral("A11")));
+			gs2.add(new Triple(s2Row2, RDF.li(2).asNode(), NodeFactory.createLiteral("B11")));
+			gs2.add(new Triple(s2Row2, RDF.li(3).asNode(), NodeFactory.createLiteral("C11")));
+
+			Node s2Row3 = NodeFactory.createBlankNode();
+			gs2.add(new Triple(s2Root, RDF.li(3).asNode(), s2Row3));
+			gs2.add(new Triple(s2Row3, RDF.li(1).asNode(), NodeFactory.createLiteral("A12")));
+			gs2.add(new Triple(s2Row3, RDF.li(2).asNode(), NodeFactory.createLiteral("B12")));
+			gs2.add(new Triple(s2Row3, RDF.li(3).asNode(), NodeFactory.createLiteral("C12")));
+
+//			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
+//			ModelFactory.createModelForGraph(dg.getGraph(NodeFactory.createURI(root + "Sheet1"))).write(System.out,"TTL");
+//			ModelFactory.createModelForGraph(gs1).difference(ModelFactory.createModelForGraph(dg.getGraph(NodeFactory.createURI(root + "Sheet1")))).write(System.out,"TTL");
+
+//			ModelFactory.createModelForGraph(dg.getGraph(NodeFactory.createURI(root + "Sheet2"))).write(System.out,"TTL");
+//			ModelFactory.createModelForGraph(gs2).write(System.out, "TTL");
+//			ModelFactory.createModelForGraph(gs2).difference(ModelFactory.createModelForGraph(dg.getGraph(NodeFactory.createURI(root + "Sheet2")))).write(System.out,"TTL");
+
+			assertTrue(dg.getGraph(NodeFactory.createURI(root + "Sheet1")).isIsomorphicWith(gs1));
+			assertTrue(dg.getGraph(NodeFactory.createURI(root + "Sheet2")).isIsomorphicWith(gs2));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
