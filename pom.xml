@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.spice-h2020</groupId>
@@ -80,8 +82,9 @@
 		<module>sparql.anything.text</module>
 		<module>sparql.anything.html</module>
 		<module>sparql.anything.it</module>
-    <module>sparql.anything.fuseki</module>
-  </modules>
+		<module>sparql.anything.fuseki</module>
+		<module>sparql.anything.spreadsheet</module>
+	</modules>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
@@ -210,12 +213,12 @@
 		</dependency>
 
 		<!-- Logging LOG4J - SLF4J -->
-<!--		<dependency>-->
-<!--			<groupId>org.slf4j</groupId>-->
-<!--			<artifactId>slf4j-log4j12</artifactId>-->
-<!--			<version>1.7.7</version>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>slf4j-log4j12</artifactId> -->
+		<!-- <version>1.7.7</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-jdk14</artifactId>

@@ -11,6 +11,9 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.escape.UnicodeEscaper;
+import com.google.common.net.PercentEscaper;
+
 public interface Triplifier {
 	static final String METADATA_GRAPH_IRI = "http://sparql.xyz/facade-x/data/metadata";
 	static final String XYZ_NS = "http://sparql.xyz/facade-x/data/";
@@ -72,6 +75,13 @@ public interface Triplifier {
 			namespace = XYZ_NS;
 		}
 		return namespace;
+	}
+	
+	
+	static UnicodeEscaper basicEscaper = new PercentEscaper("_", false);
+	
+	default String uriEscaper(String s) {
+		return basicEscaper.escape(s);
 	}
 
 }

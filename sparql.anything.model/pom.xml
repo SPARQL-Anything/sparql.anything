@@ -9,4 +9,12 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>sparql.anything.model</artifactId>
+
+	<dependencies><!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>30.1-jre</version>
+		</dependency>
+	</dependencies>
 </project>
