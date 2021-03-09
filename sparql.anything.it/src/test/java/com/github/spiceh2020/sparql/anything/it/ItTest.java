@@ -34,7 +34,7 @@ public class ItTest {
 	@Test
 	public void RegistryExtensionsTest() {
 		for (String ext : new String[] { "json", "html", "xml", "csv", "bin", "png", "jpeg", "jpg", "bmp", "tiff",
-				"tif", "ico", "txt", "xslx", "xls" }) {
+				"tif", "ico", "txt", "xlsx", "xls" }) {
 			Assert.assertNotNull(ext, FacadeX.Registry.getTriplifierForExtension(ext));
 		}
 	}
