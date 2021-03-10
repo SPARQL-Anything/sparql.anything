@@ -1,5 +1,7 @@
 package com.github.spiceh2020.sparql.anything.html;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,6 +13,8 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 
 public class HTMLTriplifierTest {
 	private HTMLTriplifier html2rdf = new HTMLTriplifier();
@@ -48,5 +52,29 @@ public class HTMLTriplifierTest {
 		m.setNsPrefix("xhtml", "http://www.w3.org/1999/xhtml#");
 		m.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 		m.write(System.out, "TTL");
+	}
+
+	@Test
+	public void testBN() {
+		HTMLTriplifier st = new HTMLTriplifier();
+		Properties p = new Properties();
+		p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
+		DatasetGraph dg;
+		try {
+			URL spreadsheet = new URL(getTestLocation(name.getMethodName()));
+			dg = st.triplify(spreadsheet, p);
+
+			dg.find(null, null, null, null).forEachRemaining(q -> {
+				assertTrue(!q.getSubject().isBlank());
+				assertTrue(!q.getPredicate().isBlank());
+				assertTrue(!q.getObject().isBlank());
+				assertTrue(!q.getGraph().isBlank());
+			});
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 	}
 }
