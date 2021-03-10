@@ -84,6 +84,7 @@
 		<module>sparql.anything.it</module>
 		<module>sparql.anything.fuseki</module>
 		<module>sparql.anything.spreadsheet</module>
+		<module>sparql.anything.rdf</module>
 	</modules>
 
 	<build>

@@ -23,14 +23,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class SpreadsheetTriplifier implements Triplifier {
 
-	private static Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
+//	private static Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
 
 	public final static String PROPERTY_HEADERS = "spreadsheet.headers";
 

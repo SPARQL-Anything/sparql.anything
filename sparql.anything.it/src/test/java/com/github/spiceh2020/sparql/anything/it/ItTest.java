@@ -34,7 +34,8 @@ public class ItTest {
 	@Test
 	public void RegistryExtensionsTest() {
 		for (String ext : new String[] { "json", "html", "xml", "csv", "bin", "png", "jpeg", "jpg", "bmp", "tiff",
-				"tif", "ico", "txt", "xlsx", "xls" }) {
+				"tif", "ico", "txt", "xlsx", "xls", "rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix",
+				"trdf" }) {
 			Assert.assertNotNull(ext, FacadeX.Registry.getTriplifierForExtension(ext));
 		}
 	}
@@ -44,7 +45,9 @@ public class ItTest {
 		for (String mt : new String[] { "application/json", "text/html", "application/xml", "text/csv",
 				"application/octet-stream", "image/png", "image/jpeg", "image/bmp", "image/tiff",
 				"image/vnd.microsoft.icon", "application/vnd.ms-excel",
-				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }) {
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/rdf+thrift",
+				"application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle",
+				"application/rdf+xml", "application/n-triples", "application/ld+json" }) {
 			Assert.assertNotNull(mt, FacadeX.Registry.getTriplifierForMimeType(mt));
 		}
 	}
@@ -247,5 +250,15 @@ public class ItTest {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
 		Assert.assertTrue(rs.hasNext());
+	}
+
+	@Test
+	public void triplifyRDF() throws IOException, URISyntaxException {
+		String location = getClass().getClassLoader().getResource("nquads.nq").toURI().toString();
+		Query query = QueryFactory.create("ASK { SERVICE <x-sparql-anything:location=" + location
+				+ "> { GRAPH <http://example.org/g> {<http://example.org/a> <http://example.org/b> <http://example.org/c>} }} ");
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
 	}
 }

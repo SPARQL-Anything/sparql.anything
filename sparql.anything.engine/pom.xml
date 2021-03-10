@@ -76,6 +76,12 @@
 			<artifactId>sparql.anything.spreadsheet</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.github.spice-h2020</groupId>
+			<artifactId>sparql.anything.rdf</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 
 	</dependencies>
