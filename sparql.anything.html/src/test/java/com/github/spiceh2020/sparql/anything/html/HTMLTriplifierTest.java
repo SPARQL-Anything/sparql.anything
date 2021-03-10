@@ -56,6 +56,7 @@ public class HTMLTriplifierTest {
 
 	@Test
 	public void testBN() {
+		
 		HTMLTriplifier st = new HTMLTriplifier();
 		Properties p = new Properties();
 		p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
