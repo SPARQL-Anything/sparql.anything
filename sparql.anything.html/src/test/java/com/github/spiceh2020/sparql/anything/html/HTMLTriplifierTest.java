@@ -10,6 +10,7 @@ import java.util.Properties;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -54,6 +55,7 @@ public class HTMLTriplifierTest {
 		m.write(System.out, "TTL");
 	}
 
+	@Ignore
 	@Test
 	public void testBN() {
 		
