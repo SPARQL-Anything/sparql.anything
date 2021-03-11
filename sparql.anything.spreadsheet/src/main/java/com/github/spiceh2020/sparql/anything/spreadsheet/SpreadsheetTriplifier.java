@@ -52,7 +52,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 		Workbook wb = WorkbookFactory.create(url.openStream());
 
 		wb.sheetIterator().forEachRemaining(s -> {
-			String uriGraph = root + uriEscaper(s.getSheetName());
+			String uriGraph = root + Triplifier.toSafeURIString(s.getSheetName());
 			Graph g = toGraph(s, uriGraph, namespace, blank_nodes, headers.get());
 			dg.addGraph(NodeFactory.createURI(uriGraph), g);
 		});
@@ -126,7 +126,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 					Node property;
 					if (headers && headers_map.containsKey(colid)) {
-						property = NodeFactory.createURI(namespace + uriEscaper(headers_map.get(colid)));
+						property = NodeFactory.createURI(namespace + Triplifier.toSafeURIString(headers_map.get(colid)));
 					} else {
 						property = RDF.li(colid).asNode();
 					}

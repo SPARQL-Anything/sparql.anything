@@ -47,40 +47,39 @@ public interface Triplifier {
 		}
 		return charset;
 	}
-	
+
 	default String getRootArgument(Properties properties, URL url) {
 		String root = null;
-		try{
+		try {
 			root = properties.getProperty(IRIArgument.ROOT.toString());
 			if (root == null || root.trim().equals("")) {
 				throw new Exception();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.warn("Unsupported parameter value for 'root', using default (location + '#').");
 			root = url.toString() + "#";
 		}
 		return root;
 	}
-	
+
 	default String getNamespaceArgument(Properties properties, URL url) {
 		String namespace = null;
-		try{
+		try {
 			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
 			if (namespace == null || namespace.trim().equals("")) {
 				throw new Exception();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.warn("Unsupported parameter value for 'namespace': '{}', using default ({}}).", url, XYZ_NS);
 //			namespace = url.toString() + "#";
 			namespace = XYZ_NS;
 		}
 		return namespace;
 	}
-	
-	
+
 	static UnicodeEscaper basicEscaper = new PercentEscaper("_", false);
-	
-	default String uriEscaper(String s) {
+
+	public static String toSafeURIString(String s) {
 		return basicEscaper.escape(s);
 	}
 
