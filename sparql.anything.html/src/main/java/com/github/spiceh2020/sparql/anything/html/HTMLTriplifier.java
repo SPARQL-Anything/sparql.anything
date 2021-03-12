@@ -45,7 +45,7 @@ public class HTMLTriplifier implements Triplifier {
 		String root = getRootArgument(properties, url);
 		Charset charset = getCharsetArgument(properties);
 		boolean blank_nodes = getBlankNodeArgument(properties);
-		String namespace = url.toString() + "#";
+		String namespace = getNamespaceArgument(properties, url);
 
 		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
 
@@ -79,23 +79,23 @@ public class HTMLTriplifier implements Triplifier {
 			counter++;
 			if (elements.size() > 1) {
 				// link to root container
-				Resource elResource = toResource(model, element);
+				Resource elResource = toResource(model, element, blank_nodes, namespace);
 				rootResource.addProperty(RDF.li(counter), elResource);
 			} else {
 				// Is root container
-				model.add(toResource(model, element), RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+				model.add(toResource(model, element, blank_nodes, namespace), RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 			}
-			populate(model, element, namespace);
+			populate(model, element, blank_nodes, namespace);
 		}
 		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
 		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
 		return dg;
 	}
 
-	private void populate(Model model, Element element, String namespace) {
+	private void populate(Model model, Element element, boolean blank_nodes, String namespace) {
 
 		String tagName = element.tagName(); // tagname is the type
-		Resource resource = toResource(model, element);
+		Resource resource = toResource(model, element,blank_nodes,namespace );
 		String innerHtml = element.html();
 		if (!innerHtml.trim().equals(""))
 			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerHTML"), innerHtml);
@@ -120,8 +120,8 @@ public class HTMLTriplifier implements Triplifier {
 				continue;
 			counter++;
 			if (child instanceof Element) {
-				resource.addProperty(RDF.li(counter), toResource(model, (Element) child));
-				populate(model, (Element) child, namespace);
+				resource.addProperty(RDF.li(counter), toResource(model, (Element) child, blank_nodes, namespace));
+				populate(model, (Element) child, blank_nodes, namespace);
 			} else {
 				resource.addProperty(RDF.li(counter), child.outerHtml());
 			}
@@ -133,8 +133,13 @@ public class HTMLTriplifier implements Triplifier {
 //		}
 	}
 
-	private Resource toResource(Model model, Element element) {
-		return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
+	private Resource toResource(Model model, Element element, boolean blankNodes, String namespace) {
+		if(blankNodes == true) {
+			return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
+		} else {
+			log.info(element.cssSelector());
+			return model.createResource(Triplifier.toSafeURIString(element.cssSelector()));
+		}
 	}
 
 	@Override

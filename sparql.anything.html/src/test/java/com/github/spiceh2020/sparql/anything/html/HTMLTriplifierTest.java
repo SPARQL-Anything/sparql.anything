@@ -55,7 +55,6 @@ public class HTMLTriplifierTest {
 		m.write(System.out, "TTL");
 	}
 
-	@Ignore
 	@Test
 	public void testBN() {
 		
