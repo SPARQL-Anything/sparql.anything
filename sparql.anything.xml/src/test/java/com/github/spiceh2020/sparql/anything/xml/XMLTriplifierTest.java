@@ -16,10 +16,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XMLTriplifierTest {
     private XMLTriplifier triplifier = new XMLTriplifier();
-
+    public static Logger log = LoggerFactory.getLogger(XMLTriplifierTest.class);
     @Test
     public void test1() throws IOException {
         Properties properties = new Properties();
@@ -41,7 +43,10 @@ public class XMLTriplifierTest {
 //        ModelFactory.createModelForGraph(graph.getDefaultGraph()).write(System.out,"TTL");
         Iterator<Quad> iter = graph.find(null,null, null, null);
         while(iter.hasNext()){
-            Assert.assertFalse(iter.next().getSubject().isBlank());
+            Quad q = iter.next();
+            log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
+            Assert.assertFalse(q.getSubject().isBlank());
+            Assert.assertFalse(q.getObject().isBlank());
         }
 
     }

@@ -63,7 +63,9 @@ public class XMLTriplifier implements Triplifier {
 
 			if (event != null && event.isEndElement()) {
 				log.trace("element close: {} [{}]", path, stack.size());
+				// Remove the last path
 				path = path.substring(0, path.lastIndexOf('/'));
+//				path = path.substring(0, path.lastIndexOf('/'));
 
 				// Collect data if available
 				if (charBuilder != null) {
@@ -91,23 +93,34 @@ public class XMLTriplifier implements Triplifier {
 			log.trace("event: {}", event);
 			if (event.isStartElement()) {
 				StartElement se = event.asStartElement();
-				String name = se.getName().getPrefix() + ":" + se.getName().getLocalPart();
-				path += "/" + name;
-				log.trace("element open: {} [{}]", path, stack.size());
-
+				String name;
+				if(se.getName().getPrefix().equals("")){
+					name = se.getName().getLocalPart();
+				}else {
+					name = se.getName().getPrefix() + ":" + se.getName().getLocalPart();
+				}
 				int member = 0;
 				if (stack.size() > 0) {
 					Resource parent = stack.peekLast();
 					member = members.get(parent) + 1;
 					members.put(parent, member);
 				}
+
+				if(path.equals("")){
+					path = String.join("", "/",  name);
+				}else {
+					path = String.join("", path, "/", Integer.toString(member), ":", name);
+				}
+				log.trace("element open: {} [{}]", path, stack.size());
+
 				// XXX Create an RDF resource
 				Resource resource;
 				if (blank_nodes == false) {
 					if (isRoot) {
 						resource = model.createResource(root);
 					} else {
-						resource = model.createResource(namespace + event.asStartElement().hashCode());
+//						resource = model.createResource(namespace + event.asStartElement().hashCode());
+						resource = model.createResource(String.join("", new String[]{namespace, path.substring(1)}));
 					}
 				} else {
 					resource = model.createResource();
