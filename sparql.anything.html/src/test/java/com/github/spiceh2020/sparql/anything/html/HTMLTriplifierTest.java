@@ -16,8 +16,11 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HTMLTriplifierTest {
+	public static final Logger log = LoggerFactory.getLogger(HTMLTriplifierTest.class);
 	private HTMLTriplifier html2rdf = new HTMLTriplifier();
 
 	@Rule
@@ -67,6 +70,7 @@ public class HTMLTriplifierTest {
 			dg = st.triplify(spreadsheet, p);
 
 			dg.find(null, null, null, null).forEachRemaining(q -> {
+				log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
 				assertTrue(!q.getSubject().isBlank());
 				assertTrue(!q.getPredicate().isBlank());
 				assertTrue(!q.getObject().isBlank());

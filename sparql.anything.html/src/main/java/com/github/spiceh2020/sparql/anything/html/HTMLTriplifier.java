@@ -19,6 +19,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.vocabulary.RDF;
 import org.jsoup.Jsoup;
+import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -133,12 +134,32 @@ public class HTMLTriplifier implements Triplifier {
 //		}
 	}
 
+	private static final String localName(Element element){
+		String tagName = element.tagName().replace(':', '|');
+		StringBuilder selector = new StringBuilder(tagName);
+		String classes = StringUtil.join(element.classNames(), ".");
+		if (classes.length() > 0) {
+			selector.append('.').append(classes);
+		}
+
+		if (element.parent() != null && !(element.parent() instanceof Document)) {
+			selector.insert(0, " > ");
+			if (element.parent().select(selector.toString()).size() > 1) {
+				selector.append(String.format(":nth-child(%d)", element.elementSiblingIndex() + 1));
+			}
+
+			selector.insert(0, localName(element.parent()));
+		}
+		return selector.toString().replaceAll(" > ", "/").replaceAll(":nth-child\\(([0-9]+)\\)",":$1");
+	}
+
 	private Resource toResource(Model model, Element element, boolean blankNodes, String namespace) {
 		if(blankNodes == true) {
 			return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
 		} else {
-			log.info(element.cssSelector());
-			return model.createResource(Triplifier.toSafeURIString(element.cssSelector()));
+			String ln = localName(element);
+			log.info(ln);
+			return model.createResource(namespace + ln);
 		}
 	}
 
