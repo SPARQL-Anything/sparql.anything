@@ -64,9 +64,9 @@ public class JSONTriplifier implements Triplifier {
 	private void transformJSON(String json, TripleFilteringModel filter) {
 		checkParameters();
 		try {
-			getModel(new JSONObject(json), filter);
+			transform(new JSONObject(json), filter);
 		} catch (JSONException e) {
-			getModel(new JSONArray(json), filter);
+			transform(new JSONArray(json), filter);
 		}
 	}
 
@@ -75,23 +75,23 @@ public class JSONTriplifier implements Triplifier {
 			throw new RuntimeException("The property prefix can't be null");
 	}
 
-	public void getModel(JSONObject object, TripleFilteringModel filter) {
+	public void transform(JSONObject object, TripleFilteringModel filter) {
 		//Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
 		filter.add(root, RDF.type, filter.getModel().createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		getModel(object, root, filter);
+		transform(object, root, filter);
 //		return m;
 	}
 
-	public void getModel(JSONArray arr, TripleFilteringModel filter) {
+	public void transform(JSONArray arr, TripleFilteringModel filter) {
 //		Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
 		filter.add(root, RDF.type, filter.getModel().createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		getModel(arr, root, filter);
+		transform(arr, root, filter);
 //		return m;
 	}
 
-	private void getModel(JSONObject object, Resource r, TripleFilteringModel filter) {
+	private void transform(JSONObject object, Resource r, TripleFilteringModel filter) {
 //		m.add(r, RDF.type, RDFS.Resource);
 		object.keys().forEachRemaining(k -> {
 			Object o = object.get(k);
@@ -107,7 +107,7 @@ public class JSONTriplifier implements Triplifier {
 		});
 	}
 
-	private void getModel(JSONArray arr, Resource r, TripleFilteringModel filter) {
+	private void transform(JSONArray arr, Resource r, TripleFilteringModel filter) {
 //		m.add(r, RDF.type, RDF.Seq);
 		for (int i = 0; i < arr.length(); i++) {
 			Object o = arr.get(i);
@@ -126,13 +126,13 @@ public class JSONTriplifier implements Triplifier {
 	private void transformArray(Resource r, Property p, JSONArray o, TripleFilteringModel filter) {
 		Resource seq = createResource(r.getURI() + "/" + p.getLocalName());
 		filter.add(r, p, seq);
-		getModel(o, seq, filter);
+		transform(o, seq, filter);
 	}
 
 	private void transformJSONObject(Resource r, Property p, JSONObject o, TripleFilteringModel filter) {
 		Resource rnew = createResource(r.getURI() + "/" + p.getLocalName());
 		filter.add(r, p, rnew);
-		getModel(o, rnew, filter);
+		transform(o, rnew, filter);
 	}
 
 	private void transformPrimites(Resource r, Property p, Object o, TripleFilteringModel filter) {
