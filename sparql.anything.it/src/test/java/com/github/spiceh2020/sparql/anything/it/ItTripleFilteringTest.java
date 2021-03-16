@@ -24,6 +24,7 @@ package com.github.spiceh2020.sparql.anything.it;
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.sparql.util.Context;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -36,8 +37,6 @@ import java.util.List;
 
 public class ItTripleFilteringTest {
     private static final Logger log = LoggerFactory.getLogger(ItTripleFilteringTest.class);
-
-
 
     @Test
     public void JSON1() throws URISyntaxException {
@@ -60,6 +59,42 @@ public class ItTripleFilteringTest {
             mustInclude.remove(qs.get("p").toString());
         }
         Assert.assertTrue(mustInclude.isEmpty());
+    }
+
+    @Test
+    public void Audit_JSON2() throws URISyntaxException {
+        // a01009-14709.json
+        Dataset kb = DatasetFactory.createGeneral();
+
+        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+        String location = getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json").toURI().toString();
+        Query query = QueryFactory.create(
+                "PREFIX xyz:  <http://sparql.xyz/facade-x/data/>\n" +
+                        "PREFIX fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+                        "PREFIX sd:   <http://www.w3.org/ns/sparql-service-description#>\n" +
+                        "PREFIX void: <http://rdfs.org/ns/void#>\n" +
+                        "SELECT DISTINCT ?g ?triples WHERE { " +
+                        "{" +
+                        "SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=1,location="
+                        + location + "> { graph ?g {[] ?p [] } . graph xyz:audit { ?g void:triples ?triples } } " +
+                        "} UNION {" +
+                        "SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=1,location="
+                        + location + "> { graph ?g {[] a [] } . graph xyz:audit { ?g void:triples ?triples } } " +
+                        "" +
+                        "}}");
+
+        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        // 151
+        int count = 0;
+        while (rs.hasNext()) {
+            count++;
+            int rowId = rs.getRowNumber() + 1;
+            QuerySolution qs = rs.next();
+            log.info("{} {}", rowId, qs);
+            Assert.assertTrue(qs.get("triples").asLiteral().getInt() == 1 || qs.get("triples").asLiteral().getInt() == 151);
+        }
+        Assert.assertTrue(count == 2);
     }
 
 }
