@@ -30,6 +30,8 @@ import org.apache.jena.sparql.algebra.OpVisitor;
 import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class TripleFilteringModel {
     private List<Object> opComponents = new ArrayList<Object>();
     private Node graph;
     private Model model;
-
+    private static final Logger log = LoggerFactory.getLogger(TripleFilteringModel.class);
 
     public TripleFilteringModel(Node graph, Op op){
         this(graph, op, ModelFactory.createDefaultModel());
@@ -60,13 +62,14 @@ public class TripleFilteringModel {
     }
 
     public boolean match(Node subject, Node predicate, Node object){
-        if(op == null) return true;
+        if(op == null || opComponents.isEmpty()) return true;
 
         for (Object o : opComponents){
+
             if (o instanceof Quad){
                 Quad q = (Quad) o;
                 if((!q.getGraph().isConcrete() || q.getGraph().matches(graph))
-                        &&(!q.getSubject().isConcrete() || q.getSubject().matches(subject))
+                        && (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
                         && (!q.getPredicate().isConcrete() || q.getPredicate().matches(predicate))
                         && (!q.getObject().isConcrete() || q.getObject().matches(object))){
                     return true;
@@ -96,27 +99,32 @@ public class TripleFilteringModel {
     class ComponentsCollector implements OpVisitor{
         @Override
         public void visit(OpBGP opBGP) {
+            log.trace(" - OpBGP - ", opBGP);
             opComponents.addAll(opBGP.getPattern().getList());
         }
 
         @Override
         public void visit(OpQuadPattern opQuadPattern) {
+            log.trace(" - OpQuadPattern - ", opQuadPattern);
             opComponents.addAll(opQuadPattern.getPattern().getList());
         }
 
         @Override
         public void visit(OpQuadBlock opQuadBlock) {
-
+            log.trace(" - OpQuadBlock - ", opQuadBlock);
+            opComponents.addAll(opQuadBlock.getPattern().getList());
         }
 
         @Override
         public void visit(OpTriple opTriple) {
-
+            log.trace(" - OpBGP - ", opTriple);
+            opComponents.add(opTriple.getTriple());
         }
 
         @Override
         public void visit(OpQuad opQuad) {
-
+            log.trace(" - OpQuad - ", opQuad);
+            opComponents.add(opQuad.getQuad());
         }
 
         @Override
@@ -141,27 +149,28 @@ public class TripleFilteringModel {
 
         @Override
         public void visit(OpProcedure opProcedure) {
-
+            opProcedure.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpPropFunc opPropFunc) {
-
+            opPropFunc.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpFilter opFilter) {
-
+            opFilter.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpGraph opGraph) {
-
+            log.trace(" - OpGraph - ", opGraph);
+            opGraph.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpService opService) {
-
+            opService.getSubOp().visit(this);
         }
 
         @Override
@@ -186,77 +195,87 @@ public class TripleFilteringModel {
 
         @Override
         public void visit(OpJoin opJoin) {
-
+            opJoin.getLeft().visit(this);
+            opJoin.getRight().visit(this);
         }
 
         @Override
         public void visit(OpLeftJoin opLeftJoin) {
-
+            opLeftJoin.getLeft().visit(this);
+            opLeftJoin.getRight().visit(this);
         }
 
         @Override
         public void visit(OpUnion opUnion) {
-
+            opUnion.getLeft().visit(this);
+            opUnion.getRight().visit(this);
         }
 
         @Override
         public void visit(OpDiff opDiff) {
-
+            opDiff.getLeft().visit(this);
+            opDiff.getRight().visit(this);
         }
 
         @Override
         public void visit(OpMinus opMinus) {
-
+            opMinus.getLeft().visit(this);
+            opMinus.getRight().visit(this);
         }
 
         @Override
         public void visit(OpConditional opConditional) {
-
+            opConditional.getLeft().visit(this);
+            opConditional.getRight().visit(this);
         }
 
         @Override
         public void visit(OpSequence opSequence) {
-
+            for(Op o: opSequence.getElements()){
+                o.visit(this);
+            }
         }
 
         @Override
         public void visit(OpDisjunction opDisjunction) {
-
+            for(Op o: opDisjunction.getElements()){
+                o.visit(this);
+            }
         }
 
         @Override
         public void visit(OpList opList) {
-
+            opList.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpOrder opOrder) {
-
+            opOrder.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpProject opProject) {
-
+            opProject.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpReduced opReduced) {
-
+            opReduced.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpDistinct opDistinct) {
-
+            opDistinct.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpSlice opSlice) {
-
+            opSlice.getSubOp().visit(this);
         }
 
         @Override
         public void visit(OpGroup opGroup) {
-
+            opGroup.getSubOp().visit(this);
         }
 
         @Override
