@@ -8,8 +8,13 @@ import java.net.URL;
 import java.util.*;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -22,6 +27,9 @@ import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.util.Symbol;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.VOID;
+import org.apache.jena.vocabulary.XSD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +48,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private Map<String, DatasetGraph> executedFacadeXIris;
 
 	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
+	private final static Symbol audit = Symbol.create("facade-x-audit");
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
@@ -50,6 +59,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 			execCxt.getContext().set(inMemoryCache, new HashMap<String, DatasetGraph>());
 		}
 		executedFacadeXIris = execCxt.getContext().get(inMemoryCache);
+	}
+	private String getInMemoryCacheKey(OpService opService){
+		return opService.getService().getURI() + opService.getSubOp().toString();
 	}
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
@@ -63,9 +75,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 				// XXX Future implementations may use a caching system
 				try {
 					DatasetGraph dg;
-					if (executedFacadeXIris.containsKey(opService.getService().getURI())) {
+					if (executedFacadeXIris.containsKey(getInMemoryCacheKey(opService))) {
 						logger.debug("Graph reloaded from in-memory cache");
-						dg = executedFacadeXIris.get(opService.getService().getURI());
+						dg = executedFacadeXIris.get(getInMemoryCacheKey(opService));
 					}else{
 						Triplifier t;
 						Properties p = getProperties(opService.getService().getURI());
@@ -109,9 +121,29 @@ public class FacadeXOpExecutor extends OpExecutor {
 									metadataTriplifier.triplify(url, p).getDefaultGraph());
 						}
 
+						if(p.containsKey("audit") && p.get("audit").equals("1")){
+							logger.info("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
+							logger.info("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(), NodeFactory.createURI(url.toString()));
+							String SD = "http://www.w3.org/ns/sparql-service-description#";
+							Model audit = ModelFactory.createDefaultModel();
+							Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
+
+							// For each graph
+							Iterator<Node> graphs = dg.listGraphNodes();
+							while(graphs.hasNext()){
+								Node g = graphs.next();
+								Resource auditGraph = audit.createResource(g.getURI());
+								root.addProperty(ResourceFactory.createProperty(SD + "namedGraph"),  auditGraph);
+								auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD + "NamedGraph"));
+								auditGraph.addProperty(ResourceFactory.createProperty(SD + "name"), g.getURI());
+								auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
+								dg.addGraph(NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI), audit.getGraph());
+							}
+						}
+
 						// Remember the triplified data
-						if (!executedFacadeXIris.containsKey(opService.getService().getURI())) {
-							executedFacadeXIris.put(opService.getService().getURI(), dg);
+						if (!executedFacadeXIris.containsKey(getInMemoryCacheKey(opService))) {
+							executedFacadeXIris.put(getInMemoryCacheKey(opService), dg);
 							logger.debug("Graph added to in-memory cache");
 						}
 					}
