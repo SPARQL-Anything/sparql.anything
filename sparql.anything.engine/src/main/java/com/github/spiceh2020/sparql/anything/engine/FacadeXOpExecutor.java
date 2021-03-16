@@ -99,7 +99,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 						}
 
 						if (t != null) {
-							dg = t.triplify(url, p);
+							dg = t.triplify(url, p, opService.getSubOp());
 						} else {
 							logger.error("No triplifier available for the input format!");
 							dg = DatasetFactory.create().asDatasetGraph();

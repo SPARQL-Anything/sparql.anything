@@ -7,13 +7,13 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.TripleFilteringModel;
 import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.vocabulary.RDF;
 import org.json.JSONArray;
@@ -39,7 +39,7 @@ public class JSONTriplifier implements Triplifier {
 //		return transformJSON(br.toString());
 //	}
 
-	private Model transformJSONFromURL(URL url) throws IOException {
+	private void transformJSONFromURL(URL url, TripleFilteringModel filter) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 
 		if (propertyPrefix == null) {
@@ -52,7 +52,7 @@ public class JSONTriplifier implements Triplifier {
 		});
 		br.close();
 
-		return transformJSON(sb.toString());
+		transformJSON(sb.toString(), filter);
 	}
 
 	private void reset() {
@@ -61,12 +61,12 @@ public class JSONTriplifier implements Triplifier {
 		useBlankNodes = true;
 	}
 
-	private Model transformJSON(String json) {
+	private void transformJSON(String json, TripleFilteringModel filter) {
 		checkParameters();
 		try {
-			return getModel(new JSONObject(json));
+			getModel(new JSONObject(json), filter);
 		} catch (JSONException e) {
-			return getModel(new JSONArray(json));
+			getModel(new JSONArray(json), filter);
 		}
 	}
 
@@ -75,75 +75,75 @@ public class JSONTriplifier implements Triplifier {
 			throw new RuntimeException("The property prefix can't be null");
 	}
 
-	public Model getModel(JSONObject object) {
-		Model m = ModelFactory.createDefaultModel();
+	public void getModel(JSONObject object, TripleFilteringModel filter) {
+		//Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
-		m.add(root, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		getModel(object, root, m);
-		return m;
+		filter.add(root, RDF.type, filter.getModel().createResource(Triplifier.FACADE_X_TYPE_ROOT));
+		getModel(object, root, filter);
+//		return m;
 	}
 
-	public Model getModel(JSONArray arr) {
-		Model m = ModelFactory.createDefaultModel();
+	public void getModel(JSONArray arr, TripleFilteringModel filter) {
+//		Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
-		m.add(root, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		getModel(arr, root, m);
-		return m;
+		filter.add(root, RDF.type, filter.getModel().createResource(Triplifier.FACADE_X_TYPE_ROOT));
+		getModel(arr, root, filter);
+//		return m;
 	}
 
-	private void getModel(JSONObject object, Resource r, Model m) {
+	private void getModel(JSONObject object, Resource r, TripleFilteringModel filter) {
 //		m.add(r, RDF.type, RDFS.Resource);
 		object.keys().forEachRemaining(k -> {
 			Object o = object.get(k);
-			Property p = m.createProperty(propertyPrefix + k);
+			Property p = filter.getModel().createProperty(propertyPrefix + k);
 //			m.add(p, RDFS.label, m.createTypedLiteral(k));
 			if (o instanceof String || o instanceof Boolean || o instanceof Integer) {
-				transformPrimites(m, r, p, o);
+				transformPrimites(r, p, o, filter);
 			} else if (o instanceof JSONObject) {
-				transformJSONObject(m, r, p, (JSONObject) o);
+				transformJSONObject(r, p, (JSONObject) o, filter);
 			} else if (o instanceof JSONArray) {
-				transformArray(m, r, p, (JSONArray) o);
+				transformArray(r, p, (JSONArray) o, filter);
 			}
 		});
 	}
 
-	private void getModel(JSONArray arr, Resource r, Model m) {
+	private void getModel(JSONArray arr, Resource r, TripleFilteringModel filter) {
 //		m.add(r, RDF.type, RDF.Seq);
 		for (int i = 0; i < arr.length(); i++) {
 			Object o = arr.get(i);
 			Property p = RDF.li(i + 1);
 			if (o instanceof String || o instanceof Boolean || o instanceof Integer) {
-				transformPrimites(m, r, p, o);
+				transformPrimites( r, p, o, filter);
 			} else if (o instanceof JSONObject) {
-				transformJSONObject(m, r, p, (JSONObject) o);
+				transformJSONObject( r, p, (JSONObject) o, filter);
 			} else if (o instanceof JSONArray) {
-				transformArray(m, r, p, (JSONArray) o);
+				transformArray( r, p, (JSONArray) o, filter);
 			}
 		}
 		;
 	}
 
-	private void transformArray(Model m, Resource r, Property p, JSONArray o) {
+	private void transformArray(Resource r, Property p, JSONArray o, TripleFilteringModel filter) {
 		Resource seq = createResource(r.getURI() + "/" + p.getLocalName());
-		m.add(r, p, seq);
-		getModel(o, seq, m);
+		filter.add(r, p, seq);
+		getModel(o, seq, filter);
 	}
 
-	private void transformJSONObject(Model m, Resource r, Property p, JSONObject o) {
+	private void transformJSONObject(Resource r, Property p, JSONObject o, TripleFilteringModel filter) {
 		Resource rnew = createResource(r.getURI() + "/" + p.getLocalName());
-		m.add(r, p, rnew);
-		getModel(o, rnew, m);
+		filter.add(r, p, rnew);
+		getModel(o, rnew, filter);
 	}
 
-	private void transformPrimites(Model m, Resource r, Property p, Object o) {
-		m.add(r, p, m.createTypedLiteral(o));
+	private void transformPrimites(Resource r, Property p, Object o, TripleFilteringModel filter) {
+		filter.add(r, p, filter.getModel().createTypedLiteral(o));
 	}
 
 	private Resource createResource(String path) {
 		if (useBlankNodes) {
-			return ModelFactory.createDefaultModel().createResource();
+			return ResourceFactory.createResource();
 		} else {
-			return ModelFactory.createDefaultModel().createResource(path);
+			return ResourceFactory.createResource(path);
 		}
 
 	}
@@ -152,19 +152,29 @@ public class JSONTriplifier implements Triplifier {
 		this.propertyPrefix = propertyPrefix;
 	}
 
+	@Deprecated
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		logger.trace("Triplifying " + url.toString());
-		
+		return triplify(url, properties, null);
+	}
+
+	@Override
+	public DatasetGraph triplify(URL url, Properties properties, Op op) throws IOException {
+		logger.trace("Triplifying ", url.toString());
+		logger.trace("Op ", op);
+
+		Node graphName = NodeFactory.createURI(url.toString());
+		TripleFilteringModel filter = new TripleFilteringModel(graphName, op, ModelFactory.createDefaultModel());
 		this.uriRoot = getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
 		useBlankNodes = getBlankNodeArgument(properties);
 		propertyPrefix = getNamespaceArgument(properties, url);
 
-		Model m = transformJSONFromURL(url);
+		transformJSONFromURL(url, filter);
+		Model m = filter.getModel();
 		logger.trace("Number of triples " + m.size());
 		DatasetGraph dg = DatasetFactory.create(m).asDatasetGraph();
-		dg.addGraph(NodeFactory.createURI(url.toString()), dg.getDefaultGraph());
+		dg.addGraph(graphName, dg.getDefaultGraph());
 		// FIXME quick and dirty solution for resetting fields
 		reset();
 		return dg;

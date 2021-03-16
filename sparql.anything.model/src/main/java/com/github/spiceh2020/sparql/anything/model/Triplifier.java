@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,10 @@ public interface Triplifier {
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
 
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException;
+
+	default public DatasetGraph triplify(URL url, Properties properties, Op subOp) throws IOException {
+		return triplify(url, properties);
+	}
 
 	public Set<String> getMimeTypes();
 
