@@ -54,10 +54,6 @@ public class TripleFilteringModel {
         if(op != null) {
             ComponentsCollector collector = new ComponentsCollector();
             op.visit(collector);
-//            for (Object o : opComponents) {
-//                System.err.println(o);
-//                System.err.println(o.getClass());
-//            }
         }
         this.model = model;
         this.graph = graph;
