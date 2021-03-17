@@ -19,7 +19,7 @@ public class TestDataCreator {
 
 		JSONArray arr = new JSONArray();
 		String[] files = {
-				"https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json",
+				"https://raw.githubusercontent.com/SPARQL-Anything/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017.json",
 				"https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json",
 				"https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json" };
 
@@ -30,7 +30,7 @@ public class TestDataCreator {
 				arr.put(l.get(i));
 			}
 		}
-		System.out.println(arr.length());
+		System.out.println("Generated array of length "+arr.length());
 		int c = arr.length();
 		while (c < 1000000) {
 			for (int i = 0; i < arr.length(); i++) {

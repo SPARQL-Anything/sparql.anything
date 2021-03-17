@@ -95,7 +95,7 @@ public class JSONTriplifier implements Triplifier {
 //		m.add(r, RDF.type, RDFS.Resource);
 		object.keys().forEachRemaining(k -> {
 			Object o = object.get(k);
-			Property p = filter.getModel().createProperty(propertyPrefix + k);
+			Property p = filter.getModel().createProperty(propertyPrefix + Triplifier.toSafeURIString(k));
 //			m.add(p, RDFS.label, m.createTypedLiteral(k));
 			if (o instanceof String || o instanceof Boolean || o instanceof Integer) {
 				transformPrimites(r, p, o, filter);

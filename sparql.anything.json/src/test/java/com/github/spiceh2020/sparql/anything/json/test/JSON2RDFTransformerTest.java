@@ -113,6 +113,28 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
+	public void keys() {
+		JSONTriplifier jt = new JSONTriplifier();
+		Properties properties = new Properties();
+		Model m = ModelFactory.createDefaultModel();
+		Resource r = m.createResource();
+		m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+		m.add(r, m.createProperty(Triplifier.XYZ_NS + "ab%20cd"), m.createTypedLiteral("ef"));
+		m.add(r, m.createProperty(Triplifier.XYZ_NS + "ab%2Dcd"), m.createTypedLiteral("ef"));
+
+		DatasetGraph g1;
+		try {
+			g1 = jt.triplify(getClass().getClassLoader().getResource("./whitespaceKeys.json"), properties);
+			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out,"TTL");
+//			m.write(System.out,"TTL");
+			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Test
 	public void testBlankNodeProperty() {
 		JSONTriplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
@@ -166,7 +188,7 @@ public class JSON2RDFTransformerTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testBlankNodeFalseNoRoot() {
 		JSONTriplifier jt = new JSONTriplifier();

@@ -8,7 +8,7 @@ CONSTRUCT {
             ex:Titolo    ?t .
 } WHERE {
 	SERVICE <x-sparql-anything:namespace=http://exmaple.org/,location=100.json> {
-		?arr ?p _:b .
+		
 		_:b  ex:Autore     ?a ;
             ex:Datazione  ?d ;
             ex:Dimensioni ?dim ;

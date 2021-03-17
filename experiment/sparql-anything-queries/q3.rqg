@@ -1,11 +1,8 @@
-PREFIX source: <urn:facade-x:ns#>
-
 SELECT DISTINCT ?titolo
-WHERE{
-
+WHERE {
 	SERVICE <x-sparql-anything:data/COLLEZIONI_FONDO_GABINIO_MARZO_2017.json> {
-		?s source:Datazione ?date .
-		?s source:Titolo ?titolo .
+		?s <http://sparql.xyz/facade-x/data/Datazione> ?date .
+		?s <http://sparql.xyz/facade-x/data/Titolo> ?titolo .
 		FILTER(REGEX(?date,".*1935.*","i"))
 	}
 }

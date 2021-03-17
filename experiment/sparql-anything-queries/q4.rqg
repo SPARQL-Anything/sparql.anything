@@ -1,11 +1,9 @@
-PREFIX source: <urn:facade-x:ns#>
-
 SELECT DISTINCT ?id
 WHERE{
 
 	SERVICE <x-sparql-anything:data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
-		?s source:Materiali ?material .
-		?s source:Inventario ?id .
+		?s <http://sparql.xyz/facade-x/data/Materiali> ?material .
+		?s <http://sparql.xyz/facade-x/data/Inventario> ?id .
 		FILTER(REGEX(?material,".*bronzo.*","i"))
 	}
 }
