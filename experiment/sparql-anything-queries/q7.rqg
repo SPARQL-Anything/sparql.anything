@@ -1,10 +1,8 @@
-PREFIX source: <urn:facade-x:ns#>
-
 SELECT DISTINCT ?author (count(DISTINCT ?id) AS ?numberOfWorks)
 WHERE{
 
 	SERVICE <x-sparql-anything:data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
-		?s source:Autore ?author .
-		?s source:Inventario ?id .
+		?s <http://sparql.xyz/facade-x/data/Autore> ?author .
+		?s <http://sparql.xyz/facade-x/data/Inventario> ?id .
 	}
 } GROUP BY ?author

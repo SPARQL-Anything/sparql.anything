@@ -1,24 +1,22 @@
 PREFIX ex: <http://exmaple.org/>
 CONSTRUCT {
-	_:b ex:Inventario ?in .
-		_:b ex:Autore ?a .
-		_:b <http://exmaple.org/Ambito_culturale> ?ac .
-		_:b ex:Datazione ?d .
-		_:b ex:Titolo-soggetto ?t .
-		_:b ex:Materiali ?m .
-		_:b ex:Immagine ?i .
-		_:b ex:lsreferenceby ?ref .
+	_:b ex:Inventario ?in ;
+		ex:Autore ?a ;
+		ex:Ambito_Culturale ?ac ;
+		ex:Datazione ?d ;
+		ex:Titolo-soggetto ?t ;
+		ex:Materiali ?m ;
+		ex:Immagine ?i ;
+		ex:lsreferenceby ?ref .
 } WHERE {
 	SERVICE <x-sparql-anything:namespace=http://exmaple.org/,location=data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
-		?arr ?p  _:b .
-		_:b ex:Inventario ?in .
-		_:b ex:Autore ?a .
-		_:b ?acp ?ac .
-		_:b ex:Datazione ?d .
-		_:b ex:Titolo-soggetto ?t .
-		_:b ex:Materiali ?m .
-		_:b ex:Immagine ?i .
-		_:b ex:lsreferenceby ?ref .
-		FILTER(str(?acp)="http://exmaple.org/Ambito culturale")
+		_:b ex:Inventario ?in ;
+		 ex:Autore ?a ;
+		ex:Ambito%20culturale ?ac ;
+		ex:Datazione ?d ;
+		ex:Titolo%2Dsoggetto ?t ;
+		ex:Materiali ?m ;
+		ex:Immagine ?i ;
+		ex:lsreferenceby ?ref .
 	}
 }

@@ -77,7 +77,7 @@ public interface Triplifier {
 		return namespace;
 	}
 
-	static UnicodeEscaper basicEscaper = new PercentEscaper("_", false);
+	static UnicodeEscaper basicEscaper = new PercentEscaper("%", false);
 
 	public static String toSafeURIString(String s) {
 		return basicEscaper.escape(s);
