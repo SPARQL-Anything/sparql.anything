@@ -1,0 +1,8 @@
+SELECT DISTINCT ?titolo
+WHERE{
+
+	SERVICE <x-sparql-anything:location=100000.json> {
+		?s <http://sparql.xyz/facade-x/data/Autore> "ANONIMO" .
+		?s <http://sparql.xyz/facade-x/data/Titolo> ?titolo .
+	}
+}

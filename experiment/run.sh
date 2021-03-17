@@ -1,4 +1,5 @@
 SPARQL_ANYTHING_VERSION=0.0.5-SNAPSHOT
+#SPARQL_ANYTHING_VERSION=0.1.0-SNAPSHOT
 if [[ ! -e "bin" ]]; then
 	echo "bin not exists"
 	mkdir bin

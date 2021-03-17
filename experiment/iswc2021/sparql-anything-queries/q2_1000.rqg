@@ -1,0 +1,9 @@
+SELECT DISTINCT ?titolo
+WHERE{
+
+	SERVICE <x-sparql-anything:location=1000.json> {
+		?s <http://sparql.xyz/facade-x/data/Tecnica> ?technique .
+		?s <http://sparql.xyz/facade-x/data/Titolo> ?titolo .
+		FILTER(REGEX(?technique,".*STAMPA ALLA GELATINA CLOROBROMURO D'ARGENTO.*","i"))
+	}
+}
