@@ -136,28 +136,25 @@ public class TripleFilteringModel {
     }
 
     public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId){
-        return add(container2node(dataSourceId), container2node(containerId), key2predicate(slotKey), container2node(childContainerId));
+        return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey), container2node(childContainerId));
     }
 
     public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId){
-        return add(container2node(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(), container2node(childContainerId));
+        return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(), container2node(childContainerId));
     }
 
     public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value){
-        return add(container2node(dataSourceId), container2node(containerId), key2predicate(slotKey), value2node(value));
+        return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey), value2node(value));
     }
 
     public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value){
-        return add(container2node(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(), value2node(value));
+        return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(), value2node(value));
     }
 
     public boolean addRoot(String dataSourceId, String rootId){
-        return add(container2node(dataSourceId), container2node(rootId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
+        return add(NodeFactory.createURI(dataSourceId), container2node(rootId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
     }
 
-    /**
-     *
-     */
     public Node container2node(String container){
         if (p_blank_nodes) {
             return NodeFactory.createBlankNode(container);
