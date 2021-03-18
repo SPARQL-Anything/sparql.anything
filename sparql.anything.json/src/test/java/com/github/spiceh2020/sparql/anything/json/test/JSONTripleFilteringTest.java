@@ -21,23 +21,13 @@
 
 package com.github.spiceh2020.sparql.anything.json.test;
 
-import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
-import org.apache.jena.graph.Node_Literal;
+import com.github.spiceh2020.sparql.anything.json.old.JSONTriplifier;
 import org.apache.jena.graph.Node_Variable;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.shared.NamespaceEndsWithNameCharException;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
-import org.apache.jena.sparql.core.Var;
-import org.apache.jena.sparql.syntax.TripleCollector;
-import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

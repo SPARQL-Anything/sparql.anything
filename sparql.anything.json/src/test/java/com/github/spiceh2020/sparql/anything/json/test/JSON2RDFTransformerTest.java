@@ -7,18 +7,16 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
-import com.github.spiceh2020.sparql.anything.json.JSONTriplifier2;
+import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.vocabulary.RDF;
 import org.json.JSONException;
 import org.junit.Test;
 
-import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
@@ -29,7 +27,7 @@ public class JSON2RDFTransformerTest {
 	@Test
 	public void testEmptyAndNull() {
 
-		Triplifier jt = new JSONTriplifier2();
+		Triplifier jt = new JSONTriplifier();
 
 		try {
 			DatasetGraph g1 = jt.triplify(getClass().getClassLoader().getResource("./emptyobject.json"),
@@ -69,7 +67,7 @@ public class JSON2RDFTransformerTest {
 		{
 
 			{
-				Triplifier jt = new JSONTriplifier2();
+				Triplifier jt = new JSONTriplifier();
 				Properties properties = new Properties();
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
 				Model m = ModelFactory.createDefaultModel();
@@ -90,7 +88,7 @@ public class JSON2RDFTransformerTest {
 			}
 
 			{
-				Triplifier jt = new JSONTriplifier2();
+				Triplifier jt = new JSONTriplifier();
 				Properties properties = new Properties();
 				String root = "https://w3id.org/spice/resource/root";
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -118,7 +116,7 @@ public class JSON2RDFTransformerTest {
 
 	@Test
 	public void keys() {
-		Triplifier jt = new JSONTriplifier2();
+		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		Model m = ModelFactory.createDefaultModel();
 		Resource r = m.createResource();
@@ -140,7 +138,7 @@ public class JSON2RDFTransformerTest {
 
 	@Test
 	public void testBlankNodeProperty() {
-		Triplifier jt = new JSONTriplifier2();
+		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		String root = "https://w3id.org/spice/resource/root";
 		properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -167,7 +165,7 @@ public class JSON2RDFTransformerTest {
 
 	@Test
 	public void testBlankNodeFalse() {
-		Triplifier jt = new JSONTriplifier2();
+		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		String root = "https://w3id.org/spice/resource/root";
 		properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -195,7 +193,7 @@ public class JSON2RDFTransformerTest {
 
 	@Test
 	public void testBlankNodeFalseNoRoot() {
-		Triplifier jt = new JSONTriplifier2();
+		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		String root = getClass().getClassLoader().getResource("./testprimitive.json").toString();
 		properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -241,7 +239,7 @@ public class JSON2RDFTransformerTest {
 
 				Properties properties = new Properties();
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
-				Triplifier jt = new JSONTriplifier2();
+				Triplifier jt = new JSONTriplifier();
 
 				DatasetGraph g1;
 				try {
@@ -275,7 +273,7 @@ public class JSON2RDFTransformerTest {
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
 				properties.setProperty(IRIArgument.ROOT.toString(), root);
 				properties.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
-				Triplifier jt = new JSONTriplifier2();
+				Triplifier jt = new JSONTriplifier();
 
 				DatasetGraph g1;
 				try {
@@ -303,7 +301,7 @@ public class JSON2RDFTransformerTest {
 	@Test(expected = org.json.JSONException.class)
 	public void testDuplicateKeyJSON() {
 		{
-			Triplifier jt = new JSONTriplifier2();
+			Triplifier jt = new JSONTriplifier();
 			try {
 				jt.triplify(getClass().getClassLoader().getResource("./testduplicatekey.json"), new Properties());
 			} catch (IOException e) {
