@@ -76,10 +76,10 @@ public class CSVTriplifier implements Triplifier {
 //			namespace = url.toString() + "#";
 //		}
 		
-		String root = getRootArgument(properties, url);
-		Charset charset = getCharsetArgument(properties);
-		boolean blank_nodes = getBlankNodeArgument(properties);
-		String namespace = getNamespaceArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties, url);
+		Charset charset = Triplifier.getCharsetArgument(properties);
+		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		String namespace = Triplifier.getNamespaceArgument(properties);
 		
 		boolean headers;
 		try{

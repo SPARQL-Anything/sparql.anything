@@ -43,10 +43,10 @@ public class HTMLTriplifier implements Triplifier {
 //		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
 //		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
 
-		String root = getRootArgument(properties, url);
-		Charset charset = getCharsetArgument(properties);
-		boolean blank_nodes = getBlankNodeArgument(properties);
-		String namespace = getNamespaceArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties, url);
+		Charset charset = Triplifier.getCharsetArgument(properties);
+		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		String namespace = Triplifier.getNamespaceArgument(properties);
 
 		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
 

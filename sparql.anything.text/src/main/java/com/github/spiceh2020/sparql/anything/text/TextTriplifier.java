@@ -53,9 +53,9 @@ public class TextTriplifier implements Triplifier {
 //
 //		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
 		
-		String root = getRootArgument(properties, url);
-		Charset charset = getCharsetArgument(properties);
-		boolean blank_nodes = getBlankNodeArgument(properties);
+		String root = Triplifier.getRootArgument(properties, url);
+		Charset charset = Triplifier.getCharsetArgument(properties);
+		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
 		Node rootResource;
 		if (!blank_nodes) {

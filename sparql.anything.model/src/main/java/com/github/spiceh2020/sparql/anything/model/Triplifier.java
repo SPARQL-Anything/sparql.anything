@@ -34,7 +34,7 @@ public interface Triplifier {
 
 	public Set<String> getExtensions();
 
-	default boolean getBlankNodeArgument(Properties properties) {
+	static boolean getBlankNodeArgument(Properties properties) {
 		boolean blank_nodes = true;
 		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
 			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
@@ -42,7 +42,7 @@ public interface Triplifier {
 		return blank_nodes;
 	}
 
-	default Charset getCharsetArgument(Properties properties) {
+	static Charset getCharsetArgument(Properties properties) {
 		Charset charset = null;
 		try {
 			charset = Charset.forName(properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8"));
@@ -54,7 +54,11 @@ public interface Triplifier {
 		return charset;
 	}
 
-	default String getRootArgument(Properties properties, URL url) {
+	static String getRootArgument(Properties properties, URL url) {
+		return getRootArgument(properties, url.toString());
+	}
+
+	static String getRootArgument(Properties properties, String url) {
 		String root = null;
 		try {
 			root = properties.getProperty(IRIArgument.ROOT.toString());
@@ -64,10 +68,10 @@ public interface Triplifier {
 		} catch (Exception e) {
 			log.warn("Unsupported parameter value for 'root': '{}', using default (location + '#').", root);
 		}
-		return url.toString() + "#";
+		return url + "#";
 	}
 
-	default String getNamespaceArgument(Properties properties, URL url) {
+	static String getNamespaceArgument(Properties properties) {
 		String namespace = null;
 		try {
 			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());

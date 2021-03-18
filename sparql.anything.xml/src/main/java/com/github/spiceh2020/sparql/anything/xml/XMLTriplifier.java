@@ -31,16 +31,16 @@ public class XMLTriplifier implements Triplifier {
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
 //		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
-		String namespace = getNamespaceArgument(properties, url);
+		String namespace = Triplifier.getNamespaceArgument(properties);
 //		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
 
-		String root = getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties, url);
 
 //		boolean blank_nodes = true;
 //		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
 //			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
 //		}
-		boolean blank_nodes = getBlankNodeArgument(properties);
+		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
 		Model model = ModelFactory.createDefaultModel();
 		//

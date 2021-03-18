@@ -164,10 +164,10 @@ public class JSONTriplifier implements Triplifier {
 		logger.trace("Op ", op);
 
 		TripleFilteringModel filter = new TripleFilteringModel(url, op, properties);
-		this.uriRoot = getRootArgument(properties, url);
+		this.uriRoot = Triplifier.getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
-		useBlankNodes = getBlankNodeArgument(properties);
-		propertyPrefix = getNamespaceArgument(properties, url);
+		useBlankNodes = Triplifier.getBlankNodeArgument(properties);
+		propertyPrefix = Triplifier.getNamespaceArgument(properties);
 
 		transformJSONFromURL(url, filter);
 		logger.info("Number of triples " + filter.getMainGraph().size());

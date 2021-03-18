@@ -35,10 +35,10 @@ public class SpreadsheetTriplifier implements Triplifier {
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
 		DatasetGraph dg = DatasetGraphFactory.create();
-		String root = getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
-		boolean blank_nodes = getBlankNodeArgument(properties);
-		String namespace = getNamespaceArgument(properties, url);
+		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		String namespace = Triplifier.getNamespaceArgument(properties);
 
 		AtomicBoolean headers = new AtomicBoolean();
 		try {

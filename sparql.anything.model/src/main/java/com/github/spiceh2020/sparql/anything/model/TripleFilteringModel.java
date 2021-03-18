@@ -53,6 +53,11 @@ public class TripleFilteringModel {
     private final DatasetGraph datasetGraph;
     private static final Logger log = LoggerFactory.getLogger(TripleFilteringModel.class);
 
+    //
+    private final boolean p_blank_nodes;
+    private final String p_namespace;
+    private final String p_root;
+
     TripleFilteringModel(String resourceId, Op op, DatasetGraph ds, Properties properties){
         this.properties = properties;
         this.op = op;
@@ -62,8 +67,12 @@ public class TripleFilteringModel {
         }
         this.datasetGraph = ds;
         this.mainGraphName = NodeFactory.createURI(resourceId);
-
+        //
+        this.p_blank_nodes = Triplifier.getBlankNodeArgument(properties);
+        this.p_root = Triplifier.getRootArgument(properties, resourceId);
+        this.p_namespace = Triplifier.getNamespaceArgument(properties);
     }
+
 
     public TripleFilteringModel(String resourceId, Op op, Properties properties){
         this(resourceId, op, DatasetGraphFactory.createTxnMem(), properties);
@@ -123,6 +132,34 @@ public class TripleFilteringModel {
             return true;
         }
         return false;
+    }
+//
+//    public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId){
+//
+//    }
+//
+//    public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId){
+//
+//    }
+//
+//    public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value){
+//
+//    }
+//
+//    public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value){
+//
+//    }
+//
+//    public boolean addRoot(String dataSourceId, String rootId){
+//
+//    }
+//
+//    public Node container2node(String container){
+//
+//    }
+
+    public Node value2node(Object value){
+        return ResourceFactory.createTypedLiteral(value).asNode();
     }
 
     /**
