@@ -163,7 +163,7 @@ public class JSONTriplifier implements Triplifier {
 		logger.trace("Triplifying ", url.toString());
 		logger.trace("Op ", op);
 
-		TripleFilteringModel filter = new TripleFilteringModel(url, op);
+		TripleFilteringModel filter = new TripleFilteringModel(url, op, properties);
 		this.uriRoot = getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
 		useBlankNodes = getBlankNodeArgument(properties);
@@ -171,8 +171,6 @@ public class JSONTriplifier implements Triplifier {
 
 		transformJSONFromURL(url, filter);
 		logger.info("Number of triples " + filter.getMainGraph().size());
-		logger.info("Number of triples u " + filter.getDatasetGraph().getUnionGraph().size());
-		logger.info("Number of triples d " + filter.getDatasetGraph().getDefaultGraph().size());
 		// FIXME quick and dirty solution for resetting fields
 		reset();
 		return filter.getDatasetGraph();

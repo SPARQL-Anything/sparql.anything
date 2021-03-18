@@ -40,18 +40,21 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
  */
 public class TripleFilteringModel {
-    private Op op;
-    private List<Object> opComponents = new ArrayList<Object>();
-    private Node mainGraphName;
-    private DatasetGraph datasetGraph;
+    private final Properties properties;
+    private final Op op;
+    private final List<Object> opComponents = new ArrayList<Object>();
+    private final Node mainGraphName;
+    private final DatasetGraph datasetGraph;
     private static final Logger log = LoggerFactory.getLogger(TripleFilteringModel.class);
 
-    TripleFilteringModel(String resourceId, Op op, DatasetGraph ds){
+    TripleFilteringModel(String resourceId, Op op, DatasetGraph ds, Properties properties){
+        this.properties = properties;
         this.op = op;
         if(op != null) {
             ComponentsCollector collector = new ComponentsCollector();
@@ -59,14 +62,15 @@ public class TripleFilteringModel {
         }
         this.datasetGraph = ds;
         this.mainGraphName = NodeFactory.createURI(resourceId);
+
     }
 
-    public TripleFilteringModel(String resourceId, Op op){
-        this(resourceId, op, DatasetGraphFactory.createTxnMem());
+    public TripleFilteringModel(String resourceId, Op op, Properties properties){
+        this(resourceId, op, DatasetGraphFactory.createTxnMem(), properties);
     }
 
-    public TripleFilteringModel(URL location, Op op){
-        this(location.toString(), op);
+    public TripleFilteringModel(URL location, Op op, Properties properties){
+        this(location.toString(), op, properties);
     }
 
     public boolean match(Node graph, Node subject, Node predicate, Node object){
