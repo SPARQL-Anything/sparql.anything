@@ -19,6 +19,6 @@ for q in 1 2 3
 do
 	for size in 10 100 1000 10000 100000 1000000
 	do
-			m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q${q}_$size.rqg"
+			m "java $JVM_ARGS -jar bin/sparql-anything-$SPARQL_ANYTHING_VERSION.jar -q sparql-anything-queries/q${q}_$size"
 	done
 done
