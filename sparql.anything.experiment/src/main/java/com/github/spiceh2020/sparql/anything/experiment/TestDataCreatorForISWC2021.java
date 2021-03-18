@@ -59,6 +59,8 @@ public class TestDataCreatorForISWC2021 {
 		arr.write(fwa);
 		fwa.flush();
 		fwa.close();
+		
+		createQueriesForArray(arr,   "1000000.json", queriesFolder.getAbsolutePath());
 
 		for (int s : sizes) {
 			System.out.println("Computing " + s);
