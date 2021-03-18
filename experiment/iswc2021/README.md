@@ -1,7 +1,7 @@
 To compile the executable jar for the current project version run the following command (from the iswc2021 folder)
 
 ```
-./compile.sh <SPARQL_ANYTHING_VERSION>
+./compile.sh <SPARQL_ANYTHING_CURRENT_VERSION> <SPARQL_ANYTHING_OLD_VERSION>
 ```
 
 To generate test data run the following command (from the iswc2021 folder)
@@ -13,5 +13,5 @@ To generate test data run the following command (from the iswc2021 folder)
 To run experiments run the following command (from the iswc2021 folder)
 
 ```
-./run.sh <SPARQL_ANYTHING_VERSION>
+./run.sh <SPARQL_ANYTHING_CURRENT_VERSION> <SPARQL_ANYTHING_OLD_VERSION>
 ```
