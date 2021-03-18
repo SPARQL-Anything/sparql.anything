@@ -78,7 +78,7 @@ public class JSONTriplifier implements Triplifier {
 	public void transform(JSONObject object, TripleFilteringModel filter) {
 		//Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
-		filter.add(root, RDF.type, filter.getModel().createResource(Triplifier.FACADE_X_TYPE_ROOT));
+		filter.add(root, RDF.type, ResourceFactory.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		transform(object, root, filter);
 //		return m;
 	}
@@ -86,7 +86,7 @@ public class JSONTriplifier implements Triplifier {
 	public void transform(JSONArray arr, TripleFilteringModel filter) {
 //		Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
-		filter.add(root, RDF.type, filter.getModel().createResource(Triplifier.FACADE_X_TYPE_ROOT));
+		filter.add(root, RDF.type, ResourceFactory.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		transform(arr, root, filter);
 //		return m;
 	}
@@ -95,7 +95,7 @@ public class JSONTriplifier implements Triplifier {
 //		m.add(r, RDF.type, RDFS.Resource);
 		object.keys().forEachRemaining(k -> {
 			Object o = object.get(k);
-			Property p = filter.getModel().createProperty(propertyPrefix + Triplifier.toSafeURIString(k));
+			Property p = ResourceFactory.createProperty(propertyPrefix + Triplifier.toSafeURIString(k));
 //			m.add(p, RDFS.label, m.createTypedLiteral(k));
 			if (o instanceof String || o instanceof Boolean || o instanceof Integer) {
 				transformPrimites(r, p, o, filter);
@@ -136,7 +136,7 @@ public class JSONTriplifier implements Triplifier {
 	}
 
 	private void transformPrimites(Resource r, Property p, Object o, TripleFilteringModel filter) {
-		filter.add(r, p, filter.getModel().createTypedLiteral(o));
+		filter.add(r, p, ResourceFactory.createTypedLiteral(o));
 	}
 
 	private Resource createResource(String path) {
@@ -163,21 +163,19 @@ public class JSONTriplifier implements Triplifier {
 		logger.trace("Triplifying ", url.toString());
 		logger.trace("Op ", op);
 
-		Node graphName = NodeFactory.createURI(url.toString());
-		TripleFilteringModel filter = new TripleFilteringModel(graphName, op, ModelFactory.createDefaultModel());
+		TripleFilteringModel filter = new TripleFilteringModel(url, op);
 		this.uriRoot = getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
 		useBlankNodes = getBlankNodeArgument(properties);
 		propertyPrefix = getNamespaceArgument(properties, url);
 
 		transformJSONFromURL(url, filter);
-		Model m = filter.getModel();
-		logger.trace("Number of triples " + m.size());
-		DatasetGraph dg = DatasetFactory.create(m).asDatasetGraph();
-		dg.addGraph(graphName, dg.getDefaultGraph());
+		logger.info("Number of triples " + filter.getMainGraph().size());
+		logger.info("Number of triples u " + filter.getDatasetGraph().getUnionGraph().size());
+		logger.info("Number of triples d " + filter.getDatasetGraph().getDefaultGraph().size());
 		// FIXME quick and dirty solution for resetting fields
 		reset();
-		return dg;
+		return filter.getDatasetGraph();
 	}
 
 	@Override

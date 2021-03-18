@@ -21,21 +21,25 @@
 
 package com.github.spiceh2020.sparql.anything.model;
 
+import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.iri.IRI;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVisitor;
 import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  *
@@ -43,25 +47,29 @@ import java.util.function.Predicate;
 public class TripleFilteringModel {
     private Op op;
     private List<Object> opComponents = new ArrayList<Object>();
-    private Node graph;
-    private Model model;
+    private Node mainGraphName;
+    private DatasetGraph datasetGraph;
     private static final Logger log = LoggerFactory.getLogger(TripleFilteringModel.class);
 
-    public TripleFilteringModel(Node graph, Op op){
-        this(graph, op, ModelFactory.createDefaultModel());
-    }
-
-    public TripleFilteringModel(Node graph, Op op, Model model){
+    TripleFilteringModel(String resourceId, Op op, DatasetGraph ds){
         this.op = op;
         if(op != null) {
             ComponentsCollector collector = new ComponentsCollector();
             op.visit(collector);
         }
-        this.model = model;
-        this.graph = graph;
+        this.datasetGraph = ds;
+        this.mainGraphName = NodeFactory.createURI(resourceId);
     }
 
-    public boolean match(Node subject, Node predicate, Node object){
+    public TripleFilteringModel(String resourceId, Op op){
+        this(resourceId, op, DatasetGraphFactory.createTxnMem());
+    }
+
+    public TripleFilteringModel(URL location, Op op){
+        this(location.toString(), op);
+    }
+
+    public boolean match(Node graph, Node subject, Node predicate, Node object){
         if(op == null || opComponents.isEmpty()) return true;
 
         for (Object o : opComponents){
@@ -86,14 +94,58 @@ public class TripleFilteringModel {
         return false;
     }
 
+    @Deprecated
     public void add(Resource subject, Property predicate, RDFNode object){
-        if(match(subject.asNode(), predicate.asNode(), object.asNode())){
-            model.add(subject, predicate, object);
+        if(match(mainGraphName, subject.asNode(), predicate.asNode(), object.asNode())){
+            datasetGraph.getGraph(mainGraphName).add(new Triple(subject.asNode(), predicate.asNode(), object.asNode()));
         }
     }
 
+    /**
+     * Triples are added to the main data source / graph
+     * Triplifiers generating multiple data sources / graphs, should use add(Node g, Node s, Node p, Node o) instead
+     */
+    public boolean add(Node subject, Node predicate, Node object){
+        if(match(mainGraphName, subject, predicate, object)){
+            datasetGraph.getGraph(mainGraphName).add(new Triple(subject, predicate, object));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean add(Node graph, Node subject, Node predicate, Node object){
+        if(match(graph, subject, predicate, object)){
+            datasetGraph.getGraph(graph).add(new Triple(subject, predicate, object));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * This includes triples from the default graph / union of all graphs.
+     * @return
+     */
     public Model getModel(){
-        return model;
+        return ModelFactory.createModelForGraph(getDatasetGraph().getUnionGraph());
+    }
+
+    public DatasetGraph getDatasetGraph(){
+        datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
+        return datasetGraph;
+    }
+
+    /**
+     * The main graph is created when adding triples instead of quads.
+     * The main graph uses the resourceId as data source identifier / graph name
+     *
+     * @return
+     */
+    public Node getMainGraphName(){
+        return mainGraphName;
+    }
+
+    public Graph getMainGraph(){
+        return datasetGraph.getGraph(mainGraphName);
     }
 
     class ComponentsCollector implements OpVisitor{

@@ -23,16 +23,13 @@ package com.github.spiceh2020.sparql.anything.model.test;
 
 import com.github.spiceh2020.sparql.anything.model.TripleFilteringModel;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Node_Literal;
 import org.apache.jena.graph.Node_Variable;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.op.OpBGP;
-import org.apache.jena.sparql.algebra.op.OpQuad;
 import org.apache.jena.sparql.algebra.op.OpQuadPattern;
-import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
 import org.junit.Test;
@@ -50,7 +47,7 @@ public class TripleFilteringModelTest {
         OpBGP bgp = new OpBGP();
         bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringModel f = new TripleFilteringModel(NodeFactory.createURI("http://www.example.org/"), bgp);
+        TripleFilteringModel f = new TripleFilteringModel("http://www.example.org/", bgp);
         f.add(ResourceFactory.createResource(), RDF.type, ResourceFactory.createPlainLiteral("Hello world"));
         Assert.assertTrue(f.getModel().size() == 1);
         f.add(ResourceFactory.createResource(), RDF.type, ResourceFactory.createPlainLiteral("Hello world not!"));
@@ -65,7 +62,7 @@ public class TripleFilteringModelTest {
         OpBGP bgp = new OpBGP();
         bgp.getPattern().add(new Triple(Node_Variable.ANY, new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringModel f = new TripleFilteringModel(NodeFactory.createURI("http://www.example.org/"), bgp);
+        TripleFilteringModel f = new TripleFilteringModel("http://www.example.org/", bgp);
         f.add(ResourceFactory.createResource(), RDF.type, ResourceFactory.createPlainLiteral("Hello world"));
         Assert.assertTrue(f.getModel().size() == 1);
         f.add(ResourceFactory.createResource(), RDF.type, ResourceFactory.createPlainLiteral("Hello world not!"));
@@ -82,7 +79,7 @@ public class TripleFilteringModelTest {
         OpBGP bgp = new OpBGP();
         bgp.getPattern().add(new Triple(Node_Variable.ANY, property.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringModel f = new TripleFilteringModel(NodeFactory.createURI("http://www.example.org/"), bgp);
+        TripleFilteringModel f = new TripleFilteringModel("http://www.example.org/", bgp);
         //
         f.add(ResourceFactory.createResource(), RDF.type, ResourceFactory.createPlainLiteral("Hello world"));
         Assert.assertTrue(f.getModel().size() == 0);
@@ -107,7 +104,7 @@ public class TripleFilteringModelTest {
         bgp.getPattern().add(new Triple(Node_Variable.ANY, property1.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
         bgp.getPattern().add(new Triple(Node_Variable.ANY, property2.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringModel f = new TripleFilteringModel(NodeFactory.createURI("http://www.example.org/"), bgp);
+        TripleFilteringModel f = new TripleFilteringModel("http://www.example.org/", bgp);
         //
         f.add(ResourceFactory.createResource(), property1, ResourceFactory.createPlainLiteral("Hello world"));
         Assert.assertTrue(f.getModel().size() == 1);
@@ -131,7 +128,7 @@ public class TripleFilteringModelTest {
         bgp.getPattern().add(new Triple(resource1.asNode(), property1.asNode(), resource3.asNode()));
         bgp.getPattern().add(new Triple(resource2.asNode(), property2.asNode(), resource4.asNode()));
 
-        TripleFilteringModel f = new TripleFilteringModel(NodeFactory.createURI("http://www.example.org/"), bgp);
+        TripleFilteringModel f = new TripleFilteringModel("http://www.example.org/", bgp);
         //
         f.add(ResourceFactory.createResource(), property1, ResourceFactory.createPlainLiteral("Hello world"));
         Assert.assertTrue(f.getModel().size() == 0);
@@ -169,7 +166,7 @@ public class TripleFilteringModelTest {
         bgp.getPattern().add(new Triple(resource2.asNode(), property2.asNode(), resource4.asNode()));
         bgp.getPattern().add(new Triple(Node_Variable.ANY, new Node_Variable("p"), Node_Variable.ANY));
 
-        TripleFilteringModel f = new TripleFilteringModel(NodeFactory.createURI("http://www.example.org/"), bgp);
+        TripleFilteringModel f = new TripleFilteringModel("http://www.example.org/", bgp);
         //
         f.add(ResourceFactory.createResource(), property1, ResourceFactory.createPlainLiteral("Hello world"));
         Assert.assertTrue(f.getModel().size() == 1);
@@ -200,7 +197,7 @@ public class TripleFilteringModelTest {
 
         OpQuadPattern qp = new OpQuadPattern(new Node_Variable("g"), bgp.getPattern());
 
-        TripleFilteringModel f = new TripleFilteringModel(NodeFactory.createURI("http://www.example.org/"), qp);
+        TripleFilteringModel f = new TripleFilteringModel("http://www.example.org/", qp);
         f.add(ResourceFactory.createResource(), RDF.type, ResourceFactory.createPlainLiteral("Hello world"));
         Assert.assertTrue(f.getModel().size() == 1);
         f.add(ResourceFactory.createResource(), RDF.type, ResourceFactory.createPlainLiteral("Hello world not!"));
@@ -226,7 +223,7 @@ public class TripleFilteringModelTest {
 
         OpQuadPattern qp = new OpQuadPattern(NodeFactory.createURI("http://www.example.org/"), bgp.getPattern());
 
-        TripleFilteringModel f = new TripleFilteringModel(NodeFactory.createURI("http://www.example.org/"), qp);
+        TripleFilteringModel f = new TripleFilteringModel("http://www.example.org/", qp);
         //
         f.add(ResourceFactory.createResource(), property1, ResourceFactory.createPlainLiteral("Hello world"));
         Assert.assertTrue(f.getModel().size() == 1);
