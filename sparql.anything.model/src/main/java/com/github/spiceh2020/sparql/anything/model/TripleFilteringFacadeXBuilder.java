@@ -25,8 +25,6 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVisitor;
@@ -46,20 +44,20 @@ import java.util.Properties;
 /**
  *
  */
-public class TripleFilteringModel {
+public class TripleFilteringFacadeXBuilder implements FacadeXGraphBuilder {
     private final Properties properties;
     private final Op op;
     private final List<Object> opComponents = new ArrayList<Object>();
     private final Node mainGraphName;
     private final DatasetGraph datasetGraph;
-    private static final Logger log = LoggerFactory.getLogger(TripleFilteringModel.class);
+    private static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilder.class);
 
     //
     private final boolean p_blank_nodes;
     private final String p_namespace;
     private final String p_root;
 
-    TripleFilteringModel(String resourceId, Op op, DatasetGraph ds, Properties properties){
+    TripleFilteringFacadeXBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties){
         this.properties = properties;
         this.op = op;
         if(op != null) {
@@ -75,11 +73,11 @@ public class TripleFilteringModel {
     }
 
 
-    public TripleFilteringModel(String resourceId, Op op, Properties properties){
+    public TripleFilteringFacadeXBuilder(String resourceId, Op op, Properties properties){
         this(resourceId, op, DatasetGraphFactory.createTxnMem(), properties);
     }
 
-    public TripleFilteringModel(URL location, Op op, Properties properties){
+    public TripleFilteringFacadeXBuilder(URL location, Op op, Properties properties){
         this(location.toString(), op, properties);
     }
 
@@ -119,6 +117,7 @@ public class TripleFilteringModel {
      * Triples are added to the main data source / graph
      * Triplifiers generating multiple data sources / graphs, should use add(Node g, Node s, Node p, Node o) instead
      */
+    @Override
     public boolean add(Node subject, Node predicate, Node object){
         if(match(mainGraphName, subject, predicate, object)){
             datasetGraph.getGraph(mainGraphName).add(new Triple(subject, predicate, object));
@@ -127,6 +126,7 @@ public class TripleFilteringModel {
         return false;
     }
 
+    @Override
     public boolean add(Node graph, Node subject, Node predicate, Node object){
         if(match(graph, subject, predicate, object)){
             datasetGraph.getGraph(graph).add(new Triple(subject, predicate, object));
@@ -135,26 +135,32 @@ public class TripleFilteringModel {
         return false;
     }
 
+    @Override
     public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId){
         return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey), container2node(childContainerId));
     }
 
+    @Override
     public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId){
         return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(), container2node(childContainerId));
     }
 
+    @Override
     public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value){
         return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey), value2node(value));
     }
 
+    @Override
     public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value){
         return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(), value2node(value));
     }
 
+    @Override
     public boolean addRoot(String dataSourceId, String rootId){
         return add(NodeFactory.createURI(dataSourceId), container2node(rootId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
     }
 
+    @Override
     public Node container2node(String container){
         if (p_blank_nodes) {
             return NodeFactory.createBlankNode(container);
@@ -163,10 +169,12 @@ public class TripleFilteringModel {
         }
     }
 
+    @Override
     public Node key2predicate(String key){
         return NodeFactory.createURI(this.p_namespace + key);
     }
 
+    @Override
     public Node value2node(Object value){
         return ResourceFactory.createTypedLiteral(value).asNode();
     }
@@ -179,6 +187,7 @@ public class TripleFilteringModel {
         return ModelFactory.createModelForGraph(getDatasetGraph().getUnionGraph());
     }
 
+    @Override
     public DatasetGraph getDatasetGraph(){
         datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
         return datasetGraph;
@@ -190,10 +199,12 @@ public class TripleFilteringModel {
      *
      * @return
      */
+    @Override
     public Node getMainGraphName(){
         return mainGraphName;
     }
 
+    @Override
     public Graph getMainGraph(){
         return datasetGraph.getGraph(mainGraphName);
     }

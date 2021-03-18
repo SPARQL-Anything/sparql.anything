@@ -28,7 +28,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
-import com.github.spiceh2020.sparql.anything.model.TripleFilteringModel;
+import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.algebra.Op;
@@ -58,7 +58,7 @@ public class JSONTriplifier implements Triplifier {
 //		return transformJSON(br.toString());
 //	}
 
-	private void transformJSONFromURL(URL url, TripleFilteringModel filter) throws IOException {
+	private void transformJSONFromURL(URL url, TripleFilteringFacadeXBuilder filter) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 
 		if (propertyPrefix == null) {
@@ -80,7 +80,7 @@ public class JSONTriplifier implements Triplifier {
 		useBlankNodes = true;
 	}
 
-	private void transformJSON(String json, TripleFilteringModel filter) {
+	private void transformJSON(String json, TripleFilteringFacadeXBuilder filter) {
 		checkParameters();
 		try {
 			transform(new JSONObject(json), filter);
@@ -94,7 +94,7 @@ public class JSONTriplifier implements Triplifier {
 			throw new RuntimeException("The property prefix can't be null");
 	}
 
-	public void transform(JSONObject object, TripleFilteringModel filter) {
+	public void transform(JSONObject object, TripleFilteringFacadeXBuilder filter) {
 		//Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
 		filter.add(root, RDF.type, ResourceFactory.createResource(Triplifier.FACADE_X_TYPE_ROOT));
@@ -102,7 +102,7 @@ public class JSONTriplifier implements Triplifier {
 //		return m;
 	}
 
-	public void transform(JSONArray arr, TripleFilteringModel filter) {
+	public void transform(JSONArray arr, TripleFilteringFacadeXBuilder filter) {
 //		Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
 		filter.add(root, RDF.type, ResourceFactory.createResource(Triplifier.FACADE_X_TYPE_ROOT));
@@ -110,7 +110,7 @@ public class JSONTriplifier implements Triplifier {
 //		return m;
 	}
 
-	private void transform(JSONObject object, Resource r, TripleFilteringModel filter) {
+	private void transform(JSONObject object, Resource r, TripleFilteringFacadeXBuilder filter) {
 //		m.add(r, RDF.type, RDFS.Resource);
 		object.keys().forEachRemaining(k -> {
 			Object o = object.get(k);
@@ -126,7 +126,7 @@ public class JSONTriplifier implements Triplifier {
 		});
 	}
 
-	private void transform(JSONArray arr, Resource r, TripleFilteringModel filter) {
+	private void transform(JSONArray arr, Resource r, TripleFilteringFacadeXBuilder filter) {
 //		m.add(r, RDF.type, RDF.Seq);
 		for (int i = 0; i < arr.length(); i++) {
 			Object o = arr.get(i);
@@ -142,19 +142,19 @@ public class JSONTriplifier implements Triplifier {
 		;
 	}
 
-	private void transformArray(Resource r, Property p, JSONArray o, TripleFilteringModel filter) {
+	private void transformArray(Resource r, Property p, JSONArray o, TripleFilteringFacadeXBuilder filter) {
 		Resource seq = createResource(r.getURI() + "/" + p.getLocalName());
 		filter.add(r, p, seq);
 		transform(o, seq, filter);
 	}
 
-	private void transformJSONObject(Resource r, Property p, JSONObject o, TripleFilteringModel filter) {
+	private void transformJSONObject(Resource r, Property p, JSONObject o, TripleFilteringFacadeXBuilder filter) {
 		Resource rnew = createResource(r.getURI() + "/" + p.getLocalName());
 		filter.add(r, p, rnew);
 		transform(o, rnew, filter);
 	}
 
-	private void transformPrimites(Resource r, Property p, Object o, TripleFilteringModel filter) {
+	private void transformPrimites(Resource r, Property p, Object o, TripleFilteringFacadeXBuilder filter) {
 		filter.add(r, p, ResourceFactory.createTypedLiteral(o));
 	}
 
@@ -182,7 +182,7 @@ public class JSONTriplifier implements Triplifier {
 		logger.trace("Triplifying ", url.toString());
 		logger.trace("Op ", op);
 
-		TripleFilteringModel filter = new TripleFilteringModel(url, op, properties);
+		TripleFilteringFacadeXBuilder filter = new TripleFilteringFacadeXBuilder(url, op, properties);
 		this.uriRoot = Triplifier.getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
 		useBlankNodes = Triplifier.getBlankNodeArgument(properties);
