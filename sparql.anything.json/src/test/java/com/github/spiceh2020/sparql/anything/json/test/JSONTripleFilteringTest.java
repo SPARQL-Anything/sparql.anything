@@ -21,7 +21,7 @@
 
 package com.github.spiceh2020.sparql.anything.json.test;
 
-import com.github.spiceh2020.sparql.anything.json.old.JSONTriplifier;
+import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 import org.apache.jena.graph.Node_Variable;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.ResourceFactory;
