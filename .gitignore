@@ -8,3 +8,4 @@
 .java-version
 **/target/
 log.txt
+sparql.anything.experiment/src/main/java/com/github/spiceh2020/sparql/anything/experiment/Test.java

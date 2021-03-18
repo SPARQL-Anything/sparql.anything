@@ -1,8 +1,0 @@
-SELECT DISTINCT ?titolo
-WHERE {
-	SERVICE <x-sparql-anything:location=1000.json> {
-		?s <http://sparql.xyz/facade-x/data/Datazione> ?date .
-		?s <http://sparql.xyz/facade-x/data/Titolo> ?titolo .
-		FILTER(REGEX(?date,".*1935.*","i"))
-	}
-}
