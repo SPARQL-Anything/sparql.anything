@@ -65,6 +65,16 @@
 			<groupId>io.github.basilapi</groupId>
 			<artifactId>sparql</artifactId>
 			<version>0.8.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.jena</groupId>
+					<artifactId>jena-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.jena</groupId>
+					<artifactId>jena-arq</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
