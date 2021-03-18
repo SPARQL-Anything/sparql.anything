@@ -74,7 +74,8 @@ public class TripleFilteringFacadeXBuilder implements FacadeXGraphBuilder {
 
 
     public TripleFilteringFacadeXBuilder(String resourceId, Op op, Properties properties){
-        this(resourceId, op, DatasetGraphFactory.createTxnMem(), properties);
+        this(resourceId, op, DatasetGraphFactory.create(), properties);
+//        this(resourceId, op, DatasetGraphFactory.createTxnMem(), properties);
     }
 
     public TripleFilteringFacadeXBuilder(URL location, Op op, Properties properties){
