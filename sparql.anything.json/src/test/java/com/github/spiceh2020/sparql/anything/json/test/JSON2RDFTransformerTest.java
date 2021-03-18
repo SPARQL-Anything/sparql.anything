@@ -4,12 +4,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.json.JSONTriplifier2;
+import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.vocabulary.RDF;
 import org.json.JSONException;
 import org.junit.Test;
@@ -25,7 +29,7 @@ public class JSON2RDFTransformerTest {
 	@Test
 	public void testEmptyAndNull() {
 
-		JSONTriplifier jt = new JSONTriplifier();
+		Triplifier jt = new JSONTriplifier2();
 
 		try {
 			DatasetGraph g1 = jt.triplify(getClass().getClassLoader().getResource("./emptyobject.json"),
@@ -65,7 +69,7 @@ public class JSON2RDFTransformerTest {
 		{
 
 			{
-				JSONTriplifier jt = new JSONTriplifier();
+				Triplifier jt = new JSONTriplifier2();
 				Properties properties = new Properties();
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
 				Model m = ModelFactory.createDefaultModel();
@@ -86,7 +90,7 @@ public class JSON2RDFTransformerTest {
 			}
 
 			{
-				JSONTriplifier jt = new JSONTriplifier();
+				Triplifier jt = new JSONTriplifier2();
 				Properties properties = new Properties();
 				String root = "https://w3id.org/spice/resource/root";
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -114,7 +118,7 @@ public class JSON2RDFTransformerTest {
 
 	@Test
 	public void keys() {
-		JSONTriplifier jt = new JSONTriplifier();
+		Triplifier jt = new JSONTriplifier2();
 		Properties properties = new Properties();
 		Model m = ModelFactory.createDefaultModel();
 		Resource r = m.createResource();
@@ -136,7 +140,7 @@ public class JSON2RDFTransformerTest {
 
 	@Test
 	public void testBlankNodeProperty() {
-		JSONTriplifier jt = new JSONTriplifier();
+		Triplifier jt = new JSONTriplifier2();
 		Properties properties = new Properties();
 		String root = "https://w3id.org/spice/resource/root";
 		properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -163,7 +167,7 @@ public class JSON2RDFTransformerTest {
 
 	@Test
 	public void testBlankNodeFalse() {
-		JSONTriplifier jt = new JSONTriplifier();
+		Triplifier jt = new JSONTriplifier2();
 		Properties properties = new Properties();
 		String root = "https://w3id.org/spice/resource/root";
 		properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -191,7 +195,7 @@ public class JSON2RDFTransformerTest {
 
 	@Test
 	public void testBlankNodeFalseNoRoot() {
-		JSONTriplifier jt = new JSONTriplifier();
+		Triplifier jt = new JSONTriplifier2();
 		Properties properties = new Properties();
 		String root = getClass().getClassLoader().getResource("./testprimitive.json").toString();
 		properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -237,11 +241,12 @@ public class JSON2RDFTransformerTest {
 
 				Properties properties = new Properties();
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
-				JSONTriplifier jt = new JSONTriplifier();
+				Triplifier jt = new JSONTriplifier2();
 
 				DatasetGraph g1;
 				try {
 					g1 = jt.triplify(getClass().getClassLoader().getResource("./testarray.json"), properties);
+
 //					ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out,"TTL");
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
@@ -270,11 +275,22 @@ public class JSON2RDFTransformerTest {
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
 				properties.setProperty(IRIArgument.ROOT.toString(), root);
 				properties.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
-				JSONTriplifier jt = new JSONTriplifier();
+				Triplifier jt = new JSONTriplifier2();
 
 				DatasetGraph g1;
 				try {
 					g1 = jt.triplify(getClass().getClassLoader().getResource("./testarray.json"), properties);
+					Iterator<Triple> ii = g1.getDefaultGraph().find();
+					while(ii.hasNext()){
+						System.err.println(ii.next());
+					}
+					System.err.println("---");
+					ii = m.getGraph().find();
+					while(ii.hasNext()){
+						System.err.println(ii.next());
+					}
+					System.err.println("---");
+
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -287,7 +303,7 @@ public class JSON2RDFTransformerTest {
 	@Test(expected = org.json.JSONException.class)
 	public void testDuplicateKeyJSON() {
 		{
-			JSONTriplifier jt = new JSONTriplifier();
+			Triplifier jt = new JSONTriplifier2();
 			try {
 				jt.triplify(getClass().getClassLoader().getResource("./testduplicatekey.json"), new Properties());
 			} catch (IOException e) {

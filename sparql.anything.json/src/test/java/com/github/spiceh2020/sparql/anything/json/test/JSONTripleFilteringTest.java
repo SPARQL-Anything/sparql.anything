@@ -88,4 +88,9 @@ public class JSONTripleFilteringTest {
         }
         assertTrue(g1.getDefaultGraph().size() == 4);
     }
+
+    @Test
+    public void testEquals(){
+
+    }
 }
