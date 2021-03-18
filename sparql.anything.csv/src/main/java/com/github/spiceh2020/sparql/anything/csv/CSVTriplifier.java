@@ -52,37 +52,6 @@ public class CSVTriplifier implements Triplifier {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
-//		Charset charset = null;
-//		try{
-//			charset = Charset.forName(properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8"));
-//		}catch(Exception e){
-//			log.warn("Unsupported charset format: '{}', using UTF-8.", properties.getProperty(IRIArgument.CHARSET.toString()));
-//			charset = StandardCharsets.UTF_8;
-//		}
-//		boolean blank_nodes = true;
-//		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
-//			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
-//		}
-//		String root = null;
-//		try{
-//			root = properties.getProperty(IRIArgument.ROOT.toString());
-//			if (root == null || root.trim().equals("")) {
-//				throw new Exception();
-//			}
-//		}catch(Exception e){
-//			log.warn("Unsupported parameter value for 'root', using default (no value).");
-//		}
-//		String namespace = null;
-//		try{
-//			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
-//			if (namespace == null || namespace.trim().equals("")) {
-//				throw new Exception();
-//			}
-//		}catch(Exception e){
-//			log.warn("Unsupported parameter value for 'namespace': '{}', using default (location}).", url);
-//			namespace = url.toString() + "#";
-//		}
-		
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
@@ -101,16 +70,7 @@ public class CSVTriplifier implements Triplifier {
 		} catch (URISyntaxException e) {
 			throw new IOException(e);
 		}
-//		Model model = ModelFactory.createDefaultModel();
 		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties );
-//		Resource document;
-//		if(root != null){
-//			document = model.createResource(root);
-//		}else if (blank_nodes == false){
-//			document = model.createResource(namespace + "root");
-//		}else{
-//			document = model.createResource();
-//		}
 		String dataSourceId = url.toString();
 		String rootId = root;
 		if(rootId == null){
@@ -118,7 +78,6 @@ public class CSVTriplifier implements Triplifier {
 		}
 		String containerRowPrefix = url.toString() + "#row";
 		// Add type Root
-//		document.addProperty(RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		builder.addRoot(dataSourceId, rootId);
 		Iterable<CSVRecord> records = format.parse(in);
 		int rown = 0;
@@ -150,13 +109,6 @@ public class CSVTriplifier implements Triplifier {
 				// Rows
 				rown++;
 				String rowContainerId = containerRowPrefix + rown;
-//				Resource row;
-//				if(blank_nodes){
-//					row = model.createResource();
-//				} else{
-//					row = model.createResource(namespace + rown);
-//				}
-//				document.addProperty(RDF.li(rown), row);
 				builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
 				CSVRecord record = recordIterator.next();
 				Iterator<String> cells = record.iterator();
@@ -164,20 +116,14 @@ public class CSVTriplifier implements Triplifier {
 				while(cells.hasNext()){
 					String value = cells.next();
 					cellid ++;
-//					Property p;
 					if(headers && headers_map.containsKey(cellid)) {
-//						p = model.createProperty(namespace,headers_map.get(cellid));
 						builder.addValue(dataSourceId, rowContainerId, headers_map.get(cellid), value);
 					}else{
 						builder.addValue(dataSourceId, rowContainerId, cellid, value);
-//						p = RDF.li(cellid);
 					}
-//					row.addProperty(p, model.createLiteral(value));
 				}
 			}
 		}
-//		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
-//		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
 		return builder.getDatasetGraph();
 	}
 
