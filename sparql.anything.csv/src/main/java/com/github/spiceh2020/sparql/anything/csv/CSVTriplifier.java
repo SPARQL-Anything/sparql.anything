@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
+import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -23,6 +25,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
@@ -34,8 +37,12 @@ public class CSVTriplifier implements Triplifier {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
 
-	@Override
+	@Deprecated
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+		return triplify(url, null,  properties);
+	}
+	
+	public DatasetGraph triplify(URL url, Op op, Properties properties) throws IOException {
 
 		// TODO Support all flavour of csv types
 		CSVFormat format;
@@ -94,18 +101,25 @@ public class CSVTriplifier implements Triplifier {
 		} catch (URISyntaxException e) {
 			throw new IOException(e);
 		}
-		Model model = ModelFactory.createDefaultModel();
-
-		Resource document;
-		if(root != null){
-			document = model.createResource(root);
-		}else if (blank_nodes == false){
-			document = model.createResource(namespace + "root");
-		}else{
-			document = model.createResource();
+//		Model model = ModelFactory.createDefaultModel();
+		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties );
+//		Resource document;
+//		if(root != null){
+//			document = model.createResource(root);
+//		}else if (blank_nodes == false){
+//			document = model.createResource(namespace + "root");
+//		}else{
+//			document = model.createResource();
+//		}
+		String dataSourceId = url.toString();
+		String rootId = root;
+		if(rootId == null){
+			rootId = url.toString() + "#root";
 		}
+		String containerRowPrefix = url.toString() + "#row";
 		// Add type Root
-		document.addProperty(RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+//		document.addProperty(RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+		builder.addRoot(dataSourceId, rootId);
 		Iterable<CSVRecord> records = format.parse(in);
 		int rown = 0;
 		LinkedHashMap<Integer,String> headers_map = new LinkedHashMap<Integer,String>();
@@ -135,32 +149,36 @@ public class CSVTriplifier implements Triplifier {
 			if(recordIterator.hasNext()) {
 				// Rows
 				rown++;
-				Resource row;
-				if(blank_nodes){
-					row = model.createResource();
-				} else{
-					row = model.createResource(namespace + rown);
-				}
-				document.addProperty(RDF.li(rown), row);
+				String rowContainerId = containerRowPrefix + rown;
+//				Resource row;
+//				if(blank_nodes){
+//					row = model.createResource();
+//				} else{
+//					row = model.createResource(namespace + rown);
+//				}
+//				document.addProperty(RDF.li(rown), row);
+				builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
 				CSVRecord record = recordIterator.next();
 				Iterator<String> cells = record.iterator();
 				int cellid = 0;
 				while(cells.hasNext()){
 					String value = cells.next();
 					cellid ++;
-					Property p;
+//					Property p;
 					if(headers && headers_map.containsKey(cellid)) {
-						p = model.createProperty(namespace,headers_map.get(cellid));
+//						p = model.createProperty(namespace,headers_map.get(cellid));
+						builder.addValue(dataSourceId, rowContainerId, headers_map.get(cellid), value);
 					}else{
-						p = RDF.li(cellid);
+						builder.addValue(dataSourceId, rowContainerId, cellid, value);
+//						p = RDF.li(cellid);
 					}
-					row.addProperty(p, model.createLiteral(value));
+//					row.addProperty(p, model.createLiteral(value));
 				}
 			}
 		}
-		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
-		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
-		return dg;
+//		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
+//		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
+		return builder.getDatasetGraph();
 	}
 
 	@Override
