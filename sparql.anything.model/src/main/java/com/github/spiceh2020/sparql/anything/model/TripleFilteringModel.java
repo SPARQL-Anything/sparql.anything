@@ -34,6 +34,7 @@ import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,30 +134,41 @@ public class TripleFilteringModel {
         }
         return false;
     }
-//
-//    public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId){
-//
-//    }
-//
-//    public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId){
-//
-//    }
-//
-//    public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value){
-//
-//    }
-//
-//    public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value){
-//
-//    }
-//
-//    public boolean addRoot(String dataSourceId, String rootId){
-//
-//    }
-//
-//    public Node container2node(String container){
-//
-//    }
+
+    public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId){
+        return add(container2node(dataSourceId), container2node(containerId), key2predicate(slotKey), container2node(childContainerId));
+    }
+
+    public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId){
+        return add(container2node(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(), container2node(childContainerId));
+    }
+
+    public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value){
+        return add(container2node(dataSourceId), container2node(containerId), key2predicate(slotKey), value2node(value));
+    }
+
+    public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value){
+        return add(container2node(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(), value2node(value));
+    }
+
+    public boolean addRoot(String dataSourceId, String rootId){
+        return add(container2node(dataSourceId), container2node(rootId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
+    }
+
+    /**
+     *
+     */
+    public Node container2node(String container){
+        if (p_blank_nodes) {
+            return NodeFactory.createBlankNode(container);
+        } else {
+            return NodeFactory.createURI(container);
+        }
+    }
+
+    public Node key2predicate(String key){
+        return NodeFactory.createURI(this.p_namespace + key);
+    }
 
     public Node value2node(Object value){
         return ResourceFactory.createTypedLiteral(value).asNode();
