@@ -15,6 +15,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.shared.Lock;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -137,8 +138,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 								auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD + "NamedGraph"));
 								auditGraph.addProperty(ResourceFactory.createProperty(SD + "name"), g.getURI());
 								auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
-								dg.addGraph(NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI), audit.getGraph());
 							}
+							dg.addGraph(NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI), audit.getGraph());
 						}
 
 						// Remember the triplified data
