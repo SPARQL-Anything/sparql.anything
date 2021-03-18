@@ -58,29 +58,26 @@ public interface Triplifier {
 		String root = null;
 		try {
 			root = properties.getProperty(IRIArgument.ROOT.toString());
-			if (root == null || root.trim().equals("")) {
-				throw new Exception();
+			if (root != null && !root.trim().equals("")) {
+				return root;
 			}
 		} catch (Exception e) {
-			log.warn("Unsupported parameter value for 'root', using default (location + '#').");
-			root = url.toString() + "#";
+			log.warn("Unsupported parameter value for 'root': '{}', using default (location + '#').", root);
 		}
-		return root;
+		return url.toString() + "#";
 	}
 
 	default String getNamespaceArgument(Properties properties, URL url) {
 		String namespace = null;
 		try {
 			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
-			if (namespace == null || namespace.trim().equals("")) {
-				throw new Exception();
+			if (namespace != null && !namespace.trim().equals("")) {
+				return namespace;
 			}
 		} catch (Exception e) {
-			log.warn("Unsupported parameter value for 'namespace': '{}', using default ({}}).", url, XYZ_NS);
-//			namespace = url.toString() + "#";
-			namespace = XYZ_NS;
+			log.warn("Unsupported parameter value for 'namespace': '{}', using default ({}}).", namespace, XYZ_NS);
 		}
-		return namespace;
+		return XYZ_NS;
 	}
 
 	static UnicodeEscaper basicEscaper = new PercentEscaper("%", false);
