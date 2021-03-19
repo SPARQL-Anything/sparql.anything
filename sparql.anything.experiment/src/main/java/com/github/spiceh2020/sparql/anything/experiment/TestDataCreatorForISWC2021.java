@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 public class TestDataCreatorForISWC2021 {
 
-	private static String queriesFolderName = "sparql-anything-queries";
+	private static String queriesFolderName = "queries";
 
 	public static void main(String[] args) throws MalformedURLException, IOException {
 
@@ -82,13 +82,23 @@ public class TestDataCreatorForISWC2021 {
 
 	private static void createQueriesForArray(JSONArray ja, String filename, String queriesFolder) throws IOException {
 		JSONObject jo = ja.getJSONObject(ja.length() / 2);
+		// SPARQL ANything
 		String q1 = String.format(q1Template, filename, jo.get("Autore"));
-		writeFile(q1, new File(queriesFolder + "/q1_" + ja.length()));
+		writeFile(q1, new File(queriesFolder + "/q1_" + ja.length() + ".sparql"));
 		String q2 = String.format(q2Template, filename, jo.get("Tecnica"));
-		writeFile(q2, new File(queriesFolder + "/q2_" + ja.length()));
+		writeFile(q2, new File(queriesFolder + "/q2_" + ja.length() + ".sparql"));
 		String q3 = String.format(q3Template, filename, jo.get("Datazione"));
-		writeFile(q3, new File(queriesFolder + "/q3_" + ja.length()));
+		writeFile(q3, new File(queriesFolder + "/q3_" + ja.length() + ".sparql"));
+		// SPARQL Generate
+		{
+			 q1 = String.format(q1TemplateG, filename, jo.get("Autore"));
+			writeFile(q1, new File(queriesFolder + "/q1_" + ja.length() + ".rqg"));
+			 q2 = String.format(q2TemplateG, filename, jo.get("Tecnica"));
+			writeFile(q2, new File(queriesFolder + "/q2_" + ja.length() + ".rqg"));
+			 q3 = String.format(q3TemplateG, filename, jo.get("Datazione"));
+			writeFile(q3, new File(queriesFolder + "/q3_" + ja.length() + ".rqg"));
 
+		}
 	}
 
 	private static void writeFile(String content, File file) throws IOException {
@@ -113,6 +123,28 @@ public class TestDataCreatorForISWC2021 {
 			+ "		?s <http://sparql.xyz/facade-x/data/Datazione> ?date .\n"
 			+ "		?s <http://sparql.xyz/facade-x/data/Titolo> ?titolo .\n"
 			+ "		FILTER(REGEX(?date,\".*%s.*\",\"i\"))\n" + "	}\n" + "}\n" + "";
+
+	private static String q1TemplateG = "PREFIX ite: <http://w3id.org/sparql-generate/iter/>\n" +
+			"\n" +
+			"SELECT DISTINCT ?titolo\n" +
+			"ITERATOR ite:JSONPath(<%s>,\"$[*]\",\"$.Autore\",\"$.Titolo\") AS ?obj ?autore ?titolo\n" +
+			"WHERE{\n" +
+			"\tFILTER(REGEX(?autore,\".*%s.*\",\"i\"))\n" +
+			"}";
+	private static String q2TemplateG = "PREFIX ite: <http://w3id.org/sparql-generate/iter/>\n" +
+			"\n" +
+			"SELECT DISTINCT ?titolo\n" +
+			"ITERATOR ite:JSONPath(<%s>,\"$[*]\",\"$.Tecnica\",\"$.Titolo\") AS ?obj ?technique ?titolo\n" +
+			"WHERE{\n" +
+			"  FILTER(REGEX(?technique,\".*%s.*\",\"i\"))\n" +
+			"}";
+	private static String q3TemplateG = "PREFIX ite: <http://w3id.org/sparql-generate/iter/>\n" +
+			"\n" +
+			"SELECT DISTINCT ?titolo\n" +
+			"ITERATOR ite:JSONPath(<%s>,\"$[*]\",\"$.Datazione\",\"$.Titolo\") AS ?obj ?date ?titolo\n" +
+			"WHERE{\n" +
+			"  FILTER(REGEX(?date,\".*%s.*\",\"i\"))\n" +
+			"}\n";
 
 	public static JSONArray readFileFromURL(URL url) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
