@@ -3,6 +3,12 @@ package com.github.spiceh2020.sparql.anything.json;
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import com.jsoniter.JsonIterator;
+import com.jsoniter.ValueType;
+import com.jsoniter.any.Any;
+import com.jsoniter.output.EncodingMode;
+import com.jsoniter.output.JsonStream;
+import com.jsoniter.spi.DecodingMode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -19,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -27,56 +35,82 @@ public class JSONTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
 	private void transformJSONFromURL(URL url, String rootId, FacadeXGraphBuilder filter) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-		String json = IOUtils.toString(url, StandardCharsets.UTF_8);
-//		StringBuilder sb = new StringBuilder();
-//		br.lines().forEachOrdered(l -> {
-//			sb.append(l);
-//			sb.append('\n');
-//		});
-//		br.close();
-
+		JsonIterator.setMode(DecodingMode.DYNAMIC_MODE_AND_MATCH_FIELD_WITH_HASH);
+		JsonStream.setMode(EncodingMode.DYNAMIC_MODE);
+		JsonIterator json = JsonIterator.parse(url.openStream().readAllBytes());
 		transformJSON(json, url.toString(), rootId, filter);
 	}
 
-	private void transformJSON(String json, String dataSourceId, String rootId, FacadeXGraphBuilder filter) {
+//	private void any(String jsoon)
+
+	private void transformJSON(JsonIterator json, String dataSourceId, String rootId, FacadeXGraphBuilder filter) throws IOException {
+
 		filter.addRoot(dataSourceId, rootId);
-		try {
-			transform( new JSONObject(json), dataSourceId, rootId, filter);
-		} catch (JSONException e) {
-			transform( new JSONArray(json), dataSourceId, rootId, filter);
+		Any any = json.readAny();
+
+		if(any.valueType().equals(ValueType.OBJECT)) {
+			Map<String, Any> object = any.asMap();
+			transform(object, dataSourceId, rootId, filter);
+		} else {
+			List<Any> object = any.asList();
+			transform( object, dataSourceId, rootId, filter);
 		}
 	}
 
-	private void transform( JSONObject object, String dataSourceId, String containerId, FacadeXGraphBuilder filter) {
-		object.keys().forEachRemaining(k -> {
-			Object o = object.get(k);
-			if (o instanceof String || o instanceof Boolean || o instanceof Integer) {
-				filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), o);
-			} else if(o instanceof JSONObject || o instanceof JSONArray) {
+	private void transform( Map<String,Any> object, String dataSourceId, String containerId, FacadeXGraphBuilder filter) {
+		object.keySet().iterator().forEachRemaining(k -> {
+			Any o = object.get(k);
+			if(o.valueType().equals(ValueType.OBJECT) || o.valueType().equals(ValueType.ARRAY)) {
 				String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
 				filter.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
-				if (o instanceof JSONObject) {
-					transform((JSONObject) o, dataSourceId, childContainerId, filter);
-				} else if (o instanceof JSONArray) {
-					transform((JSONArray) o, dataSourceId, childContainerId, filter);
+				if (o.valueType().equals(ValueType.OBJECT)) {
+					transform(o.asMap(), dataSourceId, childContainerId, filter);
+				} else {
+					transform( o.asList(), dataSourceId, childContainerId, filter);
+				}
+			}else
+				// Value
+			if(((Any) o).valueType().equals(ValueType.STRING)){
+				filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Any) o).toString());
+			}else
+			if(((Any) o).valueType().equals(ValueType.BOOLEAN)){
+				filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Any) o).toBoolean());
+			}else
+			if(((Any) o).valueType().equals(ValueType.NUMBER)){
+//				filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Any) o).toString());
+				if(o.toString().contains(".")){
+					filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Any) o).toFloat());
+				} else {
+					filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Any) o).toInt());
 				}
 			}
 		});
 	}
 
-	private void transform( JSONArray arr, String dataSourceId, String containerId, FacadeXGraphBuilder filter) {
-		for (int i = 0; i < arr.length(); i++) {
-			Object o = arr.get(i);
-			if (o instanceof String || o instanceof Boolean || o instanceof Integer) {
-				filter.addValue(dataSourceId, containerId, i+1, o);
-			} else if(o instanceof JSONObject || o instanceof JSONArray) {
+	private void transform( List<Any> arr, String dataSourceId, String containerId, FacadeXGraphBuilder filter) {
+		for (int i = 0; i < arr.size(); i++) {
+			Any o = arr.get(i);
+			if(o.valueType().equals(ValueType.OBJECT) || o.valueType().equals(ValueType.ARRAY)) {
 				String childContainerId = StringUtils.join(containerId, "/_", String.valueOf(i+1));
 				filter.addContainer(dataSourceId, containerId, i+1, childContainerId);
-				if (o instanceof JSONObject) {
-					transform((JSONObject) o, dataSourceId, childContainerId, filter);
-				} else if (o instanceof JSONArray) {
-					transform((JSONArray) o, dataSourceId, childContainerId, filter);
+				if (o.valueType().equals(ValueType.OBJECT)) {
+					transform(o.asMap(), dataSourceId, childContainerId, filter);
+				} else {
+					transform(o.asList(), dataSourceId, childContainerId, filter);
+				}
+			}else
+			if(((Any) o).valueType().equals(ValueType.STRING)){
+				filter.addValue(dataSourceId, containerId, i+1, ((Any) o).toString());
+			}else
+			if(((Any) o).valueType().equals(ValueType.BOOLEAN)){
+				filter.addValue(dataSourceId, containerId, i+1, ((Any) o).toBoolean());
+			}else
+			if(((Any) o).valueType().equals(ValueType.NUMBER)){
+				log.info("Type: {} {}", o.valueType(), o.getClass());
+				if(o.toString().contains(".")){
+					filter.addValue(dataSourceId, containerId, i+1, ((Any) o).toFloat());
+				} else {
+					filter.addValue(dataSourceId, containerId, i+1, ((Any) o).toInt());
 				}
 			}
 		}
