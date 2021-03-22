@@ -4,13 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
-import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -36,12 +33,11 @@ import org.junit.Test;
 import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegister;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class AppTest {
-	private static String PREFIX = "http://example.org/";
+	public static String PREFIX = "http://example.org/";
 
-	private static DatasetGraph createExampleGraph() {
+	static DatasetGraph createExampleGraph() {
 		DatasetGraph dg = DatasetGraphFactory.create();
 		Graph g = GraphFactory.createGraphMem();
 		g.add(new Triple(NodeFactory.createURI(PREFIX + "s"), NodeFactory.createURI(PREFIX + "p"),
@@ -51,25 +47,11 @@ public class AppTest {
 		return dg;
 	}
 
+	;
 	@Test
 	public void testConstructAndSelect() throws IOException {
-		Triplifier t = new Triplifier() {
-
-			@Override
-			public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-				return createExampleGraph();
-			}
-
-			@Override
-			public Set<String> getMimeTypes() {
-				return Sets.newHashSet("test-mime");
-			}
-
-			@Override
-			public Set<String> getExtensions() {
-				return Sets.newHashSet("test");
-			}
-		};
+		System.out.println(new TestTriplifier().getClass().getName());
+//		Triplifier t = new TestTriplifier();
 		try {
 
 			OpExecutorFactory customExecutorFactory = new OpExecutorFactory() {
@@ -81,7 +63,7 @@ public class AppTest {
 
 			QC.setFactory(ARQ.getContext(), customExecutorFactory);
 
-			TriplifierRegister.getInstance().registerTriplifier(t);
+			TriplifierRegister.getInstance().registerTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier", new String[]{"test"}, new String[]{"test-mime"});
 
 			Dataset kb = DatasetFactory.createGeneral();
 			Query q = QueryFactory
@@ -102,39 +84,16 @@ public class AppTest {
 			assertTrue(qs.getResource("p").getURI().equals(PREFIX + "p"));
 			assertTrue(qs.getResource("o").getURI().equals(PREFIX + "o"));
 
+			TriplifierRegister.getInstance().removeTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier");
 		} catch (TriplifierRegisterException e) {
 			e.printStackTrace();
 		}
 	}
 
+	;
 	@Test
-	public void testRelativePath() throws IOException {
-		Triplifier t = new Triplifier() {
-
-			@Override
-			public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-				DatasetGraph dg = DatasetGraphFactory.create();
-				Graph g = GraphFactory.createGraphMem();
-
-				String content = IOUtils.toString(url, Charset.defaultCharset());
-
-				g.add(new Triple(NodeFactory.createURI(PREFIX + "s"), NodeFactory.createURI(PREFIX + "p"),
-						NodeFactory.createLiteral(content)));
-				dg.addGraph(NodeFactory.createURI(PREFIX + "g"), g);
-				dg.setDefaultGraph(g);
-				return dg;
-			}
-
-			@Override
-			public Set<String> getMimeTypes() {
-				return Sets.newHashSet("test-mime2");
-			}
-
-			@Override
-			public Set<String> getExtensions() {
-				return Sets.newHashSet("test2");
-			}
-		};
+	public void testRelativePath() throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		Class.forName("com.github.spiceh2020.sparql.anything.test.TestTriplifier2").getConstructor().newInstance();
 		try {
 
 			OpExecutorFactory customExecutorFactory = new OpExecutorFactory() {
@@ -146,7 +105,8 @@ public class AppTest {
 
 			QC.setFactory(ARQ.getContext(), customExecutorFactory);
 
-			TriplifierRegister.getInstance().registerTriplifier(t);
+//			TriplifierRegister.getInstance().registerTriplifier(t);
+			TriplifierRegister.getInstance().registerTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier2", new String[]{"test2"}, new String[]{"test-mime2"});
 
 			Dataset kb = DatasetFactory.createGeneral();
 
@@ -163,6 +123,8 @@ public class AppTest {
 			assertTrue(qs.getResource("s").getURI().equals(PREFIX + "s"));
 			assertTrue(qs.getResource("p").getURI().equals(PREFIX + "p"));
 			assertTrue(qs.get("o").toString().replace("\\", "").equals(content));
+
+			TriplifierRegister.getInstance().removeTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier");
 
 		} catch (TriplifierRegisterException e) {
 			e.printStackTrace();

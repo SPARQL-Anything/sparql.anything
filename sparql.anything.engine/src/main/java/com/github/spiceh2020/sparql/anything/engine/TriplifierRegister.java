@@ -12,8 +12,8 @@ public final class TriplifierRegister {
 
 	private static TriplifierRegister instance;
 
-	private Map<String, Triplifier> mimeType = new HashMap<>();
-	private Map<String, Triplifier> extension = new HashMap<>();
+	private Map<String, String> mimeType = new HashMap<>();
+	private Map<String, String> extension = new HashMap<>();
 
 	private TriplifierRegister() {
 
@@ -27,9 +27,9 @@ public final class TriplifierRegister {
 		return instance;
 	}
 
-	public void registerTriplifier(Triplifier t) throws TriplifierRegisterException {
+	public void registerTriplifier(String t, String [] extensions, String[] mimeTypes) throws TriplifierRegisterException {
 		log.trace("Registering {}", t);
-		for (String ext : t.getExtensions()) {
+		for (String ext : extensions) {
 			if (extension.containsKey(ext)) {
 				throw new TriplifierRegisterException(
 						"A triplifier for " + ext + " extension has been already registered!");
@@ -38,7 +38,7 @@ public final class TriplifierRegister {
 			extension.put(ext, t);
 		}
 
-		for (String mimeType : t.getMimeTypes()) {
+		for (String mimeType : mimeTypes) {
 			if (this.mimeType.containsKey(mimeType)) {
 				throw new TriplifierRegisterException(
 						"A triplifier for " + mimeType + " mime has been already registered!");
@@ -49,25 +49,25 @@ public final class TriplifierRegister {
 
 	}
 
-	public void removeTriplifier(Triplifier t) {
-		for (String ext : t.getExtensions()) {
-			if (extension.containsKey(ext) && extension.get(ext).getClass().equals(t.getClass())) {
+	public void removeTriplifier(String t) {
+		for (String ext : extension.keySet()) {
+			if (extension.get(ext).equals(t)) {
 				extension.remove(ext);
 			}
 		}
 
-		for (String mimeType : t.getMimeTypes()) {
-			if (this.mimeType.containsKey(mimeType) && this.mimeType.get(mimeType).getClass().equals(t.getClass())) {
+		for (String mimeType : mimeType.keySet()) {
+			if ( this.mimeType.get(mimeType).equals(t)) {
 				this.mimeType.remove(mimeType);
 			}
 		}
 	}
 
-	public Triplifier getTriplifierForMimeType(String f) {
+	public String getTriplifierForMimeType(String f) {
 		return this.mimeType.get(f);
 	}
 
-	public Triplifier getTriplifierForExtension(String f) {
+	public String getTriplifierForExtension(String f) {
 		return this.extension.get(f);
 	}
 
