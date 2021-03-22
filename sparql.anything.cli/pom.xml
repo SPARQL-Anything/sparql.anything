@@ -115,6 +115,7 @@
 						<configuration>
 							<outputFile>target/sparql-anything-${project.version}.jar</outputFile>
 							<shadedArtifactAttached>false</shadedArtifactAttached>
+
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
@@ -133,6 +134,9 @@
 								<filter>
 									<artifact>*:*</artifact>
 									<excludes>
+										<exclude>com.github.spice-h2020:sparql.anything.fuseki</exclude>
+										<exclude>junit:junit</exclude>
+										<exclude>org.apache.maven:lib:tests</exclude>
 										<exclude>META-INF/*.SF</exclude>
 										<exclude>META-INF/*.DSA</exclude>
 										<exclude>META-INF/*.RSA</exclude>
