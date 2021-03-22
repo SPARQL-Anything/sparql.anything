@@ -96,11 +96,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 							t = (Triplifier) Class.forName(triplifierRegister
 									.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString()))).getConstructor().newInstance();
 						} else {
-							logger.trace(
-									"Guess triplifier using file extension " + FilenameUtils.getExtension(urlLocation));
-
+							logger.trace("Guessing triplifier using file extension ");
 							String tt = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
-							logger.info("Extension: {} {} " , FilenameUtils.getExtension(urlLocation), tt);
+							logger.trace("Guessed extension: {} :: {} " , FilenameUtils.getExtension(urlLocation), tt);
 							t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
 						}
 						// If triplifier is null, return an empty graph
