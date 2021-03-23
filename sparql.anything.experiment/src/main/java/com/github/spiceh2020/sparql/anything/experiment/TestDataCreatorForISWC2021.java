@@ -108,40 +108,46 @@ public class TestDataCreatorForISWC2021 {
 		fos.close();
 	}
 
-	private static String q1Template = "SELECT DISTINCT ?titolo\n" + "WHERE{\n" + "\n"
+	private static String q1Template = "SELECT ?titolo\n" + "WHERE{\n" + "\n"
 			+ "	SERVICE <x-sparql-anything:location=%s> {\n"
 			+ "		?s <http://sparql.xyz/facade-x/data/Autore> \"%s\" .\n"
 			+ "		?s <http://sparql.xyz/facade-x/data/Titolo> ?titolo .\n" + "	}\n" + "}\n";
-	private static String q2Template = "SELECT DISTINCT ?titolo\n" + "WHERE{\n" + "\n"
+	private static String q2Template = "SELECT DISTINCT ?technique\n" + "WHERE{\n" + "\n"
 			+ "	SERVICE <x-sparql-anything:location=%s> {\n"
 			+ "		?s <http://sparql.xyz/facade-x/data/Tecnica> ?technique .\n"
-			+ "		?s <http://sparql.xyz/facade-x/data/Titolo> ?titolo .\n"
 			+ "		FILTER(REGEX(?technique,\".*%s.*\",\"i\"))\n" + "	}\n" + "}\n";
 
-	private static String q3Template = "SELECT DISTINCT ?titolo\n" + "WHERE {\n"
+	private static String q3Template = "SELECT ?titolo\n" + "WHERE {\n"
 			+ "	SERVICE <x-sparql-anything:location=%s> {\n"
 			+ "		?s <http://sparql.xyz/facade-x/data/Datazione> ?date .\n"
 			+ "		?s <http://sparql.xyz/facade-x/data/Titolo> ?titolo .\n"
 			+ "		FILTER(REGEX(?date,\".*%s.*\",\"i\"))\n" + "	}\n" + "}\n" + "";
 
-	private static String q1TemplateG = "PREFIX ite: <http://w3id.org/sparql-generate/iter/>\n" +
+	private static String q1TemplateG = "" +
+			"PREFIX ite: <http://w3id.org/sparql-generate/iter/>\n" +
 			"\n" +
-			"SELECT DISTINCT ?titolo\n" +
-			"ITERATOR ite:JSONPath(<%s>,\"$[*]\",\"$.Autore\",\"$.Titolo\") AS ?obj ?autore ?titolo\n" +
-			"WHERE{\n" +
-			"\tFILTER(REGEX(?autore,\".*%s.*\",\"i\"))\n" +
-			"}";
+			"SELECT ?titolo\n" +
+			"ITERATOR ite:JSONPath(<%s>,\"$[?(@.Autore=='%s')].Titolo\") AS ?titolo\n" +
+			"WHERE{}\n";
+//			"" +
+//			"PREFIX ite: <http://w3id.org/sparql-generate/iter/>\n" +
+//			"\n" +
+//			"SELECT ?titolo\n" +
+//			"ITERATOR ite:JSONPath(<%s>,\"$[*]\",\"$.Autore\",\"$.Titolo\") AS ?obj ?autore ?titolo\n" +
+//			"WHERE{\n" +
+//			"\tFILTER(REGEX(?autore,\".*%s.*\",\"i\"))\n" +
+//			"}";
 	private static String q2TemplateG = "PREFIX ite: <http://w3id.org/sparql-generate/iter/>\n" +
 			"\n" +
-			"SELECT DISTINCT ?titolo\n" +
-			"ITERATOR ite:JSONPath(<%s>,\"$[*]\",\"$.Tecnica\",\"$.Titolo\") AS ?obj ?technique ?titolo\n" +
+			"SELECT DISTINCT ?technique\n" +
+			"ITERATOR ite:JSONPath(<%s>,\"$[*].Tecnica\") AS ?technique \n" +
 			"WHERE{\n" +
 			"  FILTER(REGEX(?technique,\".*%s.*\",\"i\"))\n" +
 			"}";
 	private static String q3TemplateG = "PREFIX ite: <http://w3id.org/sparql-generate/iter/>\n" +
 			"\n" +
 			"SELECT DISTINCT ?titolo\n" +
-			"ITERATOR ite:JSONPath(<%s>,\"$[*]\",\"$.Datazione\",\"$.Titolo\") AS ?obj ?date ?titolo\n" +
+			"ITERATOR ite:JSONPath(<%s>,\"$[*]\",\"@.Datazione\",\"@.Titolo\") AS ?obj ?date ?titolo\n" +
 			"WHERE{\n" +
 			"  FILTER(REGEX(?date,\".*%s.*\",\"i\"))\n" +
 			"}\n";
