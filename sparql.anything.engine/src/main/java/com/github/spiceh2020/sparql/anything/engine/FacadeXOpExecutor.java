@@ -50,6 +50,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
 	private final static Symbol audit = Symbol.create("facade-x-audit");
+	private final static Symbol strategy = Symbol.create("facade-x-strategy");
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
@@ -83,7 +84,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 						Triplifier t;
 						Properties p = getProperties(opService.getService().getURI());
 
-						logger.trace("Properties extracted " + p.toString());
+						logger.trace("Properties extracted: {}", p.toString());
 
 						String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 
@@ -123,7 +124,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 									metadataTriplifier.triplify(url, p).getDefaultGraph());
 						}
 
-						if(p.containsKey("audit") && p.get("audit").equals("1")){
+						if(p.containsKey("audit") && (p.get("audit").equals("1") || p.get("audit").equals("true"))){
 							logger.info("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
 							logger.info("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(), NodeFactory.createURI(url.toString()));
 							String SD = "http://www.w3.org/ns/sparql-service-description#";
