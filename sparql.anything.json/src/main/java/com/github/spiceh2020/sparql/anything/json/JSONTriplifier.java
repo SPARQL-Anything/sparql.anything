@@ -128,7 +128,9 @@ public class JSONTriplifier implements Triplifier {
 		logger.trace("Op ", op);
 		FacadeXGraphBuilder filter = new TripleFilteringFacadeXBuilder(url, op, properties);
 		transformJSONFromURL(url, Triplifier.getRootArgument(properties, url), filter);
-		logger.info("Number of triples: {} ", filter.getMainGraph().size());
+		if(logger.isDebugEnabled()){
+			logger.debug("Number of triples: {} ", filter.getMainGraph().size());
+		}
 		return filter.getDatasetGraph();
 	}
 
