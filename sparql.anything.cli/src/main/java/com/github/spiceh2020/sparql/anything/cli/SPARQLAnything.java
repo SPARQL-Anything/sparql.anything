@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -35,6 +36,8 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.sparql.util.Context;
+import org.apache.jena.sparql.util.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +65,9 @@ public class SPARQLAnything {
 
 	private static final String LOAD = "l";
 	private static final String LOAD_LONG = "load";
+
+	private static final String STRATEGY = "s";
+	private static final String STRATEGY_LONG = "strategy";
 
 	private static final String OUTPUTPATTERN = "p";
 	private static final String OUTPUTPATTERN_LONG = "output-pattern";
@@ -91,7 +97,7 @@ public class SPARQLAnything {
 	}
 
 	private static void executeQuery(CommandLine commandLine, Dataset kb, String query, PrintStream pw) throws FileNotFoundException {
-		logger.trace("Executing Query: " + query);
+		logger.trace("Executing Query: {}", query);
 		Query q = QueryFactory.create(query);
 		String format = getFormat(q, commandLine);
 		if (q.isSelectType()) {
@@ -238,6 +244,10 @@ public class SPARQLAnything {
 				.desc("OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]")
 				.longOpt(FORMAT_LONG).build());
 
+		options.addOption(Option.builder(STRATEGY).argName("strategy").hasArg().optionalArg(true)
+				.desc("OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.")
+				.longOpt(STRATEGY_LONG).build());
+
 		options.addOption(Option.builder(OUTPUTPATTERN).argName("outputPattern").hasArg()
 				.desc("OPTIONAL - Output filename pattern, e.g. 'myfile-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.").longOpt(OUTPUTPATTERN_LONG).build());
 
@@ -246,8 +256,15 @@ public class SPARQLAnything {
 		CommandLineParser cmdLineParser = new DefaultParser();
 		try {
 			commandLine = cmdLineParser.parse(options, args);
-
 			String query = getQuery(commandLine.getOptionValue(QUERY));
+			Integer strategy = ( commandLine.hasOption(STRATEGY) ? Integer.valueOf(commandLine.getOptionValue(STRATEGY)) : null);
+			if(strategy != null){
+				if(strategy == 1 || strategy == 0) {
+					ARQ.getContext().set(FacadeXOpExecutor.strategy, strategy);
+				}else{
+					logger.error("Invalid value for parameter 'strategy': {}", strategy);
+				}
+			}
 
 			initSPARQLAnythingEngine();
 

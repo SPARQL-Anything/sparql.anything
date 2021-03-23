@@ -50,7 +50,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
 	private final static Symbol audit = Symbol.create("facade-x-audit");
-	private final static Symbol strategy = Symbol.create("facade-x-strategy");
+	public final static Symbol strategy = Symbol.create("facade-x-strategy");
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
@@ -102,8 +102,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 							logger.trace("Guessed extension: {} :: {} " , FilenameUtils.getExtension(urlLocation), tt);
 							t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
 						}
-						// If triplifier is null, return an empty graph
-
 
 						URL url;
 						try {
@@ -113,9 +111,21 @@ public class FacadeXOpExecutor extends OpExecutor {
 							url = new File(urlLocation).toURI().toURL();
 						}
 
+						Integer strategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
+						if (strategy == null){
+							strategy = 1;
+						}
+						logger.debug("Execution strategy: {}", strategy);
 						if (t != null) {
-							dg = t.triplify(url, p, opService.getSubOp());
+							if (strategy == 1){
+								logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
+								dg = t.triplify(url, p, opService.getSubOp());
+							} else {
+								logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
+								dg = t.triplify(url, p);
+							}
 						} else {
+							// If triplifier is null, return an empty graph
 							logger.error("No triplifier available for the input format!");
 							dg = DatasetFactory.create().asDatasetGraph();
 						}
