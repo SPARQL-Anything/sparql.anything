@@ -49,7 +49,8 @@ public final class FacadeX {
             Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.binary.BinaryTriplifier", new String[]{"bin","dat"}, new String[]{"application/octet-stream"});
 
 //            Registry.registerTriplifier(new JSONTriplifier());
-            Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.json.JSONTriplifier", new String[]{"json"}, new String[]{"application/json"});
+//            Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.json.JSONTriplifier", new String[]{"json"}, new String[]{"application/json"});
+            Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.json.JSONStreamingTriplifier", new String[]{"json"}, new String[]{"application/json"});
 
 //            Registry.registerTriplifier(new SpreadsheetTriplifier());
             Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.spreadsheet.SpreadsheetTriplifier", new String[]{"xls", "xlsx"}, new String[]{"application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
