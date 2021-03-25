@@ -259,7 +259,7 @@ public class SPARQLAnything {
 			String query = getQuery(commandLine.getOptionValue(QUERY));
 			Integer strategy = ( commandLine.hasOption(STRATEGY) ? Integer.valueOf(commandLine.getOptionValue(STRATEGY)) : null);
 			if(strategy != null){
-				if(strategy == 1 || strategy == 0) {
+				if(strategy == 1 || strategy == 0 || strategy == 2) {
 					ARQ.getContext().set(FacadeXOpExecutor.strategy, strategy);
 				}else{
 					logger.error("Invalid value for parameter 'strategy': {}", strategy);
