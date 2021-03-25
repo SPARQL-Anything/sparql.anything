@@ -7,20 +7,19 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
-import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
-import com.jsoniter.spi.JsonException;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.vocabulary.RDF;
-import org.json.JSONException;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import com.jsoniter.spi.JsonException;
 
 public class JSON2RDFTransformerTest {
 
@@ -79,6 +78,7 @@ public class JSON2RDFTransformerTest {
 				m.add(r, m.createProperty(ontologyPrefix + "string"), m.createTypedLiteral("string"));
 				m.add(r, m.createProperty(ontologyPrefix + "bool"), m.createTypedLiteral(true));
 				m.add(r, m.createProperty(ontologyPrefix + "boolf"), m.createTypedLiteral(false));
+				m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(0));
 
 				DatasetGraph g1;
 				try {
@@ -104,6 +104,7 @@ public class JSON2RDFTransformerTest {
 				mn.add(rn, mn.createProperty(ontologyPrefix + "string"), mn.createTypedLiteral("string"));
 				mn.add(rn, mn.createProperty(ontologyPrefix + "bool"), mn.createTypedLiteral(true));
 				mn.add(rn, mn.createProperty(ontologyPrefix + "boolf"), mn.createTypedLiteral(false));
+				mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(0));
 
 				DatasetGraph g1;
 				try {
@@ -113,6 +114,33 @@ public class JSON2RDFTransformerTest {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+
+	@Test
+	public void testNegative() {
+		Triplifier jt = new JSONTriplifier();
+		Properties properties = new Properties();
+		properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
+		Model m = ModelFactory.createDefaultModel();
+		Resource r = m.createResource();
+		m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+		m.add(r, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral(1));
+		m.add(r, m.createProperty(ontologyPrefix + "string"), m.createTypedLiteral("string"));
+		m.add(r, m.createProperty(ontologyPrefix + "bool"), m.createTypedLiteral(true));
+		m.add(r, m.createProperty(ontologyPrefix + "boolf"), m.createTypedLiteral(false));
+		m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(0));
+		m.add(r, m.createProperty(ontologyPrefix + "neg"), m.createTypedLiteral(-1));
+		m.add(r, m.createProperty(ontologyPrefix + "float"), m.createTypedLiteral(0.1f));
+
+		DatasetGraph g1;
+		try {
+			g1 = jt.triplify(getClass().getClassLoader().getResource("./testnumbers.json"), properties);
+//			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
+//			m.write(System.out, "TTL");
+			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -129,7 +157,7 @@ public class JSON2RDFTransformerTest {
 		DatasetGraph g1;
 		try {
 			g1 = jt.triplify(getClass().getClassLoader().getResource("./whitespaceKeys.json"), properties);
-			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out,"TTL");
+			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 //			m.write(System.out,"TTL");
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
@@ -154,6 +182,7 @@ public class JSON2RDFTransformerTest {
 		m.add(r, m.createProperty(ontologyPrefix + "string"), m.createTypedLiteral("string"));
 		m.add(r, m.createProperty(ontologyPrefix + "bool"), m.createTypedLiteral(true));
 		m.add(r, m.createProperty(ontologyPrefix + "boolf"), m.createTypedLiteral(false));
+		m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(0));
 
 		DatasetGraph g1;
 		try {
@@ -181,6 +210,7 @@ public class JSON2RDFTransformerTest {
 		mn.add(rn, mn.createProperty(ontologyPrefix + "string"), mn.createTypedLiteral("string"));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "bool"), mn.createTypedLiteral(true));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "boolf"), mn.createTypedLiteral(false));
+		mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(0));
 
 		DatasetGraph g1;
 		try {
@@ -209,6 +239,7 @@ public class JSON2RDFTransformerTest {
 		mn.add(rn, mn.createProperty(ontologyPrefix + "string"), mn.createTypedLiteral("string"));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "bool"), mn.createTypedLiteral(true));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "boolf"), mn.createTypedLiteral(false));
+		mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(0));
 
 		DatasetGraph g1;
 		try {
@@ -222,7 +253,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void testArray() {
+	public void s() {
 		{
 			{
 				Model m = ModelFactory.createDefaultModel();
@@ -247,7 +278,7 @@ public class JSON2RDFTransformerTest {
 				try {
 					g1 = jt.triplify(getClass().getClassLoader().getResource("./testarray.json"), properties);
 
-//					ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out,"TTL");
+					ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -281,12 +312,12 @@ public class JSON2RDFTransformerTest {
 				try {
 					g1 = jt.triplify(getClass().getClassLoader().getResource("./testarray.json"), properties);
 					Iterator<Triple> ii = g1.getDefaultGraph().find();
-					while(ii.hasNext()){
+					while (ii.hasNext()) {
 						System.err.println(ii.next());
 					}
 					System.err.println("---");
 					ii = m.getGraph().find();
-					while(ii.hasNext()){
+					while (ii.hasNext()) {
 						System.err.println(ii.next());
 					}
 					System.err.println("---");
