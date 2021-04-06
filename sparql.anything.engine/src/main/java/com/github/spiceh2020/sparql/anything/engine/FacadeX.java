@@ -40,7 +40,7 @@ public final class FacadeX {
             Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.csv.CSVTriplifier", new String[]{"csv"}, new String[]{"text/csv"});
 
 //            Registry.registerTriplifier(new HTMLTriplifier());
-            Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.csv.HTMLTriplifier", new String[]{"html"}, new String[]{"text/html"});
+            Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.html.HTMLTriplifier", new String[]{"html"}, new String[]{"text/html"});
 
 //            Registry.registerTriplifier(new TextTriplifier());
             Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.text.TextTriplifier", new String[]{"txt"}, new String[]{"text/plain"});
