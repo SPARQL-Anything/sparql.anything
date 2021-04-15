@@ -39,11 +39,12 @@ public class CSVTriplifier implements Triplifier {
 
 	@Deprecated
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		return triplify(url, null,  properties);
+		return triplify(url,  properties, null);
 	}
-	
-	public DatasetGraph triplify(URL url, Op op, Properties properties) throws IOException {
 
+	@Override
+	public DatasetGraph triplify(URL url, Properties properties, Op op) throws IOException {
+		log.info("CSV Triplifier: {}", op);
 		// TODO Support all flavour of csv types
 		CSVFormat format;
 		try{
@@ -67,7 +68,8 @@ public class CSVTriplifier implements Triplifier {
 		Reader in = null;
 		try {
 			in = new InputStreamReader(new BOMInputStream(new FileInputStream(new File(url.toURI()))), charset);
-		} catch (URISyntaxException e) {
+		} catch (URISyntaxException|IllegalArgumentException e) {
+			log.error("{} :: {}", e.getMessage(), url);
 			throw new IOException(e);
 		}
 		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties );
