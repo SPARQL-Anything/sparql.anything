@@ -1,6 +1,7 @@
 package com.github.spiceh2020.sparql.anything.json;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +33,16 @@ public class JSONTriplifier implements Triplifier {
 	private void transformJSONFromURL(URL url, String rootId, FacadeXGraphBuilder filter) throws IOException {
 		JsonIterator.setMode(DecodingMode.DYNAMIC_MODE_AND_MATCH_FIELD_WITH_HASH);
 		JsonStream.setMode(EncodingMode.DYNAMIC_MODE);
+
 //		JsonIterator json = JsonIterator.parse(url.openStream().readAllBytes());
 		JsonIterator json = JsonIterator.parse(BUFF);
-		json.reset(url.openStream());
-		transformJSON(json, url.toString(), rootId, filter);
+		final InputStream stream = url.openStream();
+		try {
+			json.reset(stream);
+			transformJSON(json, url.toString(), rootId, filter);
+		}finally{
+			stream.close();
+		}
 	}
 
 //	private void any(String jsoon)
