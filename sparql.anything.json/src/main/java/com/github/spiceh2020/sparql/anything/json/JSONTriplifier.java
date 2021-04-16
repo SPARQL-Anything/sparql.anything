@@ -40,7 +40,6 @@ public class JSONTriplifier implements Triplifier {
 
 //		JsonIterator json = JsonIterator.parse(url.openStream().readAllBytes());
 		JsonIterator json = JsonIterator.parse(BUFF);
-		logger.info("Escaping unicode? {}", JsoniterSpi.getCurrentConfig().escapeUnicode());
 
 		final InputStream us = url.openStream();
 		// XXX We need to do this roundtrip since JsonIterator does not seem to properly unescape \uXXXX - to be investigated.
