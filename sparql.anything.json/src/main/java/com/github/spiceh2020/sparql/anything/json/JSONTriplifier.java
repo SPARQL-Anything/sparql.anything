@@ -3,12 +3,16 @@ package com.github.spiceh2020.sparql.anything.json;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import com.jsoniter.spi.JsoniterSpi;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.translate.UnicodeUnescaper;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -36,12 +40,17 @@ public class JSONTriplifier implements Triplifier {
 
 //		JsonIterator json = JsonIterator.parse(url.openStream().readAllBytes());
 		JsonIterator json = JsonIterator.parse(BUFF);
-		final InputStream stream = url.openStream();
+		logger.info("Escaping unicode? {}", JsoniterSpi.getCurrentConfig().escapeUnicode());
+
+		final InputStream us = url.openStream();
+		// XXX We need to do this roundtrip since JsonIterator does not seem to properly unescape \uXXXX - to be investigated.
+		final InputStream stream = IOUtils.toInputStream(new UnicodeUnescaper().translate(IOUtils.toString(us, StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
 		try {
 			json.reset(stream);
 			transformJSON(json, url.toString(), rootId, filter);
 		}finally{
 			stream.close();
+			us.close();
 		}
 	}
 

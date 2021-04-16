@@ -346,4 +346,15 @@ public class JSON2RDFTransformerTest {
 
 	}
 
+	@Test
+	public void testUTF8encoded(){
+//		/collection/artworks/p/052/p05259-15628.json {namespace=http://sparql.xyz/facade-x/data/, location=./collection/artworks/p/052/p05259-15628.json
+		String f = "./p05259-15628.json";
+		Triplifier jt = new JSONTriplifier();
+		try {
+			jt.triplify(getClass().getClassLoader().getResource(f), new Properties());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

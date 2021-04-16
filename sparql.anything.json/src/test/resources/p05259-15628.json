@@ -1,0 +1,92 @@
+{
+  "acno": "P05259", 
+  "acquisitionYear": 1975, 
+  "all_artists": "Ian Tyson", 
+  "catalogueGroup": {
+    "accessionRanges": "P05258-P05261", 
+    "completeStatus": "INCOMPLETE", 
+    "groupType": null, 
+    "id": 65563, 
+    "shortTitle": "The 17 Horse Songs of Frank Mitchell"
+  }, 
+  "classification": "on paper, print", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1933, 
+      "date": "born 1933", 
+      "displayOrder": 1, 
+      "fc": "Ian Tyson", 
+      "gender": "Male", 
+      "id": 2081, 
+      "mda": "Tyson, Ian", 
+      "role": "artist", 
+      "startLetter": "T"
+    }
+  ], 
+  "creditLine": "Presented by Rose and Chris Prater through the Institute of Contemporary Prints 1975", 
+  "dateRange": {
+    "endYear": 1969, 
+    "startYear": 1969, 
+    "text": "1969"
+  }, 
+  "dateText": "1969", 
+  "depth": "", 
+  "dimensions": "image: 305 x 254 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "The 17 Horse Songs of Frank Mitchell", 
+  "height": "254", 
+  "id": 15628, 
+  "inscription": null, 
+  "medium": "Screenprint on paper", 
+  "movementCount": 0, 
+  "subjectCount": 3, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 10282, 
+                "name": "Rothenberg, Jerome, 'The 17 Horse Songs of Frank Mitchell'"
+              }
+            ], 
+            "id": 58, 
+            "name": "literature (not Shakespeare)"
+          }
+        ], 
+        "id": 55, 
+        "name": "literature and fiction"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 225, 
+                "name": "colour"
+              }, 
+              {
+                "id": 226, 
+                "name": "geometric"
+              }
+            ], 
+            "id": 185, 
+            "name": "non-representational"
+          }
+        ], 
+        "id": 184, 
+        "name": "abstraction"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": "\u00a9 Ian Tyson", 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/P/P05/P05259_8.jpg", 
+  "title": "No. XI", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/tyson-no-xi-p05259", 
+  "width": "305"
+}
