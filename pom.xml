@@ -11,42 +11,12 @@
 
 	<name>sparql.anything</name>
 	<description>An opinionated approach to SPARQL any file</description>
-	<url>https://github.com/spice-h2020/sparql.everything</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
-
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>https://github.com/spice-h2020/sparql.anything/blob/main/LICENSE</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
-	<developers>
-		<developer>
-			<name>Luigi Asprino</name>
-			<email>luigi.asprino@unibo.it</email>
-			<organization>FICLIT</organization>
-			<organizationUrl>https://ficlit.unibo.it/it</organizationUrl>
-		</developer>
-		<developer>
-			<name>Enrico Daga</name>
-			<email>enrico.daga@open.ac.uk</email>
-			<organization>The Open University</organization>
-			<organizationUrl>https://kmi.open.ac.uk</organizationUrl>
-		</developer>
-	</developers>
-
-	<scm>
-		<connection>scm:git:git://github.com/spice-h2020/sparql.anything.git</connection>
-		<developerConnection>scm:git:ssh://github.com:spice-h2020/sparql.anything.git</developerConnection>
-		<url>http://github.com/spice-h2020/sparql.anything/tree/main</url>
-	</scm>
 
 	<distributionManagement>
 		<snapshotRepository>
