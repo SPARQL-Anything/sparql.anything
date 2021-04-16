@@ -1,7 +1,0 @@
-PREFIX ite: <http://w3id.org/sparql-generate/iter/>
-
-SELECT  ?author (count(DISTINCT ?id) AS ?numberOfWorks)
-ITERATOR ite:JSONPath(<data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json>,"$[*]","$.Inventario","$.Autore") AS ?obj ?id ?author
-WHERE{
-
-} GROUP BY ?author
