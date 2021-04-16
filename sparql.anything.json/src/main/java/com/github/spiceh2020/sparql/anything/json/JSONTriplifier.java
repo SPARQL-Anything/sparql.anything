@@ -42,7 +42,7 @@ public class JSONTriplifier implements Triplifier {
 		JsonIterator json = JsonIterator.parse(BUFF);
 
 		final InputStream us = url.openStream();
-		// XXX We need to do this roundtrip since JsonIterator does not seem to properly unescape \uXXXX - to be investigated.
+		// XXX We need to do this roundtrip since JsonIterator does not seem to properly unescape \\uXXXX - to be investigated.
 		final InputStream stream = IOUtils.toInputStream(new UnicodeUnescaper().translate(IOUtils.toString(us, StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
 		try {
 			json.reset(stream);
