@@ -1,10 +1,6 @@
 package com.github.spiceh2020.sparql.anything.csv;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -66,9 +62,10 @@ public class CSVTriplifier implements Triplifier {
 			headers = false;
 		}
 		Reader in = null;
+		final InputStream is = url.openStream();
 		try {
-			in = new InputStreamReader(new BOMInputStream(new FileInputStream(new File(url.toURI()))), charset);
-		} catch (URISyntaxException|IllegalArgumentException e) {
+			in = new InputStreamReader(new BOMInputStream(is), charset);
+		} catch (IllegalArgumentException e) {
 			log.error("{} :: {}", e.getMessage(), url);
 			throw new IOException(e);
 		}
@@ -81,50 +78,54 @@ public class CSVTriplifier implements Triplifier {
 		String containerRowPrefix = url.toString() + "#row";
 		// Add type Root
 		builder.addRoot(dataSourceId, rootId);
-		Iterable<CSVRecord> records = format.parse(in);
-		int rown = 0;
-		LinkedHashMap<Integer,String> headers_map = new LinkedHashMap<Integer,String>();
-		Iterator<CSVRecord> recordIterator = records.iterator();
-		while (recordIterator.hasNext()) {
-			// Header
-			if(headers && rown == 0){
-				CSVRecord record = recordIterator.next();
-				Iterator<String> columns = record.iterator();
-				int colid = 0;
-				while(columns.hasNext()){
-					colid++;
-					String colstring = columns.next();
-					String colname = colstring.strip();
+		try {
+			Iterable<CSVRecord> records = format.parse(in);
+			int rown = 0;
+			LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
+			Iterator<CSVRecord> recordIterator = records.iterator();
+			while (recordIterator.hasNext()) {
+				// Header
+				if (headers && rown == 0) {
+					CSVRecord record = recordIterator.next();
+					Iterator<String> columns = record.iterator();
+					int colid = 0;
+					while (columns.hasNext()) {
+						colid++;
+						String colstring = columns.next();
+						String colname = colstring.strip();
 
-					int c = 0;
-					while (headers_map.containsValue(colname)){
-						c++;
-						colname += "_" + String.valueOf(c);
+						int c = 0;
+						while (headers_map.containsValue(colname)) {
+							c++;
+							colname += "_" + String.valueOf(c);
+						}
+						log.trace("adding colname >{}<", colname);
+						headers_map.put(colid, colname);
 					}
-					log.trace("adding colname >{}<", colname);
-					headers_map.put(colid, colname);
-				}
 
-			}
-			// Data
-			if(recordIterator.hasNext()) {
-				// Rows
-				rown++;
-				String rowContainerId = containerRowPrefix + rown;
-				builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
-				CSVRecord record = recordIterator.next();
-				Iterator<String> cells = record.iterator();
-				int cellid = 0;
-				while(cells.hasNext()){
-					String value = cells.next();
-					cellid ++;
-					if(headers && headers_map.containsKey(cellid)) {
-						builder.addValue(dataSourceId, rowContainerId, headers_map.get(cellid), value);
-					}else{
-						builder.addValue(dataSourceId, rowContainerId, cellid, value);
+				}
+				// Data
+				if (recordIterator.hasNext()) {
+					// Rows
+					rown++;
+					String rowContainerId = containerRowPrefix + rown;
+					builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
+					CSVRecord record = recordIterator.next();
+					Iterator<String> cells = record.iterator();
+					int cellid = 0;
+					while (cells.hasNext()) {
+						String value = cells.next();
+						cellid++;
+						if (headers && headers_map.containsKey(cellid)) {
+							builder.addValue(dataSourceId, rowContainerId, headers_map.get(cellid), value);
+						} else {
+							builder.addValue(dataSourceId, rowContainerId, cellid, value);
+						}
 					}
 				}
 			}
+		} finally{
+			is.close();
 		}
 		return builder.getDatasetGraph();
 	}
