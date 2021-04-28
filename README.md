@@ -1,9 +1,10 @@
+[![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 
 <p align="center">
-  <img  src="https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/logo.png">
+  <img  src="https://raw.githubusercontent.com/sparql-anything/sparql.anything/main/logo.png">
 </p>
 
-sparql.anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
+SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
 ## Facade-X
 sparql.anything uses a single generic abstraction for all data source formats called Facade-X.
