@@ -1,5 +1,6 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 
+# SPARQL Anything
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
 ## Facade-X
@@ -73,7 +74,7 @@ Suppose having this JSON file as input (also available at ``https://raw.githubus
 ]
 ```
 
-With sparql.anything you can select the TV series starring "Courteney Cox" with the SPARQL query
+With SPARQL Anything you can select the TV series starring "Courteney Cox" with the SPARQL query
 
 ```
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
@@ -101,7 +102,7 @@ and get this result without caring of transforming JSON to RDF.
 
 
 ## Supported Formats
-Currently, sparql.anything supports the following formats: "json", "html", "xml", "csv", "bin", "png","jpeg","jpg","bmp","tiff","tif", "ico", "txt" ... but the possibilities are limitless!
+Currently, the system supports the following formats: "json", "html", "xml", "csv", "bin", "png","jpeg","jpg","bmp","tiff","tif", "ico", "txt" ... but the possibilities are limitless!
 
 By default, these formats are triplified as follows.
 
@@ -289,5 +290,5 @@ We conducted a comparative [evaluation](experiment) of sparql.anything with resp
 
 ## Licence
 
-sparql.anything is distributed under [Apache 2.0 License](LICENSE)
+SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 
