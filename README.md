@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 
 <p align="center">
-  <img  src="https://raw.githubusercontent.com/sparql-anything/sparql.anything/main/logo.png">
+  <img  src="https://raw.githubusercontent.com/sparql-anything/sparql.anything/v0.2-DEV/logo.png">
 </p>
 
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
