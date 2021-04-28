@@ -1,13 +1,9 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 
-<p align="center">
-  <img  src="https://raw.githubusercontent.com/sparql-anything/sparql.anything/v0.2-DEV/logo.png">
-</p>
-
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
 ## Facade-X
-sparql.anything uses a single generic abstraction for all data source formats called Facade-X.
+SPARQL Anything uses a single generic abstraction for all data source formats called Facade-X.
 Facade-X is a simplistic meta-model used by sparql.anything transformers to generate RDF data from diverse data sources.
 Intuitively, Facade-X uses a subset of RDF as a general approach to represent the source content *as-it-is* but in RDF.
 The model combines two type of elements: containers and literals.
@@ -31,7 +27,7 @@ This is a generic example of a Facade-X data object (more examples below):
 ```
 
 ## Querying anything
-sparql.anything extends the Apache Jena ARQ processors by *overloading* the SERVICE operator, as in the following example:
+SPARQL Anything extends the Apache Jena ARQ processors by *overloading* the SERVICE operator, as in the following example:
 
 Suppose having this JSON file as input (also available at ``https://raw.githubusercontent.com/SPARQL-Anything/sparql.anything/main/examples/example1.json``)
 
