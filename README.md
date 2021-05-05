@@ -1,4 +1,5 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # SPARQL Anything
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
