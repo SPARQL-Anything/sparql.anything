@@ -11,6 +11,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>sparql.anything.fuseki</artifactId>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
