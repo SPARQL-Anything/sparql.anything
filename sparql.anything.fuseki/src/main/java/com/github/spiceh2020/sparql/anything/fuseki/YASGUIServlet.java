@@ -34,11 +34,14 @@ public class YASGUIServlet extends HttpServlet {
 		var.put("fxPrefix", this.fxPrefix);
 
 		PrintWriter pw = res.getWriter();
+//		StringWriter sw = new StringWriter();
 		try {
 			temp.process(var, pw);
+//			temp.process(var, sw);
 		} catch (TemplateException | IOException e1) {
 			e1.printStackTrace();
 		}
 		pw.close();
+//		System.out.println(sw.toString());
 	}
 }
