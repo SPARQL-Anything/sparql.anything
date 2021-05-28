@@ -18,8 +18,8 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.sparql.util.Context;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
 import org.junit.Test;
@@ -261,5 +261,14 @@ public class ItTest {
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
+	}
+	
+	@Test
+	public void triplifyExternal() throws IOException, URISyntaxException {
+		Query query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/>PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>SELECT *WHERE {    SERVICE <x-sparql-anything:csv.headers=true,location=https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-20200409.csv> {        ?s ?p ?o    }}");
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+//		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
 	}
 }
