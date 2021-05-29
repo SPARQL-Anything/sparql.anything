@@ -32,7 +32,7 @@ This is a generic example of a Facade-X data object (more examples below):
 ## Querying anything
 SPARQL Anything extends the Apache Jena ARQ processors by *overloading* the SERVICE operator, as in the following example:
 
-Suppose having this JSON file as input (also available at ``https://raw.githubusercontent.com/SPARQL-Anything/sparql.anything/main/examples/example1.json``)
+Suppose having this JSON file as input (also available at ``https://sparql-anything.cc/example1.json``)
 
 ```
 [
@@ -85,7 +85,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SELECT ?seriesName
 WHERE {
 
-    SERVICE <x-sparql-anything:https://raw.githubusercontent.com/SPARQL-Anything/sparql.anything/v0.2-DEV/examples/example1.json> {
+    SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star ?li "Courteney Cox" .
