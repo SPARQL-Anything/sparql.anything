@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -53,7 +54,7 @@ public class JSON2RDFTransformerTest {
 
 		boolean nullPointerException = false;
 		try {
-			jt.triplify(null, new Properties());
+			jt.triplify((URL)null, new Properties());
 		} catch (NullPointerException e) {
 			nullPointerException = true;
 		} catch (IOException e) {
