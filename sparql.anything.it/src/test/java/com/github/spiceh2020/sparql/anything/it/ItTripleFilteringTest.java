@@ -21,19 +21,26 @@
 
 package com.github.spiceh2020.sparql.anything.it;
 
-import com.github.spiceh2020.sparql.anything.engine.FacadeX;
-import org.apache.jena.query.*;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.jena.query.ARQ;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.sparql.util.Context;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 
 public class ItTripleFilteringTest {
     private static final Logger log = LoggerFactory.getLogger(ItTripleFilteringTest.class);

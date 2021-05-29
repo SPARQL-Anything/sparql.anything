@@ -51,7 +51,7 @@ public class JSONTripleFilteringTest {
         g1 = jt.triplify(getClass().getClassLoader().getResource("./friends.json"), properties, bgp);
         // Only two triples matching the BGP
         log.info("Size is: {}", g1.getDefaultGraph().size());
-        Iterator quads = g1.find();
+        Iterator<Quad> quads = g1.find();
         while(quads.hasNext()){
             Quad q = (Quad) quads.next();
             log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
@@ -71,7 +71,7 @@ public class JSONTripleFilteringTest {
         g1 = jt.triplify(getClass().getClassLoader().getResource("./friends.json"), properties, bgp);
         // Only four triples matching the BGP
         log.info("Size is: {}", g1.getDefaultGraph().size());
-        Iterator quads = g1.find();
+		Iterator<Quad> quads = g1.find();
         while(quads.hasNext()){
             Quad q = (Quad) quads.next();
             log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
