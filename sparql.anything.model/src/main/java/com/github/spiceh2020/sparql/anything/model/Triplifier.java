@@ -23,6 +23,10 @@ public interface Triplifier {
 	static final String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
 
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
+	
+	default public DatasetGraph triplify(String string, Properties properties) throws IOException {
+		throw new UnsupportedOperationException("Triplification of lexical forms unsupported");
+	}
 
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException;
 

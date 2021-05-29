@@ -29,33 +29,25 @@ public class TextTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(TextTriplifier.class);
 
-	public static final String REGEX = "txt.regex", GROUP = "txt.group";
+	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
+
+	public DatasetGraph triplify(String value, Properties properties) throws IOException {
+		DatasetGraph dg = DatasetGraphFactory.create();
+		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		Graph g = triplifyValue(properties, blank_nodes, NodeFactory.createBlankNode(), value);
+		dg.setDefaultGraph(g);
+		return dg;
+	}
 
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
 		DatasetGraph dg = DatasetGraphFactory.create();
-		Graph g = GraphFactory.createGraphMem();
 
-//		String root = null;
-//
-//		if (properties.contains(IRIArgument.ROOT.toString())) {
-//			root = properties.getProperty(IRIArgument.ROOT.toString());
-//			if (root.trim().length() == 0) {
-//				logger.warn("Unsupported parameter value for 'root', using default (no value).");
-//				root = null;
-//			}
-//		}
-//
-//		boolean blank_nodes = true;
-//		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
-//			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
-//		}
-//
-//		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
-		
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+
+		String value = readFromURL(url, charset.toString());
 
 		Node rootResource;
 		if (!blank_nodes) {
@@ -68,9 +60,19 @@ public class TextTriplifier implements Triplifier {
 		} else {
 			rootResource = NodeFactory.createBlankNode();
 		}
-		g.add(new Triple(rootResource, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 
-		String value = readFromURL(url, charset.toString());
+		Graph g = triplifyValue(properties, blank_nodes, rootResource, value);
+
+		dg.addGraph(NodeFactory.createURI(url.toString()), g);
+		dg.setDefaultGraph(g);
+
+		return dg;
+	}
+
+	private Graph triplifyValue(Properties properties, boolean blank_nodes, Node rootResource, String value) {
+		logger.trace("Triplifying {}", value);
+		Graph g = GraphFactory.createGraphMem();
+		g.add(new Triple(rootResource, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 
 		Pattern pattern = null;
 		if (properties.containsKey(REGEX)) {
@@ -87,7 +89,7 @@ public class TextTriplifier implements Triplifier {
 		}
 
 		int group = -1;
-		if (properties.contains(GROUP)) {
+		if (properties.contains(GROUP) && pattern != null) {
 			try {
 				int gr = Integer.parseInt(properties.getProperty(GROUP));
 				if (gr >= 0) {
@@ -116,14 +118,24 @@ public class TextTriplifier implements Triplifier {
 				count++;
 			}
 		} else {
-			g.add(new Triple(rootResource, RDF.li(1).asNode(),
-					NodeFactory.createLiteralByValue(value, XSDDatatype.XSDstring)));
+			logger.trace("No pattern set");
+			if (properties.containsKey(SPLIT)) {
+				logger.trace("Splitting regex: {}", properties.getProperty(SPLIT));
+				String[] split = value.split(properties.getProperty(SPLIT));
+				for (int i = 0; i < split.length; i++) {
+					g.add(new Triple(rootResource, RDF.li(i + 1).asNode(),
+							NodeFactory.createLiteralByValue(split[i], XSDDatatype.XSDstring)));
+				}
+
+			} else {
+				g.add(new Triple(rootResource, RDF.li(1).asNode(),
+						NodeFactory.createLiteralByValue(value, XSDDatatype.XSDstring)));
+			}
+
 		}
 
-		dg.addGraph(NodeFactory.createURI(url.toString()), g);
-		dg.setDefaultGraph(g);
+		return g;
 
-		return dg;
 	}
 
 	private static String readFromURL(URL url, String charset) throws IOException {

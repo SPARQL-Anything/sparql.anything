@@ -1,24 +1,12 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.spiceh2020.sparql.anything.binary.BinaryTriplifier;
-import com.github.spiceh2020.sparql.anything.csv.CSVTriplifier;
-import com.github.spiceh2020.sparql.anything.html.HTMLTriplifier;
 import com.github.spiceh2020.sparql.anything.spreadsheet.RDFTriplifier;
-import com.github.spiceh2020.sparql.anything.spreadsheet.SpreadsheetTriplifier;
-import com.github.spiceh2020.sparql.anything.text.TextTriplifier;
-import com.github.spiceh2020.sparql.anything.xml.XMLTriplifier;
 
 public final class FacadeX {
     private static final Logger log = LoggerFactory.getLogger(FacadeX.class);

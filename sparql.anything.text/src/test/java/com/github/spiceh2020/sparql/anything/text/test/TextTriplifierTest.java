@@ -54,7 +54,8 @@ public class TextTriplifierTest {
 			DatasetGraph dg = tt.triplify(url, p);
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph
+					.add(new Triple(root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(
 					new Triple(root, RDF.li(1).asNode(), NodeFactory.createLiteral("this", XSDDatatype.XSDstring)));
 			expectedGraph
@@ -63,9 +64,40 @@ public class TextTriplifierTest {
 					.add(new Triple(root, RDF.li(3).asNode(), NodeFactory.createLiteral("a", XSDDatatype.XSDstring)));
 			expectedGraph.add(
 					new Triple(root, RDF.li(4).asNode(), NodeFactory.createLiteral("test", XSDDatatype.XSDstring)));
-			
-			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out,"TTL");
-			
+
+//			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
+
+			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testSplit() throws MalformedURLException {
+		TextTriplifier tt = new TextTriplifier();
+		File f = new File("src/main/resources/testfile");
+		URL url = f.toURI().toURL();
+		try {
+			Properties p = new Properties();
+			p.setProperty(TextTriplifier.SPLIT, "\\s+");
+			DatasetGraph dg = tt.triplify(url, p);
+			Graph expectedGraph = GraphFactory.createGraphMem();
+			Node root = NodeFactory.createBlankNode();
+			expectedGraph
+					.add(new Triple(root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(
+					new Triple(root, RDF.li(1).asNode(), NodeFactory.createLiteral("this", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(root, RDF.li(2).asNode(), NodeFactory.createLiteral("is", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(root, RDF.li(3).asNode(), NodeFactory.createLiteral("a", XSDDatatype.XSDstring)));
+			expectedGraph.add(
+					new Triple(root, RDF.li(4).asNode(), NodeFactory.createLiteral("test", XSDDatatype.XSDstring)));
+
+			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
+
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
 		} catch (IOException e) {

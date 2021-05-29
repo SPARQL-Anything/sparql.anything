@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -36,12 +35,11 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.sparql.util.Context;
-import org.apache.jena.sparql.util.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.spiceh2020.sparql.anything.engine.FacadeX;
+import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
 
 import io.github.basilapi.basil.sparql.QueryParameter;
@@ -325,7 +323,7 @@ public class SPARQLAnything {
 				// Specifications
 				Specification specification = SpecificationFactory.create("", query);
 				// Iterate over parameters
-				List<String> variables = parameters.getResultVars();
+//				List<String> variables = parameters.getResultVars();
 				while(parameters.hasNext()){
 					QuerySolution qs = parameters.nextSolution();
 					Query q = bindParameters(specification, qs);

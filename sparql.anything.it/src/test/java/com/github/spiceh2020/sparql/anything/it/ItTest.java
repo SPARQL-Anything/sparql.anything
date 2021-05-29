@@ -271,4 +271,13 @@ public class ItTest {
 //		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
 	}
+	
+	@Test
+	public void testNoLocation() throws IOException, URISyntaxException {
+		Query query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT * WHERE {    SERVICE <x-sparql-anything:content=abcd,txt.regex=b> {        ?s ?p ?o    }}");
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+//		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
+	}
 }
