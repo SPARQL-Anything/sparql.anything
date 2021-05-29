@@ -50,7 +50,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private Map<String, DatasetGraph> executedFacadeXIris;
 
 	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
-	private final static Symbol audit = Symbol.create("facade-x-audit");
+	// TODO
+//	private final static Symbol audit = Symbol.create("facade-x-audit");
 	public final static Symbol strategy = Symbol.create("facade-x-strategy");
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
@@ -84,97 +85,24 @@ public class FacadeXOpExecutor extends OpExecutor {
 						logger.debug("Graph reloaded from in-memory cache");
 						dg = executedFacadeXIris.get(getInMemoryCacheKey(opService));
 					} else {
-						Triplifier t;
 						Properties p = getProperties(opService.getService().getURI());
-
 						logger.trace("Properties extracted: {}", p.toString());
 
 						String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 
-						if (!p.containsKey(IRIArgument.LOCATION.toString())
-								&& !p.containsKey(IRIArgument.CONTENT.toString())) {
-							logger.error("Neither location nor content provided");
-							throw new RuntimeException("Neither location nor content provided");
-						}
-
-						if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
-							logger.trace("Triplifier enforced");
-							t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString()))
-									.getConstructor().newInstance();
-						} else if (p.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
-							logger.trace("MimeType enforced");
-							t = (Triplifier) Class
-									.forName(triplifierRegister
-											.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString())))
-									.getConstructor().newInstance();
-						} else if (p.containsKey(IRIArgument.LOCATION.toString())) {
-							logger.trace("Guessing triplifier using file extension ");
-							String tt = triplifierRegister
-									.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
-							logger.trace("Guessed extension: {} :: {} ", FilenameUtils.getExtension(urlLocation), tt);
-							t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
-						} else {
-							logger.trace("No location provided, using the Text triplifier");
-							t = (Triplifier) Class.forName("com.github.spiceh2020.sparql.anything.text.TextTriplifier")
-									.getConstructor().newInstance();
-						}
+						Triplifier t = getTriplifier(p, urlLocation);
 
 						if (urlLocation != null) {
 
-							logger.trace("Location provied {}", urlLocation);
+							logger.trace("Location provided {}", urlLocation);
 
-							URL url;
-							try {
-								url = new URL(urlLocation);
-							} catch (MalformedURLException u) {
-								logger.trace("Malformed url interpreting as file");
-								url = new File(urlLocation).toURI().toURL();
-							}
-							Integer strategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
-							if (strategy == null) {
-								strategy = 1;
-							}
-							logger.debug("Execution strategy: {}", strategy);
-							if (t != null) {
-								if (strategy == 1) {
-									logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
-									dg = t.triplify(url, p, opService.getSubOp());
-								} else {
-									logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
-									dg = t.triplify(url, p);
-								}
-							} else {
-								// If triplifier is null, return an empty graph
-								logger.error("No triplifier available for the input format!");
-								dg = DatasetFactory.create().asDatasetGraph();
-							}
-							if (triplifyMetadata(p)) {
-								dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI),
-										metadataTriplifier.triplify(url, p).getDefaultGraph());
-							}
+							URL url = instantiateURL(urlLocation);
 
-							if (p.containsKey("audit")
-									&& (p.get("audit").equals("1") || p.get("audit").equals("true"))) {
-								logger.info("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
-								logger.info("{} triples loaded ({})",
-										dg.getGraph(NodeFactory.createURI(url.toString())).size(),
-										NodeFactory.createURI(url.toString()));
-								String SD = "http://www.w3.org/ns/sparql-service-description#";
-								Model audit = ModelFactory.createDefaultModel();
-								Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
+							dg = triplify(opService, p, t, url);
 
-								// For each graph
-								Iterator<Node> graphs = dg.listGraphNodes();
-								while (graphs.hasNext()) {
-									Node g = graphs.next();
-									Resource auditGraph = audit.createResource(g.getURI());
-									root.addProperty(ResourceFactory.createProperty(SD + "namedGraph"), auditGraph);
-									auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD + "NamedGraph"));
-									auditGraph.addProperty(ResourceFactory.createProperty(SD + "name"), g.getURI());
-									auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
-								}
-								dg.addGraph(NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI), audit.getGraph());
-							}
+							createMetadataGraph(dg, p, url);
+
+							createAuditGraph(dg, p, url);
 
 							// Remember the triplified data
 							if (!executedFacadeXIris.containsKey(getInMemoryCacheKey(opService))) {
@@ -220,6 +148,101 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 		logger.trace("Not a Variable and not a IRI: {}", opService.getService());
 		return super.execute(opService, input);
+	}
+
+	private URL instantiateURL(String urlLocation) throws MalformedURLException {
+		URL url;
+		try {
+			url = new URL(urlLocation);
+		} catch (MalformedURLException u) {
+			logger.trace("Malformed url interpreting as file");
+			url = new File(urlLocation).toURI().toURL();
+		}
+		return url;
+	}
+
+	private DatasetGraph triplify(final OpService opService, Properties p, Triplifier t, URL url) throws IOException {
+		DatasetGraph dg;
+		Integer strategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
+		if (strategy == null) {
+			strategy = 1;
+		}
+		logger.debug("Execution strategy: {}", strategy);
+		if (t != null) {
+			if (strategy == 1) {
+				logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
+				dg = t.triplify(url, p, opService.getSubOp());
+			} else {
+				logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
+				dg = t.triplify(url, p);
+			}
+		} else {
+			// If triplifier is null, return an empty graph
+			logger.error("No triplifier available for the input format!");
+			dg = DatasetFactory.create().asDatasetGraph();
+		}
+		return dg;
+	}
+
+	private void createMetadataGraph(DatasetGraph dg, Properties p, URL url) throws IOException {
+		if (triplifyMetadata(p)) {
+			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI),
+					metadataTriplifier.triplify(url, p).getDefaultGraph());
+		}
+	}
+
+	private void createAuditGraph(DatasetGraph dg, Properties p, URL url) {
+		if (p.containsKey("audit") && (p.get("audit").equals("1") || p.get("audit").equals("true"))) {
+			logger.info("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
+			logger.info("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(),
+					NodeFactory.createURI(url.toString()));
+			String SD = "http://www.w3.org/ns/sparql-service-description#";
+			Model audit = ModelFactory.createDefaultModel();
+			Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
+
+			// For each graph
+			Iterator<Node> graphs = dg.listGraphNodes();
+			while (graphs.hasNext()) {
+				Node g = graphs.next();
+				Resource auditGraph = audit.createResource(g.getURI());
+				root.addProperty(ResourceFactory.createProperty(SD + "namedGraph"), auditGraph);
+				auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD + "NamedGraph"));
+				auditGraph.addProperty(ResourceFactory.createProperty(SD + "name"), g.getURI());
+				auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
+			}
+			dg.addGraph(NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI), audit.getGraph());
+		}
+	}
+
+	private Triplifier getTriplifier(Properties p, String urlLocation) throws InstantiationException,
+			IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
+		Triplifier t;
+		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString())) {
+			logger.error("Neither location nor content provided");
+			throw new RuntimeException("Neither location nor content provided");
+		}
+
+		if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
+			logger.trace("Triplifier enforced");
+			t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString())).getConstructor()
+					.newInstance();
+		} else if (p.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
+			logger.trace("MimeType enforced");
+			t = (Triplifier) Class
+					.forName(triplifierRegister
+							.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString())))
+					.getConstructor().newInstance();
+		} else if (p.containsKey(IRIArgument.LOCATION.toString())) {
+			logger.trace("Guessing triplifier using file extension ");
+			String tt = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
+			logger.trace("Guessed extension: {} :: {} ", FilenameUtils.getExtension(urlLocation), tt);
+			t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
+		} else {
+			logger.trace("No location provided, using the Text triplifier");
+			t = (Triplifier) Class.forName("com.github.spiceh2020.sparql.anything.text.TextTriplifier").getConstructor()
+					.newInstance();
+		}
+		return t;
 	}
 
 	private Properties getProperties(String url) {
