@@ -32,9 +32,11 @@ public class TextTriplifier implements Triplifier {
 	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
 
 	public DatasetGraph triplify(String value, Properties properties) throws IOException {
+		logger.trace("Triplifying \"{}\"", value);
 		DatasetGraph dg = DatasetGraphFactory.create();
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		Graph g = triplifyValue(properties, blank_nodes, NodeFactory.createBlankNode(), value);
+		logger.trace("Number of triples: {}",g.size());
 		dg.setDefaultGraph(g);
 		return dg;
 	}

@@ -1,18 +1,27 @@
 package com.github.spiceh2020.sparql.anything.it;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.compress.utils.Sets;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
@@ -262,22 +271,52 @@ public class ItTest {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
 	}
-	
+
 	@Test
 	public void triplifyExternal() throws IOException, URISyntaxException {
-		Query query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/>PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>SELECT *WHERE {    SERVICE <x-sparql-anything:csv.headers=true,location=https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-20200409.csv> {        ?s ?p ?o    }}");
+		Query query = QueryFactory.create(
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/>PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>SELECT *WHERE {    SERVICE <x-sparql-anything:csv.headers=true,location=https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-20200409.csv> {        ?s ?p ?o    }}");
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 //		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
 	}
-	
+
 	@Test
 	public void testNoLocation() throws IOException, URISyntaxException {
-		Query query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT * WHERE {    SERVICE <x-sparql-anything:content=abcd,txt.regex=b> {        ?s ?p ?o    }}");
+		Query query = QueryFactory.create(
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ASK {    SERVICE <x-sparql-anything:content=abcd,txt.regex=b> { ?r a <http://sparql.xyz/facade-x/ns/root>.  ?r <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> \"b\" }}");
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-//		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
+		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
+	}
+
+	@Test
+	public void testPropertiesAsBGP() throws IOException, URISyntaxException {
+		Query query = QueryFactory.create(
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX xyz: <http://sparql.xyz/facade-x/ns/> ASK {    SERVICE <x-sparql-anything:> {   xyz:properties xyz:txt.regex \"b\" ; xyz:content \"abcd\" .  ?r a <http://sparql.xyz/facade-x/ns/root> .  ?r <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> \"b\" }}");
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+//		System.out.println(QueryExecutionFactory.create(query, kb).execAsk());
+		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
+
+	}
+
+	@Test
+	public void testVariablesInProprtyGraph() throws IOException, URISyntaxException {
+		String location = getClass().getClassLoader().getResource("test-propbank.xml").toURI().toString();
+		ParameterizedSparqlString pss = new ParameterizedSparqlString(
+				FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("query3.sparql").getFile()),
+						Charset.defaultCharset()));
+		pss.setIri("location", location);
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(pss.asQuery(), kb).execSelect();
+		Set<String> result = new HashSet<>();
+		while (rs.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs.next();
+			result.add(querySolution.get("c").asLiteral().getValue().toString());
+		}
+		assertEquals(Sets.newHashSet("Quitting_a_place", "Departing"), result);
 	}
 }

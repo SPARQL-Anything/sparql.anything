@@ -21,6 +21,7 @@ public interface Triplifier {
 	static final String XYZ_NS = "http://sparql.xyz/facade-x/data/";
 	static final String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
 	static final String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
+	static final String FACADE_X_TYPE_PROPERTIES = FACADE_X_CONST_NAMESPACE_IRI + "properties";
 
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
 	

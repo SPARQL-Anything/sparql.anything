@@ -3,7 +3,6 @@ package com.github.spiceh2020.sparql.anything.engine;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
