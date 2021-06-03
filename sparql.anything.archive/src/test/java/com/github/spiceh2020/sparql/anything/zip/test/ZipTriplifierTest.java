@@ -1,4 +1,4 @@
-package com.github.spiceh2020.sparql.anything.text.test;
+package com.github.spiceh2020.sparql.anything.zip.test;
 
 import static org.junit.Assert.assertTrue;
 
