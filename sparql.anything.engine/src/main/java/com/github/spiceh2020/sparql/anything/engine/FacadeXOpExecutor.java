@@ -154,7 +154,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return super.execute(opService, input);
 	}
 
-	QueryIterator postponeService(final OpService opService, QueryIterator input) {
+	private QueryIterator postponeService(final OpService opService, QueryIterator input) {
 		logger.trace("is variable: {}", opService.getService());
 		// Postpone to next iteration
 		return new QueryIterRepeatApply(input, execCxt) {
@@ -170,13 +170,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 		};
 	}
 
-	QueryIterator postponeBGP(final OpBGP opBGP, QueryIterator input) {
+	private QueryIterator postponeBGP(final OpBGP opBGP, QueryIterator input) {
 		// Postpone to next iteration
 		return new QueryIterRepeatApply(input, execCxt) {
 
 			@Override
 			protected QueryIterator nextStage(Binding binding) {
-				logger.trace("Binding {}", Utils.bindingToString(binding));
 				Op op2 = QC.substitute(opBGP, binding);
 				QueryIterator thisStep = QueryIterSingleton.create(binding, this.getExecContext());
 				QueryIterator cIter = QC.execute(op2, thisStep, super.getExecContext());
@@ -403,7 +402,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return result;
 	}
 
-	protected boolean isFacadeXURI(String uri) {
+	private boolean isFacadeXURI(String uri) {
 		if (uri.startsWith(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
 			return true;
 		}

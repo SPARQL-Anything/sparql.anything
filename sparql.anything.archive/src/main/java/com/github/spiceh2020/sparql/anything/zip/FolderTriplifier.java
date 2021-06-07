@@ -71,11 +71,11 @@ public class FolderTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/x-tar");
+		return Sets.newHashSet();
 	}
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("tar");
+		return Sets.newHashSet();
 	}
 }

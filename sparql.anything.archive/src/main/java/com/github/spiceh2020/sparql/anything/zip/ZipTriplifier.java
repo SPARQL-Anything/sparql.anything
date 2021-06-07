@@ -54,8 +54,7 @@ public class ZipTriplifier implements Triplifier {
 		ZipEntry ze;
 		int i = 1;
 		while ((ze = zis.getNextEntry()) != null) {
-			g.add(new Triple(rootResource, RDF.li(i).asNode(),
-					NodeFactory.createLiteral(url.toString() + "#" + ze.getName())));
+			g.add(new Triple(rootResource, RDF.li(i).asNode(), NodeFactory.createLiteral(ze.getName())));
 			i++;
 		}
 

@@ -1,14 +1,23 @@
 package com.github.spiceh2020.sparql.anything.model;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +33,7 @@ public interface Triplifier {
 	static final String FACADE_X_TYPE_PROPERTIES = FACADE_X_CONST_NAMESPACE_IRI + "properties";
 
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
-	
+
 	default public DatasetGraph triplify(String string, Properties properties) throws IOException {
 		throw new UnsupportedOperationException("Triplification of lexical forms unsupported");
 	}

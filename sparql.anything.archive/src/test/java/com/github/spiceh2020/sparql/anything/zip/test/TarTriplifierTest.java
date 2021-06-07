@@ -35,11 +35,11 @@ public class TarTriplifierTest {
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
 			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
-			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), NodeFactory.createLiteral(url + "#test/test.csv")));
-			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral(url + "#test/test.json")));
-			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral(url + "#test/test.xml")));
-			expectedGraph.add(new Triple(n, RDF.li(5).asNode(), NodeFactory.createLiteral(url + "#test/test.txt")));
-			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral(url + "#test/")));
+			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), NodeFactory.createLiteral("test/test.csv")));
+			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral("test/test.json")));
+			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("test/test.xml")));
+			expectedGraph.add(new Triple(n, RDF.li(5).asNode(), NodeFactory.createLiteral("test/test.txt")));
+			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test/")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
 
@@ -62,11 +62,11 @@ public class TarTriplifierTest {
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createURI(url.toString() + "#");
 			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
-			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), NodeFactory.createLiteral(url + "#test/test.csv")));
-			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral(url + "#test/test.json")));
-			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral(url + "#test/test.xml")));
-			expectedGraph.add(new Triple(n, RDF.li(5).asNode(), NodeFactory.createLiteral(url + "#test/test.txt")));
-			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral(url + "#test/")));
+			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), NodeFactory.createLiteral("test/test.csv")));
+			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral("test/test.json")));
+			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("test/test.xml")));
+			expectedGraph.add(new Triple(n, RDF.li(5).asNode(), NodeFactory.createLiteral("test/test.txt")));
+			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test/")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
 

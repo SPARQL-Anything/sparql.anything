@@ -58,8 +58,7 @@ public class TarTriplifier implements Triplifier {
 			int i = 1;
 			TarArchiveEntry entry = null;
 			while ((entry = (TarArchiveEntry) debInputStream.getNextEntry()) != null) {
-				g.add(new Triple(rootResource, RDF.li(i).asNode(),
-						NodeFactory.createLiteral(url.toString() + "#" + entry.getName())));
+				g.add(new Triple(rootResource, RDF.li(i).asNode(), NodeFactory.createLiteral(entry.getName())));
 				i++;
 			}
 
