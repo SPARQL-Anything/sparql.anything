@@ -14,6 +14,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +57,9 @@ public class ResourceManager {
 			// extract
 			new File(folder).mkdir();
 
-			ArchiveInputStream i = new ArchiveStreamFactory().createArchiveInputStream("tar",
-					archiveLocation.openStream(), charset.toString());
+			ArchiveInputStream i = new ArchiveStreamFactory().createArchiveInputStream(
+					FilenameUtils.getExtension(archiveLocation.toString()), archiveLocation.openStream(),
+					charset.toString());
 			ArchiveEntry entry = null;
 			while ((entry = i.getNextEntry()) != null) {
 

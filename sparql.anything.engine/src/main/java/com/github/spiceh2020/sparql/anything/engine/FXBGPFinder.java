@@ -150,6 +150,8 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpLeftJoin opLeftJoin) {
+		opLeftJoin.getLeft().visit(this);
+		opLeftJoin.getRight().visit(this);
 
 	}
 

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.beanutils.ResultSetDynaClass;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -425,9 +424,8 @@ public class ItTest {
 				actual.add(Lists.newArrayList(qs.get("file").asLiteral().getValue().toString(),
 						qs.get("o1").asLiteral().getValue().toString()));
 		}
-		
-		
-		archive = archive.replace("file:/","file:///");
+
+		archive = archive.replace("file:/", "file:///");
 
 		assertTrue(actual.contains(Lists.newArrayList(archive + "test.csv", "Year")));
 		assertTrue(actual.contains(Lists.newArrayList(archive + "test.json", "Sword of Honour")));
