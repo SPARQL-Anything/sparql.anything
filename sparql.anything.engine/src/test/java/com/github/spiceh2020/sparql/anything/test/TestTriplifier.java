@@ -37,7 +37,7 @@ public class TestTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {
-		return AppTest.createExampleGraph();
+		return TriplifierRegistryTest.createExampleGraph();
 	}
 
 	@Override

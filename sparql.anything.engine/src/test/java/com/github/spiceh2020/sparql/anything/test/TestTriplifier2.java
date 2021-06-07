@@ -56,9 +56,9 @@ public class TestTriplifier2 implements Triplifier {
 
 		String content = IOUtils.toString(url, Charset.defaultCharset());
 
-		g.add(new Triple(NodeFactory.createURI(AppTest.PREFIX + "s"), NodeFactory.createURI(AppTest.PREFIX + "p"),
+		g.add(new Triple(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "s"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "p"),
 				NodeFactory.createLiteral(content)));
-		dg.addGraph(NodeFactory.createURI(AppTest.PREFIX + "g"), g);
+		dg.addGraph(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "g"), g);
 		dg.setDefaultGraph(g);
 		return dg;
 	}

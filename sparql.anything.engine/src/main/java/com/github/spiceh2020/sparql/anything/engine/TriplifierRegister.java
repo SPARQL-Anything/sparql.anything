@@ -1,6 +1,7 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,16 +52,29 @@ public final class TriplifierRegister {
 	}
 
 	public void removeTriplifier(String t) {
+		Set<String> extToRemove = new HashSet<>();
 		for (String ext : extension.keySet()) {
 			if (extension.get(ext).equals(t)) {
-				extension.remove(ext);
+//				extension.remove(ext);
+				extToRemove.add(ext);
 			}
 		}
 
+		for (String ext : extToRemove) {
+			extension.remove(ext);
+		}
+		
+		Set<String> mimeToRemove = new HashSet<>();
+
 		for (String mimeType : mimeType.keySet()) {
 			if (this.mimeType.get(mimeType).equals(t)) {
-				this.mimeType.remove(mimeType);
+//				this.mimeType.remove(mimeType);
+				mimeToRemove.add(mimeType);
 			}
+		}
+		
+		for(String mimeType:mimeToRemove) {
+			this.mimeType.remove(mimeType);
 		}
 	}
 
