@@ -2,19 +2,13 @@ package com.github.spiceh2020.sparql.anything.xml;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
-
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.rdf.model.*;
-
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.vocabulary.RDF;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -24,12 +18,33 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
+import org.apache.jena.vocabulary.RDF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
+
 public class XMLTriplifier implements Triplifier {
 
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+	public DatasetGraph triplify(Properties properties) throws IOException {
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return DatasetGraphFactory.create();
+
 //		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
 		String namespace = Triplifier.getNamespaceArgument(properties);
 //		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
@@ -94,9 +109,9 @@ public class XMLTriplifier implements Triplifier {
 			if (event.isStartElement()) {
 				StartElement se = event.asStartElement();
 				String name;
-				if(se.getName().getPrefix().equals("")){
+				if (se.getName().getPrefix().equals("")) {
 					name = se.getName().getLocalPart();
-				}else {
+				} else {
 					name = se.getName().getPrefix() + ":" + se.getName().getLocalPart();
 				}
 				int member = 0;
@@ -106,9 +121,9 @@ public class XMLTriplifier implements Triplifier {
 					members.put(parent, member);
 				}
 
-				if(path.equals("")){
-					path = String.join("", "/",  name);
-				}else {
+				if (path.equals("")) {
+					path = String.join("", "/", name);
+				} else {
 					path = String.join("", path, "/", Integer.toString(member), ":", name);
 				}
 				log.trace("element open: {} [{}]", path, stack.size());
@@ -120,7 +135,7 @@ public class XMLTriplifier implements Triplifier {
 						resource = model.createResource(root);
 					} else {
 //						resource = model.createResource(namespace + event.asStartElement().hashCode());
-						resource = model.createResource(String.join("", new String[]{namespace, path.substring(1)}));
+						resource = model.createResource(String.join("", new String[] { namespace, path.substring(1) }));
 					}
 				} else {
 					resource = model.createResource();

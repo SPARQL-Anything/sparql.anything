@@ -28,7 +28,9 @@ public class ZipTriplifierTest {
 		ZipTriplifier tt = new ZipTriplifier();
 		try {
 			URL url = getClass().getClassLoader().getResource("test.zip").toURI().toURL();
-			DatasetGraph dg = tt.triplify(url, new Properties());
+			Properties p = new Properties();
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			DatasetGraph dg = tt.triplify(p);
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
@@ -54,7 +56,8 @@ public class ZipTriplifierTest {
 			URL url = getClass().getClassLoader().getResource("test.zip").toURI().toURL();
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
-			DatasetGraph dg = tt.triplify(url, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			DatasetGraph dg = tt.triplify(p);
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 

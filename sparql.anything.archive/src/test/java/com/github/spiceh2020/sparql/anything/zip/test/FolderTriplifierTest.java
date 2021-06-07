@@ -25,7 +25,10 @@ public class FolderTriplifierTest {
 		FolderTriplifier tt = new FolderTriplifier();
 		try {
 			URL url = getClass().getClassLoader().getResource("test").toURI().toURL();
-			DatasetGraph dg = tt.triplify(url, new Properties());
+
+			Properties p = new Properties();
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			DatasetGraph dg = tt.triplify(p);
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
@@ -63,7 +66,8 @@ public class FolderTriplifierTest {
 			URL url = getClass().getClassLoader().getResource("test").toURI().toURL();
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
-			DatasetGraph dg = tt.triplify(url, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			DatasetGraph dg = tt.triplify(p);
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 

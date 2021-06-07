@@ -15,6 +15,7 @@ import org.apache.commons.lang3.text.translate.UnicodeUnescaper;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +42,14 @@ public class JSONTriplifier implements Triplifier {
 		JsonIterator json = JsonIterator.parse(BUFF);
 
 		final InputStream us = url.openStream();
-		// XXX We need to do this roundtrip since JsonIterator does not seem to properly unescape \\uXXXX - to be investigated.
-		final InputStream stream = IOUtils.toInputStream(new UnicodeUnescaper().translate(IOUtils.toString(us, StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+		// XXX We need to do this roundtrip since JsonIterator does not seem to properly
+		// unescape \\uXXXX - to be investigated.
+		final InputStream stream = IOUtils.toInputStream(
+				new UnicodeUnescaper().translate(IOUtils.toString(us, StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
 		try {
 			json.reset(stream);
 			transformJSON(json, url.toString(), rootId, filter);
-		}finally{
+		} finally {
 			stream.close();
 			us.close();
 		}
@@ -174,12 +177,18 @@ public class JSONTriplifier implements Triplifier {
 
 	@Deprecated
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		return triplify(url, properties, null);
+	public DatasetGraph triplify(Properties properties) throws IOException {
+		return triplify(properties, null);
 	}
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties, Op op) throws IOException {
+	public DatasetGraph triplify(Properties properties, Op op) throws IOException {
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return DatasetGraphFactory.create();
+
 		logger.trace("Triplifying ", url.toString());
 		logger.trace("Op ", op);
 		FacadeXGraphBuilder filter = new TripleFilteringFacadeXBuilder(url, op, properties);

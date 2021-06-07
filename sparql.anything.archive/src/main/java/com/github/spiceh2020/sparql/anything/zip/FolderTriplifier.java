@@ -29,8 +29,13 @@ public class FolderTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(FolderTriplifier.class);
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+	public DatasetGraph triplify(Properties properties) throws IOException {
 		DatasetGraph dg = DatasetGraphFactory.create();
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return dg;
 
 		String root = Triplifier.getRootArgument(properties, url);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);

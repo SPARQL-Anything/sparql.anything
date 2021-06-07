@@ -13,7 +13,8 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.junit.Test;
 
-import com.github.spiceh2020.sparql.anything.spreadsheet.RDFTriplifier;
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
+import com.github.spiceh2020.sparql.anything.rdf.RDFTriplifier;
 
 public class TestTriplifier {
 
@@ -29,9 +30,10 @@ public class TestTriplifier {
 		RDFTriplifier st = new RDFTriplifier();
 		URL url = st.getClass().getClassLoader().getResource("ntriples.nt");
 		Properties p = new Properties();
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		DatasetGraph dg;
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,8 +46,9 @@ public class TestTriplifier {
 		URL url = st.getClass().getClassLoader().getResource("turtle.ttl");
 		Properties p = new Properties();
 		DatasetGraph dg;
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -58,8 +61,9 @@ public class TestTriplifier {
 		URL url = st.getClass().getClassLoader().getResource("jsonld.jsonld");
 		Properties p = new Properties();
 		DatasetGraph dg;
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -72,8 +76,9 @@ public class TestTriplifier {
 		URL url = st.getClass().getClassLoader().getResource("rdf.rdf");
 		Properties p = new Properties();
 		DatasetGraph dg;
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -86,8 +91,9 @@ public class TestTriplifier {
 		URL url = st.getClass().getClassLoader().getResource("owl.owl");
 		Properties p = new Properties();
 		DatasetGraph dg;
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -100,50 +106,54 @@ public class TestTriplifier {
 		URL url = st.getClass().getClassLoader().getResource("nquads.nq");
 		Properties p = new Properties();
 		DatasetGraph dg;
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getGraph(NodeFactory.createURI("http://example.org/g")).isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testTRDF() {
 		RDFTriplifier st = new RDFTriplifier();
 		URL url = st.getClass().getClassLoader().getResource("trdf.trdf");
 		Properties p = new Properties();
 		DatasetGraph dg;
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getGraph(NodeFactory.createURI("http://example.org/g")).isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testTRIG() {
 		RDFTriplifier st = new RDFTriplifier();
 		URL url = st.getClass().getClassLoader().getResource("trig.trig");
 		Properties p = new Properties();
 		DatasetGraph dg;
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getGraph(NodeFactory.createURI("http://example.org/g")).isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testTRIX() {
 		RDFTriplifier st = new RDFTriplifier();
 		URL url = st.getClass().getClassLoader().getResource("trix.trix");
 		Properties p = new Properties();
 		DatasetGraph dg;
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(url, p);
+			dg = st.triplify(p);
 			assertTrue(dg.getGraph(NodeFactory.createURI("http://example.org/g")).isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();

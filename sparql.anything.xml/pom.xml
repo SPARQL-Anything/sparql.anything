@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.model</artifactId>
-			<version>0.2.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

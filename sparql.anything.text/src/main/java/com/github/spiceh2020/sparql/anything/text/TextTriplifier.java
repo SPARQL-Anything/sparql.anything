@@ -23,6 +23,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class TextTriplifier implements Triplifier {
@@ -36,14 +37,23 @@ public class TextTriplifier implements Triplifier {
 		DatasetGraph dg = DatasetGraphFactory.create();
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		Graph g = triplifyValue(properties, blank_nodes, NodeFactory.createBlankNode(), value);
-		logger.trace("Number of triples: {}",g.size());
+		logger.trace("Number of triples: {}", g.size());
 		dg.setDefaultGraph(g);
 		return dg;
 	}
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+	public DatasetGraph triplify(Properties properties) throws IOException {
 		DatasetGraph dg = DatasetGraphFactory.create();
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null) {
+			if (properties.containsKey(IRIArgument.CONTENT.toString())) {
+				return triplify(properties.getProperty(IRIArgument.CONTENT.toString()), properties);
+			}
+			return dg;
+		}
 
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);

@@ -21,32 +21,32 @@
 
 package com.github.spiceh2020.sparql.anything.test;
 
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.sparql.core.DatasetGraph;
-
 import java.io.IOException;
-import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.sparql.core.DatasetGraph;
+
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
+
 public class TestTriplifier implements Triplifier {
 
-    public TestTriplifier() {
-    }
+	public TestTriplifier() {
+	}
 
-    @Override
-    public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-        return AppTest.createExampleGraph();
-    }
+	@Override
+	public DatasetGraph triplify(Properties properties) throws IOException {
+		return AppTest.createExampleGraph();
+	}
 
-    @Override
-    public Set<String> getMimeTypes() {
-        return Sets.newHashSet("test-mime");
-    }
+	@Override
+	public Set<String> getMimeTypes() {
+		return Sets.newHashSet("test-mime");
+	}
 
-    @Override
-    public Set<String> getExtensions() {
-        return Sets.newHashSet("test");
-    }
+	@Override
+	public Set<String> getExtensions() {
+		return Sets.newHashSet("test");
+	}
 }

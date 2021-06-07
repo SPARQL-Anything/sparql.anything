@@ -28,7 +28,8 @@ public class TestTriplifier {
 		Properties p = new Properties();
 		DatasetGraph dg;
 		try {
-			dg = st.triplify(spreadsheet, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			dg = st.triplify(p);
 
 			String root = spreadsheet.toString() + "#";
 
@@ -100,7 +101,8 @@ public class TestTriplifier {
 		p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 		DatasetGraph dg;
 		try {
-			dg = st.triplify(spreadsheet, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			dg = st.triplify(p);
 
 			dg.find(null, null, null, null).forEachRemaining(q -> {
 				assertTrue(!q.getSubject().isBlank());
@@ -123,7 +125,8 @@ public class TestTriplifier {
 		p.setProperty(IRIArgument.NAMESPACE.toString(), namespace);
 		DatasetGraph dg;
 		try {
-			dg = st.triplify(spreadsheet, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			dg = st.triplify(p);
 
 			dg.find(null, null, null, null).forEachRemaining(q -> {
 				boolean condition = q.getPredicate().getURI().startsWith(namespace)
@@ -144,7 +147,8 @@ public class TestTriplifier {
 		p.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS, "true");
 		DatasetGraph dg;
 		try {
-			dg = st.triplify(spreadsheet, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			dg = st.triplify(p);
 
 			String root = spreadsheet.toString() + "#";
 
@@ -210,7 +214,7 @@ public class TestTriplifier {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void test5() {
 		SpreadsheetTriplifier st = new SpreadsheetTriplifier();
@@ -218,7 +222,10 @@ public class TestTriplifier {
 		Properties p = new Properties();
 		DatasetGraph dg;
 		try {
-			dg = st.triplify(spreadsheet, p);
+
+			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+
+			dg = st.triplify(p);
 
 			String root = spreadsheet.toString() + "#";
 

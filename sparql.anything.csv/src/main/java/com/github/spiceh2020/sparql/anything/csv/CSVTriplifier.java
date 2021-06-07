@@ -1,7 +1,9 @@
 package com.github.spiceh2020.sparql.anything.csv;
 
-import java.io.*;
-import java.net.URISyntaxException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Iterator;
@@ -9,24 +11,18 @@ import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
 
-import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
-import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
+import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class CSVTriplifier implements Triplifier {
@@ -34,18 +30,25 @@ public class CSVTriplifier implements Triplifier {
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
 
 	@Deprecated
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		return triplify(url,  properties, null);
+	public DatasetGraph triplify(Properties properties) throws IOException {
+		return triplify(properties, null);
 	}
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties, Op op) throws IOException {
+	public DatasetGraph triplify(Properties properties, Op op) throws IOException {
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return DatasetGraphFactory.create();
+
 		log.info("CSV Triplifier: {}", op);
+
 		// TODO Support all flavour of csv types
 		CSVFormat format;
-		try{
+		try {
 			format = CSVFormat.valueOf(properties.getProperty(PROPERTY_FORMAT, "DEFAULT"));
-		}catch(Exception e){
+		} catch (Exception e) {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
@@ -53,12 +56,13 @@ public class CSVTriplifier implements Triplifier {
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		String namespace = Triplifier.getNamespaceArgument(properties);
-		
+
 		boolean headers;
-		try{
+		try {
 			headers = Boolean.valueOf(properties.getProperty(PROPERTY_HEADERS, "false"));
-		}catch(Exception e){
-			log.warn("Unsupported value for csv.headers: '{}', using default (false).", properties.getProperty(PROPERTY_HEADERS));
+		} catch (Exception e) {
+			log.warn("Unsupported value for csv.headers: '{}', using default (false).",
+					properties.getProperty(PROPERTY_HEADERS));
 			headers = false;
 		}
 		Reader in = null;
@@ -69,10 +73,10 @@ public class CSVTriplifier implements Triplifier {
 			log.error("{} :: {}", e.getMessage(), url);
 			throw new IOException(e);
 		}
-		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties );
+		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties);
 		String dataSourceId = url.toString();
 		String rootId = root;
-		if(rootId == null){
+		if (rootId == null) {
 			rootId = url.toString() + "#root";
 		}
 		String containerRowPrefix = url.toString() + "#row";
@@ -124,7 +128,7 @@ public class CSVTriplifier implements Triplifier {
 					}
 				}
 			}
-		} finally{
+		} finally {
 			is.close();
 		}
 		return builder.getDatasetGraph();

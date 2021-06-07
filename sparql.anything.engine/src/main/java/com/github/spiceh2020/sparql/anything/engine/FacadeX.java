@@ -6,7 +6,7 @@ import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.spiceh2020.sparql.anything.spreadsheet.RDFTriplifier;
+import com.github.spiceh2020.sparql.anything.rdf.RDFTriplifier;
 
 public final class FacadeX {
     private static final Logger log = LoggerFactory.getLogger(FacadeX.class);

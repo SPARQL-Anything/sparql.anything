@@ -1,23 +1,16 @@
 package com.github.spiceh2020.sparql.anything.model;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.compress.archivers.ArchiveException;
-import org.apache.commons.compress.archivers.ArchiveStreamFactory;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +18,7 @@ import com.google.common.escape.UnicodeEscaper;
 import com.google.common.net.PercentEscaper;
 
 public interface Triplifier {
+
 	static final String METADATA_GRAPH_IRI = "http://sparql.xyz/facade-x/data/metadata";
 	static final String AUDIT_GRAPH_IRI = "http://sparql.xyz/facade-x/data/audit";
 	static final String XYZ_NS = "http://sparql.xyz/facade-x/data/";
@@ -34,14 +28,10 @@ public interface Triplifier {
 
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
 
-	default public DatasetGraph triplify(String string, Properties properties) throws IOException {
-		throw new UnsupportedOperationException("Triplification of lexical forms unsupported");
-	}
+	public DatasetGraph triplify(Properties properties) throws IOException;
 
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException;
-
-	default public DatasetGraph triplify(URL url, Properties properties, Op subOp) throws IOException {
-		return triplify(url, properties);
+	default public DatasetGraph triplify(Properties properties, Op subOp) throws IOException {
+		return triplify(properties);
 	}
 
 	public Set<String> getMimeTypes();
@@ -102,6 +92,24 @@ public interface Triplifier {
 
 	public static String toSafeURIString(String s) {
 		return basicEscaper.escape(s);
+	}
+
+	public static URL instantiateURL(String urlLocation) throws MalformedURLException {
+		URL url;
+		try {
+			url = new URL(urlLocation);
+		} catch (MalformedURLException u) {
+			log.trace("Malformed url interpreting as file");
+			url = new File(urlLocation).toURI().toURL();
+		}
+		return url;
+	}
+
+	static URL getLocation(Properties properties) throws MalformedURLException {
+		if(properties.containsKey(IRIArgument.LOCATION.toString())) {
+			return instantiateURL(properties.getProperty(IRIArgument.LOCATION.toString()));
+		}
+		return null;
 	}
 
 }

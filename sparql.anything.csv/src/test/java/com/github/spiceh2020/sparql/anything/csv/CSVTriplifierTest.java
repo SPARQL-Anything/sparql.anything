@@ -25,39 +25,44 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 import org.junit.Test;
 
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
 public class CSVTriplifierTest {
-    private CSVTriplifier triplifier = new CSVTriplifier();
-    @Test
-    public void test() throws IOException {
-        Properties properties = new Properties();
-        properties.setProperty("namespace", "http://www.example.org#");
-//        properties.setProperty("uriRoot", "http://www.example.org#");
-        URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
-        DatasetGraph graph = triplifier.triplify(csv1, properties);
-        Iterator<Quad> iter = graph.find(null,null,null,null);
-        while(iter.hasNext()){
-            Quad t = iter.next();
-            System.err.println(t);
-        }
-    }
+	private CSVTriplifier triplifier = new CSVTriplifier();
 
-    @Test
-    public void testBNodesFalse() throws IOException {
-        Properties properties = new Properties();
-        properties.setProperty("namespace", "http://www.example.org#");
-        properties.setProperty("blank-nodes", "false");
+	@Test
+	public void test() throws IOException {
+		Properties properties = new Properties();
+		properties.setProperty("namespace", "http://www.example.org#");
 //        properties.setProperty("uriRoot", "http://www.example.org#");
-        URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
-        DatasetGraph graph = triplifier.triplify(csv1, properties);
-        Iterator<Quad> iter = graph.find(null,null,null,null);
-        while(iter.hasNext()){
-            Quad t = iter.next();
-            System.err.println(t);
-        }
-    }
+		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
+		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
+		DatasetGraph graph = triplifier.triplify(properties);
+		Iterator<Quad> iter = graph.find(null, null, null, null);
+		while (iter.hasNext()) {
+			Quad t = iter.next();
+			System.err.println(t);
+		}
+	}
+
+	@Test
+	public void testBNodesFalse() throws IOException {
+		Properties properties = new Properties();
+		properties.setProperty("namespace", "http://www.example.org#");
+		properties.setProperty("blank-nodes", "false");
+//        properties.setProperty("uriRoot", "http://www.example.org#");
+		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
+		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
+		DatasetGraph graph = triplifier.triplify(properties);
+		Iterator<Quad> iter = graph.find(null, null, null, null);
+		while (iter.hasNext()) {
+			Quad t = iter.next();
+			System.err.println(t);
+		}
+	}
 }

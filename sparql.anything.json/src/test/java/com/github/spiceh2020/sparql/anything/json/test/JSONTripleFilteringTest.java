@@ -22,6 +22,8 @@
 package com.github.spiceh2020.sparql.anything.json.test;
 
 import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
+
 import org.apache.jena.graph.Node_Variable;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -39,48 +41,54 @@ import java.util.Properties;
 import static org.junit.Assert.assertTrue;
 
 public class JSONTripleFilteringTest {
-    public static final Logger log = LoggerFactory.getLogger(JSONTripleFilteringTest.class);
+	public static final Logger log = LoggerFactory.getLogger(JSONTripleFilteringTest.class);
 
-    @Test
-    public void friendsSinglePattern() throws IOException {
-        JSONTriplifier jt = new JSONTriplifier();
-        Properties properties = new Properties();
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Romance").asNode()));
-        DatasetGraph g1;
-        g1 = jt.triplify(getClass().getClassLoader().getResource("./friends.json"), properties, bgp);
-        // Only two triples matching the BGP
-        log.info("Size is: {}", g1.getDefaultGraph().size());
-        Iterator<Quad> quads = g1.find();
-        while(quads.hasNext()){
-            Quad q = (Quad) quads.next();
-            log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
-        }
-        assertTrue(g1.getDefaultGraph().size() == 2);
-    }
-
-
-    @Test
-    public void friendsMultiplePatterns() throws IOException {
-        JSONTriplifier jt = new JSONTriplifier();
-        Properties properties = new Properties();
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Romance").asNode()));
-        bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Comedy").asNode()));
-        DatasetGraph g1;
-        g1 = jt.triplify(getClass().getClassLoader().getResource("./friends.json"), properties, bgp);
-        // Only four triples matching the BGP
-        log.info("Size is: {}", g1.getDefaultGraph().size());
+	@Test
+	public void friendsSinglePattern() throws IOException {
+		JSONTriplifier jt = new JSONTriplifier();
+		Properties properties = new Properties();
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"),
+				ResourceFactory.createPlainLiteral("Romance").asNode()));
+		DatasetGraph g1;
+		properties.setProperty(IRIArgument.LOCATION.toString(),
+				getClass().getClassLoader().getResource("./friends.json").toString());
+		g1 = jt.triplify(properties, bgp);
+		// Only two triples matching the BGP
+		log.info("Size is: {}", g1.getDefaultGraph().size());
 		Iterator<Quad> quads = g1.find();
-        while(quads.hasNext()){
-            Quad q = (Quad) quads.next();
-            log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
-        }
-        assertTrue(g1.getDefaultGraph().size() == 4);
-    }
+		while (quads.hasNext()) {
+			Quad q = (Quad) quads.next();
+			log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
+		}
+		assertTrue(g1.getDefaultGraph().size() == 2);
+	}
 
-    @Test
-    public void testEquals(){
+	@Test
+	public void friendsMultiplePatterns() throws IOException {
+		JSONTriplifier jt = new JSONTriplifier();
+		Properties properties = new Properties();
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"),
+				ResourceFactory.createPlainLiteral("Romance").asNode()));
+		bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"),
+				ResourceFactory.createPlainLiteral("Comedy").asNode()));
+		DatasetGraph g1;
+		properties.setProperty(IRIArgument.LOCATION.toString(),
+				getClass().getClassLoader().getResource("./friends.json").toString());
+		g1 = jt.triplify(properties, bgp);
+		// Only four triples matching the BGP
+		log.info("Size is: {}", g1.getDefaultGraph().size());
+		Iterator<Quad> quads = g1.find();
+		while (quads.hasNext()) {
+			Quad q = (Quad) quads.next();
+			log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
+		}
+		assertTrue(g1.getDefaultGraph().size() == 4);
+	}
 
-    }
+	@Test
+	public void testEquals() {
+
+	}
 }

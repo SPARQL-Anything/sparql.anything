@@ -31,7 +31,13 @@ import com.github.spiceh2020.sparql.anything.model.Triplifier;
 public class MetadataTriplifier implements Triplifier {
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+	public DatasetGraph triplify(Properties properties) throws IOException {
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return DatasetGraphFactory.create();
+
 		DatasetGraph dg = DatasetGraphFactory.create();
 		Graph g = GraphFactory.createGraphMem();
 
@@ -47,9 +53,9 @@ public class MetadataTriplifier implements Triplifier {
 //		} else {
 //			namespace = defaultNamespace;
 //		}
-		
+
 		String namespace = url.toString() + "#";
-		
+
 		Node n = NodeFactory.createURI(url.toString());
 		File f = new File(FilenameUtils.getName(url.getFile()));
 		FileUtils.copyURLToFile(url, f);

@@ -1,9 +1,7 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -93,9 +91,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
-			URL url = instantiateURL(urlLocation);
-			dg = triplify(op, p, t, url);
-			createMetadataGraph(dg, p, url);
+			URL url = Triplifier.instantiateURL(urlLocation);
+			dg = triplify(op, p, t);
+			createMetadataGraph(dg, p);
 			createAuditGraph(dg, p, url);
 			// Remember the triplified data
 			if (!executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
@@ -104,7 +102,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			}
 		} else {
 			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
-			dg = t.triplify(p.getProperty(IRIArgument.CONTENT.toString()), p);
+			dg = t.triplify(p);
 			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
 
 		}
@@ -185,18 +183,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		};
 	}
 
-	private URL instantiateURL(String urlLocation) throws MalformedURLException {
-		URL url;
-		try {
-			url = new URL(urlLocation);
-		} catch (MalformedURLException u) {
-			logger.trace("Malformed url interpreting as file");
-			url = new File(urlLocation).toURI().toURL();
-		}
-		return url;
-	}
-
-	private DatasetGraph triplify(final Op opService, Properties p, Triplifier t, URL url) throws IOException {
+	private DatasetGraph triplify(final Op opService, Properties p, Triplifier t) throws IOException {
 		DatasetGraph dg;
 		Integer strategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
 		if (strategy == null) {
@@ -205,11 +192,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 		logger.debug("Execution strategy: {}", strategy);
 		if (t != null) {
 			if (strategy == 1) {
-				logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
-				dg = t.triplify(url, p, opService);
+				logger.trace("Executing: {} {} [strategy={}]", p, strategy);
+				dg = t.triplify(p, opService);
 			} else {
-				logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
-				dg = t.triplify(url, p);
+				logger.trace("Executing: {} {} [strategy={}]", p, strategy);
+				dg = t.triplify(p);
 			}
 		} else {
 			// If triplifier is null, return an empty graph
@@ -219,10 +206,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return dg;
 	}
 
-	private void createMetadataGraph(DatasetGraph dg, Properties p, URL url) throws IOException {
+	private void createMetadataGraph(DatasetGraph dg, Properties p) throws IOException {
 		if (triplifyMetadata(p)) {
 			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI),
-					metadataTriplifier.triplify(url, p).getDefaultGraph());
+					metadataTriplifier.triplify(p).getDefaultGraph());
 		}
 	}
 
