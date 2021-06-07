@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -66,13 +67,7 @@ public class CSVTriplifier implements Triplifier {
 			headers = false;
 		}
 		Reader in = null;
-		final InputStream is = url.openStream();
-		try {
-			in = new InputStreamReader(new BOMInputStream(is), charset);
-		} catch (IllegalArgumentException e) {
-			log.error("{} :: {}", e.getMessage(), url);
-			throw new IOException(e);
-		}
+
 		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties);
 		String dataSourceId = url.toString();
 		String rootId = root;
@@ -83,6 +78,10 @@ public class CSVTriplifier implements Triplifier {
 		// Add type Root
 		builder.addRoot(dataSourceId, rootId);
 		try {
+
+			final InputStream is = Triplifier.getInputStream(url, properties, charset);
+			in = new InputStreamReader(new BOMInputStream(is), charset);
+
 			Iterable<CSVRecord> records = format.parse(in);
 			int rown = 0;
 			LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
@@ -128,8 +127,9 @@ public class CSVTriplifier implements Triplifier {
 					}
 				}
 			}
-		} finally {
-			is.close();
+		} catch (IllegalArgumentException | ArchiveException e) {
+			log.error("{} :: {}", e.getMessage(), url);
+			throw new IOException(e);
 		}
 		return builder.getDatasetGraph();
 	}

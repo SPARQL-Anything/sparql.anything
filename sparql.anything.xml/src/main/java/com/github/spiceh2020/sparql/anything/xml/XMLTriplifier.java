@@ -1,7 +1,9 @@
 package com.github.spiceh2020.sparql.anything.xml;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
@@ -48,6 +51,7 @@ public class XMLTriplifier implements Triplifier {
 //		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
 		String namespace = Triplifier.getNamespaceArgument(properties);
 //		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
+		Charset charset = Triplifier.getCharsetArgument(properties);
 
 		String root = Triplifier.getRootArgument(properties, url);
 
@@ -69,8 +73,9 @@ public class XMLTriplifier implements Triplifier {
 		StringBuilder charBuilder = null;
 		//
 		try {
-			eventReader = inputFactory.createXMLEventReader(url.openStream());
-		} catch (XMLStreamException e) {
+			InputStream is = Triplifier.getInputStream(url, properties, charset);
+			eventReader = inputFactory.createXMLEventReader(is);
+		} catch (XMLStreamException | ArchiveException e) {
 			throw new IOException(e);
 		}
 		boolean isRoot = true;
@@ -158,7 +163,7 @@ public class XMLTriplifier implements Triplifier {
 					parent.addProperty(property, resource);
 				}
 				// Attributes
-				Iterator attributes = se.getAttributes();
+				Iterator<Attribute> attributes = se.getAttributes();
 				while (attributes.hasNext()) {
 					Attribute attribute = (Attribute) attributes.next();
 					log.trace("attribute: {}", attribute);

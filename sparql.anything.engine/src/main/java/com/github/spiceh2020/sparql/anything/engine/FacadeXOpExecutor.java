@@ -1,5 +1,6 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -42,6 +43,7 @@ import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
 import com.github.spiceh2020.sparql.anything.metadata.MetadataTriplifier;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import com.github.spiceh2020.sparql.anything.zip.FolderTriplifier;
 
 public class FacadeXOpExecutor extends OpExecutor {
 
@@ -86,8 +88,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 		String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 		Triplifier t = getTriplifier(p);
 
-		if (t == null)
+		if (t == null) {
+			logger.trace("No triplifier");
 			return DatasetGraphFactory.create();
+		}
+
+		logger.trace("Triplifier {}", t.getClass().toString());
 
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
@@ -257,10 +263,23 @@ public class FacadeXOpExecutor extends OpExecutor {
 							.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString())))
 					.getConstructor().newInstance();
 		} else if (p.containsKey(IRIArgument.LOCATION.toString())) {
-			logger.trace("Guessing triplifier using file extension ");
-			String tt = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
-			logger.trace("Guessed extension: {} :: {} ", FilenameUtils.getExtension(urlLocation), tt);
-			t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
+
+			File f = new File(p.get(IRIArgument.LOCATION.toString()).toString().replace("file://", ""));
+
+			logger.trace("Use location {}, exists on local FS? {}, is directory? {}", f.getAbsolutePath(), f.exists(), f.isDirectory());
+
+			if (f.exists() && f.isDirectory()) {
+				logger.trace("Return folder triplifier");
+				t = new FolderTriplifier();
+			} else if (IsFacadeXExtension.isFacadeXExtension(p.get(IRIArgument.LOCATION.toString()).toString())) {
+				logger.trace("Guessing triplifier using file extension ");
+				String tt = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
+				logger.trace("Guessed extension: {} :: {} ", FilenameUtils.getExtension(urlLocation), tt);
+				t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
+			} else {
+				return null;
+			}
+
 		} else {
 			logger.trace("No location provided, using the Text triplifier");
 			t = (Triplifier) Class.forName("com.github.spiceh2020.sparql.anything.text.TextTriplifier").getConstructor()

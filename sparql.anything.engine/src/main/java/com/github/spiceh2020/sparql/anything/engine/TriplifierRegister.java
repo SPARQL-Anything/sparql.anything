@@ -2,6 +2,7 @@ package com.github.spiceh2020.sparql.anything.engine;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,8 @@ public final class TriplifierRegister {
 		return instance;
 	}
 
-	public void registerTriplifier(String t, String [] extensions, String[] mimeTypes) throws TriplifierRegisterException {
+	public void registerTriplifier(String t, String[] extensions, String[] mimeTypes)
+			throws TriplifierRegisterException {
 		log.trace("Registering {}", t);
 		for (String ext : extensions) {
 			if (extension.containsKey(ext)) {
@@ -56,7 +58,7 @@ public final class TriplifierRegister {
 		}
 
 		for (String mimeType : mimeType.keySet()) {
-			if ( this.mimeType.get(mimeType).equals(t)) {
+			if (this.mimeType.get(mimeType).equals(t)) {
 				this.mimeType.remove(mimeType);
 			}
 		}
@@ -74,6 +76,14 @@ public final class TriplifierRegister {
 		this.mimeType.keySet().forEach(mt -> {
 			System.out.println(mt);
 		});
+	}
+
+	public Set<String> getRegisteredExtensions() {
+		return extension.keySet();
+	}
+
+	public Set<String> getRegisteredMediaTypes() {
+		return mimeType.keySet();
 	}
 
 }

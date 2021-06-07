@@ -2,6 +2,7 @@ package com.github.spiceh2020.sparql.anything.model;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -9,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.slf4j.Logger;
@@ -106,10 +108,19 @@ public interface Triplifier {
 	}
 
 	static URL getLocation(Properties properties) throws MalformedURLException {
-		if(properties.containsKey(IRIArgument.LOCATION.toString())) {
+		if (properties.containsKey(IRIArgument.LOCATION.toString())) {
 			return instantiateURL(properties.getProperty(IRIArgument.LOCATION.toString()));
 		}
 		return null;
+	}
+
+	public static InputStream getInputStream(URL url, Properties properties, Charset charset)
+			throws IOException, ArchiveException {
+		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString()))
+			return url.openStream();
+		URL urlArchive = instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
+		return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive,
+				properties.getProperty(IRIArgument.LOCATION.toString()), charset);
 	}
 
 }
