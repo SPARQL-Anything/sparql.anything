@@ -15,10 +15,10 @@ The queries were tokenized (by using ``"(){},;{}\n\t\r `` as token delimiters) a
 
 
 
-![Number of Distinct Token per Query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/chart.png)![Number of Distinct Token per Query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/number_of_tokens.png)
+![Number of Distinct Token per Query](/experiment/img/chart.png)![Number of Distinct Token per Query](/experiment/img/number_of_tokens.png)
 
 
-*Running the experiment*: The code implementing the tokenizer that has been used for the experiment can be found in the [sparql.anything.experiment module](https://github.com/spice-h2020/sparql.anything/tree/main/sparql.anything.experiment).
+*Running the experiment*: The code implementing the tokenizer that has been used for the experiment can be found in the [sparql.anything.experiment module](/sparql.anything.experiment).
 The experiment can be run with following command:
 
 ```
@@ -33,7 +33,7 @@ The tests were executed on a MacBook Pro 2020 (CPU: i7 2.3 GHz, RAM: 32GB).
 ### Performace in retrieving RDF data
 The following Figure shows the time needed for evaluating the SELECT queries q1-q8 and for generating the RDF triples according to the CONSTRUCT queries/mapping rules q9-q12.
 
-![Execution time per  query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/execution_time_queries.png)
+![Execution time per  query](/experiment/img/execution_time_queries.png)
 
 ### Performance in generating RDF data
 
@@ -41,7 +41,7 @@ We also measured the performance in transforming input of increasing size.
 To do so, we  repeatedly concatenated the data sources in order to obtain a JSON array containing 1M JSON objects and we cut this array at length 10, 100, 1K, 10K and 100K.
 We ran the query/mapping q12 on these files and we measured the execution time which is shown in the following figure:
 
-![Execution time per  query](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/img/execution_time_increasing_input.png)
+![Execution time per  query](/experiment/img/execution_time_increasing_input.png)
 
 
 All the perfomance comparisons can be run with the following command:
@@ -55,7 +55,7 @@ All the perfomance comparisons can be run with the following command:
 
 In the following the queries used for the experiment are reported.
 
-### Sources: [1](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_GAM.json) [3](https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/experiment/data/COLLEZIONI_MAO.json)
+### Sources: [1](/experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017%20json.json) [2](/experiment/data/COLLEZIONI_GAM.json) [3](/experiment/data/COLLEZIONI_MAO.json)
 
 #### Structure of the input files
 
