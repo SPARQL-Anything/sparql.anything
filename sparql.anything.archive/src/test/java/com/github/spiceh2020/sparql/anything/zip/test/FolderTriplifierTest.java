@@ -12,11 +12,13 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.junit.Test;
 
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.zip.FolderTriplifier;
+import com.github.spiceh2020.sparql.anything.zip.ZipTriplifier;
 
 public class FolderTriplifierTest {
 
@@ -37,6 +39,51 @@ public class FolderTriplifierTest {
 			expected.add("");
 			expected.add("test.csv");
 			expected.add("test.json");
+			expected.add("test.xml");
+			expected.add("test.txt");
+
+			Set<String> actual = new HashSet<>();
+			dg.find(null, null, null, null).forEachRemaining(q -> {
+				if (q.getObject().isLiteral()) {
+					try {
+						actual.add(q.getObject().getLiteralLexicalForm()
+								.replace(Paths.get(url.toURI()).toUri().toString(), ""));
+					} catch (URISyntaxException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
+			assertEquals(expected, actual);
+
+		} catch (IOException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testMatches() throws MalformedURLException {
+		FolderTriplifier tt = new FolderTriplifier();
+		
+		
+		System.out.println("test/".matches("[^t]*"));
+		
+		
+		try {
+			URL url = getClass().getClassLoader().getResource("test").toURI().toURL();
+
+			Properties p = new Properties();
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			p.setProperty(ZipTriplifier.MATCHES.toString(), "[^j]*");
+			DatasetGraph dg = tt.triplify(p);
+
+			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
+
+			Set<String> expected = new HashSet<>();
+
+			expected.add("");
+			expected.add("test.csv");
+//			expected.add("test.json");
 			expected.add("test.xml");
 			expected.add("test.txt");
 

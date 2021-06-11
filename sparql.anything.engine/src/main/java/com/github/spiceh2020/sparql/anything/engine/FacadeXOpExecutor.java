@@ -67,6 +67,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.trace("Initialising in-memory cache");
 			execCxt.getContext().set(inMemoryCache, new HashMap<String, DatasetGraph>());
 		}
+
 		executedFacadeXIris = execCxt.getContext().get(inMemoryCache);
 	}
 
@@ -106,6 +107,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 				logger.debug("Graph added to in-memory cache");
 			}
+			logger.trace("Triplified, #triples in default graph {}", dg.getDefaultGraph().size());
 		} else {
 			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
 			dg = t.triplify(p);
@@ -117,43 +119,29 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
-
-		logger.trace("SERVICE uri: {}\n{}", opService.getService(), opService.toString());
-
+		logger.trace("SERVICE uri: {} {}", opService.getService(), opService.toString());
 		if (opService.getService().isVariable())
 			return postponeService(opService, input);
-
 		if (opService.getService().isURI() && isFacadeXURI(opService.getService().getURI())) {
-
 			logger.trace("Facade-X uri: {}", opService.getService());
-
 			try {
-
 				Properties p = getProperties(opService.getService().getURI(), opService);
-
 				DatasetGraph dg = getDatasetGraph(p, opService.getSubOp());
-
-				logger.trace("Executing sub op {} {}", opService.getSubOp().toString(), dg.getDefaultGraph().size());
-
 				return QC.execute(opService.getSubOp(), input,
 						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
 					| IllegalAccessException | InvocationTargetException | NoSuchMethodException
 					| ClassNotFoundException e) {
-
 				logger.error("An error occurred", e);
-
 				throw new RuntimeException(e);
-
 			} catch (UnboundVariableException e) {
-
 				// Proceed with the next operation
-				return QC.execute(opService.getSubOp(), input, execCxt);
+//				logger.trace("Unbound variables, BGP {}", e.getOpBGP().toString());
+				OpBGP fakeBGP = extractFakePattern(e.getOpBGP());
+				logger.trace("Executing fake pattern {}", fakeBGP);
+				return postponeService(opService, QC.execute(fakeBGP, input, execCxt));
 			}
-
 		}
-
 		logger.trace("Not a Variable and not a IRI: {}", opService.getService());
 		return super.execute(opService, input);
 	}
@@ -162,7 +150,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 		logger.trace("is variable: {}", opService.getService());
 		// Postpone to next iteration
 		return new QueryIterRepeatApply(input, execCxt) {
-
 			@Override
 			protected QueryIterator nextStage(Binding binding) {
 				Op op2 = QC.substitute(opService, binding);
@@ -177,9 +164,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private QueryIterator postponeBGP(final OpBGP opBGP, QueryIterator input) {
 		// Postpone to next iteration
 		return new QueryIterRepeatApply(input, execCxt) {
-
 			@Override
 			protected QueryIterator nextStage(Binding binding) {
+				logger.trace(Utils.bindingToString(binding));
 				Op op2 = QC.substitute(opBGP, binding);
 				QueryIterator thisStep = QueryIterSingleton.create(binding, this.getExecContext());
 				QueryIterator cIter = QC.execute(op2, thisStep, super.getExecContext());
@@ -198,10 +185,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 		logger.debug("Execution strategy: {}", strategy);
 		if (t != null) {
 			if (strategy == 1) {
-				logger.trace("Executing: {} {} [strategy={}]", p, strategy);
+				logger.trace("Executing: {} [strategy={}]", p, strategy);
 				dg = t.triplify(p, opService);
 			} else {
-				logger.trace("Executing: {} {} [strategy={}]", p, strategy);
+				logger.trace("Executing: {} [strategy={}]", p, strategy);
 				dg = t.triplify(p);
 			}
 		} else {
@@ -266,7 +253,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 			File f = new File(p.get(IRIArgument.LOCATION.toString()).toString().replace("file://", ""));
 
-			logger.trace("Use location {}, exists on local FS? {}, is directory? {}", f.getAbsolutePath(), f.exists(), f.isDirectory());
+			logger.trace("Use location {}, exists on local FS? {}, is directory? {}", f.getAbsolutePath(), f.exists(),
+					f.isDirectory());
 
 			if (f.exists() && f.isDirectory()) {
 				logger.trace("Return folder triplifier");
@@ -307,12 +295,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 
 		Op next = opService.getSubOp();
-		logger.trace("Class Next operator {}", next.getClass());
 		FXBGPFinder vis = new FXBGPFinder();
 		next.visit(vis);
-		if (vis.getServiceBGP() != null) {
-			logger.trace("BGP Extracted {}:{}", vis.getServiceBGP().toString(), properties.size());
-			extractPropertiesFromOpGraph(properties, vis.getServiceBGP());
+		if (vis.getBGP() != null) {
+			extractPropertiesFromOpGraph(properties, vis.getBGP());
 			logger.trace("Number of properties {}", properties.size());
 		} else {
 			logger.trace("Couldn't find OpGraph");
@@ -339,14 +325,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private OpBGP extractFakePattern(OpBGP bgp) {
 		BasicPattern pattern = new BasicPattern();
-		int c = 0;
 		for (Triple t : bgp.getPattern().getList()) {
 			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
 				if (t.getObject().isVariable()) {
-					Var s = Var.alloc("s" + c);
-					Var p = Var.alloc("p" + c);
+					Var s = Var.alloc("s" + System.currentTimeMillis());
+					Var p = Var.alloc("p" + System.currentTimeMillis());
 					pattern.add(new Triple(s, p, t.getObject()));
-					c++;
 				}
 			}
 		}
@@ -371,28 +355,19 @@ public class FacadeXOpExecutor extends OpExecutor {
 		try {
 			extractPropertiesFromOpGraph(p, opBGP);
 			if (p.size() > 0) {
-
 				logger.trace("BGP Properties {}", p.toString());
-
 				DatasetGraph dg = getDatasetGraph(p, opBGP);
-
 				return QC.execute(excludeFXProperties(opBGP), input,
 						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-
 			}
 		} catch (UnboundVariableException e) {
-
+			logger.trace("Unbound variables");
 			OpBGP fakeBGP = extractFakePattern(opBGP);
-
-			logger.trace("Fake pattern {}", fakeBGP.toString());
-
 			return postponeBGP(opBGP, QC.executeDirect(fakeBGP.getPattern(), input, execCxt));
-
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
 				| ClassNotFoundException | IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-
 		return super.execute(opBGP, input);
 	}
 

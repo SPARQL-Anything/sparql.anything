@@ -40,6 +40,7 @@ public class TarTriplifier implements Triplifier {
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
 		logger.trace("BN nodes {}", blank_nodes);
 
@@ -63,8 +64,12 @@ public class TarTriplifier implements Triplifier {
 			int i = 1;
 			TarArchiveEntry entry = null;
 			while ((entry = (TarArchiveEntry) debInputStream.getNextEntry()) != null) {
-				g.add(new Triple(rootResource, RDF.li(i).asNode(), NodeFactory.createLiteral(entry.getName())));
-				i++;
+
+				if (entry.getName().matches(matches)) {
+					g.add(new Triple(rootResource, RDF.li(i).asNode(), NodeFactory.createLiteral(entry.getName())));
+					i++;
+				}
+
 			}
 
 		} catch (ArchiveException e) {

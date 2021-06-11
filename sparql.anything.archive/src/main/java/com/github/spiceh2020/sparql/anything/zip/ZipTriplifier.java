@@ -25,11 +25,12 @@ import com.github.spiceh2020.sparql.anything.model.Triplifier;
 public class ZipTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(ZipTriplifier.class);
+	public static final String MATCHES = "archive.matches";
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {
 		DatasetGraph dg = DatasetGraphFactory.create();
-		
+
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
@@ -38,6 +39,7 @@ public class ZipTriplifier implements Triplifier {
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		String matches = properties.getProperty(MATCHES, ".*");
 
 		logger.trace("BN nodes {}", blank_nodes);
 
@@ -59,8 +61,10 @@ public class ZipTriplifier implements Triplifier {
 		ZipEntry ze;
 		int i = 1;
 		while ((ze = zis.getNextEntry()) != null) {
-			g.add(new Triple(rootResource, RDF.li(i).asNode(), NodeFactory.createLiteral(ze.getName())));
-			i++;
+			if (ze.getName().matches(matches)) {
+				g.add(new Triple(rootResource, RDF.li(i).asNode(), NodeFactory.createLiteral(ze.getName())));
+				i++;
+			}
 		}
 
 		dg.setDefaultGraph(g);

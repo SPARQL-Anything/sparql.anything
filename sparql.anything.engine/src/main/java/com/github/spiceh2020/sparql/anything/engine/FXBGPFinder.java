@@ -41,7 +41,7 @@ public class FXBGPFinder implements OpVisitor {
 
 	private OpBGP serviceBGP;
 
-	public OpBGP getServiceBGP() {
+	public OpBGP getBGP() {
 		return serviceBGP;
 	}
 

@@ -39,8 +39,10 @@ public class FolderTriplifier implements Triplifier {
 
 		String root = Triplifier.getRootArgument(properties, url);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
 		logger.trace("BN nodes {}", blank_nodes);
+		logger.trace("Matches {}", matches);
 
 		Node rootResource;
 		if (!blank_nodes) {
@@ -60,8 +62,12 @@ public class FolderTriplifier implements Triplifier {
 			Path path = Paths.get(url.toURI());
 			AtomicInteger i = new AtomicInteger(1);
 			Files.walk(path).forEach(p -> {
-				g.add(new Triple(rootResource, RDF.li(i.getAndIncrement()).asNode(),
-						NodeFactory.createLiteral(p.toUri().toString())));
+				logger.trace("{} matches? {}", p.toString(), path.toString().matches(matches));
+				if (p.toString().matches(matches)) {
+					g.add(new Triple(rootResource, RDF.li(i.getAndIncrement()).asNode(),
+							NodeFactory.createLiteral(p.toUri().toString())));
+				}
+
 			});
 
 		} catch (URISyntaxException e) {

@@ -20,6 +20,7 @@ import org.junit.Test;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import com.github.spiceh2020.sparql.anything.zip.TarTriplifier;
+import com.github.spiceh2020.sparql.anything.zip.ZipTriplifier;
 
 public class TarTriplifierTest {
 
@@ -42,6 +43,34 @@ public class TarTriplifierTest {
 			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("test/test.xml")));
 			expectedGraph.add(new Triple(n, RDF.li(5).asNode(), NodeFactory.createLiteral("test/test.txt")));
 			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test/")));
+			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+
+		} catch (IOException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testMatches() throws MalformedURLException {
+		TarTriplifier tt = new TarTriplifier();
+		try {
+			URL url = getClass().getClassLoader().getResource("test.tar").toURI().toURL();
+			Properties p = new Properties();
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			p.setProperty(ZipTriplifier.MATCHES.toString(), "test/.*\\..*");
+			DatasetGraph dg = tt.triplify(p);
+
+//			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
+
+			Graph expectedGraph = GraphFactory.createGraphMem();
+			Node n = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test/test.csv")));
+			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), NodeFactory.createLiteral("test/test.json")));
+			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral("test/test.xml")));
+			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("test/test.txt")));
+//			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test/")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
 
