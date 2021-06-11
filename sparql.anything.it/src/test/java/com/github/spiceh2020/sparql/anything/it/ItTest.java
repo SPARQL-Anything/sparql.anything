@@ -314,11 +314,18 @@ public class ItTest {
 		pss.setIri("location", location);
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		System.out.println("Query " + pss.asQuery().toString());
 		ResultSet rs = QueryExecutionFactory.create(pss.asQuery(), kb).execSelect();
 		Set<String> result = new HashSet<>();
+//		System.out.println(ResultSetFormatter.asText(rs));
 		while (rs.hasNext()) {
 			QuerySolution querySolution = (QuerySolution) rs.next();
-			result.add(querySolution.get("c").asLiteral().getValue().toString());
+//			querySolution.varNames().forEachRemaining(v -> {
+//				System.out.println("v -> " + querySolution.get(v));
+//			});
+			if (querySolution.contains("c")) {
+				result.add(querySolution.get("c").asLiteral().getValue().toString());
+			}
 		}
 		assertEquals(Sets.newHashSet("Quitting_a_place", "Departing"), result);
 	}
