@@ -103,7 +103,8 @@ public class JSONTriplifier implements Triplifier {
 				if (o.toString().contains(".")) {
 					filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Any) o).toFloat());
 				} else if (o.toString().contains("0")) {
-					filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), 0);
+					// There is a bug with Jsoniter when the int number contains a zero, we do the cast ourselves in that case
+					filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), Integer.valueOf(o.toString().trim()));
 				} else {
 					filter.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Any) o).toInt());
 				}

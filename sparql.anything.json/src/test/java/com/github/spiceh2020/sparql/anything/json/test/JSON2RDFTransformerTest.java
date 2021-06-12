@@ -13,6 +13,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,10 +22,13 @@ import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import com.jsoniter.spi.JsonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSON2RDFTransformerTest {
 
 	private String ontologyPrefix = "https://w3id.org/resource/ontology/";
+	private Logger log = LoggerFactory.getLogger(JSON2RDFTransformerTest.class);
 
 	@Test
 	public void testEmptyAndNull() {
@@ -354,6 +358,24 @@ public class JSON2RDFTransformerTest {
 		Triplifier jt = new JSONTriplifier();
 		try {
 			jt.triplify(getClass().getClassLoader().getResource(f), new Properties());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Ignore // this seems to work now but keeping the test for future reference
+	@Test
+	public void testContainsZerosDebug(){
+//		/collection/artworks/p/052/p05259-15628.json {namespace=http://sparql.xyz/facade-x/data/, location=./collection/artworks/p/052/p05259-15628.json
+		String f = "./t09122-23226.json";
+		Triplifier jt = new JSONTriplifier();
+		try {
+			DatasetGraph ds = jt.triplify(getClass().getClassLoader().getResource(f), new Properties());
+			Iterator<Quad> i = ds.find(null);
+			while(i.hasNext()){
+				Quad q = i.next();
+				log.info("{} {} {} {}", new Object[]{q.getGraph(), q.getSubject(), q.getPredicate(), q.getObject()});
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
