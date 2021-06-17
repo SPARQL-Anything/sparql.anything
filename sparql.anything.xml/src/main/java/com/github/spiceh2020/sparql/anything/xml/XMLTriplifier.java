@@ -166,7 +166,17 @@ public class XMLTriplifier implements Triplifier {
 	}
 
 	private String toIRI(QName qname, String namespace) {
-		return (qname.getNamespaceURI().equals("") ? namespace : qname.getNamespaceURI()) + qname.getLocalPart();
+		String ns;
+		if(qname.getNamespaceURI().equals("")){
+			ns = namespace;
+		}else{
+			if(qname.getNamespaceURI().endsWith("/") || qname.getNamespaceURI().endsWith("#") ){
+				ns = qname.getNamespaceURI();
+			}else{
+				ns = qname.getNamespaceURI() + '#';
+			}
+		}
+		return ns + qname.getLocalPart();
 	}
 
 	@Override
