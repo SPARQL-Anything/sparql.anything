@@ -221,7 +221,7 @@ In this case sparql.anything guesses the data source type from the file extensio
 |charset|The charset of the data source.|Any charset.|UTF-8|
 |metadata|It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;  |true/false|false|
 
-* It is mandatory to provide either the local or the content.
+\* It is mandatory to provide either the local or the content.
 
 ### Format specific options
 
