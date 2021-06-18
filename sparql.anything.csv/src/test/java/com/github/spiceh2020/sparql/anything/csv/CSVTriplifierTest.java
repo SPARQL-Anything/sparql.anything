@@ -21,16 +21,22 @@
 
 package com.github.spiceh2020.sparql.anything.csv;
 
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.Quad;
-import org.junit.Test;
-
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
+
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.core.BasicPattern;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.sparql.graph.GraphFactory;
+import org.junit.Test;
+
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 
 public class CSVTriplifierTest {
 	private CSVTriplifier triplifier = new CSVTriplifier();
@@ -39,15 +45,16 @@ public class CSVTriplifierTest {
 	public void test() throws IOException {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
-//        properties.setProperty("uriRoot", "http://www.example.org#");
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
-		DatasetGraph graph = triplifier.triplify(properties);
-		Iterator<Quad> iter = graph.find(null, null, null, null);
-		while (iter.hasNext()) {
-			Quad t = iter.next();
-			System.err.println(t);
-		}
+		BasicPattern bp = new BasicPattern();
+		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
+				NodeFactory.createVariable("o")));
+		DatasetGraph graph = triplifier.triplify(properties, new OpBGP(bp));
+		
+		Graph expected = GraphFactory.createGraphMem();
+		
+		
 	}
 
 	@Test

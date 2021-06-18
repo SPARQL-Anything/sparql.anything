@@ -70,13 +70,9 @@ public class CSVTriplifier implements Triplifier {
 
 		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties);
 		String dataSourceId = url.toString();
-		String rootId = root;
-		if (rootId == null) {
-			rootId = url.toString() + "#root";
-		}
 		String containerRowPrefix = url.toString() + "#row";
 		// Add type Root
-		builder.addRoot(dataSourceId, rootId);
+		builder.addRoot(dataSourceId, root);
 		try {
 
 			final InputStream is = Triplifier.getInputStream(url, properties, charset);
@@ -112,7 +108,7 @@ public class CSVTriplifier implements Triplifier {
 					// Rows
 					rown++;
 					String rowContainerId = containerRowPrefix + rown;
-					builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
+					builder.addContainer(dataSourceId, root, rown, rowContainerId);
 					CSVRecord record = recordIterator.next();
 					Iterator<String> cells = record.iterator();
 					int cellid = 0;
