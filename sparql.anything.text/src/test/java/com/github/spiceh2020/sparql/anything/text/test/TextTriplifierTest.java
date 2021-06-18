@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Graph;
@@ -30,7 +31,9 @@ public class TextTriplifierTest {
 		File f = new File("src/main/resources/testfile");
 		URL url = f.toURI().toURL();
 		try {
-			DatasetGraph dg = tt.triplify(url, new Properties());
+			Properties p = new Properties();
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			DatasetGraph dg = tt.triplify(p);
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
 			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
@@ -51,7 +54,8 @@ public class TextTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.REGEX, "\\w+");
-			DatasetGraph dg = tt.triplify(url, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			DatasetGraph dg = tt.triplify(p);
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph
@@ -73,7 +77,7 @@ public class TextTriplifierTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testSplit() throws MalformedURLException {
 		TextTriplifier tt = new TextTriplifier();
@@ -82,7 +86,8 @@ public class TextTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.SPLIT, "\\s+");
-			DatasetGraph dg = tt.triplify(url, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			DatasetGraph dg = tt.triplify(p);
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph

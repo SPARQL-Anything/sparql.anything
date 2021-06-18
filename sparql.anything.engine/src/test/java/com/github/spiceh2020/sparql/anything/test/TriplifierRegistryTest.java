@@ -34,7 +34,7 @@ import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegister;
 import com.github.spiceh2020.sparql.anything.engine.TriplifierRegisterException;
 
-public class AppTest {
+public class TriplifierRegistryTest {
 	public static String PREFIX = "http://example.org/";
 
 	static DatasetGraph createExampleGraph() {
@@ -124,7 +124,7 @@ public class AppTest {
 			assertTrue(qs.getResource("p").getURI().equals(PREFIX + "p"));
 			assertTrue(qs.get("o").toString().replace("\\", "").equals(content));
 
-			TriplifierRegister.getInstance().removeTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier");
+			TriplifierRegister.getInstance().removeTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier2");
 
 		} catch (TriplifierRegisterException e) {
 			e.printStackTrace();

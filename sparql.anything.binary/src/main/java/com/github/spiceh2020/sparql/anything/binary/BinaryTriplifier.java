@@ -34,8 +34,14 @@ public class BinaryTriplifier implements Triplifier {
 	}
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+	public DatasetGraph triplify(Properties properties) throws IOException {
 		DatasetGraph dg = DatasetGraphFactory.create();
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return dg;
+
 		Graph g = GraphFactory.createGraphMem();
 
 		Encoding encoding = Encoding.BASE64;
@@ -49,7 +55,7 @@ public class BinaryTriplifier implements Triplifier {
 		} else {
 			logger.warn("Using default encoding (Base64)");
 		}
-		
+
 		String root = Triplifier.getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);

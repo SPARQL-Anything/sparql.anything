@@ -1,4 +1,4 @@
-package com.github.spiceh2020.sparql.anything.spreadsheet;
+package com.github.spiceh2020.sparql.anything.rdf;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,7 +19,13 @@ public class RDFTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(RDFTriplifier.class);
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+	public DatasetGraph triplify(Properties properties) throws IOException {
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return DatasetGraphFactory.create();
+
 		DatasetGraph dg = DatasetGraphFactory.create();
 		logger.info("URL {}", url.toString());
 		RDFDataMgr.read(dg, url.toString());
@@ -37,6 +43,5 @@ public class RDFTriplifier implements Triplifier {
 	public Set<String> getExtensions() {
 		return Sets.newHashSet("rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix", "trdf");
 	}
-
 
 }

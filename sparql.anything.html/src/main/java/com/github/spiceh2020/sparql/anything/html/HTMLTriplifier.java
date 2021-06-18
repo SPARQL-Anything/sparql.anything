@@ -17,6 +17,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
@@ -38,10 +39,15 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+	public DatasetGraph triplify(Properties properties) throws IOException {
 //		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), url.toString() + "#");
 //		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
 //		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return DatasetGraphFactory.create();
 
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -84,7 +90,8 @@ public class HTMLTriplifier implements Triplifier {
 				rootResource.addProperty(RDF.li(counter), elResource);
 			} else {
 				// Is root container
-				model.add(toResource(model, element, blank_nodes, namespace), RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+				model.add(toResource(model, element, blank_nodes, namespace), RDF.type,
+						model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 			}
 			populate(model, element, blank_nodes, namespace);
 		}
@@ -96,7 +103,7 @@ public class HTMLTriplifier implements Triplifier {
 	private void populate(Model model, Element element, boolean blank_nodes, String namespace) {
 
 		String tagName = element.tagName(); // tagname is the type
-		Resource resource = toResource(model, element,blank_nodes,namespace );
+		Resource resource = toResource(model, element, blank_nodes, namespace);
 		String innerHtml = element.html();
 		if (!innerHtml.trim().equals(""))
 			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerHTML"), innerHtml);
@@ -134,7 +141,7 @@ public class HTMLTriplifier implements Triplifier {
 //		}
 	}
 
-	private static final String localName(Element element){
+	private static final String localName(Element element) {
 		String tagName = element.tagName().replace(':', '|');
 		StringBuilder selector = new StringBuilder(tagName);
 		String classes = StringUtil.join(element.classNames(), ".");
@@ -150,11 +157,11 @@ public class HTMLTriplifier implements Triplifier {
 
 			selector.insert(0, localName(element.parent()));
 		}
-		return selector.toString().replaceAll(" > ", "/").replaceAll(":nth-child\\(([0-9]+)\\)",":$1");
+		return selector.toString().replaceAll(" > ", "/").replaceAll(":nth-child\\(([0-9]+)\\)", ":$1");
 	}
 
 	private Resource toResource(Model model, Element element, boolean blankNodes, String namespace) {
-		if(blankNodes == true) {
+		if (blankNodes == true) {
 			return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
 		} else {
 			String ln = localName(element);

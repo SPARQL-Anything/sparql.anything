@@ -10,14 +10,13 @@ import java.util.Properties;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 
 public class HTMLTriplifierTest {
 	public static final Logger log = LoggerFactory.getLogger(HTMLTriplifierTest.class);
@@ -32,7 +31,9 @@ public class HTMLTriplifierTest {
 
 	@Test
 	public void test1() throws URISyntaxException, IOException {
-		DatasetGraph dataset = html2rdf.triplify(new URL(getTestLocation(name.getMethodName())), new Properties());
+		Properties p = new Properties();
+		p.setProperty(IRIArgument.LOCATION.toString(), new URL(getTestLocation(name.getMethodName())).toString());
+		DatasetGraph dataset = html2rdf.triplify(p);
 //        Iterator<Quad> iter = dataset.find(null,null,null,null);
 //        while(iter.hasNext()){
 //            Quad t = iter.next();
@@ -46,7 +47,9 @@ public class HTMLTriplifierTest {
 
 	@Test
 	public void test2() throws URISyntaxException, IOException {
-		DatasetGraph dataset = html2rdf.triplify(new URL(getTestLocation(name.getMethodName())), new Properties());
+		Properties p = new Properties();
+		p.setProperty(IRIArgument.LOCATION.toString(), new URL(getTestLocation(name.getMethodName())).toString());
+		DatasetGraph dataset = html2rdf.triplify(p);
 //        Iterator<Quad> iter = dataset.find(null,null,null,null);
 //        while(iter.hasNext()){
 //            Quad t = iter.next();
@@ -60,14 +63,15 @@ public class HTMLTriplifierTest {
 
 	@Test
 	public void testBN() {
-		
+
 		HTMLTriplifier st = new HTMLTriplifier();
 		Properties p = new Properties();
 		p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 		DatasetGraph dg;
 		try {
 			URL spreadsheet = new URL(getTestLocation(name.getMethodName()));
-			dg = st.triplify(spreadsheet, p);
+			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			dg = st.triplify(p);
 
 			dg.find(null, null, null, null).forEachRemaining(q -> {
 				log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());

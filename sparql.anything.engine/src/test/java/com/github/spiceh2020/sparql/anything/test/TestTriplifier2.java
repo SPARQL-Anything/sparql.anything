@@ -39,31 +39,37 @@ import java.util.Set;
 
 public class TestTriplifier2 implements Triplifier {
 
-    public TestTriplifier2() {
-        System.err.println(getClass().getName());
-    }
+	public TestTriplifier2() {
+		System.err.println(getClass().getName());
+	}
 
-    @Override
-    public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-        DatasetGraph dg = DatasetGraphFactory.create();
-        Graph g = GraphFactory.createGraphMem();
+	@Override
+	public DatasetGraph triplify(Properties properties) throws IOException {
 
-        String content = IOUtils.toString(url, Charset.defaultCharset());
+		DatasetGraph dg = DatasetGraphFactory.create();
+		Graph g = GraphFactory.createGraphMem();
 
-        g.add(new Triple(NodeFactory.createURI(AppTest.PREFIX + "s"), NodeFactory.createURI(AppTest.PREFIX + "p"),
-                NodeFactory.createLiteral(content)));
-        dg.addGraph(NodeFactory.createURI(AppTest.PREFIX + "g"), g);
-        dg.setDefaultGraph(g);
-        return dg;
-    }
+		URL url = Triplifier.getLocation(properties);
 
-    @Override
-    public Set<String> getMimeTypes() {
-        return Sets.newHashSet("test-mime2");
-    }
+		if (url == null)
+			return DatasetGraphFactory.create();
 
-    @Override
-    public Set<String> getExtensions() {
-        return Sets.newHashSet("test2");
-    }
+		String content = IOUtils.toString(url, Charset.defaultCharset());
+
+		g.add(new Triple(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "s"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "p"),
+				NodeFactory.createLiteral(content)));
+		dg.addGraph(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "g"), g);
+		dg.setDefaultGraph(g);
+		return dg;
+	}
+
+	@Override
+	public Set<String> getMimeTypes() {
+		return Sets.newHashSet("test-mime2");
+	}
+
+	@Override
+	public Set<String> getExtensions() {
+		return Sets.newHashSet("test2");
+	}
 }

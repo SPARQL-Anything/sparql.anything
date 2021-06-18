@@ -33,8 +33,12 @@ public class SpreadsheetTriplifier implements Triplifier {
 	public final static String PROPERTY_HEADERS = "spreadsheet.headers";
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
+	public DatasetGraph triplify(Properties properties) throws IOException {
 		DatasetGraph dg = DatasetGraphFactory.create();
+
+		URL url = Triplifier.getLocation(properties);
+		if (url == null)
+			return dg;
 		String root = Triplifier.getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
@@ -126,7 +130,8 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 					Node property;
 					if (headers && headers_map.containsKey(colid)) {
-						property = NodeFactory.createURI(namespace + Triplifier.toSafeURIString(headers_map.get(colid)));
+						property = NodeFactory
+								.createURI(namespace + Triplifier.toSafeURIString(headers_map.get(colid)));
 					} else {
 						property = RDF.li(colid).asNode();
 					}
@@ -156,7 +161,8 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		return Sets.newHashSet("application/vnd.ms-excel",
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 	}
 
 	@Override

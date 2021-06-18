@@ -33,6 +33,7 @@ import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,7 +96,7 @@ public class JSONTriplifier implements Triplifier {
 	}
 
 	public void transform(JSONObject object, TripleFilteringFacadeXBuilder filter) {
-		//Model m = ModelFactory.createDefaultModel();
+		// Model m = ModelFactory.createDefaultModel();
 		Resource root = createResource(uriRoot);
 		filter.add(root, RDF.type, ResourceFactory.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		transform(object, root, filter);
@@ -132,11 +133,11 @@ public class JSONTriplifier implements Triplifier {
 			Object o = arr.get(i);
 			Property p = RDF.li(i + 1);
 			if (o instanceof String || o instanceof Boolean || o instanceof Integer) {
-				transformPrimites( r, p, o, filter);
+				transformPrimites(r, p, o, filter);
 			} else if (o instanceof JSONObject) {
-				transformJSONObject( r, p, (JSONObject) o, filter);
+				transformJSONObject(r, p, (JSONObject) o, filter);
 			} else if (o instanceof JSONArray) {
-				transformArray( r, p, (JSONArray) o, filter);
+				transformArray(r, p, (JSONArray) o, filter);
 			}
 		}
 		;
@@ -173,12 +174,18 @@ public class JSONTriplifier implements Triplifier {
 
 	@Deprecated
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties) throws IOException {
-		return triplify(url, properties, null);
+	public DatasetGraph triplify(Properties properties) throws IOException {
+		return triplify(properties, null);
 	}
 
 	@Override
-	public DatasetGraph triplify(URL url, Properties properties, Op op) throws IOException {
+	public DatasetGraph triplify(Properties properties, Op op) throws IOException {
+
+		URL url = Triplifier.getLocation(properties);
+
+		if (url == null)
+			return DatasetGraphFactory.create();
+
 		logger.trace("Triplifying ", url.toString());
 		logger.trace("Op ", op);
 

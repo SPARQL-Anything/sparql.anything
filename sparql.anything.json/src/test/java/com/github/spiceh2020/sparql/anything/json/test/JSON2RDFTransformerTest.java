@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -36,10 +35,15 @@ public class JSON2RDFTransformerTest {
 		Triplifier jt = new JSONTriplifier();
 
 		try {
-			DatasetGraph g1 = jt.triplify(getClass().getClassLoader().getResource("./emptyobject.json"),
-					new Properties());
-			DatasetGraph g2 = jt.triplify(getClass().getClassLoader().getResource("./emptyarray.json"),
-					new Properties());
+			Properties p1 = new Properties();
+			p1.setProperty(IRIArgument.LOCATION.toString(),
+					getClass().getClassLoader().getResource("./emptyobject.json").toString());
+			DatasetGraph g1 = jt.triplify(p1);
+
+			Properties p2 = new Properties();
+			p2.setProperty(IRIArgument.LOCATION.toString(),
+					getClass().getClassLoader().getResource("./emptyarray.json").toString());
+			DatasetGraph g2 = jt.triplify(p2);
 			assertEquals(1L, g1.getDefaultGraph().size());
 			assertEquals(1L, g2.getDefaultGraph().size());
 		} catch (IOException e1) {
@@ -48,7 +52,10 @@ public class JSON2RDFTransformerTest {
 
 		boolean jsonException = false;
 		try {
-			jt.triplify(getClass().getClassLoader().getResource("./emptyfile"), new Properties());
+			Properties p3 = new Properties();
+			p3.setProperty(IRIArgument.LOCATION.toString(),
+					getClass().getClassLoader().getResource("./emptyfile").toString());
+			jt.triplify(p3);
 		} catch (JsonException e) {
 			jsonException = true;
 		} catch (IOException e) {
@@ -58,7 +65,7 @@ public class JSON2RDFTransformerTest {
 
 		boolean nullPointerException = false;
 		try {
-			jt.triplify((URL)null, new Properties());
+			jt.triplify(null);
 		} catch (NullPointerException e) {
 			nullPointerException = true;
 		} catch (IOException e) {
@@ -87,7 +94,9 @@ public class JSON2RDFTransformerTest {
 
 				DatasetGraph g1;
 				try {
-					g1 = jt.triplify(getClass().getClassLoader().getResource("./testprimitive.json"), properties);
+					properties.setProperty(IRIArgument.LOCATION.toString(),
+							getClass().getClassLoader().getResource("./testprimitive.json").toString());
+					g1 = jt.triplify(properties);
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -113,7 +122,9 @@ public class JSON2RDFTransformerTest {
 
 				DatasetGraph g1;
 				try {
-					g1 = jt.triplify(getClass().getClassLoader().getResource("./testprimitive.json"), properties);
+					properties.setProperty(IRIArgument.LOCATION.toString(),
+							getClass().getClassLoader().getResource("./testprimitive.json").toString());
+					g1 = jt.triplify(properties);
 					assertTrue(mn.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -140,7 +151,9 @@ public class JSON2RDFTransformerTest {
 
 		DatasetGraph g1;
 		try {
-			g1 = jt.triplify(getClass().getClassLoader().getResource("./testnumbers.json"), properties);
+			properties.setProperty(IRIArgument.LOCATION.toString(),
+					getClass().getClassLoader().getResource("./testnumbers.json").toString());
+			g1 = jt.triplify(properties);
 //			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 //			m.write(System.out, "TTL");
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
@@ -161,7 +174,9 @@ public class JSON2RDFTransformerTest {
 
 		DatasetGraph g1;
 		try {
-			g1 = jt.triplify(getClass().getClassLoader().getResource("./whitespaceKeys.json"), properties);
+			properties.setProperty(IRIArgument.LOCATION.toString(),
+					getClass().getClassLoader().getResource("./whitespaceKeys.json").toString());
+			g1 = jt.triplify(properties);
 			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 //			m.write(System.out,"TTL");
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
@@ -191,7 +206,9 @@ public class JSON2RDFTransformerTest {
 
 		DatasetGraph g1;
 		try {
-			g1 = jt.triplify(getClass().getClassLoader().getResource("./testprimitive.json"), properties);
+			properties.setProperty(IRIArgument.LOCATION.toString(),
+					getClass().getClassLoader().getResource("./testprimitive.json").toString());
+			g1 = jt.triplify(properties);
 //			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
@@ -219,7 +236,9 @@ public class JSON2RDFTransformerTest {
 
 		DatasetGraph g1;
 		try {
-			g1 = jt.triplify(getClass().getClassLoader().getResource("./testprimitive.json"), properties);
+			properties.setProperty(IRIArgument.LOCATION.toString(),
+					getClass().getClassLoader().getResource("./testprimitive.json").toString());
+			g1 = jt.triplify(properties);
 //			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 
 			assertTrue(mn.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
@@ -248,7 +267,9 @@ public class JSON2RDFTransformerTest {
 
 		DatasetGraph g1;
 		try {
-			g1 = jt.triplify(getClass().getClassLoader().getResource("./testprimitive.json"), properties);
+			properties.setProperty(IRIArgument.LOCATION.toString(),
+					getClass().getClassLoader().getResource("./testprimitive.json").toString());
+			g1 = jt.triplify(properties);
 //			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 
 			assertTrue(mn.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
@@ -281,7 +302,9 @@ public class JSON2RDFTransformerTest {
 
 				DatasetGraph g1;
 				try {
-					g1 = jt.triplify(getClass().getClassLoader().getResource("./testarray.json"), properties);
+					properties.setProperty(IRIArgument.LOCATION.toString(),
+							getClass().getClassLoader().getResource("./testarray.json").toString());
+					g1 = jt.triplify(properties);
 
 					ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
@@ -315,7 +338,9 @@ public class JSON2RDFTransformerTest {
 
 				DatasetGraph g1;
 				try {
-					g1 = jt.triplify(getClass().getClassLoader().getResource("./testarray.json"), properties);
+					properties.setProperty(IRIArgument.LOCATION.toString(),
+							getClass().getClassLoader().getResource("./testarray.json").toString());
+					g1 = jt.triplify(properties);
 					Iterator<Triple> ii = g1.getDefaultGraph().find();
 					while (ii.hasNext()) {
 						System.err.println(ii.next());
@@ -342,7 +367,10 @@ public class JSON2RDFTransformerTest {
 		{
 			Triplifier jt = new JSONTriplifier();
 			try {
-				jt.triplify(getClass().getClassLoader().getResource("./testduplicatekey.json"), new Properties());
+				Properties p = new Properties();
+				p.setProperty(IRIArgument.LOCATION.toString(),
+						getClass().getClassLoader().getResource("./testduplicatekey.json").toString());
+				jt.triplify(p);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -352,12 +380,14 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void testUTF8encoded(){
+	public void testUTF8encoded() {
 //		/collection/artworks/p/052/p05259-15628.json {namespace=http://sparql.xyz/facade-x/data/, location=./collection/artworks/p/052/p05259-15628.json
 		String f = "./p05259-15628.json";
 		Triplifier jt = new JSONTriplifier();
 		try {
-			jt.triplify(getClass().getClassLoader().getResource(f), new Properties());
+			Properties p = new Properties();
+			p.setProperty(IRIArgument.LOCATION.toString(), getClass().getClassLoader().getResource(f).toString());
+			jt.triplify(p);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -365,16 +395,18 @@ public class JSON2RDFTransformerTest {
 
 	@Ignore // this seems to work now but keeping the test for future reference
 	@Test
-	public void testContainsZerosDebug(){
+	public void testContainsZerosDebug() {
 //		/collection/artworks/p/052/p05259-15628.json {namespace=http://sparql.xyz/facade-x/data/, location=./collection/artworks/p/052/p05259-15628.json
 		String f = "./t09122-23226.json";
 		Triplifier jt = new JSONTriplifier();
 		try {
-			DatasetGraph ds = jt.triplify(getClass().getClassLoader().getResource(f), new Properties());
+			Properties p = new Properties();
+			p.setProperty(IRIArgument.LOCATION.toString(), getClass().getClassLoader().getResource(f).toString());
+			DatasetGraph ds = jt.triplify(p);
 			Iterator<Quad> i = ds.find(null);
-			while(i.hasNext()){
+			while (i.hasNext()) {
 				Quad q = i.next();
-				log.info("{} {} {} {}", new Object[]{q.getGraph(), q.getSubject(), q.getPredicate(), q.getObject()});
+				log.info("{} {} {} {}", new Object[] { q.getGraph(), q.getSubject(), q.getPredicate(), q.getObject() });
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

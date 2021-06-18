@@ -1,0 +1,10 @@
+docker run --name sparql-anything-test-3 -e MYSQL_ROOT_PASSWORD=abcd -p3308:3306 -d mysql:8.0
+
+
+CREATE TABLE Person (
+    PersonID int,
+    LastName varchar(255),
+    FirstName varchar(255),
+    Address varchar(255),
+    City varchar(255)
+);
