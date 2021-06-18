@@ -60,4 +60,21 @@ public class CSVTriplifierTest {
             System.err.println(t);
         }
     }
+
+    @Test
+    public void testSpacesInHeader() throws IOException {
+        Properties properties = new Properties();
+        properties.setProperty("namespace", "http://www.example.org#");
+        properties.setProperty("csv.headers", "true");
+        // properties.setProperty("uriRoot", "http://www.example.org#");
+        // Test file to cover chars as in https://stackoverflow.com/a/2849800/1035608
+        // can use !, $, &, ', (, ), *, +, ,, ;, =
+        URL csv1 = getClass().getClassLoader().getResource("./test2.csv");
+        DatasetGraph graph = triplifier.triplify(csv1, properties);
+        Iterator<Quad> iter = graph.find(null,null,null,null);
+        while(iter.hasNext()){
+            Quad t = iter.next();
+            System.err.println(t);
+        }
+    }
 }

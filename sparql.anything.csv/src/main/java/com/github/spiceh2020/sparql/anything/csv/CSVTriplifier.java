@@ -3,6 +3,7 @@ package com.github.spiceh2020.sparql.anything.csv;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -14,6 +15,7 @@ import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
@@ -117,7 +119,8 @@ public class CSVTriplifier implements Triplifier {
 						String value = cells.next();
 						cellid++;
 						if (headers && headers_map.containsKey(cellid)) {
-							builder.addValue(dataSourceId, rowContainerId, headers_map.get(cellid), value);
+							String colname = URLEncodedUtils.formatSegments(headers_map.get(cellid)).substring(1);
+							builder.addValue(dataSourceId, rowContainerId, colname, value);
 						} else {
 							builder.addValue(dataSourceId, rowContainerId, cellid, value);
 						}
