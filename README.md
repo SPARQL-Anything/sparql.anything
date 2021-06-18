@@ -178,6 +178,26 @@ In order to instruct the query processor to delegate the execution to facade-x, 
 x-sparql-anything ':' ([option] ('=' [value])? ','?)+
 ```
 
+Alternatively, options can be provided as basic graph pattern inside the SERVICE clause as follows
+
+```
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+
+SELECT ?seriesName
+WHERE {
+
+    SERVICE <x-sparql-anything:> {
+        fx:properties fx:location "https://sparql-anything.cc/example1.json" .
+        ?tvSeries xyz:name ?seriesName .
+        ?tvSeries xyz:stars ?star .
+        ?star ?li "Courteney Cox" .
+    }
+
+}
+```
+
 A minimal URI that uses only the resource locator is also possible.
 
 ```
@@ -191,7 +211,8 @@ In this case sparql.anything guesses the data source type from the file extensio
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
-|location|The URL of the data source.|Any valid URL.|Mandatory|
+|location*|The URL of the data source.|Any valid URL.|-|
+|content*|The content to be triplified.|Any valid literal.|-|
 |root|The IRI of generated root resource.|Any valid IRI.|location + '#'|
 |media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml, image/png, text/html, application/octet-stream, application/json, image/jpeg, image/tiff, image/bmp, text/csv, image/vnd.microsoft.icon,text/plain |No value (the media-type will be guessed from the the file extension)|
 |namespace|The namespace prefix for the properties that will be generated.|Any valid namespace prefix.|http://sparql.xyz/facade-x/data/|
@@ -200,6 +221,7 @@ In this case sparql.anything guesses the data source type from the file extensio
 |charset|The charset of the data source.|Any charset.|UTF-8|
 |metadata|It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;  |true/false|false|
 
+* It is mandatory to provide either the local or the content.
 
 ### Format specific options
 
