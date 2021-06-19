@@ -161,6 +161,15 @@ By default, these formats are triplified as follows.
 
 </details>
 
+<details><summary>Archive: ZIP, Tar, File System folder</summary>
+
+|Input|Triplification|
+|---|---|
+| <pre>archive.tar<br/>\|__ file.csv<br/>\|__ file.json<br/>\|__ file.xml</pre> | <pre>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;<br/>@prefix fx: &lt;http://sparql.xyz/facade-x/ns/&gt;<br/>[ rdf:type fx:Root <br/> rdf:_1 "file.csv" ; <br/> rdf:_2 "file.json" ;<br/> rdf:_3 "file.xml" ] .</pre> |
+
+</details>
+
+
 <details><summary>Metadata</summary>
 
 |Input|Triplification|
@@ -259,6 +268,15 @@ In this case sparql.anything guesses the data source type from the file extensio
 |-|-|-|-|
 |txt.regex|It tells sparql.anything to evaluate a regular expression on the data source. In this case the slots will be filled with the bindings of the regex.|Any valid regular expression|No value|
 |txt.group|It tells sparql.anything to generate slots by using a specific group of the regular expression.|Any integer|No value|
+|txt.split|It tells sparql.anything to split the input around the matches of the give regular expression.|Any valid regular expression|No value|
+</details>
+
+
+<details><summary>Archive: ZIP, Tar, folder</summary>
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|archive.matches|It tells sparql.anything to evaluate a regular expression on the filenames within the archives. In this case the slots will be filled with the files that match the regex only.|Any valid regular expression|.*|
 
 </details>
 
