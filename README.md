@@ -280,6 +280,10 @@ In this case sparql.anything guesses the data source type from the file extensio
 
 </details>
 
+## Magic Properties
+
+The SPARQL Anything engine is sensible to che magic property ``<http://sparql.xyz/facade-x/ns/anySlot>``. This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).
+
 
 ## Download and Usage
 
