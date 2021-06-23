@@ -28,8 +28,10 @@ import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
@@ -438,6 +440,55 @@ public class ItTest {
 		assertTrue(actual.contains(Lists.newArrayList(archive + "test.json", "Sword of Honour")));
 		assertTrue(actual.contains(Lists.newArrayList(archive + "test.xml", "Computer")));
 		assertTrue(actual.contains(Lists.newArrayList(archive + "test.txt", "this is a test")));
+
+	}
+
+	@Test
+	public void testAnySlotMagicProperty() throws IOException, URISyntaxException {
+		Query query = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+						+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      "
+						+ "SERVICE <x-sparql-anything:content=abcd,txt.split=b> { " + "?r fx:anySlot ?slot   }}");
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		Set<String> slots = new HashSet<>();
+		while (rs.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs.next();
+			slots.add(querySolution.get("slot").asLiteral().getValue().toString());
+		}
+
+		assertEquals(Sets.newHashSet("a", "cd"), slots);
+
+	}
+
+	@Test
+	public void testAnySlotMagicPropertyPropertyPath() throws IOException, URISyntaxException {
+		String location = getClass().getClassLoader().getResource("propertypath.json").toURI().toString();
+		Query query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
+				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT DISTINCT ?slot  {      "
+				+ "SERVICE <x-sparql-anything:location=" + location + "> { " + "?s fx:anySlot/fx:anySlot ?slot . }}");
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		Set<String> slots = new HashSet<>();
+		while (rs.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs.next();
+			if (querySolution.get("slot").isLiteral()) {
+				slots.add(querySolution.get("slot").asLiteral().getValue().toString());
+			}
+		}
+
+		assertEquals(Sets.newHashSet("b", "d", "c"), slots);
 
 	}
 

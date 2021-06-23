@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -20,7 +22,11 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpProcedure;
+import org.apache.jena.sparql.algebra.op.OpPropFunc;
 import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.algebra.op.OpTable;
+import org.apache.jena.sparql.algebra.table.TableUnit;
 import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
@@ -33,6 +39,7 @@ import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.Symbol;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
@@ -59,6 +66,27 @@ public class FacadeXOpExecutor extends OpExecutor {
 //	private final static Symbol audit = Symbol.create("facade-x-audit");
 	public final static Symbol strategy = Symbol.create("facade-x-strategy");
 
+	protected QueryIterator execute(OpPropFunc opPropFunc, QueryIterator input) {
+		logger.trace(opPropFunc.toString());
+		return super.execute(opPropFunc, input);
+	}
+
+	private List<Triple> getPropFuncTriples(BasicPattern e) {
+		List<Triple> result = new ArrayList<>();
+		e.forEach(t -> {
+			if (t.getPredicate().isURI()
+					&& t.getPredicate().getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")) {
+				result.add(t);
+			}
+		});
+		return result;
+	}
+
+	private OpPropFunc getOpPropFuncAnySlot(Triple t) {
+		return new OpPropFunc(NodeFactory.createURI(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot"),
+				new PropFuncArg(t.getSubject()), new PropFuncArg(t.getObject()), OpTable.create(new TableUnit()));
+	}
+
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
 		triplifierRegister = TriplifierRegister.getInstance();
@@ -73,6 +101,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private String getInMemoryCacheKey(Properties properties, Op op) {
 		return properties.toString() + op.toString();
+	}
+
+	protected QueryIterator execute(OpProcedure opProc, QueryIterator input) {
+		logger.trace("Op Procedure {}", opProc.toString());
+		return super.exec(opProc, input);
 	}
 
 	private DatasetGraph getDatasetGraph(Properties p, Op op) throws IOException, InstantiationException,
@@ -347,28 +380,48 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return new OpBGP(result);
 	}
 
+	private OpBGP excludeOpPropFunction(OpBGP bgp) {
+		BasicPattern result = new BasicPattern();
+		for (Triple t : bgp.getPattern().getList()) {
+			if (t.getPredicate().isURI()
+					&& t.getPredicate().getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot"))
+				continue;
+			result.add(t);
+		}
+		return new OpBGP(result);
+	}
+
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
 				this.execCxt.getDataset().getDefaultGraph().size());
+
+		List<Triple> l = getPropFuncTriples(opBGP.getPattern());
+		logger.trace("Triples with OpFunc: {}", l.size());
+		QueryIterator input2 = input;
+		for (Triple t : l) {
+			input2 = QC.execute(getOpPropFuncAnySlot(t), input2, execCxt);
+		}
+
 		Properties p = new Properties();
 		try {
 			extractPropertiesFromOpGraph(p, opBGP);
 			if (p.size() > 0) {
 				logger.trace("BGP Properties {}", p.toString());
 				DatasetGraph dg = getDatasetGraph(p, opBGP);
-				return QC.execute(excludeFXProperties(opBGP), input,
+				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2,
 						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 			}
 		} catch (UnboundVariableException e) {
 			logger.trace("Unbound variables");
 			OpBGP fakeBGP = extractFakePattern(opBGP);
-			return postponeBGP(opBGP, QC.executeDirect(fakeBGP.getPattern(), input, execCxt));
+			return postponeBGP(excludeOpPropFunction(opBGP), QC.executeDirect(fakeBGP.getPattern(), input2, execCxt));
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
 				| ClassNotFoundException | IOException e) {
 			logger.error(e.getMessage());
 		}
-		return super.execute(opBGP, input);
+		logger.trace("Execute default");
+		return super.execute(excludeOpPropFunction(opBGP), input2);
 	}
 
 	private boolean triplifyMetadata(Properties p) {
