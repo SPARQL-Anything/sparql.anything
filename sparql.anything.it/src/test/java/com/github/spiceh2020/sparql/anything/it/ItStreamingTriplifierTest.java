@@ -125,21 +125,37 @@ public class ItStreamingTriplifierTest {
                 "\n" +
                         "PREFIX xyz: <http://sparql.xyz/facade-x/data/>" +
                         "\n SELECT ?s ?acno  WHERE { SERVICE <x-sparql-anything:location="
-//                        + location + "> {graph ?g {?s xyz:acno ?acno }}}");
-        + location + "> {graph ?g {?s xyz:acno ?acno . ?s xyz:contributorCount ?count }}}");
-//        + location + "> {graph ?g {?s ?p ?o }}}");
+                + location + "> {graph ?g {?s xyz:acno ?acno . ?s xyz:contributorCount ?count }}}");
         ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
-//        List<String> mustInclude = new ArrayList<String>(
-//                Arrays.asList(new String[] { "http://www.example.org#thumbnailUrl", "http://www.example.org#title",
-//                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.example.org#text",
-//                        "http://www.example.org#subjects", "http://www.example.org#subjectCount" }));
         while (rs.hasNext()) {
             int rowId = rs.getRowNumber() + 1;
             QuerySolution qs = rs.next();
             log.info("{} {} {}", rowId, qs.get("s").toString(), qs.get("acno").toString());
-//            mustInclude.remove(qs.get("p").toString());
+            Assert.assertTrue(rowId == 1);
         }
-//        Assert.assertTrue(mustInclude.isEmpty());
+    }
 
+    @Test
+    public void JSONSamePatternTwice() throws URISyntaxException {
+        // a01009-14709.json
+        Dataset kb = DatasetFactory.createGeneral();
+
+        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+        String location = getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json").toURI().toString();
+        Query query = QueryFactory.create(
+                "\n" +
+                        "PREFIX xyz: <http://sparql.xyz/facade-x/data/>" +
+                        "\n SELECT ?s ?acno ?a ?acno2  WHERE { SERVICE <x-sparql-anything:location="
+                        + location + "> {graph ?g {?s xyz:acno ?acno . ?a xyz:acno ?acno2}}}");
+        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        while (rs.hasNext()) {
+            int rowId = rs.getRowNumber() + 1;
+            QuerySolution qs = rs.next();
+            System.err.println("Before");
+            log.info("{} {} {} {}", rowId, qs.get("s").toString(), qs.get("acno").toString(), qs.get("acno2").toString());
+            System.err.println("After");
+        }
+        System.err.println("After1");
     }
 }

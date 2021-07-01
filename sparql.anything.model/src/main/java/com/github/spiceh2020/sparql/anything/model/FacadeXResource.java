@@ -93,6 +93,10 @@ public class FacadeXResource implements DatasetGraph {
             this.o = object;
         }
 
+        boolean about(Node graph, Node subject, Node predicate, Node object){
+            return this.g.equals(graph) && this.s.equals(subject) && this.p.equals(predicate) && this.o.equals(object);
+        }
+
         /**
          *
          * @param graph
@@ -118,14 +122,21 @@ public class FacadeXResource implements DatasetGraph {
         @Override
         public boolean hasNext() {
             if(!buffer.isEmpty()){
+                log.info("Buffer is not empty");
                 isWaiting = false;
                 return true;
             }
             isWaiting = true;
+
             try {
+                if(isCompleted){
+                    log.info("BufferedIterator is completed");
+                    return false;
+                }
                 while(buffer.isEmpty()){
+                    log.info("Buffer is empty, streaming for new results");
                     FacadeXResource.this.streamInactive = false;
-                    if(!isCompleted && FacadeXResource.this.triplifier.stream() == false){
+                    if( FacadeXResource.this.triplifier.stream() == false){
                         log.info("Streaming complete {}", this.hashCode());
                         FacadeXResource.this.streamInactive = true;
                         isCompleted = true;
@@ -163,19 +174,24 @@ public class FacadeXResource implements DatasetGraph {
         this.dataSources.put(graph, new FacadeXDataSource(this.prefixMappings) {
             @Override
             protected ExtendedIterator<Triple> findInDataSource(Node node, Node node1, Node node2) {
+                log.info("findInDataSource: {} {} {}", node, node1, node2);
                 if(FacadeXResource.this.streamInactive != true){
                     throw new RuntimeException("Allocating iterators while streaming!");
                 }
+                // Looking for iterators already returned, if found, return same iterator
                 // Check current iterators, if they are all completed, reset data source
                 boolean allCompleted = true;
                 for(BufferedIterator i : FacadeXResource.this.iterators){
                     if(!i.isCompleted){
                         allCompleted = false;
-                        break;
+                    }
+                    if(!i.isCompleted && i.about(graph, node, node1, node2)){
+                        log.info("Found iterator: {} {} {}", node, node1, node2);
+                        return i;
                     }
                 }
                 if(allCompleted){
-                    log.info("adding iterator: {}");
+                    log.info("Resetting stream");
                     try {
                         FacadeXResource.this.triplifier.reset();
                     }catch(IOException ex){
@@ -192,9 +208,11 @@ public class FacadeXResource implements DatasetGraph {
             @Override
             public void add(Triple triple) throws AddDeniedException {
                 // Find iterator and
-                log.info("contributing: {}", triple);
                 for(BufferedIterator bufi: iterators){
-                    bufi.contribute(graph, triple.getSubject(), triple.getPredicate(), triple.getObject());
+                    if(!bufi.isCompleted){
+                        log.info("contributing triple to iterator: {} {}", triple, bufi);
+                        bufi.contribute(graph, triple.getSubject(), triple.getPredicate(), triple.getObject());
+                    }
                 }
             }
         });
@@ -208,6 +226,7 @@ public class FacadeXResource implements DatasetGraph {
 
     @Override
     public Graph getGraph(Node node) {
+        log.info("getGraph {}", node);
         return dataSources.get(node);
     }
 
@@ -284,36 +303,29 @@ public class FacadeXResource implements DatasetGraph {
 
     @Override
     public Iterator<Quad> findNG(Node node, Node node1, Node node2, Node node3) {
-//        Set<Node> nodes = new HashSet<Node>(dataSources.keySet());
-//        for (Node n : nodes.toArray(new Node[nodes.size()])){
-//            if(node.isConcrete() && !node.matches(n)){
-//                // remove unmatching graphs
-//                nodes.remove(n);
-//            }
-//        }
-//        final List<Node> graphs = Arrays.asList(nodes.toArray(new Node[nodes.size()]));
         return new Iterator<Quad>() {
             int position = 0;
             Node g = null;
             Iterator<Triple> it = null;
             @Override
             public boolean hasNext() {
-
+                System.out.println(".");
                 if(it == null ){
+                    log.trace("Allocating iterators for data source " + position);
                     g = dataSourcesList.get(position);
                     it = dataSources.get(g).findInDataSource(node1, node2, node3);
                     position += 1;
                 }
                 if(!it.hasNext() && dataSourcesList.size() > position){
+                    log.trace("Move to next data source, if any " + position);
                     // Move to the next iterator, if any
                     g = dataSourcesList.get(position);
-                    if(g == null){
-                        // Iteration has finished!
-                        return false;
-                    } else {
-                        it = dataSources.get(g).findInDataSource(node1, node2, node3);
-                        position += 1;
-                    }
+                    it = dataSources.get(g).findInDataSource(node1, node2, node3);
+                    position += 1;
+                }else{
+                    log.trace("No more data from data source " + position);
+                    // No more data
+                    return false;
                 }
                 return it.hasNext();
             }
