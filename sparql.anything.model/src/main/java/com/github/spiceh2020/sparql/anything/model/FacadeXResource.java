@@ -153,7 +153,9 @@ public class FacadeXResource implements DatasetGraph {
 
         public Triple nextTriple(){
             if(!buffer.isEmpty()){
-                return buffer.poll();
+                Triple toreturn = buffer.poll();
+                log.info("Returning triple: {}", toreturn);
+                return toreturn;
             }
             if(isWaiting){
                 throw new IllegalStateException();
@@ -175,9 +177,6 @@ public class FacadeXResource implements DatasetGraph {
             @Override
             protected ExtendedIterator<Triple> findInDataSource(Node node, Node node1, Node node2) {
                 log.info("findInDataSource: {} {} {}", node, node1, node2);
-                if(FacadeXResource.this.streamInactive != true){
-                    throw new RuntimeException("Allocating iterators while streaming!");
-                }
                 // Looking for iterators already returned, if found, return same iterator
                 // Check current iterators, if they are all completed, reset data source
                 boolean allCompleted = true;
@@ -190,6 +189,9 @@ public class FacadeXResource implements DatasetGraph {
                         return i;
                     }
                 }
+                if(FacadeXResource.this.streamInactive != true){
+                    throw new RuntimeException("Allocating iterators while streaming!");
+                }
                 if(allCompleted){
                     log.info("Resetting stream");
                     try {
@@ -198,6 +200,7 @@ public class FacadeXResource implements DatasetGraph {
                         throw new RuntimeException(ex);
                     }
                 }
+
                 BufferedIterator bufi = new BufferedIterator(graph, node, node1, node2);
                 log.info("adding iterator: {}", bufi);
                 log.info(" - {} - {} {} {}", new Object[]{graph, node, node1, node2});

@@ -114,7 +114,7 @@ public class ItStreamingTriplifierTest {
     }
 
     @Test
-    public void JSONJoin() throws URISyntaxException {
+    public void JSONLeftJoin() throws URISyntaxException {
         // a01009-14709.json
         Dataset kb = DatasetFactory.createGeneral();
 
@@ -125,14 +125,17 @@ public class ItStreamingTriplifierTest {
                 "\n" +
                         "PREFIX xyz: <http://sparql.xyz/facade-x/data/>" +
                         "\n SELECT ?s ?acno  WHERE { SERVICE <x-sparql-anything:location="
-                + location + "> {graph ?g {?s xyz:acno ?acno . ?s xyz:contributorCount ?count }}}");
+                + location + "> {graph ?g {?s xyz:acno ?acno . ?s xyz:contributorCount [] }}}");
         ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        boolean hasResults = false;
         while (rs.hasNext()) {
+            hasResults = true;
             int rowId = rs.getRowNumber() + 1;
             QuerySolution qs = rs.next();
             log.info("{} {} {}", rowId, qs.get("s").toString(), qs.get("acno").toString());
             Assert.assertTrue(rowId == 1);
         }
+        Assert.assertTrue(hasResults);
     }
 
     @Test
@@ -143,19 +146,70 @@ public class ItStreamingTriplifierTest {
         QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
         String location = getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json").toURI().toString();
-        Query query = QueryFactory.create(
-                "\n" +
-                        "PREFIX xyz: <http://sparql.xyz/facade-x/data/>" +
+        Query query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/>" +
                         "\n SELECT ?s ?acno ?a ?acno2  WHERE { SERVICE <x-sparql-anything:location="
                         + location + "> {graph ?g {?s xyz:acno ?acno . ?a xyz:acno ?acno2}}}");
         ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        boolean hasResults = false;
         while (rs.hasNext()) {
+            hasResults = true;
             int rowId = rs.getRowNumber() + 1;
             QuerySolution qs = rs.next();
-            System.err.println("Before");
             log.info("{} {} {} {}", rowId, qs.get("s").toString(), qs.get("acno").toString(), qs.get("acno2").toString());
-            System.err.println("After");
+            Assert.assertTrue(rowId == 1);
         }
-        System.err.println("After1");
+        Assert.assertTrue(hasResults);
+    }
+
+    @Test
+    public void JSONRightJoin() throws URISyntaxException {
+        // a01009-14709.json
+        Dataset kb = DatasetFactory.createGeneral();
+
+        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+        String location = getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json").toURI().toString();
+        Query query = QueryFactory.create(
+                "\n" +
+                        "PREFIX xyz: <http://sparql.xyz/facade-x/data/>" +
+                        "\n SELECT ?s1 ?s2  WHERE { SERVICE <x-sparql-anything:location="
+                        + location + "> {graph ?g {?s1 xyz:acno ?acno . ?s2 xyz:acno ?acno }}}");
+        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        boolean hasResults = false;
+        while (rs.hasNext()) {
+            hasResults = true;
+            int rowId = rs.getRowNumber() + 1;
+            QuerySolution qs = rs.next();
+            //log.info("{} {} {}", rowId, qs.get("s").toString(), qs.get("s1").toString());
+            Assert.assertTrue(qs.get("s1").equals(qs.get("s2")));
+            Assert.assertTrue(rowId == 1);
+        }
+        Assert.assertTrue(hasResults);
+    }
+
+
+    @Test
+    public void JSONJoinInAnonNode() throws URISyntaxException {
+        // a01009-14709.json
+        Dataset kb = DatasetFactory.createGeneral();
+
+        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+        String location = getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json").toURI().toString();
+        Query query = QueryFactory.create(
+                "\n" +
+                        "PREFIX xyz: <http://sparql.xyz/facade-x/data/>" +
+                        "\n SELECT ?id  WHERE { SERVICE <x-sparql-anything:location="
+                        + location + "> {graph ?g { ?bob  xyz:id ?id . ?bob xyz:children [] }}}");
+        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+        boolean hasResults = false;
+        while (rs.hasNext()) {
+            hasResults = true;
+            int rowId = rs.getRowNumber() + 1;
+            QuerySolution qs = rs.next();
+            log.info("{} {}", rowId, qs.get("id").toString());
+//            Assert.assertTrue(rowId == 1);
+        }
+        Assert.assertTrue(hasResults);
     }
 }
