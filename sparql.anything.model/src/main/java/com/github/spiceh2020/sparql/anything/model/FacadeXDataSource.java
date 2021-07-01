@@ -169,6 +169,7 @@ abstract class FacadeXDataSource implements Graph {
 
     @Override
     public int size() {
+        // TODO do this only 1 time for static files and cache result
         // Find and count
         int c = 0;
         ExtendedIterator<Triple> t = findInDataSource(Node_ANY.ANY, Node_ANY.ANY, Node_ANY.ANY);

@@ -75,6 +75,7 @@ public class FacadeXResource implements DatasetGraph {
 //    public FacadeXGraphBuilder getBuilder(){
 //        return this.builder;
 //    }
+    private boolean streamInactive = true;
 
     private class BufferedIterator extends NiceIterator<Triple> {
         LinkedList<Triple> buffer = new LinkedList<Triple>();
@@ -83,6 +84,7 @@ public class FacadeXResource implements DatasetGraph {
         private Node s;
         private Node p;
         private Node o;
+        boolean isCompleted = false;
 
         BufferedIterator(Node graph, Node subject, Node predicate, Node object){
             this.g = graph;
@@ -122,7 +124,12 @@ public class FacadeXResource implements DatasetGraph {
             isWaiting = true;
             try {
                 while(buffer.isEmpty()){
-                    if(FacadeXResource.this.triplifier.stream() == false){
+                    FacadeXResource.this.streamInactive = false;
+                    if(!isCompleted && FacadeXResource.this.triplifier.stream() == false){
+                        log.info("Streaming complete {}", this.hashCode());
+                        FacadeXResource.this.streamInactive = true;
+                        isCompleted = true;
+                        // Remove this from the stack of iterators?
                         break;
                     }
                 }
@@ -156,6 +163,25 @@ public class FacadeXResource implements DatasetGraph {
         this.dataSources.put(graph, new FacadeXDataSource(this.prefixMappings) {
             @Override
             protected ExtendedIterator<Triple> findInDataSource(Node node, Node node1, Node node2) {
+                if(FacadeXResource.this.streamInactive != true){
+                    throw new RuntimeException("Allocating iterators while streaming!");
+                }
+                // Check current iterators, if they are all completed, reset data source
+                boolean allCompleted = true;
+                for(BufferedIterator i : FacadeXResource.this.iterators){
+                    if(!i.isCompleted){
+                        allCompleted = false;
+                        break;
+                    }
+                }
+                if(allCompleted){
+                    log.info("adding iterator: {}");
+                    try {
+                        FacadeXResource.this.triplifier.reset();
+                    }catch(IOException ex){
+                        throw new RuntimeException(ex);
+                    }
+                }
                 BufferedIterator bufi = new BufferedIterator(graph, node, node1, node2);
                 log.info("adding iterator: {}", bufi);
                 log.info(" - {} - {} {} {}", new Object[]{graph, node, node1, node2});

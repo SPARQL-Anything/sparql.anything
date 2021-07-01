@@ -124,7 +124,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 							if (strategy == 2){
 								if(t instanceof StreamingTriplifier) {
 									logger.trace("Executing: {} {} [strategy={}]", url, p, strategy);
-									dg = t.triplify(url, p, opService.getSubOp());
 									dg = new FacadeXResource(url, opService.getSubOp(), execCxt.getContext(), p, new JSONStreamingTriplifier());
 								} else {
 									throw new UnsupportedOperationException("Strategy 2 is not supported on this format");

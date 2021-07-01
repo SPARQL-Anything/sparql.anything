@@ -30,6 +30,8 @@ import java.util.Properties;
 
 public interface StreamingTriplifier extends Triplifier {
 
+    boolean reset() throws IOException;
+
     /**
      *
      * @return any more content?

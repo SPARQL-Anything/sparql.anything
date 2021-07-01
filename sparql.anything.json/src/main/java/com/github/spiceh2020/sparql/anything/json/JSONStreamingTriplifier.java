@@ -116,6 +116,7 @@ public class JSONStreamingTriplifier implements StreamingTriplifier {
 		return triplify(url, properties, null);
 	}
 
+	// Implements Strategy = 2
 	@Override
 	public DatasetGraph triplify(URL url, Properties properties, Op op) throws IOException {
 		logger.trace("Triplifying ", url.toString());
@@ -126,8 +127,9 @@ public class JSONStreamingTriplifier implements StreamingTriplifier {
 				stream();
 			}
 		}
+		logger.info("Number of triples: {} ", builder.getMainGraph().size());
 		if(logger.isDebugEnabled()){
-			logger.debug("Number of triples: {} ", builder.getMainGraph().size());
+			logger.info("Number of triples: {} ", builder.getMainGraph().size());
 		}
 		return builder.getDatasetGraph();
 	}
@@ -152,10 +154,15 @@ public class JSONStreamingTriplifier implements StreamingTriplifier {
 	private String dataSourceId = null;
 
 	@Override
+	public boolean reset() throws IOException{
+		this.queue = new ArrayDeque<Pair<String,Any>>();
+		return this.transformJSONFromURL(url, Triplifier.getRootArgument(properties, url), this.builder);
+	}
+
+	@Override
 	public boolean stream() throws IOException{
 		if(queue == null){
-			this.queue = new ArrayDeque<Pair<String,Any>>();
-			return this.transformJSONFromURL(url, Triplifier.getRootArgument(properties, url), this.builder);
+			reset();
 		}
 		if(queue.isEmpty()){
 			// nothing added
