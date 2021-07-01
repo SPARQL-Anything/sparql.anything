@@ -46,14 +46,15 @@ import java.util.*;
 public class FacadeXResource implements DatasetGraph {
 
     protected final Map<Node, FacadeXDataSource> dataSources;
-    protected final List<BufferedIterator> iterators;
+    protected final Map<Integer, List<BufferedIterator>> iterators;
     protected final Context context;
     protected final String resourceId;
     private final PrefixMapping prefixMappings;
     protected final FacadeXGraphBuilder builder;
     protected StreamingTriplifier triplifier;
     protected final List<Node> dataSourcesList;
-
+    private int generation = 0;
+    private int runningGeneration = 0;
     private static final Logger log = LoggerFactory.getLogger(FacadeXResource.class);
     public FacadeXResource (URL url, Op operation, Context context, Properties properties, StreamingTriplifier triplifier) throws IOException {
         this.dataSources = new HashMap<Node,FacadeXDataSource>();
@@ -61,7 +62,7 @@ public class FacadeXResource implements DatasetGraph {
         this.resourceId = url.toString();
         this.builder = new TripleFilteringFacadeXBuilder(resourceId, operation, this, properties);
         this.prefixMappings = PrefixMapping.Factory.create(); // FIXME Not sure what to do with this or where to take the mappings in the sparql query.
-        this.iterators = new ArrayList<>();
+        this.iterators = new HashMap<Integer,List<BufferedIterator>>();
         this.triplifier = triplifier;
         // Always call setup first
         this.triplifier.setup(url, properties, builder);
@@ -85,8 +86,9 @@ public class FacadeXResource implements DatasetGraph {
         private Node p;
         private Node o;
         boolean isCompleted = false;
-
-        BufferedIterator(Node graph, Node subject, Node predicate, Node object){
+        private int myGeneration;
+        BufferedIterator(int generation, Node graph, Node subject, Node predicate, Node object){
+            this.myGeneration = generation;
             this.g = graph;
             this.s = subject;
             this.p = predicate;
@@ -121,6 +123,13 @@ public class FacadeXResource implements DatasetGraph {
 
         @Override
         public boolean hasNext() {
+            if(isCompleted){
+                log.info("BufferedIterator is completed");
+                return false;
+            }
+            if(runningGeneration != myGeneration){
+                throw new RuntimeException("This cannot be done " + runningGeneration + " " + myGeneration);
+            }
             if(!buffer.isEmpty()){
                 log.info("Buffer is not empty");
                 isWaiting = false;
@@ -129,10 +138,7 @@ public class FacadeXResource implements DatasetGraph {
             isWaiting = true;
 
             try {
-                if(isCompleted){
-                    log.info("BufferedIterator is completed");
-                    return false;
-                }
+
                 while(buffer.isEmpty()){
                     log.info("Buffer is empty, streaming for new results");
                     FacadeXResource.this.streamInactive = false;
@@ -177,41 +183,58 @@ public class FacadeXResource implements DatasetGraph {
             @Override
             protected ExtendedIterator<Triple> findInDataSource(Node node, Node node1, Node node2) {
                 log.info("findInDataSource: {} {} {}", node, node1, node2);
+                log.info("generation {} running {}", generation, runningGeneration);
+                if(FacadeXResource.this.streamInactive != true && generation == runningGeneration){
+                    // Allocate iterator to next generation
+                    generation += 1;
+                    // throw new RuntimeException("Allocating iterators while streaming!");
+                }
+
                 // Looking for iterators already returned, if found, return same iterator
                 // Check current iterators, if they are all completed, reset data source
                 boolean allCompleted = true;
-                for(BufferedIterator i : FacadeXResource.this.iterators){
-                    if(!i.isCompleted){
-                        allCompleted = false;
+                if(!FacadeXResource.this.iterators.isEmpty()) {
+                    log.info("Inspetting running generation {}", runningGeneration);
+                    for (BufferedIterator i : FacadeXResource.this.iterators.get(runningGeneration)) {
+                        if (!i.isCompleted) {
+                            allCompleted = false;
+                        }
+                        if (!i.isCompleted && i.about(graph, node, node1, node2)) {
+                            log.info("Found iterator: {} {} {}", node, node1, node2);
+                            return i;
+                        }
                     }
-                    if(!i.isCompleted && i.about(graph, node, node1, node2)){
-                        log.info("Found iterator: {} {} {}", node, node1, node2);
-                        return i;
-                    }
-                }
-                if(FacadeXResource.this.streamInactive != true){
-                    throw new RuntimeException("Allocating iterators while streaming!");
-                }
-                if(allCompleted){
-                    log.info("Resetting stream");
-                    try {
-                        FacadeXResource.this.triplifier.reset();
-                    }catch(IOException ex){
-                        throw new RuntimeException(ex);
-                    }
-                }
 
-                BufferedIterator bufi = new BufferedIterator(graph, node, node1, node2);
+                    if(allCompleted){
+                        log.info("Generation {} completed", runningGeneration);
+                        log.info("Resetting stream");
+                        try {
+                            FacadeXResource.this.triplifier.reset();
+                        }catch(IOException ex){
+                            throw new RuntimeException(ex);
+                        }
+                        // moving to next generation
+                        runningGeneration += 1;
+                        generation += 1;
+                        log.info("Moving to generation {}", runningGeneration);
+                    }
+                }
+                log.info("generation {} running {}", generation, runningGeneration);
+                BufferedIterator bufi = new BufferedIterator(generation, graph, node, node1, node2);
                 log.info("adding iterator: {}", bufi);
                 log.info(" - {} - {} {} {}", new Object[]{graph, node, node1, node2});
-                FacadeXResource.this.iterators.add(bufi);
+                if(!FacadeXResource.this.iterators.containsKey(generation)){
+                    FacadeXResource.this.iterators.put(generation, new ArrayList<BufferedIterator>());
+                }
+                FacadeXResource.this.iterators.get(generation).add(bufi);
                 return bufi;
             }
 
             @Override
             public void add(Triple triple) throws AddDeniedException {
+                log.info("Adding triple to iterators in generation {}", runningGeneration );
                 // Find iterator and
-                for(BufferedIterator bufi: iterators){
+                for(BufferedIterator bufi: iterators.get(runningGeneration)){
                     if(!bufi.isCompleted){
                         log.info("contributing triple to iterator: {} {}", triple, bufi);
                         bufi.contribute(graph, triple.getSubject(), triple.getPredicate(), triple.getObject());
