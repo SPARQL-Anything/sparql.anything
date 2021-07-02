@@ -68,7 +68,7 @@ public class FacadeXResource implements DatasetGraph {
         this.triplifier.setup(url, properties, builder);
         this.dataSourcesList = new ArrayList<>();
         for(String ds: triplifier.getDataSourcesIds()){
-            log.info("Data source: {}", ds);
+            log.trace("Data source: {}", ds);
             addFacadeXDataSource(ds);
         }
     }
@@ -124,26 +124,34 @@ public class FacadeXResource implements DatasetGraph {
         @Override
         public boolean hasNext() {
             if(isCompleted){
-                log.info("BufferedIterator is completed");
+                log.trace("BufferedIterator is completed");
                 return false;
             }
-            if(runningGeneration != myGeneration){
-                throw new RuntimeException("This cannot be done " + runningGeneration + " " + myGeneration);
-            }
+            log.trace("Data is in buffer: {}", !buffer.isEmpty());
             if(!buffer.isEmpty()){
-                log.info("Buffer is not empty");
                 isWaiting = false;
                 return true;
             }
             isWaiting = true;
 
+            if(runningGeneration != myGeneration){
+                log.trace("Calling hasNext on generation {} but running generation is {}", myGeneration, runningGeneration);
+                try {
+                    FacadeXResource.this.triplifier.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                FacadeXResource.this.streamInactive = true;
+                runningGeneration += 1;
+                // throw new RuntimeException("This cannot be done " + runningGeneration + " " + myGeneration);
+            }
             try {
 
                 while(buffer.isEmpty()){
-                    log.info("Buffer is empty, streaming for new results");
+                    log.trace("Buffer is empty, streaming for new results");
                     FacadeXResource.this.streamInactive = false;
                     if( FacadeXResource.this.triplifier.stream() == false){
-                        log.info("Streaming complete {}", this.hashCode());
+                        log.trace("Streaming complete {}", this.hashCode());
                         FacadeXResource.this.streamInactive = true;
                         isCompleted = true;
                         // Remove this from the stack of iterators?
@@ -160,7 +168,7 @@ public class FacadeXResource implements DatasetGraph {
         public Triple nextTriple(){
             if(!buffer.isEmpty()){
                 Triple toreturn = buffer.poll();
-                log.info("Returning triple: {}", toreturn);
+                log.trace("Returning triple: {}", toreturn);
                 return toreturn;
             }
             if(isWaiting){
@@ -182,47 +190,63 @@ public class FacadeXResource implements DatasetGraph {
         this.dataSources.put(graph, new FacadeXDataSource(this.prefixMappings) {
             @Override
             protected ExtendedIterator<Triple> findInDataSource(Node node, Node node1, Node node2) {
-                log.info("findInDataSource: {} {} {}", node, node1, node2);
-                log.info("generation {} running {}", generation, runningGeneration);
-                if(FacadeXResource.this.streamInactive != true && generation == runningGeneration){
+                log.trace("findInDataSource: {} {} {}", node, node1, node2);
+                log.trace("generation {} running {}", generation, runningGeneration);
+                if(log.isInfoEnabled() ){
+                    log.info("Allocating generation {} includes {} iterators", generation, (iterators.containsKey(generation)) ? iterators.get(generation).size() : 0);
+                    log.info("Running generation {} includes {} iterators", runningGeneration, (iterators.containsKey(runningGeneration)) ? iterators.get(runningGeneration).size() : 0);
+                }
+                if(FacadeXResource.this.streamInactive != true){
                     // Allocate iterator to next generation
                     generation += 1;
+                    log.trace("Allocate iterator to generation {} (running {})", generation, runningGeneration);
                     // throw new RuntimeException("Allocating iterators while streaming!");
                 }
 
                 // Looking for iterators already returned, if found, return same iterator
                 // Check current iterators, if they are all completed, reset data source
                 boolean allCompleted = true;
-                if(!FacadeXResource.this.iterators.isEmpty()) {
-                    log.info("Inspetting running generation {}", runningGeneration);
+                if(FacadeXResource.this.iterators.containsKey(runningGeneration)) {
+                    log.trace("Inspetting running generation {}", runningGeneration);
                     for (BufferedIterator i : FacadeXResource.this.iterators.get(runningGeneration)) {
                         if (!i.isCompleted) {
                             allCompleted = false;
                         }
                         if (!i.isCompleted && i.about(graph, node, node1, node2)) {
-                            log.info("Found iterator: {} {} {}", node, node1, node2);
+                            log.trace("Found iterator: {} {} {}", node, node1, node2);
                             return i;
                         }
                     }
 
                     if(allCompleted){
-                        log.info("Generation {} completed", runningGeneration);
-                        log.info("Resetting stream");
+                        log.trace("Generation {} completed", runningGeneration);
+                        log.trace("Resetting stream");
                         try {
                             FacadeXResource.this.triplifier.reset();
                         }catch(IOException ex){
                             throw new RuntimeException(ex);
                         }
-                        // moving to next generation
-                        runningGeneration += 1;
-                        generation += 1;
-                        log.info("Moving to generation {}", runningGeneration);
+                    } else {
+                        log.trace("Generation {} not completed", runningGeneration);
+                        // Flush generation
+                        try {
+                            log.warn("Flushing generation");
+                            FacadeXResource.this.triplifier.flush();
+                            FacadeXResource.this.streamInactive = true;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+                    // Previous generation data should be all in the buffers at this point
+                    // Moving to next generation
+                    runningGeneration += 1;
+                    generation += 1;
+                    log.trace("Moving to generation {}", runningGeneration);
                 }
-                log.info("generation {} running {}", generation, runningGeneration);
+                log.trace("generation {} running {}", generation, runningGeneration);
                 BufferedIterator bufi = new BufferedIterator(generation, graph, node, node1, node2);
-                log.info("adding iterator: {}", bufi);
-                log.info(" - {} - {} {} {}", new Object[]{graph, node, node1, node2});
+                log.trace("adding iterator: {} (generation: {})", bufi, generation);
+                log.trace(" - {} - {} {} {}", new Object[]{graph, node, node1, node2});
                 if(!FacadeXResource.this.iterators.containsKey(generation)){
                     FacadeXResource.this.iterators.put(generation, new ArrayList<BufferedIterator>());
                 }
@@ -232,11 +256,11 @@ public class FacadeXResource implements DatasetGraph {
 
             @Override
             public void add(Triple triple) throws AddDeniedException {
-                log.info("Adding triple to iterators in generation {}", runningGeneration );
+                log.trace("Adding triple to iterators in generation {}", runningGeneration );
                 // Find iterator and
                 for(BufferedIterator bufi: iterators.get(runningGeneration)){
                     if(!bufi.isCompleted){
-                        log.info("contributing triple to iterator: {} {}", triple, bufi);
+                        log.trace("contributing triple to iterator: {} {}", triple, bufi);
                         bufi.contribute(graph, triple.getSubject(), triple.getPredicate(), triple.getObject());
                     }
                 }
@@ -252,7 +276,7 @@ public class FacadeXResource implements DatasetGraph {
 
     @Override
     public Graph getGraph(Node node) {
-        log.info("getGraph {}", node);
+        log.trace("getGraph {}", node);
         return dataSources.get(node);
     }
 

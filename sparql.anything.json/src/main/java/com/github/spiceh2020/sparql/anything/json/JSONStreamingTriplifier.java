@@ -210,4 +210,10 @@ public class JSONStreamingTriplifier implements StreamingTriplifier {
 		return Collections.unmodifiableList(Arrays.asList(new String[]{dataSourceId}));
 	}
 
+	@Override
+	public void flush() throws IOException {
+		while(stream()){
+
+		}
+	}
 }

@@ -44,4 +44,6 @@ public interface StreamingTriplifier extends Triplifier {
     public void clear() throws IOException;
 
     public List<String> getDataSourcesIds();
+
+    public void flush() throws IOException;
 }
