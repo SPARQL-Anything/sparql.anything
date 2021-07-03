@@ -27,7 +27,7 @@ import org.apache.jena.shared.DeleteDeniedException;
 import org.apache.jena.shared.PrefixMapping;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
-abstract class FacadeXDataSource implements Graph {
+public abstract class FacadeXDataSource implements Graph {
 
     private final PrefixMapping prefixMappings;
 
