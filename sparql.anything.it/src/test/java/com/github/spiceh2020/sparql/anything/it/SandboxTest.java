@@ -32,6 +32,7 @@ import org.apache.jena.rdf.model.AnonId;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -97,4 +98,8 @@ public class SandboxTest {
 //        flushed in 169.618465255 s
     }
 
+    @Test
+    public void testrange(){
+        Assert.assertTrue("1...10".matches("^[0-9]+\\.\\.\\.[0-9]+$"));
+    }
 }
