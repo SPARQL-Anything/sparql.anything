@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -19,22 +17,21 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFactory;
-import org.apache.jena.query.ResultSetFormatter;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.sparql.core.ResultBinding;
+import org.apache.jena.sparql.core.Var;
+import org.apache.jena.sparql.engine.binding.Binding;
+import org.apache.jena.sparql.engine.binding.BindingBase;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.xpath.Arg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +66,10 @@ public class SPARQLAnything {
 
 	private static final String OUTPUTPATTERN = "p";
 	private static final String OUTPUTPATTERN_LONG = "output-pattern";
+
+	private static final String VALUES = "v";
+	private static final String VALUES_LONG = "values";
+
 	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
 
 	private static String getQuery(String queryArgument) throws IOException {
@@ -221,6 +222,170 @@ public class SPARQLAnything {
 		return template;
 	}
 
+	private static class ArgValuesAsResultSet implements ResultSetRewindable {
+		private String[] values;
+		private List<String> variables;
+		private Set<Binding> bindings;
+		private Iterator<Binding> iterator;
+		private Model model;
+		private int row;
+		ArgValuesAsResultSet(String[] values){
+			this.values = values;
+			reset();
+		}
+
+		@Override
+		public void reset() {
+			this.variables = new ArrayList<String>();
+			this.bindings = new HashSet<Binding>();
+			this.model = ModelFactory.createDefaultModel();
+			row = 0;
+			// Populate
+			Map<String,Set<Pair>> var_val_map = new HashMap<String,Set<Pair>>();
+			for(String value : values){
+				String var = value.substring(0, value.indexOf('='));
+				String val = value.substring(value.indexOf('=') + 1);
+				if(!var_val_map.containsKey(var)){
+					var_val_map.put(var, new HashSet<Pair>());
+				}
+				logger.debug("Value: {} -> {}", var, val);
+				// If integer check if value represents range
+				if(val.matches("^[0-9]+\\.\\.\\.[0-9]+$")){
+					logger.trace("Range");
+					String[] vv = val.split("\\.\\.\\.");
+					int from = Integer.valueOf(vv[0]);
+					int to = Integer.valueOf(vv[1]);
+					logger.trace("Value: {} -> range({},{})", var, from, to);
+					for(int x = from; x <=to; x++){
+						var_val_map.get(var).add(Pair.of(var, Integer.toString(x)));
+					}
+				} else {
+					var_val_map.get(var).add(Pair.of(var, val));
+				}
+			}
+			// Generate bindings
+			Set<Set<Object>> sets;
+			if(var_val_map.values().size() > 1){
+				sets = cartesianProduct(var_val_map.values().toArray(new HashSet[var_val_map.values().size()]));
+			}else{
+				sets =  new HashSet<Set<Object>>();
+
+				for(Pair p: var_val_map.entrySet().iterator().next().getValue()) {
+					Set<Object> singleton = new HashSet<Object>();
+					singleton.add(p);
+					sets.add(singleton);
+				}
+			}
+			for(Set<Object> s : sets){
+				final Map<Var,Node> bins = new HashMap<Var,Node>();
+				for (Object j: s){
+					Pair p = (Pair) j;
+					String var = (String) p.getLeft();
+					String val = (String) p.getRight();
+					bins.put(Var.alloc(var), NodeFactory.createLiteral(val));
+				}
+
+				this.bindings.add(new Binding() {
+					@Override
+					public Iterator<Var> vars() {
+						return bins.keySet().iterator();
+					}
+
+					@Override
+					public boolean contains(Var var) {
+						return bins.containsKey(var);
+					}
+
+					@Override
+					public Node get(Var var) {
+						return bins.get(var);
+					}
+
+					@Override
+					public int size() {
+						return bins.size();
+					}
+
+					@Override
+					public boolean isEmpty() {
+						return bins.isEmpty();
+					}
+				});
+			}
+			this.iterator = bindings.iterator();
+		}
+
+		@Override
+		public int size() {
+			return bindings.size();
+		}
+
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+
+		@Override
+		public QuerySolution next() {
+			return nextSolution();
+		}
+
+		@Override
+		public QuerySolution nextSolution() {
+			return new ResultBinding(this.model,nextBinding());
+		}
+
+		@Override
+		public Binding nextBinding() {
+			row += 1;
+			return iterator.next();
+		}
+
+		@Override
+		public int getRowNumber() {
+			return row;
+		}
+
+		@Override
+		public List<String> getResultVars() {
+			return Collections.unmodifiableList(variables);
+		}
+
+		@Override
+		public Model getResourceModel() {
+			return this.model;
+		}
+
+		// Credits: https://stackoverflow.com/a/714256/1035608
+		public static Set<Set<Object>> cartesianProduct(Set<?>... sets) {
+			if (sets.length < 2)
+				throw new IllegalArgumentException(
+						"Can't have a product of fewer than two sets (got " +
+								sets.length + ")");
+
+			return _cartesianProduct(0, sets);
+		}
+
+		private static Set<Set<Object>> _cartesianProduct(int index, Set<?>... sets) {
+			Set<Set<Object>> ret = new HashSet<Set<Object>>();
+			if (index == sets.length) {
+				ret.add(new HashSet<Object>());
+			} else {
+				for (Object obj : sets[index]) {
+					for (Set<Object> set : _cartesianProduct(index+1, sets)) {
+						set.add(obj);
+						ret.add(set);
+					}
+				}
+			}
+			return ret;
+		}
+	}
+
+	public static ResultSet prepareResultSetFromArgValues(String [] values){
+		return new ArgValuesAsResultSet(values);
+	}
+
 	public static void main(String[] args) throws Exception {
 		logger.info("SPARQL anything");
 		Options options = new Options();
@@ -247,8 +412,12 @@ public class SPARQLAnything {
 				.longOpt(STRATEGY_LONG).build());
 
 		options.addOption(Option.builder(OUTPUTPATTERN).argName("outputPattern").hasArg()
-				.desc("OPTIONAL - Output filename pattern, e.g. 'myfile-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.").longOpt(OUTPUTPATTERN_LONG).build());
+				.desc("OPTIONAL - Output filename pattern, e.g. 'myfile-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
+				.longOpt(OUTPUTPATTERN_LONG).build());
 
+		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true)
+				.desc("OPTIONAL - Values passed as input to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The passed argument must follow the syntax: var_name=var_value. Multiple arguments are allowed. The query is repeated for each set of values.")
+				.longOpt(VALUES_LONG).build());
 		CommandLine commandLine = null;
 
 		CommandLineParser cmdLineParser = new DefaultParser();
@@ -310,16 +479,27 @@ public class SPARQLAnything {
 			String inputFile = commandLine.getOptionValue(INPUT);
 			String outputFileName = commandLine.getOptionValue(OUTPUT);
 			String outputPattern = commandLine.getOptionValue(OUTPUTPATTERN);
+			String[] values = commandLine.getOptionValues(VALUES);
 			if(outputPattern != null && outputFileName != null){
 				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
 			}
-			if(inputFile == null) {
+			if(inputFile == null && values == null) {
 				logger.debug("No input file");
 				executeQuery(commandLine, kb, query, getPrintWriter(commandLine, outputFileName));
 			} else {
-				logger.debug("Input file given");
-				// Load the file
-				ResultSet parameters = ResultSetFactory.load(inputFile);
+
+				if(inputFile != null && values != null){
+					throw new ParseException("Arguments 'input' and 'values' cannot be used together.");
+				}
+				ResultSet parameters = null;
+				if(inputFile!=null) {
+					logger.debug("Input file given");
+					// Load the file
+					parameters = ResultSetFactory.load(inputFile);
+				}else{
+					logger.debug("Values given");
+					parameters = new ArgValuesAsResultSet(values);
+				}
 				// Specifications
 				Specification specification = SpecificationFactory.create("", query);
 				// Iterate over parameters

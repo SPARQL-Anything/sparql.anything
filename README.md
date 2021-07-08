@@ -280,6 +280,24 @@ In this case sparql.anything guesses the data source type from the file extensio
 
 </details>
 
+## Query static RDF files
+
+The SPARQL Anything engine can load static RDF files in memory and perform the query against it, alongside any `x-sparql-anything` service clause.
+RDF files produced by previous SPARQL Anything processes can joined with data coming from additional resources.
+This feature is enabled with the command line argument `-l|--load` that accepts a file or a directory. 
+In the second case, all RDF files in the folder are loaded in memory before execution.
+
+## Query templates and variable bindings
+
+SPARQL Anything uses the BASIL convention for variable names in queries. Variable bindings can be passed in two ways:
+
+ - Inline arguments, using the option `-v|--values`
+ - Passing an SPARQL Result Set file, using the option `-i|--input`
+
+In the first case, the engine computes the cardinal product of all the variables bindings included and execute the query for each one of the resulting set of bindings.
+
+In the second case, the query is executed for each set of bindings in the result set.
+
 ## Magic Properties
 
 The SPARQL Anything engine is sensible to the magic property ``<http://sparql.xyz/facade-x/ns/anySlot>``. This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).
@@ -324,6 +342,22 @@ usage: java -jar sparql.anything-<version> -q query [-f format] [-i
  -q,--query <query>                    The path to the file storing the
                                        query to execute or the query
                                        itself.
+ -s,--strategy <strategy>              OPTIONAL - Strategy for query
+                                       evaluation. Possible values: '1' -
+                                       triple filtering (default), '0' -
+                                       triplify all data. The system
+                                       fallbacks to '0' when the strategy
+                                       is not implemented yet for the
+                                       given resource type.
+ -v,--values <values>                  OPTIONAL - Values passed as input
+                                       to a query template. When present,
+                                       the query is pre-processed by
+                                       substituting variable names with
+                                       the values provided. The passed
+                                       argument must follow the syntax:
+                                       var_name=var_value. Multiple
+                                       arguments are allowed. The query is
+                                       repeated for each set of values.
 
 ```
 Logging can be configured adding the following option (SLF4J):
