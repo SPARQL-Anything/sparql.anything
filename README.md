@@ -178,14 +178,28 @@ By default, these formats are triplified as follows.
 
 </details>
 
-## IRI schema
+## IRI schema and triplification options
 
 sparql.anything will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
-In order to instruct the query processor to delegate the execution to facade-x, you must use the  following URI-schema within SERVICE clauses.
+
+### Passing triplification options via SERVICE URI
+
+In order to instruct the query processor to delegate the execution to facade-x, you can use the  following URI-schema within SERVICE clauses.
 
 ```
 x-sparql-anything ':' ([option] ('=' [value])? ','?)+
 ```
+
+A minimal URI that uses only the resource locator is also possible.
+
+```
+x-sparql-anything ':' URL
+```
+
+In this case sparql.anything guesses the data source type from the file extension.
+
+
+### Passing triplification options via Basic Graph Pattern
 
 Alternatively, options can be provided as basic graph pattern inside the SERVICE clause as follows
 
@@ -207,14 +221,31 @@ WHERE {
 }
 ```
 
-A minimal URI that uses only the resource locator is also possible.
+Note that
+
+1. The SERVICE URI scheme must be ``x-sparql-anything:``.
+2. Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the SERVICE clause.
+3. Such triples must have ``fx:properties`` as subject, ``fx:[OPTION-NAME]`` as predicate, and a literal or a variable as object.
+
+You can also mix the two modalities as follows.
 
 ```
-x-sparql-anything ':' URL
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+
+SELECT ?seriesName
+WHERE {
+
+    SERVICE <x-sparql-anything:blank-nodes=false> {
+        fx:properties fx:location "https://sparql-anything.cc/example1.json" .
+        ?tvSeries xyz:name ?seriesName .
+        ?tvSeries xyz:stars ?star .
+        ?star ?li "Courteney Cox" .
+    }
+
+}
 ```
-
-In this case sparql.anything guesses the data source type from the file extension.
-
 
 ### General purpose options
 
@@ -364,6 +395,23 @@ Logging can be configured adding the following option (SLF4J):
 ```
 -Dorg.slf4j.simpleLogger.defaultLogLevel=trace
 ```
+
+## Fuseki
+
+An executable JAR of a SPARQL-Anything-powered Fuseki endpoint can be obtained from the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
+
+The jar can be executed as follows:
+
+```
+usage: java -jar sparql-anything-fuseki-<version>.jar [-p port] [-e
+            sparql-endpoint-path] [-g endpoint-gui-path]
+ -e,--path <path>   The path where the server will be running on (Default
+                    /sparql.anything).
+ -g,--gui <gui>     The path of the SPARQL endpoint GUI (Default /sparql).
+ -p,--port <port>   The port where the server will be running on (Default
+                    3000 ).
+```
+
 ## Evaluation
 
 We conducted a comparative [evaluation](experiment) of sparql.anything with respect to the state of art methods RML and SPARQL Generate.
