@@ -9,19 +9,10 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.jena.fuseki.main.FusekiServer;
 import org.apache.jena.fuseki.main.FusekiServer.Builder;
-import org.apache.jena.graph.Node;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.sparql.pfunction.PFuncSimple;
-import org.apache.jena.sparql.pfunction.PropertyFunction;
-import org.apache.jena.sparql.pfunction.PropertyFunctionFactory;
-import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,7 +121,7 @@ public class Endpoint {
 
 		} catch (ParseException e) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("process", options);
+			formatter.printHelp("java -jar sparql-anything-fuseki-<version>.jar [-p port] [-e sparql-endpoint-path] [-g endpoint-gui-path]", options);
 		}
 	}
 
