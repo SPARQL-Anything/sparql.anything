@@ -41,12 +41,18 @@
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr4-runtime</artifactId>
-			<version>4.7</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.model</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
     </dependencies>
 
