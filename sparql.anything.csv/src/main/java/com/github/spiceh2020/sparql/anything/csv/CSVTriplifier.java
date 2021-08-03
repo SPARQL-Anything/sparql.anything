@@ -50,10 +50,12 @@ public class CSVTriplifier implements Triplifier {
 		// TODO Support all flavour of csv types
 		CSVFormat format;
 		try {
-			format = CSVFormat.valueOf(properties.getProperty(PROPERTY_FORMAT, "DEFAULT"));
+			format = CSVFormat.valueOf(properties.getProperty(PROPERTY_FORMAT, "DEFAULT")).withNullString(""); // TODO make the null string a param
+			// format = CSVFormat.valueOf(properties.getProperty(PROPERTY_FORMAT, "DEFAULT"));
 		} catch (Exception e) {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
-			format = CSVFormat.DEFAULT;
+			// format = CSVFormat.DEFAULT;
+			format = CSVFormat.DEFAULT.withNullString(""); // TODO make the null string a param
 		}
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -119,9 +121,13 @@ public class CSVTriplifier implements Triplifier {
 						cellid++;
 						if (headers && headers_map.containsKey(cellid)) {
 							String colname = URLEncodedUtils.formatSegments(headers_map.get(cellid)).substring(1);
-							builder.addValue(dataSourceId, rowContainerId, colname, value);
+                            if(value != null){
+                                builder.addValue(dataSourceId, rowContainerId, colname, value);
+                            }
 						} else {
-							builder.addValue(dataSourceId, rowContainerId, cellid, value);
+                            if(value != null){
+                                builder.addValue(dataSourceId, rowContainerId, cellid, value);
+                            }
 						}
 					}
 				}
