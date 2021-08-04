@@ -19,9 +19,9 @@
  * under the License.
  */
 
-package com.github.spiceh2020.sparql.anything.test;
+package com.github.spiceh2020.sparql.anything.model.test;
 
-import com.github.spiceh2020.sparql.anything.engine.HTTPHelper;
+import com.github.spiceh2020.sparql.anything.model.HTTPHelper;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Assert;
 import org.junit.Before;
