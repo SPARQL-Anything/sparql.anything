@@ -11,6 +11,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -129,6 +131,8 @@ public interface Triplifier {
 			if(url.getProtocol().equals("http") || url.getProtocol().equals("https")){
 				CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
 				if(!HTTPHelper.isSuccessful(response) ){
+					log.error("Request unsuccesful: {}", response.getStatusLine().toString() );
+					log.error("Response body: {}", IOUtils.toString(response.getEntity().getContent()));
 					throw new IOException(response.getStatusLine().toString());
 				}
 				return response.getEntity().getContent();

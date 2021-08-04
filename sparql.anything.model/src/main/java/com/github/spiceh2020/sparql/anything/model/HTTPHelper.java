@@ -344,8 +344,18 @@ public class HTTPHelper {
         HttpClientBuilder builder = HTTPHelper.setupClientBuilder(url, properties);
         CloseableHttpClient client = builder.build();
         HttpUriRequest request = HTTPHelper.buildRequest(url, properties);
+        if(log.isDebugEnabled()){
+            log.debug("* Request line: {}", request.getRequestLine());
+            for(Header h: request.getAllHeaders()) {
+                log.debug("> {}: {}", h.getName(), h.getValue());
+            }
+        }
         CloseableHttpResponse response = client.execute(request);
-        log.info("Downloaded {} :: {}", url, response.getStatusLine().getStatusCode());
+        log.debug("* Status line: {}", response.getStatusLine());
+        for(Header h: response.getAllHeaders()) {
+            log.debug("< {}: {}", h.getName(), h.getValue());
+        }
+        log.debug("Downloaded {} :: {}", url, response.getStatusLine().getStatusCode());
         return response;
     }
 }
