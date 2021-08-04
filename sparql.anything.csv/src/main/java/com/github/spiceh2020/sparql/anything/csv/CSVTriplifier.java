@@ -77,7 +77,7 @@ public class CSVTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId, root);
 		try {
 
-			final InputStream is = Triplifier.getInputStream(url, properties, charset);
+			final InputStream is = Triplifier.getInputStream(url, properties);
 			in = new InputStreamReader(new BOMInputStream(is), charset);
 
 			Iterable<CSVRecord> records = format.parse(in);

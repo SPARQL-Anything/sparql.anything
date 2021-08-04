@@ -51,7 +51,7 @@ public class XMLTriplifier implements Triplifier {
 //		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
 		String namespace = Triplifier.getNamespaceArgument(properties);
 //		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
-		Charset charset = Triplifier.getCharsetArgument(properties);
+//		Charset charset = Triplifier.getCharsetArgument(properties);
 
 		String root = Triplifier.getRootArgument(properties, url);
 
@@ -73,7 +73,7 @@ public class XMLTriplifier implements Triplifier {
 		StringBuilder charBuilder = null;
 		//
 		try {
-			InputStream is = Triplifier.getInputStream(url, properties, charset);
+			InputStream is = Triplifier.getInputStream(url, properties);
 			eventReader = inputFactory.createXMLEventReader(is);
 		} catch (XMLStreamException | ArchiveException e) {
 			throw new IOException(e);

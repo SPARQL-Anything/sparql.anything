@@ -36,7 +36,7 @@ public class JSONTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 	private static final byte[] BUFF = new byte[1024];
 
-	private void transformJSONFromURL(URL url, String rootId, Properties properties, Charset charset,
+	private void transformJSONFromURL(URL url, String rootId, Properties properties,
 			FacadeXGraphBuilder filter) throws IOException {
 		JsonIterator.setMode(DecodingMode.DYNAMIC_MODE_AND_MATCH_FIELD_WITH_HASH);
 		JsonStream.setMode(EncodingMode.DYNAMIC_MODE);
@@ -46,7 +46,7 @@ public class JSONTriplifier implements Triplifier {
 
 //		final InputStream us = url.openStream();
 		try {
-			final InputStream us = Triplifier.getInputStream(url, properties, charset);
+			final InputStream us = Triplifier.getInputStream(url, properties);
 
 			// XXX We need to do this roundtrip since JsonIterator does not seem to properly
 			// unescape \\uXXXX - to be investigated.
@@ -202,9 +202,9 @@ public class JSONTriplifier implements Triplifier {
 
 		logger.trace("Triplifying ", url.toString());
 		logger.trace("Op ", op);
-		Charset charset = Triplifier.getCharsetArgument(properties);
+
 		FacadeXGraphBuilder filter = new TripleFilteringFacadeXBuilder(url, op, properties);
-		transformJSONFromURL(url, Triplifier.getRootArgument(properties, url), properties, charset, filter);
+		transformJSONFromURL(url, Triplifier.getRootArgument(properties, url), properties, filter);
 		if (logger.isDebugEnabled()) {
 			logger.debug("Number of triples: {} ", filter.getMainGraph().size());
 		}

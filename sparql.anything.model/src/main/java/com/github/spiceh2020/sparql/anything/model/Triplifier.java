@@ -114,13 +114,18 @@ public interface Triplifier {
 		return null;
 	}
 
-	public static InputStream getInputStream(URL url, Properties properties, Charset charset)
+	private static InputStream getInputStream(URL url, Properties properties, Charset charset)
 			throws IOException, ArchiveException {
 		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString()))
 			return url.openStream();
 		URL urlArchive = instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
 		return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive,
 				properties.getProperty(IRIArgument.LOCATION.toString()), charset);
+	}
+
+	public static InputStream getInputStream(URL url, Properties properties)
+			throws IOException, ArchiveException {
+		return getInputStream(url, properties, getCharsetArgument(properties));
 	}
 
 }

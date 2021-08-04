@@ -58,12 +58,12 @@ public class TextTriplifier implements Triplifier {
 		}
 
 		String root = Triplifier.getRootArgument(properties, url);
-		Charset charset = Triplifier.getCharsetArgument(properties);
+
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
 		String value;
 		try {
-			value = readFromURL(url, properties, charset.toString());
+			value = readFromURL(url, properties);
 
 			Node rootResource;
 			if (!blank_nodes) {
@@ -158,12 +158,12 @@ public class TextTriplifier implements Triplifier {
 
 	}
 
-	private static String readFromURL(URL url, Properties properties, String charset)
+	private static String readFromURL(URL url, Properties properties)
 			throws IOException, ArchiveException {
 		StringWriter sw = new StringWriter();
 //		IOUtils.copy(url.openStream(), sw, Charset.forName(charset));
-		InputStream is = Triplifier.getInputStream(url, properties, Charset.forName(charset));
-		IOUtils.copy(is, sw, Charset.forName(charset));
+		InputStream is = Triplifier.getInputStream(url, properties);
+		IOUtils.copy(is, sw, Triplifier.getCharsetArgument(properties));
 		return sw.toString();
 
 	}
