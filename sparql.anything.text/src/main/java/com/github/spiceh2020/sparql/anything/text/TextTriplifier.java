@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -58,34 +56,30 @@ public class TextTriplifier implements Triplifier {
 		}
 
 		String root = Triplifier.getRootArgument(properties, url);
-		Charset charset = Triplifier.getCharsetArgument(properties);
+
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
 		String value;
-		try {
-			value = readFromURL(url, properties, charset.toString());
 
-			Node rootResource;
-			if (!blank_nodes) {
-				if (root == null) {
-					rootResource = NodeFactory.createURI(url.toString());
-				} else {
-					rootResource = NodeFactory.createURI(root);
-				}
+		value = readFromURL(url, properties);
 
+		Node rootResource;
+		if (!blank_nodes) {
+			if (root == null) {
+				rootResource = NodeFactory.createURI(url.toString());
 			} else {
-				rootResource = NodeFactory.createBlankNode();
+				rootResource = NodeFactory.createURI(root);
 			}
 
-			Graph g = triplifyValue(properties, blank_nodes, rootResource, value);
-
-			dg.addGraph(NodeFactory.createURI(url.toString()), g);
-			dg.setDefaultGraph(g);
-
-		} catch (ArchiveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
+			rootResource = NodeFactory.createBlankNode();
 		}
+
+		Graph g = triplifyValue(properties, blank_nodes, rootResource, value);
+
+		dg.addGraph(NodeFactory.createURI(url.toString()), g);
+		dg.setDefaultGraph(g);
+
 		return dg;
 	}
 
@@ -158,12 +152,12 @@ public class TextTriplifier implements Triplifier {
 
 	}
 
-	private static String readFromURL(URL url, Properties properties, String charset)
-			throws IOException, ArchiveException {
+	private static String readFromURL(URL url, Properties properties)
+			throws IOException {
 		StringWriter sw = new StringWriter();
 //		IOUtils.copy(url.openStream(), sw, Charset.forName(charset));
-		InputStream is = Triplifier.getInputStream(url, properties, Charset.forName(charset));
-		IOUtils.copy(is, sw, Charset.forName(charset));
+		InputStream is = Triplifier.getInputStream(url, properties);
+		IOUtils.copy(is, sw, Triplifier.getCharsetArgument(properties));
 		return sw.toString();
 
 	}

@@ -1,13 +1,11 @@
 package com.github.spiceh2020.sparql.anything.html;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
@@ -61,17 +59,20 @@ public class HTMLTriplifier implements Triplifier {
 		Document doc;
 		// If location is a http or https, raise exception if status is not 200
 		log.debug("Loading URL: {}", url);
-		if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.connect();
-			log.debug("Response code: {}", conn.getResponseCode());
-			if (conn.getResponseCode() != 200) {
-				throw new IOException(HttpStatus.getStatusText(conn.getResponseCode()));
-			}
-			doc = Jsoup.parse(conn.getInputStream(), charset.toString(), url.toString());
-		} else {
-			doc = Jsoup.parse(url.openStream(), charset.toString(), url.toString());
-		}
+//		if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
+//			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//			conn.connect();
+//			log.debug("Response code: {}", conn.getResponseCode());
+//			if (conn.getResponseCode() != 200) {
+//				throw new IOException(HttpStatus.getStatusText(conn.getResponseCode()));
+//			}
+//			doc = Jsoup.parse(conn.getInputStream(), charset.toString(), url.toString());
+//		} else {
+//			doc = Jsoup.parse(url.openStream(), charset.toString(), url.toString());
+//		}
+
+		doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
+
 		Model model = ModelFactory.createDefaultModel();
 		// log.info(doc.title());
 		Elements elements = doc.select(selector);

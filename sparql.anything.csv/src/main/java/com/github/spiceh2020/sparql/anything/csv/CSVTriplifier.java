@@ -5,14 +5,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -82,7 +80,7 @@ public class CSVTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId, root);
 		try {
 
-			final InputStream is = Triplifier.getInputStream(url, properties, charset);
+			final InputStream is = Triplifier.getInputStream(url, properties);
 			in = new InputStreamReader(new BOMInputStream(is), charset);
 
 			Iterable<CSVRecord> records = format.parse(in);
@@ -135,7 +133,7 @@ public class CSVTriplifier implements Triplifier {
 					}
 				}
 			}
-		} catch (IllegalArgumentException | ArchiveException e) {
+		} catch (IllegalArgumentException e) {
 			log.error("{} :: {}", e.getMessage(), url);
 			throw new IOException(e);
 		}

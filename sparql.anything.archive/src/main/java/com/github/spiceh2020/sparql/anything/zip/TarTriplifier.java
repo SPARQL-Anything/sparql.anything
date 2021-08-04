@@ -73,7 +73,7 @@ public class TarTriplifier implements Triplifier {
 			}
 
 		} catch (ArchiveException e) {
-			e.printStackTrace();
+			throw new IOException(e);
 		}
 
 		dg.setDefaultGraph(g);
