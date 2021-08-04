@@ -327,13 +327,13 @@ public class HTTPHelper {
         return response.getStatusLine().getStatusCode() >= 500 && response.getStatusLine().getStatusCode() <= 599;
     }
 
-    public static final InputStream getInputStream(URL url, Properties properties) throws IOException {
+    public static final CloseableHttpResponse getInputStream(URL url, Properties properties) throws IOException {
         log.debug("Downloading via HTTP Client");
         HttpClientBuilder builder = HTTPHelper.setupClientBuilder(url, properties);
         CloseableHttpClient client = builder.build();
         HttpUriRequest request = HTTPHelper.buildRequest(url, properties);
         CloseableHttpResponse response = client.execute(request);
         log.info("Downloaded {} :: {}", url, response.getStatusLine().getStatusCode());
-        return response.getEntity().getContent();
+        return response;
     }
 }
