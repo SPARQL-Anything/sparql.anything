@@ -311,6 +311,23 @@ WHERE {
 
 </details>
 
+### HTTP options
+SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|http.client.*|Calls methods on the HTTPClient Java object. E.g. `http.client.useSystemProperties=false` means to avoid inheriting Java system properties (Default 'yes')|
+|http.client.useSystemProperties|Use Java System Properties to configure the HTTP Client.|true/false|true|
+|http.header.*|To add headers to the HTTP request. E.g. `http.header.accept=application/json`|||
+|http.query.*|To add parameters to the query string. E.g. `http.query.var=value` or `http.query.var.1=value` to add more variable of the same name|||
+|http.form.*|To add parameters to the POST content. E.g. `http.form.var=value` or `http.form.var.1=value` to add more variable of the same name|||
+|http.method|HTTP Method|GET,POST,...|GET|
+|http.payload| Sets the payload of the request|||
+|http.protocol|Protocol|0.9,1.0,1.1|1.1|
+|http.auth.user|Authentication: user name|||
+|http.auth.password|Authentication: password|||
+|http.redirect|Follow redirect?|true,false|true|
+
 ## Query static RDF files
 
 The SPARQL Anything engine can load static RDF files in memory and perform the query against it, alongside any `x-sparql-anything` service clause.
