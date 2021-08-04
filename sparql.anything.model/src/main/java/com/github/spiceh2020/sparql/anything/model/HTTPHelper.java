@@ -27,15 +27,13 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.DefaultHttpRequestFactory;
 import org.apache.http.impl.client.*;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BasicRequestLine;
 import org.slf4j.Logger;
@@ -188,7 +186,6 @@ public class HTTPHelper {
     }
 
     public static HttpUriRequest buildRequest(URL url, Properties properties) {
-        HttpRequestFactory factory = new DefaultHttpRequestFactory();
 
         String method = "GET";
         if (properties.containsKey(HTTPMETHOD)) {
@@ -247,21 +244,39 @@ public class HTTPHelper {
             uri = url.toString();
         }
 
-        RequestLine requestLine = new BasicRequestLine(method, uri, protocol);
+//        RequestLine requestLine = new BasicRequestLine(method, uri, protocol);
         HttpUriRequest request;
-        try {
-            request = (HttpUriRequest) factory.newHttpRequest(requestLine);
-        } catch (MethodNotSupportedException e) {
-            log.error("Method not supported: {}", method);
-            log.warn("Using method GET");
-            requestLine = new BasicRequestLine("GET", url.toString(), protocol);
-            try {
-                request = (HttpUriRequest) factory.newHttpRequest(requestLine);
-            } catch (MethodNotSupportedException e1) {
-                // This is not supposed to happen
-                throw new RuntimeException(e1);
-            }
+
+        switch (method){
+            case "GET":
+                request = new HttpGet(uri);
+                break;
+            case "POST":
+                request = new HttpPost(uri);
+                break;
+            case "PUT":
+                request = new HttpPut(uri);
+                break;
+            case "DELETE":
+                request = new HttpDelete(uri);
+                break;
+            case "OPTIONS":
+                request = new HttpOptions(uri);
+                break;
+            case "HEAD":
+                request = new HttpHead(uri);
+                break;
+            case "TRACE":
+                request = new HttpTrace(uri);
+                break;
+            case "PATCH":
+                request = new HttpPatch(uri);
+                break;
+            default:
+                log.error("Method not supported: {}", method);
+                throw new IllegalArgumentException("Unsupported method: " + method);
         }
+
 
         // Add Headers
         for(Header h: headers){

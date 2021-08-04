@@ -11,6 +11,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.slf4j.Logger;
@@ -116,8 +117,28 @@ public interface Triplifier {
 
 	private static InputStream getInputStream(URL url, Properties properties, Charset charset)
 			throws IOException, ArchiveException {
-		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString()))
+		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString())){
+
+			// If local throw exception
+			if(url.getProtocol().equals("file")){
+				log.debug("Getting input stream from file");
+				return url.openStream();
+			} else
+
+			// If HTTP
+			if(url.getProtocol().equals("http") || url.getProtocol().equals("https")){
+				CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
+				if(!HTTPHelper.isSuccessful(response) ){
+					throw new IOException(response.getStatusLine().toString());
+				}
+				return response.getEntity().getContent();
+			}
+
+			// If other protocol, try URL and Connection
+			log.debug("Other protocol: {}", url.getProtocol());
 			return url.openStream();
+		}
+		// Handle archives differently
 		URL urlArchive = instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
 		return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive,
 				properties.getProperty(IRIArgument.LOCATION.toString()), charset);
