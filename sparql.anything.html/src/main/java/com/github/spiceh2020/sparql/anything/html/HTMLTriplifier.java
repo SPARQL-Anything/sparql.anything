@@ -1,13 +1,11 @@
 package com.github.spiceh2020.sparql.anything.html;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
@@ -72,11 +70,9 @@ public class HTMLTriplifier implements Triplifier {
 //		} else {
 //			doc = Jsoup.parse(url.openStream(), charset.toString(), url.toString());
 //		}
-		try {
-			doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
-		} catch (ArchiveException e) {
-			throw new IOException(e);
-		}
+
+		doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
+
 		Model model = ModelFactory.createDefaultModel();
 		// log.info(doc.title());
 		Elements elements = doc.select(selector);

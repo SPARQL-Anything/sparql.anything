@@ -116,7 +116,7 @@ public interface Triplifier {
 	}
 
 	private static InputStream getInputStream(URL url, Properties properties, Charset charset)
-			throws IOException, ArchiveException {
+			throws IOException {
 		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString())){
 
 			// If local throw exception
@@ -140,12 +140,16 @@ public interface Triplifier {
 		}
 		// Handle archives differently
 		URL urlArchive = instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
-		return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive,
-				properties.getProperty(IRIArgument.LOCATION.toString()), charset);
+		try {
+			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive,
+					properties.getProperty(IRIArgument.LOCATION.toString()), charset);
+		} catch (ArchiveException e) {
+			throw new IOException(e);
+		}
 	}
 
 	public static InputStream getInputStream(URL url, Properties properties)
-			throws IOException, ArchiveException {
+			throws IOException {
 		return getInputStream(url, properties, getCharsetArgument(properties));
 	}
 

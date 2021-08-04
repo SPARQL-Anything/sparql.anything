@@ -75,7 +75,7 @@ public class XMLTriplifier implements Triplifier {
 		try {
 			InputStream is = Triplifier.getInputStream(url, properties);
 			eventReader = inputFactory.createXMLEventReader(is);
-		} catch (XMLStreamException | ArchiveException e) {
+		} catch (XMLStreamException e) {
 			throw new IOException(e);
 		}
 		boolean isRoot = true;
