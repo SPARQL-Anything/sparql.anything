@@ -28,6 +28,7 @@ import java.util.Properties;
 
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.core.BasicPattern;
@@ -35,11 +36,35 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.junit.Test;
+import static org.junit.Assert.fail;
 
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 
 public class CSVTriplifierTest {
 	private CSVTriplifier triplifier = new CSVTriplifier();
+
+	@Test
+	public void testCsvNullStrings() throws IOException {
+		testCsvNullString("");
+		testCsvNullString("N/A");
+		testCsvNullString(" ");
+	}
+
+	public void testCsvNullString(String nullString) throws IOException {
+		Properties properties = new Properties();
+		properties.setProperty("namespace", "http://www.example.org#");
+		properties.setProperty("csv.null-string", nullString);
+		URL csv1 = getClass().getClassLoader().getResource("./test3.csv");
+		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
+		BasicPattern bp = new BasicPattern();
+		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
+					NodeFactory.createVariable("o")));
+		DatasetGraph graph = triplifier.triplify(properties, new OpBGP(bp));
+		// with csv.null-string set to nullString we should not see any quads with nullString in the object position
+		if(graph.find(Node.ANY,Node.ANY,Node.ANY,NodeFactory.createLiteral(nullString)).hasNext()){
+			fail("csv.null-string didn't work for: \"" +  nullString + "\"");
+		}
+	}
 
 	@Test
 	public void test() throws IOException {
@@ -49,12 +74,12 @@ public class CSVTriplifierTest {
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
 		BasicPattern bp = new BasicPattern();
 		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
-				NodeFactory.createVariable("o")));
+					NodeFactory.createVariable("o")));
 		DatasetGraph graph = triplifier.triplify(properties, new OpBGP(bp));
-		
+
 		Graph expected = GraphFactory.createGraphMem();
-		
-		
+
+
 	}
 
 	@Test
@@ -62,7 +87,7 @@ public class CSVTriplifierTest {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 		properties.setProperty("blank-nodes", "false");
-//        properties.setProperty("uriRoot", "http://www.example.org#");
+		//        properties.setProperty("uriRoot", "http://www.example.org#");
 
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());

@@ -29,6 +29,7 @@ import com.github.spiceh2020.sparql.anything.model.Triplifier;
 public class CSVTriplifier implements Triplifier {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
+	public final static String PROPERTY_NULLSTRING = "csv.null-string";
 
 	@Deprecated
 	public DatasetGraph triplify(Properties properties) throws IOException {
@@ -53,6 +54,10 @@ public class CSVTriplifier implements Triplifier {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
+		if(properties.containsKey(PROPERTY_NULLSTRING)){
+			format = format.withNullString(properties.getProperty(PROPERTY_NULLSTRING)) ;
+		}
+
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
@@ -117,9 +122,13 @@ public class CSVTriplifier implements Triplifier {
 						cellid++;
 						if (headers && headers_map.containsKey(cellid)) {
 							String colname = URLEncodedUtils.formatSegments(headers_map.get(cellid)).substring(1);
-							builder.addValue(dataSourceId, rowContainerId, colname, value);
+							if(value != null){
+								builder.addValue(dataSourceId, rowContainerId, colname, value);
+							}
 						} else {
-							builder.addValue(dataSourceId, rowContainerId, cellid, value);
+							if(value != null){
+								builder.addValue(dataSourceId, rowContainerId, cellid, value);
+							}
 						}
 					}
 				}
