@@ -270,7 +270,7 @@ WHERE {
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
 |html.selector|A CSS selector that restricts the HTML tags to consider for the triplification.|Any valid CSS selector.|No Value|
-|html.browser|It tells the triplifier to use the specified browser to navigate to the page to obtain HTML.|chromium\|webkit\|firefox|null|
+|html.browser|It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see TODO.md.|chromium\|webkit\|firefox|null|
 
 </details>
 
