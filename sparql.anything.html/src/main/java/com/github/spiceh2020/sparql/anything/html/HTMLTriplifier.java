@@ -26,6 +26,10 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.Page;
 
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
@@ -33,6 +37,7 @@ public class HTMLTriplifier implements Triplifier {
 
 	private static final Logger log = LoggerFactory.getLogger(HTMLTriplifier.class);
 	private static final String PROPERTY_SELECTOR = "html.selector";
+	private static final String PROPERTY_BROWSER = "html.browser";
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
@@ -46,6 +51,7 @@ public class HTMLTriplifier implements Triplifier {
 
 		if (url == null)
 			return DatasetGraphFactory.create();
+
 
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -71,7 +77,12 @@ public class HTMLTriplifier implements Triplifier {
 //			doc = Jsoup.parse(url.openStream(), charset.toString(), url.toString());
 //		}
 
-		doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
+
+		if(properties.containsKey(PROPERTY_BROWSER)){
+			doc = Jsoup.parse(useBrowserToNavigate(url.toString(), properties.getProperty(PROPERTY_BROWSER)));
+		} else {
+			doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
+		}
 
 		Model model = ModelFactory.createDefaultModel();
 		// log.info(doc.title());
@@ -169,6 +180,35 @@ public class HTMLTriplifier implements Triplifier {
 			log.info(ln);
 			return model.createResource(namespace + ln);
 		}
+	}
+
+	private String useBrowserToNavigate(String url, String browserProperty){
+		// navigate to the page at url and return the HTML as a string 
+		Playwright playwright = Playwright.create() ;
+		Browser browser ;
+		switch (browserProperty){
+			case "chromium":
+				log.info("using chromium");
+				browser = playwright.chromium().launch();
+				break;
+			case "firefox":
+				log.info("using firefox");
+				browser = playwright.firefox().launch();
+				break;
+			case "webkit":
+				log.info("using webkit");
+				browser = playwright.webkit().launch();
+				break;
+			default:
+				log.warn("\"" + browserProperty + "\"" + " is not a valid browser -- defaulting to chromium");
+				browser = playwright.chromium().launch();
+				break;
+		}
+		BrowserContext context = browser.newContext() ;
+		Page page = context.newPage() ;
+		page.navigate(url);
+		String htmlFromBrowser = page.content();
+		return htmlFromBrowser;
 	}
 
 	@Override
