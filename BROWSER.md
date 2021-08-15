@@ -3,10 +3,11 @@
 ## SPARQL Anything Inside a Docker Container
 
 
-The headless browser has quite a few dependencies.
+The [headless browser](https://github.com/microsoft/playwright-java) has quite a few dependencies.
 You can run it natively if you get them all but it is easier to just run SPARQL Anything in a docker container (containing all the required dependencies) when you know you need to the use the browser.
 
 Option 1 (use a prebuilt docker image)
+
 Run this (in a bash shell):
 ```
 # cd into the sparql-anything git repo
@@ -14,6 +15,7 @@ docker run --rm -it -p 3000:3000 -v `pwd`:/mnt mcr.microsoft.com/playwright/java
 ```
 
 Option 2 (build your own docker image)
+
 Run this (in a bash shell):
 ```
 git clone https://github.com/microsoft/playwright-java.git
