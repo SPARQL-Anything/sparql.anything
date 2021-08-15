@@ -208,6 +208,7 @@ public class HTMLTriplifier implements Triplifier {
 		Page page = context.newPage() ;
 		page.navigate(url);
 		String htmlFromBrowser = page.content();
+		browser.close();
 		return htmlFromBrowser;
 	}
 
