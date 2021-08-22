@@ -410,8 +410,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 				// if we have FX properties we at least need to excludeFXProperties()
 				logger.trace("BGP Properties {}", p.toString());
 				DatasetGraph dg;
-				if (this.execCxt.getDataset() == null){
-					// we only need to call getDatasetGraph() if we don't already have one
+				if (this.execCxt.getDataset().isEmpty()){
+					// we only need to call getDatasetGraph() if we have an empty one
 					// otherwise we could triplify the same data multiple times
 					dg = getDatasetGraph(p, opBGP);
 				} else {
