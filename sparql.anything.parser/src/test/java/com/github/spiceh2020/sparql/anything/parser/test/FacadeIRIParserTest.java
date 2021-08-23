@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
 
-public class AppTest {
+public class FacadeIRIParserTest {
 
 	@Test
 	public void test1() {
