@@ -1,7 +1,10 @@
 package com.github.spiceh2020.sparql.anything.parser.test;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -82,6 +85,14 @@ public class AppTest {
 	@Test
 	public void specialCharsArgs() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=https://myfile.json?fo\\,o=bar&tab=goal#hack,same=汉字";
+		Properties p = new FacadeIRIParser(uri).getProperties();
+		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
+		Assert.assertEquals(p.get("same"), "汉字");
+	}
+
+	@Test
+	public void specialCharsArgsFromFile() throws IOException {
+		String uri = IOUtils.toString(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("./exampleIRI.txt")));
 		Properties p = new FacadeIRIParser(uri).getProperties();
 		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
 		Assert.assertEquals(p.get("same"), "汉字");
