@@ -490,4 +490,48 @@ public class ItTest {
 
 	}
 
+	@Test
+	public void testMixedOptions() throws URISyntaxException {
+		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
+		System.out.println(location);
+		Query query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
+				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      "
+				+ "SERVICE <x-sparql-anything:csv.headers=true> { " + "" +
+				" fx:properties fx:location \"" + location + "\";" +
+				" fx:csv.null-string \"\"" +
+				"." +
+				" ?s ?p ?o }}");
+
+		Query query2 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
+				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      "
+				+ "SERVICE <x-sparql-anything:> { " + "" +
+				" fx:properties fx:location \"" + location + "\";" +
+				" fx:csv.null-string \"\";" +
+				" fx:csv.headers \"true\"" +
+				"." +
+				" ?s ?p ?o }}");
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		ResultSet rs1 = QueryExecutionFactory.create(query1, ds).execSelect();
+		List<QuerySolution> list1 = new ArrayList<QuerySolution>();
+		while (rs1.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs1.next();
+			System.out.println(querySolution.toString());
+		}
+
+		ResultSet rs2 = QueryExecutionFactory.create(query2, ds).execSelect();
+		List<QuerySolution> list2 = new ArrayList<QuerySolution>();
+		while (rs2.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs2.next();
+			System.out.println(querySolution.toString());
+		}
+
+		assertEquals(list1, list2);
+
+	}
 }
