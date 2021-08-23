@@ -11,6 +11,11 @@
 	</parent>
 	<artifactId>sparql.anything.html</artifactId>
 	<dependencies>
+	<dependency>
+       <groupId>com.microsoft.playwright</groupId>
+       <artifactId>playwright</artifactId>
+       <version>1.13.0</version>
+       </dependency>
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.model</artifactId>
