@@ -1,5 +1,9 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
+import com.github.spiceh2020.sparql.anything.engine.functions.After;
+import com.github.spiceh2020.sparql.anything.engine.functions.Before;
+import com.github.spiceh2020.sparql.anything.engine.functions.Next;
+import com.github.spiceh2020.sparql.anything.engine.functions.Previous;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.OpExecutor;
@@ -34,7 +38,7 @@ public final class FacadeX {
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "isFacadeXExtension",
 					IsFacadeXExtension.class);
 			enablingMagicProperties();
-
+			enablingFunctions();
 			log.trace("Registering standard triplifiers");
 			Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.xml.XMLTriplifier",
 					new String[] { "xml" }, new String[] { "application/xml" });
@@ -85,6 +89,13 @@ public final class FacadeX {
 		log.trace("Registering {} magic property", Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot");
 		reg.put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot", p);
 		PropertyFunctionRegistry.set(ARQ.getContext(), reg);
+	}
 
+	public static void enablingFunctions() {
+		log.trace("Enabling functions");
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "previous", Previous.class) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "next", Next.class) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "before", Before.class) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "after", After.class) ;
 	}
 }
