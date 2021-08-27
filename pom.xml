@@ -215,6 +215,11 @@
 <!--				</exclusion>-->
 <!--			</exclusions>-->
 <!--		</dependency>-->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-fuseki-main</artifactId>
+			<version>3.16.0</version>
+		</dependency>
 
 		<!-- Commons configuration -->
 		<dependency>
@@ -349,8 +354,21 @@
 			<scope>test</scope>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.28</version>
+		</dependency>
 
 	</dependencies>
 	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.7</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>
