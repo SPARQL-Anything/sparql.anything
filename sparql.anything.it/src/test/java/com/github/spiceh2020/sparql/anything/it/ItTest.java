@@ -282,7 +282,7 @@ public class ItTest {
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 //		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
+		log.info("\n{}",ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
 	}
 
 	@Test
@@ -314,7 +314,7 @@ public class ItTest {
 		pss.setIri("location", location);
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-		System.out.println("Query " + pss.asQuery().toString());
+		log.info("Query: {}",pss.asQuery().toString());
 		ResultSet rs = QueryExecutionFactory.create(pss.asQuery(), kb).execSelect();
 		Set<String> result = new HashSet<>();
 //		System.out.println(ResultSetFormatter.asText(rs));
@@ -493,7 +493,7 @@ public class ItTest {
 	@Test
 	public void testMixedOptions() throws URISyntaxException {
 		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
-		System.out.println(location);
+		log.debug("Location {}",location);
 		Query query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
 				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      "
@@ -521,14 +521,14 @@ public class ItTest {
 		List<QuerySolution> list1 = new ArrayList<QuerySolution>();
 		while (rs1.hasNext()) {
 			QuerySolution querySolution = (QuerySolution) rs1.next();
-			System.out.println(querySolution.toString());
+			log.debug("{}",querySolution.toString());
 		}
 
 		ResultSet rs2 = QueryExecutionFactory.create(query2, ds).execSelect();
 		List<QuerySolution> list2 = new ArrayList<QuerySolution>();
 		while (rs2.hasNext()) {
 			QuerySolution querySolution = (QuerySolution) rs2.next();
-			System.out.println(querySolution.toString());
+			log.debug("{}",querySolution.toString());
 		}
 
 		assertEquals(list1, list2);
