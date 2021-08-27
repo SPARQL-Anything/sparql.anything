@@ -27,7 +27,7 @@ public class YASGUIServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		res.setContentType("text/html");// setting the content type
 
-		Template temp = TransformerConfiguration.getInstance().getFreemarkerCfg().getTemplate("yasgui.ftlh");
+		Template temp = TransformerConfiguration.getInstance().getFreemarkerCfg().getTemplate("com/github/spiceh2020/sparql/anything/fuseki/yasgui.ftlh");
 
 		Map<String, Object> var = new HashMap<>();
 		var.put("sparqlPath", this.endpointPath);

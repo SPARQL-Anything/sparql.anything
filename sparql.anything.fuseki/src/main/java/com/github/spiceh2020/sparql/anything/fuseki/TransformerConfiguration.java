@@ -2,6 +2,7 @@ package com.github.spiceh2020.sparql.anything.fuseki;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -19,7 +20,8 @@ public class TransformerConfiguration {
 
 		// Specify the source where the template files come from. Here I set a
 		// plain directory for it, but non-file-system sources are possible too:
-		freemarkerCfg.setDirectoryForTemplateLoading(new File("src/main/resources"));
+//		freemarkerCfg.setDirectoryForTemplateLoading(new File("src/main/resources"));
+		freemarkerCfg.setClassLoaderForTemplateLoading(TransformerConfiguration.class.getClassLoader(), ".");
 		freemarkerCfg.setNumberFormat("computer");
 
 		// Set the preferred charset template files are stored in. UTF-8 is
