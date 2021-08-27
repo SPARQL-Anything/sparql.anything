@@ -177,7 +177,7 @@ public class JSON2RDFTransformerTest {
 			properties.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./whitespaceKeys.json").toString());
 			g1 = jt.triplify(properties);
-			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
+//			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 //			m.write(System.out,"TTL");
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
@@ -306,7 +306,7 @@ public class JSON2RDFTransformerTest {
 							getClass().getClassLoader().getResource("./testarray.json").toString());
 					g1 = jt.triplify(properties);
 
-					ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
+//					ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -343,14 +343,15 @@ public class JSON2RDFTransformerTest {
 					g1 = jt.triplify(properties);
 					Iterator<Triple> ii = g1.getDefaultGraph().find();
 					while (ii.hasNext()) {
-						System.err.println(ii.next());
+						log.debug("{}",ii.next());
+//						System.err.println(ii.next());
 					}
-					System.err.println("---");
+					log.debug("---");
 					ii = m.getGraph().find();
 					while (ii.hasNext()) {
-						System.err.println(ii.next());
+						log.debug("{}",ii.next());
 					}
-					System.err.println("---");
+					log.debug("---");
 
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
