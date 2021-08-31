@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -26,8 +27,10 @@ public class YASGUIServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		res.setContentType("text/html");// setting the content type
-
-		Template temp = TransformerConfiguration.getInstance().getFreemarkerCfg().getTemplate("com/github/spiceh2020/sparql/anything/fuseki/yasgui.ftlh");
+		
+		Configuration c = TransformerConfiguration.getInstance().getFreemarkerCfg();
+		c.setClassForTemplateLoading(this.getClass(), "");
+		Template temp = c.getTemplate("yasgui.ftlh");
 
 		Map<String, Object> var = new HashMap<>();
 		var.put("sparqlPath", this.endpointPath);
