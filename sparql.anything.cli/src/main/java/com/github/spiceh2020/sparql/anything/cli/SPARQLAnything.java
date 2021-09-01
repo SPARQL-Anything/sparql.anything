@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -181,7 +182,7 @@ public class SPARQLAnything {
 		return "TEXT";
 	}
 
-	public static Query bindParameters(Specification specification, QuerySolution qs){
+	public static Query bindParameters(Specification specification, QuerySolution qs) throws Exception {
 		VariablesBinder binder = new VariablesBinder(specification);
 
 		List<String> missing = new ArrayList<String>();
@@ -189,12 +190,11 @@ public class SPARQLAnything {
 			logger.trace("Looking into parameter {} ({})", qp.getName(), qp.isOptional());
 			logger.trace("Checking against qs {}", qs);
 			if (qs.contains("?" + qp.getName())) {
-
 				RDFNode value = qs.get("?" + qp.getName());
 				logger.debug("Setting {}->{}", qp.getName(), value.toString());
 				binder.bind(qp.getName(), value.toString());
 			} else if (!qp.isOptional()) {
-				logger.warn("Missing parameter: {}", qp);
+				logger.warn("Missing parameter: {}", qp.getName());
 				missing.add(qp.getName());
 			}
 		}
@@ -207,17 +207,32 @@ public class SPARQLAnything {
 				ms.append("\t");
 			}
 			ms.append("\n");
-			throw new RuntimeException(ms.toString());
+			logger.error("Available query parameters not sufficient: {}", qs.toString());
+			throw new Exception(ms.toString());
 		}
 		return binder.toQuery();
 	}
 
 	public static String prepareOutputFromPattern(String template, QuerySolution qs){
+		logger.trace(" - template: {}", template);
 		Iterator<String> vars = qs.varNames();
 		while(vars.hasNext()){
+
 			String var = vars.next();
-			String v = "?" + var;
-			template = template.replace(v, qs.get(var).toString());
+//			String v = "?" + var;
+//			template = template.replace(v, qs.get(var).toString());
+			// ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040] )*
+			// #x00B7 middle dot
+			// chars with accents #x0300-#x036F
+
+			Pattern p = Pattern.compile("[\\?|\\$]" + var + "([^0-9a-z_])",
+					Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
+			template = p.matcher(template).replaceAll(qs.get(var).toString() + "$1");
+			if(logger.isTraceEnabled()) {
+				logger.trace(" - var: {}", var);
+				logger.trace(" - replacement: {}", qs.get(var).toString());
+				logger.trace(" - template: {}", template);
+			}
 		}
 		return template;
 	}
@@ -463,7 +478,7 @@ public class SPARQLAnything {
 							logger.error("An error occurred while loading {}", l);
 						}
 					}
-					logger.info("Loaded {} triples", kb.asDatasetGraph().size());
+					logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
 				}else if(loadSource.isFile()){
 					// If it is a file, load it
 					logger.info("Load location: {}", loadSource);
@@ -506,7 +521,14 @@ public class SPARQLAnything {
 //				List<String> variables = parameters.getResultVars();
 				while(parameters.hasNext()){
 					QuerySolution qs = parameters.nextSolution();
-					Query q = bindParameters(specification, qs);
+					Query q;
+					try {
+						q = bindParameters(specification, qs);
+					}catch(Exception e1){
+						logger.error("An exception occurred while evaluating the input parameters", e1);
+						logger.error("Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+						continue;
+					}
 					String outputFile = null;
 					if(outputPattern != null){
 						outputFile = prepareOutputFromPattern(outputPattern, qs);
