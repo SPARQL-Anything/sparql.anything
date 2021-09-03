@@ -348,9 +348,16 @@ In the first case, the engine computes the cardinal product of all the variables
 
 In the second case, the query is executed for each set of bindings in the result set.
 
-## Magic Properties
+## Magic Properties and Functions
 
 The SPARQL Anything engine is sensible to the magic property ``<http://sparql.xyz/facade-x/ns/anySlot>``. This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).
+
+The system supports the following functions on container membership properties (See #67): 
+
+- `fx:before(?a, ?b)` returns `true` if ?a and ?b are container membership properties and ?a is lower than ?b, false otherwise
+- `fx:after(?a, ?b)`  returns `true` if ?a and ?b are container membership properties and ?a is higher than ?b, false otherwise
+- `fx:previous(?a)` returns the container membership property that preceeds ?a (rdf:\_2 -> rdf:\_1)
+- `fx:next(?b)` returns the container membership property that succeedes ?b (rdf:\_1 -> rdf:\_2)
 
 
 ## Download and Usage
