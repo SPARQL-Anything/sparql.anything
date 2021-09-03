@@ -36,6 +36,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.regex.Pattern;
+
 public class SandboxTest {
 
     @Ignore
@@ -98,8 +100,20 @@ public class SandboxTest {
 //        flushed in 169.618465255 s
     }
 
+	@Ignore
     @Test
     public void testrange(){
         Assert.assertTrue("1...10".matches("^[0-9]+\\.\\.\\.[0-9]+$"));
     }
+
+    @Ignore
+    @Test
+	public void testRegexForVarReplacement(){
+    	String template = "?filename.ttl";
+    	String var = "filename";
+		String replacement = "the-name-of-a-file";
+		Pattern p = Pattern.compile("[\\?|\\$]" + var + "([^0-9a-z_])",
+				Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
+		System.err.println( p.matcher(template).replaceAll(replacement + "$1"));
+	}
 }
