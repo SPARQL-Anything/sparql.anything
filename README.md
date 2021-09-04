@@ -1,7 +1,9 @@
 
-<p align="center">
-  <img  src="https://raw.githubusercontent.com/spice-h2020/sparql.anything/main/logo.png">
-</p>
+# SPARQL Anything v0.1.1 (April 2021)
+
+*This branch is preserved for archiaval purposes only. Development is ongoing in the latest vX.Y-DEV branch, generally the default branch on GitHub.*
+
+---
 
 sparql.anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
