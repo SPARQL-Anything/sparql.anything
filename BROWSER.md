@@ -10,14 +10,8 @@ Follow these steps (in a bash shell) to build and run the docker container:
 
 0) have Docker [installed](https://docs.docker.com/get-docker/)
 1) `git clone` this repository and cd into it
-2) 
-```
-docker build -f Dockerfile.development -t sparql-anything-development . 
-```
-3) 
-```
-docker run -v sparql-anything_playwright:/ms-playwright -v sparql-anything_m2:/root/.m2 -p 3000:3000 --rm -it -v `pwd`:/app sparql-anything-development 
-```
+2) ``docker build -f Dockerfile.development -t sparql-anything-development .``
+3) ``docker run -v sparql-anything_playwright:/ms-playwright -v sparql-anything_m2:/root/.m2 -p 3000:3000 --rm -it -v `pwd`:/app sparql-anything-development``
 
 ## Notes
 
