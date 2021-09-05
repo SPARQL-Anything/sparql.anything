@@ -12,3 +12,5 @@ sparql.anything.experiment/src/main/java/com/github/spiceh2020/sparql/anything/e
 /tmp/
 /frameset.dtd
 /log/
+*swp
+*swo

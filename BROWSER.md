@@ -6,30 +6,21 @@
 The [headless browser](https://github.com/microsoft/playwright-java) has quite a few dependencies.
 You can run it natively if you get them all but it is easier to just run SPARQL-Anything in a docker container (containing all the required dependencies) when you know you need to the use the browser.
 
-Option 1 (use a prebuilt docker image)
+Follow these steps (in a bash shell) to build and run the docker container:
 
-Run this (in a bash shell):
+0) have Docker [installed](https://docs.docker.com/get-docker/)
+1) `git clone` this repository and cd into it
+2) 
 ```
-# cd into the sparql-anything git repo
-docker run --rm -it -p 3000:3000 -v `pwd`:/mnt mcr.microsoft.com/playwright/java:focal bash -c 'cd /mnt ; mvn package ; java -cp /root/.m2/repository/org/slf4j/slf4j-simple/1.7.7/slf4j-simple-1.7.7.jar:/mnt/sparql.anything.fuseki/target/sparql-anything-fuseki-0.3.0-SNAPSHOT.jar com.github.spiceh2020.sparql.anything.fuseki.Endpoint'
+docker build -f Dockerfile.development -t sparql-anything-development . 
 ```
-
-<br/>
-
-Option 2 (build your own docker image)
-
-Run this (in a bash shell):
+3) 
 ```
-git clone https://github.com/microsoft/playwright-java.git
-cd playwright-java
-build -t mcr.microsoft.com/playwright/java:focal . -f Dockerfile.focal
-# cd back into the sparql-anything git repo
-docker run --rm -it -p 3000:3000 -v `pwd`:/mnt mcr.microsoft.com/playwright/java:focal bash -c 'cd /mnt ; mvn package ; java -cp /root/.m2/repository/org/slf4j/slf4j-simple/1.7.7/slf4j-simple-1.7.7.jar:/mnt/sparql.anything.fuseki/target/sparql-anything-fuseki-0.3.0-SNAPSHOT.jar com.github.spiceh2020.sparql.anything.fuseki.Endpoint'
+docker run -v sparql-anything_playwright:/ms-playwright -v sparql-anything_m2:/root/.m2 -p 3000:3000 --rm -it -v `pwd`:/app sparql-anything-development 
 ```
-
-
 
 ## Notes
 
 The first time you run a SPARQL query using the headless browser [Playwright](https://playwright.dev/java/) will download the browsers.
-If you deploy this SPARQL-Anything-powered Fuseki endpoint (in this docker container) you will likely want to put a volume at the path there the browsers are saved so they don't have to be downloaded each time you start the container.
+The docker volume at /ms-playwright is to save the browsers so they don't have to be downloaded each time you re-run (3).
+The docker volume at /root/.m2 is to make subsequent builds faster.
