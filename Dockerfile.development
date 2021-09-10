@@ -1,0 +1,18 @@
+# FROM ubuntu:latest
+# if you don't need the headless browser this is sufficient
+
+FROM mcr.microsoft.com/playwright/java:focal
+#    needed for the headless browser
+
+LABEL description="SPARQL Anything"
+
+RUN apt-get update && apt-get install -y maven
+# Set the locale https://stackoverflow.com/questions/28405902/how-to-set-the-locale-inside-a-debian-ubuntu-docker-container
+RUN apt-get install locales
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+CMD cd /app && mvn clean install && \
+    java -jar sparql.anything.fuseki/target/sparql-anything-fuseki-*jar

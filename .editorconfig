@@ -4,3 +4,6 @@ root = true
 indent_style = tab
 charset = utf-8
 insert_final_newline = true
+
+; [*]
+; trim_trailing_whitespace = true
