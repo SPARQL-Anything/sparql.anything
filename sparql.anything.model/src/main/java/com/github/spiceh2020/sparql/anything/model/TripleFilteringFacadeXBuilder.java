@@ -304,17 +304,17 @@ public class TripleFilteringFacadeXBuilder implements FacadeXGraphBuilder {
 
 		@Override
 		public void visit(OpLabel opLabel) {
-
+			opLabel.getSubOp().visit(this);
 		}
 
 		@Override
 		public void visit(OpAssign opAssign) {
-
+			opAssign.getSubOp().visit(this);
 		}
 
 		@Override
 		public void visit(OpExtend opExtend) {
-
+			opExtend.getSubOp().visit(this);
 		}
 
 		@Override
@@ -404,7 +404,7 @@ public class TripleFilteringFacadeXBuilder implements FacadeXGraphBuilder {
 
 		@Override
 		public void visit(OpTopN opTopN) {
-
+			opTopN.getSubOp().visit(this);
 		}
 	}
 }
