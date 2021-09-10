@@ -6,7 +6,7 @@
 
 	<groupId>com.github.spice-h2020</groupId>
 	<artifactId>sparql.anything.parent</artifactId>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.3.1</version>
 	<packaging>pom</packaging>
 
 	<name>sparql.anything</name>
