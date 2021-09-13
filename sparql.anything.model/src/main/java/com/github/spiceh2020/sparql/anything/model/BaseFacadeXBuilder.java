@@ -27,13 +27,14 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
-public abstract class BaseFacadeXBuilder implements FacadeXGraphBuilder {
+public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	protected static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilder.class);
 	protected final Properties properties;
 	protected final Node mainGraphName;
@@ -43,7 +44,11 @@ public abstract class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	protected final String p_namespace;
 	protected final String p_root;
 
-	public BaseFacadeXBuilder(String resourceId, DatasetGraph ds, Properties properties) {
+	public BaseFacadeXBuilder(String resourceId, Properties properties) {
+		this(resourceId, DatasetGraphFactory.create(), properties);
+	}
+
+	protected BaseFacadeXBuilder(String resourceId, DatasetGraph ds, Properties properties) {
 		this.properties = properties;
 		this.mainGraphName = NodeFactory.createURI(resourceId);
 		this.datasetGraph = ds;

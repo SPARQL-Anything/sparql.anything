@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
@@ -40,6 +41,12 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String PROPERTY_BROWSER = "html.browser";
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not implemented yet
+		return triplify(properties);
+	}
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {

@@ -9,6 +9,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -29,6 +30,13 @@ import com.drew.metadata.Tag;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class MetadataTriplifier implements Triplifier {
+
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not implemented yet
+		return triplify(properties);
+	}
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {

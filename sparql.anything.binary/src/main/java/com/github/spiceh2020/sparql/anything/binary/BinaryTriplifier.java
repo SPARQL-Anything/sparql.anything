@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -31,6 +32,12 @@ public class BinaryTriplifier implements Triplifier {
 
 	public static enum Encoding {
 		BASE64
+	}
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not implemented yet
+		return triplify(properties);
 	}
 
 	@Override

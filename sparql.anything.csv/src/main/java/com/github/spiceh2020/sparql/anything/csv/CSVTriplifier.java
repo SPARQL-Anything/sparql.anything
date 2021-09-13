@@ -31,20 +31,13 @@ public class CSVTriplifier implements Triplifier {
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
 	public final static String PROPERTY_NULLSTRING = "csv.null-string";
 
-	@Deprecated
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		return triplify(properties, null);
-	}
-
 	@Override
-	public DatasetGraph triplify(Properties properties, Op op) throws IOException {
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
 			return DatasetGraphFactory.create();
-
-		log.info("CSV Triplifier: {}", op);
 
 		// TODO Support all flavour of csv types
 		CSVFormat format;
@@ -73,7 +66,7 @@ public class CSVTriplifier implements Triplifier {
 		}
 		Reader in = null;
 
-		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties);
+//		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties);
 		String dataSourceId = url.toString();
 		String containerRowPrefix = url.toString() + "#row";
 		// Add type Root

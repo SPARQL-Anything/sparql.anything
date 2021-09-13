@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.rdf.model.*;
@@ -175,7 +176,7 @@ public class JSONTriplifier implements Triplifier {
 	@Deprecated
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {
-		return triplify(properties, null);
+		return triplify(properties, (Op) null);
 	}
 
 	@Override
@@ -189,7 +190,7 @@ public class JSONTriplifier implements Triplifier {
 		logger.trace("Triplifying ", url.toString());
 		logger.trace("Op ", op);
 
-		TripleFilteringFacadeXBuilder filter = new TripleFilteringFacadeXBuilder(url, op, properties);
+		TripleFilteringFacadeXBuilder filter = new TripleFilteringFacadeXBuilder(url.toString(), op, properties);
 		this.uriRoot = Triplifier.getRootArgument(properties, url);
 //		Charset charset = getCharsetArgument(properties);
 		useBlankNodes = Triplifier.getBlankNodeArgument(properties);
@@ -200,6 +201,11 @@ public class JSONTriplifier implements Triplifier {
 		// FIXME quick and dirty solution for resetting fields
 		reset();
 		return filter.getDatasetGraph();
+	}
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		return null; // XXX added this just to allow compiling. This class is kept for reference only.
 	}
 
 	@Override

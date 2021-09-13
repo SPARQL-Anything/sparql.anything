@@ -20,6 +20,7 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
@@ -40,6 +41,12 @@ import com.github.spiceh2020.sparql.anything.model.Triplifier;
 public class XMLTriplifier implements Triplifier {
 
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not implemented yet
+		return triplify(properties);
+	}
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {

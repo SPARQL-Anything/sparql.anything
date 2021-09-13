@@ -48,7 +48,7 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 	private final Op op;
 	private final List<Object> opComponents = new ArrayList<Object>();
 
-	TripleFilteringFacadeXBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
+	public TripleFilteringFacadeXBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
 		super( resourceId,  ds,  properties);
 		this.op = op;
 		if (op != null) {
@@ -62,10 +62,10 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 		this(resourceId, op, DatasetGraphFactory.create(), properties);
 //        this(resourceId, op, DatasetGraphFactory.createTxnMem(), properties);
 	}
-
-	public TripleFilteringFacadeXBuilder(URL location, Op op, Properties properties) {
-		this(location.toString(), op, properties);
-	}
+//
+//	public TripleFilteringFacadeXBuilder(URL location, Op op, Properties properties) {
+//		this(location.toString(), op, properties);
+//	}
 
 	public boolean match(Node graph, Node subject, Node predicate, Node object) {
 		if (op == null || opComponents.isEmpty())

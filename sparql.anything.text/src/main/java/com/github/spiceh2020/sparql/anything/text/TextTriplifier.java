@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -31,6 +32,12 @@ public class TextTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(TextTriplifier.class);
 
 	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not implemented yet
+		return triplify(properties);
+	}
 
 	public DatasetGraph triplify(String value, Properties properties) throws IOException {
 		logger.trace("Triplifying \"{}\"", value);

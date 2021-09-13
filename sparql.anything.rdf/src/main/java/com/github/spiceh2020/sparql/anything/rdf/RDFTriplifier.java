@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -17,6 +18,12 @@ import com.github.spiceh2020.sparql.anything.model.Triplifier;
 public class RDFTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(RDFTriplifier.class);
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not implemented yet
+		return triplify(properties);
+	}
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {

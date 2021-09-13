@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.*;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -48,8 +49,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
 import com.github.spiceh2020.sparql.anything.metadata.MetadataTriplifier;
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import com.github.spiceh2020.sparql.anything.zip.FolderTriplifier;
 
 public class FacadeXOpExecutor extends OpExecutor {
@@ -215,15 +214,18 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (strategy == null) {
 			strategy = 1;
 		}
+		URL url = Triplifier.getLocation(p);
 		logger.debug("Execution strategy: {}", strategy);
 		if (t != null) {
+			FacadeXGraphBuilder builder;
 			if (strategy == 1) {
 				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				dg = t.triplify(p, opService);
+				builder = new TripleFilteringFacadeXBuilder(url.toString(), opService, p);
 			} else {
 				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				dg = t.triplify(p);
+				builder = new BaseFacadeXBuilder(url.toString(), p);
 			}
+			dg = t.triplify(p, builder);
 		} else {
 			// If triplifier is null, return an empty graph
 			logger.error("No triplifier available for the input format!");

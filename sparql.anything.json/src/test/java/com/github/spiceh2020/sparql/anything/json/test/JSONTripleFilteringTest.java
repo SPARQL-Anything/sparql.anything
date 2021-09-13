@@ -22,11 +22,14 @@
 package com.github.spiceh2020.sparql.anything.json.test;
 
 import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 
+import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
 import org.apache.jena.graph.Node_Variable;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
@@ -35,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -43,8 +47,13 @@ import static org.junit.Assert.assertTrue;
 public class JSONTripleFilteringTest {
 	public static final Logger log = LoggerFactory.getLogger(JSONTripleFilteringTest.class);
 
+	protected FacadeXGraphBuilder getTripleFilteringBuilder(URL url, Op op, Properties p){
+		return new TripleFilteringFacadeXBuilder(url.toString(), op, p);
+	}
+
 	@Test
 	public void friendsSinglePattern() throws IOException {
+		URL url = getClass().getClassLoader().getResource("./friends.json");
 		JSONTriplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		OpBGP bgp = new OpBGP();
@@ -52,8 +61,9 @@ public class JSONTripleFilteringTest {
 				ResourceFactory.createPlainLiteral("Romance").asNode()));
 		DatasetGraph g1;
 		properties.setProperty(IRIArgument.LOCATION.toString(),
-				getClass().getClassLoader().getResource("./friends.json").toString());
-		g1 = jt.triplify(properties, bgp);
+				url.toString());
+		FacadeXGraphBuilder builder = getTripleFilteringBuilder(url, bgp, properties);
+		g1 = jt.triplify(properties, builder);
 		// Only two triples matching the BGP
 		log.info("Size is: {}", g1.getDefaultGraph().size());
 		Iterator<Quad> quads = g1.find();
@@ -66,6 +76,7 @@ public class JSONTripleFilteringTest {
 
 	@Test
 	public void friendsMultiplePatterns() throws IOException {
+		URL url = getClass().getClassLoader().getResource("./friends.json");
 		JSONTriplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		OpBGP bgp = new OpBGP();
@@ -74,9 +85,10 @@ public class JSONTripleFilteringTest {
 		bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"),
 				ResourceFactory.createPlainLiteral("Comedy").asNode()));
 		DatasetGraph g1;
+		FacadeXGraphBuilder builder = getTripleFilteringBuilder(url, bgp, properties);
 		properties.setProperty(IRIArgument.LOCATION.toString(),
-				getClass().getClassLoader().getResource("./friends.json").toString());
-		g1 = jt.triplify(properties, bgp);
+				url.toString());
+		g1 = jt.triplify(properties, builder);
 		// Only four triples matching the BGP
 		log.info("Size is: {}", g1.getDefaultGraph().size());
 		Iterator<Quad> quads = g1.find();

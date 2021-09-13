@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -26,6 +27,12 @@ public class ZipTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(ZipTriplifier.class);
 	public static final String MATCHES = "archive.matches";
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not implemented yet
+		return triplify(properties);
+	}
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {

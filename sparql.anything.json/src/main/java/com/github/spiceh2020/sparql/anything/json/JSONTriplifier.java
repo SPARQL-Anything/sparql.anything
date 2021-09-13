@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.BaseFacadeXBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.translate.UnicodeUnescaper;
@@ -34,18 +35,25 @@ public class JSONTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 	private static final byte[] BUFF = new byte[1024];
 
-	private void transformFromURL(URL url, String rootId, Properties properties,
-								  FacadeXGraphBuilder builder) throws IOException {
+
+	private String[] getDataSources(URL url){
+		return new String[]{url.toString()};
+	}
+
+	private String getRootId(URL url, String dataSourceId, Properties properties){
+		return Triplifier.getRootArgument(properties, url);
+	}
+
+	private void transform(URL url, Properties properties,
+				FacadeXGraphBuilder builder) throws IOException {
+
 		JsonIterator.setMode(DecodingMode.DYNAMIC_MODE_AND_MATCH_FIELD_WITH_HASH);
 		JsonStream.setMode(EncodingMode.DYNAMIC_MODE);
 
 //		JsonIterator json = JsonIterator.parse(url.openStream().readAllBytes());
 		JsonIterator json = JsonIterator.parse(BUFF);
 
-//		final InputStream us = url.openStream();
-
 		final InputStream us = Triplifier.getInputStream(url, properties);
-
 		// XXX We need to do this roundtrip since JsonIterator does not seem to properly
 		// unescape \\uXXXX - to be investigated.
 		final InputStream stream = IOUtils.toInputStream(
@@ -53,7 +61,9 @@ public class JSONTriplifier implements Triplifier {
 				StandardCharsets.UTF_8);
 		try {
 			json.reset(stream);
-			transformJSON(json, url.toString(), rootId, builder);
+			// Only 1 data source expected
+			String dataSourceId = getDataSources(url)[0];
+			transformJSON(json, dataSourceId, getRootId(url, dataSourceId, properties), builder);
 		} finally {
 			stream.close();
 			us.close();
@@ -142,32 +152,43 @@ public class JSONTriplifier implements Triplifier {
 		}
 	}
 
-	@Deprecated
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		return triplify(properties, null);
-	}
+
+
+
+//	@Override
+//	public DatasetGraph triplify(Properties properties, Op op) throws IOException {
+//
+//		URL url = Triplifier.getLocation(properties);
+//
+//		if (url == null)
+//			return DatasetGraphFactory.create();
+//
+//		logger.trace("Triplifying ", url.toString());
+//		logger.trace("Op ", op);
+//
+//		FacadeXGraphBuilder filter = new TripleFilteringFacadeXBuilder(url.toString(), op, properties);
+//		transform(url, properties, filter);
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("Number of triples: {} ", filter.getMainGraph().size());
+//		}
+//		return filter.getDatasetGraph();
+//	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, Op op) throws IOException {
-
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 		URL url = Triplifier.getLocation(properties);
-
-		if (url == null)
-			return DatasetGraphFactory.create();
-
 		logger.trace("Triplifying ", url.toString());
-		logger.trace("Op ", op);
 
-		FacadeXGraphBuilder filter = new TripleFilteringFacadeXBuilder(url, op, properties);
-		transformFromURL(url, Triplifier.getRootArgument(properties, url), properties, filter);
+		transform(url,  properties, builder);
+
+
 		if (logger.isDebugEnabled()) {
-			logger.debug("Number of triples: {} ", filter.getMainGraph().size());
+			logger.debug("Number of triples: {} ", builder.getMainGraph().size());
 		}
-		return filter.getDatasetGraph();
+		return builder.getDatasetGraph();
 	}
 
-	@Override
+								 @Override
 	public Set<String> getMimeTypes() {
 		return Sets.newHashSet("application/json");
 	}

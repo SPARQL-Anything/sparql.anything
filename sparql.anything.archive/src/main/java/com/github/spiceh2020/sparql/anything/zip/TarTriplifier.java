@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -27,6 +28,12 @@ import com.github.spiceh2020.sparql.anything.model.Triplifier;
 public class TarTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(TarTriplifier.class);
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not implemented yet
+		return triplify(properties);
+	}
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {

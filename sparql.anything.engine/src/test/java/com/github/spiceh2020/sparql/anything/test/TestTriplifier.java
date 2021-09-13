@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.sparql.core.DatasetGraph;
 
@@ -33,6 +34,12 @@ import com.github.spiceh2020.sparql.anything.model.Triplifier;
 public class TestTriplifier implements Triplifier {
 
 	public TestTriplifier() {
+	}
+
+	@Override
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+		// TODO Not tested yet
+		return triplify(properties);
 	}
 
 	@Override
