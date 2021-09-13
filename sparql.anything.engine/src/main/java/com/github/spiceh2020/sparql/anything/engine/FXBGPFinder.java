@@ -40,9 +40,19 @@ import org.apache.jena.sparql.algebra.op.OpUnion;
 public class FXBGPFinder implements OpVisitor {
 
 	private OpBGP serviceBGP;
+	private OpTable opTable;
+	private boolean hasTable = false;
 
 	public OpBGP getBGP() {
 		return serviceBGP;
+	}
+
+	public OpTable getOpTable() {
+		return opTable;
+	}
+
+	public boolean hasTable() {
+		return hasTable;
 	}
 
 	@Override
@@ -87,7 +97,8 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpTable opTable) {
-
+		this.hasTable = true;
+		this.opTable = opTable;
 	}
 
 	@Override
