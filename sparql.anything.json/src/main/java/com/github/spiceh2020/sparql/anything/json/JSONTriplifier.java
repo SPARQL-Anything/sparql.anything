@@ -59,22 +59,12 @@ public class JSONTriplifier implements Triplifier {
 			us.close();
 		}
 	}
-
-//	private void any(String jsoon)
-
+	
 	private void transformJSON(JsonIterator json, String dataSourceId, String rootId, FacadeXGraphBuilder builder)
 			throws IOException {
 
 		builder.addRoot(dataSourceId, rootId);
-//		Any any = json.readAny();
-//
-//		if(any.valueType().equals(ValueType.OBJECT)) {
-//			Map<String, Any> object = any.asMap();
-//			transform(object, dataSourceId, rootId, filter);
-//		} else {
-//			List<Any> object = any.asList();
-//			transform( object, dataSourceId, rootId, filter);
-//		}
+
 		if (json.whatIsNext().equals(ValueType.OBJECT)) {
 			Map<String, Any> object = json.readAny().asMap();
 			transform(object, dataSourceId, rootId, builder);
@@ -118,35 +108,6 @@ public class JSONTriplifier implements Triplifier {
 			}
 		});
 	}
-
-//	private void transform( List<Any> arr, String dataSourceId, String containerId, FacadeXGraphBuilder filter) {
-//		for (int i = 0; i < arr.size(); i++) {
-//			Any o = arr.get(i);
-//			if(o.valueType().equals(ValueType.OBJECT) || o.valueType().equals(ValueType.ARRAY)) {
-//				String childContainerId = StringUtils.join(containerId, "/_", String.valueOf(i+1));
-//				filter.addContainer(dataSourceId, containerId, i+1, childContainerId);
-//				if (o.valueType().equals(ValueType.OBJECT)) {
-//					transform(o.asMap(), dataSourceId, childContainerId, filter);
-//				} else {
-//					transform(o.asList(), dataSourceId, childContainerId, filter);
-//				}
-//			}else
-//			if(((Any) o).valueType().equals(ValueType.STRING)){
-//				filter.addValue(dataSourceId, containerId, i+1, ((Any) o).toString());
-//			}else
-//			if(((Any) o).valueType().equals(ValueType.BOOLEAN)){
-//				filter.addValue(dataSourceId, containerId, i+1, ((Any) o).toBoolean());
-//			}else
-//			if(((Any) o).valueType().equals(ValueType.NUMBER)){
-//				log.info("Type: {} {}", o.valueType(), o.getClass());
-//				if(o.toString().contains(".")){
-//					filter.addValue(dataSourceId, containerId, i+1, ((Any) o).toFloat());
-//				} else {
-//					filter.addValue(dataSourceId, containerId, i+1, ((Any) o).toInt());
-//				}
-//			}
-//		}
-//	}
 
 	private void transform(List<Any> arr, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
 		for (int i = 0; i < arr.size(); i++) {
