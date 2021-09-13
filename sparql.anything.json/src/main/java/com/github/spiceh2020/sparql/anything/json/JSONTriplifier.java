@@ -34,8 +34,8 @@ public class JSONTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 	private static final byte[] BUFF = new byte[1024];
 
-	private void transformJSONFromURL(URL url, String rootId, Properties properties,
-			FacadeXGraphBuilder builder) throws IOException {
+	private void transformFromURL(URL url, String rootId, Properties properties,
+								  FacadeXGraphBuilder builder) throws IOException {
 		JsonIterator.setMode(DecodingMode.DYNAMIC_MODE_AND_MATCH_FIELD_WITH_HASH);
 		JsonStream.setMode(EncodingMode.DYNAMIC_MODE);
 
@@ -59,7 +59,7 @@ public class JSONTriplifier implements Triplifier {
 			us.close();
 		}
 	}
-	
+
 	private void transformJSON(JsonIterator json, String dataSourceId, String rootId, FacadeXGraphBuilder builder)
 			throws IOException {
 
@@ -160,7 +160,7 @@ public class JSONTriplifier implements Triplifier {
 		logger.trace("Op ", op);
 
 		FacadeXGraphBuilder filter = new TripleFilteringFacadeXBuilder(url, op, properties);
-		transformJSONFromURL(url, Triplifier.getRootArgument(properties, url), properties, filter);
+		transformFromURL(url, Triplifier.getRootArgument(properties, url), properties, filter);
 		if (logger.isDebugEnabled()) {
 			logger.debug("Number of triples: {} ", filter.getMainGraph().size());
 		}
