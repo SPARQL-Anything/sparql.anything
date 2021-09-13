@@ -44,32 +44,18 @@ import java.util.Properties;
 /**
  *
  */
-public class TripleFilteringFacadeXBuilder implements FacadeXGraphBuilder {
-	private final Properties properties;
+public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 	private final Op op;
 	private final List<Object> opComponents = new ArrayList<Object>();
-	private final Node mainGraphName;
-	private final DatasetGraph datasetGraph;
-	private static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilder.class);
-
-	//
-	private final boolean p_blank_nodes;
-	private final String p_namespace;
-	private final String p_root;
 
 	TripleFilteringFacadeXBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
-		this.properties = properties;
+		super( resourceId,  ds,  properties);
 		this.op = op;
 		if (op != null) {
 			ComponentsCollector collector = new ComponentsCollector();
 			op.visit(collector);
 		}
-		this.datasetGraph = ds;
-		this.mainGraphName = NodeFactory.createURI(resourceId);
 		//
-		this.p_blank_nodes = Triplifier.getBlankNodeArgument(properties);
-		this.p_root = Triplifier.getRootArgument(properties, resourceId);
-		this.p_namespace = Triplifier.getNamespaceArgument(properties);
 	}
 
 	public TripleFilteringFacadeXBuilder(String resourceId, Op op, Properties properties) {
@@ -107,6 +93,7 @@ public class TripleFilteringFacadeXBuilder implements FacadeXGraphBuilder {
 		return false;
 	}
 
+	@Override
 	@Deprecated
 	public void add(Resource subject, Property predicate, RDFNode object) {
 		if (match(mainGraphName, subject.asNode(), predicate.asNode(), object.asNode())) {
@@ -137,88 +124,6 @@ public class TripleFilteringFacadeXBuilder implements FacadeXGraphBuilder {
 		return false;
 	}
 
-	@Override
-	public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey),
-				container2node(childContainerId));
-	}
-	
-	
-
-
-	@Override
-	public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
-				container2node(childContainerId));
-	}
-
-	@Override
-	public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey),
-				value2node(value));
-	}
-
-	@Override
-	public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
-				value2node(value));
-	}
-
-	@Override
-	public boolean addRoot(String dataSourceId, String rootId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(rootId), RDF.type.asNode(),
-				NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
-	}
-
-	@Override
-	public Node container2node(String container) {
-		if (p_blank_nodes) {
-			return NodeFactory.createBlankNode(container);
-		} else {
-			return NodeFactory.createURI(container);
-		}
-	}
-
-	@Override
-	public Node key2predicate(String key) {
-		return NodeFactory.createURI(this.p_namespace + key);
-	}
-
-	@Override
-	public Node value2node(Object value) {
-		return ResourceFactory.createTypedLiteral(value).asNode();
-	}
-
-	/**
-	 * This includes triples from the default graph / union of all graphs.
-	 * 
-	 * @return
-	 */
-	public Model getModel() {
-		return ModelFactory.createModelForGraph(getDatasetGraph().getUnionGraph());
-	}
-
-	@Override
-	public DatasetGraph getDatasetGraph() {
-		datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
-		return datasetGraph;
-	}
-
-	/**
-	 * The main graph is created when adding triples instead of quads. The main
-	 * graph uses the resourceId as data source identifier / graph name
-	 *
-	 * @return
-	 */
-	@Override
-	public Node getMainGraphName() {
-		return mainGraphName;
-	}
-
-	@Override
-	public Graph getMainGraph() {
-		return datasetGraph.getGraph(mainGraphName);
-	}
 
 	class ComponentsCollector implements OpVisitor {
 		@Override
