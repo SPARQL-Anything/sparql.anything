@@ -37,6 +37,7 @@ import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.iterator.QueryIterDefaulting;
 import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
+import org.apache.jena.sparql.engine.join.Join;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
@@ -171,6 +172,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 				// Proceed with the next operation
 //				logger.trace("Unbound variables, BGP {}", e.getOpBGP().toString());
 				OpBGP fakeBGP = extractFakePattern(e.getOpBGP());
+				if (e.getOpTable() != null) {
+					logger.trace("Executing table");
+					QueryIterator qIterT = e.getOpTable().getTable().iterator(execCxt);
+					QueryIterator qIter = Join.join(input, qIterT, execCxt);
+					return postponeService(opService, qIter);
+				}
 				logger.trace("Executing fake pattern {}", fakeBGP);
 				return postponeService(opService, QC.execute(fakeBGP, input, execCxt));
 			}
@@ -330,8 +337,23 @@ public class FacadeXOpExecutor extends OpExecutor {
 		Op next = opService.getSubOp();
 		FXBGPFinder vis = new FXBGPFinder();
 		next.visit(vis);
+		logger.trace("Has Table {}", vis.hasTable());
+
 		if (vis.getBGP() != null) {
-			extractPropertiesFromOpGraph(properties, vis.getBGP());
+			try {
+				extractPropertiesFromOpGraph(properties, vis.getBGP());
+			} catch (UnboundVariableException e) {
+				if (vis.hasTable()) {
+					logger.trace(vis.getOpTable().toString());
+					logger.trace("BGP {}", vis.getBGP());
+					logger.trace("Contains variable names {}",
+							vis.getOpTable().getTable().getVarNames().contains(e.getVariableName()));
+					if (vis.getOpTable().getTable().getVarNames().contains(e.getVariableName())) {
+						e.setOpTable(vis.getOpTable());
+					}
+				}
+				throw e;
+			}
 			logger.trace("Number of properties {}", properties.size());
 		} else {
 			logger.trace("Couldn't find OpGraph");
@@ -410,12 +432,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 				// if we have FX properties we at least need to excludeFXProperties()
 				logger.trace("BGP Properties {}", p.toString());
 				DatasetGraph dg;
-				if (this.execCxt.getDataset().isEmpty()){
+				if (this.execCxt.getDataset().isEmpty()) {
 					// we only need to call getDatasetGraph() if we have an empty one
 					// otherwise we could triplify the same data multiple times
 					dg = getDatasetGraph(p, opBGP);
 				} else {
-					dg = this.execCxt.getDataset() ;
+					dg = this.execCxt.getDataset();
 				}
 				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2,
 						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
