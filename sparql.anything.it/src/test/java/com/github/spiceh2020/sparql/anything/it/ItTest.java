@@ -549,32 +549,35 @@ public class ItTest {
 	public void testIssue83() throws URISyntaxException {
 		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
 		log.debug("Location {}", location);
-		Query query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
-				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
-				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { VALUES(?location) {(\""
-				+ location + "\")}     " + "SERVICE <x-sparql-anything:csv.headers=true> { " + ""
-				+ " fx:properties fx:location ?location ;" + " fx:csv.null-string \"\"" + "." + " ?s ?p ?o }}");
 
-		query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
-				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
-				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { "
-				+ "SERVICE <x-sparql-anything:csv.headers=true> { " + "" + " fx:properties fx:location ?location ; "
-				+ " fx:csv.null-string \"\"" + "." + " ?s ?p ?o VALUES (?location) {(\"" + location + "\")} }}");
-		
-		System.out.println(QueryFactory.create(query1).toString(Syntax.syntaxSPARQL_11));
+		Query query1 = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+						+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { "
+						+ "SERVICE <x-sparql-anything:csv.headers=true> { " + ""
+						+ " fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "."
+						+ " ?s rdf:_1 ?o . ?o xyz:A ?r  VALUES (?location) {(\"" + location + "\")} }}");
 
 		Dataset ds = DatasetFactory.createGeneral();
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
 		ResultSet rs1 = QueryExecutionFactory.create(query1, ds).execSelect();
-//		List<QuerySolution> list1 = new ArrayList<QuerySolution>();
-//		while (rs1.hasNext()) {
-//			QuerySolution querySolution = (QuerySolution) rs1.next();
-//			log.debug("{}", querySolution.toString());
-//		}
+		Set<String> results = new HashSet<>();
+		while (rs1.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs1.next();
+			results.add(querySolution.getLiteral("r").getValue().toString());
+		}
+		assertEquals(Sets.newHashSet("A1"), results);
 
-		System.out.println(ResultSetFormatter.asText(rs1));
+//		Query query2 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
+//				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+//				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { VALUES(?location) {(\""
+//				+ location + "\")}" + "SERVICE <x-sparql-anything:csv.headers=true> { " + ""
+//				+ " fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "."
+//				+ " ?s rdf:_1 ?o . ?o xyz:A ?r  ");
+//		System.out.println(query2.toString(Syntax.syntaxSPARQL_11));
+//		ResultSet rs2 = QueryExecutionFactory.create(query2, ds).execSelect();
+//		System.out.println(ResultSetFormatter.asText(rs2));
 
 	}
 }
