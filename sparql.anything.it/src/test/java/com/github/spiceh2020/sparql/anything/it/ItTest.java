@@ -508,38 +508,49 @@ public class ItTest {
 	}
 
 	@Test
-	public void testMixedOptions() throws URISyntaxException {
+	public void issue75() throws URISyntaxException {
 		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
 		log.debug("Location {}", location);
 		Query query1 = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
 						+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      "
-						+ "SERVICE <x-sparql-anything:csv.headers=true> { " + "" + " fx:properties fx:location \""
-						+ location + "\";" + " fx:csv.null-string \"\"" + "." + " ?s ?p ?o }}");
+						+ "SERVICE <x-sparql-anything:> { "
+						+ " fx:properties fx:csv.headers true . fx:properties fx:location \"" + location + "\" . "
+						+ " ?s rdf:_1 ?o . ?o xyz:A ?a }}");
 
 		Query query2 = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
 						+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      "
 						+ "SERVICE <x-sparql-anything:> { " + "" + " fx:properties fx:location \"" + location + "\";"
-						+ " fx:csv.null-string \"\";" + " fx:csv.headers \"true\"" + "." + " ?s ?p ?o }}");
+						+ " fx:csv.headers true " + "." + " ?s rdf:_1 ?o . ?o xyz:A ?a }}");
 
 		Dataset ds = DatasetFactory.createGeneral();
+
+		System.out.println(query1.toString(Syntax.syntaxSPARQL_11));
+		System.out.println(query2.toString(Syntax.syntaxSPARQL_11));
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
 		ResultSet rs1 = QueryExecutionFactory.create(query1, ds).execSelect();
-		List<QuerySolution> list1 = new ArrayList<QuerySolution>();
+//		System.out.println(ResultSetFormatter.asText(rs1));
+		List<String> list1 = new ArrayList<>();
 		while (rs1.hasNext()) {
 			QuerySolution querySolution = (QuerySolution) rs1.next();
-			log.debug("{}", querySolution.toString());
+//			System.out.println(querySolution);
+			list1.add(querySolution.getLiteral("a").getValue().toString());
 		}
 
 		ResultSet rs2 = QueryExecutionFactory.create(query2, ds).execSelect();
-		List<QuerySolution> list2 = new ArrayList<QuerySolution>();
+//		System.out.println(ResultSetFormatter.asText(rs2));
+		List<String> list2 = new ArrayList<>();
 		while (rs2.hasNext()) {
 			QuerySolution querySolution = (QuerySolution) rs2.next();
-			log.debug("{}", querySolution.toString());
+//			System.out.println(querySolution);
+			list2.add(querySolution.getLiteral("a").getValue().toString());
 		}
+
+//		System.out.println(list1);
+//		System.out.println(list2);
 
 		assertEquals(list1, list2);
 
@@ -558,7 +569,7 @@ public class ItTest {
 						+ " ?s rdf:_1 ?o . ?o xyz:A ?r  VALUES (?location) {(\"" + location + "\")} }}");
 
 		Dataset ds = DatasetFactory.createGeneral();
-		
+
 //		System.out.println(query1.toString(Syntax.syntaxSPARQL_11));
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
