@@ -30,27 +30,6 @@ public class Issues {
 
 	private static final Logger log = LoggerFactory.getLogger(Issues.class);
 
-	@Test
-	public void testAnySlotMagicProperty() throws IOException, URISyntaxException {
-		Query query = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
-						+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      "
-						+ "SERVICE <x-sparql-anything:content=abcd,txt.split=b> { " + "?r fx:anySlot ?slot   }}");
-
-		Dataset ds = DatasetFactory.createGeneral();
-
-		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-
-		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
-		Set<String> slots = new HashSet<>();
-		while (rs.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs.next();
-			slots.add(querySolution.get("slot").asLiteral().getValue().toString());
-		}
-
-		assertEquals(Sets.newHashSet("a", "cd"), slots);
-
-	}
 
 	@Test
 	public void issue75() throws URISyntaxException {
