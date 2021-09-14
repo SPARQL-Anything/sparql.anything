@@ -140,7 +140,7 @@ public class TextTriplifier implements Triplifier {
 			if (properties.containsKey(SPLIT)) {
 
 				logger.trace("Splitting regex: {}", properties.getProperty(SPLIT));
-				System.out.println("split: " + properties.getProperty(SPLIT));
+//				System.out.println("split: " + properties.getProperty(SPLIT));
 				String[] split = value.split(properties.getProperty(SPLIT));
 				for (int i = 0; i < split.length; i++) {
 //					System.out.println(" -> " + split[i]);
