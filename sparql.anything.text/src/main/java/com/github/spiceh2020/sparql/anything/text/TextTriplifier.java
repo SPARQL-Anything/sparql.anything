@@ -32,68 +32,63 @@ public class TextTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(TextTriplifier.class);
 
 	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
+//
+//	public DatasetGraph triplify(String value, Properties properties, FacadeXGraphBuilder builder) throws IOException {
+//		logger.trace("Triplifying \"{}\"", value);
+//		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+//		triplifyValue(builder, properties, blank_nodes, Integer.toString(value.hashCode()), value);
+//		logger.trace("Number of triples: {}", g.size());
+//
+//		return builder.getDatasetGraph();
+//	}
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not implemented yet
-		return triplify(properties);
-	}
-
-	public DatasetGraph triplify(String value, Properties properties) throws IOException {
-		logger.trace("Triplifying \"{}\"", value);
-		DatasetGraph dg = DatasetGraphFactory.create();
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
-		Graph g = triplifyValue(properties, blank_nodes, NodeFactory.createBlankNode(), value);
-		logger.trace("Number of triples: {}", g.size());
-		dg.setDefaultGraph(g);
-		return dg;
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		DatasetGraph dg = DatasetGraphFactory.create();
-
-		URL url = Triplifier.getLocation(properties);
-
-		if (url == null) {
-			if (properties.containsKey(IRIArgument.CONTENT.toString())) {
-				return triplify(properties.getProperty(IRIArgument.CONTENT.toString()), properties);
-			}
-			return dg;
-		}
-
-		String root = Triplifier.getRootArgument(properties, url);
-
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+//		DatasetGraph dg = DatasetGraphFactory.create();
 
 		String value;
-
-		value = readFromURL(url, properties);
-
-		Node rootResource;
-		if (!blank_nodes) {
-			if (root == null) {
-				rootResource = NodeFactory.createURI(url.toString());
-			} else {
-				rootResource = NodeFactory.createURI(root);
-			}
-
-		} else {
-			rootResource = NodeFactory.createBlankNode();
+		String root;
+		String dataSourceId;
+		URL url = Triplifier.getLocation(properties);
+		if (url == null) {
+			value = properties.getProperty(IRIArgument.CONTENT.toString(), "");
+			root = Triplifier.getRootArgument(properties, Integer.toString(value.hashCode()));
+			dataSourceId = builder.getMainGraphName().getURI();
+		}else{
+			value = readFromURL(url, properties);
+			root = Triplifier.getRootArgument(properties, url.toString());
+			dataSourceId = builder.getMainGraphName().getURI();
 		}
 
-		Graph g = triplifyValue(properties, blank_nodes, rootResource, value);
+		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
-		dg.addGraph(NodeFactory.createURI(url.toString()), g);
-		dg.setDefaultGraph(g);
+		String rootResourceId = root;
+//		if (!blank_nodes) {
+//			if (root == null) {
+//				rootResourceId = url.toString(); //NodeFactory.createURI(url.toString());
+//			} else {
+//				rootResourceId = NodeFactory.createURI(root);
+//			}
+//
+//		} else {
+//			rootResource = NodeFactory.createBlankNode();
+//		}
 
-		return dg;
-	}
+//		triplifyValue(builder, properties, blank_nodes, rootResourceId, value);
 
-	private Graph triplifyValue(Properties properties, boolean blank_nodes, Node rootResource, String value) {
-		logger.trace("Triplifying {}", value);
-		Graph g = GraphFactory.createGraphMem();
-		g.add(new Triple(rootResource, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+//		dg.addGraph(NodeFactory.createURI(url.toString()), g);
+//		dg.setDefaultGraph(g);
+//
+//		return dg;
+//		return builder.getDatasetGraph();
+
+		if(logger.isTraceEnabled()) {
+			logger.trace("Content:\n{}\n", value);
+		}
+
+		builder.addRoot(dataSourceId, rootResourceId );
+//		Graph g = GraphFactory.createGraphMem();
+//		g.add(new Triple(rootResource, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 
 		Pattern pattern = null;
 		if (properties.containsKey(REGEX)) {
@@ -119,8 +114,8 @@ public class TextTriplifier implements Triplifier {
 					logger.warn("Group number is supposed to be a positive integer, using default (group 0)");
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(e.getMessage());
+//				e.printStackTrace();
+				logger.error("",e);
 			}
 		}
 
@@ -129,34 +124,41 @@ public class TextTriplifier implements Triplifier {
 			int count = 1;
 			while (m.find()) {
 				if (group > 1) {
-					g.add(new Triple(rootResource, RDF.li(count).asNode(),
-							NodeFactory.createLiteralByValue(m.group(group), XSDDatatype.XSDstring)));
+//					g.add(new Triple(rootResource, RDF.li(count).asNode(),
+//							NodeFactory.createLiteralByValue(m.group(group), XSDDatatype.XSDstring)));
+					builder.addValue(dataSourceId, rootResourceId, count, m.group(group));
 				} else {
-					g.add(new Triple(rootResource, RDF.li(count).asNode(),
-							NodeFactory.createLiteralByValue(m.group(), XSDDatatype.XSDstring)));
-
+//					g.add(new Triple(rootResource, RDF.li(count).asNode(),
+//							NodeFactory.createLiteralByValue(m.group(), XSDDatatype.XSDstring)));
+					builder.addValue(dataSourceId, rootResourceId, count, m.group());
 				}
 				count++;
 			}
 		} else {
 			logger.trace("No pattern set");
+
 			if (properties.containsKey(SPLIT)) {
+
 				logger.trace("Splitting regex: {}", properties.getProperty(SPLIT));
+				System.out.println("split: " + properties.getProperty(SPLIT));
 				String[] split = value.split(properties.getProperty(SPLIT));
 				for (int i = 0; i < split.length; i++) {
-					g.add(new Triple(rootResource, RDF.li(i + 1).asNode(),
-							NodeFactory.createLiteralByValue(split[i], XSDDatatype.XSDstring)));
+//					System.out.println(" -> " + split[i]);
+//					g.add(new Triple(rootResource, RDF.li(i + 1).asNode(),
+//							NodeFactory.createLiteralByValue(split[i], XSDDatatype.XSDstring)));
+//					System.out.println(dataSourceId + " -> " + rootResourceId +" -> " + (i + 1) + " -> " + split[i]);
+					builder.addValue(dataSourceId, rootResourceId, i + 1, split[i]);
 				}
 
 			} else {
-				g.add(new Triple(rootResource, RDF.li(1).asNode(),
-						NodeFactory.createLiteralByValue(value, XSDDatatype.XSDstring)));
+//				g.add(new Triple(rootResource, RDF.li(1).asNode(),
+//						NodeFactory.createLiteralByValue(value, XSDDatatype.XSDstring)));
+				builder.addValue(dataSourceId, rootResourceId, 1, value);
 			}
 
 		}
-
-		return g;
-
+//		System.out.println("Empty? " + builder.getDatasetGraph().getDefaultGraph().isEmpty());
+		return builder.getDatasetGraph();
 	}
 
 	private static String readFromURL(URL url, Properties properties)
