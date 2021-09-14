@@ -50,9 +50,6 @@ public class HTMLTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties) throws IOException {
-//		String namespace = properties.getProperty(IRIArgument.NAMESPACE.toString(), url.toString() + "#");
-//		String root = properties.getProperty(IRIArgument.ROOT.toString(), url.toString() + "#");
-//		String charset = properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8");
 
 		URL url = Triplifier.getLocation(properties);
 
@@ -72,17 +69,6 @@ public class HTMLTriplifier implements Triplifier {
 		Document doc;
 		// If location is a http or https, raise exception if status is not 200
 		log.debug("Loading URL: {}", url);
-//		if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
-//			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//			conn.connect();
-//			log.debug("Response code: {}", conn.getResponseCode());
-//			if (conn.getResponseCode() != 200) {
-//				throw new IOException(HttpStatus.getStatusText(conn.getResponseCode()));
-//			}
-//			doc = Jsoup.parse(conn.getInputStream(), charset.toString(), url.toString());
-//		} else {
-//			doc = Jsoup.parse(url.openStream(), charset.toString(), url.toString());
-//		}
 
 
 		if(properties.containsKey(PROPERTY_BROWSER)){
@@ -138,11 +124,8 @@ public class HTMLTriplifier implements Triplifier {
 		}
 		// Children
 		int counter = 0;
-//		int childNodeSize = element.childNodeSize();
-//		System.err.println("Child nodes: " + childNodeSize);
+
 		for (Node child : element.childNodes()) {
-//			System.err.println(c);
-//			Node child = element.child(c);
 			if (child.outerHtml().trim().equals(""))
 				continue;
 			counter++;
@@ -154,10 +137,6 @@ public class HTMLTriplifier implements Triplifier {
 			}
 		}
 
-//		if (element.hasText() && element.ownText().length() > 0) {
-//			counter++;
-//			resource.addProperty(RDF.li(counter), element.ownText());
-//		}
 	}
 
 	private static final String localName(Element element) {
