@@ -128,25 +128,26 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 
 		logger.trace("Triplifier {}", t.getClass().toString());
-
+		dg = triplify(op, p, t);
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
 			URL url = Triplifier.instantiateURL(urlLocation);
-			dg = triplify(op, p, t);
 			createMetadataGraph(dg, p);
 			createAuditGraph(dg, p, url);
-			// Remember the triplified data
-			if (!executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
-				executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
-				logger.debug("Graph added to in-memory cache");
-			}
-			logger.trace("Triplified, #triples in default graph {}", dg.getDefaultGraph().size());
-		} else {
-			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
-			dg = t.triplify(p);
-			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
-
 		}
+		// Remember the triplified data
+		if (!executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
+			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
+			logger.debug("Graph added to in-memory cache");
+		}
+		logger.trace("Triplified, #triples in default graph {}", dg.getDefaultGraph().size());
+
+//		else {
+//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
+//			dg = t.triplify(p);
+//			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
+//
+//		}
 
 		return dg;
 	}
@@ -221,16 +222,31 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (strategy == null) {
 			strategy = 1;
 		}
+
 		URL url = Triplifier.getLocation(p);
+		String resourceId;
+		if(url == null){
+			// XXX This method of passing content seems only supported by the TextTriplifier.
+			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
+			String id = Integer.toString(p.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+			resourceId = "content:" + id;
+		}else{
+			resourceId = url.toString();
+		}
+		System.err.println(">>>>>" + t.getClass().getCanonicalName());
+		//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
+//			dg = t.triplify(p);
+//			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
+
 		logger.debug("Execution strategy: {}", strategy);
 		if (t != null) {
 			FacadeXGraphBuilder builder;
 			if (strategy == 1) {
 				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new TripleFilteringFacadeXBuilder(url.toString(), opService, p);
+				builder = new TripleFilteringFacadeXBuilder(resourceId, opService, p);
 			} else {
 				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new BaseFacadeXBuilder(url.toString(), p);
+				builder = new BaseFacadeXBuilder(resourceId, p);
 			}
 			dg = t.triplify(p, builder);
 		} else {
