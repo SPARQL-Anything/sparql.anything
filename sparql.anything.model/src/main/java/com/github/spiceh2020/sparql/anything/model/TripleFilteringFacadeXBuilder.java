@@ -77,20 +77,32 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 				Quad q = (Quad) o;
 				if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph))
 						&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
-						&& (!q.getPredicate().isConcrete() || q.getPredicate().matches(predicate))
+						&&  predicateMatch(q.getPredicate(), predicate) //(!q.getPredicate().isConcrete() || q.getPredicate().matches(predicate))
 						&& (!q.getObject().isConcrete() || q.getObject().matches(object))) {
 					return true;
 				}
 			} else if (o instanceof Triple) {
 				Triple t = (Triple) o;
 				if ((!t.getSubject().isConcrete() || t.getSubject().matches(subject))
-						&& (!t.getPredicate().isConcrete() || t.getPredicate().matches(predicate))
+						&& predicateMatch(t.getPredicate(), predicate) //(!t.getPredicate().isConcrete() || t.getPredicate().matches(predicate))
 						&& (!t.getObject().isConcrete() || t.getObject().matches(object))) {
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	private boolean predicateMatch(Node queryPredicate, Node dataPredicate){
+		// If queryPredicate is fx:anySLot match any container membership property
+		if(queryPredicate.isConcrete() && queryPredicate.getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")){
+			if(dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return (!queryPredicate.isConcrete() || queryPredicate.matches(dataPredicate));
 	}
 
 	@Override
