@@ -1,6 +1,8 @@
 package com.github.spiceh2020.sparql.anything.html;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
@@ -8,16 +10,16 @@ import java.util.Set;
 
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.rdf.model.AnonId;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
+//import org.apache.jena.graph.NodeFactory;
+//import org.apache.jena.query.DatasetFactory;
+//import org.apache.jena.rdf.model.AnonId;
+//import org.apache.jena.rdf.model.Model;
+//import org.apache.jena.rdf.model.ModelFactory;
+//import org.apache.jena.rdf.model.Resource;
+//import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.apache.jena.vocabulary.RDF;
+//import org.apache.jena.vocabulary.RDF;
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Attribute;
@@ -44,12 +46,6 @@ public class HTMLTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not implemented yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
 
@@ -77,50 +73,69 @@ public class HTMLTriplifier implements Triplifier {
 			doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
 		}
 
-		Model model = ModelFactory.createDefaultModel();
+//		Model model = ModelFactory.createDefaultModel();
 		// log.info(doc.title());
 		Elements elements = doc.select(selector);
-		Resource rootResource = null;
+//		Resource rootResource = null;
+		String rootResourceId = null;
+		String dataSourceId = url.toString();
 		if (elements.size() > 1) {
 			// Create a root container
-			rootResource = model.createResource(root);
-			rootResource.addProperty(RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+			rootResourceId = root;
+			builder.addRoot(dataSourceId, rootResourceId);
+//			rootResource = model.createResource(root);
+//			rootResource.addProperty(RDF.type, model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		}
 		int counter = 0;
 		for (Element element : elements) {
 			counter++;
 			if (elements.size() > 1) {
 				// link to root container
-				Resource elResource = toResource(model, element, blank_nodes, namespace);
-				rootResource.addProperty(RDF.li(counter), elResource);
+//				Resource elResource = toResource(model, element, blank_nodes, namespace);
+//				rootResource.addProperty(RDF.li(counter), elResource);
+				builder.addContainer(dataSourceId, rootResourceId, counter, toResourceId(element, blank_nodes));
 			} else {
 				// Is root container
-				model.add(toResource(model, element, blank_nodes, namespace), RDF.type,
-						model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+//				model.add(toResource(model, element, blank_nodes, namespace), RDF.type,
+//						model.createResource(Triplifier.FACADE_X_TYPE_ROOT));
+				rootResourceId = toResourceId(element, blank_nodes);
+				builder.addRoot(dataSourceId, rootResourceId);
 			}
-			populate(model, element, blank_nodes, namespace);
+			try {
+				populate(builder, dataSourceId, element, blank_nodes, namespace);
+			} catch (URISyntaxException e) {
+				throw new IOException(e);
+			}
 		}
-		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
-		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
-		return dg;
+//		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
+//		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
+//		return dg;
+		return builder.getDatasetGraph();
 	}
 
-	private void populate(Model model, Element element, boolean blank_nodes, String namespace) {
+	private void populate(FacadeXGraphBuilder builder, String dataSourceId, Element element, boolean blank_nodes, String namespace) throws URISyntaxException {
 
 		String tagName = element.tagName(); // tagname is the type
-		Resource resource = toResource(model, element, blank_nodes, namespace);
+//		Resource resource = toResource(model, element, blank_nodes, namespace);
+		String resourceId = toResourceId(element, blank_nodes);
 		String innerHtml = element.html();
-		if (!innerHtml.trim().equals(""))
-			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerHTML"), innerHtml);
+		if (!innerHtml.trim().equals("")) {
+			builder.addValue(dataSourceId, resourceId, new URI(DOM_NS + "innerHTML"), innerHtml);
+//			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerHTML"), innerHtml);
+		}
 		String innerText = element.select("*").text();
-		if (!innerText.trim().equals(""))
-			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerText"), innerText);
-		resource.addProperty(RDF.type, ResourceFactory.createResource(HTML_NS + tagName));
+		if (!innerText.trim().equals("")) {
+			builder.addValue(dataSourceId, resourceId, new URI(DOM_NS + "innerText"), innerText);
+//			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerText"), innerText);
+		}
+//		resource.addProperty(RDF.type, ResourceFactory.createResource(HTML_NS + tagName));
+		builder.addType(dataSourceId,resourceId, new URI(HTML_NS + tagName));
 		// attributes
 		for (Attribute attribute : element.attributes()) {
 			String key = attribute.getKey();
 			String value = attribute.getValue();
-			resource.addProperty(ResourceFactory.createProperty(HTML_NS + key), model.createLiteral(value));
+//			resource.addProperty(ResourceFactory.createProperty(HTML_NS + key), model.createLiteral(value));
+			builder.addValue(dataSourceId, resourceId, new URI(HTML_NS + key), value);
 		}
 		// Children
 		int counter = 0;
@@ -130,10 +145,12 @@ public class HTMLTriplifier implements Triplifier {
 				continue;
 			counter++;
 			if (child instanceof Element) {
-				resource.addProperty(RDF.li(counter), toResource(model, (Element) child, blank_nodes, namespace));
-				populate(model, (Element) child, blank_nodes, namespace);
+//				resource.addProperty(RDF.li(counter), toResource(model, (Element) child, blank_nodes, namespace));
+				builder.addContainer(dataSourceId, resourceId, counter, toResourceId(element, blank_nodes));
+				populate(builder, dataSourceId, (Element) child, blank_nodes, namespace);
 			} else {
-				resource.addProperty(RDF.li(counter), child.outerHtml());
+//				resource.addProperty(RDF.li(counter), child.outerHtml());
+				builder.addValue(dataSourceId, resourceId, counter, child.outerHtml());
 			}
 		}
 
@@ -158,13 +175,23 @@ public class HTMLTriplifier implements Triplifier {
 		return selector.toString().replaceAll(" > ", "/").replaceAll(":nth-child\\(([0-9]+)\\)", ":$1");
 	}
 
-	private Resource toResource(Model model, Element element, boolean blankNodes, String namespace) {
+//	private Resource toResource(Model model, Element element, boolean blankNodes, String namespace) {
+//		if (blankNodes == true) {
+//			return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
+//		} else {
+//			String ln = localName(element);
+//			log.info(ln);
+//			return model.createResource(namespace + ln);
+//		}
+//	}
+
+	private String toResourceId(Element element, boolean blankNodes) {
 		if (blankNodes == true) {
-			return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
+			return Integer.toHexString(element.hashCode());
 		} else {
 			String ln = localName(element);
 			log.info(ln);
-			return model.createResource(namespace + ln);
+			return ln;
 		}
 	}
 
