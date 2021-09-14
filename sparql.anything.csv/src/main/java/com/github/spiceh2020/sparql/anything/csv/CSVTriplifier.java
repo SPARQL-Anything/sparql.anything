@@ -16,14 +16,12 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
-import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class CSVTriplifier implements Triplifier {
@@ -65,8 +63,7 @@ public class CSVTriplifier implements Triplifier {
 			headers = false;
 		}
 		Reader in = null;
-
-//		FacadeXGraphBuilder builder = new TripleFilteringFacadeXBuilder(url, op, properties);
+		
 		String dataSourceId = url.toString();
 		String containerRowPrefix = url.toString() + "#row";
 		// Add type Root
