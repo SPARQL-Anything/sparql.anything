@@ -32,6 +32,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
 import java.util.Properties;
 
 public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
@@ -84,9 +85,27 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	}
 
 	@Override
+	public boolean addContainer(String dataSourceId, String containerId, URI customKey, String childContainerId) {
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), NodeFactory.createURI(customKey.toString()),
+				container2node(childContainerId));
+	}
+
+	@Override
 	public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId) {
 		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
 				container2node(childContainerId));
+	}
+
+	@Override
+	public boolean addType(String dataSourceId, String containerId, String typeId) {
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(),
+				container2node(typeId));
+	}
+
+	@Override
+	public boolean addType(String dataSourceId, String containerId, URI type) {
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(),
+				NodeFactory.createURI(type.toString()));
 	}
 
 	@Override
@@ -98,6 +117,12 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	@Override
 	public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value) {
 		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
+				value2node(value));
+	}
+
+	@Override
+	public boolean addValue(String dataSourceId, String containerId, URI customKey, Object value) {
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), NodeFactory.createURI(customKey.toString()),
 				value2node(value));
 	}
 

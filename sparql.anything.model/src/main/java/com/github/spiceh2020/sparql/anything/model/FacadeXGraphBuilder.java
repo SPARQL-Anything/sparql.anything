@@ -25,6 +25,8 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.DatasetGraph;
 
+import java.net.URI;
+
 public interface FacadeXGraphBuilder {
     boolean add(Node subject, Node predicate, Node object);
 
@@ -32,9 +34,17 @@ public interface FacadeXGraphBuilder {
 
     boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId);
 
+	boolean addContainer(String dataSourceId, String containerId, URI customKey, String childContainerId);
+
     boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId);
 
-    boolean addValue(String dataSourceId, String containerId, String slotKey, Object value);
+	boolean addType(String dataSourceId, String containerId, String typeId);
+
+	boolean addType(String dataSourceId, String containerId, URI type);
+
+	boolean addValue(String dataSourceId, String containerId, String slotKey, Object value);
+
+	boolean addValue(String dataSourceId, String containerId, URI customKey, Object value);
 
     boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value);
 
