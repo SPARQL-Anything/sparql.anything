@@ -558,6 +558,8 @@ public class ItTest {
 						+ " ?s rdf:_1 ?o . ?o xyz:A ?r  VALUES (?location) {(\"" + location + "\")} }}");
 
 		Dataset ds = DatasetFactory.createGeneral();
+		
+//		System.out.println(query1.toString(Syntax.syntaxSPARQL_11));
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
@@ -569,12 +571,13 @@ public class ItTest {
 		}
 		assertEquals(Sets.newHashSet("A1"), results);
 
-//		Query query2 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
-//				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
-//				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { VALUES(?location) {(\""
-//				+ location + "\")}" + "SERVICE <x-sparql-anything:csv.headers=true> { " + ""
-//				+ " fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "."
-//				+ " ?s rdf:_1 ?o . ?o xyz:A ?r  ");
+//		Query query2 = QueryFactory.create(
+//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+//						+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { VALUES (?location) {(\""+location+"\")} "
+//						+ "SERVICE <x-sparql-anything:csv.headers=true> { " + ""
+//						+ " fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "."
+//						+ " ?s rdf:_1 ?o . ?o xyz:A ?r   }}");
+//
 //		System.out.println(query2.toString(Syntax.syntaxSPARQL_11));
 //		ResultSet rs2 = QueryExecutionFactory.create(query2, ds).execSelect();
 //		System.out.println(ResultSetFormatter.asText(rs2));
