@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.github.spiceh2020.sparql.anything.model.*;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -35,6 +34,7 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
+import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
 import org.apache.jena.sparql.engine.iterator.QueryIterDefaulting;
 import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
@@ -50,6 +50,11 @@ import org.slf4j.LoggerFactory;
 
 import com.github.spiceh2020.sparql.anything.facadeiri.FacadeIRIParser;
 import com.github.spiceh2020.sparql.anything.metadata.MetadataTriplifier;
+import com.github.spiceh2020.sparql.anything.model.BaseFacadeXBuilder;
+import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
+import com.github.spiceh2020.sparql.anything.model.TripleFilteringFacadeXBuilder;
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import com.github.spiceh2020.sparql.anything.zip.FolderTriplifier;
 
 public class FacadeXOpExecutor extends OpExecutor {
@@ -176,6 +181,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 					logger.trace("Executing table");
 					QueryIterator qIterT = e.getOpTable().getTable().iterator(execCxt);
 					QueryIterator qIter = Join.join(input, qIterT, execCxt);
+					return postponeService(opService, qIter);
+				} else if (e.getOpExtend() != null) {
+					logger.trace("Executing op extend");
+
+					QueryIterator qIter = exec(e.getOpExtend().getSubOp(), input);
+					qIter = new QueryIterAssign(qIter, e.getOpExtend().getVarExprList(), execCxt, true);
 					return postponeService(opService, qIter);
 				}
 				logger.trace("Executing fake pattern {}", fakeBGP);
@@ -370,6 +381,18 @@ public class FacadeXOpExecutor extends OpExecutor {
 						e.setOpTable(vis.getOpTable());
 					}
 				}
+
+				if (vis.getOpExtend() != null) {
+					logger.trace("OpExtend {}", vis.getOpExtend());
+					Iterator<Var> vars = vis.getOpExtend().getVarExprList().getVars().iterator();
+					while (vars.hasNext()) {
+						Var var = (Var) vars.next();
+						if (var.getName().equals(e.getVariableName())) {
+							e.setOpExtend(vis.getOpExtend());
+						}
+					}
+				}
+
 				throw e;
 			}
 			logger.trace("Number of properties {}", properties.size());

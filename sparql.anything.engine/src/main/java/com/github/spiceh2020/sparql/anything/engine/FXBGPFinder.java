@@ -41,6 +41,7 @@ public class FXBGPFinder implements OpVisitor {
 
 	private OpBGP serviceBGP;
 	private OpTable opTable;
+	private OpExtend opExtend;
 	private boolean hasTable = false;
 
 	public OpBGP getBGP() {
@@ -49,6 +50,10 @@ public class FXBGPFinder implements OpVisitor {
 
 	public OpTable getOpTable() {
 		return opTable;
+	}
+
+	public OpExtend getOpExtend() {
+		return opExtend;
 	}
 
 	public boolean hasTable() {
@@ -149,6 +154,7 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpExtend opExtend) {
+		this.opExtend = opExtend;
 		opExtend.getSubOp().visit(this);
 
 	}

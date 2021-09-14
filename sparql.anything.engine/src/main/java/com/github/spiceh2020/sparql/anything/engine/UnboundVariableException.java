@@ -1,6 +1,7 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
 import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpTable;
 
 public class UnboundVariableException extends Exception {
@@ -13,6 +14,7 @@ public class UnboundVariableException extends Exception {
 	private String variableName;
 	private OpBGP opBGP;
 	private OpTable optable;
+	private OpExtend opExtend;
 
 	public UnboundVariableException(String variableName, OpBGP op) {
 		super();
@@ -38,6 +40,14 @@ public class UnboundVariableException extends Exception {
 
 	public OpTable getOpTable() {
 		return optable;
+	}
+
+	public OpExtend getOpExtend() {
+		return opExtend;
+	}
+
+	public void setOpExtend(OpExtend opExtend) {
+		this.opExtend = opExtend;
 	}
 
 }
