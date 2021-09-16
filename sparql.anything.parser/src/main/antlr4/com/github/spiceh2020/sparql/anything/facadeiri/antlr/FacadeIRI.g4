@@ -1,8 +1,6 @@
 grammar FacadeIRI;
 
-@header {
-    package com.github.spiceh2020.sparql.anything.facadeiri.antlr;
-}
+
 
 basicURL
 :
