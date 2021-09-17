@@ -4,12 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.compress.utils.Sets;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
@@ -19,7 +21,11 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,4 +133,14 @@ public class Issues {
 
 	}
 
+	// Marked as ignored because invoking a remote resource in the query. Refers to #93
+	@Ignore
+	@Test
+	public void testIssue93() throws URISyntaxException, IOException {
+		Query query= QueryFactory.create(IOUtils.toString(getClass().getClassLoader().getResource("issue93.sparql"), StandardCharsets.UTF_8));
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Dataset ds = DatasetFactory.createGeneral();
+		Model model = QueryExecutionFactory.create(query, ds).execConstruct();
+		RDFDataMgr.write(System.out, model, Lang.TTL) ;
+	}
 }
