@@ -25,6 +25,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -133,14 +134,16 @@ public class Issues {
 
 	}
 
-	// Marked as ignored because invoking a remote resource in the query. Refers to #93
-	@Ignore
+	// Root container cannot be object
+	// Refers to #93
 	@Test
 	public void testIssue93() throws URISyntaxException, IOException {
-		Query query= QueryFactory.create(IOUtils.toString(getClass().getClassLoader().getResource("issue93.sparql"), StandardCharsets.UTF_8));
+		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issue93.sparql"), StandardCharsets.UTF_8);
+		qs = qs.replace("%%location%%", getClass().getClassLoader().getResource("issue93.html").toURI().toString());
+		Query query= QueryFactory.create(qs);
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Dataset ds = DatasetFactory.createGeneral();
-		Model model = QueryExecutionFactory.create(query, ds).execConstruct();
-		RDFDataMgr.write(System.out, model, Lang.TTL) ;
+		Boolean rootInObject = QueryExecutionFactory.create(query, ds).execAsk();
+		Assert.assertFalse(rootInObject);
 	}
 }
