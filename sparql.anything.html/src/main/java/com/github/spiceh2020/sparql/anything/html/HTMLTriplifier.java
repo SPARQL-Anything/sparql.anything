@@ -146,7 +146,7 @@ public class HTMLTriplifier implements Triplifier {
 			counter++;
 			if (child instanceof Element) {
 //				resource.addProperty(RDF.li(counter), toResource(model, (Element) child, blank_nodes, namespace));
-				builder.addContainer(dataSourceId, resourceId, counter, toResourceId(element, blank_nodes));
+				builder.addContainer(dataSourceId, resourceId, counter, toResourceId((Element)  child, blank_nodes));
 				populate(builder, dataSourceId, (Element) child, blank_nodes, namespace);
 			} else {
 //				resource.addProperty(RDF.li(counter), child.outerHtml());
