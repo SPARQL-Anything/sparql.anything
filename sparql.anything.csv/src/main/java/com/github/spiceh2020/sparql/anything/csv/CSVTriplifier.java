@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -30,7 +31,7 @@ public class CSVTriplifier implements Triplifier {
 	public final static String PROPERTY_NULLSTRING = "csv.null-string";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException{
 
 		URL url = Triplifier.getLocation(properties);
 

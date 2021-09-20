@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -26,7 +27,7 @@ import com.github.spiceh2020.sparql.anything.text.TextTriplifier;
 public class TextTriplifierTest {
 
 	@Test
-	public void test1() throws MalformedURLException {
+	public void test1() throws MalformedURLException, TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
 		File f = new File("src/main/resources/testfile");
 		URL url = f.toURI().toURL();
@@ -47,7 +48,7 @@ public class TextTriplifierTest {
 	}
 
 	@Test
-	public void testRegex() throws MalformedURLException {
+	public void testRegex() throws MalformedURLException, TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
 		File f = new File("src/main/resources/testfile");
 		URL url = f.toURI().toURL();
@@ -79,7 +80,7 @@ public class TextTriplifierTest {
 	}
 
 	@Test
-	public void testSplit() throws MalformedURLException {
+	public void testSplit() throws MalformedURLException, TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
 		File f = new File("src/main/resources/testfile");
 		URL url = f.toURI().toURL();

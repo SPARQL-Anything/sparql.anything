@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 //import org.apache.jena.graph.NodeFactory;
@@ -45,7 +46,7 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		URL url = Triplifier.getLocation(properties);
 

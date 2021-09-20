@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Node;
@@ -44,13 +45,13 @@ public class CSVTriplifierTest {
 	private CSVTriplifier triplifier = new CSVTriplifier();
 
 	@Test
-	public void testCsvNullStrings() throws IOException {
+	public void testCsvNullStrings() throws IOException, TriplifierHTTPException {
 		testCsvNullString("");
 		testCsvNullString("N/A");
 		testCsvNullString(" ");
 	}
 
-	public void testCsvNullString(String nullString) throws IOException {
+	public void testCsvNullString(String nullString) throws IOException, TriplifierHTTPException {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 		properties.setProperty("csv.null-string", nullString);
@@ -67,7 +68,7 @@ public class CSVTriplifierTest {
 	}
 
 	@Test
-	public void test() throws IOException {
+	public void test() throws IOException, TriplifierHTTPException {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
@@ -83,7 +84,7 @@ public class CSVTriplifierTest {
 	}
 
 	@Test
-	public void testBNodesFalse() throws IOException {
+	public void testBNodesFalse() throws IOException, TriplifierHTTPException {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 		properties.setProperty("blank-nodes", "false");

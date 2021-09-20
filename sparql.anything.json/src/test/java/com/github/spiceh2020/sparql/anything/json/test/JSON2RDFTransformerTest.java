@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -30,7 +31,7 @@ public class JSON2RDFTransformerTest {
 	private Logger log = LoggerFactory.getLogger(JSON2RDFTransformerTest.class);
 
 	@Test
-	public void testEmptyAndNull() {
+	public void testEmptyAndNull() throws TriplifierHTTPException {
 
 		Triplifier jt = new JSONTriplifier();
 
@@ -76,7 +77,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void testPrimitive() {
+	public void testPrimitive() throws TriplifierHTTPException {
 		{
 
 			{
@@ -134,7 +135,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void testNegative() {
+	public void testNegative() throws TriplifierHTTPException {
 		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -163,7 +164,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void keys() {
+	public void keys() throws TriplifierHTTPException {
 		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		Model m = ModelFactory.createDefaultModel();
@@ -187,7 +188,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void testBlankNodeProperty() {
+	public void testBlankNodeProperty() throws TriplifierHTTPException {
 		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		String root = "https://w3id.org/spice/resource/root";
@@ -217,7 +218,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void testBlankNodeFalse() {
+	public void testBlankNodeFalse() throws TriplifierHTTPException {
 		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		String root = "https://w3id.org/spice/resource/root";
@@ -248,7 +249,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void testBlankNodeFalseNoRoot() {
+	public void testBlankNodeFalseNoRoot() throws TriplifierHTTPException {
 		Triplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		String root = getClass().getClassLoader().getResource("./testprimitive.json").toString();
@@ -279,7 +280,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void s() {
+	public void s() throws TriplifierHTTPException {
 		{
 			{
 				Model m = ModelFactory.createDefaultModel();
@@ -364,7 +365,7 @@ public class JSON2RDFTransformerTest {
 
 	@Ignore // Not sure how to reproduce with the new library
 	@Test(expected = JsonException.class)
-	public void testDuplicateKeyJSON() {
+	public void testDuplicateKeyJSON() throws TriplifierHTTPException {
 		{
 			Triplifier jt = new JSONTriplifier();
 			try {
@@ -381,7 +382,7 @@ public class JSON2RDFTransformerTest {
 	}
 
 	@Test
-	public void testUTF8encoded() {
+	public void testUTF8encoded() throws TriplifierHTTPException {
 //		/collection/artworks/p/052/p05259-15628.json {namespace=http://sparql.xyz/facade-x/data/, location=./collection/artworks/p/052/p05259-15628.json
 		String f = "./p05259-15628.json";
 		Triplifier jt = new JSONTriplifier();
@@ -396,7 +397,7 @@ public class JSON2RDFTransformerTest {
 
 	@Ignore // this seems to work now but keeping the test for future reference
 	@Test
-	public void testContainsZerosDebug() {
+	public void testContainsZerosDebug() throws TriplifierHTTPException {
 //		/collection/artworks/p/052/p05259-15628.json {namespace=http://sparql.xyz/facade-x/data/, location=./collection/artworks/p/052/p05259-15628.json
 		String f = "./t09122-23226.json";
 		Triplifier jt = new JSONTriplifier();

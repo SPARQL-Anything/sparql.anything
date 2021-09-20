@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -30,7 +31,7 @@ public class HTMLTriplifierTest {
 	}
 
 	@Test
-	public void test1() throws URISyntaxException, IOException {
+	public void test1() throws URISyntaxException, IOException, TriplifierHTTPException {
 		Properties p = new Properties();
 		p.setProperty(IRIArgument.LOCATION.toString(), new URL(getTestLocation(name.getMethodName())).toString());
 		DatasetGraph dataset = html2rdf.triplify(p);
@@ -46,7 +47,7 @@ public class HTMLTriplifierTest {
 	}
 
 	@Test
-	public void test2() throws URISyntaxException, IOException {
+	public void test2() throws URISyntaxException, IOException, TriplifierHTTPException {
 		Properties p = new Properties();
 		p.setProperty(IRIArgument.LOCATION.toString(), new URL(getTestLocation(name.getMethodName())).toString());
 		DatasetGraph dataset = html2rdf.triplify(p);
@@ -62,7 +63,7 @@ public class HTMLTriplifierTest {
 	}
 
 	@Test
-	public void testBN() {
+	public void testBN() throws TriplifierHTTPException {
 
 		HTMLTriplifier st = new HTMLTriplifier();
 		Properties p = new Properties();

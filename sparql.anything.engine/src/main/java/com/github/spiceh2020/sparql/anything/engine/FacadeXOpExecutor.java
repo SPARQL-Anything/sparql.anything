@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -60,6 +61,7 @@ import com.github.spiceh2020.sparql.anything.zip.FolderTriplifier;
 public class FacadeXOpExecutor extends OpExecutor {
 
 	private TriplifierRegister triplifierRegister;
+	public final static String PROPERTY_OPSERVICE_SILENT = "opservice.silent";
 
 	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
 	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
@@ -259,7 +261,21 @@ public class FacadeXOpExecutor extends OpExecutor {
 				logger.trace("Executing: {} [strategy={}]", p, strategy);
 				builder = new BaseFacadeXBuilder(resourceId, p);
 			}
-			dg = t.triplify(p, builder);
+			try{
+				 dg = t.triplify(p, builder);
+			} catch (TriplifierHTTPException e){
+				if(p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")){
+					// as per  https://www.w3.org/TR/sparql11-federated-query/#serviceFailure
+					// if silent is specified "errors encountered while accessing a remote SPARQL
+					// endpoint should be ignored"
+					//
+					// so ignore errors by just returning an empty graph
+					logger.warn("Errors encountered but the silent keyword was specified");
+					dg = DatasetFactory.create().asDatasetGraph();
+				} else {
+					throw new IOException(e.toString()) ;
+				}
+			}
 		} else {
 			// If triplifier is null, return an empty graph
 			logger.error("No triplifier available for the input format!");
@@ -358,6 +374,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 			if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
 				logger.trace("Setting default value for namespace: {}", Triplifier.XYZ_NS);
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
+			}
+			if(opService.getSilent()){
+				// we can only see if silent was specified at the OpService so we need to stash a boolean
+				// at this point so we can use it when we triplify further down the Op tree
+				properties.setProperty(PROPERTY_OPSERVICE_SILENT, "true");
 			}
 		} else {
 			properties = new Properties();
