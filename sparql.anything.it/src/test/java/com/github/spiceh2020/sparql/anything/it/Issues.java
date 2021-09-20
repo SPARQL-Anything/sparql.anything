@@ -4,12 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.compress.utils.Sets;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
@@ -19,7 +21,12 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,4 +134,16 @@ public class Issues {
 
 	}
 
+	// Root container cannot be object
+	// Refers to #93
+	@Test
+	public void testIssue93() throws URISyntaxException, IOException {
+		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issue93.sparql"), StandardCharsets.UTF_8);
+		qs = qs.replace("%%location%%", getClass().getClassLoader().getResource("issue93.html").toURI().toString());
+		Query query= QueryFactory.create(qs);
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Dataset ds = DatasetFactory.createGeneral();
+		Boolean rootInObject = QueryExecutionFactory.create(query, ds).execAsk();
+		Assert.assertFalse(rootInObject);
+	}
 }

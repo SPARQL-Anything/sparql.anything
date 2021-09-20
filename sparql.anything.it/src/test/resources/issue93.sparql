@@ -1,0 +1,9 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+ASK {
+    service <x-sparql-anything:blank-nodes=true,media-type=text/html,location=%%location%%> {
+        ?root a fx:root .
+        ?higher ?slotp ?root .
+    }
+}

@@ -246,7 +246,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}else{
 			resourceId = url.toString();
 		}
-		System.err.println(">>>>>" + t.getClass().getCanonicalName());
+
 		//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
 //			dg = t.triplify(p);
 //			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
