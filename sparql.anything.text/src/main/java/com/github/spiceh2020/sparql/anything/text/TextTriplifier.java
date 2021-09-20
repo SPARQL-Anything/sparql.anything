@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -43,7 +44,7 @@ public class TextTriplifier implements Triplifier {
 //	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 //		DatasetGraph dg = DatasetGraphFactory.create();
 
 		String value;
@@ -162,7 +163,7 @@ public class TextTriplifier implements Triplifier {
 	}
 
 	private static String readFromURL(URL url, Properties properties)
-			throws IOException {
+			throws IOException, TriplifierHTTPException {
 		StringWriter sw = new StringWriter();
 //		IOUtils.copy(url.openStream(), sw, Charset.forName(charset));
 		InputStream is = Triplifier.getInputStream(url, properties);

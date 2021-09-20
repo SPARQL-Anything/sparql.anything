@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import com.github.spiceh2020.sparql.anything.model.BaseFacadeXBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +46,7 @@ public class JSONTriplifier implements Triplifier {
 	}
 
 	private void transform(URL url, Properties properties,
-				FacadeXGraphBuilder builder) throws IOException {
+				FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		JsonIterator.setMode(DecodingMode.DYNAMIC_MODE_AND_MATCH_FIELD_WITH_HASH);
 		JsonStream.setMode(EncodingMode.DYNAMIC_MODE);
@@ -175,7 +176,7 @@ public class JSONTriplifier implements Triplifier {
 //	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 		URL url = Triplifier.getLocation(properties);
 		logger.trace("Triplifying ", url.toString());
 
@@ -190,7 +191,9 @@ public class JSONTriplifier implements Triplifier {
 
 								 @Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/json");
+		Set set = Sets.newHashSet("application/json");
+		// set.add("application/problem+json"); // TODO is this necessary?
+		return set ;
 	}
 
 	@Override

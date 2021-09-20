@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException; 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -34,7 +35,7 @@ public interface Triplifier {
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
 
 	@Deprecated
-	default public DatasetGraph triplify(Properties properties) throws IOException {
+	default public DatasetGraph triplify(Properties properties) throws IOException, TriplifierHTTPException {
 		return triplify(properties, new BaseFacadeXBuilder(Triplifier.getLocation(properties).toString(), properties));
 	}
 
@@ -42,11 +43,11 @@ public interface Triplifier {
 	 * @Deprecated because triplifiers should not need to know about Op, only triple builders should, if needed.
 	 */
 	@Deprecated
-	default public DatasetGraph triplify(Properties properties, Op subOp) throws IOException {
+	default public DatasetGraph triplify(Properties properties, Op subOp) throws IOException, TriplifierHTTPException {
 		return triplify(properties);
 	}
 
-	DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException;
+	DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException;
 
 	public Set<String> getMimeTypes();
 
@@ -127,7 +128,7 @@ public interface Triplifier {
 	}
 
 	private static InputStream getInputStream(URL url, Properties properties, Charset charset)
-			throws IOException {
+			throws IOException, TriplifierHTTPException {
 		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString())){
 
 			// If local throw exception
@@ -141,8 +142,9 @@ public interface Triplifier {
 				CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
 				if(!HTTPHelper.isSuccessful(response) ){
 					log.error("Request unsuccesful: {}", response.getStatusLine().toString() );
+					log.error("Response: {}", response.toString());
 					log.error("Response body: {}", IOUtils.toString(response.getEntity().getContent()));
-					throw new IOException(response.getStatusLine().toString());
+					throw new TriplifierHTTPException(response.getStatusLine().toString());
 				}
 				return response.getEntity().getContent();
 			}
@@ -157,12 +159,13 @@ public interface Triplifier {
 			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive,
 					properties.getProperty(IRIArgument.LOCATION.toString()), charset);
 		} catch (ArchiveException e) {
-			throw new IOException(e);
+			throw new IOException(e); // TODO i think we should throw a TriplifierHTTPException instead
+			                          // to allow the silent keyword to be respected
 		}
 	}
 
 	public static InputStream getInputStream(URL url, Properties properties)
-			throws IOException {
+			throws IOException, TriplifierHTTPException {
 		return getInputStream(url, properties, getCharsetArgument(properties));
 	}
 

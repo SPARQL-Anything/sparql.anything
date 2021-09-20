@@ -21,6 +21,7 @@
 
 package com.github.spiceh2020.sparql.anything.json.test;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import com.github.spiceh2020.sparql.anything.json.JSONTriplifier;
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import com.github.spiceh2020.sparql.anything.model.IRIArgument;
@@ -52,7 +53,7 @@ public class JSONTripleFilteringTest {
 	}
 
 	@Test
-	public void friendsSinglePattern() throws IOException {
+	public void friendsSinglePattern() throws IOException, TriplifierHTTPException {
 		URL url = getClass().getClassLoader().getResource("./friends.json");
 		JSONTriplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
@@ -75,7 +76,7 @@ public class JSONTripleFilteringTest {
 	}
 
 	@Test
-	public void friendsMultiplePatterns() throws IOException {
+	public void friendsMultiplePatterns() throws IOException, TriplifierHTTPException {
 		URL url = getClass().getClassLoader().getResource("./friends.json");
 		JSONTriplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();

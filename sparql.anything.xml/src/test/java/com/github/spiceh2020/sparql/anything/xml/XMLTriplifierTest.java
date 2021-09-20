@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
@@ -23,7 +24,7 @@ public class XMLTriplifierTest {
 	public static Logger log = LoggerFactory.getLogger(XMLTriplifierTest.class);
 
 	@Test
-	public void test1() throws IOException {
+	public void test1() throws IOException, TriplifierHTTPException {
 		Properties properties = new Properties();
 		properties.setProperty("baseNamespace", "http://www.example.org#");
 
@@ -37,7 +38,7 @@ public class XMLTriplifierTest {
 	}
 
 	@Test
-	public void testBNodesFalse() throws IOException {
+	public void testBNodesFalse() throws IOException, TriplifierHTTPException {
 		Properties properties = new Properties();
 		properties.setProperty("baseNamespace", "http://www.example.org#");
 		properties.setProperty("blank-nodes", "false");
