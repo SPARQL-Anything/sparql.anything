@@ -24,16 +24,8 @@ import javax.xml.stream.events.XMLEvent;
 import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-//import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.query.DatasetFactory;
-//import org.apache.jena.rdf.model.Model;
-//import org.apache.jena.rdf.model.ModelFactory;
-//import org.apache.jena.rdf.model.Property;
-//import org.apache.jena.rdf.model.Resource;
-//import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +45,6 @@ public class XMLTriplifier implements Triplifier {
 		String namespace = Triplifier.getNamespaceArgument(properties);
 		String dataSourceId = url.toString();
 		String root = Triplifier.getRootArgument(properties, url);
-
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		// TODO allow users to configure XML parser via properties
