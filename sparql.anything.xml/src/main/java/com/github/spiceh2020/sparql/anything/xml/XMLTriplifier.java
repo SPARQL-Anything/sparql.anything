@@ -56,13 +56,11 @@ public class XMLTriplifier implements Triplifier {
 
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
-//		Model model = ModelFactory.createDefaultModel();
-		//
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		// TODO allow users to configure XML parser via properties
 		inputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
 		inputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-		
+
 		XMLEvent event = null;
 		XMLEventReader eventReader;
 		//
@@ -84,20 +82,12 @@ public class XMLTriplifier implements Triplifier {
 				log.trace("element close: {} [{}]", path, stack.size());
 				// Remove the last path
 				path = path.substring(0, path.lastIndexOf('/'));
-//				path = path.substring(0, path.lastIndexOf('/'));
 
 				// Collect data if available
 				if (charBuilder != null) {
 					String value = charBuilder.toString();
 					log.trace("collecting char stream: {}", value);
 					if (stack.peekLast() != null && value != null && !value.trim().equals("")) {
-////						Resource resource = stack.peekLast();
-//						if (!members.containsKey(resource)) {
-//							members.put(resource, 0);
-//						}
-//						int member = members.get(resource) + 1;
-//						resource.addProperty(RDF.li(member), value);
-
 						String resourceId = stack.peekLast();
 						if (!members.containsKey(resourceId)) {
 							members.put(resourceId, 0);
@@ -127,7 +117,6 @@ public class XMLTriplifier implements Triplifier {
 				}
 				int member = 0;
 				if (stack.size() > 0) {
-//					Resource parent = stack.peekLast();
 					String parent = stack.peekLast();
 					member = members.get(parent) + 1;
 					members.put(parent, member);
@@ -142,25 +131,12 @@ public class XMLTriplifier implements Triplifier {
 
 				// XXX Create an RDF resource
 				String resourceId = path.substring(1);
-//				if (blank_nodes == false) {
-//					if (isRoot) {
-//						resource = model.createResource(root);
-//					} else {
-////						resource = model.createResource(namespace + event.asStartElement().hashCode());
-//						resource = model.createResource(String.join("", new String[] { namespace, path.substring(1) }));
-//					}
-//				} else {
-//					resource = model.createResource();
-//				}
 				// If this is the root
 				if (isRoot) {
 					// Add type root
-//					resource.addProperty(RDF.type, ResourceFactory.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 					builder.addRoot(dataSourceId, resourceId);
 					isRoot = false;
 				}
-				// XXX Type is element name
-//				resource.addProperty(RDF.type, ResourceFactory.createResource(toIRI(se.getName(), namespace)));
 				try {
 					builder.addType(dataSourceId, resourceId, new URI(toIRI(se.getName(), namespace)));
 				} catch (URISyntaxException e) {
@@ -171,19 +147,14 @@ public class XMLTriplifier implements Triplifier {
 				}
 				// Link it with the container membership property
 				if (stack.size() > 0) {
-//					Resource parent = stack.peekLast();
 					String parent = stack.peekLast();
 					builder.addContainer(dataSourceId, parent, member, resourceId);
-//					Property property = RDF.li(member);
-//					parent.addProperty(property, resource);
 				}
 				// Attributes
 				Iterator<Attribute> attributes = se.getAttributes();
 				while (attributes.hasNext()) {
 					Attribute attribute = (Attribute) attributes.next();
 					log.trace("attribute: {}", attribute);
-//					Property property = model.createProperty(toIRI(attribute.getName(), namespace));
-//					resource.addProperty(property, attribute.getValue());
 					try {
 						builder.addValue(dataSourceId, resourceId, new URI(toIRI(attribute.getName(), namespace)), attribute.getValue());
 					} catch (URISyntaxException e) {
@@ -200,9 +171,6 @@ public class XMLTriplifier implements Triplifier {
 				charBuilder.append(event.asCharacters().getData().trim());
 			}
 		}
-//		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
-//		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
-//		return dg;
 		return builder.getDatasetGraph();
 	}
 
