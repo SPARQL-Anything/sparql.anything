@@ -21,5 +21,12 @@
 
 package com.github.spiceh2020.sparql.anything.engine.test;
 
+import org.junit.Test;
+
 public class FunctionsTest {
+
+	@Test
+	public void after(){
+
+	}
 }

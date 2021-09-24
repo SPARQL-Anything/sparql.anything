@@ -26,6 +26,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
@@ -84,7 +86,7 @@ public class TriplifierRegistryTest {
 
 			QC.setFactory(ARQ.getContext(), customExecutorFactory);
 
-			TriplifierRegister.getInstance().registerTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier", new String[]{"test"}, new String[]{"test-mime"});
+			TriplifierRegister.getInstance().registerTriplifier("com.github.spiceh2020.sparql.anything.engine.test.TestTriplifier", new String[]{"test"}, new String[]{"test-mime"});
 
 			Dataset kb = DatasetFactory.createGeneral();
 			Query q = QueryFactory
@@ -105,7 +107,7 @@ public class TriplifierRegistryTest {
 			assertTrue(qs.getResource("p").getURI().equals(PREFIX + "p"));
 			assertTrue(qs.getResource("o").getURI().equals(PREFIX + "o"));
 
-			TriplifierRegister.getInstance().removeTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier");
+			TriplifierRegister.getInstance().removeTriplifier("com.github.spiceh2020.sparql.anything.engine.test.TestTriplifier");
 		} catch (TriplifierRegisterException e) {
 			e.printStackTrace();
 		}
@@ -127,17 +129,18 @@ public class TriplifierRegistryTest {
 			QC.setFactory(ARQ.getContext(), customExecutorFactory);
 
 //			TriplifierRegister.getInstance().registerTriplifier(t);
-			TriplifierRegister.getInstance().registerTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier2", new String[]{"test2"}, new String[]{"test-mime2"});
+			TriplifierRegister.getInstance().registerTriplifier("com.github.spiceh2020.sparql.anything.engine.test.TestTriplifier2", new String[]{"test2"}, new String[]{"test-mime2"});
 
 			Dataset kb = DatasetFactory.createGeneral();
 
+			String location = getClass().getClassLoader().getResource("./test.json").toString();
 			Query select = QueryFactory.create(
-					"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:media-type=test-mime2,location=src/main/resources/test.json> {GRAPH ?g {?s ?p ?o}}}");
+					"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:media-type=test-mime2,location=" + location + "> {GRAPH ?g {?s ?p ?o}}}");
 
 			ResultSet rs = QueryExecutionFactory.create(select, kb).execSelect();
 			QuerySolution qs = rs.next();
 
-			String content = IOUtils.toString(new File("src/main/resources/test.json").toURI().toURL(),
+			String content = IOUtils.toString(new URI(location),
 					Charset.defaultCharset());
 
 			assertTrue(qs.getResource("g").getURI().equals(PREFIX + "g"));
@@ -145,9 +148,9 @@ public class TriplifierRegistryTest {
 			assertTrue(qs.getResource("p").getURI().equals(PREFIX + "p"));
 			assertTrue(qs.get("o").toString().replace("\\", "").equals(content));
 
-			TriplifierRegister.getInstance().removeTriplifier("com.github.spiceh2020.sparql.anything.test.TestTriplifier2");
+			TriplifierRegister.getInstance().removeTriplifier("com.github.spiceh2020.sparql.anything.engine.test.TestTriplifier2");
 
-		} catch (TriplifierRegisterException e) {
+		} catch (TriplifierRegisterException | URISyntaxException e) {
 			e.printStackTrace();
 		}
 	}
