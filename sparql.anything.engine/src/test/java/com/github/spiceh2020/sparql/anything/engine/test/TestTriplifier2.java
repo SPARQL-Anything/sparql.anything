@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package com.github.spiceh2020.sparql.anything.test;
+package com.github.spiceh2020.sparql.anything.engine.test;
 
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;

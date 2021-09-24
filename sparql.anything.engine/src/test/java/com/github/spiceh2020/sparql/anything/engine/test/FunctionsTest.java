@@ -21,39 +21,5 @@
 
 package com.github.spiceh2020.sparql.anything.engine.test;
 
-import java.io.IOException;
-import java.util.Properties;
-import java.util.Set;
-
-import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.sparql.core.DatasetGraph;
-
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
-
-public class TestTriplifier implements Triplifier {
-
-	public TestTriplifier() {
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not tested yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		return TriplifierRegistryTest.createExampleGraph();
-	}
-
-	@Override
-	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("test-mime");
-	}
-
-	@Override
-	public Set<String> getExtensions() {
-		return Sets.newHashSet("test");
-	}
+public class FunctionsTest {
 }
