@@ -1,9 +1,6 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
-import com.github.spiceh2020.sparql.anything.engine.functions.After;
-import com.github.spiceh2020.sparql.anything.engine.functions.Before;
-import com.github.spiceh2020.sparql.anything.engine.functions.Next;
-import com.github.spiceh2020.sparql.anything.engine.functions.Previous;
+import com.github.spiceh2020.sparql.anything.engine.functions.*;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.OpExecutor;
@@ -97,5 +94,7 @@ public final class FacadeX {
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "next", Next.class) ;
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "before", Before.class) ;
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "after", After.class) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "backward", Backward.class) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "forward", Forward.class) ;
 	}
 }
