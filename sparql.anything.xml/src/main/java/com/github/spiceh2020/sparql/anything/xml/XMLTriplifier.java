@@ -59,6 +59,10 @@ public class XMLTriplifier implements Triplifier {
 //		Model model = ModelFactory.createDefaultModel();
 		//
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+		// TODO allow users to configure XML parser via properties
+		inputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+		inputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+		
 		XMLEvent event = null;
 		XMLEventReader eventReader;
 		//
