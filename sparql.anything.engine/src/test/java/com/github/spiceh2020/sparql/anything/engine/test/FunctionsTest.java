@@ -121,4 +121,55 @@ public class FunctionsTest {
 		Assert.assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#_20", twentyUri);
 	}
 
+	@Test
+	public void substring1(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"SELECT ?ob WHERE {" +
+				"BIND(fx:String.substring(\"bob\", 1) as ?ob)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		String ob = result.next().get("ob").asLiteral().getString();
+		Assert.assertEquals("ob", ob);
+	}
+
+	@Test
+	public void substring2(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"SELECT ?bo WHERE {" +
+				"BIND(fx:String.substring(\"bob\", 0, 2) as ?bo)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		String bo = result.next().get("bo").asLiteral().getString();
+		Assert.assertEquals("bo", bo);
+	}
+
+	@Test
+	public void trim(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"SELECT ?bob WHERE {" +
+				"BIND(fx:String.trim(\" bob \") as ?bob)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		String bob = result.next().get("bob").asLiteral().getString();
+		Assert.assertEquals("bob", bob);
+	}
+
+	@Test
+	public void indexOf(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"SELECT ?one WHERE {" +
+				"BIND(fx:String.indexOf(\"bob\", \"o\") as ?one)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int one = result.next().get("one").asLiteral().getInt();
+		Assert.assertEquals(1, one);
+	}
 }

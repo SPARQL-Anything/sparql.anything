@@ -1,6 +1,8 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
 import com.github.spiceh2020.sparql.anything.engine.functions.*;
+import com.github.spiceh2020.sparql.anything.engine.functions.reflection.NoConverterException;
+import com.github.spiceh2020.sparql.anything.engine.functions.reflection.ReflectionFunctionFactory;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.OpExecutor;
@@ -90,11 +92,35 @@ public final class FacadeX {
 
 	public static void enablingFunctions() {
 		log.trace("Enabling functions");
+		log.trace("Enabling collection functions");
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "previous", Previous.class) ;
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "next", Next.class) ;
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "before", Before.class) ;
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "after", After.class) ;
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "backward", Backward.class) ;
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "forward", Forward.class) ;
+
+		log.trace("Enabling String functions");
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.trim",
+				ReflectionFunctionFactory.get().makeFunction(String.class,"trim")) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.substring",
+				ReflectionFunctionFactory.get().makeFunction(String.class,"substring")) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.indexOf",
+				ReflectionFunctionFactory.get().makeFunction(String.class,"indexOf")) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.startsWith",
+				ReflectionFunctionFactory.get().makeFunction(String.class,"startsWith")) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.endsWith",
+				ReflectionFunctionFactory.get().makeFunction(String.class,"endsWith")) ;
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.endsWith",
+				ReflectionFunctionFactory.get().makeFunction(String.class,"endsWith")) ;
+
+		try {
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.toLowerCase",
+					ReflectionFunctionFactory.get().makeFunction(String.class.getMethod("toLowerCase") )) ;
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.toUpperCase",
+					ReflectionFunctionFactory.get().makeFunction(String.class.getMethod("toUpperCase") )) ;
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
