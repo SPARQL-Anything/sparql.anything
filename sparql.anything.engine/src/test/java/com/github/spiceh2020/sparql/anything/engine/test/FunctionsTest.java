@@ -165,7 +165,6 @@ public class FunctionsTest {
 	}
 
 	@Test
-	@Ignore
 	public void indexOf(){
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
 				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
