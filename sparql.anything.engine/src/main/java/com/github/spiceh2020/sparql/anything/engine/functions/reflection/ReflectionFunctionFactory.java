@@ -116,7 +116,7 @@ public class ReflectionFunctionFactory {
 				// Check compatibility of argument types
 				for(int a = 0; a < m.getParameterCount(); a++){
 					Class<?> par = m.getParameterTypes()[a];
-					if(!converters.containsKey(par) && converters.get(par).compatibleWith(args.get(a))){
+					if(!converters.containsKey(par) || !converters.get(par).compatibleWith(args.get(a))){
 						return false;
 					}
 				}
