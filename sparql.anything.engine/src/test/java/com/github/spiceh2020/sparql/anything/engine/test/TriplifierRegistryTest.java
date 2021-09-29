@@ -73,7 +73,7 @@ public class TriplifierRegistryTest {
 	;
 	@Test
 	public void testConstructAndSelect() throws IOException {
-		System.out.println(new TestTriplifier().getClass().getName());
+//		System.out.println(new TestTriplifier().getClass().getName());
 //		Triplifier t = new TestTriplifier();
 		try {
 

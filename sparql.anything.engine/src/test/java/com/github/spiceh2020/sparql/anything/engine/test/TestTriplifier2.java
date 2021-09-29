@@ -41,7 +41,7 @@ import java.util.Set;
 public class TestTriplifier2 implements Triplifier {
 
 	public TestTriplifier2() {
-		System.err.println(getClass().getName());
+//		System.err.println(getClass().getName());
 	}
 
 	@Override
