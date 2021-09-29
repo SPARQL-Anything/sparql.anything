@@ -1,8 +1,5 @@
 package com.github.spiceh2020.sparql.anything.engine;
 
-import com.github.spiceh2020.sparql.anything.engine.functions.*;
-import com.github.spiceh2020.sparql.anything.engine.functions.reflection.NoConverterException;
-import com.github.spiceh2020.sparql.anything.engine.functions.reflection.ReflectionFunctionFactory;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.OpExecutor;
@@ -14,6 +11,13 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.spiceh2020.sparql.anything.engine.functions.After;
+import com.github.spiceh2020.sparql.anything.engine.functions.Backward;
+import com.github.spiceh2020.sparql.anything.engine.functions.Before;
+import com.github.spiceh2020.sparql.anything.engine.functions.Forward;
+import com.github.spiceh2020.sparql.anything.engine.functions.Next;
+import com.github.spiceh2020.sparql.anything.engine.functions.Previous;
+import com.github.spiceh2020.sparql.anything.engine.functions.reflection.ReflectionFunctionFactory;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import com.github.spiceh2020.sparql.anything.rdf.RDFTriplifier;
 

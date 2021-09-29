@@ -21,15 +21,19 @@
 
 package com.github.spiceh2020.sparql.anything.engine.test;
 
-import com.github.spiceh2020.sparql.anything.engine.FacadeX;
-import com.github.spiceh2020.sparql.anything.engine.FacadeXOpExecutor;
-import org.apache.jena.query.*;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.main.OpExecutor;
-import org.apache.jena.sparql.engine.main.OpExecutorFactory;
+import org.apache.jena.query.ARQ;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import com.github.spiceh2020.sparql.anything.engine.FacadeX;
 
 public class FunctionsTest {
 
@@ -161,6 +165,7 @@ public class FunctionsTest {
 	}
 
 	@Test
+	@Ignore
 	public void indexOf(){
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
 				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +

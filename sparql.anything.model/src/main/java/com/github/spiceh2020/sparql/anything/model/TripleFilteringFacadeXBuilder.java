@@ -173,11 +173,7 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 
 		}
 
-		@Override
-		public void visit(OpFind opFind) {
-
-		}
-
+	
 		@Override
 		public void visit(OpTable opTable) {
 

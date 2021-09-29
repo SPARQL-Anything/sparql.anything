@@ -8,7 +8,15 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
@@ -21,7 +29,17 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.query.*;
+import org.apache.jena.query.ARQ;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFactory;
+import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.query.ResultSetRewindable;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
@@ -32,7 +50,6 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.binding.BindingBase;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.xpath.Arg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,32 +113,33 @@ public class SPARQLAnything {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
-	private static void executeQuery(CommandLine commandLine, Dataset kb, String query, PrintStream pw) throws FileNotFoundException {
+	private static void executeQuery(CommandLine commandLine, Dataset kb, String query, PrintStream pw)
+			throws FileNotFoundException {
 		logger.trace("Executing Query: {}", query);
 		Query q = QueryFactory.create(query);
 		String format = getFormat(q, commandLine);
 		if (q.isSelectType()) {
-			if(format.equals("JSON")) {
+			if (format.equals("JSON")) {
 				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execSelect());
-			}else if(format.equals("XML")){
+			} else if (format.equals("XML")) {
 				ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(q, kb).execSelect());
-			}else if(format.equals("CSV")){
+			} else if (format.equals("CSV")) {
 				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execSelect());
-			}else if(format.equals("TEXT")){
+			} else if (format.equals("TEXT")) {
 				pw.println(ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect()));
-			}else {
+			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
 		} else if (q.isAskType()) {
-			if(format.equals("JSON")) {
+			if (format.equals("JSON")) {
 				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execAsk());
-			}else if(format.equals("XML")){
+			} else if (format.equals("XML")) {
 				ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(q, kb).execAsk());
-			}else if(format.equals("CSV")){
+			} else if (format.equals("CSV")) {
 				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
-			}else if(format.equals("TEXT")){
+			} else if (format.equals("TEXT")) {
 				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
-			}else {
+			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
 //			pw.println(QueryExecutionFactory.create(q, kb).execAsk());
@@ -129,25 +147,25 @@ public class SPARQLAnything {
 			Model m;
 			if (q.isConstructType()) {
 				m = QueryExecutionFactory.create(q, kb).execConstruct();
-			}else {
+			} else {
 				m = QueryExecutionFactory.create(q, kb).execDescribe();
 			}
-			if(format.equals("JSON")) {
+			if (format.equals("JSON")) {
 				// JSON-LD
-				RDFDataMgr.write(pw, m, Lang.JSONLD) ;
-			}else if(format.equals("XML")){
+				RDFDataMgr.write(pw, m, Lang.JSONLD);
+			} else if (format.equals("XML")) {
 				// RDF/XML
-				RDFDataMgr.write(pw, m, Lang.RDFXML) ;
-			}else if(format.equals("TTL")){
+				RDFDataMgr.write(pw, m, Lang.RDFXML);
+			} else if (format.equals("TTL")) {
 				// TURTLE
-				RDFDataMgr.write(pw, m, Lang.TTL) ;
-			}else if(format.equals("NT")){
+				RDFDataMgr.write(pw, m, Lang.TTL);
+			} else if (format.equals("NT")) {
 				// N-Triples
-				RDFDataMgr.write(pw, m, Lang.NT) ;
-			}else if(format.equals("NQ")){
+				RDFDataMgr.write(pw, m, Lang.NT);
+			} else if (format.equals("NQ")) {
 				// NQ
-				RDFDataMgr.write(pw, m, Lang.NQ) ;
-			}else {
+				RDFDataMgr.write(pw, m, Lang.NQ);
+			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
 		}
@@ -168,15 +186,15 @@ public class SPARQLAnything {
 		}
 
 		// Set default format for query type and STDOUT or FILE
-		if(commandLine.getOptionValue(OUTPUT) != null ){
-			if(q.isAskType()|| q.isSelectType()) {
+		if (commandLine.getOptionValue(OUTPUT) != null) {
+			if (q.isAskType() || q.isSelectType()) {
 				return "JSON";
-			}else if(q.isConstructType()|| q.isDescribeType()) {
+			} else if (q.isConstructType() || q.isDescribeType()) {
 				return "TTL";
 			}
 		}
 		//
-		if(q.isDescribeType() || q.isConstructType()){
+		if (q.isDescribeType() || q.isConstructType()) {
 			return "TTL";
 		}
 		return "TEXT";
@@ -213,22 +231,23 @@ public class SPARQLAnything {
 		return binder.toQuery();
 	}
 
-	public static String prepareOutputFromPattern(String template, QuerySolution qs){
+	public static String prepareOutputFromPattern(String template, QuerySolution qs) {
 		logger.trace(" - template: {}", template);
 		Iterator<String> vars = qs.varNames();
-		while(vars.hasNext()){
+		while (vars.hasNext()) {
 
 			String var = vars.next();
 //			String v = "?" + var;
 //			template = template.replace(v, qs.get(var).toString());
-			// ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040] )*
+			// ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] |
+			// [#x203F-#x2040] )*
 			// #x00B7 middle dot
 			// chars with accents #x0300-#x036F
 
 			Pattern p = Pattern.compile("[\\?|\\$]" + var + "([^0-9a-z_])",
 					Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
 			template = p.matcher(template).replaceAll(qs.get(var).toString() + "$1");
-			if(logger.isTraceEnabled()) {
+			if (logger.isTraceEnabled()) {
 				logger.trace(" - var: {}", var);
 				logger.trace(" - replacement: {}", qs.get(var).toString());
 				logger.trace(" - template: {}", template);
@@ -244,7 +263,8 @@ public class SPARQLAnything {
 		private Iterator<Binding> iterator;
 		private Model model;
 		private int row;
-		ArgValuesAsResultSet(String[] values){
+
+		ArgValuesAsResultSet(String[] values) {
 			this.values = values;
 			reset();
 		}
@@ -256,22 +276,22 @@ public class SPARQLAnything {
 			this.model = ModelFactory.createDefaultModel();
 			row = 0;
 			// Populate
-			Map<String,Set<Pair>> var_val_map = new HashMap<String,Set<Pair>>();
-			for(String value : values){
+			Map<String, Set<Pair>> var_val_map = new HashMap<String, Set<Pair>>();
+			for (String value : values) {
 				String var = value.substring(0, value.indexOf('='));
 				String val = value.substring(value.indexOf('=') + 1);
-				if(!var_val_map.containsKey(var)){
+				if (!var_val_map.containsKey(var)) {
 					var_val_map.put(var, new HashSet<Pair>());
 				}
 				logger.debug("Value: {} -> {}", var, val);
 				// If integer check if value represents range
-				if(val.matches("^[0-9]+\\.\\.\\.[0-9]+$")){
+				if (val.matches("^[0-9]+\\.\\.\\.[0-9]+$")) {
 					logger.trace("Range");
 					String[] vv = val.split("\\.\\.\\.");
 					int from = Integer.valueOf(vv[0]);
 					int to = Integer.valueOf(vv[1]);
 					logger.trace("Value: {} -> range({},{})", var, from, to);
-					for(int x = from; x <=to; x++){
+					for (int x = from; x <= to; x++) {
 						var_val_map.get(var).add(Pair.of(var, Integer.toString(x)));
 					}
 				} else {
@@ -280,20 +300,20 @@ public class SPARQLAnything {
 			}
 			// Generate bindings
 			Set<Set<Object>> sets;
-			if(var_val_map.values().size() > 1){
+			if (var_val_map.values().size() > 1) {
 				sets = cartesianProduct(var_val_map.values().toArray(new HashSet[var_val_map.values().size()]));
-			}else{
-				sets =  new HashSet<Set<Object>>();
+			} else {
+				sets = new HashSet<Set<Object>>();
 
-				for(Pair p: var_val_map.entrySet().iterator().next().getValue()) {
+				for (Pair p : var_val_map.entrySet().iterator().next().getValue()) {
 					Set<Object> singleton = new HashSet<Object>();
 					singleton.add(p);
 					sets.add(singleton);
 				}
 			}
-			for(Set<Object> s : sets){
-				final Map<Var,Node> bins = new HashMap<Var,Node>();
-				for (Object j: s){
+			for (Set<Object> s : sets) {
+				final Map<Var, Node> bins = new HashMap<Var, Node>();
+				for (Object j : s) {
 					Pair p = (Pair) j;
 					String var = (String) p.getLeft();
 					String val = (String) p.getRight();
@@ -325,6 +345,17 @@ public class SPARQLAnything {
 					public boolean isEmpty() {
 						return bins.isEmpty();
 					}
+
+					@Override
+					public void forEach(BiConsumer<Var, Node> action) {
+						// TODO Auto-generated method stub
+						Iterator<Var> vIter = bins.keySet().iterator();
+						while (vIter.hasNext()) {
+							Var v = vIter.next();
+							Node n = bins.get(v);
+							action.accept(v, n);
+						}
+					}
 				});
 			}
 			this.iterator = bindings.iterator();
@@ -347,7 +378,7 @@ public class SPARQLAnything {
 
 		@Override
 		public QuerySolution nextSolution() {
-			return new ResultBinding(this.model,nextBinding());
+			return new ResultBinding(this.model, nextBinding());
 		}
 
 		@Override
@@ -375,8 +406,7 @@ public class SPARQLAnything {
 		public static Set<Set<Object>> cartesianProduct(Set<?>... sets) {
 			if (sets.length < 2)
 				throw new IllegalArgumentException(
-						"Can't have a product of fewer than two sets (got " +
-								sets.length + ")");
+						"Can't have a product of fewer than two sets (got " + sets.length + ")");
 
 			return _cartesianProduct(0, sets);
 		}
@@ -387,7 +417,7 @@ public class SPARQLAnything {
 				ret.add(new HashSet<Object>());
 			} else {
 				for (Object obj : sets[index]) {
-					for (Set<Object> set : _cartesianProduct(index+1, sets)) {
+					for (Set<Object> set : _cartesianProduct(index + 1, sets)) {
 						set.add(obj);
 						ret.add(set);
 					}
@@ -397,7 +427,7 @@ public class SPARQLAnything {
 		}
 	}
 
-	public static ResultSet prepareResultSetFromArgValues(String [] values){
+	public static ResultSet prepareResultSetFromArgValues(String[] values) {
 		return new ArgValuesAsResultSet(values);
 	}
 
@@ -412,26 +442,28 @@ public class SPARQLAnything {
 		options.addOption(Option.builder(OUTPUT).argName("file").hasArg()
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
-		options.addOption(Option.builder(INPUT).argName("input").hasArg()
-				.desc("OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.").longOpt(INPUT_LONG).build());
+		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
+				"OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
+				.longOpt(INPUT_LONG).build());
 
-		options.addOption(Option.builder(LOAD).argName("load").hasArg()
-				.desc("OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.").longOpt(LOAD_LONG).build());
+		options.addOption(Option.builder(LOAD).argName("load").hasArg().desc(
+				"OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
+				.longOpt(LOAD_LONG).build());
 
-		options.addOption(Option.builder(FORMAT).argName("string").hasArg()
-				.desc("OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]")
+		options.addOption(Option.builder(FORMAT).argName("string").hasArg().desc(
+				"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]")
 				.longOpt(FORMAT_LONG).build());
 
-		options.addOption(Option.builder(STRATEGY).argName("strategy").hasArg().optionalArg(true)
-				.desc("OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.")
+		options.addOption(Option.builder(STRATEGY).argName("strategy").hasArg().optionalArg(true).desc(
+				"OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.")
 				.longOpt(STRATEGY_LONG).build());
 
-		options.addOption(Option.builder(OUTPUTPATTERN).argName("outputPattern").hasArg()
-				.desc("OPTIONAL - Output filename pattern, e.g. 'myfile-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
+		options.addOption(Option.builder(OUTPUTPATTERN).argName("outputPattern").hasArg().desc(
+				"OPTIONAL - Output filename pattern, e.g. 'myfile-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
 				.longOpt(OUTPUTPATTERN_LONG).build());
 
-		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true)
-				.desc("OPTIONAL - Values passed as input to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The passed argument must follow the syntax: var_name=var_value. Multiple arguments are allowed. The query is repeated for each set of values.")
+		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true).desc(
+				"OPTIONAL - Values passed as input to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The passed argument must follow the syntax: var_name=var_value. Multiple arguments are allowed. The query is repeated for each set of values.")
 				.longOpt(VALUES_LONG).build());
 		CommandLine commandLine = null;
 
@@ -439,11 +471,12 @@ public class SPARQLAnything {
 		try {
 			commandLine = cmdLineParser.parse(options, args);
 			String query = getQuery(commandLine.getOptionValue(QUERY));
-			Integer strategy = ( commandLine.hasOption(STRATEGY) ? Integer.valueOf(commandLine.getOptionValue(STRATEGY)) : null);
-			if(strategy != null){
-				if(strategy == 1 || strategy == 0) {
+			Integer strategy = (commandLine.hasOption(STRATEGY) ? Integer.valueOf(commandLine.getOptionValue(STRATEGY))
+					: null);
+			if (strategy != null) {
+				if (strategy == 1 || strategy == 0) {
 					ARQ.getContext().set(FacadeXOpExecutor.strategy, strategy);
-				}else{
+				} else {
 					logger.error("Invalid value for parameter 'strategy': {}", strategy);
 				}
 			}
@@ -452,66 +485,66 @@ public class SPARQLAnything {
 
 			Dataset kb = null;
 			String load = commandLine.getOptionValue(LOAD);
-			if(load != null){
+			if (load != null) {
 
 				logger.info("Loading data from: {}", load);
 				File loadSource = new File(load);
-				if(loadSource.isDirectory()){
+				if (loadSource.isDirectory()) {
 
 					logger.info("Loading from directory: {}", loadSource);
 					// If directory, load all files
 					List<String> list = new ArrayList<String>();
 					Path base = Paths.get(".");
 					File[] files = loadSource.listFiles();
-					for (File f : files){
+					for (File f : files) {
 						logger.info("Adding location: {}", f);
 						list.add(base.relativize(f.toPath()).toString());
 					}
 					kb = DatasetFactory.createGeneral();
-					for (String l : list){
+					for (String l : list) {
 						try {
 							Model m = ModelFactory.createDefaultModel();
 							// read into the model.
 							m.read(l);
-							kb.addNamedModel(l,m);
-						}catch(Exception e){
+							kb.addNamedModel(l, m);
+						} catch (Exception e) {
 							logger.error("An error occurred while loading {}", l);
 						}
 					}
 					logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
-				}else if(loadSource.isFile()){
+				} else if (loadSource.isFile()) {
 					// If it is a file, load it
 					logger.info("Load location: {}", loadSource);
 					Path base = Paths.get(".");
 					kb = DatasetFactory.create(base.relativize(loadSource.toPath()).toString());
-				}else{
+				} else {
 					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
 					return;
 				}
-			}else{
+			} else {
 				kb = DatasetFactory.createGeneral();
 			}
 			String inputFile = commandLine.getOptionValue(INPUT);
 			String outputFileName = commandLine.getOptionValue(OUTPUT);
 			String outputPattern = commandLine.getOptionValue(OUTPUTPATTERN);
 			String[] values = commandLine.getOptionValues(VALUES);
-			if(outputPattern != null && outputFileName != null){
+			if (outputPattern != null && outputFileName != null) {
 				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
 			}
-			if(inputFile == null && values == null) {
+			if (inputFile == null && values == null) {
 				logger.debug("No input file");
 				executeQuery(commandLine, kb, query, getPrintWriter(commandLine, outputFileName));
 			} else {
 
-				if(inputFile != null && values != null){
+				if (inputFile != null && values != null) {
 					throw new ParseException("Arguments 'input' and 'values' cannot be used together.");
 				}
 				ResultSet parameters = null;
-				if(inputFile!=null) {
+				if (inputFile != null) {
 					logger.debug("Input file given");
 					// Load the file
 					parameters = ResultSetFactory.load(inputFile);
-				}else{
+				} else {
 					logger.debug("Values given");
 					parameters = new ArgValuesAsResultSet(values);
 				}
@@ -519,40 +552,44 @@ public class SPARQLAnything {
 				Specification specification = SpecificationFactory.create("", query);
 				// Iterate over parameters
 //				List<String> variables = parameters.getResultVars();
-				while(parameters.hasNext()){
+				while (parameters.hasNext()) {
 					QuerySolution qs = parameters.nextSolution();
 					Query q;
 					try {
 						q = bindParameters(specification, qs);
-					}catch(Exception e1){
+					} catch (Exception e1) {
 						logger.error("An exception occurred while evaluating the input parameters", e1);
-						logger.error("Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+						logger.error(
+								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
 						continue;
 					}
 					String outputFile = null;
-					if(outputPattern != null){
+					if (outputPattern != null) {
 						outputFile = prepareOutputFromPattern(outputPattern, qs);
 					} else {
-						if( outputFileName != null ){
+						if (outputFileName != null) {
 							outputFile = outputFileName + "-" + parameters.getRowNumber();
 						}
 						// else stays null and output goes to STDOUT
 					}
 					try {
 						executeQuery(commandLine, kb, q.toString(), getPrintWriter(commandLine, outputFile));
-					}catch(Exception e1){
-						logger.error("Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
-						if(logger.isDebugEnabled()){
+					} catch (Exception e1) {
+						logger.error(
+								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+						if (logger.isDebugEnabled()) {
 							logger.error("Details:", e1);
 						}
 					}
 				}
 			}
-		}catch(FileNotFoundException e){
+		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
 		} catch (ParseException e) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("java -jar sparql.anything-<version> -q query [-f format] [-i filepath]  [-l path] [-o filepath]", options);
+			formatter.printHelp(
+					"java -jar sparql.anything-<version> -q query [-f format] [-i filepath]  [-l path] [-o filepath]",
+					options);
 		}
 	}
 }

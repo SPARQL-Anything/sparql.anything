@@ -11,7 +11,6 @@ import org.apache.jena.sparql.algebra.op.OpDisjunction;
 import org.apache.jena.sparql.algebra.op.OpDistinct;
 import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpFilter;
-import org.apache.jena.sparql.algebra.op.OpFind;
 import org.apache.jena.sparql.algebra.op.OpGraph;
 import org.apache.jena.sparql.algebra.op.OpGroup;
 import org.apache.jena.sparql.algebra.op.OpJoin;
@@ -95,10 +94,6 @@ public class FXBGPFinder implements OpVisitor {
 
 	}
 
-	@Override
-	public void visit(OpFind opFind) {
-
-	}
 
 	@Override
 	public void visit(OpTable opTable) {
