@@ -9,8 +9,7 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.binding.BindingFactory;
-import org.apache.jena.sparql.engine.binding.BindingMap;
+import org.apache.jena.sparql.engine.binding.BindingBuilder;
 import org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper;
 import org.apache.jena.sparql.pfunction.PFuncSimple;
 import org.apache.jena.util.iterator.ExtendedIterator;
@@ -35,8 +34,7 @@ public class AnySlot extends PFuncSimple {
 		}
 
 		ExtendedIterator<Triple> it = execCxt.getActiveGraph().find(s, Node.ANY, o);
-
-		return new QueryIterPlainWrapper(new Iterator<Binding>() {
+		QueryIterator res = QueryIterPlainWrapper.create(new Iterator<Binding>() {
 
 			private Triple cached;
 			private boolean hasCached;
@@ -81,24 +79,31 @@ public class AnySlot extends PFuncSimple {
 			}
 
 			private Binding bindTriple(Triple t) {
-				BindingMap bm = BindingFactory.create(parent);
+				BindingBuilder bb = Binding.builder(parent);
+//				BindingMap bm = BindingFactory.create(parent);
 				if (subject.isVariable()) {
 					if (parent.contains((Var) subject)) {
-						bm.add((Var) subject, parent.get((Var) subject));
+//						bm.add((Var) subject, parent.get((Var) subject));
+						bb.add((Var) subject, parent.get((Var) subject));
 					} else {
-						bm.add((Var) subject, t.getSubject());
+//						bm.add((Var) subject, t.getSubject());
+						bb.add((Var) subject, t.getSubject());
 					}
 				}
 				if (object.isVariable()) {
 					if (parent.contains((Var) object)) {
-						bm.add((Var) object, parent.get((Var) object));
+//						bm.add((Var) object, parent.get((Var) object));
+						bb.add((Var) subject, t.getSubject());
 					} else {
-						bm.add((Var) object, t.getObject());
+//						bm.add((Var) object, t.getObject());
+						bb.add((Var) object, t.getObject());
 					}
 				}
-				return bm;
+				return bb.build();
 			}
 		});
+
+		return res;
 	}
 
 }
