@@ -10,10 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Set;
 
-import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException; 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;

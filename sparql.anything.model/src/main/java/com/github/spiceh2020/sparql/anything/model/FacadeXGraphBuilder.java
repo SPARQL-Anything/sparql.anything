@@ -21,22 +21,22 @@
 
 package com.github.spiceh2020.sparql.anything.model;
 
+import java.net.URI;
+
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.DatasetGraph;
 
-import java.net.URI;
-
 public interface FacadeXGraphBuilder {
-    boolean add(Node subject, Node predicate, Node object);
+	boolean add(Node subject, Node predicate, Node object);
 
-    boolean add(Node graph, Node subject, Node predicate, Node object);
+	boolean add(Node graph, Node subject, Node predicate, Node object);
 
-    boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId);
+	boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId);
 
 	boolean addContainer(String dataSourceId, String containerId, URI customKey, String childContainerId);
 
-    boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId);
+	boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId);
 
 	boolean addType(String dataSourceId, String containerId, String typeId);
 
@@ -46,19 +46,19 @@ public interface FacadeXGraphBuilder {
 
 	boolean addValue(String dataSourceId, String containerId, URI customKey, Object value);
 
-    boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value);
+	boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value);
 
-    boolean addRoot(String dataSourceId, String rootId);
+	boolean addRoot(String dataSourceId, String rootId);
 
-    Node container2node(String container);
+	Node container2node(String container);
 
-    Node key2predicate(String key);
+	Node key2predicate(String key);
 
-    Node value2node(Object value);
+	Node value2node(Object value);
 
-    DatasetGraph getDatasetGraph();
+	DatasetGraph getDatasetGraph();
 
-    Node getMainGraphName();
+	Node getMainGraphName();
 
-    Graph getMainGraph();
+	Graph getMainGraph();
 }

@@ -51,6 +51,8 @@ public final class FacadeX {
 					new String[] { "html" }, new String[] { "text/html" });
 			Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.text.TextTriplifier",
 					new String[] { "txt" }, new String[] { "text/plain" });
+			Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.docs.DocxTriplifier",
+					new String[] { "docx" }, new String[] { "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
 			Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.zip.TarTriplifier",
 					new String[] { "tar" }, new String[] { "application/x-tar" });
 			Registry.registerTriplifier("com.github.spiceh2020.sparql.anything.zip.ZipTriplifier",
