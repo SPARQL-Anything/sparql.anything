@@ -87,6 +87,7 @@
 		<module>sparql.anything.spreadsheet</module>
 		<module>sparql.anything.rdf</module>
 		<module>sparql.anything.archive</module>
+		<module>sparql.anything.docs</module>
 	</modules>
 
 	<build>

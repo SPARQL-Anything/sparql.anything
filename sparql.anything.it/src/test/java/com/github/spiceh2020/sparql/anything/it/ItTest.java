@@ -47,7 +47,7 @@ public class ItTest {
 	public void RegistryExtensionsTest() {
 		for (String ext : new String[] { "json", "html", "xml", "csv", "bin", "png", "jpeg", "jpg", "bmp", "tiff",
 				"tif", "ico", "txt", "xlsx", "xls", "rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix", "trdf",
-				"zip", "tar" }) {
+				"zip", "tar", "docx" }) {
 			Assert.assertNotNull(ext, FacadeX.Registry.getTriplifierForExtension(ext));
 		}
 	}
@@ -60,7 +60,7 @@ public class ItTest {
 				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/rdf+thrift",
 				"application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle",
 				"application/rdf+xml", "application/n-triples", "application/ld+json", "application/zip",
-				"application/x-tar" }) {
+				"application/x-tar", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }) {
 			Assert.assertNotNull(mt, FacadeX.Registry.getTriplifierForMimeType(mt));
 		}
 	}
@@ -257,6 +257,17 @@ public class ItTest {
 	@Test
 	public void triplifySpreadsheet() throws IOException, URISyntaxException {
 		String location = getClass().getClassLoader().getResource("Book1.xls").toURI().toString();
+		Query query = QueryFactory.create("SELECT distinct ?p WHERE { SERVICE <x-sparql-anything:location=" + location
+				+ "> { ?s ?p ?o }} ORDER BY ?p");
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+		Assert.assertTrue(rs.hasNext());
+	}
+
+	@Test
+	public void triplifyDocx() throws IOException, URISyntaxException {
+		String location = getClass().getClassLoader().getResource("Document.docx").toURI().toString();
 		Query query = QueryFactory.create("SELECT distinct ?p WHERE { SERVICE <x-sparql-anything:location=" + location
 				+ "> { ?s ?p ?o }} ORDER BY ?p");
 		Dataset kb = DatasetFactory.createGeneral();
@@ -506,5 +517,4 @@ public class ItTest {
 
 	}
 
-	
 }

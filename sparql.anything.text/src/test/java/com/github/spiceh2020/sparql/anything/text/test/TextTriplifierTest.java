@@ -8,20 +8,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
-import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
-import com.github.spiceh2020.sparql.anything.model.IRIArgument;
-import com.github.spiceh2020.sparql.anything.model.Triplifier;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
+import com.github.spiceh2020.sparql.anything.model.BaseFacadeXBuilder;
+import com.github.spiceh2020.sparql.anything.model.IRIArgument;
+import com.github.spiceh2020.sparql.anything.model.Triplifier;
+import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import com.github.spiceh2020.sparql.anything.text.TextTriplifier;
 
 public class TextTriplifierTest {
@@ -34,7 +34,7 @@ public class TextTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
+			DatasetGraph dg = tt.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
 			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
@@ -56,7 +56,7 @@ public class TextTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.REGEX, "\\w+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
+			DatasetGraph dg = tt.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph
@@ -88,7 +88,7 @@ public class TextTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.SPLIT, "\\s+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
+			DatasetGraph dg = tt.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph
@@ -102,7 +102,7 @@ public class TextTriplifierTest {
 			expectedGraph.add(
 					new Triple(root, RDF.li(4).asNode(), NodeFactory.createLiteral("test", XSDDatatype.XSDstring)));
 
-			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
+//			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));

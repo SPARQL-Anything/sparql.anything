@@ -16,7 +16,7 @@
 			<artifactId>sparql.anything.model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.metadata</artifactId>
@@ -43,6 +43,12 @@
 
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
+			<artifactId>sparql.anything.docs</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.html</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -58,13 +64,13 @@
 			<artifactId>sparql.anything.json</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.archive</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
 		<dependency>
 			<groupId>commons-cli</groupId>
@@ -83,7 +89,7 @@
 			<artifactId>sparql.anything.spreadsheet</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.github.spice-h2020</groupId>
 			<artifactId>sparql.anything.rdf</artifactId>

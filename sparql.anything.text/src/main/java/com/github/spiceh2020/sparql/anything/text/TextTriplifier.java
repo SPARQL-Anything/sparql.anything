@@ -27,7 +27,8 @@ public class TextTriplifier implements Triplifier {
 	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
+			throws IOException, TriplifierHTTPException {
 
 		String value;
 		String root;
@@ -37,21 +38,21 @@ public class TextTriplifier implements Triplifier {
 			value = properties.getProperty(IRIArgument.CONTENT.toString(), "");
 			root = Triplifier.getRootArgument(properties, Integer.toString(value.hashCode()));
 			dataSourceId = builder.getMainGraphName().getURI();
-		}else{
+		} else {
 			value = readFromURL(url, properties);
 			root = Triplifier.getRootArgument(properties, url.toString());
 			dataSourceId = builder.getMainGraphName().getURI();
 		}
 
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+//		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
 		String rootResourceId = root;
 
-		if(logger.isTraceEnabled()) {
+		if (logger.isTraceEnabled()) {
 			logger.trace("Content:\n{}\n", value);
 		}
 
-		builder.addRoot(dataSourceId, rootResourceId );
+		builder.addRoot(dataSourceId, rootResourceId);
 
 		Pattern pattern = null;
 		if (properties.containsKey(REGEX)) {
@@ -77,7 +78,7 @@ public class TextTriplifier implements Triplifier {
 					logger.warn("Group number is supposed to be a positive integer, using default (group 0)");
 				}
 			} catch (Exception e) {
-				logger.error("",e);
+				logger.error("", e);
 			}
 		}
 
@@ -111,8 +112,7 @@ public class TextTriplifier implements Triplifier {
 		return builder.getDatasetGraph();
 	}
 
-	private static String readFromURL(URL url, Properties properties)
-			throws IOException, TriplifierHTTPException {
+	private static String readFromURL(URL url, Properties properties) throws IOException, TriplifierHTTPException {
 		StringWriter sw = new StringWriter();
 		InputStream is = Triplifier.getInputStream(url, properties);
 		IOUtils.copy(is, sw, Triplifier.getCharsetArgument(properties));

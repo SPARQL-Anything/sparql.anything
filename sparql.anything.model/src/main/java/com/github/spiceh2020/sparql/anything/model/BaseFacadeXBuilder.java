@@ -59,19 +59,19 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	}
 
 	@Deprecated
-	public void add(Resource subject, Property predicate, RDFNode object){
+	public void add(Resource subject, Property predicate, RDFNode object) {
 		add(subject.asNode(), predicate.asNode(), object.asNode());
 	}
 
 	@Override
-	public boolean add(Node subject, Node predicate, Node object){
+	public boolean add(Node subject, Node predicate, Node object) {
 		return add(mainGraphName, subject, predicate, object);
 	}
 
 	@Override
-	public boolean add(Node graph, Node subject, Node predicate, Node object){
+	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 		Triple t = new Triple(subject, predicate, object);
-		if(datasetGraph.getGraph(graph).contains(t)){
+		if (datasetGraph.getGraph(graph).contains(t)) {
 			return false;
 		}
 		datasetGraph.getGraph(graph).add(t);
@@ -86,8 +86,8 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 
 	@Override
 	public boolean addContainer(String dataSourceId, String containerId, URI customKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), NodeFactory.createURI(customKey.toString()),
-				container2node(childContainerId));
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId),
+				NodeFactory.createURI(customKey.toString()), container2node(childContainerId));
 	}
 
 	@Override
@@ -122,8 +122,8 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 
 	@Override
 	public boolean addValue(String dataSourceId, String containerId, URI customKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), NodeFactory.createURI(customKey.toString()),
-				value2node(value));
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId),
+				NodeFactory.createURI(customKey.toString()), value2node(value));
 	}
 
 	@Override
@@ -148,7 +148,11 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 
 	@Override
 	public Node value2node(Object value) {
-		return ResourceFactory.createTypedLiteral(value).asNode();
+		if (value instanceof Node) {
+			return (Node) value;
+		} else {
+			return ResourceFactory.createTypedLiteral(value).asNode();
+		}
 	}
 
 	/**
