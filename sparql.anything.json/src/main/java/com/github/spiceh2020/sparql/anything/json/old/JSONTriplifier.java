@@ -173,13 +173,13 @@ public class JSONTriplifier implements Triplifier {
 		this.propertyPrefix = propertyPrefix;
 	}
 
-	@Deprecated
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		return triplify(properties, (Op) null);
-	}
+//	@Deprecated
+//	@Override
+//	public DatasetGraph triplify(Properties properties) throws IOException {
+//		return triplify(properties, (Op) null);
+//	}
 
-	@Override
+//	@Override
 	public DatasetGraph triplify(Properties properties, Op op) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);

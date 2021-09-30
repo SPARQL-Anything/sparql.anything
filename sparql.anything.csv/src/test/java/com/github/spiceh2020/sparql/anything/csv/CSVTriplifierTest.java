@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
+import com.github.spiceh2020.sparql.anything.model.BaseFacadeXBuilder;
 import com.github.spiceh2020.sparql.anything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
@@ -34,6 +35,7 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.junit.Test;
@@ -60,7 +62,7 @@ public class CSVTriplifierTest {
 		BasicPattern bp = new BasicPattern();
 		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
 					NodeFactory.createVariable("o")));
-		DatasetGraph graph = triplifier.triplify(properties, new OpBGP(bp));
+		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXBuilder(csv1.toString(), properties));
 		// with csv.null-string set to nullString we should not see any quads with nullString in the object position
 		if(graph.find(Node.ANY,Node.ANY,Node.ANY,NodeFactory.createLiteral(nullString)).hasNext()){
 			fail("csv.null-string didn't work for: \"" +  nullString + "\"");
@@ -76,7 +78,7 @@ public class CSVTriplifierTest {
 		BasicPattern bp = new BasicPattern();
 		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
 					NodeFactory.createVariable("o")));
-		DatasetGraph graph = triplifier.triplify(properties, new OpBGP(bp));
+		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXBuilder(csv1.toString(), properties));
 
 		Graph expected = GraphFactory.createGraphMem();
 
