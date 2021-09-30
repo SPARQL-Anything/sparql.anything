@@ -3,6 +3,8 @@ package com.github.spiceh2020.sparql.anything.docs;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -14,13 +16,17 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import com.github.spiceh2020.sparql.anything.model.FacadeXGraphBuilder;
 import com.github.spiceh2020.sparql.anything.model.Triplifier;
 
 public class DocxTriplifier implements Triplifier {
 
-	public final static String KEEP_PARAGRAPH = "docs.preserver-paragraphs";
+	public final static String KEEP_PARAGRAPH = "docs.preserve-paragraphs";
+	public final static String TABLE_HEADERS = "docs.table-headers";
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
@@ -30,10 +36,10 @@ public class DocxTriplifier implements Triplifier {
 		if (url == null)
 			return dg;
 		String root = Triplifier.getRootArgument(properties, url);
-//		Charset charset = getCharsetArgument(properties);
-//		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
-//		String namespace = Triplifier.getNamespaceArgument(properties);
 		String dataSourceId = builder.getMainGraphName().getURI();
+		String namespace = Triplifier.getNamespaceArgument(properties);
+		boolean keepParagraph = Boolean.parseBoolean(properties.getProperty(KEEP_PARAGRAPH, "false"));
+		boolean headers = Boolean.parseBoolean(properties.getProperty(TABLE_HEADERS, "false"));
 
 		builder.addRoot(dataSourceId, root);
 
@@ -41,24 +47,77 @@ public class DocxTriplifier implements Triplifier {
 		try (XWPFDocument document = new XWPFDocument(is)) {
 			List<XWPFParagraph> paragraphs = document.getParagraphs();
 
-			boolean keepParagraph = Boolean.parseBoolean(properties.getProperty(KEEP_PARAGRAPH, "false"));
-
+			int count = 1;
 			if (keepParagraph) {
-				int count = 1;
 				for (XWPFParagraph para : paragraphs) {
-//					builder.addValue(dataSourceId, root, count, para.getText());
 					builder.addValue(dataSourceId, root, count,
 							NodeFactory.createLiteral(para.getText(), XSDDatatype.XSDstring));
 					count++;
 				}
+
 			} else {
 				StringBuilder sb = new StringBuilder();
 				for (XWPFParagraph para : paragraphs) {
 					sb.append(para.getText());
 				}
-//				builder.addValue(dataSourceId, root, 1, sb.toString());
-				builder.addValue(dataSourceId, root, 1,
+				builder.addValue(dataSourceId, root, count,
 						NodeFactory.createLiteral(sb.toString(), XSDDatatype.XSDstring));
+				count++;
+			}
+
+			Iterator<XWPFTable> it = document.getTables().iterator();
+			while (it.hasNext()) {
+				XWPFTable xwpfTable = (XWPFTable) it.next();
+
+				String tableId = namespace + "Table_" + count;
+				builder.addContainer(dataSourceId, root, count, tableId);
+
+				LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
+				int rown = 0;
+				Iterator<XWPFTableRow> itrows = xwpfTable.getRows().iterator();
+				while (itrows.hasNext()) {
+					// Header
+					if (headers && rown == 0) {
+						XWPFTableRow xwpfTableRow = (XWPFTableRow) itrows.next();
+						Iterator<XWPFTableCell> cellIterator = xwpfTableRow.getTableCells().iterator();
+						int colid = 0;
+						while (cellIterator.hasNext()) {
+							colid++;
+							XWPFTableCell xwpfTableCell = (XWPFTableCell) cellIterator.next();
+							String colstring = xwpfTableCell.getText();
+							String colname = colstring.strip();
+							int c = 0;
+							while (headers_map.containsValue(colname)) {
+								c++;
+								colname += "_" + String.valueOf(c);
+							}
+							headers_map.put(colid, colname);
+						}
+					}
+
+					// Data
+					if (itrows.hasNext()) {
+						XWPFTableRow xwpfTableRow = (XWPFTableRow) itrows.next();
+						rown++;
+						String rowId = namespace + "Table_" + count + "_Row_" + rown;
+						builder.addContainer(dataSourceId, tableId, rown, rowId);
+						Iterator<XWPFTableCell> cellIterator = xwpfTableRow.getTableCells().iterator();
+						int colid = 0;
+						while (cellIterator.hasNext()) {
+							colid++;
+							XWPFTableCell xwpfTableCell = (XWPFTableCell) cellIterator.next();
+							String value = xwpfTableCell.getText();
+							if (headers && headers_map.containsKey(colid)) {
+								builder.addValue(dataSourceId, rowId, headers_map.get(colid), value);
+							} else {
+								builder.addValue(dataSourceId, rowId, colid, value);
+							}
+						}
+					}
+
+				}
+
+				count++;
 			}
 		}
 

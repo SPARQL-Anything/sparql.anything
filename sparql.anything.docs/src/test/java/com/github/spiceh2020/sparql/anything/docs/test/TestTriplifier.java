@@ -11,6 +11,9 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
@@ -66,6 +69,199 @@ public class TestTriplifier {
 					"3Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 					XSDDatatype.XSDstring)));
 			expectedGraph.add(new Triple(n, RDF.li(6).asNode(), NodeFactory.createLiteral("", XSDDatatype.XSDstring)));
+
+			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testNoBlankNodes() {
+		DocxTriplifier st = new DocxTriplifier();
+		URL doc = st.getClass().getClassLoader().getResource("./testResources/doc1.docx");
+		Properties p = new Properties();
+		DatasetGraph dg;
+		try {
+			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
+			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
+			dg = st.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
+
+			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
+
+			dg.find(null, null, null, null).forEachRemaining(q -> {
+				assertTrue(!q.getGraph().isBlank());
+				assertTrue(!q.getSubject().isBlank());
+				assertTrue(!q.getPredicate().isBlank());
+				assertTrue(!q.getObject().isBlank());
+			});
+
+//			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
+//			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void test2() {
+		DocxTriplifier st = new DocxTriplifier();
+		URL doc = st.getClass().getClassLoader().getResource("./testResources/doc2.docx");
+		Properties p = new Properties();
+		DatasetGraph dg;
+		try {
+			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
+			dg = st.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
+
+//			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
+
+			Graph expectedGraph = GraphFactory.createGraphMem();
+			Node n = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(new Triple(n, RDF.li(1).asNode(),
+					NodeFactory.createLiteral("Title 1Paragraph1Title 2Paragraph2", XSDDatatype.XSDstring)));
+
+			Node table = NodeFactory.createBlankNode();
+
+			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), table));
+
+			Node row1 = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(table, RDF.li(1).asNode(), row1));
+			expectedGraph
+					.add(new Triple(row1, RDF.li(1).asNode(), NodeFactory.createLiteral("11", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row1, RDF.li(2).asNode(), NodeFactory.createLiteral("12", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row1, RDF.li(3).asNode(), NodeFactory.createLiteral("13", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row1, RDF.li(4).asNode(), NodeFactory.createLiteral("14", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row1, RDF.li(5).asNode(), NodeFactory.createLiteral("15", XSDDatatype.XSDstring)));
+
+			Node row2 = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(table, RDF.li(2).asNode(), row2));
+			expectedGraph
+					.add(new Triple(row2, RDF.li(1).asNode(), NodeFactory.createLiteral("21", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row2, RDF.li(2).asNode(), NodeFactory.createLiteral("22", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row2, RDF.li(3).asNode(), NodeFactory.createLiteral("23", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row2, RDF.li(4).asNode(), NodeFactory.createLiteral("24", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row2, RDF.li(5).asNode(), NodeFactory.createLiteral("25", XSDDatatype.XSDstring)));
+
+			Node row3 = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(table, RDF.li(3).asNode(), row3));
+			expectedGraph
+					.add(new Triple(row3, RDF.li(1).asNode(), NodeFactory.createLiteral("31", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row3, RDF.li(2).asNode(), NodeFactory.createLiteral("32", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row3, RDF.li(3).asNode(), NodeFactory.createLiteral("33", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row3, RDF.li(4).asNode(), NodeFactory.createLiteral("34", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row3, RDF.li(5).asNode(), NodeFactory.createLiteral("35", XSDDatatype.XSDstring)));
+
+			Node row4 = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(table, RDF.li(4).asNode(), row4));
+			expectedGraph
+					.add(new Triple(row4, RDF.li(1).asNode(), NodeFactory.createLiteral("41", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row4, RDF.li(2).asNode(), NodeFactory.createLiteral("42", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row4, RDF.li(3).asNode(), NodeFactory.createLiteral("43", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row4, RDF.li(4).asNode(), NodeFactory.createLiteral("44", XSDDatatype.XSDstring)));
+			expectedGraph
+					.add(new Triple(row4, RDF.li(5).asNode(), NodeFactory.createLiteral("45", XSDDatatype.XSDstring)));
+
+			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
+
+			if (!dg.getDefaultGraph().isIsomorphicWith(expectedGraph)) {
+				ModelFactory.createModelForGraph(expectedGraph)
+						.difference(ModelFactory.createModelForGraph(dg.getDefaultGraph())).write(System.out, "TTL");
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void test3() {
+		DocxTriplifier st = new DocxTriplifier();
+		URL doc = st.getClass().getClassLoader().getResource("./testResources/doc2.docx");
+		Properties p = new Properties();
+		DatasetGraph dg;
+		try {
+			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
+			p.setProperty(DocxTriplifier.TABLE_HEADERS.toString(), "true");
+			dg = st.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
+
+//			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
+
+			Graph expectedGraph = GraphFactory.createGraphMem();
+			Node n = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(new Triple(n, RDF.li(1).asNode(),
+					NodeFactory.createLiteral("Title 1Paragraph1Title 2Paragraph2", XSDDatatype.XSDstring)));
+
+			Node table = NodeFactory.createBlankNode();
+
+			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), table));
+
+//			NodeFactory.createURI(Triplifier.XYZ_NS+"11")
+
+			Node row2 = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(table, RDF.li(1).asNode(), row2));
+			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
+					NodeFactory.createLiteral("21", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
+					NodeFactory.createLiteral("22", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
+					NodeFactory.createLiteral("23", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
+					NodeFactory.createLiteral("24", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
+					NodeFactory.createLiteral("25", XSDDatatype.XSDstring)));
+
+			Node row3 = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(table, RDF.li(2).asNode(), row3));
+
+			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
+					NodeFactory.createLiteral("31", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
+					NodeFactory.createLiteral("32", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
+					NodeFactory.createLiteral("33", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
+					NodeFactory.createLiteral("34", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
+					NodeFactory.createLiteral("35", XSDDatatype.XSDstring)));
+
+			Node row4 = NodeFactory.createBlankNode();
+			expectedGraph.add(new Triple(table, RDF.li(3).asNode(), row4));
+			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
+					NodeFactory.createLiteral("41", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
+					NodeFactory.createLiteral("42", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
+					NodeFactory.createLiteral("43", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
+					NodeFactory.createLiteral("44", XSDDatatype.XSDstring)));
+			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
+					NodeFactory.createLiteral("45", XSDDatatype.XSDstring)));
+
+			if (!dg.getDefaultGraph().isIsomorphicWith(expectedGraph)) {
+				ModelFactory.createModelForGraph(expectedGraph)
+						.difference(ModelFactory.createModelForGraph(dg.getDefaultGraph())).write(System.out, "TTL");
+			}
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
