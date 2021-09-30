@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven.yml/badge.svg?branch=v0.3-DEV)]()
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v0.3-DEV)]()
+[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven.yml/badge.svg?branch=v0.3-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven.yml)
+[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v0.3-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
 
 # SPARQL Anything
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
