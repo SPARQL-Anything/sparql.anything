@@ -377,7 +377,12 @@ The system supports the following functions on container membership properties (
 - `fx:next(?b)` returns the container membership property that succeedes ?b (rdf:\_1 -> rdf:\_2)
 - `fx:forward(?a, ?b)` returns the container membership property that follows ?a of ?b steps (rdf:\_2, 5 -> rdf:\_7)
 - `fx:backward(?a, ?b)` returns the container membership property that preceeds ?a of ?b steps (rdf:\_24, 4 -> rdf:\_20)
-
+- `fx:String.endsWith` wraps [`java.lang.String.endsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
+- `fx:String.indexOf` wraps [`java.lang.String.indexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
+- `fx:String.substring` wraps [`java.lang.String.substring`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
+- `fx:String.toLowerCase` wraps [`java.lang.String.toLowerCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
+- `fx:String.toUpperCase` wraps [`java.lang.String.toUpperCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
+- `fx:String.trim` wraps [`java.lang.String.trim`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 
 ## Download and Usage
 
