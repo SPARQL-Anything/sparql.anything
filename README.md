@@ -377,6 +377,9 @@ The system supports the following functions on container membership properties (
 - `fx:next(?b)` returns the container membership property that succeedes ?b (rdf:\_1 -> rdf:\_2)
 - `fx:forward(?a, ?b)` returns the container membership property that follows ?a of ?b steps (rdf:\_2, 5 -> rdf:\_7)
 - `fx:backward(?a, ?b)` returns the container membership property that preceeds ?a of ?b steps (rdf:\_24, 4 -> rdf:\_20)
+
+The system supports the following functions for string manipulation (See #104): 
+
 - `fx:String.endsWith` wraps [`java.lang.String.endsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 - `fx:String.indexOf` wraps [`java.lang.String.indexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 - `fx:String.substring` wraps [`java.lang.String.substring`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
