@@ -35,15 +35,7 @@ public interface Triplifier {
 	default public DatasetGraph triplify(Properties properties) throws IOException, TriplifierHTTPException {
 		return triplify(properties, new BaseFacadeXBuilder(Triplifier.getLocation(properties).toString(), properties));
 	}
-
-	/**
-	 * @Deprecated because triplifiers should not need to know about Op, only triple builders should, if needed.
-	 */
-//	@Deprecated
-//	default public DatasetGraph triplify(Properties properties, Op subOp) throws IOException, TriplifierHTTPException {
-//		return triplify(properties);
-//	}
-
+	
 	DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException;
 
 	public Set<String> getMimeTypes();
