@@ -341,7 +341,7 @@ WHERE {
 
 
 
-<details><summary>Documente: DOCx</summary>
+<details><summary>Document: DOCx</summary>
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
