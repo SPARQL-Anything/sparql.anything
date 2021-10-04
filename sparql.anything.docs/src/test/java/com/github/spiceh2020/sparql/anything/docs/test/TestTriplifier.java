@@ -116,7 +116,7 @@ public class TestTriplifier {
 			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
 			dg = st.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
 
-//			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
+			RDFDataMgr.write(System.out, dg, RDFFormat.TRIG_PRETTY);
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();

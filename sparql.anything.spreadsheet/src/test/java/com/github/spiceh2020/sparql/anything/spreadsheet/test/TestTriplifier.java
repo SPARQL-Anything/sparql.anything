@@ -37,6 +37,8 @@ public class TestTriplifier {
 			Node s1Root = NodeFactory.createBlankNode();
 			gs1.add(new Triple(s1Root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 
+//			RDFDataMgr.write(System.out, dg, RDFFormat.TRIG_PRETTY);
+
 			Node s1Row1 = NodeFactory.createBlankNode();
 			gs1.add(new Triple(s1Root, RDF.li(1).asNode(), s1Row1));
 			gs1.add(new Triple(s1Row1, RDF.li(1).asNode(), NodeFactory.createLiteral("A")));
