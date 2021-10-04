@@ -40,7 +40,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.spiceh2020.sparql.anything.engine.FacadeX;
+import com.github.sparqlanything.engine.FacadeX;
 
 public class ItTripleFilteringTest {
     private static final Logger log = LoggerFactory.getLogger(ItTripleFilteringTest.class);

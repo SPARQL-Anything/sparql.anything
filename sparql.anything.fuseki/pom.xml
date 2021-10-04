@@ -60,7 +60,7 @@
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.github.spiceh2020.sparql.anything.fuseki.Endpoint</mainClass>
+									<mainClass>com.github.sparqlanything.fuseki.Endpoint</mainClass>
 								</transformer>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
