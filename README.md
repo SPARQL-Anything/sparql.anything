@@ -330,6 +330,27 @@ WHERE {
 
 </details>
 
+
+<details><summary>Spreadsheet: XLS, XLSx</summary>
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|spreadsheet.headers|It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.|true/false|false|
+
+</details>
+
+
+
+<details><summary>Documente: DOCx</summary>
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|docs.table-headers|It tells the document triplifier to use the headers of the tables within the document file for minting the properties of the generated triples.|true/false|false|
+|docs.preserve-paragraphs|It tells the document triplifier to preserve the paragraph defined in the document. If set as true each paragraph of the document will become a slot of the root container.|true/false|false|
+
+</details>
+
+
 ### HTTP options
 SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
 
