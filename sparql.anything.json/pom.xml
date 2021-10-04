@@ -11,7 +11,7 @@
 	</parent>
 	<artifactId>sparql.anything.json</artifactId>
 	<dependencies>
-	<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -21,10 +21,14 @@
 			<artifactId>sparql.anything.model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- dependency> <groupId>com.jsoniter</groupId> <artifactId>jsoniter</artifactId> 
+			</dependency -->
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 		<dependency>
-			<groupId>com.jsoniter</groupId>
-			<artifactId>jsoniter</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
