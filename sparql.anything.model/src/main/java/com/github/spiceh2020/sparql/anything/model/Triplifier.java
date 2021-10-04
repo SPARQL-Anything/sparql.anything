@@ -1,5 +1,6 @@
 package com.github.spiceh2020.sparql.anything.model;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +36,9 @@ public interface Triplifier {
 	default public DatasetGraph triplify(Properties properties) throws IOException, TriplifierHTTPException {
 		return triplify(properties, new BaseFacadeXBuilder(Triplifier.getLocation(properties).toString(), properties));
 	}
-	
-	DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException;
+
+	DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
+			throws IOException, TriplifierHTTPException;
 
 	public Set<String> getMimeTypes();
 
@@ -118,19 +120,24 @@ public interface Triplifier {
 
 	private static InputStream getInputStream(URL url, Properties properties, Charset charset)
 			throws IOException, TriplifierHTTPException {
-		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString())){
+
+		if (properties.containsKey(IRIArgument.CONTENT.toString())) {
+			return new ByteArrayInputStream(properties.get(IRIArgument.CONTENT.toString()).toString().getBytes());
+		}
+
+		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString())) {
 
 			// If local throw exception
-			if(url.getProtocol().equals("file")){
+			if (url.getProtocol().equals("file")) {
 				log.debug("Getting input stream from file");
 				return url.openStream();
 			} else
 
 			// If HTTP
-			if(url.getProtocol().equals("http") || url.getProtocol().equals("https")){
+			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
 				CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
-				if(!HTTPHelper.isSuccessful(response) ){
-					log.error("Request unsuccesful: {}", response.getStatusLine().toString() );
+				if (!HTTPHelper.isSuccessful(response)) {
+					log.error("Request unsuccesful: {}", response.getStatusLine().toString());
 					log.error("Response: {}", response.toString());
 					log.error("Response body: {}", IOUtils.toString(response.getEntity().getContent()));
 					throw new TriplifierHTTPException(response.getStatusLine().toString());
@@ -149,7 +156,7 @@ public interface Triplifier {
 					properties.getProperty(IRIArgument.LOCATION.toString()), charset);
 		} catch (ArchiveException e) {
 			throw new IOException(e); // TODO i think we should throw a TriplifierHTTPException instead
-			                          // to allow the silent keyword to be respected
+										// to allow the silent keyword to be respected
 		}
 	}
 
