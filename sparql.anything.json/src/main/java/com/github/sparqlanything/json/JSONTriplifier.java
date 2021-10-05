@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -37,6 +38,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 
@@ -62,7 +64,13 @@ public class JSONTriplifier implements Triplifier {
 
 		try {
 			// Only 1 data source expected
-			String dataSourceId = getDataSources(url)[0];
+			String dataSourceId;
+			if (properties.containsKey(IRIArgument.CONTENT.toString())) {
+				dataSourceId = Triplifier.XYZ_NS
+						+ DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString()));
+			} else {
+				dataSourceId = getDataSources(url)[0];
+			}
 			transformJSON(parser, dataSourceId, getRootId(url, dataSourceId, properties), builder);
 		} finally {
 			us.close();
@@ -82,7 +90,6 @@ public class JSONTriplifier implements Triplifier {
 			logger.trace("Transforming array");
 			transformArray(parser, dataSourceId, rootId, builder);
 		}
-		
 
 	}
 
@@ -155,12 +162,12 @@ public class JSONTriplifier implements Triplifier {
 					transformObject(parser, dataSourceId, childContainerId, builder);
 					break;
 				case VALUE_NUMBER_FLOAT:
-					logger.trace("{} float",k);
+					logger.trace("{} float", k);
 					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
 							parser.getValueAsDouble());
 					break;
 				case VALUE_NUMBER_INT:
-					logger.trace("{} int",k);
+					logger.trace("{} int", k);
 					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), parser.getValueAsInt());
 					break;
 				case VALUE_STRING:
