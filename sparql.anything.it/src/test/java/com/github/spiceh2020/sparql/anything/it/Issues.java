@@ -23,6 +23,7 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,4 +143,30 @@ public class Issues {
 		Boolean rootInObject = QueryExecutionFactory.create(query, ds).execAsk();
 		Assert.assertFalse(rootInObject);
 	}
+
+	@Ignore
+	@Test
+	public void testIssue114() throws IOException, URISyntaxException {
+		String location = getClass().getClassLoader().getResource("propertypath.json").toURI().toString();
+		Query query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
+				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT DISTINCT ?slot  {      "
+				+ "SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" . " + "?s fx:anySlot/fx:anySlot ?slot . }}");
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		Set<String> slots = new HashSet<>();
+		while (rs.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs.next();
+			if (querySolution.get("slot").isLiteral()) {
+				slots.add(querySolution.get("slot").asLiteral().getValue().toString());
+			}
+		}
+
+		assertEquals(Sets.newHashSet("b", "d", "c"), slots);
+	}
+
 }
