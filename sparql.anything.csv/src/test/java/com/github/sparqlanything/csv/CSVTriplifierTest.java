@@ -99,4 +99,24 @@ public class CSVTriplifierTest {
 			System.err.println(t);
 		}
 	}
+
+
+	@Test
+	public void testTab() throws IOException, TriplifierHTTPException {
+		Properties properties = new Properties();
+		properties.setProperty("namespace", "http://www.example.org#");
+		properties.setProperty("csv.delimiter", "\t");
+		properties.setProperty("csv.headers", "true");
+		properties.setProperty("blank-nodes", "false");
+		//        properties.setProperty("uriRoot", "http://www.example.org#");
+
+		URL csv1 = getClass().getClassLoader().getResource("./test.tsv");
+		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
+		DatasetGraph graph = triplifier.triplify(properties);
+		Iterator<Quad> iter = graph.find(null, null, null, null);
+		while (iter.hasNext()) {
+			Quad t = iter.next();
+			System.err.println(t);
+		}
+	}
 }
