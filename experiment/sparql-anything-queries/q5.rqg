@@ -1,9 +1,0 @@
-SELECT DISTINCT ?id
-WHERE{
-
-	SERVICE <x-sparql-anything:data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json> {
-		?s <http://sparql.xyz/facade-x/data/Ambito%20culturale> ?subject .
-		?s <http://sparql.xyz/facade-x/data/Inventario> ?id .
-		FILTER(REGEX(?subject,".*manifattura Hochst.*","i"))
-	}
-}
