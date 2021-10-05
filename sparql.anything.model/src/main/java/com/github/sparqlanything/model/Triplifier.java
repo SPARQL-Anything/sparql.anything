@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -86,20 +87,29 @@ public interface Triplifier {
 	}
 
 	static String getRootArgument(Properties properties, URL url) {
-		return getRootArgument(properties, url.toString());
+		if (url != null) {
+			return getRootArgument(properties, url.toString());
+		} else {
+			return getRootArgument(properties, (String) null);
+		}
 	}
 
 	static String getRootArgument(Properties properties, String url) {
-		String root = null;
-		try {
-			root = properties.getProperty(IRIArgument.ROOT.toString());
-			if (root != null && !root.trim().equals("")) {
-				return root;
+		if (url != null) {
+			String root = null;
+			try {
+				root = properties.getProperty(IRIArgument.ROOT.toString());
+				if (root != null && !root.trim().equals("")) {
+					return root;
+				}
+			} catch (Exception e) {
+				log.warn("Unsupported parameter value for 'root': '{}', using default (location + '#').", root);
 			}
-		} catch (Exception e) {
-			log.warn("Unsupported parameter value for 'root': '{}', using default (location + '#').", root);
+			return url.toString() + "#";
+		} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
+			return XYZ_NS + DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString())) + "#";
 		}
-		return url + "#";
+		throw new RuntimeException("No location nor content provided!");
 	}
 
 	static String getNamespaceArgument(Properties properties) {

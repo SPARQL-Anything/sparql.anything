@@ -488,10 +488,6 @@ usage: java -jar sparql-anything-fuseki-<version>.jar [-p port] [-e
                     3000 ).
 ```
 
-## Evaluation
-
-We conducted a comparative [evaluation](experiment) of sparql.anything with respect to the state of art methods RML and SPARQL Generate.
-
 ## Licence
 
 SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)

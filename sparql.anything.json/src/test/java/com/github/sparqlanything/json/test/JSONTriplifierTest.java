@@ -94,6 +94,8 @@ public class JSONTriplifierTest {
 		assertTrue(nullPointerException);
 
 	}
+	
+	
 
 	@Test
 	public void testPrimitive() throws TriplifierHTTPException {
