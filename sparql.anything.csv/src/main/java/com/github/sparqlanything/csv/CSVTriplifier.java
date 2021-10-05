@@ -49,6 +49,7 @@ import com.github.sparqlanything.model.Triplifier;
 public class CSVTriplifier implements Triplifier {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
+	public final static String PROPERTY_DELIMITER = "csv.delimiter";
 	public final static String PROPERTY_NULLSTRING = "csv.null-string";
 
 	@Override
@@ -69,6 +70,13 @@ public class CSVTriplifier implements Triplifier {
 		}
 		if(properties.containsKey(PROPERTY_NULLSTRING)){
 			format = format.withNullString(properties.getProperty(PROPERTY_NULLSTRING)) ;
+		}
+		if(properties.containsKey(PROPERTY_DELIMITER)){
+			System.out.println("Setting delimiter to " + properties.getProperty(PROPERTY_DELIMITER));
+			if(properties.getProperty(PROPERTY_DELIMITER).length() != 1){
+				throw new IOException("Bad value for property " + PROPERTY_DELIMITER + ": string length must be 1, " + Integer.toString(properties.getProperty(PROPERTY_DELIMITER).length()) + " given");
+			}
+			format = format.withDelimiter(properties.getProperty(PROPERTY_DELIMITER).charAt(0)) ;
 		}
 
 		String root = Triplifier.getRootArgument(properties, url);
