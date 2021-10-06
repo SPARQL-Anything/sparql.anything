@@ -495,3 +495,20 @@ SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 ## Publication
 [Daga, Enrico; Asprino, Luigi; Mulholland, Paul and Gangemi, Aldo (2021). Facade-X: An Opinionated Approach to SPARQL Anything. In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume 53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
 DOI: https://doi.org/10.3233/ssw210035](http://oro.open.ac.uk/78973/1/78973.pdf)
+```
+@incollection{oro78973,
+          volume = {53},
+           month = {August},
+          author = {Enrico Daga and Luigi Asprino and Paul Mulholland and Aldo Gangemi},
+       booktitle = {Volume 53: Further with Knowledge Graphs},
+          editor = {Mehwish Alam and Paul Groth and Victor de Boer and Tassilo Pellegrini and Harshvardhan J. Pandit},
+           title = {Facade-X: An Opinionated Approach to SPARQL Anything},
+       publisher = {IOS Press},
+            year = {2021},
+         journal = {Studies on the Semantic Web},
+           pages = {58--73},
+        keywords = {SPARQL; meta-model; re-engineering},
+             url = {http://oro.open.ac.uk/78973/},
+        abstract = {The Semantic Web research community understood since its beginning how crucial it is to equip practitioners with methods to transform non-RDF resources into RDF. Proposals focus on either engineering content transformations or accessing non-RDF resources with SPARQL. Existing solutions require users to learn specific mapping languages (e.g. RML), to know how to query and manipulate a variety of source formats (e.g. XPATH, JSON-Path), or to combine multiple languages (e.g. SPARQL Generate). In this paper, we explore an alternative solution and contribute a general-purpose meta-model for converting non-RDF resources into RDF: {\ensuremath{<}}i{\ensuremath{>}}Facade-X{\ensuremath{<}}/i{\ensuremath{>}}. Our approach can be implemented by overriding the SERVICE operator and does not require to extend the SPARQL syntax. We compare our approach with the state of art methods RML and SPARQL Generate and show how our solution has lower learning demands and cognitive complexity, and it is cheaper to implement and maintain, while having comparable extensibility and efficiency.}
+}
+```
