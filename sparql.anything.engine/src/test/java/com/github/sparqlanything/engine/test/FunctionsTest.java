@@ -21,13 +21,7 @@
 
 package com.github.sparqlanything.engine.test;
 
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Test;
@@ -174,5 +168,150 @@ public class FunctionsTest {
 		Assert.assertTrue(result.hasNext());
 		int one = result.next().get("one").asLiteral().getInt();
 		Assert.assertEquals(1, one);
+	}
+
+
+	@Test
+	public void serial_1(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"SELECT ?one ?two ?three WHERE {" +
+				"BIND(fx:serial(\"c\") as ?one)" +
+				"BIND(fx:serial(\"c\") as ?two)" +
+				"BIND(fx:serial(\"c\") as ?three)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+
+		QuerySolution s = result.next();
+		int one = s.get("one").asLiteral().getInt();
+		int two = s.get("two").asLiteral().getInt();
+		int three = s.get("three").asLiteral().getInt();
+		Assert.assertTrue(one == 1);
+		Assert.assertTrue(two == 2);
+		Assert.assertTrue(three == 3);
+	}
+
+	@Test
+	public void serial_2(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"SELECT ?one ?two ?three WHERE {" +
+				"BIND(fx:serial(\"a\") as ?one)" +
+				"BIND(fx:serial(\"b\") as ?two)" +
+				"BIND(fx:serial(\"c\") as ?three)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+
+		QuerySolution s = result.next();
+		int one = s.get("one").asLiteral().getInt();
+		int two = s.get("two").asLiteral().getInt();
+		int three = s.get("three").asLiteral().getInt();
+		Assert.assertTrue(one == 1);
+		Assert.assertTrue(two == 1);
+		Assert.assertTrue(three == 1);
+	}
+
+	@Test
+	public void serial_3(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"SELECT ?one ?two ?three WHERE {" +
+				"BIND(fx:serial(\"a\", \"b\", \"c\") as ?one)" +
+				"BIND(fx:serial(\"a\", \"b\", \"c\") as ?two)" +
+				"BIND(fx:serial(\"a\", \"b\", \"c\") as ?three)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+
+		QuerySolution s = result.next();
+		int one = s.get("one").asLiteral().getInt();
+		int two = s.get("two").asLiteral().getInt();
+		int three = s.get("three").asLiteral().getInt();
+		Assert.assertTrue(one == 1);
+		Assert.assertTrue(two == 2);
+		Assert.assertTrue(three == 3);
+	}
+
+	@Test
+	public void serial_4(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"PREFIX ex: <http://example.org/>\n" +
+				"" +
+				"SELECT ?one ?two ?three WHERE {" +
+				"VALUES(?v1 ?v2){ ( ex:1_1 ex:1_2 ) ( ex:2_1 ex:2_2 ) }" +
+				"BIND(fx:serial(?v1, ?v2) as ?one)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+
+		// Two rows,  both ?one == 1
+		QuerySolution s = result.next();
+		int one = s.get("one").asLiteral().getInt();
+		Assert.assertTrue(one == 1);
+		s = result.next();
+		one = s.get("one").asLiteral().getInt();
+		Assert.assertTrue(one == 1);
+	}
+
+	@Test
+	public void serial_5(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"PREFIX ex: <http://example.org/>\n" +
+				"" +
+				"SELECT ?c WHERE {" +
+				"VALUES (?v1 ?v2) { ( ex:1_1 ex:1_2 ) ( ex:1_1 ex:1_2 ) ( ex:1_1 ex:1_2 )  ( ex:1_1 ex:1_2 ) }" +
+				"BIND(fx:serial(?v1, ?v2) as ?c)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+
+		// 4 rows, ?c = 1, 2, 3, 4
+		QuerySolution s = result.next();
+		int c = s.get("c").asLiteral().getInt();
+		Assert.assertTrue(c == 1);
+		s = result.next();
+		c = s.get("c").asLiteral().getInt();
+		Assert.assertTrue(c == 2);
+		s = result.next();
+		c = s.get("c").asLiteral().getInt();
+		Assert.assertTrue(c == 3);
+		s = result.next();
+		c = s.get("c").asLiteral().getInt();
+		Assert.assertTrue(c == 4);
+
+	}
+
+
+	@Test
+	public void serial_6(){
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"PREFIX ex: <http://example.org/>\n" +
+				"" +
+				"SELECT ?c WHERE {" +
+				"VALUES (?v1 ?v2) { ( ex:1_1 ex:1_2 ) ( ex:1_1 ex:1_2 ) ( ex:XXXX ex:YYYY )  ( ex:1_1 ex:1_2 ) }" +
+				"BIND(fx:serial(?v1, ?v2) as ?c)" +
+				"}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+
+		// 4 rows, ?c = 1, 2, 1, 3
+		QuerySolution s = result.next();
+		int c = s.get("c").asLiteral().getInt();
+		Assert.assertTrue(c == 1);
+		s = result.next();
+		c = s.get("c").asLiteral().getInt();
+		Assert.assertTrue(c == 2);
+		s = result.next();
+		c = s.get("c").asLiteral().getInt();
+		Assert.assertTrue(c == 1);
+		s = result.next();
+		c = s.get("c").asLiteral().getInt();
+		Assert.assertTrue(c == 3);
+
 	}
 }
