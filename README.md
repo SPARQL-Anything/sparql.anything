@@ -494,7 +494,8 @@ SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 
 ## How to cite our work
 Daga, Enrico; Asprino, Luigi; Mulholland, Paul and Gangemi, Aldo (2021). Facade-X: An Opinionated Approach to SPARQL Anything. In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume 53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
-DOI: https://doi.org/10.3233/ssw210035 [PDF](http://oro.open.ac.uk/78973/1/78973.pdf)
+
+DOI: https://doi.org/10.3233/ssw210035 | [PDF](http://oro.open.ac.uk/78973/1/78973.pdf)
 ```
 @incollection{oro78973,
           volume = {53},
