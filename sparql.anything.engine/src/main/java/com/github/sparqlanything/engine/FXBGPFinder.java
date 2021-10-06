@@ -115,7 +115,6 @@ public class FXBGPFinder implements OpVisitor {
 
 	}
 
-
 	@Override
 	public void visit(OpTable opTable) {
 		this.hasTable = true;
@@ -210,7 +209,9 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpSequence opSequence) {
-
+		opSequence.getElements().forEach(op -> {
+			op.visit(this);
+		});
 	}
 
 	@Override

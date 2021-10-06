@@ -34,8 +34,11 @@ import org.apache.jena.sparql.engine.binding.BindingBuilder;
 import org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper;
 import org.apache.jena.sparql.pfunction.PFuncSimple;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AnySlot extends PFuncSimple {
+	private static final Logger logger = LoggerFactory.getLogger(AnySlot.class);
 
 	@Override
 	public QueryIterator execEvaluated(Binding parent, Node subject, Node predicate, Node object,
@@ -48,13 +51,16 @@ public class AnySlot extends PFuncSimple {
 			s = Node.ANY;
 		}
 
-		if (object.isURI()) {
+		if (object.isURI() || object.isLiteral()) {
 			o = object;
 		} else {
 			o = Node.ANY;
 		}
 
 		ExtendedIterator<Triple> it = execCxt.getActiveGraph().find(s, Node.ANY, o);
+		logger.trace("S {} {} P {} O {} {} BP {} : {}", subject.toString(), s.toString(), predicate.toString(),
+				object.toString(), o.toString(), Utils.bindingToString(parent), it.hasNext());
+
 		QueryIterator res = QueryIterPlainWrapper.create(new Iterator<Binding>() {
 
 			private Triple cached;
