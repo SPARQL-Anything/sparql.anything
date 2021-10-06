@@ -21,19 +21,70 @@
 
 package com.github.sparqlanything.model;
 
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.OpVisitor;
-import org.apache.jena.sparql.algebra.op.*;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.apache.jena.sparql.core.Quad;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.sparql.algebra.Op;
+import org.apache.jena.sparql.algebra.OpVisitor;
+import org.apache.jena.sparql.algebra.op.OpAssign;
+import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpConditional;
+import org.apache.jena.sparql.algebra.op.OpDatasetNames;
+import org.apache.jena.sparql.algebra.op.OpDiff;
+import org.apache.jena.sparql.algebra.op.OpDisjunction;
+import org.apache.jena.sparql.algebra.op.OpDistinct;
+import org.apache.jena.sparql.algebra.op.OpExtend;
+import org.apache.jena.sparql.algebra.op.OpFilter;
+import org.apache.jena.sparql.algebra.op.OpGraph;
+import org.apache.jena.sparql.algebra.op.OpGroup;
+import org.apache.jena.sparql.algebra.op.OpJoin;
+import org.apache.jena.sparql.algebra.op.OpLabel;
+import org.apache.jena.sparql.algebra.op.OpLeftJoin;
+import org.apache.jena.sparql.algebra.op.OpList;
+import org.apache.jena.sparql.algebra.op.OpMinus;
+import org.apache.jena.sparql.algebra.op.OpNull;
+import org.apache.jena.sparql.algebra.op.OpOrder;
+import org.apache.jena.sparql.algebra.op.OpPath;
+import org.apache.jena.sparql.algebra.op.OpProcedure;
+import org.apache.jena.sparql.algebra.op.OpProject;
+import org.apache.jena.sparql.algebra.op.OpPropFunc;
+import org.apache.jena.sparql.algebra.op.OpQuad;
+import org.apache.jena.sparql.algebra.op.OpQuadBlock;
+import org.apache.jena.sparql.algebra.op.OpQuadPattern;
+import org.apache.jena.sparql.algebra.op.OpReduced;
+import org.apache.jena.sparql.algebra.op.OpSequence;
+import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.algebra.op.OpSlice;
+import org.apache.jena.sparql.algebra.op.OpTable;
+import org.apache.jena.sparql.algebra.op.OpTopN;
+import org.apache.jena.sparql.algebra.op.OpTriple;
+import org.apache.jena.sparql.algebra.op.OpUnion;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
+import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.sparql.path.P_Alt;
+import org.apache.jena.sparql.path.P_Distinct;
+import org.apache.jena.sparql.path.P_FixedLength;
+import org.apache.jena.sparql.path.P_Inverse;
+import org.apache.jena.sparql.path.P_Link;
+import org.apache.jena.sparql.path.P_Mod;
+import org.apache.jena.sparql.path.P_Multi;
+import org.apache.jena.sparql.path.P_NegPropSet;
+import org.apache.jena.sparql.path.P_OneOrMore1;
+import org.apache.jena.sparql.path.P_OneOrMoreN;
+import org.apache.jena.sparql.path.P_ReverseLink;
+import org.apache.jena.sparql.path.P_Seq;
+import org.apache.jena.sparql.path.P_Shortest;
+import org.apache.jena.sparql.path.P_ZeroOrMore1;
+import org.apache.jena.sparql.path.P_ZeroOrMoreN;
+import org.apache.jena.sparql.path.P_ZeroOrOne;
+import org.apache.jena.sparql.path.PathVisitor;
 
 /**
  *
@@ -43,7 +94,7 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 	private final List<Object> opComponents = new ArrayList<Object>();
 
 	public TripleFilteringFacadeXBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
-		super( resourceId,  ds,  properties);
+		super(resourceId, ds, properties);
 		this.op = op;
 		if (op != null) {
 			ComponentsCollector collector = new ComponentsCollector();
@@ -71,14 +122,16 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 				Quad q = (Quad) o;
 				if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph))
 						&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
-						&&  predicateMatch(q.getPredicate(), predicate) //(!q.getPredicate().isConcrete() || q.getPredicate().matches(predicate))
+						&& predicateMatch(q.getPredicate(), predicate) // (!q.getPredicate().isConcrete() ||
+																		// q.getPredicate().matches(predicate))
 						&& (!q.getObject().isConcrete() || q.getObject().matches(object))) {
 					return true;
 				}
 			} else if (o instanceof Triple) {
 				Triple t = (Triple) o;
 				if ((!t.getSubject().isConcrete() || t.getSubject().matches(subject))
-						&& predicateMatch(t.getPredicate(), predicate) //(!t.getPredicate().isConcrete() || t.getPredicate().matches(predicate))
+						&& predicateMatch(t.getPredicate(), predicate) // (!t.getPredicate().isConcrete() ||
+																		// t.getPredicate().matches(predicate))
 						&& (!t.getObject().isConcrete() || t.getObject().matches(object))) {
 					return true;
 				}
@@ -87,12 +140,13 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 		return false;
 	}
 
-	private boolean predicateMatch(Node queryPredicate, Node dataPredicate){
+	private boolean predicateMatch(Node queryPredicate, Node dataPredicate) {
 		// If queryPredicate is fx:anySLot match any container membership property
-		if(queryPredicate.isConcrete() && queryPredicate.getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")){
-			if(dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")){
+		if (queryPredicate.isConcrete()
+				&& queryPredicate.getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")) {
+			if (dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		}
@@ -130,7 +184,6 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 		return false;
 	}
 
-
 	class ComponentsCollector implements OpVisitor {
 		@Override
 		public void visit(OpBGP opBGP) {
@@ -164,10 +217,97 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 
 		@Override
 		public void visit(OpPath opPath) {
+			log.trace(" - OpPath - {}", opPath.toString());
+			opPath.getTriplePath().getPath().visit(new PathVisitor() {
+
+				@Override
+				public void visit(P_Seq pathSeq) {
+					pathSeq.getLeft().visit(this);
+					pathSeq.getRight().visit(this);
+				}
+
+				@Override
+				public void visit(P_Alt pathAlt) {
+					pathAlt.getLeft().visit(this);
+					pathAlt.getRight().visit(this);
+				}
+
+				@Override
+				public void visit(P_OneOrMoreN path) {
+					path.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_OneOrMore1 path) {
+					path.getSubPath().visit(this);
+
+				}
+
+				@Override
+				public void visit(P_ZeroOrMoreN path) {
+					path.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_ZeroOrMore1 path) {
+					path.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_ZeroOrOne path) {
+					path.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_Shortest pathShortest) {
+					pathShortest.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_Multi pathMulti) {
+					pathMulti.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_Distinct pathDistinct) {
+					pathDistinct.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_FixedLength pFixedLength) {
+					pFixedLength.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_Mod pathMod) {
+					pathMod.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_Inverse inversePath) {
+					inversePath.getSubPath().visit(this);
+				}
+
+				@Override
+				public void visit(P_NegPropSet pathNotOneOf) {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void visit(P_ReverseLink pathNode) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void visit(P_Link pathNode) {
+					opComponents.add(new Triple(Node.ANY, pathNode.getNode(), Node.ANY));
+
+				}
+			});
 
 		}
 
-	
 		@Override
 		public void visit(OpTable opTable) {
 

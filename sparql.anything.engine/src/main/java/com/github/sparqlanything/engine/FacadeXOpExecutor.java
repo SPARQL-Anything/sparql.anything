@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -44,6 +43,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpPath;
 import org.apache.jena.sparql.algebra.op.OpProcedure;
 import org.apache.jena.sparql.algebra.op.OpPropFunc;
 import org.apache.jena.sparql.algebra.op.OpService;
@@ -77,6 +77,7 @@ import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.TripleFilteringFacadeXBuilder;
 import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 import com.github.sparqlanything.zip.FolderTriplifier;
 
 public class FacadeXOpExecutor extends OpExecutor {
@@ -155,7 +156,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			return DatasetGraphFactory.create();
 		}
 
-		logger.trace("Triplifier {}", t.getClass().toString());
+		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op.toString());
 		dg = triplify(op, p, t);
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
@@ -168,7 +169,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 			logger.debug("Graph added to in-memory cache");
 		}
-		logger.trace("Triplified, #triples in default graph {}", dg.getDefaultGraph().size());
+		logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
 
 //		else {
 //			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
@@ -250,7 +251,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		};
 	}
 
-	private DatasetGraph triplify(final Op opService, Properties p, Triplifier t) throws IOException {
+	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
 		DatasetGraph dg;
 		Integer strategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
 		if (strategy == null) {
@@ -259,34 +260,36 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		URL url = Triplifier.getLocation(p);
 		String resourceId;
-		if(url == null){
-			// XXX This method of passing content seems only supported by the TextTriplifier.
+		if (url == null) {
+			// XXX This method of passing content seems only supported by the
+			// TextTriplifier.
 			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
 			String id = Integer.toString(p.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
 			resourceId = "content:" + id;
-		}else{
+		} else {
 			resourceId = url.toString();
 		}
 
-		//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
+		// logger.trace("No location, use content: {}",
+		// p.getProperty(IRIArgument.CONTENT.toString()));
 //			dg = t.triplify(p);
 //			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
 
-		logger.debug("Execution strategy: {}", strategy);
+		logger.debug("Execution strategy: {} {}", strategy, op.toString());
 		if (t != null) {
 			FacadeXGraphBuilder builder;
 			if (strategy == 1) {
 				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new TripleFilteringFacadeXBuilder(resourceId, opService, p);
+				builder = new TripleFilteringFacadeXBuilder(resourceId, op, p);
 			} else {
 				logger.trace("Executing: {} [strategy={}]", p, strategy);
 				builder = new BaseFacadeXBuilder(resourceId, p);
 			}
-			try{
-				 dg = t.triplify(p, builder);
-			} catch (TriplifierHTTPException e){
-				if(p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")){
-					// as per  https://www.w3.org/TR/sparql11-federated-query/#serviceFailure
+			try {
+				dg = t.triplify(p, builder);
+			} catch (TriplifierHTTPException e) {
+				if (p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")) {
+					// as per https://www.w3.org/TR/sparql11-federated-query/#serviceFailure
 					// if silent is specified "errors encountered while accessing a remote SPARQL
 					// endpoint should be ignored"
 					//
@@ -294,7 +297,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 					logger.warn("Errors encountered but the silent keyword was specified");
 					dg = DatasetFactory.create().asDatasetGraph();
 				} else {
-					throw new IOException(e.toString()) ;
+					throw new IOException(e.toString());
 				}
 			}
 		} else {
@@ -302,6 +305,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.error("No triplifier available for the input format!");
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
+		logger.trace("Default graph size {}",dg.getDefaultGraph().size());
 		return dg;
 	}
 
@@ -396,8 +400,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 				logger.trace("Setting default value for namespace: {}", Triplifier.XYZ_NS);
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
 			}
-			if(opService.getSilent()){
-				// we can only see if silent was specified at the OpService so we need to stash a boolean
+			if (opService.getSilent()) {
+				// we can only see if silent was specified at the OpService so we need to stash
+				// a boolean
 				// at this point so we can use it when we triplify further down the Op tree
 				properties.setProperty(PROPERTY_OPSERVICE_SILENT, "true");
 			}
@@ -496,6 +501,14 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return new OpBGP(result);
 	}
 
+	protected QueryIterator execute(final OpPath s, QueryIterator input) {
+//		logger.trace("Execute OpPath {} {}", s.toString(), Utils.queryIteratorToString( super.execute(s, input)));
+		logger.trace("Execute OpPath {} ", s.toString());
+		
+		return super.execute(s, input);
+
+	}
+
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
@@ -510,6 +523,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		Properties p = new Properties();
 		try {
+			logger.debug("Input BGP {} ", opBGP.toString());
 			extractPropertiesFromOpGraph(p, opBGP);
 			if (p.size() > 0) {
 				// if we have FX properties we at least need to excludeFXProperties()
@@ -533,7 +547,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				| ClassNotFoundException | IOException e) {
 			logger.error(e.getMessage());
 		}
-		logger.trace("Execute default");
+		logger.trace("Execute default {} {}", opBGP.toString(), excludeOpPropFunction(opBGP).toString());
 		return super.execute(excludeOpPropFunction(opBGP), input2);
 	}
 

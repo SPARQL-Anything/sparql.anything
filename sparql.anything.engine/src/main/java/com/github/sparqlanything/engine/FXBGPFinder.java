@@ -145,12 +145,12 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpGraph opGraph) {
-		opGraph.visit(this);
+		opGraph.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpService opService) {
-		opService.getSubOp().visit(this);
+//		opService.getSubOp().visit(this);
 	}
 
 	@Override

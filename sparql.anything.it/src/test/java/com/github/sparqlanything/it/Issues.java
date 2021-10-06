@@ -41,6 +41,7 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
@@ -54,7 +55,6 @@ import com.github.sparqlanything.engine.FacadeX;
 public class Issues {
 
 	private static final Logger log = LoggerFactory.getLogger(Issues.class);
-
 
 	@Test
 	public void issue75() throws URISyntaxException {
@@ -158,27 +158,33 @@ public class Issues {
 	public void testIssue93() throws URISyntaxException, IOException {
 		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issue93.sparql"), StandardCharsets.UTF_8);
 		qs = qs.replace("%%location%%", getClass().getClassLoader().getResource("issue93.html").toURI().toString());
-		Query query= QueryFactory.create(qs);
+		Query query = QueryFactory.create(qs);
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Dataset ds = DatasetFactory.createGeneral();
 		Boolean rootInObject = QueryExecutionFactory.create(query, ds).execAsk();
 		Assert.assertFalse(rootInObject);
 	}
 
-	@Ignore
 	@Test
 	public void testIssue114() throws IOException, URISyntaxException {
 		String location = getClass().getClassLoader().getResource("propertypath.json").toURI().toString();
 		Query query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
 				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT DISTINCT ?slot  {      "
-				+ "SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" . " + "?s fx:anySlot/fx:anySlot ?slot . }}");
+				+ "SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" .   "
+				+ "?s fx:anySlot/fx:anySlot ?slot . }}");
+
+//		query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
+//				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+//				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT DISTINCT ?slot  {      "
+//				+ "SERVICE <x-sparql-anything:" + location + "> {  " + "?s fx:anySlot/fx:anySlot ?slot . }}");
 
 		Dataset ds = DatasetFactory.createGeneral();
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
 		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+//		System.out.println(ResultSetFormatter.asText(rs));
 		Set<String> slots = new HashSet<>();
 		while (rs.hasNext()) {
 			QuerySolution querySolution = (QuerySolution) rs.next();
