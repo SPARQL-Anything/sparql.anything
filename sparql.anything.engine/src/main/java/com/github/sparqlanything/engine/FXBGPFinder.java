@@ -22,6 +22,7 @@
 package com.github.sparqlanything.engine;
 
 import org.apache.jena.graph.Triple;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVisitor;
 import org.apache.jena.sparql.algebra.op.OpAssign;
 import org.apache.jena.sparql.algebra.op.OpBGP;
@@ -128,12 +129,12 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpProcedure opProc) {
-
+		opProc.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpPropFunc opPropFunc) {
-
+		opPropFunc.getSubOp().visit(this);
 	}
 
 	@Override
@@ -144,12 +145,12 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpGraph opGraph) {
-
+		opGraph.visit(this);
 	}
 
 	@Override
 	public void visit(OpService opService) {
-
+		opService.getSubOp().visit(this);
 	}
 
 	@Override
@@ -159,12 +160,12 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpLabel opLabel) {
-
+		opLabel.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpAssign opAssign) {
-
+		opAssign.getSubOp().visit(this);
 	}
 
 	@Override
@@ -189,74 +190,80 @@ public class FXBGPFinder implements OpVisitor {
 
 	@Override
 	public void visit(OpUnion opUnion) {
-
+		opUnion.getLeft().visit(this);
+		opUnion.getRight().visit(this);
 	}
 
 	@Override
 	public void visit(OpDiff opDiff) {
-
+		opDiff.getLeft().visit(this);
+		opDiff.getRight().visit(this);
 	}
 
 	@Override
 	public void visit(OpMinus opMinus) {
-
+		opMinus.getLeft().visit(this);
+		opMinus.getRight().visit(this);
 	}
 
 	@Override
-	public void visit(OpConditional opCondition) {
-
+	public void visit(OpConditional op) {
+		op.getLeft().visit(this);
+		op.getRight().visit(this);
 	}
 
 	@Override
 	public void visit(OpSequence opSequence) {
-		opSequence.getElements().forEach(op -> {
+		for (Op op : opSequence.getElements()) {
 			op.visit(this);
-		});
+		}
 	}
 
 	@Override
-	public void visit(OpDisjunction opDisjunction) {
-
+	public void visit(OpDisjunction op) {
+		for (Op op1 : op.getElements()) {
+			op1.visit(this);
+		}
 	}
 
 	@Override
 	public void visit(OpList opList) {
-
+		opList.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpOrder opOrder) {
-
+		opOrder.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpProject opProject) {
-
+		opProject.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpReduced opReduced) {
-
+		opReduced.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpDistinct opDistinct) {
-
+		opDistinct.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpSlice opSlice) {
-
+		opSlice.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpGroup opGroup) {
-
+		opGroup.getSubOp().visit(this);
 	}
 
 	@Override
 	public void visit(OpTopN opTop) {
-
+		opTop.getSubOp().visit(this);
 	}
 
 }
