@@ -410,6 +410,10 @@ The system supports the following functions for string manipulation (See #104):
 - `fx:String.toUpperCase` wraps [`java.lang.String.toUpperCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 - `fx:String.trim` wraps [`java.lang.String.trim`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 
+Additional functions:
+
+- `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.
+
 ## Download and Usage
 
 An executable JAR can be obtained from the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
