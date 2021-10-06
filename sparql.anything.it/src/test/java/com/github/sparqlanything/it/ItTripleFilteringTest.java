@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package com.github.spiceh2020.sparql.anything.it;
+package com.github.sparqlanything.it;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;

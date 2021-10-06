@@ -1,4 +1,25 @@
-package com.github.spiceh2020.sparql.anything.it;
+/*
+ * Copyright (c) 2021 Enrico Daga @ http://www.enridaga.net
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+package com.github.sparqlanything.it;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -33,6 +54,7 @@ import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -517,4 +539,59 @@ public class ItTest {
 
 	}
 
+	// This is waiting until issue #114 is resolved
+	@Ignore
+	@Test
+	public void testAnySlotMagicPropertyPropertyPath2() throws IOException, URISyntaxException {
+		String location = getClass().getClassLoader().getResource("anySlotPath.json").toURI().toString();
+		String q = "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+				"PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n" +
+				"PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n" +
+				"PREFIX fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX xyz:  <http://sparql.xyz/facade-x/data/>\n" +
+				"PREFIX ont: <http://sparql.xyz/facade-x/example/>\n" +
+				"PREFIX xpath: <https://www.w3.org/TR/xpath-functions/>\n" +
+				"SELECT ?placeId ?latitude ?longitude\n" +
+				"where {\n" +
+				"  service <x-sparql-anything:> {\n" +
+				"  \t  fx:properties fx:location \"" + location + "\" ;\n" +
+				"\t  \tfx:media-type \"application/json\" ;\n" +
+				"\t\t  fx:blank-nodes false\n" +
+				"\t\t  .\n" +
+				"\t  [] xyz:track%5Fid ?track_id ;\n" +
+				"\t  \t ?pArtist ?artist ;\n" +
+				"\t\t ?pArtistForIri ?artistForIri ;\n" +
+				"\t\t xyz:title ?title ;\n" +
+				"\t\t xyz:recording%5Fplaces ?places\n" +
+				"\t\t .\n" +
+				"\t\t FILTER(REGEX(STR(?pArtist),\".*artist%5F[0-9]+$\")) .\n" +
+				"\t\t FILTER(REGEX(STR(?pArtistForIri),\".*artist%5Ffor%5Firi%5F[0-9]+$\")) .\n" +
+				"\t\t \n" +
+				"\t\t ####\n" +
+				"\t\t ?places fx:anySlot [\n" +
+				"\t\t \txyz:place [ xyz:id ?placeId ; xyz:coordinates [ xyz:latitude ?latitude ; xyz:longitude ?longitude ]]]\n" +
+				//"\t\t ?places fx:anySlot/xyz:place [ xyz:id ?placeId ; xyz:coordinates [ xyz:latitude ?latitude ; xyz:longitude ?longitude ]]\n" +
+				"}}";
+		System.out.println(q);
+		Query query = QueryFactory.create(q);
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		Set<String> slots = new HashSet<>();
+		while (rs.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs.next();
+			if (querySolution.get("placeId").isLiteral()) {
+				slots.add(querySolution.get("placeId").asLiteral().getValue().toString());
+			}
+		}
+		System.err.println(slots);
+		//assertEquals(Sets.newHashSet("b", "d", "c"), slots);
+
+	}
 }
