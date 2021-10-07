@@ -485,7 +485,7 @@ An executable JAR of a SPARQL-Anything-powered Fuseki endpoint can be obtained f
 The jar can be executed as follows:
 
 ```
-usage: java -jar sparql-anything-fuseki-<version>.jar [-p port] [-e
+usage: java -jar sparql-anything-server-<version>.jar [-p port] [-e
             sparql-endpoint-path] [-g endpoint-gui-path]
  -e,--path <path>   The path where the server will be running on (Default
                     /sparql.anything).
