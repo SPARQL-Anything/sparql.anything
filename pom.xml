@@ -71,23 +71,23 @@
 	</repositories>
 
 	<modules>
-		<module>sparql.anything.engine</module>
-		<module>sparql.anything.model</module>
-		<module>sparql.anything.parser</module>
-		<module>sparql.anything.json</module>
-		<module>sparql.anything.xml</module>
-		<module>sparql.anything.csv</module>
-		<module>sparql.anything.cli</module>
-		<module>sparql.anything.metadata</module>
-		<module>sparql.anything.binary</module>
-		<module>sparql.anything.text</module>
-		<module>sparql.anything.html</module>
-		<module>sparql.anything.it</module>
-		<module>sparql.anything.fuseki</module>
-		<module>sparql.anything.spreadsheet</module>
-		<module>sparql.anything.rdf</module>
-		<module>sparql.anything.archive</module>
-		<module>sparql.anything.docs</module>
+		<module>sparql-anything-engine</module>
+		<module>sparql-anything-model</module>
+		<module>sparql-anything-parser</module>
+		<module>sparql-anything-json</module>
+		<module>sparql-anything-xml</module>
+		<module>sparql-anything-csv</module>
+		<module>sparql-anything-cli</module>
+		<module>sparql-anything-metadata</module>
+		<module>sparql-anything-binary</module>
+		<module>sparql-anything-text</module>
+		<module>sparql-anything-html</module>
+		<module>sparql-anything-it</module>
+		<module>sparql-anything-fuseki</module>
+		<module>sparql-anything-spreadsheet</module>
+		<module>sparql-anything-rdf</module>
+		<module>sparql-anything-archive</module>
+		<module>sparql-anything-docs</module>
 	</modules>
 
 	<build>

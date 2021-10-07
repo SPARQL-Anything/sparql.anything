@@ -1,1 +1,0 @@
-x-sparql-anything:mimeType=application/json,location=https://myfile.json?fo\,o=bar&tab=goal#hack,same=汉字
