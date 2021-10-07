@@ -1,0 +1,72 @@
+{
+  "acno": "A01081", 
+  "acquisitionYear": 1960, 
+  "all_artists": "Emilio Greco", 
+  "catalogueGroup": {
+    "accessionRanges": "A01080-A01081", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65332, 
+    "shortTitle": "Two Drawings for Large Bather I"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1913, 
+      "date": "1913\u20131995", 
+      "displayOrder": 1, 
+      "fc": "Emilio Greco", 
+      "gender": "Male", 
+      "id": 1211, 
+      "mda": "Greco, Emilio", 
+      "role": "artist", 
+      "startLetter": "G"
+    }
+  ], 
+  "creditLine": "Presented by the artist 1960", 
+  "dateRange": {
+    "endYear": 1959, 
+    "startYear": 1959, 
+    "text": "1959"
+  }, 
+  "dateText": "1959", 
+  "depth": "", 
+  "dimensions": "support: 660 x 467 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Two Drawings for Large Bather I", 
+  "height": "467", 
+  "id": 5634, 
+  "inscription": "date inscribed", 
+  "medium": "Ink on paper", 
+  "movementCount": 0, 
+  "subjectCount": 1, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 221, 
+                "name": "figure"
+              }
+            ], 
+            "id": 189, 
+            "name": "from recognisable sources"
+          }
+        ], 
+        "id": 184, 
+        "name": "abstraction"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": null, 
+  "title": "[title not known]", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/greco-title-not-known-a01081", 
+  "width": "660"
+}

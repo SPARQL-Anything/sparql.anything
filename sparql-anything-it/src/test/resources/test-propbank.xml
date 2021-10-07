@@ -1,0 +1,70 @@
+<frameset>
+  <predicate lemma="abandon">
+    <roleset id="abandon.01" name="leave behind">
+      <aliases>
+        <alias framenet="Quitting_a_place Departing" pos="v" verbnet="">abandon</alias>
+      </aliases>
+      <note>ABANDON-V NOTES: Verbnet class leave-51.2, other framed members include leave. Comparison with 'leave'. (from abandon.01-v)</note>
+      <roles>
+        <role descr="abandoner" f="ppt" n="0">
+          <vnrole vncls="51.2" vntheta="theme"/>
+        </role>
+        <role descr="thing abandoned, left behind" f="dir" n="1"/>
+        <role descr="attribute of arg1" f="prd" n="2"/>
+      </roles>
+      <example name="typical transitive" src="" type="">
+        <text>And they believe the Big Board, under Mr. Phelan, has abandoned their interest.</text>
+        <arg f="" n="0">the Big Board</arg>
+        <arg f="adv" n="m">under Mr. Phelan</arg>
+        <rel f="">abandoned</rel>
+        <arg f="" n="1">their interest</arg>
+      </example>
+      <example name="ARG1 and ARG2" src="ontonotes nw/wsj/05/wsj_0581" type="">
+        <text>Consumers Power Co. , now the main unit of CMS Energy , ran into financial problems over its $ 4.2 billion Midland nuclear plant , which was abandoned as a nuclear facility in 1984 because of construction delays and high costs .</text>
+        <arg f="" n="1">[which][its $ 4.2 billion Midland nuclear plant]</arg>
+        <rel f="">abandoned</rel>
+        <arg f="" n="2">as a nuclear facility</arg>
+        <arg f="tmp" n="m">in 1984</arg>
+        <arg f="cau" n="m">because of construction delays and high costs</arg>
+      </example>
+
+    </roleset>
+    <roleset id="abandon.02" name="exchange">
+      <aliases>
+        <alias framenet="" pos="v" verbnet="">abandon</alias>
+      </aliases>
+      <note>ABANDON-V NOTES: Verbnet class leave-51.2, other framed members include leave. Comparison with 'leave'.Note that without an arg2 the two senses cannot be distinguished. (from abandon.02-v)</note>
+      <roles>
+        <role descr="abandoner" f="pag" n="0"/>
+        <role descr="thing abandoned, left behind" f="ppt" n="1"/>
+        <role descr="preferred item" f="gol" n="2"/>
+      </roles>
+      <example name="with preferred item" src="" type="">
+        <inflection aspect="ns" form="infinitive" person="ns" tense="ns" voice="active"/>
+        <text>One Colombian drug boss, upon hearing in 1987 that Gen. Noriega was negotiating with the U.S. [*] to abandon his command for a comfortable exile, sent him a hand-sized mahogany coffin engraved with his name.</text>
+        <arg f="" n="0">[*] -&gt; Gen. Noriega</arg>
+        <rel f="">abandon</rel>
+        <arg f="" n="1">his command</arg>
+        <arg f="" n="2">for a comfortable exile</arg>
+      </example>
+    </roleset>
+    <roleset id="abandon.03" name="surrender, give_over">
+      <aliases>
+        <alias framenet="" pos="v" verbnet="">abandon</alias>
+      </aliases>
+      <note>ABANDON-V NOTES: No Vncls. (from abandon.03-v)</note>
+      <roles>
+        <role descr="entity abandoning something" f="pag" n="0"/>
+        <role descr="thing abandoned" f="ppt" n="1"/>
+        <role descr="benefactive, abandoned-to" f="gol" n="2"/>
+      </roles>
+      <example name="give up to" src="" type="">
+        <text>Once he had abandoned himself to the very worst, once he had quieted all the dragons of worry and suspense, there would n't be very much for Mae to do.</text>
+        <arg f="" n="0">he</arg>
+        <rel f="">abandoned</rel>
+        <arg f="" n="1">himself</arg>
+        <arg f="" n="2">to the very worst</arg>
+      </example>
+    </roleset>
+  </predicate>
+</frameset>

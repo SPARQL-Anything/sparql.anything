@@ -1,0 +1,190 @@
+{
+  "acno": "A01095", 
+  "acquisitionYear": 1946, 
+  "all_artists": "Helen Beatrix Potter", 
+  "catalogueGroup": {
+    "accessionRanges": "A01089-A01110", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65490, 
+    "shortTitle": "Illustrations for 'The Tailor of Gloucester'"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1866, 
+      "date": "1866\u20131943", 
+      "displayOrder": 1, 
+      "fc": "Helen Beatrix Potter", 
+      "gender": "Female", 
+      "id": 1794, 
+      "mda": "Potter, Helen Beatrix", 
+      "role": "artist", 
+      "startLetter": "P"
+    }
+  ], 
+  "creditLine": "Presented by Capt. K.W.G. Duke RN 1946", 
+  "dateRange": {
+    "endYear": 1902, 
+    "startYear": 1902, 
+    "text": "c.1902"
+  }, 
+  "dateText": "c.1902", 
+  "depth": "", 
+  "dimensions": "support: 111 x 92 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Illustrations for 'The Tailor of Gloucester'", 
+  "height": "92", 
+  "id": 12186, 
+  "inscription": null, 
+  "medium": "Ink, watercolour and gouache on paper", 
+  "movementCount": 0, 
+  "subjectCount": 11, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 6456, 
+                "name": "Potter, Beatrix, 'The Tailor of Gloucester'"
+              }
+            ], 
+            "id": 58, 
+            "name": "literature (not Shakespeare)"
+          }
+        ], 
+        "id": 55, 
+        "name": "literature and fiction"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 750, 
+                "name": "chair"
+              }
+            ], 
+            "id": 82, 
+            "name": "furnishings"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1907, 
+                "name": "fire, open"
+              }, 
+              {
+                "id": 2571, 
+                "name": "fireplace"
+              }
+            ], 
+            "id": 85, 
+            "name": "heating and lighting"
+          }, 
+          {
+            "children": [
+              {
+                "id": 6465, 
+                "name": "kettle"
+              }
+            ], 
+            "id": 84, 
+            "name": "kitchen"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 3256, 
+                "name": "kitchen"
+              }
+            ], 
+            "id": 41, 
+            "name": "domestic"
+          }
+        ], 
+        "id": 40, 
+        "name": "interiors"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1134, 
+                "name": "man, old"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }, 
+          {
+            "children": [
+              {
+                "id": 694, 
+                "name": "sitting"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 14746, 
+                "name": "sleeping"
+              }
+            ], 
+            "id": 175, 
+            "name": "actions: processes and functions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 3544, 
+                "name": "tiredness"
+              }
+            ], 
+            "id": 178, 
+            "name": "diseases and conditions"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 5004, 
+                "name": "tailor"
+              }
+            ], 
+            "id": 124, 
+            "name": "industrial and crafts"
+          }
+        ], 
+        "id": 116, 
+        "name": "work and occupations"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01095_8.jpg", 
+  "title": "The Tailor by the Hearth", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/potter-the-tailor-by-the-hearth-a01095", 
+  "width": "111"
+}

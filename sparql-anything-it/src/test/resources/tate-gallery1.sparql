@@ -1,0 +1,18 @@
+
+PREFIX ex: <http://www.example.org#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX tate: <https://github.com/tategallery/collection#>
+SELECT * WHERE {
+SERVICE <x-sparql-anything:csv.headers=true,namespace=https://github.com/tategallery/collection#,charset=UTF-8-BOM,location=%%artwork_data%%> {
+        []
+            tate:id ?id ;
+            tate:accession_number ?accession ;
+            tate:artist ?artist ;
+            tate:artistId ?artistId ;
+            tate:title ?title;
+            tate:medium ?medium ;
+            tate:year ?year ;
+            tate:thumbnailCopyright ?thumbnailCopyright ;
+            tate:thumbnailUrl ?thumbnail
+    }
+} LIMIT 100

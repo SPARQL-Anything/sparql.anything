@@ -1,0 +1,202 @@
+{
+  "acno": "A01039", 
+  "acquisitionYear": 1941, 
+  "all_artists": "Sir Max Beerbohm", 
+  "catalogueGroup": {
+    "accessionRanges": "A01038-A01060", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65258, 
+    "shortTitle": "Rossetti and his Friends"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1872, 
+      "date": "1872\u20131956", 
+      "displayOrder": 1, 
+      "fc": "Sir Max Beerbohm", 
+      "gender": "Male", 
+      "id": 722, 
+      "mda": "Beerbohm, Sir Max", 
+      "role": "artist", 
+      "startLetter": "B"
+    }
+  ], 
+  "creditLine": "Bequeathed by Sir Hugh Walpole 1941", 
+  "dateRange": {
+    "endYear": 1917, 
+    "startYear": 1917, 
+    "text": "1917"
+  }, 
+  "dateText": "1917", 
+  "depth": "", 
+  "dimensions": "support: 298 x 419 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Rossetti and his Friends", 
+  "height": "419", 
+  "id": 851, 
+  "inscription": "date inscribed", 
+  "medium": "Graphite and watercolour on paper", 
+  "movementCount": 0, 
+  "subjectCount": 17, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1083, 
+                "name": "Disraeli, Benjamin"
+              }, 
+              {
+                "id": 1082, 
+                "name": "Hunt, William Holman"
+              }, 
+              {
+                "id": 1080, 
+                "name": "Millais, John Everett, 1st Baronet"
+              }, 
+              {
+                "id": 1170, 
+                "name": "Rossetti, Dante Gabriel"
+              }
+            ], 
+            "id": 102, 
+            "name": "named individuals"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1173, 
+                "name": "Jewish"
+              }
+            ], 
+            "id": 179, 
+            "name": "ethnicity"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20169, 
+                "name": "Pre-Raphaelite Brotherhood"
+              }
+            ], 
+            "id": 103, 
+            "name": "named groups"
+          }, 
+          {
+            "children": [
+              {
+                "id": 799, 
+                "name": "group"
+              }
+            ], 
+            "id": 97, 
+            "name": "groups"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20115, 
+                "name": "groups"
+              }, 
+              {
+                "id": 20118, 
+                "name": "individuals: male"
+              }
+            ], 
+            "id": 20114, 
+            "name": "portraits"
+          }, 
+          {
+            "children": [
+              {
+                "id": 195, 
+                "name": "man"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }, 
+          {
+            "children": [
+              {
+                "id": 270, 
+                "name": "standing"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 4369, 
+                "name": "anti-semitism"
+              }, 
+              {
+                "id": 847, 
+                "name": "caricature"
+              }, 
+              {
+                "id": 1171, 
+                "name": "race"
+              }
+            ], 
+            "id": 158, 
+            "name": "social comment"
+          }
+        ], 
+        "id": 145, 
+        "name": "society"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2793, 
+                "name": "artist, painter"
+              }
+            ], 
+            "id": 118, 
+            "name": "arts and entertainment"
+          }, 
+          {
+            "children": [
+              {
+                "id": 808, 
+                "name": "politician - non-specific"
+              }, 
+              {
+                "id": 698, 
+                "name": "politician, prime minister"
+              }
+            ], 
+            "id": 130, 
+            "name": "public service"
+          }
+        ], 
+        "id": 116, 
+        "name": "work and occupations"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": "\u00a9 The estate of Max Beerbohm", 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01039_8.jpg", 
+  "title": "British Stock and Alien Inspiration, 1849", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/beerbohm-british-stock-and-alien-inspiration-1849-a01039", 
+  "width": "298"
+}

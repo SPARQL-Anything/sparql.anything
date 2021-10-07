@@ -1,0 +1,86 @@
+{
+  "acno": "A01017", 
+  "acquisitionYear": 1927, 
+  "all_artists": "Philip Webb", 
+  "catalogueGroup": {}, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1831, 
+      "date": "1831\u20131915", 
+      "displayOrder": 1, 
+      "fc": "Philip Webb", 
+      "gender": "Male", 
+      "id": 589, 
+      "mda": "Webb, Philip", 
+      "role": "artist", 
+      "startLetter": "W"
+    }
+  ], 
+  "creditLine": "Bequeathed by J.R. Holliday 1927", 
+  "dateRange": {
+    "endYear": 1893, 
+    "startYear": 1893, 
+    "text": "1893"
+  }, 
+  "dateText": "1893", 
+  "depth": "", 
+  "dimensions": "support: 267 x 279 mm", 
+  "foreignTitle": null, 
+  "groupTitle": null, 
+  "height": "279", 
+  "id": 16042, 
+  "inscription": null, 
+  "medium": "Graphite on paper", 
+  "movementCount": 0, 
+  "subjectCount": 3, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 5054, 
+                "name": "feeding"
+              }
+            ], 
+            "id": 61, 
+            "name": "animals: actions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 936, 
+                "name": "foliage"
+              }
+            ], 
+            "id": 72, 
+            "name": "plants and flowers"
+          }, 
+          {
+            "children": [
+              {
+                "id": 2419, 
+                "name": "pelican"
+              }
+            ], 
+            "id": 62, 
+            "name": "animals: birds"
+          }
+        ], 
+        "id": 60, 
+        "name": "nature"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01017_8.jpg", 
+  "title": "Study for Heraldic Glass", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/webb-study-for-heraldic-glass-a01017", 
+  "width": "267"
+}

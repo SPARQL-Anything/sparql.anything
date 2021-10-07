@@ -1,0 +1,224 @@
+{
+  "acno": "A01056", 
+  "acquisitionYear": 1941, 
+  "all_artists": "Sir Max Beerbohm", 
+  "catalogueGroup": {
+    "accessionRanges": "A01038-A01060", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65258, 
+    "shortTitle": "Rossetti and his Friends"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1872, 
+      "date": "1872\u20131956", 
+      "displayOrder": 1, 
+      "fc": "Sir Max Beerbohm", 
+      "gender": "Male", 
+      "id": 722, 
+      "mda": "Beerbohm, Sir Max", 
+      "role": "artist", 
+      "startLetter": "B"
+    }
+  ], 
+  "creditLine": "Bequeathed by Sir Hugh Walpole 1941", 
+  "dateRange": {
+    "endYear": 1916, 
+    "startYear": 1916, 
+    "text": "1916"
+  }, 
+  "dateText": "1916", 
+  "depth": "", 
+  "dimensions": "support: 292 x 394 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Rossetti and his Friends", 
+  "height": "394", 
+  "id": 868, 
+  "inscription": "date inscribed", 
+  "medium": "Graphite and watercolour on paper", 
+  "movementCount": 0, 
+  "subjectCount": 18, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1212, 
+                "name": "Brown, Ford Madox"
+              }, 
+              {
+                "id": 1188, 
+                "name": "Burne-Jones, Edward"
+              }, 
+              {
+                "id": 7218, 
+                "name": "Morris, Lynda"
+              }, 
+              {
+                "id": 25209, 
+                "name": "Pater, Walter"
+              }, 
+              {
+                "id": 1170, 
+                "name": "Rossetti, Dante Gabriel"
+              }, 
+              {
+                "id": 1211, 
+                "name": "Scott, William Bell"
+              }, 
+              {
+                "id": 1202, 
+                "name": "Swinburne, Algernon Charles"
+              }
+            ], 
+            "id": 102, 
+            "name": "named individuals"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20169, 
+                "name": "Pre-Raphaelite Brotherhood"
+              }
+            ], 
+            "id": 103, 
+            "name": "named groups"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1215, 
+                "name": "arms folded"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20115, 
+                "name": "groups"
+              }
+            ], 
+            "id": 20114, 
+            "name": "portraits"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1106, 
+                "name": "looking / watching"
+              }
+            ], 
+            "id": 175, 
+            "name": "actions: processes and functions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 195, 
+                "name": "man"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 847, 
+                "name": "caricature"
+              }
+            ], 
+            "id": 158, 
+            "name": "social comment"
+          }
+        ], 
+        "id": 145, 
+        "name": "society"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 743, 
+                "name": "garden"
+              }, 
+              {
+                "id": 807, 
+                "name": "lawn"
+              }
+            ], 
+            "id": 18, 
+            "name": "garden structures"
+          }, 
+          {
+            "children": [
+              {
+                "id": 211, 
+                "name": "wall"
+              }
+            ], 
+            "id": 28, 
+            "name": "townscapes, man-made features"
+          }
+        ], 
+        "id": 13, 
+        "name": "architecture"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 941, 
+                "name": "playing"
+              }
+            ], 
+            "id": 52, 
+            "name": "recreational activities"
+          }
+        ], 
+        "id": 47, 
+        "name": "leisure and pastimes"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1214, 
+                "name": "wombat"
+              }
+            ], 
+            "id": 67, 
+            "name": "animals: mammals"
+          }
+        ], 
+        "id": 60, 
+        "name": "nature"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": "\u00a9 The estate of Max Beerbohm", 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01056_8.jpg", 
+  "title": "Mr William Bell Scott Wondering What It is Those Fellows Seem to See in Gabriel", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/beerbohm-mr-william-bell-scott-wondering-what-it-is-those-fellows-seem-to-see-in-gabriel-a01056", 
+  "width": "292"
+}

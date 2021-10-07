@@ -1,0 +1,136 @@
+{
+  "acno": "A01079", 
+  "acquisitionYear": 1960, 
+  "all_artists": "Emilio Greco", 
+  "catalogueGroup": {
+    "accessionRanges": "A01074-A01079", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65331, 
+    "shortTitle": "Six Drawings for 'Pinocchio'"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1913, 
+      "date": "1913\u20131995", 
+      "displayOrder": 1, 
+      "fc": "Emilio Greco", 
+      "gender": "Male", 
+      "id": 1211, 
+      "mda": "Greco, Emilio", 
+      "role": "artist", 
+      "startLetter": "G"
+    }
+  ], 
+  "creditLine": "Presented by the artist 1960", 
+  "dateRange": {
+    "endYear": 1953, 
+    "startYear": 1953, 
+    "text": "1953"
+  }, 
+  "dateText": "1953", 
+  "depth": "", 
+  "dimensions": "support: 660 x 467 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Six Drawings for 'Pinocchio'", 
+  "height": "467", 
+  "id": 5632, 
+  "inscription": "date inscribed", 
+  "medium": "Ink on paper", 
+  "movementCount": 0, 
+  "subjectCount": 5, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 16262, 
+                "name": "Greco, Emilio, 'Monument to Pinnochio at Collodi'"
+              }
+            ], 
+            "id": 10639, 
+            "name": "fine art and design, named works"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 16261, 
+                "name": "Lorenzini, Carlo, 'The Adventures of Pinnochio'"
+              }
+            ], 
+            "id": 58, 
+            "name": "literature (not Shakespeare)"
+          }
+        ], 
+        "id": 55, 
+        "name": "literature and fiction"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2153, 
+                "name": "fairy"
+              }
+            ], 
+            "id": 138, 
+            "name": "magic and occultism"
+          }
+        ], 
+        "id": 132, 
+        "name": "religion and belief"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 13791, 
+                "name": "stork"
+              }
+            ], 
+            "id": 62, 
+            "name": "animals: birds"
+          }
+        ], 
+        "id": 60, 
+        "name": "nature"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 167, 
+                "name": "woman"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": null, 
+  "title": "[title not known]", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/greco-title-not-known-a01079", 
+  "width": "660"
+}

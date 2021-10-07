@@ -1,0 +1,216 @@
+{
+  "acno": "A01052", 
+  "acquisitionYear": 1941, 
+  "all_artists": "Sir Max Beerbohm", 
+  "catalogueGroup": {
+    "accessionRanges": "A01038-A01060", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65258, 
+    "shortTitle": "Rossetti and his Friends"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1872, 
+      "date": "1872\u20131956", 
+      "displayOrder": 1, 
+      "fc": "Sir Max Beerbohm", 
+      "gender": "Male", 
+      "id": 722, 
+      "mda": "Beerbohm, Sir Max", 
+      "role": "artist", 
+      "startLetter": "B"
+    }
+  ], 
+  "creditLine": "Bequeathed by Sir Hugh Walpole 1941", 
+  "dateRange": {
+    "endYear": 1916, 
+    "startYear": 1916, 
+    "text": "1916"
+  }, 
+  "dateText": "1916", 
+  "depth": "", 
+  "dimensions": "support: 330 x 419 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Rossetti and his Friends", 
+  "height": "419", 
+  "id": 864, 
+  "inscription": "date inscribed", 
+  "medium": "Graphite and watercolour on paper", 
+  "movementCount": 0, 
+  "subjectCount": 16, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1197, 
+                "name": "Meredith, George"
+              }, 
+              {
+                "id": 1170, 
+                "name": "Rossetti, Dante Gabriel"
+              }
+            ], 
+            "id": 102, 
+            "name": "named individuals"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20169, 
+                "name": "Pre-Raphaelite Brotherhood"
+              }
+            ], 
+            "id": 103, 
+            "name": "named groups"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1050, 
+                "name": "arm/arms raised"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20115, 
+                "name": "groups"
+              }
+            ], 
+            "id": 20114, 
+            "name": "portraits"
+          }, 
+          {
+            "children": [
+              {
+                "id": 195, 
+                "name": "man"
+              }, 
+              {
+                "id": 167, 
+                "name": "woman"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2793, 
+                "name": "artist, painter"
+              }
+            ], 
+            "id": 118, 
+            "name": "arts and entertainment"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1196, 
+                "name": "author"
+              }, 
+              {
+                "id": 1181, 
+                "name": "poet"
+              }
+            ], 
+            "id": 126, 
+            "name": "literary"
+          }
+        ], 
+        "id": 116, 
+        "name": "work and occupations"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 847, 
+                "name": "caricature"
+              }
+            ], 
+            "id": 158, 
+            "name": "social comment"
+          }
+        ], 
+        "id": 145, 
+        "name": "society"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 841, 
+                "name": "curtain"
+              }
+            ], 
+            "id": 82, 
+            "name": "furnishings"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1200, 
+                "name": "easel"
+              }, 
+              {
+                "id": 2835, 
+                "name": "paintbrush"
+              }, 
+              {
+                "id": 199, 
+                "name": "palette"
+              }
+            ], 
+            "id": 80, 
+            "name": "fine arts and music"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 206, 
+                "name": "studio"
+              }
+            ], 
+            "id": 46, 
+            "name": "workspaces"
+          }
+        ], 
+        "id": 40, 
+        "name": "interiors"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": "\u00a9 The estate of Max Beerbohm", 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01052_8.jpg", 
+  "title": "Rossetti Insistently Exhorted by George Meredith to Come Forth into the Glorious Sun and Wind for a Walk to Hendon and Beyond", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/beerbohm-rossetti-insistently-exhorted-by-george-meredith-to-come-forth-into-the-glorious-a01052", 
+  "width": "330"
+}

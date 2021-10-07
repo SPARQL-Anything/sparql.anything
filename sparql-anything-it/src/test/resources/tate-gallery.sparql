@@ -1,0 +1,37 @@
+PREFIX ex: <http://www.example.org#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX tate: <https://github.com/tategallery/collection#>
+CONSTRUCT {
+    ?artistEntity tate:name ?artist ;
+        tate:artistId ?artistId .
+    ?artworkEntity
+        tate:id ?id ;
+        tate:accession_number ?accession ;
+        tate:artist ?artistEntity ;
+        tate:title ?title;
+        tate:medium ?medium ;
+        tate:year ?year ;
+        tate:thumbnailCopyright ?thumbnailCopyright ;
+        tate:thumbnailUrl ?thumbnail ;
+        tate:thumbnail ?image .
+} WHERE {
+    BIND (IRI(CONCAT(STR(tate:), "artwork-", ?id )) AS ?artworkEntity) .
+    BIND (IRI(CONCAT(STR(tate:), "artist-", ?id )) AS ?artistEntity) .
+
+    SERVICE <x-sparql-anything:csv.headers=true,namespace=https://github.com/tategallery/collection#,location=%%artwork_data%%> {
+        []
+            tate:id ?id ;
+            tate:accession_number ?accession ;
+            tate:artist ?artist ;
+            tate:artistId ?artistId ;
+            tate:title ?title;
+            tate:medium ?medium ;
+            tate:year ?year ;
+            tate:thumbnailCopyright ?thumbnailCopyright ;
+            tate:thumbnailUrl ?thumbnail
+    }
+
+    BIND (IRI(CONCAT("facade-x:location=", ?thumbnail )) AS ?embed ) .
+
+    SERVICE ?embed { [] rdf:_1 ?image } .
+}

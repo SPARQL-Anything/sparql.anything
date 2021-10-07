@@ -1,0 +1,296 @@
+{
+  "acno": "A01044", 
+  "acquisitionYear": 1941, 
+  "all_artists": "Sir Max Beerbohm", 
+  "catalogueGroup": {
+    "accessionRanges": "A01038-A01060", 
+    "completeStatus": "COMPLETE", 
+    "groupType": null, 
+    "id": 65258, 
+    "shortTitle": "Rossetti and his Friends"
+  }, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1872, 
+      "date": "1872\u20131956", 
+      "displayOrder": 1, 
+      "fc": "Sir Max Beerbohm", 
+      "gender": "Male", 
+      "id": 722, 
+      "mda": "Beerbohm, Sir Max", 
+      "role": "artist", 
+      "startLetter": "B"
+    }
+  ], 
+  "creditLine": "Bequeathed by Sir Hugh Walpole 1941", 
+  "dateRange": {
+    "endYear": 1916, 
+    "startYear": 1916, 
+    "text": "1916"
+  }, 
+  "dateText": "1916", 
+  "depth": "", 
+  "dimensions": "support: 324 x 432 mm", 
+  "foreignTitle": null, 
+  "groupTitle": "Rossetti and his Friends", 
+  "height": "432", 
+  "id": 856, 
+  "inscription": "date inscribed", 
+  "medium": "Graphite and watercolour on paper", 
+  "movementCount": 0, 
+  "subjectCount": 24, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1080, 
+                "name": "Millais, John Everett, 1st Baronet"
+              }, 
+              {
+                "id": 1529, 
+                "name": "Ramage, Edie"
+              }
+            ], 
+            "id": 102, 
+            "name": "named individuals"
+          }, 
+          {
+            "children": [
+              {
+                "id": 20169, 
+                "name": "Pre-Raphaelite Brotherhood"
+              }
+            ], 
+            "id": 103, 
+            "name": "named groups"
+          }, 
+          {
+            "children": [
+              {
+                "id": 594, 
+                "name": "girl"
+              }
+            ], 
+            "id": 94, 
+            "name": "children"
+          }, 
+          {
+            "children": [
+              {
+                "id": 195, 
+                "name": "man"
+              }, 
+              {
+                "id": 1134, 
+                "name": "man, old"
+              }
+            ], 
+            "id": 95, 
+            "name": "adults"
+          }, 
+          {
+            "children": [
+              {
+                "id": 2653, 
+                "name": "recoiling"
+              }
+            ], 
+            "id": 177, 
+            "name": "actions: expressive"
+          }, 
+          {
+            "children": [
+              {
+                "id": 694, 
+                "name": "sitting"
+              }
+            ], 
+            "id": 92, 
+            "name": "actions: postures and motions"
+          }
+        ], 
+        "id": 91, 
+        "name": "people"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2793, 
+                "name": "artist, painter"
+              }
+            ], 
+            "id": 118, 
+            "name": "arts and entertainment"
+          }
+        ], 
+        "id": 116, 
+        "name": "work and occupations"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 847, 
+                "name": "caricature"
+              }
+            ], 
+            "id": 158, 
+            "name": "social comment"
+          }, 
+          {
+            "children": [
+              {
+                "id": 6460, 
+                "name": "fancy dress / role play"
+              }
+            ], 
+            "id": 153, 
+            "name": "dress: fantasy/fancy"
+          }
+        ], 
+        "id": 145, 
+        "name": "society"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 750, 
+                "name": "chair"
+              }
+            ], 
+            "id": 82, 
+            "name": "furnishings"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1200, 
+                "name": "easel"
+              }, 
+              {
+                "id": 2835, 
+                "name": "paintbrush"
+              }, 
+              {
+                "id": 204, 
+                "name": "painting"
+              }, 
+              {
+                "id": 199, 
+                "name": "palette"
+              }
+            ], 
+            "id": 80, 
+            "name": "fine arts and music"
+          }, 
+          {
+            "children": [
+              {
+                "id": 493, 
+                "name": "hat"
+              }, 
+              {
+                "id": 201, 
+                "name": "hat, cap"
+              }, 
+              {
+                "id": 1091, 
+                "name": "pipe"
+              }
+            ], 
+            "id": 88, 
+            "name": "clothing and personal effects"
+          }
+        ], 
+        "id": 78, 
+        "name": "objects"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1417, 
+                "name": "complacency"
+              }, 
+              {
+                "id": 1416, 
+                "name": "shock"
+              }
+            ], 
+            "id": 31, 
+            "name": "emotions and human qualities"
+          }
+        ], 
+        "id": 29, 
+        "name": "emotions, concepts and ideas"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2800, 
+                "name": "smoking"
+              }
+            ], 
+            "id": 52, 
+            "name": "recreational activities"
+          }
+        ], 
+        "id": 47, 
+        "name": "leisure and pastimes"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 206, 
+                "name": "studio"
+              }
+            ], 
+            "id": 46, 
+            "name": "workspaces"
+          }
+        ], 
+        "id": 40, 
+        "name": "interiors"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1714, 
+                "name": "vision"
+              }
+            ], 
+            "id": 444, 
+            "name": "mysticism"
+          }
+        ], 
+        "id": 132, 
+        "name": "religion and belief"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": "\u00a9 The estate of Max Beerbohm", 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01044_8.jpg", 
+  "title": "A Momentary Vision that Once Befell Young Millais", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/beerbohm-a-momentary-vision-that-once-befell-young-millais-a01044", 
+  "width": "324"
+}

@@ -1,0 +1,152 @@
+{
+  "acno": "A01018", 
+  "acquisitionYear": 1927, 
+  "all_artists": "Philip Webb", 
+  "catalogueGroup": {}, 
+  "classification": "on paper, unique", 
+  "contributorCount": 1, 
+  "contributors": [
+    {
+      "birthYear": 1831, 
+      "date": "1831\u20131915", 
+      "displayOrder": 1, 
+      "fc": "Philip Webb", 
+      "gender": "Male", 
+      "id": 589, 
+      "mda": "Webb, Philip", 
+      "role": "artist", 
+      "startLetter": "W"
+    }
+  ], 
+  "creditLine": "Bequeathed by J.R. Holliday 1927", 
+  "dateRange": {
+    "endYear": 1863, 
+    "startYear": 1863, 
+    "text": "1863"
+  }, 
+  "dateText": "1863", 
+  "depth": "", 
+  "dimensions": "support: 346 x 492 mm", 
+  "foreignTitle": null, 
+  "groupTitle": null, 
+  "height": "492", 
+  "id": 16043, 
+  "inscription": null, 
+  "medium": "Watercolour, ink and graphite on paper", 
+  "movementCount": 0, 
+  "subjectCount": 9, 
+  "subjects": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 640, 
+                "name": "St John the Evangelist"
+              }, 
+              {
+                "id": 1468, 
+                "name": "St Luke"
+              }
+            ], 
+            "id": 136, 
+            "name": "Saints"
+          }, 
+          {
+            "children": [
+              {
+                "id": 5738, 
+                "name": "halo"
+              }
+            ], 
+            "id": 5731, 
+            "name": "universal religious imagery"
+          }
+        ], 
+        "id": 132, 
+        "name": "religion and belief"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 2757, 
+                "name": "St John the Evangelist - eagle"
+              }, 
+              {
+                "id": 2754, 
+                "name": "St Luke - ox"
+              }
+            ], 
+            "id": 165, 
+            "name": "religious"
+          }
+        ], 
+        "id": 162, 
+        "name": "symbols & personifications"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 1130, 
+                "name": "bull"
+              }
+            ], 
+            "id": 67, 
+            "name": "animals: mammals"
+          }, 
+          {
+            "children": [
+              {
+                "id": 930, 
+                "name": "eagle"
+              }
+            ], 
+            "id": 62, 
+            "name": "animals: birds"
+          }, 
+          {
+            "children": [
+              {
+                "id": 1573, 
+                "name": "wing"
+              }
+            ], 
+            "id": 64, 
+            "name": "animals: features"
+          }
+        ], 
+        "id": 60, 
+        "name": "nature"
+      }, 
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "id": 4306, 
+                "name": "window, stained glass"
+              }
+            ], 
+            "id": 17, 
+            "name": "features"
+          }
+        ], 
+        "id": 13, 
+        "name": "architecture"
+      }
+    ], 
+    "id": 1, 
+    "name": "subject"
+  }, 
+  "thumbnailCopyright": null, 
+  "thumbnailUrl": "http://www.tate.org.uk/art/images/work/A/A01/A01018_8.jpg", 
+  "title": "Emblems of Saints Luke and John", 
+  "units": "mm", 
+  "url": "http://www.tate.org.uk/art/artworks/webb-emblems-of-saints-luke-and-john-a01018", 
+  "width": "346"
+}
