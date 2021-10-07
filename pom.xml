@@ -23,7 +23,7 @@
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
-			<url>https://github.com/spice-h2020/sparql.anything/blob/main/LICENSE</url>
+			<url>https://github.com/SPARQL-Anything/sparql.anything/blob/HEAD/LICENSE</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -44,9 +44,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/spice-h2020/sparql.anything.git</connection>
-		<developerConnection>scm:git:ssh://github.com:spice-h2020/sparql.anything.git</developerConnection>
-		<url>https://github.com/spice-h2020/sparql.anything/tree/main</url>
+		<connection>scm:git:git://github.com/SPARQL-Anything/sparql.anything.git</connection>
+		<developerConnection>scm:git:ssh://github.com:SPARQL-Anything/sparql.anything.git</developerConnection>
+		<url>https://github.com/SPARQL-Anything/sparql.anything/tree/v0.3-DEV</url>
 	</scm>
 
 	<distributionManagement>
