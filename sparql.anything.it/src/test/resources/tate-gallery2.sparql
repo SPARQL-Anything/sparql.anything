@@ -1,7 +1,0 @@
-
-PREFIX fx: <urn:facade-x:ns#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?subjectId ?subjectName WHERE {
-    BIND (IRI(CONCAT("x-sparql-anything:", "%%artwork_json%%" )) AS ?artworkJSON ) .
-    SERVICE ?artworkJSON { [ fx:id ?subjectId ; fx:name ?subjectName ] } .
-} LIMIT 100
