@@ -4,8 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.github.spice-h2020</groupId>
-		<artifactId>sparql.anything.parent</artifactId>
+		<groupId>com.github.sparqlanything</groupId>
+		<artifactId>sparql-anything-parent</artifactId>
 		<version>0.3.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
@@ -17,7 +17,7 @@
 	</properties>
 
 
-	<artifactId>sparql.anything.parser</artifactId>
+	<artifactId>sparql-anything-parser</artifactId>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
@@ -44,8 +44,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.model</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

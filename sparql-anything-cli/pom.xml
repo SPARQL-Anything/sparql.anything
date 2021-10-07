@@ -4,60 +4,60 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.github.spice-h2020</groupId>
-		<artifactId>sparql.anything.parent</artifactId>
+		<groupId>com.github.sparqlanything</groupId>
+		<artifactId>sparql-anything-parent</artifactId>
 		<version>0.3.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>sparql.anything.cli</artifactId>
+	<artifactId>sparql-anything-cli</artifactId>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.model</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.json</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-json</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.engine</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-engine</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.csv</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-csv</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.xml</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-xml</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.binary</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-binary</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.text</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-text</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.html</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-html</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

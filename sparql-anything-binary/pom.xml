@@ -5,16 +5,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.spice-h2020</groupId>
-		<artifactId>sparql.anything.parent</artifactId>
+		<groupId>com.github.sparqlanything</groupId>
+		<artifactId>sparql-anything-parent</artifactId>
 		<version>0.3.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>sparql.anything.binary</artifactId>
+	<artifactId>sparql-anything-binary</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.model</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

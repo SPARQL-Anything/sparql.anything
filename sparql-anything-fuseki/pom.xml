@@ -5,12 +5,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.spice-h2020</groupId>
-		<artifactId>sparql.anything.parent</artifactId>
+		<groupId>com.github.sparqlanything</groupId>
+		<artifactId>sparql-anything-parent</artifactId>
 		<version>0.3.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>sparql.anything.fuseki</artifactId>
+	<artifactId>sparql-anything-fuseki</artifactId>
 	
 	<dependencies>
 		<dependency>
@@ -18,8 +18,8 @@
 			<artifactId>jena-fuseki-main</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.spice-h2020</groupId>
-			<artifactId>sparql.anything.engine</artifactId>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-engine</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
@@ -55,7 +55,7 @@
 					<execution>
 						<id>sparql-anything</id>
 						<configuration>
-							<outputFile>target/sparql-anything-fuseki-${project.version}.jar</outputFile>
+							<outputFile>target/sparql-anything-server-${project.version}.jar</outputFile>
 							<shadedArtifactAttached>false</shadedArtifactAttached>
 							<transformers>
 								<transformer

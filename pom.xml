@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.spice-h2020</groupId>
-	<artifactId>sparql.anything.parent</artifactId>
+	<groupId>com.github.sparqlanything</groupId>
+	<artifactId>sparql-anything-parent</artifactId>
 	<version>0.3.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
