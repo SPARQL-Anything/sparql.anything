@@ -14,5 +14,11 @@ RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
+
+# normal
 CMD cd /app && mvn clean install && \
     java -jar sparql-anything-fuseki/target/sparql-anything-server-*jar
+
+# more debugging (you can attach jdb with this)
+# CMD cd /app && mvn clean install -DskipTests && \
+#     java -Dorg.slf4j.simpleLogger.defaultLogLevel=info -Dorg.slf4j.simpleLogger.log.com.github.sparqlanything=trace -agentlib:jdwp=transport=dt_socket,server=y,address=9091,suspend=n -jar sparql-anything-fuseki/target/sparql-anything-server-*jar
