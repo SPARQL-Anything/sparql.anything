@@ -1,4 +1,4 @@
-# FROM ubuntu:latest
+# FROM ubuntu:focal
 # if you don't need the headless browser this is sufficient
 
 FROM mcr.microsoft.com/playwright/java:focal
@@ -15,4 +15,4 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 CMD cd /app && mvn clean install && \
-    java -jar sparql.anything.fuseki/target/sparql-anything-fuseki-*jar
+    java -jar sparql-anything-fuseki/target/sparql-anything-server-*jar
