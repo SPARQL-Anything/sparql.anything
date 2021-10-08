@@ -76,6 +76,7 @@ public class ResourceManager {
 
 			logger.trace("Extracting content from {}", archiveLocation.toString());
 			// extract
+			File destinationDir = new File(folder);
 			new File(folder).mkdir();
 
 			ArchiveInputStream i = new ArchiveStreamFactory().createArchiveInputStream(
@@ -88,9 +89,10 @@ public class ResourceManager {
 					continue;
 				}
 
-				String filenameout = folder + "/" + entry.getName();
+				File file = new File(destinationDir, entry.getName());
 
-				File file = new File(filenameout);
+				if (!file.toPath().normalize().startsWith(destinationDir.toPath()))
+					throw new IOException("Bad zip entry");
 
 				if (entry.isDirectory()) {
 					if (!file.isDirectory() && !file.mkdirs()) {
