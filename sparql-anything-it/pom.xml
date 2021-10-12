@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.github.sparqlanything</groupId>
 		<artifactId>sparql-anything-parent</artifactId>
-		<version>0.4.0-RC1</version>
+		<version>0.4.0</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>sparql-anything-it</artifactId>
