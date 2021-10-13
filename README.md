@@ -271,7 +271,7 @@ WHERE {
 |-|-|-|-|
 |location*|The URL of the data source.|Any valid URL.|-|
 |content*|The content to be triplified.|Any valid literal.|-|
-|root|The IRI of generated root resource.|Any valid IRI.|location + '#'|
+|root|The IRI of generated root resource.|Any valid IRI.|location + '#' (in case of location argument is set) or ('http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' in case of content argument set) |
 |media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml, image/png, text/html, application/octet-stream, application/json, image/jpeg, image/tiff, image/bmp, text/csv, image/vnd.microsoft.icon,text/plain |No value (the media-type will be guessed from the the file extension)|
 |namespace|The namespace prefix for the properties that will be generated.|Any valid namespace prefix.|http://sparql.xyz/facade-x/data/|
 |blank-nodes|It tells sparql.anything to generate blank nodes or not.|true/false|true|
