@@ -11,7 +11,7 @@
 
 	<name>sparql.anything</name>
 	<description>An opinionated approach to SPARQL any file</description>
-	<url>https://github.com/spice-h2020/sparql.everything</url>
+	<url>https://github.com/SPARQL-Anything/sparql.anything</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

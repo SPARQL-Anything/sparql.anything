@@ -65,7 +65,11 @@ public class JSONTriplifier implements Triplifier {
 		try {
 			// Only 1 data source expected
 			String dataSourceId;
-			if (properties.containsKey(IRIArgument.CONTENT.toString())) {
+			if (properties.containsKey(IRIArgument.ROOT.toString())) {
+				logger.trace("Setting Data source Id using Root argument");
+				dataSourceId = properties.getProperty(IRIArgument.ROOT.toString());
+			} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
+				logger.trace("Setting Data source Id using Content argument");
 				dataSourceId = Triplifier.XYZ_NS
 						+ DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString()));
 			} else {
@@ -81,7 +85,7 @@ public class JSONTriplifier implements Triplifier {
 			throws IOException {
 
 		builder.addRoot(dataSourceId, rootId);
-		logger.trace("Transforming json");
+		logger.trace("Transforming json (dataSourceId {} rootId {})", dataSourceId, rootId);
 		JsonToken token = parser.nextToken();
 		if (token == JsonToken.START_OBJECT) {
 			logger.trace("Transforming object");

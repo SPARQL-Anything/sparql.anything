@@ -106,6 +106,19 @@ public interface Triplifier {
 				log.warn("Unsupported parameter value for 'root': '{}', using default (location + '#').", root);
 			}
 			return url.toString() + "#";
+		} else if (properties.containsKey(IRIArgument.ROOT.toString())
+				&& properties.containsKey(IRIArgument.CONTENT.toString())) {
+			String root = null;
+			try {
+				root = properties.getProperty(IRIArgument.ROOT.toString());
+				if (root != null && !root.trim().equals("")) {
+					return root;
+				}
+			} catch (Exception e) {
+				log.warn("Unsupported parameter value for 'root': '{}', using default (md5hex(content) + '#').", root);
+			}
+			return XYZ_NS + DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString())) + "#";
+
 		} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
 			return XYZ_NS + DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString())) + "#";
 		}
@@ -170,7 +183,8 @@ public interface Triplifier {
 				if (!HTTPHelper.isSuccessful(response)) {
 					log.error("Request unsuccesful: {}", response.getStatusLine().toString());
 					log.error("Response: {}", response.toString());
-					log.error("Response body: {}", IOUtils.toString(response.getEntity().getContent()));
+					log.error("Response body: {}",
+							IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
 					throw new TriplifierHTTPException(response.getStatusLine().toString());
 				}
 				return response.getEntity().getContent();
