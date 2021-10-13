@@ -6,12 +6,12 @@
 
 	<groupId>com.github.sparqlanything</groupId>
 	<artifactId>sparql-anything-parent</artifactId>
-	<version>0.4.0</version>
+	<version>0.4.1</version>
 	<packaging>pom</packaging>
 
 	<name>sparql.anything</name>
 	<description>An opinionated approach to SPARQL any file</description>
-	<url>https://github.com/spice-h2020/sparql.everything</url>
+	<url>https://github.com/SPARQL-Anything/sparql.anything</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
