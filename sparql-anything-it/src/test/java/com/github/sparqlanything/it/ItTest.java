@@ -69,7 +69,7 @@ public class ItTest {
 	public void RegistryExtensionsTest() {
 		for (String ext : new String[] { "json", "html", "xml", "csv", "bin", "png", "jpeg", "jpg", "bmp", "tiff",
 				"tif", "ico", "txt", "xlsx", "xls", "rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix", "trdf",
-				"zip", "tar", "docx" }) {
+				"zip", "tar", "docx", "bib", "bibtex" }) {
 			Assert.assertNotNull(ext, FacadeX.Registry.getTriplifierForExtension(ext));
 		}
 	}
@@ -82,7 +82,8 @@ public class ItTest {
 				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/rdf+thrift",
 				"application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle",
 				"application/rdf+xml", "application/n-triples", "application/ld+json", "application/zip",
-				"application/x-tar", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }) {
+				"application/x-tar", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"application/x-bibtex" }) {
 			Assert.assertNotNull(mt, FacadeX.Registry.getTriplifierForMimeType(mt));
 		}
 	}
@@ -513,6 +514,28 @@ public class ItTest {
 	}
 
 	@Test
+	public void testBibtex() throws IOException, URISyntaxException {
+		Query query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
+				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT ?title  {      "
+				+ "SERVICE <x-sparql-anything:> { fx:properties fx:content \"@article{Knuth1984, title={Literate Programming}}\" . fx:properties fx:media-type \"application/x-bibtex\" ."
+				+ "?s <http://sparql.xyz/facade-x/data/title> ?title  }}");
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+
+//		System.out.println(ResultSetFormatter.asText(rs));
+		String title = null;
+		if (rs.hasNext()) {
+			title = rs.next().get("title").asLiteral().getValue().toString();
+		}
+		assertEquals("Literate Programming", title);
+
+	}
+
+	@Test
 	public void testAnySlotMagicPropertyPropertyPath() throws IOException, URISyntaxException {
 		String location = getClass().getClassLoader().getResource("propertypath.json").toURI().toString();
 		Query query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
@@ -544,34 +567,26 @@ public class ItTest {
 	@Test
 	public void testAnySlotMagicPropertyPropertyPath2() throws IOException, URISyntaxException {
 		String location = getClass().getClassLoader().getResource("anySlotPath.json").toURI().toString();
-		String q = "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-				"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-				"PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n" +
-				"PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n" +
-				"PREFIX fx:   <http://sparql.xyz/facade-x/ns/>\n" +
-				"PREFIX xyz:  <http://sparql.xyz/facade-x/data/>\n" +
-				"PREFIX ont: <http://sparql.xyz/facade-x/example/>\n" +
-				"PREFIX xpath: <https://www.w3.org/TR/xpath-functions/>\n" +
-				"SELECT ?placeId ?latitude ?longitude\n" +
-				"where {\n" +
-				"  service <x-sparql-anything:> {\n" +
-				"  \t  fx:properties fx:location \"" + location + "\" ;\n" +
-				"\t  \tfx:media-type \"application/json\" ;\n" +
-				"\t\t  fx:blank-nodes false\n" +
-				"\t\t  .\n" +
-				"\t  [] xyz:track%5Fid ?track_id ;\n" +
-				"\t  \t ?pArtist ?artist ;\n" +
-				"\t\t ?pArtistForIri ?artistForIri ;\n" +
-				"\t\t xyz:title ?title ;\n" +
-				"\t\t xyz:recording%5Fplaces ?places\n" +
-				"\t\t .\n" +
-				"\t\t FILTER(REGEX(STR(?pArtist),\".*artist%5F[0-9]+$\")) .\n" +
-				"\t\t FILTER(REGEX(STR(?pArtistForIri),\".*artist%5Ffor%5Firi%5F[0-9]+$\")) .\n" +
-				"\t\t \n" +
-				"\t\t ####\n" +
-				"\t\t ?places fx:anySlot [\n" +
-				"\t\t \txyz:place [ xyz:id ?placeId ; xyz:coordinates [ xyz:latitude ?latitude ; xyz:longitude ?longitude ]]]\n" +
-				//"\t\t ?places fx:anySlot/xyz:place [ xyz:id ?placeId ; xyz:coordinates [ xyz:latitude ?latitude ; xyz:longitude ?longitude ]]\n" +
+		String q = "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+				+ "PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n"
+				+ "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n"
+				+ "PREFIX fx:   <http://sparql.xyz/facade-x/ns/>\n"
+				+ "PREFIX xyz:  <http://sparql.xyz/facade-x/data/>\n"
+				+ "PREFIX ont: <http://sparql.xyz/facade-x/example/>\n"
+				+ "PREFIX xpath: <https://www.w3.org/TR/xpath-functions/>\n" + "SELECT ?placeId ?latitude ?longitude\n"
+				+ "where {\n" + "  service <x-sparql-anything:> {\n" + "  \t  fx:properties fx:location \"" + location
+				+ "\" ;\n" + "\t  \tfx:media-type \"application/json\" ;\n" + "\t\t  fx:blank-nodes false\n"
+				+ "\t\t  .\n" + "\t  [] xyz:track%5Fid ?track_id ;\n" + "\t  \t ?pArtist ?artist ;\n"
+				+ "\t\t ?pArtistForIri ?artistForIri ;\n" + "\t\t xyz:title ?title ;\n"
+				+ "\t\t xyz:recording%5Fplaces ?places\n" + "\t\t .\n"
+				+ "\t\t FILTER(REGEX(STR(?pArtist),\".*artist%5F[0-9]+$\")) .\n"
+				+ "\t\t FILTER(REGEX(STR(?pArtistForIri),\".*artist%5Ffor%5Firi%5F[0-9]+$\")) .\n" + "\t\t \n"
+				+ "\t\t ####\n" + "\t\t ?places fx:anySlot [\n"
+				+ "\t\t \txyz:place [ xyz:id ?placeId ; xyz:coordinates [ xyz:latitude ?latitude ; xyz:longitude ?longitude ]]]\n"
+				+
+				// "\t\t ?places fx:anySlot/xyz:place [ xyz:id ?placeId ; xyz:coordinates [
+				// xyz:latitude ?latitude ; xyz:longitude ?longitude ]]\n" +
 				"}}";
 		System.out.println(q);
 		Query query = QueryFactory.create(q);
@@ -591,7 +606,7 @@ public class ItTest {
 			}
 		}
 		System.err.println(slots);
-		//assertEquals(Sets.newHashSet("b", "d", "c"), slots);
+		// assertEquals(Sets.newHashSet("b", "d", "c"), slots);
 
 	}
 }

@@ -209,5 +209,7 @@ public interface Triplifier {
 			throws IOException, TriplifierHTTPException {
 		return getInputStream(url, properties, getCharsetArgument(properties));
 	}
+	
+	
 
 }

@@ -88,6 +88,7 @@
 		<module>sparql-anything-rdf</module>
 		<module>sparql-anything-archive</module>
 		<module>sparql-anything-docs</module>
+		<module>sparql-anything-bib</module>
 	</modules>
 
 	<build>
@@ -301,7 +302,7 @@
 				<artifactId>json</artifactId>
 				<version>20200518</version>
 			</dependency>
-			<!-- dependency> <groupId>com.jsoniter</groupId> <artifactId>jsoniter</artifactId> 
+			<!-- dependency> <groupId>com.jsoniter</groupId> <artifactId>jsoniter</artifactId>
 				<version>0.9.19</version> </dependency -->
 			<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 			<dependency>

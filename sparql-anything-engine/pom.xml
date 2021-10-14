@@ -64,6 +64,12 @@
 			<artifactId>sparql-anything-json</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-bib</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.github.sparqlanything</groupId>

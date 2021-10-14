@@ -61,6 +61,8 @@ public final class FacadeX {
 			enablingMagicProperties();
 			enablingFunctions();
 			log.trace("Registering standard triplifiers");
+			Registry.registerTriplifier("com.github.sparqlanything.bib.BibtexTriplifier",
+					new String[] { "bib", "bibtex" }, new String[] { "application/x-bibtex" });
 			Registry.registerTriplifier("com.github.sparqlanything.xml.XMLTriplifier", new String[] { "xml" },
 					new String[] { "application/xml" });
 			Registry.registerTriplifier("com.github.sparqlanything.csv.CSVTriplifier", new String[] { "csv" },
