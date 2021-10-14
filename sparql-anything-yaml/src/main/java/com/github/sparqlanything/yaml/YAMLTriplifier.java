@@ -177,11 +177,11 @@ public class YAMLTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/json");
+		return Sets.newHashSet("application/yaml", "text/yaml", "x-text/yaml");
 	}
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("json");
+		return Sets.newHashSet("yaml");
 	}
 }

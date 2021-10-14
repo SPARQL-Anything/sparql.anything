@@ -81,6 +81,8 @@ public final class FacadeX {
 					new String[] { "bin", "dat" }, new String[] { "application/octet-stream" });
 			Registry.registerTriplifier("com.github.sparqlanything.json.JSONTriplifier", new String[] { "json" },
 					new String[] { "application/json", "application/problem+json" });
+			Registry.registerTriplifier("com.github.sparqlanything.yaml.YAMLTriplifier", new String[] { "yaml" },
+					new String[] { "application/yaml", "text/yaml", "x-text/yaml" });
 			Registry.registerTriplifier("com.github.sparqlanything.spreadsheet.SpreadsheetTriplifier",
 					new String[] { "xls", "xlsx" }, new String[] { "application/vnd.ms-excel",
 							"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
