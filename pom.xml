@@ -75,6 +75,7 @@
 		<module>sparql-anything-model</module>
 		<module>sparql-anything-parser</module>
 		<module>sparql-anything-json</module>
+		<module>sparql-anything-yaml</module>
 		<module>sparql-anything-xml</module>
 		<module>sparql-anything-csv</module>
 		<module>sparql-anything-cli</module>
@@ -310,7 +311,12 @@
 				<artifactId>jackson-core</artifactId>
 				<version>2.12.4</version>
 			</dependency>
-
+			<!-- https://mvnrepository.com/artifact/org.snakeyaml/snakeyaml-engine -->
+			<dependency>
+				<groupId>org.snakeyaml</groupId>
+				<artifactId>snakeyaml-engine</artifactId>
+				<version>2.3</version>
+			</dependency>
 			<dependency>
 				<groupId>org.javassist</groupId>
 				<artifactId>javassist</artifactId>

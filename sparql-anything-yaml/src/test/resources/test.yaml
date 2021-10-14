@@ -1,0 +1,13 @@
+key: value
+another-key:
+  - name: john
+    surname: smith
+# A comment
+boolean: true
+float: 0.1
+two-values:
+  - 1
+  - "2"
+nested-array:
+  - nested-array:
+      - nested:key: "Value with spaces"
