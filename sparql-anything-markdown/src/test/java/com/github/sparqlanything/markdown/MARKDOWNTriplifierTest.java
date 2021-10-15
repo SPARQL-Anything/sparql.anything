@@ -19,21 +19,16 @@
  * under the License.
  */
 
-package com.github.sparqlanything.yaml;
+package com.github.sparqlanything.markdown;
 
 import com.github.sparqlanything.model.BaseFacadeXBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.util.iterator.ExtendedIterator;
-import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,27 +39,27 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
-public class YAMLTest {
+public class MARKDOWNTriplifierTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(YAMLTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(MARKDOWNTriplifierTest.class);
 
 	@Test
 	public void test() throws TriplifierHTTPException, IOException, URISyntaxException {
-		URL url = getClass().getClassLoader().getResource("./test-change-name.yaml");
-		Triplifier t = new YAMLTriplifier();
+
+		URL url = getClass().getClassLoader().getResource("./simple.md");
+		Triplifier t = new MARKDOWNTriplifier();
 		Properties properties = new Properties();
 		properties.setProperty("location", url.toURI().toString());
-		DatasetGraph ds = t.triplify(properties, new BaseFacadeXBuilder(url.toString(), properties));
+		DatasetGraph ds = t.triplify(properties, new BaseFacadeXBuilder("simple.md", properties));
 		ExtendedIterator<Triple> triples = ds.getDefaultGraph().find();
 		while(triples.hasNext()){
 			logger.trace("{}",triples.next());
 		}
 		Iterator<Node> graphs = ds.listGraphNodes();
 		while(graphs.hasNext()){
-			logger.debug("{}", graphs.next());
+			System.out.println(graphs.next());
 		}
-		Assert.assertTrue(ds.size() == 1);
-		Assert.assertTrue(ds.getDefaultGraph().size() == 11);
+//		Assert.assertTrue(ds.size() == 2);
+//		Assert.assertTrue(ds.getDefaultGraph().size() == 11);
 	}
-
 }

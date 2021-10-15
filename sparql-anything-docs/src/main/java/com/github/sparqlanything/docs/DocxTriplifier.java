@@ -56,8 +56,8 @@ public class DocxTriplifier implements Triplifier {
 		URL url = Triplifier.getLocation(properties);
 		if (url == null)
 			return dg;
-		String root = Triplifier.getRootArgument(properties, url);
-		String dataSourceId = builder.getMainGraphName().getURI();
+		String root = Triplifier.getRootArgument(properties, url.toString());
+		String dataSourceId = root;
 		String namespace = Triplifier.getNamespaceArgument(properties);
 		boolean keepParagraph = Boolean.parseBoolean(properties.getProperty(KEEP_PARAGRAPH, "false"));
 		boolean headers = Boolean.parseBoolean(properties.getProperty(TABLE_HEADERS, "false"));

@@ -152,28 +152,28 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 		}
 		return (!queryPredicate.isConcrete() || queryPredicate.matches(dataPredicate));
 	}
-
-	@Override
-	@Deprecated
-	public void add(Resource subject, Property predicate, RDFNode object) {
-		if (match(mainGraphName, subject.asNode(), predicate.asNode(), object.asNode())) {
-			datasetGraph.getGraph(mainGraphName).add(new Triple(subject.asNode(), predicate.asNode(), object.asNode()));
-		}
-	}
+//
+//	@Override
+//	@Deprecated
+//	public void add(Resource subject, Property predicate, RDFNode object) {
+//		if (match(mainGraphName, subject.asNode(), predicate.asNode(), object.asNode())) {
+//			datasetGraph.getGraph(mainGraphName).add(new Triple(subject.asNode(), predicate.asNode(), object.asNode()));
+//		}
+//	}
 
 	/**
 	 * Triples are added to the main data source / graph Triplifiers generating
 	 * multiple data sources / graphs, should use add(Node g, Node s, Node p, Node
 	 * o) instead
 	 */
-	@Override
-	public boolean add(Node subject, Node predicate, Node object) {
-		if (match(mainGraphName, subject, predicate, object)) {
-			datasetGraph.getGraph(mainGraphName).add(new Triple(subject, predicate, object));
-			return true;
-		}
-		return false;
-	}
+//	@Override
+//	public boolean add(Node subject, Node predicate, Node object) {
+//		if (match(mainGraphName, subject, predicate, object)) {
+//			datasetGraph.getGraph(mainGraphName).add(new Triple(subject, predicate, object));
+//			return true;
+//		}
+//		return false;
+//	}
 
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {

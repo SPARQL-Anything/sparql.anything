@@ -58,15 +58,15 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 		this.p_root = Triplifier.getRootArgument(properties, resourceId);
 	}
 
-	@Deprecated
-	public void add(Resource subject, Property predicate, RDFNode object) {
-		add(subject.asNode(), predicate.asNode(), object.asNode());
-	}
-
-	@Override
-	public boolean add(Node subject, Node predicate, Node object) {
-		return add(mainGraphName, subject, predicate, object);
-	}
+//	@Deprecated
+//	public void add(Resource subject, Property predicate, RDFNode object) {
+//		add(subject.asNode(), predicate.asNode(), object.asNode());
+//	}
+//
+//	@Override
+//	public boolean add(Node subject, Node predicate, Node object) {
+//		return add(mainGraphName, subject, predicate, object);
+//	}
 
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
@@ -176,13 +176,13 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	 *
 	 * @return
 	 */
-	@Override
-	public Node getMainGraphName() {
-		return mainGraphName;
-	}
-
-	@Override
-	public Graph getMainGraph() {
-		return datasetGraph.getGraph(mainGraphName);
-	}
+//	@Override
+//	public Node getMainGraphName() {
+//		return mainGraphName;
+//	}
+//
+//	@Override
+//	public Graph getMainGraph() {
+//		return datasetGraph.getGraph(mainGraphName);
+//	}
 }

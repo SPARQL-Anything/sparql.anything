@@ -206,9 +206,9 @@ public class JSONTriplifier implements Triplifier {
 
 		transform(url, properties, builder);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Number of triples: {} ", builder.getMainGraph().size());
-		}
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("Number of triples: {} ", builder.getMainGraph().size());
+//		}
 		return builder.getDatasetGraph();
 	}
 

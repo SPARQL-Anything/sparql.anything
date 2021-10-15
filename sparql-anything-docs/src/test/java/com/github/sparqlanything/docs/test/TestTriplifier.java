@@ -24,7 +24,9 @@ package com.github.sparqlanything.docs.test;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Properties;
 
 import com.github.sparqlanything.docs.DocxTriplifier;
@@ -65,8 +67,12 @@ public class TestTriplifier {
 			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral(
 					"Title 11Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.2Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Title 23Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 					XSDDatatype.XSDstring)));
+			Iterator<Node> graphNodes = dg.listGraphNodes();
+			while(graphNodes.hasNext()){
+				System.err.println(graphNodes.next());
+			}
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p, doc))).isIsomorphicWith(expectedGraph));
 
 			p.setProperty(DocxTriplifier.KEEP_PARAGRAPH, "true");
 
@@ -92,7 +98,7 @@ public class TestTriplifier {
 			expectedGraph.add(new Triple(n, RDF.li(6).asNode(), NodeFactory.createLiteral("", XSDDatatype.XSDstring)));
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p, doc))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -134,6 +140,7 @@ public class TestTriplifier {
 		Properties p = new Properties();
 		DatasetGraph dg;
 		try {
+
 			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
 			dg = st.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
 
@@ -202,7 +209,7 @@ public class TestTriplifier {
 					.add(new Triple(row4, RDF.li(5).asNode(), NodeFactory.createLiteral("45", XSDDatatype.XSDstring)));
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p, doc))).isIsomorphicWith(expectedGraph));
 
 			if (!dg.getDefaultGraph().isIsomorphicWith(expectedGraph)) {
 				ModelFactory.createModelForGraph(expectedGraph)
@@ -285,7 +292,7 @@ public class TestTriplifier {
 			}
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p, doc))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -40,7 +40,7 @@ public class BibtexTriplifier implements Triplifier {
 			return dg;
 
 		String root = Triplifier.getRootArgument(properties, url);
-		String dataSourceId = builder.getMainGraphName().getURI();
+		String dataSourceId = root;
 		String namespace = Triplifier.getNamespaceArgument(properties);
 
 		builder.addRoot(dataSourceId, root);

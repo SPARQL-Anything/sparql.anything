@@ -28,7 +28,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.DatasetGraph;
 
 public interface FacadeXGraphBuilder {
-	boolean add(Node subject, Node predicate, Node object);
+//	boolean add(Node subject, Node predicate, Node object);
 
 	boolean add(Node graph, Node subject, Node predicate, Node object);
 
@@ -58,7 +58,7 @@ public interface FacadeXGraphBuilder {
 
 	DatasetGraph getDatasetGraph();
 
-	Node getMainGraphName();
+//	Node getMainGraphName();
 
-	Graph getMainGraph();
+//	Graph getMainGraph();
 }
