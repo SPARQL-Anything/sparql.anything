@@ -60,7 +60,7 @@ public class YAMLTest {
 		}
 		Iterator<Node> graphs = ds.listGraphNodes();
 		while(graphs.hasNext()){
-			logger.debug("{}", (graphs.next());
+			logger.debug("{}", graphs.next());
 		}
 		Assert.assertTrue(ds.size() == 1);
 		Assert.assertTrue(ds.getDefaultGraph().size() == 11);
