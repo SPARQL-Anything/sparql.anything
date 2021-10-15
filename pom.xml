@@ -208,17 +208,6 @@
 				<!-- </exclusions> -->
 			</dependency>
 
-			<!-- <dependency> -->
-			<!-- <groupId>commons-httpclient</groupId> -->
-			<!-- <artifactId>commons-httpclient</artifactId> -->
-			<!-- <version>3.1</version> -->
-			<!-- <exclusions> -->
-			<!-- <exclusion> -->
-			<!-- <groupId>commons-codec</groupId> -->
-			<!-- <artifactId>commons-codec</artifactId> -->
-			<!-- </exclusion> -->
-			<!-- </exclusions> -->
-			<!-- </dependency> -->
 			<dependency>
 				<groupId>org.apache.jena</groupId>
 				<artifactId>jena-fuseki-main</artifactId>
@@ -248,23 +237,6 @@
 				<artifactId>slf4j-simple</artifactId>
 				<version>1.7.7</version>
 			</dependency>
-
-			<!-- Logging LOG4J - SLF4J -->
-<!--			<dependency>-->
-<!--				<groupId>org.slf4j</groupId>-->
-<!--				<artifactId>slf4j-log4j12</artifactId>-->
-<!--				<version>1.7.7</version>-->
-<!--			</dependency>-->
-			<!-- <dependency> -->
-			<!-- <groupId>org.slf4j</groupId> -->
-			<!-- <artifactId>slf4j-jdk14</artifactId> -->
-			<!-- <version>1.7.7</version> -->
-			<!-- </dependency> -->
-			<!-- <dependency> -->
-			<!-- <groupId>org.slf4j</groupId> -->
-			<!-- <artifactId>slf4j-api</artifactId> -->
-			<!-- <version>1.7.7</version> -->
-			<!-- </dependency> -->
 
 			<dependency>
 				<groupId>org.jsoup</groupId>
@@ -377,23 +349,11 @@
 	</dependencyManagement>
 
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>slf4j-simple</artifactId> -->
-<!-- 			<version>1.7.7</version> -->
-<!-- 			<scope>test</scope> -->
-<!-- 		</dependency> -->
-
-<!--	<dependency>-->
-<!--		<groupId>org.slf4j</groupId>-->
-<!--		<artifactId>slf4j-log4j12</artifactId>-->
-<!--		<version>1.7.7</version>-->
-<!--	</dependency>-->
-	<dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-api</artifactId>
-		<version>1.7.7</version>
-	</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.7</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
