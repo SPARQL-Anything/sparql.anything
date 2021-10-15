@@ -24,6 +24,7 @@ package com.github.sparqlanything.yaml;
 import com.github.sparqlanything.model.BaseFacadeXBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.util.iterator.ExtendedIterator;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Properties;
 
 public class YAMLTest {
@@ -52,6 +54,12 @@ public class YAMLTest {
 		while(triples.hasNext()){
 			logger.trace("{}",triples.next());
 		}
+		Iterator<Node> graphs = ds.listGraphNodes();
+		while(graphs.hasNext()){
+			System.out.println(graphs.next());
+		}
+		System.out.println(ds.size() );
+		System.out.println(ds.getDefaultGraph().size());
 		Assert.assertTrue(ds.size() == 2);
 		Assert.assertTrue(ds.getDefaultGraph().size() == 11);
 	}
