@@ -76,6 +76,7 @@
 		<module>sparql-anything-parser</module>
 		<module>sparql-anything-json</module>
 		<module>sparql-anything-yaml</module>
+		<module>sparql-anything-markdown</module>
 		<module>sparql-anything-xml</module>
 		<module>sparql-anything-csv</module>
 		<module>sparql-anything-cli</module>
