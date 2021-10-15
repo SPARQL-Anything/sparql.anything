@@ -25,9 +25,13 @@ import com.github.sparqlanything.model.BaseFacadeXBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
+import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -45,7 +49,7 @@ public class YAMLTest {
 
 	@Test
 	public void test() throws TriplifierHTTPException, IOException, URISyntaxException {
-		URL url = getClass().getClassLoader().getResource("./test.yaml");
+		URL url = getClass().getClassLoader().getResource("./test-change-name.yaml");
 		Triplifier t = new YAMLTriplifier();
 		Properties properties = new Properties();
 		properties.setProperty("location", url.toURI().toString());
@@ -56,12 +60,9 @@ public class YAMLTest {
 		}
 		Iterator<Node> graphs = ds.listGraphNodes();
 		while(graphs.hasNext()){
-			System.out.println(graphs.next());
+			logger.debug("{}", (graphs.next());
 		}
-		System.out.println(ds.size() );
-		System.out.println(ds.getDefaultGraph().size());
-		Assert.assertTrue(ds.size() == 2);
+		Assert.assertTrue(ds.size() == 1);
 		Assert.assertTrue(ds.getDefaultGraph().size() == 11);
 	}
-
 }
