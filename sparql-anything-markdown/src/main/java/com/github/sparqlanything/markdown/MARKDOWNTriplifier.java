@@ -140,6 +140,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(Heading heading) {
 		logger.trace("[Visiting {}] {}", heading.getClass(), heading);
+		// Create container
 		super.visit(heading);
 	}
 
