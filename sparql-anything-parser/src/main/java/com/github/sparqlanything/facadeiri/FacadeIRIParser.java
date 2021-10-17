@@ -25,17 +25,21 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.sparqlanything.facadeiri.antlr.FacadeIRILexer;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.sparqlanything.facadeiri.antlr.FacadeIRILexer;
 
 public class FacadeIRIParser {
 
 	private String tupleURL;
 	public final static String SPARQL_ANYTHING_URI_SCHEMA = "x-sparql-anything:";
 	private final static Pattern key = Pattern.compile("^[a-zA-Z0-9-]+");
+	private static final Logger log = LoggerFactory.getLogger(FacadeIRIParser.class);
 
 	public FacadeIRIParser(String tupleURL) {
 		super();
@@ -65,7 +69,9 @@ public class FacadeIRIParser {
 
 	private String escape(String s) {
 		Matcher m = key.matcher(s);
+		log.trace("Input escape {}",s);
 		if (m.find() && m.end() < s.length() && s.charAt(m.end()) != '=') {
+			log.trace("Unescape");
 			// it is an URI => unescape
 			return s;
 		}
@@ -91,6 +97,7 @@ public class FacadeIRIParser {
 				sb.append(s.charAt(i));
 			}
 		}
+		log.trace("Escaped {}", sb.toString());
 		return sb.toString();
 	}
 

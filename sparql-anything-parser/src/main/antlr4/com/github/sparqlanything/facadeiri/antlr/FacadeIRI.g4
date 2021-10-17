@@ -23,7 +23,7 @@ parameter
 
 url
 :
-	LITERAL
+	LITERAL | IDENTIFIER
 ;
 
 keyValue

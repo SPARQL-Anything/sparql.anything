@@ -24,6 +24,9 @@ package com.github.sparqlanything.facadeiri;
 import java.nio.CharBuffer;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.sparqlanything.facadeiri.antlr.FacadeIRIBaseListener;
 import com.github.sparqlanything.facadeiri.antlr.FacadeIRIParser;
 import com.github.sparqlanything.model.IRIArgument;
@@ -34,10 +37,12 @@ public class ParameterListener extends FacadeIRIBaseListener {
 	private Properties properties = new Properties();
 	public static final char ESCAPE = '\\';
 	public static final char[] ESCAPED = { '=', ',' };
+	private static final Logger logger = LoggerFactory.getLogger(ParameterListener.class);
 
 	public void enterParameter(FacadeIRIParser.ParameterContext ctx) {
+		logger.trace("URL {}", ctx.url());
 		if (ctx.url() != null) {
-			properties.setProperty(IRIArgument.LOCATION.toString(), ctx.url().LITERAL().getText());
+			properties.setProperty(IRIArgument.LOCATION.toString(), ctx.url().getText());
 		}
 
 		if (ctx.keyValue() != null) {
