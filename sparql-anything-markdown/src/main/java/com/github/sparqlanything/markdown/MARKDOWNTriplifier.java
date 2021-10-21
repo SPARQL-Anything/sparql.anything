@@ -118,8 +118,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		return Sets.newHashSet("md");
 	}
 
-
-	private void handleContainer(Node node){
+	private String handleContainer(Node node){
 		String parentId = this.containers.get(node.getParent());
 		int slot = lastSlot.get(parentId) + 1;
 		if(!typeCounter.containsKey(node.getClass())){
@@ -133,9 +132,11 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		this.lastSlot.put(parentId, slot);
 		this.containers.put(node, containerId);
 		this.lastSlot.put(containerId, 0);
+		return containerId;
 	}
 
 	private void handleLiteral(Text node){
+		// We directly link the text, we will see what happens later with links etc...
 		String parentId = this.containers.get(node.getParent());
 		int slot = lastSlot.get(parentId) + 1;
 		this.builder.addValue(dataSourceId,parentId, slot, node.getLiteral());
@@ -171,9 +172,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(Code node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
-		handleContainer(node);
+		String containerId = handleContainer(node);
+		this.builder.addValue(dataSourceId, containerId, 1, node.getLiteral());
 		super.visit(node);
 	}
 

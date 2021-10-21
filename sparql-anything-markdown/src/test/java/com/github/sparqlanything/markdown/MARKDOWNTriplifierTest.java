@@ -124,13 +124,29 @@ public class MARKDOWNTriplifierTest {
 	}
 
 	@Test
+	public void testDocument_2() {
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	@Test
 	public void testHeading(){
 		logger.debug("Test: {}", name.getMethodName());
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
+
+	@Test
+	public void testParagraph(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
 //
-//	@Test
-//	public void testCode(){}
+	@Test
+	public void testCode(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
 //
 //	@Test
 //	public void testListItem(){}
@@ -141,8 +157,6 @@ public class MARKDOWNTriplifierTest {
 //	@Test
 //	public void testBulletList(){}
 //
-//	@Test
-//	public void testParagraph(){}
 //
 //	@Test
 //	public void testText(){}

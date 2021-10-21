@@ -1,0 +1,1 @@
+A document with some text.
