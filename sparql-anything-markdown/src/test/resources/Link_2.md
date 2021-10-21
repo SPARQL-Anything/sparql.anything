@@ -1,0 +1,1 @@
+[A document with a link](http://www.example.org "The link title")

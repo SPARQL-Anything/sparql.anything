@@ -1,0 +1,16 @@
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document> a fx:root .
+<http://www.example.org/document> a xyz:Document .
+<http://www.example.org/document> rdf:_1 <http://www.example.org/document/paragraph/1> .
+#
+<http://www.example.org/document/paragraph/1> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/1> rdf:_1 <http://www.example.org/document/paragraph/1/link/1> .
+#
+<http://www.example.org/document/paragraph/1/link/1> a xyz:Link .
+<http://www.example.org/document/paragraph/1/link/1> xyz:destination "http://www.example.org" .
+<http://www.example.org/document/paragraph/1/link/1> rdf:_1 "A document with a link" .
+<http://www.example.org/document/paragraph/1/link/1> xyz:title "The link title" .

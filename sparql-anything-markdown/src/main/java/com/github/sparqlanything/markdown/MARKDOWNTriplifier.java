@@ -233,8 +233,12 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		//logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		handleContainer(node);
-		builder.addValue(dataSourceId, containers.get(node), "title", node.getTitle());
-		builder.addValue(dataSourceId, containers.get(node), "destination", node.getDestination());
+		if(node.getTitle() != null) {
+			builder.addValue(dataSourceId, containers.get(node), "title", node.getTitle());
+		}
+		if(node.getDestination() != null) {
+			builder.addValue(dataSourceId, containers.get(node), "destination", node.getDestination());
+		}
 		super.visit(node);
 	}
 
