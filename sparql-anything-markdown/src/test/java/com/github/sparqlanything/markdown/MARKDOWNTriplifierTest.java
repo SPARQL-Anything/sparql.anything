@@ -154,6 +154,12 @@ public class MARKDOWNTriplifierTest {
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
 
+	@Test
+	public void testLink_2(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
 //
 //	@Test
 //	public void testListItem(){}
