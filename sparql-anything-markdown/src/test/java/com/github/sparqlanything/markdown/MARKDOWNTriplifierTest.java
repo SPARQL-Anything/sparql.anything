@@ -203,14 +203,17 @@ public class MARKDOWNTriplifierTest {
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
 
-//
-//	@Test
-//	public void testOrderedList(){}
-//
-//	@Test
-//	public void testBulletList(){}
-//
-//
+	@Test
+	public void testOrderedList(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	@Test
+	public void testOrderedList_2(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
 //
 //	@Test
 //	public void testFencedCodeBlock(){}

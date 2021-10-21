@@ -183,6 +183,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
+		logger.trace("[Spans {}]", node.getSourceSpans());
 		handleContainer(node);
 		super.visit(node);
 	}
@@ -192,6 +193,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
+		logger.trace("[Delimiter] {}", node.getDelimiter());
+		logger.trace("[Start number] {}", node.getStartNumber());
+
 		handleContainer(node);
 		super.visit(node);
 	}

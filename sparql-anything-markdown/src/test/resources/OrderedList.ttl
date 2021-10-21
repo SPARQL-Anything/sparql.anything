@@ -1,0 +1,45 @@
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document> a fx:root .
+<http://www.example.org/document> a xyz:Document ;
+ rdf:_1 <http://www.example.org/document/orderedlist/1>
+ .
+#
+<http://www.example.org/document/orderedlist/1> a xyz:OrderedList ;
+ rdf:_1 <http://www.example.org/document/orderedlist/1/listitem/1> ;
+ rdf:_2 <http://www.example.org/document/orderedlist/1/listitem/2> ;
+ rdf:_3 <http://www.example.org/document/orderedlist/1/listitem/3>
+ .
+#
+<http://www.example.org/document/orderedlist/1/listitem/1> a xyz:ListItem ;
+ rdf:_1 <http://www.example.org/document/orderedlist/1/listitem/1/paragraph/1>
+ .
+#
+<http://www.example.org/document/orderedlist/1/listitem/1/paragraph/1> a xyz:Paragraph ;
+ rdf:_1 "A document with a list item"
+ .
+#
+<http://www.example.org/document/orderedlist/1/listitem/2> a xyz:ListItem ;
+ rdf:_1 <http://www.example.org/document/orderedlist/1/listitem/2/paragraph/2>
+ .
+#
+<http://www.example.org/document/orderedlist/1/listitem/2/paragraph/2> a xyz:Paragraph ;
+ rdf:_1 "The second item in the list" ;
+ rdf:_2 <http://www.example.org/document/orderedlist/1/listitem/2/paragraph/2/softlinebreak/1> ;
+ rdf:_3 "going on a new line." ;
+ rdf:_4 <http://www.example.org/document/orderedlist/1/listitem/2/paragraph/2/hardlinebreak/1> ;
+ rdf:_5 "We want this on a new line but on the same itemlist"
+ .
+<http://www.example.org/document/orderedlist/1/listitem/2/paragraph/2/softlinebreak/1> a xyz:SoftLineBreak .
+<http://www.example.org/document/orderedlist/1/listitem/2/paragraph/2/hardlinebreak/1> a xyz:HardLineBreak .
+#
+<http://www.example.org/document/orderedlist/1/listitem/3> a xyz:ListItem ;
+ rdf:_1 <http://www.example.org/document/orderedlist/1/listitem/3/paragraph/3>
+ .
+#
+<http://www.example.org/document/orderedlist/1/listitem/3/paragraph/3> a xyz:Paragraph ;
+ rdf:_1 "How this paragraph is not ending?"
+ .
