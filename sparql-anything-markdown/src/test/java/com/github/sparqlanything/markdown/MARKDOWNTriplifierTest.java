@@ -190,9 +190,19 @@ public class MARKDOWNTriplifierTest {
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
 
-//
-//	@Test
-//	public void testListItem(){}
+
+	@Test
+	public void testListItem(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	@Test
+	public void testBulletList(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
 //
 //	@Test
 //	public void testOrderedList(){}
