@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.github.sparqlanything.facadeiri.FacadeIRIParser;
+import com.github.sparqlanything.model.IRIArgument;
 
 public class FacadeIRIParserTest {
 
@@ -94,7 +95,7 @@ public class FacadeIRIParserTest {
 		Properties p = new FacadeIRIParser(uri).getProperties();
 		Assert.assertTrue(p.size() == 3);
 	}
-	
+
 	@Test
 	public void testArgsInLocation8() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=https://myfile.json?fo\\,o=bar&tab=goal#hack,same=other";
@@ -102,7 +103,7 @@ public class FacadeIRIParserTest {
 		Assert.assertTrue(p.size() == 3);
 		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
 	}
-	
+
 	@Test
 	public void specialCharsArgs() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=https://myfile.json?fo\\,o=bar&tab=goal#hack,same=汉字";
@@ -113,9 +114,17 @@ public class FacadeIRIParserTest {
 
 	@Test
 	public void specialCharsArgsFromFile() throws IOException {
-		String uri = IOUtils.toString(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("./exampleIRI.txt")));
+		String uri = IOUtils
+				.toString(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("./exampleIRI.txt")));
 		Properties p = new FacadeIRIParser(uri).getProperties();
 		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
 		Assert.assertEquals(p.get("same"), "汉字");
+	}
+
+	@Test
+	public void testLocation() {
+		String uri = "x-sparql-anything:example.json";
+		Properties p = new FacadeIRIParser(uri).getProperties();
+		Assert.assertEquals("example.json", p.get(IRIArgument.LOCATION.toString()));
 	}
 }
