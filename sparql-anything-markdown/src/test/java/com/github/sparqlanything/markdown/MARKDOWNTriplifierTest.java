@@ -160,6 +160,36 @@ public class MARKDOWNTriplifierTest {
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
 
+	@Test
+	public void testBlockQuote(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	@Test
+	public void testText(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	@Test
+	public void testEmphasis(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	@Test
+	public void testStrongEmphasis(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	@Test
+	public void testIndentedCodeBlock(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
 //
 //	@Test
 //	public void testListItem(){}
@@ -171,15 +201,6 @@ public class MARKDOWNTriplifierTest {
 //	public void testBulletList(){}
 //
 //
-//	@Test
-//	public void testText(){}
-//
-//
-//	@Test
-//	public void testBlockQuote(){}
-//
-//	@Test
-//	public void testEmphasis(){}
 //
 //	@Test
 //	public void testFencedCodeBlock(){}
@@ -208,8 +229,6 @@ public class MARKDOWNTriplifierTest {
 //	@Test
 //	public void testLinkReferenceDefinition(){}
 //
-//	@Test
-//	public void testStrongEmphasis(){}
 //
 //	@Test
 //	public void testCustomBlock(){}

@@ -1,0 +1,1 @@
+A paragraph document with some text. With a **emphasis** in the second sentence.

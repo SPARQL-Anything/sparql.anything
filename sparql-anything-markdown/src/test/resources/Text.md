@@ -1,0 +1,1 @@
+A paragraph document with some text. With a [link](http://www.example.org) in the second sentence.
