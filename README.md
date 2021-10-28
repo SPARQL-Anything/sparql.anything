@@ -494,7 +494,7 @@ usage: java -jar sparql-anything-server-<version>.jar [-p port] [-e
                     3000 ).
 ```
 
-Also a docker image can be used by follwing the instructions [here](BROWSER.md).
+Also a docker image can be used by following the instructions [here](BROWSER.md).
 
 ## Licence
 
