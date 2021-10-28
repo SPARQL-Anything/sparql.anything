@@ -503,6 +503,8 @@ usage: java -jar sparql-anything-server-<version>.jar [-p port] [-e
                     3000 ).
 ```
 
+Also a docker image can be used by following the instructions [here](BROWSER.md).
+
 ## Licence
 
 SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
