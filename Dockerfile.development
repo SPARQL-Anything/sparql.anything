@@ -17,8 +17,14 @@ ENV LC_ALL en_US.UTF-8
 
 # normal
 CMD cd /app && mvn clean install && \
-    java -jar sparql-anything-fuseki/target/sparql-anything-server-*jar
+    java -cp \
+    "/app/sparql-anything-fuseki/target/sparql-anything-server-0.4.0-SNAPSHOT.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
+    com.github.sparqlanything.fuseki.Endpoint
 
 # more debugging (you can attach jdb with this)
 # CMD cd /app && mvn clean install -DskipTests && \
-#     java -Dorg.slf4j.simpleLogger.defaultLogLevel=info -Dorg.slf4j.simpleLogger.log.com.github.sparqlanything=trace -agentlib:jdwp=transport=dt_socket,server=y,address=9091,suspend=n -jar sparql-anything-fuseki/target/sparql-anything-server-*jar
+#     java -Dorg.slf4j.simpleLogger.defaultLogLevel=info \
+#     -Dorg.slf4j.simpleLogger.log.com.github.sparqlanything=trace \
+#     -agentlib:jdwp=transport=dt_socket,server=y,address=9091,suspend=n \
+#     -cp "/app/sparql-anything-fuseki/target/sparql-anything-server-0.4.0-SNAPSHOT.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
+#     com.github.sparqlanything.fuseki.Endpoint
