@@ -1,6 +1,6 @@
-# Headless Browser
+# SPARQL-Anything-powered Fuseki Endpoint Inside a Docker Container
 
-## SPARQL-Anything-powered Fuseki Endpoint Inside a Docker Container
+## Headless Browser
 
 
 The [headless browser](https://github.com/microsoft/playwright-java) has quite a few dependencies.
