@@ -1,0 +1,14 @@
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document> a fx:root .
+<http://www.example.org/document> a xyz:Document .
+<http://www.example.org/document> rdf:_1 <http://www.example.org/document/fencedcodeblock/1> .
+#
+#
+<http://www.example.org/document/fencedcodeblock/1> a xyz:FencedCodeBlock .
+<http://www.example.org/document/fencedcodeblock/1> rdf:_1 """# I guess this is a fenced code block
+var x = 1
+"""^^xsd:string .

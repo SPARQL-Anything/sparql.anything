@@ -269,7 +269,8 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	public void visit(FencedCodeBlock node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
-		handleContainer(node);
+		String containerId = handleContainer(node);
+		this.builder.addValue(dataSourceId, containerId, 1, node.getLiteral());
 		super.visit(node);
 	}
 
@@ -293,7 +294,8 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	public void visit(HtmlInline node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
-		handleContainer(node);
+		String containerId = handleContainer(node);
+		this.builder.addValue(dataSourceId, containerId, 1, node.getLiteral());
 		super.visit(node);
 	}
 
@@ -301,7 +303,8 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	public void visit(HtmlBlock node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
-		handleContainer(node);
+		String containerId = handleContainer(node);
+		this.builder.addValue(dataSourceId, containerId, 1, node.getLiteral());
 		super.visit(node);
 	}
 
