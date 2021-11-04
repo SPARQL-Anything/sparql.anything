@@ -1,0 +1,42 @@
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document> a fx:root .
+<http://www.example.org/document> a xyz:Document .
+<http://www.example.org/document> rdf:_1 <http://www.example.org/document/paragraph/1> .
+<http://www.example.org/document> rdf:_2 <http://www.example.org/document/thematicbreak/1> .
+<http://www.example.org/document> rdf:_3 <http://www.example.org/document/paragraph/2> .
+<http://www.example.org/document> rdf:_4 <http://www.example.org/document/thematicbreak/2> .
+<http://www.example.org/document> rdf:_5 <http://www.example.org/document/paragraph/3> .
+<http://www.example.org/document> rdf:_6 <http://www.example.org/document/thematicbreak/3> .
+<http://www.example.org/document> rdf:_7 <http://www.example.org/document/paragraph/4> .
+<http://www.example.org/document> rdf:_8 <http://www.example.org/document/thematicbreak/4> .
+<http://www.example.org/document> rdf:_9 <http://www.example.org/document/paragraph/5> .
+<http://www.example.org/document> rdf:_10 <http://www.example.org/document/thematicbreak/5> .
+<http://www.example.org/document> rdf:_11 <http://www.example.org/document/paragraph/6> .
+
+<http://www.example.org/document/paragraph/1> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/1> rdf:_1 "A paragraph before the thematic break."^^xsd:string .
+<http://www.example.org/document/thematicbreak/1> a xyz:ThematicBreak .
+
+<http://www.example.org/document/paragraph/2> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/2> rdf:_1 "A paragraph after the thematic break."^^xsd:string .
+<http://www.example.org/document/thematicbreak/2> a xyz:ThematicBreak .
+
+<http://www.example.org/document/paragraph/3> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/3> rdf:_1 "A paragraph after the thematic break with long hyphens."^^xsd:string .
+<http://www.example.org/document/thematicbreak/3> a xyz:ThematicBreak .
+
+<http://www.example.org/document/paragraph/4> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/4> rdf:_1 "A paragraph after the thematic break with three asterisks."^^xsd:string .
+<http://www.example.org/document/thematicbreak/4> a xyz:ThematicBreak .
+
+<http://www.example.org/document/paragraph/5> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/5> rdf:_1 "A paragraph after the thematic break with asterisks and spaces."^^xsd:string .
+<http://www.example.org/document/thematicbreak/5> a xyz:ThematicBreak .
+
+<http://www.example.org/document/paragraph/6> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/6> rdf:_1 "A paragraph after the thematic break with long hyphens and spaces."^^xsd:string .
+
