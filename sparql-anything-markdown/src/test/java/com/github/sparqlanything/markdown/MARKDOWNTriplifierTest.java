@@ -129,11 +129,11 @@ public class MARKDOWNTriplifierTest extends AbstractTriplifierTester {
 		assertResultIsIsomorphicWithExpected();
 	}
 
-//	@Test
-//	public void testThematicBreak(){
-//		logger.debug("Test: {}", name.getMethodName());
-//		assertTrue(this.result.isIsomorphicWith(expected));
-//	}
+	@Test
+	public void testThematicBreak(){
+		logger.debug("Test: {}", name.getMethodName());
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
 
 	@Test
 	public void testHtmlInline(){
@@ -145,11 +145,10 @@ public class MARKDOWNTriplifierTest extends AbstractTriplifierTester {
 		assertResultIsIsomorphicWithExpected();
 	}
 //
-//	@Test
-//	public void testIndentedCodeBlock(){}
-//
-//	@Test
-//	public void testImage(){}
+	@Test
+	public void testImage(){
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
 //
 //
 //	@Test

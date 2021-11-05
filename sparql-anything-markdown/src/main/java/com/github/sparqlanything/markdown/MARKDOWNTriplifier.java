@@ -321,7 +321,11 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	public void visit(Image node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
-		handleContainer(node);
+		String containerId = handleContainer(node);
+		if(node.getTitle()!=null) {
+			this.builder.addValue(dataSourceId, containerId, "title", node.getTitle());
+		}
+		this.builder.addValue(dataSourceId, containerId, "destination", node.getDestination());
 		super.visit(node);
 	}
 

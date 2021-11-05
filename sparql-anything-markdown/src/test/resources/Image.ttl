@@ -1,0 +1,25 @@
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document> a fx:root .
+<http://www.example.org/document> a xyz:Document .
+<http://www.example.org/document> rdf:_1 <http://www.example.org/document/paragraph/1> .
+<http://www.example.org/document> rdf:_2 <http://www.example.org/document/paragraph/2> .
+<http://www.example.org/document> rdf:_3 <http://www.example.org/document/paragraph/3> .
+<http://www.example.org/document> rdf:_4 <http://www.example.org/document/paragraph/4> .
+
+<http://www.example.org/document/paragraph/1> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/2> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/3> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/4> a xyz:Paragraph .
+
+<http://www.example.org/document/paragraph/1> rdf:_1 "An introductory paragraph." .
+<http://www.example.org/document/paragraph/2> rdf:_1 "Another paragraph." .
+<http://www.example.org/document/paragraph/3> rdf:_1 <http://www.example.org/document/paragraph/3/image/1> .
+<http://www.example.org/document/paragraph/4> rdf:_1 "A concluding paragraph." .
+
+<http://www.example.org/document/paragraph/3/image/1> a xyz:Image .
+<http://www.example.org/document/paragraph/3/image/1> xyz:destination "Image.jpg" .
+<http://www.example.org/document/paragraph/3/image/1> rdf:_1 "An Image" .
