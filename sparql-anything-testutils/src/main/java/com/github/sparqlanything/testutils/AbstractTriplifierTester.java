@@ -48,13 +48,15 @@ public class AbstractTriplifierTester {
 	protected Triplifier triplifier;
 	protected Properties properties;
 	protected URL url;
+	private String extension = null;
 
 	protected Graph result;
 	protected Graph expected;
 
-	public AbstractTriplifierTester(Triplifier t, Properties p){
+	public AbstractTriplifierTester(Triplifier t, Properties p, String extension){
 		this.triplifier = t;
 		this.properties = p;
+		this.extension = extension;
 	}
 
 	@Rule
@@ -63,7 +65,7 @@ public class AbstractTriplifierTester {
 	private void prepare() throws URISyntaxException {
 		logger.debug("{} (prepare)", name.getMethodName());
 		// Root is Document
-		String fileName = name.getMethodName().substring(4) + ".md";
+		String fileName = name.getMethodName().substring(4) + "." + extension;
 		logger.debug("Input filename: {}", fileName);
 		url = getClass().getClassLoader().getResource(fileName);
 		properties.setProperty("location", url.toURI().toString());

@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 
 public class MARKDOWNTriplifierTest extends AbstractTriplifierTester {
 	public MARKDOWNTriplifierTest() {
-		super(new MARKDOWNTriplifier(), new Properties());
+		super(new MARKDOWNTriplifier(), new Properties(), "md");
 	}
 
 	@Test
