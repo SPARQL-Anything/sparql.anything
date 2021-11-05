@@ -30,6 +30,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.XSD;
+import org.commonmark.Extension;
+import org.commonmark.ext.gfm.tables.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,7 +86,8 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 
 		final InputStream us = Triplifier.getInputStream(url, properties);
 		final InputStreamReader reader = new InputStreamReader(us);
-		Parser parser = Parser.builder().build();
+		List<Extension> extensions = Arrays.asList(TablesExtension.create());
+		Parser parser = Parser.builder().extensions(extensions).build();
 		Node document = parser.parseReader(reader);
 
 		try {
@@ -372,10 +375,48 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	public void visit(CustomNode node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
-		logger.trace("[ignoring]");
-//		String parentId = this.containers.get(node.getParent());
-//		String containerId = String.join("/",parentId , node.getClass().getSimpleName() , Integer.toString(node.hashCode())) ;
-//		handleContainer(node, containerId);
+		if(node instanceof TableHead){
+			visit((TableHead) node);
+		}else if(node instanceof TableRow){
+			visit((TableRow) node);
+		}else if(node instanceof TableCell){
+			visit((TableCell) node);
+		}else if(node instanceof TableBody){
+			visit((TableBody) node);
+		}else {
+			logger.trace("[ignoring]");
+		}
+//		super.visit(node);
+	}
+
+	public void visit(TableHead node){
+		logger.trace("[Visiting {}] {}", node.getClass(), node);
+		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
+		handleContainer(node);
+		super.visit(node);
+	}
+
+	public void visit(TableRow node){
+		logger.trace("[Visiting {}] {}", node.getClass(), node);
+		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
+		handleContainer(node);
+		super.visit(node);
+	}
+
+	public void visit(TableBody node){
+		logger.trace("[Visiting {}] {}", node.getClass(), node);
+		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
+		handleContainer(node);
+		super.visit(node);
+	}
+
+	public void visit(TableCell node){
+		logger.trace("[Visiting {}] {}", node.getClass(), node);
+		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
+		handleContainer(node);
+		if(node.getAlignment() != null){
+			builder.addValue(dataSourceId, containers.get(node), "alignment", node.getAlignment().name());
+		}
 		super.visit(node);
 	}
 

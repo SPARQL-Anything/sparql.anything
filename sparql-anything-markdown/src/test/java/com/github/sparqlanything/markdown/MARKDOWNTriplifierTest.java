@@ -149,16 +149,23 @@ public class MARKDOWNTriplifierTest extends AbstractTriplifierTester {
 	public void testImage(){
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
-//
 
-	/**
-	 * Credit:
-	 */
 	@Test
 	public void testLinkReferenceDefinition(){
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
-//
+
+	@Test
+	public void testTable(){
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	@Test
+	public void testTable_2(){
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
+
+	//
 //
 //	@Test
 //	public void testCustomBlock(){}

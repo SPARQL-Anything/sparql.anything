@@ -1,0 +1,42 @@
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document> a fx:root .
+<http://www.example.org/document> a xyz:Document .
+<http://www.example.org/document> rdf:_1 <http://www.example.org/document/paragraph/1> .
+<http://www.example.org/document> rdf:_2 <http://www.example.org/document/tableblock/1> .
+<http://www.example.org/document> rdf:_3 <http://www.example.org/document/paragraph/2> .
+
+<http://www.example.org/document/paragraph/1> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/1> rdf:_1 "A document starts with some text."^^xsd:string .
+
+<http://www.example.org/document/tableblock/1> a xyz:TableBlock .
+<http://www.example.org/document/tableblock/1> rdf:_1 <http://www.example.org/document/tableblock/1/tablehead/1> .
+<http://www.example.org/document/tableblock/1> rdf:_2 <http://www.example.org/document/tableblock/1/tablebody/1> .
+
+<http://www.example.org/document/tableblock/1/tablehead/1> a xyz:TableHead .
+<http://www.example.org/document/tableblock/1/tablehead/1> rdf:_1 <http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1> .
+
+<http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1> a xyz:TableRow .
+<http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1> rdf:_1 <http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1/tablecell/1> .
+<http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1> rdf:_2 <http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1/tablecell/2> .
+<http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1/tablecell/1> a xyz:TableCell .
+<http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1/tablecell/1> rdf:_1 "Header"^^xsd:string .
+<http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1/tablecell/2> a xyz:TableCell .
+<http://www.example.org/document/tableblock/1/tablehead/1/tablerow/1/tablecell/2> rdf:_1 "Another Header"^^xsd:string .
+
+<http://www.example.org/document/tableblock/1/tablebody/1> a xyz:TableBody .
+<http://www.example.org/document/tableblock/1/tablebody/1> rdf:_1 <http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2> .
+
+<http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2> a xyz:TableRow .
+<http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2> rdf:_1 <http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2/tablecell/3> .
+<http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2> rdf:_2 <http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2/tablecell/4> .
+<http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2/tablecell/3> a xyz:TableCell .
+<http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2/tablecell/3> rdf:_1 "field 1"^^xsd:string .
+<http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2/tablecell/4> a xyz:TableCell .
+<http://www.example.org/document/tableblock/1/tablebody/1/tablerow/2/tablecell/4> rdf:_1 "value one"^^xsd:string .
+
+<http://www.example.org/document/paragraph/2> a xyz:Paragraph .
+<http://www.example.org/document/paragraph/2> rdf:_1 "Ending paragraph."^^xsd:string .
