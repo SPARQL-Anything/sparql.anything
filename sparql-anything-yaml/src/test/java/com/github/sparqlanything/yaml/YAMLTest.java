@@ -64,7 +64,7 @@ public class YAMLTest {
 			logger.debug("{}", graphs.next());
 		}
 		Assert.assertTrue(ds.size() == 1);
-		Assert.assertTrue(ds.getDefaultGraph().size() == 11);
+		Assert.assertTrue(ds.getDefaultGraph().size() == 12);
 	}
 
 }
