@@ -79,6 +79,7 @@ public class YAMLTriplifier implements Triplifier {
 	}
 
 	private void transformYAML(Iterable<Object> iter, String dataSourceId, String rootId, FacadeXGraphBuilder builder) {
+		builder.addRoot(dataSourceId,rootId);
 		Iterator<Object> iterator = iter.iterator();
 		while(iterator.hasNext()){
 			Object value = iterator.next();
@@ -114,6 +115,7 @@ public class YAMLTriplifier implements Triplifier {
 
 
 	private void transformStringKeyValue(String key, Object value, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
+			key = Triplifier.toSafeURIString(key);
 			if(value instanceof String){
 				builder.addValue(dataSourceId, containerId, (String) key, value);
 			} else if(value instanceof Integer){
