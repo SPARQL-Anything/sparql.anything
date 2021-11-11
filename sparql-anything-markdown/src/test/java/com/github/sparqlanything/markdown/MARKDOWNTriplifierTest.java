@@ -165,6 +165,10 @@ public class MARKDOWNTriplifierTest extends AbstractTriplifierTester {
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
 
+	@Test
+	public void testYamlFrontMatter(){
+		assertTrue(this.result.isIsomorphicWith(expected));
+	}
 	//
 //
 //	@Test

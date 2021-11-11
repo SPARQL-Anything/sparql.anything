@@ -22,14 +22,10 @@
 package com.github.sparqlanything.markdown;
 
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import com.google.common.collect.Sets;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.XSD;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.*;
 import org.slf4j.Logger;
@@ -86,7 +82,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 
 		final InputStream us = Triplifier.getInputStream(url, properties);
 		final InputStreamReader reader = new InputStreamReader(us);
-		List<Extension> extensions = Arrays.asList(TablesExtension.create());
+		List<Extension> extensions = Arrays.asList(TablesExtension.create(), YamlFrontMatterGathererExtension.create());
 		Parser parser = Parser.builder().extensions(extensions).build();
 		Node document = parser.parseReader(reader);
 
@@ -368,6 +364,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		handleContainer(node);
+		if(node instanceof YamlFrontMatter){
+			builder.addValue(dataSourceId, containers.get(node), 1, ((YamlFrontMatter) node).getContent() );
+		}
 		super.visit(node);
 	}
 
@@ -384,9 +383,13 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		}else if(node instanceof TableBody){
 			visit((TableBody) node);
 		}else {
-			logger.trace("[ignoring]");
+			logger.trace("[ignoring] {}", node.toString());
 		}
 //		super.visit(node);
+	}
+
+	public void visit(YamlFrontMatter node){
+
 	}
 
 	public void visit(TableHead node){
