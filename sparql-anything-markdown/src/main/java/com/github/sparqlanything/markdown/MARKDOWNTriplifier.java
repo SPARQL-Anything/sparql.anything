@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -145,10 +147,16 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(Document node){
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		// Document is the root container
 		String containerId = rootId ;
-		this.builder.addType(dataSourceId, containerId, XYZ_NS + node.getClass().getSimpleName());
+		try {
+			this.builder.addType(dataSourceId, containerId, new URI(XYZ_NS + node.getClass().getSimpleName()));
+		} catch (URISyntaxException e) {
+			logger.error("This should never happen", e);
+		}
 //		this.lastSlot.put(parentId, slot);
 		this.containers.put(node, containerId);
 		this.lastSlot.put(containerId, 0);
