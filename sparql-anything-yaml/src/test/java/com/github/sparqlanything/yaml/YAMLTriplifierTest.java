@@ -32,8 +32,20 @@ public class YAMLTriplifierTest extends AbstractTriplifierTester {
 		super(new YAMLTriplifier(), new Properties(), "yaml");
 	}
 
+	@Override
+	protected void properties(Properties properties) {
+		if(name.getMethodName().equals("testFoo")){
+			properties.setProperty("blank-nodes", "true");
+		}
+	}
+
 	@Test
 	public void testMap(){
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testFoo(){
 		assertResultIsIsomorphicWithExpected();
 	}
 }

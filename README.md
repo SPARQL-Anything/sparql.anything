@@ -106,7 +106,7 @@ and get this result without caring of transforming JSON to RDF.
 
 
 ## Supported Formats
-Currently, the system supports the following formats: "json", "html", "xml", "csv", "bin", "png","jpeg","jpg","bmp","tiff","tif", "ico", "txt" ... but the possibilities are limitless!
+Currently, the system supports the following formats: "json", "html", "xml", "csv", "yaml", "md", "bib", "bin", "png","jpeg","jpg","bmp","tiff","tif", "ico", "txt" ... but the possibilities are limitless!
 
 By default, these formats are triplified as follows.
 
@@ -208,7 +208,15 @@ By default, these formats are triplified as follows.
 
 |Input|Triplification|
 |---|---|
-|<pre># Title<br>The following list of issues:<br><br>- first issue<br>- second issue<br><br>---<br>Footer paragraph. | <pre>@prefix fx: <http://sparql.xyz/facade-x/ns/> .<br>@prefix xyz: <http://sparql.xyz/facade-x/data/> .<br>@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .<br>@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.<br><br>[] a fx:root, xyz:Document ;<br> rdf:_1 [<br>    a xyz:Heading ;<br>    rdf:_1 "Title"^^xsd:string ;<br>    xyz:level "1"^^xsd:int<br> ] ;<br> rdf:_2 [<br>    a xyz:Paragraph ;<br>    rdf:_1 "The following list of issues:"^^xsd:string<br> ] ;<br> rdf:_3 [<br>    a xyz:BulletList ;<br>    rdf:_1 [<br>        a xyz:ListItem ;<br>        rdf:_1 [<br>            a xyz:Paragraph ;<br>            rdf:_1 "first issue"^^xsd:string<br>        ]<br>    ] ;<br>    rdf:_2 [<br>        a xyz:ListItem ;<br>        rdf:_1 [<br>            a xyz:Paragraph ;<br>            rdf:_1 "second issue"^^xsd:string<br>        ]<br>    ]<br> ] ;<br> rdf:_4 [<br>    a xyz:ThematicBreak<br> ] ;<br> rdf:_5 [<br>     a xyz:Paragraph ;<br>     rdf:_1 "Footer paragraph."^^xsd:string<br>  ] .<br></pre> |
+|<pre># Title<br>The following list of issues:<br><br>- first issue<br>- second issue<br><br>---<br>Footer paragraph.</pre> | <pre>@prefix fx: <http://sparql.xyz/facade-x/ns/> .<br>@prefix xyz: <http://sparql.xyz/facade-x/data/> .<br>@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .<br>@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.<br><br>[] a fx:root, xyz:Document ;<br> rdf:_1 [<br>    a xyz:Heading ;<br>    rdf:_1 "Title"^^xsd:string ;<br>    xyz:level "1"^^xsd:int<br> ] ;<br> rdf:_2 [<br>    a xyz:Paragraph ;<br>    rdf:_1 "The following list of issues:"^^xsd:string<br> ] ;<br> rdf:_3 [<br>    a xyz:BulletList ;<br>    rdf:_1 [<br>        a xyz:ListItem ;<br>        rdf:_1 [<br>            a xyz:Paragraph ;<br>            rdf:_1 "first issue"^^xsd:string<br>        ]<br>    ] ;<br>    rdf:_2 [<br>        a xyz:ListItem ;<br>        rdf:_1 [<br>            a xyz:Paragraph ;<br>            rdf:_1 "second issue"^^xsd:string<br>        ]<br>    ]<br> ] ;<br> rdf:_4 [<br>    a xyz:ThematicBreak<br> ] ;<br> rdf:_5 [<br>     a xyz:Paragraph ;<br>     rdf:_1 "Footer paragraph."^^xsd:string<br>  ] .<br></pre> |
+
+</details>
+
+<details><summary>YAML</summary>
+
+|Input|Triplification|
+|---|---|
+|<pre>foo: bar<br>pleh: help<br>stuff:<br>  foo: bar<br>  bar: foo</pre> | <pre>@prefix fx: <http://sparql.xyz/facade-x/ns/> .<br>@prefix xyz: <http://sparql.xyz/facade-x/data/> .<br>@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .<br>@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.<br><br>[ a fx:root ;<br>    xyz:foo "bar"^^xsd:string ;<br>    xyz:pleh "help"^^xsd:string ;<br>    xyz:stuff [<br>        xyz:foo "bar"^^xsd:string ;<br>        xyz:bar "foo"^^xsd:string<br>    ]<br>]</pre> |
 
 </details>
 
