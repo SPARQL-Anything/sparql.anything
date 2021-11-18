@@ -1,0 +1,39 @@
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+[] a fx:root, xyz:Document ;
+ rdf:_1 [
+    a xyz:Heading ;
+    rdf:_1 "Title"^^xsd:string ;
+    xyz:level "1"^^xsd:int
+ ] ;
+ rdf:_2 [
+    a xyz:Paragraph ;
+    rdf:_1 "The following list of issues:"^^xsd:string
+ ] ;
+ rdf:_3 [
+    a xyz:BulletList ;
+    rdf:_1 [
+        a xyz:ListItem ;
+        rdf:_1 [
+            a xyz:Paragraph ;
+            rdf:_1 "first issue"^^xsd:string
+        ]
+    ] ;
+    rdf:_2 [
+        a xyz:ListItem ;
+        rdf:_1 [
+            a xyz:Paragraph ;
+            rdf:_1 "second issue"^^xsd:string
+        ]
+    ]
+ ] ;
+ rdf:_4 [
+    a xyz:ThematicBreak
+ ] ;
+ rdf:_5 [
+     a xyz:Paragraph ;
+     rdf:_1 "Footer paragraph."^^xsd:string
+  ] .

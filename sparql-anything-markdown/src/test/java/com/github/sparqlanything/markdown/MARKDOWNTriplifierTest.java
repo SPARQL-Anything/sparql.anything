@@ -22,6 +22,8 @@
 package com.github.sparqlanything.markdown;
 
 import com.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.junit.Ignore;
 import org.junit.Test;
 import java.util.Properties;
 
@@ -30,6 +32,13 @@ import static org.junit.Assert.assertTrue;
 public class MARKDOWNTriplifierTest extends AbstractTriplifierTester {
 	public MARKDOWNTriplifierTest() {
 		super(new MARKDOWNTriplifier(), new Properties(), "md");
+	}
+
+	@Override
+	public void properties(Properties properties){
+		if (name.getMethodName().equals("testDocumentationExample")){
+			properties.setProperty("blank-nodes", "true");
+		}
 	}
 
 	@Test
@@ -169,6 +178,19 @@ public class MARKDOWNTriplifierTest extends AbstractTriplifierTester {
 	public void testYamlFrontMatter(){
 		assertTrue(this.result.isIsomorphicWith(expected));
 	}
+
+	@Test
+	public void testDocumentationExample(){
+		boolean isomorphic1 = this.result.isIsomorphicWith(this.expected);
+		boolean isomorphic2 = ModelFactory.createModelForGraph(this.result).isIsomorphicWith(ModelFactory.createModelForGraph(expected));
+		ModelFactory.createModelForGraph(this.result).write(System.err, "TTL");
+		//System.out.println(" ---- ");
+		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
+		logger.warn("Isomorphic (graph)? {} ", isomorphic1);
+		logger.warn("Isomorphic (model)? {} ", isomorphic2);
+		// assertTrue(equals);
+	}
+
 	//
 //
 //	@Test

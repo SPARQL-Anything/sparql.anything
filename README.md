@@ -188,7 +188,7 @@ By default, these formats are triplified as follows.
 </details>
 
 
-<details><summary>Metadata</summary>
+<details><summary>Image Metadata</summary>
 
 |Input|Triplification|
 |---|---|
@@ -204,6 +204,13 @@ By default, these formats are triplified as follows.
 
 </details>
 
+<details><summary>Markdown</summary>
+
+|Input|Triplification|
+|---|---|
+|<pre># Title<br>The following list of issues:<br><br>- first issue<br>- second issue<br><br>---<br>Footer paragraph. | <pre>@prefix fx: <http://sparql.xyz/facade-x/ns/> .<br>@prefix xyz: <http://sparql.xyz/facade-x/data/> .<br>@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .<br>@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.<br><br>[] a fx:root, xyz:Document ;<br> rdf:_1 [<br>    a xyz:Heading ;<br>    rdf:_1 "Title"^^xsd:string ;<br>    xyz:level "1"^^xsd:int<br> ] ;<br> rdf:_2 [<br>    a xyz:Paragraph ;<br>    rdf:_1 "The following list of issues:"^^xsd:string<br> ] ;<br> rdf:_3 [<br>    a xyz:BulletList ;<br>    rdf:_1 [<br>        a xyz:ListItem ;<br>        rdf:_1 [<br>            a xyz:Paragraph ;<br>            rdf:_1 "first issue"^^xsd:string<br>        ]<br>    ] ;<br>    rdf:_2 [<br>        a xyz:ListItem ;<br>        rdf:_1 [<br>            a xyz:Paragraph ;<br>            rdf:_1 "second issue"^^xsd:string<br>        ]<br>    ]<br> ] ;<br> rdf:_4 [<br>    a xyz:ThematicBreak<br> ] ;<br> rdf:_5 [<br>     a xyz:Paragraph ;<br>     rdf:_1 "Footer paragraph."^^xsd:string<br>  ] .<br></pre> |
+
+</details>
 
 ## IRI schema and triplification options
 
