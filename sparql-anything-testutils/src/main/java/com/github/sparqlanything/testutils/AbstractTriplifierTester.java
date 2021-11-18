@@ -103,7 +103,7 @@ public class AbstractTriplifierTester {
 
 				if(!result.contains(t)){
 					logger.warn("{} not found in result", t);
-					logger.warn("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),  t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI():null);
+					logger.warn("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),  t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI():"");
 				}
 			}
 			it = result.find();
@@ -112,7 +112,7 @@ public class AbstractTriplifierTester {
 				logger.trace("<<R {}", t);
 				if(!expected.contains(t)){
 					logger.warn("{} not found in expected", t);
-					logger.warn("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),  t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI():null);
+					logger.warn("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),  t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI():"");
 				}
 			}
 		}
@@ -120,6 +120,7 @@ public class AbstractTriplifierTester {
 
 	protected void perform() throws TriplifierHTTPException, IOException, URISyntaxException {
 		logger.debug("{} (perform)", name.getMethodName());
+		logger.info("{}", properties);
 		String graphName = Triplifier.getRootArgument(properties, url);
 		logger.debug("Graph name: {}", graphName);
 		this.result = triplifier.triplify(properties, new BaseFacadeXBuilder(graphName, properties)).getGraph(NodeFactory.createURI(graphName));
