@@ -12,7 +12,7 @@ SPARQL Anything uses a single generic abstraction for all data source formats ca
 Facade-X is a simplistic meta-model used by sparql.anything transformers to generate RDF data from diverse data sources.
 Intuitively, Facade-X uses a subset of RDF as a general approach to represent the source content *as-it-is* but in RDF.
 The model combines two type of elements: containers and literals.
-Facade-X has always a single root container. 
+Facade-X has always a single root container.
 Container members are a combination of key-value pairs, where keys are either RDF properties or container membership properties.
 Instead, values can be either RDF literals or other containers.
 This is a generic example of a Facade-X data object (more examples below):
@@ -26,8 +26,8 @@ This is a generic example of a Facade-X data object (more examples below):
     rdf:_1 "another value with unspecified key" ;
     rdf:_2 [
         rdf:type xyz:MyType ;
-        rdf:_1 "another value" 
-    ] 
+        rdf:_1 "another value"
+    ]
 ] .
 ```
 
@@ -96,7 +96,7 @@ WHERE {
 }
 ```
 
-and get this result without caring of transforming JSON to RDF. 
+and get this result without caring of transforming JSON to RDF.
 
 | seriesName    |
 |---------------|
@@ -111,14 +111,14 @@ Currently, the system supports the following formats: "json", "html", "xml", "cs
 By default, these formats are triplified as follows.
 
 <details><summary>JSON</summary>
-    
-    
+
+
 |Input|Triplification|
 |---|---|
 |<pre>{<br>  "stringArg":"stringValue",<br>  "intArg":1,<br>  "booleanArg":true,<br>  "nullArg": null,<br>  "arr":[0,1]<br>}</pre> | <pre>@prefix xyz:    &lt;http://sparql.xyz/facade-x/data/&gt; .<br>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .<br>@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .<br>[  <br>  xyz:arr         [  <br>                   rdf:_0  "0"^^xsd:int ;<br>                   rdf:_1  "1"^^xsd:int<br>                 ] ;<br>  xyz:booleanArg  true ;<br>  xyz:intArg      "1"^^xsd:int ;<br>  xyz:stringArg   "stringValue"<br>] .</pre> |
 
 
-    
+
 </details>
 
 
@@ -372,7 +372,7 @@ WHERE {
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
 |docs.table-headers|It tells the document triplifier to use the headers of the tables within the document file for minting the properties of the generated triples.|true/false|false|
-|docs.preserve-paragraphs|It tells the document triplifier to preserve the paragraph defined in the document. If set as true each paragraph of the document will become a slot of the root container.|true/false|false|
+|docs.merge-paragraphs|It tells the document triplifier to merge all the paragraphs of the document into a single slot (new line characters are preserved)|true/false|false|
 
 </details>
 
@@ -398,7 +398,7 @@ SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
 
 The SPARQL Anything engine can load static RDF files in memory and perform the query against it, alongside any `x-sparql-anything` service clause.
 RDF files produced by previous SPARQL Anything processes can joined with data coming from additional resources.
-This feature is enabled with the command line argument `-l|--load` that accepts a file or a directory. 
+This feature is enabled with the command line argument `-l|--load` that accepts a file or a directory.
 In the second case, all RDF files in the folder are loaded in memory before execution.
 
 ## Query templates and variable bindings
@@ -416,7 +416,7 @@ In the second case, the query is executed for each set of bindings in the result
 
 The SPARQL Anything engine is sensible to the magic property ``<http://sparql.xyz/facade-x/ns/anySlot>``. This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).
 
-The system supports the following functions on container membership properties (See #78): 
+The system supports the following functions on container membership properties (See #78):
 
 - `fx:before(?a, ?b)` returns `true` if ?a and ?b are container membership properties and ?a is lower than ?b, false otherwise
 - `fx:after(?a, ?b)`  returns `true` if ?a and ?b are container membership properties and ?a is higher than ?b, false otherwise
@@ -425,7 +425,7 @@ The system supports the following functions on container membership properties (
 - `fx:forward(?a, ?b)` returns the container membership property that follows ?a of ?b steps (rdf:\_2, 5 -> rdf:\_7)
 - `fx:backward(?a, ?b)` returns the container membership property that preceeds ?a of ?b steps (rdf:\_24, 4 -> rdf:\_20)
 
-The system supports the following functions for string manipulation (See #104): 
+The system supports the following functions for string manipulation (See #104):
 
 - `fx:String.startsWith` wraps [`java.lang.String.startsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 - `fx:String.endsWith` wraps [`java.lang.String.endsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)

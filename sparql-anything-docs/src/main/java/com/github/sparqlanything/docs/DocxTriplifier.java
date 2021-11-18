@@ -34,7 +34,6 @@ import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
@@ -46,20 +45,20 @@ import com.github.sparqlanything.model.Triplifier;
 
 public class DocxTriplifier implements Triplifier {
 
-	public final static String KEEP_PARAGRAPH = "docs.preserve-paragraphs";
+	public final static String MERGE_PARAGRAPHS = "docs.merge-paragraphs";
 	public final static String TABLE_HEADERS = "docs.table-headers";
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		DatasetGraph dg = DatasetGraphFactory.create();
 
 		URL url = Triplifier.getLocation(properties);
 		if (url == null)
-			return dg;
+			return builder.getDatasetGraph();
+
 		String root = Triplifier.getRootArgument(properties, url.toString());
 		String dataSourceId = root;
 		String namespace = Triplifier.getNamespaceArgument(properties);
-		boolean keepParagraph = Boolean.parseBoolean(properties.getProperty(KEEP_PARAGRAPH, "false"));
+		boolean mergeParagraphs = Boolean.parseBoolean(properties.getProperty(MERGE_PARAGRAPHS, "false"));
 		boolean headers = Boolean.parseBoolean(properties.getProperty(TABLE_HEADERS, "false"));
 
 		builder.addRoot(dataSourceId, root);
@@ -69,7 +68,7 @@ public class DocxTriplifier implements Triplifier {
 			List<XWPFParagraph> paragraphs = document.getParagraphs();
 
 			int count = 1;
-			if (keepParagraph) {
+			if (mergeParagraphs) {
 				for (XWPFParagraph para : paragraphs) {
 					builder.addValue(dataSourceId, root, count,
 							NodeFactory.createLiteral(para.getText(), XSDDatatype.XSDstring));
@@ -80,6 +79,7 @@ public class DocxTriplifier implements Triplifier {
 				StringBuilder sb = new StringBuilder();
 				for (XWPFParagraph para : paragraphs) {
 					sb.append(para.getText());
+					sb.append("\n");
 				}
 				builder.addValue(dataSourceId, root, count,
 						NodeFactory.createLiteral(sb.toString(), XSDDatatype.XSDstring));
