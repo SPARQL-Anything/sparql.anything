@@ -86,6 +86,7 @@ public class DocxTriplifier implements Triplifier {
 						paragraphURI = namespace + "paragraph/" + count;
 						builder.addType(dataSourceId, paragraphURI, namespace + "Paragraph");
 					}
+					
 
 					builder.addContainer(dataSourceId, root, count, paragraphURI);
 					builder.addValue(dataSourceId, paragraphURI, 1, para.getText());
