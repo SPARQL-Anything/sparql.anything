@@ -99,7 +99,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	@Override
 	public boolean addType(String dataSourceId, String containerId, String typeId) {
 		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(),
-				container2node(typeId));
+				NodeFactory.createURI(typeId));
 	}
 
 	@Override

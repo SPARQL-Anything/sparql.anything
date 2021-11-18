@@ -95,15 +95,15 @@ public class AbstractTriplifierTester {
 
 	protected void inspect(){
 		logger.debug("{} (inspect)", name.getMethodName());
-		if(logger.isWarnEnabled()) {
+		if(logger.isDebugEnabled()) {
 			ExtendedIterator<Triple> it = expected.find();
 			while (it.hasNext()) {
 				Triple t = it.next();
 				logger.trace("E>> {}", t);
 
 				if(!result.contains(t)){
-					logger.warn("{} not found in result", t);
-					logger.warn("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),  t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI():"");
+					logger.debug("{} not found in result", t);
+					logger.debug("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),  t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI():"");
 				}
 			}
 			it = result.find();
@@ -111,8 +111,8 @@ public class AbstractTriplifierTester {
 				Triple t = it.next();
 				logger.trace("<<R {}", t);
 				if(!expected.contains(t)){
-					logger.warn("{} not found in expected", t);
-					logger.warn("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),  t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI():"");
+					logger.debug("{} not found in expected", t);
+					logger.debug("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),  t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI():"");
 				}
 			}
 		}
