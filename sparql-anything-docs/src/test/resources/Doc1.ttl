@@ -1,9 +1,15 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix fx: <http://sparql.xyz/facade-x/ns/> .
 
-<http://www.example.org/document> rdf:_1 """Title 1
-Paragraph1
-Paragraph2
-Title 2
-Paragraph3
-""" ; a fx:root .
+<http://www.example.org/document>
+        a       <http://sparql.xyz/facade-x/ns/root> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "Title 1" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                "Paragraph1" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                "Paragraph2" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
+                "Title 2" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5>
+                "Paragraph3" .

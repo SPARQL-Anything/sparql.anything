@@ -39,6 +39,8 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.Triplifier;
@@ -47,6 +49,8 @@ public class DocxTriplifier implements Triplifier {
 
 	public final static String MERGE_PARAGRAPHS = "docs.merge-paragraphs";
 	public final static String TABLE_HEADERS = "docs.table-headers";
+
+	private static final Logger logger = LoggerFactory.getLogger(DocxTriplifier.class);
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
@@ -68,7 +72,7 @@ public class DocxTriplifier implements Triplifier {
 			List<XWPFParagraph> paragraphs = document.getParagraphs();
 
 			int count = 1;
-			if (mergeParagraphs) {
+			if (!mergeParagraphs) {
 				for (XWPFParagraph para : paragraphs) {
 					builder.addValue(dataSourceId, root, count,
 							NodeFactory.createLiteral(para.getText(), XSDDatatype.XSDstring));
