@@ -71,11 +71,25 @@ public class DocxTriplifier implements Triplifier {
 		try (XWPFDocument document = new XWPFDocument(is)) {
 			List<XWPFParagraph> paragraphs = document.getParagraphs();
 
+			builder.addType(dataSourceId, root, namespace + "Document");
+
 			int count = 1;
 			if (!mergeParagraphs) {
 				for (XWPFParagraph para : paragraphs) {
-					builder.addValue(dataSourceId, root, count,
-							NodeFactory.createLiteral(para.getText(), XSDDatatype.XSDstring));
+					logger.trace("Paragraph {} {}", count, para.getText());
+					String paragraphURI;
+					if (para.getStyle() != null) {
+						paragraphURI = namespace + Triplifier.toSafeURIString(para.getStyle()) + "/" + count;
+						builder.addType(dataSourceId, paragraphURI,
+								namespace + Triplifier.toSafeURIString(para.getStyle()));
+					} else {
+						paragraphURI = namespace + "paragraph/" + count;
+						builder.addType(dataSourceId, paragraphURI, namespace + "Paragraph");
+					}
+
+					builder.addContainer(dataSourceId, root, count, paragraphURI);
+					builder.addValue(dataSourceId, paragraphURI, 1, para.getText());
+
 					count++;
 				}
 
