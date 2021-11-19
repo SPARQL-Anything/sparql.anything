@@ -95,7 +95,7 @@ public class CSVTriplifier implements Triplifier {
 		log.debug("Use headers: {}", headers);
 		Reader in = null;
 		
-		String dataSourceId = url.toString();
+		String dataSourceId = Triplifier.getRootArgument(properties, url); // url.toString();
 		String containerRowPrefix = url.toString() + "#row";
 		// Add type Root
 		builder.addRoot(dataSourceId, root);
