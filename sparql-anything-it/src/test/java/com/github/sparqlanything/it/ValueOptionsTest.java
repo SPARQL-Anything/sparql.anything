@@ -40,11 +40,15 @@ public class ValueOptionsTest extends AbstractTriplifierTester {
 		if(name.getMethodName().equals("testTrimStringsTrue")){
 			properties.setProperty("blank-nodes", "true");
 			properties.setProperty("trim-strings", "true");
-//			properties.setProperty("csv.headers", "true");
 		}else if(name.getMethodName().equals("testTrimStringsFalse")){
 			properties.setProperty("blank-nodes", "true");
-//			properties.setProperty("csv.headers", "true");
 			properties.setProperty("trim-strings", "false");
+		}else if(name.getMethodName().equals("testNullStringsTrue")){
+			properties.setProperty("blank-nodes", "true");
+			properties.setProperty("null-strings", "true");
+		}else if(name.getMethodName().equals("testNullStringsFalse")){
+			properties.setProperty("blank-nodes", "true");
+			properties.setProperty("null-strings", "false");
 		}
 	}
 
@@ -62,4 +66,18 @@ public class ValueOptionsTest extends AbstractTriplifierTester {
 		assertResultIsIsomorphicWithExpected();
 	}
 
+
+	@Test
+	public void testNullStringsTrue(){
+//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
+//		ModelFactory.createModelForGraph(result).write(System.err, "TTL");
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testNullStringsFalse(){
+//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
+//		ModelFactory.createModelForGraph(result).write(System.err, "TTL");
+		assertResultIsIsomorphicWithExpected();
+	}
 }

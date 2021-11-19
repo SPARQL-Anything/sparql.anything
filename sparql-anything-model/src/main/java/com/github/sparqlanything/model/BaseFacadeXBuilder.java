@@ -45,6 +45,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	protected final String p_namespace;
 	protected final String p_root;
 	protected final boolean p_trim_strings;
+	protected final boolean p_null_strings;
 
 	public BaseFacadeXBuilder(String resourceId, Properties properties) {
 		this(resourceId, DatasetGraphFactory.create(), properties);
@@ -56,6 +57,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 		this.datasetGraph = ds;
 		this.p_blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		this.p_trim_strings = Triplifier.getTrimStringsArgument(properties);
+		this.p_null_strings = Triplifier.getNullStringsArgument(properties);
 		this.p_namespace = Triplifier.getNamespaceArgument(properties);
 		this.p_root = Triplifier.getRootArgument(properties, resourceId);
 	}
@@ -72,6 +74,11 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
+
+		if(p_null_strings && object.isLiteral() && object.getLiteral().toString().length() == 0){
+			return false;
+		}
+
 		Triple t = new Triple(subject, predicate, object);
 		if (datasetGraph.getGraph(graph).contains(t)) {
 			return false;
@@ -157,6 +164,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 			if(p_trim_strings && value instanceof String){
 				value = ((String)value).trim();
 			}
+
 			return ResourceFactory.createTypedLiteral(value).asNode();
 		}
 	}
