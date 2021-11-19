@@ -56,7 +56,7 @@ public class CSVTriplifier implements Triplifier {
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException{
 
 		URL url = Triplifier.getLocation(properties);
-
+		log.debug("Location: {}", url);
 		if (url == null)
 			return DatasetGraphFactory.create();
 
@@ -92,6 +92,7 @@ public class CSVTriplifier implements Triplifier {
 					properties.getProperty(PROPERTY_HEADERS));
 			headers = false;
 		}
+		log.debug("Use headers: {}", headers);
 		Reader in = null;
 		
 		String dataSourceId = url.toString();
@@ -107,9 +108,12 @@ public class CSVTriplifier implements Triplifier {
 			int rown = 0;
 			LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
 			Iterator<CSVRecord> recordIterator = records.iterator();
+			log.debug("Iterating records");
 			while (recordIterator.hasNext()) {
+				log.trace(" > record {}", rown);
 				// Header
 				if (headers && rown == 0) {
+					log.trace(" > is headers {}", rown);
 					CSVRecord record = recordIterator.next();
 					Iterator<String> columns = record.iterator();
 					int colid = 0;
@@ -130,6 +134,7 @@ public class CSVTriplifier implements Triplifier {
 				}
 				// Data
 				if (recordIterator.hasNext()) {
+					log.trace(" > is data {}", rown);
 					// Rows
 					rown++;
 					String rowContainerId = containerRowPrefix + rown;
@@ -139,6 +144,7 @@ public class CSVTriplifier implements Triplifier {
 					int cellid = 0;
 					while (cells.hasNext()) {
 						String value = cells.next();
+						log.trace(" > > row {} cell {} is <{}>", rown, cellid, value);
 						cellid++;
 						if (headers && headers_map.containsKey(cellid)) {
 							String colname = URLEncodedUtils.formatSegments(headers_map.get(cellid)).substring(1);
@@ -153,6 +159,7 @@ public class CSVTriplifier implements Triplifier {
 					}
 				}
 			}
+			log.debug("{} records", rown);
 		} catch (IllegalArgumentException e) {
 			log.error("{} :: {}", e.getMessage(), url);
 			throw new IOException(e);
