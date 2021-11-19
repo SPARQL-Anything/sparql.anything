@@ -74,6 +74,14 @@ public interface Triplifier {
 		return blank_nodes;
 	}
 
+	static boolean getTrimStringsArgument(Properties properties) {
+		boolean trim_strings = false;
+		if (properties.containsKey(IRIArgument.TRIM_STRINGS.toString())) {
+			trim_strings = Boolean.parseBoolean(properties.getProperty(IRIArgument.TRIM_STRINGS.toString()));
+		}
+		return trim_strings;
+	}
+
 	static Charset getCharsetArgument(Properties properties) {
 		Charset charset = null;
 		try {
