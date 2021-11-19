@@ -299,6 +299,7 @@ WHERE {
 |media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml, image/png, text/html, application/octet-stream, application/json, image/jpeg, image/tiff, image/bmp, text/csv, image/vnd.microsoft.icon,text/plain |No value (the media-type will be guessed from the the file extension)|
 |namespace|The namespace prefix for the properties that will be generated.|Any valid namespace prefix.|http://sparql.xyz/facade-x/data/|
 |blank-nodes|It tells sparql.anything to generate blank nodes or not.|true/false|true|
+|trim-strings|It tells sparql.anything to trim string literals.|true/false|false|
 |triplifier|It forces sparql.anything to use a specific triplifier for transforming the data source|A canonical name of a Java class|No value|
 |charset|The charset of the data source.|Any charset.|UTF-8|
 |metadata|It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;  |true/false|false|
