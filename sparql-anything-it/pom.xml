@@ -16,6 +16,13 @@
 			<artifactId>sparql-anything-engine</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-testutils</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 		
 		<dependency>
 			<groupId>junit</groupId>
