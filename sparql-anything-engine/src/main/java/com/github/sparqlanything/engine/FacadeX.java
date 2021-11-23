@@ -141,6 +141,14 @@ public final class FacadeX {
 				ReflectionFunctionFactory.get().makeFunction(String.class, "endsWith"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.endsWith",
 				ReflectionFunctionFactory.get().makeFunction(String.class, "endsWith"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.replace",
+				ReflectionFunctionFactory.get().makeFunction(String.class, "replace"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.strip",
+				ReflectionFunctionFactory.get().makeFunction(String.class, "strip"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.stripLeading",
+				ReflectionFunctionFactory.get().makeFunction(String.class, "stripLeading"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.stripTrailing",
+				ReflectionFunctionFactory.get().makeFunction(String.class, "stripTrailing"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.md5Hex",
 				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "md5Hex"));
 
