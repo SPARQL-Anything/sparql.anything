@@ -43,6 +43,8 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -194,6 +196,25 @@ public class Issues {
 		}
 
 		assertEquals(Sets.newHashSet("b", "d", "c"), slots);
+	}
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/154
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Ignore
+	@Test
+	public void testIssue154() throws URISyntaxException, IOException {
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/e.sparql").toURI(), StandardCharsets.UTF_8);
+		String location = getClass().getClassLoader().getResource("issues/a00002-1036.xml").toURI().toString();
+		Query query = QueryFactory.create(queryStr.replace("%%LOCATION%%", location));
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		// XXX This process never ends!
+		Model rs = QueryExecutionFactory.create(query, ds).execConstruct();
+		rs.write(System.err, "TTL");
 	}
 
 }

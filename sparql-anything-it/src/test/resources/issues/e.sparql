@@ -1,0 +1,24 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX tsub: <http://sparql.xyz/example/tate/topic/>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+CONSTRUCT {
+	?artwork schema:about ?topic .
+	?topic schema:name ?name .
+} WHERE {
+  SERVICE <x-sparql-anything:location=%%LOCATION%%> {
+#	[ a xyz:children; fx:anySlot [a xyz:item; fx:anySlot [ a xyz:id; rdf:_1 ?topicId]; fx:anySlot [ a xyz:name; rdf:_1 ?name ] ] ] .
+#	[ a xyz:children; ?li1 [a xyz:item; ?li2 [ a xyz:id; ?li3 ?topicId]; ?li4 [ a xyz:name; ?li5 ?name ] ] ] .
+	[] a xyz:children; fx:anySlot [a xyz:item; fx:anySlot [ a xyz:id; fx:anySlot ?topicId]; fx:anySlot [ a xyz:name; fx:anySlot ?name ]] .
+#	[] a xyz:children; ?li1 [a xyz:item; ?li2 [ a xyz:id; ?li3 ?topicId]; ?li4 [ a xyz:name; ?li5 ?name ]] .
+	[] a xyz:url; fx:anySlot ?artworkUrl .
+	BIND(IRI(?artworkUrl) as ?artwork) .
+	BIND(IRI(CONCAT(STR(tsub:),STR(?topicId))) AS ?topic) .
+	FILTER (?topicId != xyz:id) .
+	FILTER (?name != xyz:name) .
+	FILTER (?artworkUrl != xyz:url) .
+  }
+}
