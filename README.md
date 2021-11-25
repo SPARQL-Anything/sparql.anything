@@ -300,7 +300,7 @@ WHERE {
 |namespace|The namespace prefix for the properties that will be generated.|Any valid namespace prefix.|http://sparql.xyz/facade-x/data/|
 |blank-nodes|It tells sparql.anything to generate blank nodes or not.|true/false|true|
 |trim-strings|Trim all string literals.|true/false|false|
-|null-strings|Ignore triples with an empty string literal value.|true/false|false|
+|null-string|Do not produce triples where the specificed string would be in the object position of the triple.|any string|not set|
 |triplifier|It forces sparql.anything to use a specific triplifier for transforming the data source|A canonical name of a Java class|No value|
 |charset|The charset of the data source.|Any charset.|UTF-8|
 |metadata|It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;  |true/false|false|

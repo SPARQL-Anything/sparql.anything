@@ -45,10 +45,10 @@ public class ValueOptionsTest extends AbstractTriplifierTester {
 			properties.setProperty("trim-strings", "false");
 		}else if(name.getMethodName().equals("testNullStringsTrue")){
 			properties.setProperty("blank-nodes", "true");
-			properties.setProperty("null-strings", "true");
+			properties.setProperty("null-string", "");
 		}else if(name.getMethodName().equals("testNullStringsFalse")){
 			properties.setProperty("blank-nodes", "true");
-			properties.setProperty("null-strings", "false");
+			//properties.setProperty("null-string", "");
 		}
 	}
 
