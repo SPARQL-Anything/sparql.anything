@@ -28,7 +28,10 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
+import com.github.sparqlanything.model.HTTPHelper; 
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -90,7 +93,7 @@ public class HTMLTriplifier implements Triplifier {
 
 
 		if(properties.containsKey(PROPERTY_BROWSER)){
-			doc = Jsoup.parse(useBrowserToNavigate(url.toString(), properties.getProperty(PROPERTY_BROWSER)));
+			doc = Jsoup.parse(useBrowserToNavigate(url.toString(), properties));
 		} else {
 			doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
 		}
@@ -217,8 +220,20 @@ public class HTMLTriplifier implements Triplifier {
 		}
 	}
 
-	private String useBrowserToNavigate(String url, String browserProperty){
+	private String useBrowserToNavigate(String url, Properties properties){
 		// navigate to the page at url and return the HTML as a string 
+		String browserProperty = properties.getProperty(PROPERTY_BROWSER);
+
+		// first pull out http headers that we need to pass to the browser
+		Map<String,String> props =   new HashMap<String,String>((Map) properties);
+		Map<String,String> headers = new HashMap<String,String>() ;
+		for(Map.Entry<String,String> entry:  props.entrySet()) { 
+			if(entry.getKey().matches("^" + HTTPHelper.HTTPHEADER_PREFIX + ".*")){ // TODO the dots need to be escaped in the regex
+				headers.put(entry.getKey().replaceAll("^" + HTTPHelper.HTTPHEADER_PREFIX,""), entry.getValue()) ;
+			}
+		}
+		log.debug("HTTP headers passed to headless browser: {}", headers);
+
 		Playwright playwright = Playwright.create() ;
 		Browser browser ;
 		switch (browserProperty){
@@ -241,6 +256,7 @@ public class HTMLTriplifier implements Triplifier {
 		}
 		BrowserContext context = browser.newContext() ;
 		Page page = context.newPage() ;
+		page.setExtraHTTPHeaders(headers);
 		page.navigate(url);
 		String htmlFromBrowser = page.content();
 		browser.close();
