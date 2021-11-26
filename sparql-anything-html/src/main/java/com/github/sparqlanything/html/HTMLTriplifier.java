@@ -58,6 +58,7 @@ import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Frame;
 
 import com.github.sparqlanything.model.Triplifier;
 
@@ -258,9 +259,24 @@ public class HTMLTriplifier implements Triplifier {
 		Page page = context.newPage() ;
 		page.setExtraHTTPHeaders(headers);
 		page.navigate(url);
-		String htmlFromBrowser = page.content();
+		String htmlFromBrowser = page.content() + getFrames(page.mainFrame());
+		// ^ TODO it would be better to put the iframes in the right place rather than simply appending them
+		// e.g. with    Frame's    setContent(String html, Frame.SetContentOptions options) 
+		// OR
+		// it might be easier to have useBrowserToNavigate() return a List of strings
+		// so that when we triplify we can return a root node for each iframe + one for the actual page
 		browser.close();
 		return htmlFromBrowser;
+	}
+	private String getFrames(Frame frame){
+		// get the content from all of the iframes
+		String allFramesContent = "" ;
+		if(!frame.childFrames().isEmpty()){
+			for(Frame child: frame.childFrames()){
+				allFramesContent = allFramesContent + child.content() + getFrames(child) ;
+			}
+		}
+		return allFramesContent ;
 	}
 
 	@Override
