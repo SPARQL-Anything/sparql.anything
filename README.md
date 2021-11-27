@@ -315,7 +315,7 @@ WHERE {
 |-|-|-|-|
 |html.selector|A CSS selector that restricts the HTML tags to consider for the triplification.|Any valid CSS selector.|No Value|
 |html.browser|It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](BROWSER.md).|chromium\|webkit\|firefox|No Value|
-|html.browser.wait|When using a browser to nagivate, it tells the triplifer to wait for the specified number of seconds after telling the browser to navigate to the page before attempting to obtain HTML.|any integer|No Value|
+|html.browser.wait|When using a browser to nagivate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML.|any integer|No Value|
 
 </details>
 
