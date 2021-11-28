@@ -61,6 +61,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Frame;
 import com.microsoft.playwright.Page.NavigateOptions;
 import com.microsoft.playwright.options.WaitUntilState;
+import java.nio.file.Paths;
 
 import com.github.sparqlanything.model.Triplifier;
 
@@ -70,6 +71,7 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String PROPERTY_SELECTOR = "html.selector";
 	private static final String PROPERTY_BROWSER = "html.browser";
 	private static final String PROPERTY_BROWSER_WAIT = "html.browser.wait";
+	private static final String PROPERTY_BROWSER_SCREENSHOT = "html.browser.screenshot";
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
@@ -273,8 +275,10 @@ public class HTMLTriplifier implements Triplifier {
 				// sleep before we try to pull the HTML content out the the browser
 				java.util.concurrent.TimeUnit.SECONDS.sleep(seconds);
 			}
-			// page.screenshot(new Page.ScreenshotOptions()
-			// 	.setPath(java.nio.file.Paths.get(new java.net.URI("file:///tmp/screenshot.png"))));
+			if(properties.containsKey(PROPERTY_BROWSER_SCREENSHOT)){
+				page.screenshot(new Page.ScreenshotOptions()
+					.setPath(Paths.get(new URI(properties.getProperty(PROPERTY_BROWSER_SCREENSHOT)))));
+			}
 		} catch (Exception ex){
 			System.out.println(ex) ;
 		}
