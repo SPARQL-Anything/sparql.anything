@@ -149,8 +149,20 @@ public final class FacadeX {
 				ReflectionFunctionFactory.get().makeFunction(String.class, "stripLeading"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.stripTrailing",
 				ReflectionFunctionFactory.get().makeFunction(String.class, "stripTrailing"));
+
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.md2Hex",
+				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "md2Hex"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.md5Hex",
 				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "md5Hex"));
+
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.sha1Hex",
+				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "sha1Hex"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.sha256Hex",
+				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "sha256Hex"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.sha384Hex",
+				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "sha384Hex"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.sha512Hex",
+				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "sha512Hex"));
 
 		try {
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.toLowerCase",
