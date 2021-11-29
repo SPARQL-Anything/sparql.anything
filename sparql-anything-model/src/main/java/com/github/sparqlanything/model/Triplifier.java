@@ -82,12 +82,12 @@ public interface Triplifier {
 		return trim_strings;
 	}
 
-	static boolean getNullStringsArgument(Properties properties) {
-		boolean null_strings = false;
-		if (properties.containsKey(IRIArgument.NULL_STRINGS.toString())) {
-			null_strings = Boolean.parseBoolean(properties.getProperty(IRIArgument.NULL_STRINGS.toString()));
+	static String getNullStringArgument(Properties properties) {
+		String null_string = null;
+		if (properties.containsKey(IRIArgument.NULL_STRING.toString())) {
+			null_string = properties.getProperty(IRIArgument.NULL_STRING.toString());
 		}
-		return null_strings;
+		return null_string;
 	}
 
 	static Charset getCharsetArgument(Properties properties) {

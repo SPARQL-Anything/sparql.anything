@@ -166,7 +166,7 @@ public class HTTPHelper {
         if (properties.containsKey(HTTPFOLLOWREDIRECT)) {
             followRedirect = Boolean.parseBoolean((String) properties.get(HTTPFOLLOWREDIRECT));
         }
-        log.info("Following redirect responses: {}", followRedirect);
+        log.debug("Following redirect responses: {}", followRedirect);
         if(followRedirect){
             builder.setRedirectStrategy(new LaxRedirectStrategy());
         }

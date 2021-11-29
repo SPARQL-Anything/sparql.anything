@@ -227,6 +227,14 @@
 				<version>1.9.4</version>
 			</dependency>
 
+			<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-text</artifactId>
+				<version>1.9</version>
+			</dependency>
+
+
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
@@ -277,7 +285,7 @@
 				<artifactId>json</artifactId>
 				<version>20200518</version>
 			</dependency>
-			<!-- dependency> <groupId>com.jsoniter</groupId> <artifactId>jsoniter</artifactId>
+			<!-- dependency> <groupId>com.jsoniter</groupId> <artifactId>jsoniter</artifactId> 
 				<version>0.9.19</version> </dependency -->
 			<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 			<dependency>

@@ -60,10 +60,9 @@ public class CSVTriplifier implements Triplifier {
 		if (url == null)
 			return DatasetGraphFactory.create();
 
-		// TODO Support all flavour of csv types
 		CSVFormat format;
 		try {
-			format = CSVFormat.valueOf(properties.getProperty(PROPERTY_FORMAT, "DEFAULT"));
+			format = CSVFormat.valueOf(properties.getProperty(PROPERTY_FORMAT, CSVFormat.Predefined.Default.name()));
 		} catch (Exception e) {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;

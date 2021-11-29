@@ -21,7 +21,6 @@
 
 package com.github.sparqlanything.model;
 
-import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -45,7 +44,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	protected final String p_namespace;
 	protected final String p_root;
 	protected final boolean p_trim_strings;
-	protected final boolean p_null_strings;
+	protected final String p_null_string;
 
 	public BaseFacadeXBuilder(String resourceId, Properties properties) {
 		this(resourceId, DatasetGraphFactory.create(), properties);
@@ -57,7 +56,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 		this.datasetGraph = ds;
 		this.p_blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		this.p_trim_strings = Triplifier.getTrimStringsArgument(properties);
-		this.p_null_strings = Triplifier.getNullStringsArgument(properties);
+		this.p_null_string = Triplifier.getNullStringArgument(properties);
 		this.p_namespace = Triplifier.getNamespaceArgument(properties);
 		this.p_root = Triplifier.getRootArgument(properties, resourceId);
 	}
@@ -75,7 +74,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 
-		if(p_null_strings && object.isLiteral() && object.getLiteral().toString().length() == 0){
+		if(p_null_string != null && object.isLiteral() && object.getLiteral().toString().equals(p_null_string)){
 			return false;
 		}
 
