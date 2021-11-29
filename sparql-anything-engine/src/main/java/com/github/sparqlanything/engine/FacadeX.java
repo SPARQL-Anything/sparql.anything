@@ -21,10 +21,8 @@
 
 package com.github.sparqlanything.engine;
 
-import com.github.sparqlanything.engine.functions.*;
-import com.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
-
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.text.WordUtils;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.OpExecutor;
@@ -36,6 +34,14 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.sparqlanything.engine.functions.After;
+import com.github.sparqlanything.engine.functions.Backward;
+import com.github.sparqlanything.engine.functions.Before;
+import com.github.sparqlanything.engine.functions.Forward;
+import com.github.sparqlanything.engine.functions.Next;
+import com.github.sparqlanything.engine.functions.Previous;
+import com.github.sparqlanything.engine.functions.Serial;
+import com.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.rdf.RDFTriplifier;
 
@@ -163,6 +169,17 @@ public final class FacadeX {
 				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "sha384Hex"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.sha512Hex",
 				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "sha512Hex"));
+
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "WordUtils.capitalize",
+				ReflectionFunctionFactory.get().makeFunction(WordUtils.class, "capitalize"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "WordUtils.capitalizeFully",
+				ReflectionFunctionFactory.get().makeFunction(WordUtils.class, "capitalizeFully"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "WordUtils.initials",
+				ReflectionFunctionFactory.get().makeFunction(WordUtils.class, "initials"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "WordUtils.swapCase",
+				ReflectionFunctionFactory.get().makeFunction(WordUtils.class, "swapCase"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "WordUtils.uncapitalize",
+				ReflectionFunctionFactory.get().makeFunction(WordUtils.class, "uncapitalize"));
 
 		try {
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.toLowerCase",

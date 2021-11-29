@@ -24,6 +24,7 @@ package com.github.sparqlanything.engine.test;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.text.WordUtils;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
@@ -299,5 +300,14 @@ public class FunctionsTest {
 		testStringFunction("fx:DigestUtils.sha256Hex", DigestUtils.sha256Hex("test"), "test");
 		testStringFunction("fx:DigestUtils.sha384Hex", DigestUtils.sha384Hex("test"), "test");
 		testStringFunction("fx:DigestUtils.sha512Hex", DigestUtils.sha512Hex("test"), "test");
+	}
+	
+	@Test
+	public void testWordUtilsFunctions() {
+		testStringFunction("fx:WordUtils.capitalizeFully", WordUtils.capitalizeFully("test"), "test");
+		testStringFunction("fx:WordUtils.capitalize", WordUtils.capitalize("test"), "test");
+		testStringFunction("fx:WordUtils.initials", WordUtils.initials("test"), "test");
+		testStringFunction("fx:WordUtils.swapCase", WordUtils.swapCase("swapCase"), "swapCase");
+		testStringFunction("fx:WordUtils.uncapitalize", WordUtils.uncapitalize("TEST"), "TEST");
 	}
 }
