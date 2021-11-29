@@ -17,7 +17,7 @@ Container members are a combination of key-value pairs, where keys are either RD
 Instead, values can be either RDF literals or other containers.
 This is a generic example of a Facade-X data object (more examples below):
 
-```
+```turtle
 @prefix fx: <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -36,7 +36,7 @@ SPARQL Anything extends the Apache Jena ARQ processors by *overloading* the SERV
 
 Suppose having this JSON file as input (also available at ``https://sparql-anything.cc/example1.json``)
 
-```
+```json
 [
    {
       "name":"Friends",
@@ -80,7 +80,7 @@ Suppose having this JSON file as input (also available at ``https://sparql-anyth
 
 With SPARQL Anything you can select the TV series starring "Courteney Cox" with the SPARQL query
 
-```
+```sparql
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
@@ -245,7 +245,7 @@ In this case sparql.anything guesses the data source type from the file extensio
 
 Alternatively, options can be provided as basic graph pattern inside the SERVICE clause as follows
 
-```
+```sparql
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
@@ -271,7 +271,7 @@ Note that
 
 You can also mix the two modalities as follows.
 
-```
+```sparql
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
@@ -532,7 +532,7 @@ SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 Daga, Enrico; Asprino, Luigi; Mulholland, Paul and Gangemi, Aldo (2021). Facade-X: An Opinionated Approach to SPARQL Anything. In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume 53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
 
 DOI: https://doi.org/10.3233/ssw210035 | [PDF](http://oro.open.ac.uk/78973/1/78973.pdf)
-```
+```bibtex
 @incollection{oro78973,
           volume = {53},
            month = {August},
