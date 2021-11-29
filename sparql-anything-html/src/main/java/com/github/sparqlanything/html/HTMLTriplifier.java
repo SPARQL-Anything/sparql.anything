@@ -58,6 +58,10 @@ import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Frame;
+import com.microsoft.playwright.Page.NavigateOptions;
+import com.microsoft.playwright.options.WaitUntilState;
+import java.nio.file.Paths;
 
 import com.github.sparqlanything.model.Triplifier;
 
@@ -66,6 +70,8 @@ public class HTMLTriplifier implements Triplifier {
 	private static final Logger log = LoggerFactory.getLogger(HTMLTriplifier.class);
 	private static final String PROPERTY_SELECTOR = "html.selector";
 	private static final String PROPERTY_BROWSER = "html.browser";
+	private static final String PROPERTY_BROWSER_WAIT = "html.browser.wait";
+	private static final String PROPERTY_BROWSER_SCREENSHOT = "html.browser.screenshot";
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
@@ -257,10 +263,44 @@ public class HTMLTriplifier implements Triplifier {
 		BrowserContext context = browser.newContext() ;
 		Page page = context.newPage() ;
 		page.setExtraHTTPHeaders(headers);
+		Page.NavigateOptions options = new Page.NavigateOptions() ;
+		// options.setWaitUntil(WaitUntilState.NETWORKIDLE);
+		// options.setWaitUntil(WaitUntilState.LOAD);
+		// page.navigate(url,options);
 		page.navigate(url);
-		String htmlFromBrowser = page.content();
+		try{
+			if(properties.containsKey(PROPERTY_BROWSER_WAIT)){
+				Integer seconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_WAIT));
+				log.debug("headless browser navigated to url and now we wait for {} seconds...", seconds);
+				// sleep before we try to pull the HTML content out the the browser
+				java.util.concurrent.TimeUnit.SECONDS.sleep(seconds);
+			}
+			if(properties.containsKey(PROPERTY_BROWSER_SCREENSHOT)){
+				page.screenshot(new Page.ScreenshotOptions()
+					.setPath(Paths.get(new URI(properties.getProperty(PROPERTY_BROWSER_SCREENSHOT)))));
+			}
+		} catch (Exception ex){
+			System.out.println(ex) ;
+		}
+		String htmlFromBrowser = page.content() + getFrames(page.mainFrame());
+		// ^ TODO it would be better to put the iframes in the right place rather than simply appending them
+		// e.g. with    Frame's    setContent(String html, Frame.SetContentOptions options) 
+		// OR
+		// it might be easier to have useBrowserToNavigate() return a List of strings
+		// so that when we triplify we can return a root node for each iframe + one for the actual page
 		browser.close();
+		log.debug("HTML content: {}", htmlFromBrowser);
 		return htmlFromBrowser;
+	}
+	private String getFrames(Frame frame){
+		// get the content from all of the iframes
+		String allFramesContent = "" ;
+		if(!frame.childFrames().isEmpty()){
+			for(Frame child: frame.childFrames()){
+				allFramesContent = allFramesContent + child.content() + getFrames(child) ;
+			}
+		}
+		return allFramesContent ;
 	}
 
 	@Override
