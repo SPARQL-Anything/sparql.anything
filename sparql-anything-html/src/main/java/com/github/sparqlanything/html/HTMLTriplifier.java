@@ -72,6 +72,7 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String PROPERTY_BROWSER = "html.browser";
 	private static final String PROPERTY_BROWSER_WAIT = "html.browser.wait";
 	private static final String PROPERTY_BROWSER_SCREENSHOT = "html.browser.screenshot";
+	private static final String PROPERTY_BROWSER_TIMEOUT = "html.browser.timeout";
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
@@ -266,14 +267,20 @@ public class HTMLTriplifier implements Triplifier {
 		Page.NavigateOptions options = new Page.NavigateOptions() ;
 		// options.setWaitUntil(WaitUntilState.NETWORKIDLE);
 		// options.setWaitUntil(WaitUntilState.LOAD);
-		// page.navigate(url,options);
-		page.navigate(url);
+		if(properties.containsKey(PROPERTY_BROWSER_TIMEOUT)){
+			Integer timeoutMilliseconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_TIMEOUT));
+			log.debug("headless browser navigatng to url with timeout of {} milliseconds...", timeoutMilliseconds);
+			options.setTimeout(timeoutMilliseconds);
+			page.navigate(url,options);
+		}else{
+			page.navigate(url);
+		}
 		try{
 			if(properties.containsKey(PROPERTY_BROWSER_WAIT)){
-				Integer seconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_WAIT));
-				log.debug("headless browser navigated to url and now we wait for {} seconds...", seconds);
+				Integer waitSeconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_WAIT));
+				log.debug("headless browser navigated to url and now will wait for {} seconds...", waitSeconds);
 				// sleep before we try to pull the HTML content out the the browser
-				java.util.concurrent.TimeUnit.SECONDS.sleep(seconds);
+				java.util.concurrent.TimeUnit.SECONDS.sleep(waitSeconds);
 			}
 			if(properties.containsKey(PROPERTY_BROWSER_SCREENSHOT)){
 				page.screenshot(new Page.ScreenshotOptions()
