@@ -16,7 +16,7 @@ Follow these steps (in a bash shell) to build and run the docker container:
 Once you see Fuseki listening on port 3000 you can run this query (in a bash shell) to see if SPARQL Anything is working:
 
 ```sparql
-curl --silent 'http://localhost:3000/sparql.anything'  \
+curl 'http://localhost:3000/sparql.anything'  \
 -H 'Accept: text/turtle' \
 --data-urlencode 'query=
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
