@@ -269,7 +269,7 @@ public class HTMLTriplifier implements Triplifier {
 		// options.setWaitUntil(WaitUntilState.LOAD);
 		if(properties.containsKey(PROPERTY_BROWSER_TIMEOUT)){
 			Integer timeoutMilliseconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_TIMEOUT));
-			log.debug("headless browser navigatng to url with timeout of {} milliseconds...", timeoutMilliseconds);
+			log.debug("headless browser navigating to url with timeout of {} milliseconds", timeoutMilliseconds);
 			options.setTimeout(timeoutMilliseconds);
 			page.navigate(url,options);
 		}else{
