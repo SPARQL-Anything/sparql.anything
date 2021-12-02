@@ -15,10 +15,12 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
+ENV VERSION "0.6.0-SNAPSHOT"
+
 # normal
 CMD cd /app && mvn clean install && \
     java -cp \
-    "/app/sparql-anything-fuseki/target/sparql-anything-server-0.5.0-SNAPSHOT.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
+    "/app/sparql-anything-fuseki/target/sparql-anything-server-${VERSION}.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
     com.github.sparqlanything.fuseki.Endpoint
 
 # TODO don't bake the version numbers in here
@@ -28,5 +30,5 @@ CMD cd /app && mvn clean install && \
 #     java -Dorg.slf4j.simpleLogger.defaultLogLevel=info \
 #     -Dorg.slf4j.simpleLogger.log.com.github.sparqlanything=trace \
 #     -agentlib:jdwp=transport=dt_socket,server=y,address=9091,suspend=n \
-#     -cp "/app/sparql-anything-fuseki/target/sparql-anything-server-0.5.0-SNAPSHOT.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
+#     -cp "/app/sparql-anything-fuseki/target/sparql-anything-server-${VERSION}.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
 #     com.github.sparqlanything.fuseki.Endpoint
