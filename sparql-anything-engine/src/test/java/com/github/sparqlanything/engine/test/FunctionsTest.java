@@ -310,4 +310,36 @@ public class FunctionsTest {
 		testStringFunction("fx:WordUtils.swapCase", WordUtils.swapCase("swapCase"), "swapCase");
 		testStringFunction("fx:WordUtils.uncapitalize", WordUtils.uncapitalize("TEST"), "TEST");
 	}
+
+	public void execTestEntityFunction(String expectedResult, String... str) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("" +
+				"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
+				"SELECT ?result WHERE {" + "BIND( fx:entity ( ");
+		boolean first = true;
+		for(String s: str){
+			if(first){
+				first = false;
+			}else{
+				sb.append(",");
+			}
+			sb.append(s);
+		}
+		sb.append(") as ?result)" + "}");
+		String q = sb.toString();
+		ResultSet result = execute(q);
+		assertEquals(expectedResult, result.next().get("result").asResource().getURI());
+	}
+
+	@Test
+	public void testEntityFunction(){
+		execTestEntityFunction("http://sparql.xyz/facade-x/ns/type/position/1",
+			"fx:" , "\"type/\"", "\"position\"", "\"/\"", "1"
+		);
+
+		execTestEntityFunction("http://www.example.org/type/person/enrico",
+				"<http://www.example.org/>" , "\"type/\"", "\"person\"", "\"/\"", "\"enrico\"^^xsd:string"
+		);
+	}
 }
