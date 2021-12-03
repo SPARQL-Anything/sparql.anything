@@ -314,6 +314,7 @@ public class FunctionsTest {
 	public void execTestEntityFunction(String expectedResult, String... str) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("" +
+				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
 				"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
 				"SELECT ?result WHERE {" + "BIND( fx:entity ( ");
@@ -340,6 +341,10 @@ public class FunctionsTest {
 
 		execTestEntityFunction("http://www.example.org/type/person/enrico",
 				"<http://www.example.org/>" , "\"type/\"", "\"person\"", "\"/\"", "\"enrico\"^^xsd:string"
+		);
+
+		execTestEntityFunction("http://www.example.org/1/10#100",
+				"<http://www.example.org/>" , "rdf:_1", "\"/\"", "rdf:_10", "\"#\"", "\"100\"^^xsd:int"
 		);
 	}
 }
