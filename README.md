@@ -115,7 +115,7 @@ By default, these formats are triplified as follows.
 
 |Input|Triplification|
 |---|---|
-|<pre>{<br>  "stringArg":"stringValue",<br>  "intArg":1,<br>  "booleanArg":true,<br>  "nullArg": null,<br>  "arr":[0,1]<br>}</pre> | <pre>@prefix xyz:    &lt;http://sparql.xyz/facade-x/data/&gt; .<br>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .<br>@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .<br>[  <br>  xyz:arr         [  <br>                   rdf:_1  "0"^^xsd:int ;<br>                   rdf:_2  "1"^^xsd:int<br>                 ] ;<br>  xyz:booleanArg  true ;<br>  xyz:intArg      "1"^^xsd:int ;<br>  xyz:stringArg   "stringValue"<br>] .</pre> |
+|<pre>{<br>  "stringArg":"stringValue",<br>  "intArg":1,<br>  "booleanArg":true,<br>  "nullArg": null,<br>  "arr":[0,1]<br>}</pre> | <pre>@prefix xyz:    &lt;http://sparql.xyz/facade-x/data/&gt; .<br>@prefix fx:   &lt;http://sparql.xyz/facade-x/ns/&gt; .<br/>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .<br>@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .<br>[ fx:root ; <br>  xyz:arr         [  <br>                   rdf:_1  "0"^^xsd:int ;<br>                   rdf:_2  "1"^^xsd:int<br>                 ] ;<br>  xyz:booleanArg  true ;<br>  xyz:intArg      "1"^^xsd:int ;<br>  xyz:stringArg   "stringValue"<br>] .</pre> |
 
 
 
