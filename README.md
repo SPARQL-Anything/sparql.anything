@@ -21,7 +21,7 @@ This is a generic example of a Facade-X data object (more examples below):
 @prefix fx: <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-[] a fx:Root ; rdf:_1 [
+[] a fx:root ; rdf:_1 [
     xyz:someKey "some value" ;
     rdf:_1 "another value with unspecified key" ;
     rdf:_2 [
