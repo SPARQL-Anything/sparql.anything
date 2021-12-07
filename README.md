@@ -223,7 +223,7 @@ By default, these formats are triplified as follows.
 
 ## IRI schema and triplification options
 
-sparql.anything will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
+SPARQL Anything will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
 
 ### Passing triplification options via SERVICE URI
 
