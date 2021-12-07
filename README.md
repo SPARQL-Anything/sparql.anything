@@ -227,7 +227,7 @@ SPARQL Anything will act as a virtual endpoint that can be queried exactly as a 
 
 ### Passing triplification options via SERVICE URI
 
-In order to instruct the query processor to delegate the execution to facade-x, you can use the  following URI-schema within SERVICE clauses.
+In order to instruct the query processor to delegate the execution to SPARQL Anything, you can use the  following URI-schema within SERVICE clauses.
 
 ```
 x-sparql-anything ':' ([option] ('=' [value])? ','?)+
