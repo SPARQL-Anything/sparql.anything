@@ -284,7 +284,7 @@ WHERE {
         fx:properties fx:location "https://sparql-anything.cc/example1.json" .
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
-        ?star ?li "Courteney Cox" .
+        ?star fx:anySlot "Courteney Cox" .
     }
 
 }
