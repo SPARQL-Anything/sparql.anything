@@ -107,8 +107,7 @@ and get this result without caring of transforming JSON to RDF.
 
 
 ## Supported Formats
-Currently, the system supports the following formats: "json", "html", "xml", "csv", "yaml", "md", "bib", "bin", "png","jpeg","jpg","bmp","tiff","tif", "ico", "txt" ... but the possibilities are limitless!
-
+Currently, SPARQL Anything supports the following list of formats but the possibilities are limitless!
 By default, these formats are triplified as follows.
 
 <details><summary>JSON</summary>
