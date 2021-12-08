@@ -224,9 +224,9 @@ By default, these formats are triplified as follows.
 
 SPARQL Anything will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
 
-### Passing triplification options via SERVICE URI
+### Passing triplification options via SERVICE IRI
 
-In order to instruct the query processor to delegate the execution to SPARQL Anything, you can use the  following URI-schema within SERVICE clauses.
+In order to instruct the query processor to delegate the execution to SPARQL Anything, you can use the  following IRI-schema within SERVICE clauses.
 
 ```
 x-sparql-anything ':' ([option] ('=' [value])? ','?)+
@@ -238,7 +238,7 @@ A minimal URI that uses only the resource locator is also possible.
 x-sparql-anything ':' URL
 ```
 
-In this case sparql.anything guesses the data source type from the file extension.
+In this case SPARQL Anything guesses the data source type from the file extension.
 
 
 ### Passing triplification options via Basic Graph Pattern
@@ -265,7 +265,7 @@ WHERE {
 
 Note that
 
-1. The SERVICE URI scheme must be ``x-sparql-anything:``.
+1. The SERVICE IRI scheme must be ``x-sparql-anything:``.
 2. Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the SERVICE clause.
 3. Such triples must have ``fx:properties`` as subject, ``fx:[OPTION-NAME]`` as predicate, and a literal or a variable as object.
 
