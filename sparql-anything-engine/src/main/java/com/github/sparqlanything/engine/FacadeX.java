@@ -39,6 +39,9 @@ import com.github.sparqlanything.engine.functions.reflection.ReflectionFunctionF
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.rdf.RDFTriplifier;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 public final class FacadeX {
 
 	private static final Logger log = LoggerFactory.getLogger(FacadeX.class);
@@ -183,6 +186,13 @@ public final class FacadeX {
 					ReflectionFunctionFactory.get().makeFunction(String.class.getMethod("toUpperCase")));
 		} catch (NoSuchMethodException e) {
 			throw new RuntimeException(e);
+		}
+
+		try {
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "URLEncoder.encode", ReflectionFunctionFactory.get().makeFunction(URLEncoder.class.getMethod("encode", String.class, String.class)));
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "URLDecoder.decode", ReflectionFunctionFactory.get().makeFunction(URLDecoder.class.getMethod("decode", String.class, String.class)));
+		} catch (NoSuchMethodException e) {
+			log.error("",e);
 		}
 
 		log.trace("Enabling function `serial`");
