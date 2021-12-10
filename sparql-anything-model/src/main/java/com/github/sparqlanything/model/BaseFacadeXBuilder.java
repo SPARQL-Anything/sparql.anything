@@ -26,6 +26,7 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.tdb2.TDB2Factory;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
@@ -47,13 +48,39 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	protected final String p_null_string;
 
 	public BaseFacadeXBuilder(String resourceId, Properties properties) {
-		this(resourceId, DatasetGraphFactory.create(), properties);
+		// this(resourceId, DatasetGraphFactory.create(), properties);
+		// this(resourceId, getDatasetGraph(), properties);
+		this(resourceId, null, properties);
+	}
+
+	public static DatasetGraph getDatasetGraph(Properties properties){
+		log.debug("using TBD2");
+		// return TDB2Factory.createDataset().asDatasetGraph(); // only for testing (it is slow)
+		return TDB2Factory.connectDataset("/tmp/thetdb2").asDatasetGraph();
+		//returnDatasetGraphFactory.create() ;
 	}
 
 	protected BaseFacadeXBuilder(String resourceId, DatasetGraph ds, Properties properties) {
 		this.properties = properties;
 		this.mainGraphName = NodeFactory.createURI(resourceId);
-		this.datasetGraph = ds;
+		if(ds == null){
+			log.debug("ds was null");
+			this.datasetGraph = BaseFacadeXBuilder.getDatasetGraph(properties);
+		} else {
+			log.debug("ds was not null: " + ds);
+			log.debug("ignoring it");
+			this.datasetGraph = BaseFacadeXBuilder.getDatasetGraph(properties);
+			log.debug("datasetGraph is now:" + datasetGraph);
+			// this.datasetGraph = ds;
+		}
+
+		// the single place to begin txn?
+		if(this.datasetGraph.supportsTransactions() && !this.datasetGraph.isInTransaction()){
+			log.debug("begin big txn");
+			// startedTransactionHere = true ;
+			this.datasetGraph.begin();
+		}
+
 		this.p_blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		this.p_trim_strings = Triplifier.getTrimStringsArgument(properties);
 		this.p_null_string = Triplifier.getNullStringArgument(properties);
@@ -78,11 +105,19 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 			return false;
 		}
 
+		if(datasetGraph.supportsTransactions()){
+			log.debug("begin txn");
+			datasetGraph.begin();
+		}
 		Triple t = new Triple(subject, predicate, object);
 		if (datasetGraph.getGraph(graph).contains(t)) {
 			return false;
 		}
 		datasetGraph.getGraph(graph).add(t);
+		if(datasetGraph.supportsTransactions()){
+			log.debug("end txn");
+			datasetGraph.end();
+		}
 		return true;
 	}
 
@@ -179,8 +214,9 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 
 	@Override
 	public DatasetGraph getDatasetGraph() {
-		datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
+		// datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
 		return datasetGraph;
+		// return datasetGraph.getUnionGraph() ;
 	}
 
 	/**

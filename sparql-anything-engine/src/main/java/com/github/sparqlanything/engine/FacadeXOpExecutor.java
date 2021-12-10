@@ -37,6 +37,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.tdb2.TDB2Factory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
@@ -153,11 +154,21 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		if (t == null) {
 			logger.trace("No triplifier");
+            // return TDB2Factory.createDataset().asDatasetGraph();
+			// maybe we don't need TDB2s for all these throw away graphs
 			return DatasetGraphFactory.create();
 		}
 
 		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op.toString());
 		dg = triplify(op, p, t);
+		// after triplification commit and end the txn
+		if(dg.supportsTransactions()){
+			logger.debug("triplification done -- commiting and ending txn");
+			dg.commit();
+			dg.end();
+		}
+		// TODO after triplification should we end the (write) txn?
+		//   and maybe being another one for reading
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
 			URL url = Triplifier.instantiateURL(urlLocation);
@@ -169,7 +180,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 			logger.debug("Graph added to in-memory cache");
 		}
-		logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
+		// TODO wrap this in a txn
+		// logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
 
 //		else {
 //			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
@@ -305,7 +317,19 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.error("No triplifier available for the input format!");
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
+
+		boolean startedTransactionHere = false ;
+		if(dg.supportsTransactions() && !dg.isInTransaction()){
+			logger.debug("begin txn"); // TODO logger here  and log elsewhere
+			startedTransactionHere = true ;
+			dg.begin();
+		}
+		logger.trace("union graph size {}",dg.getUnionGraph().size());
 		logger.trace("Default graph size {}",dg.getDefaultGraph().size());
+		if(startedTransactionHere){
+			logger.debug("end txn");
+			dg.end();
+		}
 		return dg;
 	}
 
@@ -510,6 +534,16 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
+		// i think we can consider this the start of the query and therefore the read txn
+		boolean startedTransactionHere = false ;
+		if(this.execCxt.getDataset().supportsTransactions() && ! this.execCxt.getDataset().isInTransaction()){
+			logger.debug("begin txn"); // TODO logger here  and log elsewhere
+			startedTransactionHere = true ;
+			this.execCxt.getDataset().begin();
+			// dg.begin();
+		}
+		// TODO where to end the read txn it?
+
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
 				this.execCxt.getDataset().getDefaultGraph().size());

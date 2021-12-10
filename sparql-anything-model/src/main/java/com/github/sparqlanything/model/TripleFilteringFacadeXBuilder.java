@@ -177,10 +177,25 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
+		boolean startedTransactionHere = false ;
+		if(datasetGraph.supportsTransactions() && datasetGraph.isInTransaction()){
+			log.debug("commiting and ending current txn");
+			datasetGraph.commit();
+			datasetGraph.end();
+			log.debug("begin new txn");
+			startedTransactionHere = true ;
+			datasetGraph.begin();
+		}
+		// log.debug("meh1: " + datasetGraph.getGraph(graph));
+		// log.debug("meh2: " + datasetGraph.getGraph(graph).class());
 		if (match(graph, subject, predicate, object)) {
 			datasetGraph.getGraph(graph).add(new Triple(subject, predicate, object));
 			return true;
 		}
+		// if(datasetGraph.supportsTransactions() && startedTransactionHere){
+		// 	log.debug("end txn");
+		// 	datasetGraph.end();
+		// }
 		return false;
 	}
 
