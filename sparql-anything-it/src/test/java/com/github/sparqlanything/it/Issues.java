@@ -286,7 +286,6 @@ public class Issues {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	@Ignore
 	@Test
 	public void testIssue173() throws URISyntaxException, IOException {
 		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue173-1.sparql").toURI(),
@@ -295,10 +294,10 @@ public class Issues {
 				StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr2, ds).execSelect()));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr2, ds).execSelect()));
 		assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
-		assertTrue(QueryExecutionFactory.create(queryStr2, ds).execSelect().hasNext());
+		assertFalse(QueryExecutionFactory.create(queryStr2, ds).execSelect().hasNext());
 	}
 
 }
