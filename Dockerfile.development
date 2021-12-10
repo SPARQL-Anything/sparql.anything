@@ -18,7 +18,7 @@ ENV LC_ALL en_US.UTF-8
 # normal
 CMD cd /app && mvn clean install && \
     java -cp \
-    "/app/sparql-anything-fuseki/target/sparql-anything-server-0.5.0-SNAPSHOT.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
+    "/app/sparql-anything-fuseki/target/sparql-anything-server-0.5.1.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
     com.github.sparqlanything.fuseki.Endpoint
 
 # TODO don't bake the version numbers in here
