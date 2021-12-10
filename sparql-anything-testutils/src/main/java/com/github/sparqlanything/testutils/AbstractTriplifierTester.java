@@ -40,7 +40,9 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.junit.Before;
 import org.junit.Rule;
@@ -110,8 +112,8 @@ public class AbstractTriplifierTester {
 			expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString())
 					.getGraph();
 		} else {
-			expectedDatasetGraph = RDFDataMgr
-					.loadDatasetGraph(getClass().getClassLoader().getResource(rdfFileName).toURI().toString());
+			expectedDatasetGraph = replaceLocation(RDFDataMgr
+					.loadDatasetGraph(getClass().getClassLoader().getResource(rdfFileName).toURI().toString()));
 		}
 
 	}
@@ -209,7 +211,7 @@ public class AbstractTriplifierTester {
 
 			if (printWholeGraph) {
 				ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
-				RDFDataMgr.write(baosExpected, this.expectedDatasetGraph, Lang.NQ);
+				RDFDataMgr.write(baosExpected, replaceLocation(this.expectedDatasetGraph), Lang.NQ);
 				ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
 				RDFDataMgr.write(baosResult, this.resultDatasetGraph, Lang.NQ);
 				logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nResult\n\n{}", baosExpected.toString(),
@@ -240,16 +242,7 @@ public class AbstractTriplifierTester {
 			Iterator<Node> it = this.expectedDatasetGraph.listGraphNodes();
 			Set<String> expectedGraphUris = new HashSet<>();
 			while (it.hasNext()) {
-				String uri = it.next().getURI();
-				if (uri.equals(locationUriGraph)) {
-					try {
-						uri = url.toURI().toString();
-					} catch (URISyntaxException e) {
-						e.printStackTrace();
-					}
-				}
-				expectedGraphUris.add(uri);
-
+				expectedGraphUris.add(it.next().getURI());
 			}
 
 			it = this.resultDatasetGraph.listGraphNodes();
@@ -266,20 +259,30 @@ public class AbstractTriplifierTester {
 			it = this.expectedDatasetGraph.listGraphNodes();
 			while (it.hasNext()) {
 				Node g = (Node) it.next();
-				if (g.getURI().equals(locationUriGraph)) {
-					try {
-						assertTrue(resultDatasetGraph.containsGraph(NodeFactory.createURI(url.toURI().toString())));
-						assertTrue(expectedDatasetGraph.getGraph(g).isIsomorphicWith(
-								this.resultDatasetGraph.getGraph(NodeFactory.createURI(url.toURI().toString()))));
-					} catch (URISyntaxException e) {
-						e.printStackTrace();
-					}
-				} else {
-					assertTrue(resultDatasetGraph.containsGraph(g));
-					assertTrue(expectedDatasetGraph.getGraph(g).isIsomorphicWith(this.resultDatasetGraph.getGraph(g)));
-				}
+				assertTrue(resultDatasetGraph.containsGraph(g));
+				assertTrue(expectedDatasetGraph.getGraph(g).isIsomorphicWith(this.resultDatasetGraph.getGraph(g)));
 			}
 		}
+	}
+
+	private DatasetGraph replaceLocation(DatasetGraph g) {
+		DatasetGraph dg = DatasetGraphFactory.create();
+		g.find().forEachRemaining(q -> {
+			dg.add(new Quad(resolveNode(q.getGraph()), new Triple(resolveNode(q.getSubject()),
+					resolveNode(q.getPredicate()), resolveNode(q.getObject()))));
+		});
+		return dg;
+	}
+
+	private Node resolveNode(Node n) {
+		if (n.isURI() && n.getURI().equals("location")) {
+			try {
+				return NodeFactory.createURI(url.toURI().toString());
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
+		return n;
 	}
 
 }
