@@ -21,15 +21,15 @@
 
 package com.github.sparqlanything.engine.functions;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase;
 import org.apache.jena.sparql.function.FunctionEnv;
 import org.apache.jena.sparql.util.Symbol;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Serial extends FunctionBase {
 	private static final Symbol SYMBOL = Symbol.create("com.github.sparqlanything.engine.functions.Serial_SYMBOL");

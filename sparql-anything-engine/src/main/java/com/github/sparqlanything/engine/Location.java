@@ -21,16 +21,17 @@
 
 package com.github.sparqlanything.engine;
 
-import com.github.sparqlanything.model.HTTPHelper;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
+
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.sparqlanything.model.HTTPHelper;
 
 public class Location {
     private static final Logger log = LoggerFactory.getLogger(Location.class);

@@ -1,0 +1,16 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX ex: <http://example.org/>
+SELECT ?authorString ?titleString
+WHERE {
+  SERVICE<x-sparql-anything:%%LOCATION%%> {     
+    ?book a xyz:book .
+    ?book fx:anySlot ?authorTag .
+    ?authorTag a xyz:author .
+    ?authorTag rdf:_1 ?authorString .
+    ?book fx:anySlot ?titleTag .
+    ?titleTag a xyz:title .
+    ?titleTag rdf:_1 ?titleString .
+  }
+}

@@ -305,7 +305,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.error("No triplifier available for the input format!");
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
-		logger.trace("Default graph size {}",dg.getDefaultGraph().size());
+		logger.trace("Default graph size {}", dg.getDefaultGraph().size());
 		return dg;
 	}
 
@@ -504,7 +504,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	protected QueryIterator execute(final OpPath s, QueryIterator input) {
 //		logger.trace("Execute OpPath {} {}", s.toString(), Utils.queryIteratorToString( super.execute(s, input)));
 		logger.trace("Execute OpPath {} ", s.toString());
-		
+
 		return super.execute(s, input);
 
 	}
