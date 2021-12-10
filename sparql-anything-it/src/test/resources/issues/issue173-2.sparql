@@ -1,0 +1,13 @@
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+select *
+WHERE {
+fx:properties fx:location "https://sparql-anything.cc/example1.json" .
+{
+    [] xyz:genres [ ?p ?o ]
+}
+union
+{
+    [] xyz:stars [ ?p ?o ]
+}
+}

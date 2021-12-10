@@ -48,6 +48,7 @@ import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -276,6 +277,27 @@ public class Issues {
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 //		assertFalse(QueryExecutionFactory.create(query, ds).execSelect().next());
 		assertFalse(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
+		assertTrue(QueryExecutionFactory.create(queryStr2, ds).execSelect().hasNext());
+	}
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/173
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Ignore
+	@Test
+	public void testIssue173() throws URISyntaxException, IOException {
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue173-1.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		String queryStr2 = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue173-2.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr2, ds).execSelect()));
+		assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
 		assertTrue(QueryExecutionFactory.create(queryStr2, ds).execSelect().hasNext());
 	}
 
