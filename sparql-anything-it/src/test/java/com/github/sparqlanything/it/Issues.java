@@ -195,7 +195,7 @@ public class Issues {
 			}
 		}
 
-		assertEquals(Sets.newHashSet("b", "d", "c"), slots);
+		assertEquals(Sets.newHashSet( "d", "c"), slots);
 	}
 
 	/**
@@ -204,10 +204,10 @@ public class Issues {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	@Ignore
 	@Test
 	public void testIssue154() throws URISyntaxException, IOException {
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/e.sparql").toURI(), StandardCharsets.UTF_8);
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/e.sparql").toURI(),
+				StandardCharsets.UTF_8);
 		String location = getClass().getClassLoader().getResource("issues/a00002-1036.xml").toURI().toString();
 		Query query = QueryFactory.create(queryStr.replace("%%LOCATION%%", location));
 		Dataset ds = DatasetFactory.createGeneral();
