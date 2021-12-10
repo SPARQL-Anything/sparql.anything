@@ -558,7 +558,7 @@ public class ItTest {
 			}
 		}
 
-		assertEquals(Sets.newHashSet( "d", "c"), slots);
+		assertEquals(Sets.newHashSet("d", "c"), slots);
 
 	}
 
