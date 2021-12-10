@@ -190,8 +190,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 			try {
 				Properties p = getProperties(opService.getService().getURI(), opService);
 				DatasetGraph dg = getDatasetGraph(p, opService.getSubOp());
-				return QC.execute(opService.getSubOp(), input,
+				FacadeXExecutionContext ec = new FacadeXExecutionContext(
 						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+				return QC.execute(opService.getSubOp(), input, ec);
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
 					| IllegalAccessException | InvocationTargetException | NoSuchMethodException
 					| ClassNotFoundException e) {
@@ -510,6 +511,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
+		
+		if(this.execCxt.getClass()!=FacadeXExecutionContext.class) {
+			return super.execute(opBGP, input);
+		}
+		
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
 				this.execCxt.getDataset().getDefaultGraph().size());
