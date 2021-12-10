@@ -21,6 +21,7 @@
 
 package com.github.sparqlanything.testutils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -235,6 +236,7 @@ public class AbstractTriplifierTester {
 			assertTrue(this.result.isIsomorphicWith(expected));
 		} else {
 			Iterator<Node> it = this.expectedDatasetGraph.listGraphNodes();
+			assertEquals(this.expectedDatasetGraph.size(), this.resultDatasetGraph.size());
 			while (it.hasNext()) {
 				Node g = (Node) it.next();
 				assertTrue(resultDatasetGraph.containsGraph(g));
