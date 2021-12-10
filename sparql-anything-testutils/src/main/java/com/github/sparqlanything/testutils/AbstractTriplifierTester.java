@@ -28,8 +28,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -68,6 +70,7 @@ public class AbstractTriplifierTester {
 	private boolean useDatasetGraph = false;
 
 	private String expectedExtension;
+	private static final String locationUriGraph = "location";
 
 	public AbstractTriplifierTester(Triplifier t, Properties p, String extension, String expectedExtension) {
 		this.triplifier = t;
@@ -235,11 +238,46 @@ public class AbstractTriplifierTester {
 			assertTrue(this.result.isIsomorphicWith(expected));
 		} else {
 			Iterator<Node> it = this.expectedDatasetGraph.listGraphNodes();
-			assertEquals(this.expectedDatasetGraph.size(), this.resultDatasetGraph.size());
+			Set<String> expectedGraphUris = new HashSet<>();
+			while (it.hasNext()) {
+				String uri = it.next().getURI();
+				if (uri.equals(locationUriGraph)) {
+					try {
+						uri = url.toURI().toString();
+					} catch (URISyntaxException e) {
+						e.printStackTrace();
+					}
+				}
+				expectedGraphUris.add(uri);
+
+			}
+
+			it = this.resultDatasetGraph.listGraphNodes();
+			Set<String> resultGraphUris = new HashSet<>();
+
+			while (it.hasNext()) {
+				resultGraphUris.add(it.next().getURI());
+			}
+
+			assertTrue((this.expectedDatasetGraph.getDefaultGraph()
+					.isIsomorphicWith(this.resultDatasetGraph.getDefaultGraph())));
+			assertEquals(expectedGraphUris, resultGraphUris);
+
+			it = this.expectedDatasetGraph.listGraphNodes();
 			while (it.hasNext()) {
 				Node g = (Node) it.next();
-				assertTrue(resultDatasetGraph.containsGraph(g));
-				assertTrue(expectedDatasetGraph.getGraph(g).isIsomorphicWith(this.resultDatasetGraph.getGraph(g)));
+				if (g.getURI().equals(locationUriGraph)) {
+					try {
+						assertTrue(resultDatasetGraph.containsGraph(NodeFactory.createURI(url.toURI().toString())));
+						assertTrue(expectedDatasetGraph.getGraph(g).isIsomorphicWith(
+								this.resultDatasetGraph.getGraph(NodeFactory.createURI(url.toURI().toString()))));
+					} catch (URISyntaxException e) {
+						e.printStackTrace();
+					}
+				} else {
+					assertTrue(resultDatasetGraph.containsGraph(g));
+					assertTrue(expectedDatasetGraph.getGraph(g).isIsomorphicWith(this.resultDatasetGraph.getGraph(g)));
+				}
 			}
 		}
 	}
