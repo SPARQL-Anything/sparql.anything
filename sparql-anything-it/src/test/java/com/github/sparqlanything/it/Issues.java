@@ -22,6 +22,7 @@
 package com.github.sparqlanything.it;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -46,6 +47,7 @@ import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -255,6 +257,25 @@ public class Issues {
 
 		assertEquals(expectedResult, actualResult);
 
+	}
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/175
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Ignore
+	@Test
+	public void testIssue175() throws URISyntaxException, IOException {
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue175.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		Query query = QueryFactory.create(queryStr);
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		assertFalse(QueryExecutionFactory.create(query, ds).execSelect().next());
+		assertFalse(QueryExecutionFactory.create(query, ds).execSelect().hasNext());
 	}
 
 }
