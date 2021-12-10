@@ -21,14 +21,23 @@
 
 package com.github.sparqlanything.testutils;
 
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
-import com.github.sparqlanything.model.Triplifier;
-import com.github.sparqlanything.model.TriplifierHTTPException;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Properties;
+
 import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.junit.Before;
 import org.junit.Rule;
@@ -36,13 +45,9 @@ import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Properties;
-
-import static org.junit.Assert.assertTrue;
+import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 
 public class AbstractTriplifierTester {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractTriplifierTester.class);
@@ -55,12 +60,26 @@ public class AbstractTriplifierTester {
 	protected Graph result;
 	protected Graph expected;
 
-	private boolean printWholeGraph = false;
+	protected DatasetGraph expectedDatasetGraph;
+	protected DatasetGraph resultDatasetGraph;
 
-	public AbstractTriplifierTester(Triplifier t, Properties p, String extension) {
+	private boolean printWholeGraph = false;
+	private boolean useDatasetGraph = false;
+
+	private String expectedExtension;
+
+	public AbstractTriplifierTester(Triplifier t, Properties p, String extension, String expectedExtension) {
 		this.triplifier = t;
 		this.properties = p;
 		this.extension = extension;
+		this.expectedExtension = expectedExtension;
+		if (expectedExtension.equals("nq")) {
+			useDatasetGraph = true;
+		}
+	}
+
+	public AbstractTriplifierTester(Triplifier t, Properties p, String extension) {
+		this(t, p, extension, "ttl");
 	}
 
 	public void setPrintWholeGraph(boolean printWholeGraph) {
@@ -82,9 +101,16 @@ public class AbstractTriplifierTester {
 		properties.setProperty("root", "http://www.example.org/document");
 		//
 		// RDF file name
-		String rdfFileName = name.getMethodName().substring(4) + ".ttl";
-		expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString())
-				.getGraph();
+		String rdfFileName = name.getMethodName().substring(4) + "." + expectedExtension;
+		System.out.println(rdfFileName);
+		if (!useDatasetGraph) {
+			expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString())
+					.getGraph();
+		} else {
+			expectedDatasetGraph = RDFDataMgr
+					.loadDatasetGraph(getClass().getClassLoader().getResource(rdfFileName).toURI().toString());
+		}
+
 	}
 
 	protected void properties(Properties properties) {
@@ -105,44 +131,88 @@ public class AbstractTriplifierTester {
 
 	protected void inspect() {
 		logger.debug("{} (inspect)", name.getMethodName());
-		if (logger.isDebugEnabled()) {
-			ExtendedIterator<Triple> it = expected.find();
-			while (it.hasNext()) {
-				Triple t = it.next();
-				logger.trace("E>> {}", t);
+		if (!useDatasetGraph) {
+			if (logger.isDebugEnabled()) {
+				ExtendedIterator<Triple> it = expected.find();
+				while (it.hasNext()) {
+					Triple t = it.next();
+					logger.trace("E>> {}", t);
 
-				if (!result.contains(t)) {
-					logger.debug("{} not found in result", t);
-					logger.debug("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
-							t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
-							(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
-									? t.getObject().getLiteralDatatypeURI()
-									: "");
+					if (!result.contains(t)) {
+						logger.debug("{} not found in result", t);
+						logger.debug("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
+								t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
+								(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
+										? t.getObject().getLiteralDatatypeURI()
+										: "");
+					}
+				}
+				it = result.find();
+				while (it.hasNext()) {
+					Triple t = it.next();
+					logger.trace("<<R {}", t);
+					if (!expected.contains(t)) {
+						logger.debug("{} not found in expected", t);
+						logger.debug("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
+								t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
+								(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
+										? t.getObject().getLiteralDatatypeURI()
+										: "");
+					}
 				}
 			}
-			it = result.find();
-			while (it.hasNext()) {
-				Triple t = it.next();
-				logger.trace("<<R {}", t);
-				if (!expected.contains(t)) {
-					logger.debug("{} not found in expected", t);
-					logger.debug("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
-							t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
-							(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
-									? t.getObject().getLiteralDatatypeURI()
-									: "");
+
+			if (printWholeGraph) {
+				ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
+				RDFDataMgr.write(baosExpected, this.expected, Lang.TTL);
+				ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
+				RDFDataMgr.write(baosResult, this.result, Lang.TTL);
+				logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nResult\n\n{}", baosExpected.toString(),
+						baosResult.toString());
+
+			}
+		} else {
+			if (logger.isDebugEnabled()) {
+				Iterator<Quad> it = this.expectedDatasetGraph.find();
+				while (it.hasNext()) {
+					Quad q = it.next();
+					logger.trace("E>> {}", q);
+
+					if (!resultDatasetGraph.contains(q)) {
+						logger.debug("{} not found in result", q);
+						logger.debug("(T) {} {} {} {} {}", q.getSubject().getClass().getSimpleName(),
+								q.getPredicate().getClass().getSimpleName(), q.getObject().getClass().getSimpleName(),
+								(q.getObject().isLiteral() && q.getObject().getLiteralDatatypeURI() != null)
+										? q.getObject().getLiteralDatatypeURI()
+										: "",
+								q.getGraph().getClass().getSimpleName());
+					}
+				}
+				it = this.resultDatasetGraph.find();
+				while (it.hasNext()) {
+					Quad t = it.next();
+					logger.trace("<<R {}", t);
+					if (!expectedDatasetGraph.contains(t)) {
+						logger.debug("{} not found in expected", t);
+						logger.debug("(T) {} {} {} {} {}", t.getSubject().getClass().getSimpleName(),
+								t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
+								(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
+										? t.getObject().getLiteralDatatypeURI()
+										: "",
+								t.getGraph().getClass().getSimpleName());
+					}
 				}
 			}
-		}
 
-		if (printWholeGraph) {
-			ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
-			RDFDataMgr.write(baosExpected, this.expected, Lang.TTL);
-			ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
-			RDFDataMgr.write(baosResult, this.result, Lang.TTL);
-			logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nResult\n\n{}", baosExpected.toString(),
-					baosResult.toString());
+			if (printWholeGraph) {
+				ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
+				RDFDataMgr.write(baosExpected, this.expectedDatasetGraph, Lang.NQ);
+				ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
+				RDFDataMgr.write(baosResult, this.resultDatasetGraph, Lang.NQ);
+				logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nResult\n\n{}", baosExpected.toString(),
+						baosResult.toString());
 
+			}
 		}
 	}
 
@@ -151,12 +221,26 @@ public class AbstractTriplifierTester {
 		logger.info("{}", properties);
 		String graphName = Triplifier.getRootArgument(properties, url);
 		logger.debug("Graph name: {}", graphName);
-		this.result = triplifier.triplify(properties, new BaseFacadeXBuilder(graphName, properties))
-				.getGraph(NodeFactory.createURI(graphName));
+
+		if (!useDatasetGraph) {
+			this.result = triplifier.triplify(properties, new BaseFacadeXBuilder(graphName, properties))
+					.getGraph(NodeFactory.createURI(graphName));
+		} else {
+			this.resultDatasetGraph = triplifier.triplify(properties, new BaseFacadeXBuilder(graphName, properties));
+		}
 	}
 
 	protected void assertResultIsIsomorphicWithExpected() {
-		assertTrue(this.result.isIsomorphicWith(expected));
+		if (!useDatasetGraph) {
+			assertTrue(this.result.isIsomorphicWith(expected));
+		} else {
+			Iterator<Node> it = this.expectedDatasetGraph.listGraphNodes();
+			while (it.hasNext()) {
+				Node g = (Node) it.next();
+				assertTrue(resultDatasetGraph.containsGraph(g));
+				assertTrue(expectedDatasetGraph.getGraph(g).isIsomorphicWith(this.resultDatasetGraph.getGraph(g)));
+			}
+		}
 	}
 
 }
