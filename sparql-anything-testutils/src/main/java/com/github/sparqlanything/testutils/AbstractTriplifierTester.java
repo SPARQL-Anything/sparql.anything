@@ -103,7 +103,6 @@ public class AbstractTriplifierTester {
 		//
 		// RDF file name
 		String rdfFileName = name.getMethodName().substring(4) + "." + expectedExtension;
-		System.out.println(rdfFileName);
 		if (!useDatasetGraph) {
 			expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString())
 					.getGraph();
