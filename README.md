@@ -318,6 +318,7 @@ WHERE {
 |html.browser.timeout|When using a browser to nagivate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout. |any integer|30000|
 |html.browser.wait|When using a browser to nagivate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML.|any integer|No Value|
 |html.browser.screenshot|When using a browser to nagivate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here.|a file URI e.g. "file:///tmp/screenshot.png" |No Value|
+|html.metadata|It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. (cf. #164)|true/false|false|
 
 </details>
 
