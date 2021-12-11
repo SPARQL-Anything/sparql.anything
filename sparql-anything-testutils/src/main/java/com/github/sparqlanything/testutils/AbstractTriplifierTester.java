@@ -42,7 +42,6 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
-import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.junit.Before;
 import org.junit.Rule;
@@ -60,7 +59,7 @@ public class AbstractTriplifierTester {
 	protected Triplifier triplifier;
 	protected Properties properties;
 	protected URL url;
-	private String extension = null;
+	protected String extension = null;
 
 	protected Graph result;
 	protected Graph expected;
@@ -69,9 +68,9 @@ public class AbstractTriplifierTester {
 	protected DatasetGraph resultDatasetGraph;
 
 	private boolean printWholeGraph = false;
-	private boolean useDatasetGraph = false;
+	protected boolean useDatasetGraph = false;
 
-	private String expectedExtension;
+	protected String expectedExtension;
 	private static final String locationUriGraph = "location";
 
 	public AbstractTriplifierTester(Triplifier t, Properties p, String extension, String expectedExtension) {
@@ -95,7 +94,7 @@ public class AbstractTriplifierTester {
 	@Rule
 	public TestName name = new TestName();
 
-	private void prepare() throws URISyntaxException {
+	protected void prepare() throws URISyntaxException {
 		logger.debug("{} (prepare)", name.getMethodName());
 		// Root is Document
 		String fileName = name.getMethodName().substring(4) + "." + extension;
@@ -265,7 +264,7 @@ public class AbstractTriplifierTester {
 		}
 	}
 
-	private DatasetGraph replaceLocation(DatasetGraph g) {
+	protected DatasetGraph replaceLocation(DatasetGraph g) {
 		DatasetGraph dg = DatasetGraphFactory.create();
 		g.find().forEachRemaining(q -> {
 			dg.add(new Quad(resolveNode(q.getGraph()), new Triple(resolveNode(q.getSubject()),
@@ -275,7 +274,7 @@ public class AbstractTriplifierTester {
 	}
 
 	private Node resolveNode(Node n) {
-		if (n.isURI() && n.getURI().equals("location")) {
+		if (n.isURI() && n.getURI().equals(locationUriGraph)) {
 			try {
 				return NodeFactory.createURI(url.toURI().toString());
 			} catch (URISyntaxException e) {
