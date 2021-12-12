@@ -68,6 +68,7 @@ import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.Symbol;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
+import org.apache.jena.query.TxnType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -163,7 +164,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		dg = triplify(op, p, t);
 		// after triplification commit and end the txn
 		if(dg.supportsTransactions()){
-			logger.debug("triplification done -- commiting and ending txn");
+			logger.debug("triplification done -- commiting and ending the big write txn");
 			dg.commit();
 			dg.end();
 		}
@@ -320,14 +321,14 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		boolean startedTransactionHere = false ;
 		if(dg.supportsTransactions() && !dg.isInTransaction()){
-			logger.debug("begin txn"); // TODO logger here  and log elsewhere
+			logger.debug("begin small read txn"); // TODO logger here  and log elsewhere
 			startedTransactionHere = true ;
-			dg.begin();
+			dg.begin(TxnType.READ);
 		}
 		logger.trace("union graph size {}",dg.getUnionGraph().size());
 		logger.trace("Default graph size {}",dg.getDefaultGraph().size());
 		if(startedTransactionHere){
-			logger.debug("end txn");
+			logger.debug("end small read txn");
 			dg.end();
 		}
 		return dg;
@@ -537,10 +538,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 		// i think we can consider this the start of the query and therefore the read txn
 		boolean startedTransactionHere = false ;
 		if(this.execCxt.getDataset().supportsTransactions() && ! this.execCxt.getDataset().isInTransaction()){
-			logger.debug("begin txn"); // TODO logger here  and log elsewhere
+			logger.debug("begin big read txn"); // TODO logger here  and log elsewhere
 			startedTransactionHere = true ;
-			this.execCxt.getDataset().begin();
-			// dg.begin();
+			this.execCxt.getDataset().begin(TxnType.READ);
 		}
 		// TODO where to end the read txn it?
 

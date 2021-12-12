@@ -31,11 +31,16 @@ import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.io.FileUtils;
+import org.apache.jena.query.TxnType;
 
 import java.net.URI;
+import java.io.File;
 import java.util.Properties;
 
 public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
+	private static final String PROPERTY_TDB2_NEW = "tdb2.new";
+	private static final String PROPERTY_TDB2 = "tdb2";
 	protected static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilder.class);
 	protected final Properties properties;
 	protected final Node mainGraphName;
@@ -46,6 +51,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	protected final String p_root;
 	protected final boolean p_trim_strings;
 	protected final String p_null_string;
+	protected static String currentTDB2Path = "";
 
 	public BaseFacadeXBuilder(String resourceId, Properties properties) {
 		// this(resourceId, DatasetGraphFactory.create(), properties);
@@ -54,10 +60,40 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	}
 
 	public static DatasetGraph getDatasetGraph(Properties properties){
-		log.debug("using TBD2");
+		DatasetGraph dsg;
+		String TDB2Path = "" ;
+		boolean TDB2 = properties.containsKey(PROPERTY_TDB2); // TODO assumes "true"
+		boolean TDB2New = properties.containsKey(PROPERTY_TDB2_NEW); // TODO assumes "true"
+		// boolean TDB2New = properties.getProperty(PROPERTY_TDB2_NEW).equals("true");
 		// return TDB2Factory.createDataset().asDatasetGraph(); // only for testing (it is slow)
-		return TDB2Factory.connectDataset("/tmp/thetdb2").asDatasetGraph();
-		//returnDatasetGraphFactory.create() ;
+		// try{
+		// 	FileUtils.deleteDirectory(new File("/tmp/thetdb2/")) ;
+		// } catch (Exception ex){
+		// 	log.error(ex.toString());
+		// }
+		if(TDB2){
+			if(BaseFacadeXBuilder.currentTDB2Path != "" && !TDB2New){
+				TDB2Path = currentTDB2Path ;
+			}else{
+				try{
+					TDB2Path = java.nio.file.Files.createTempDirectory("").toString();
+					BaseFacadeXBuilder.currentTDB2Path = TDB2Path;
+				}catch(Exception ex){
+					log.error(ex.toString());
+				}
+			}
+			log.debug("using on disk TBD2 at: {}", TDB2Path);
+			dsg = TDB2Factory.connectDataset(TDB2Path).asDatasetGraph();
+			if(dsg.isInTransaction()){
+				// if we are reusing the same TDB2 then this will be true so
+				// end the read txn from the previous query
+				dsg.end();
+			}
+		}else{
+			log.debug("using in memory DatasetGraph");
+			dsg = DatasetGraphFactory.create() ;
+		}
+		return dsg;
 	}
 
 	protected BaseFacadeXBuilder(String resourceId, DatasetGraph ds, Properties properties) {
@@ -68,17 +104,17 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 			this.datasetGraph = BaseFacadeXBuilder.getDatasetGraph(properties);
 		} else {
 			log.debug("ds was not null: " + ds);
-			log.debug("ignoring it");
+			log.debug("ignoring it"); // TODO i don't think we have to have this case anymore
 			this.datasetGraph = BaseFacadeXBuilder.getDatasetGraph(properties);
-			log.debug("datasetGraph is now:" + datasetGraph);
+			// log.debug("datasetGraph is now:" + datasetGraph);
 			// this.datasetGraph = ds;
 		}
 
 		// the single place to begin txn?
 		if(this.datasetGraph.supportsTransactions() && !this.datasetGraph.isInTransaction()){
-			log.debug("begin big txn");
+			log.debug("begin big write txn");
 			// startedTransactionHere = true ;
-			this.datasetGraph.begin();
+			this.datasetGraph.begin(TxnType.WRITE);
 		}
 
 		this.p_blank_nodes = Triplifier.getBlankNodeArgument(properties);

@@ -104,7 +104,10 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 	}
 
 	public TripleFilteringFacadeXBuilder(String resourceId, Op op, Properties properties) {
-		this(resourceId, op, DatasetGraphFactory.create(), properties);
+		// this(resourceId, op, DatasetGraphFactory.create(), properties);
+		// don't make a DatasetGraph here -- instead let BaseFacadeXBuilder do all the DatasetGraph
+		// making
+		this(resourceId, op, null, properties);
 //        this(resourceId, op, DatasetGraphFactory.createTxnMem(), properties);
 	}
 //
@@ -178,14 +181,14 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 		boolean startedTransactionHere = false ;
-		if(datasetGraph.supportsTransactions() && datasetGraph.isInTransaction()){
-			log.debug("commiting and ending current txn");
-			datasetGraph.commit();
-			datasetGraph.end();
-			log.debug("begin new txn");
-			startedTransactionHere = true ;
-			datasetGraph.begin();
-		}
+		// if(datasetGraph.supportsTransactions() && datasetGraph.isInTransaction()){
+		// 	log.debug("commiting and ending current txn");
+		// 	datasetGraph.commit();
+		// 	datasetGraph.end();
+		// 	log.debug("begin new txn");
+		// 	startedTransactionHere = true ;
+		// 	datasetGraph.begin();
+		// }
 		// log.debug("meh1: " + datasetGraph.getGraph(graph));
 		// log.debug("meh2: " + datasetGraph.getGraph(graph).class());
 		if (match(graph, subject, predicate, object)) {
