@@ -318,6 +318,7 @@ WHERE {
 |html.browser.timeout|When using a browser to nagivate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout. |any integer|30000|
 |html.browser.wait|When using a browser to nagivate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML.|any integer|No Value|
 |html.browser.screenshot|When using a browser to nagivate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here.|a file URI e.g. "file:///tmp/screenshot.png" |No Value|
+|html.metadata|It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. (cf. #164)|true/false|false|
 
 </details>
 
@@ -462,6 +463,13 @@ The system supports the following functions operating on strings that are URLs (
 Additional functions:
 
 - `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.
+- `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).
+```
+BIND ( fx:entity ( myns:, "dummy-entity", 1) AS ?myentity) 
+# is equivalent to
+BIND ( IRI( CONCAT ( STR (myns:), "dummy-entity", STR(1) ) AS ?myentity )
+```
+See also https://github.com/SPARQL-Anything/sparql.anything/issues/106
 
 ## Download and Usage
 

@@ -1,40 +1,48 @@
 /*
- * Copyright (c) 2021 Enrico Daga @ http://www.enridaga.net
+ * Copyright (c) 2021 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 
 package com.github.sparqlanything.html;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
 
-import com.github.sparqlanything.model.HTTPHelper; 
-import com.github.sparqlanything.model.TriplifierHTTPException;
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import org.apache.any23.Any23;
+import org.apache.any23.extractor.ExtractionException;
+import org.apache.any23.http.HTTPClient;
+import org.apache.any23.source.DocumentSource;
+import org.apache.any23.source.HTTPDocumentSource;
+import org.apache.any23.writer.NTriplesWriter;
+import org.apache.any23.writer.TripleHandler;
+import org.apache.any23.writer.TripleHandlerException;
 import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 //import org.apache.jena.graph.NodeFactory;
 //import org.apache.jena.query.DatasetFactory;
 //import org.apache.jena.rdf.model.AnonId;
@@ -54,22 +62,23 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.microsoft.playwright.Playwright;
+
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.HTTPHelper;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Frame;
-import com.microsoft.playwright.Page.NavigateOptions;
-import com.microsoft.playwright.options.WaitUntilState;
-import java.nio.file.Paths;
-
-import com.github.sparqlanything.model.Triplifier;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
 
 public class HTMLTriplifier implements Triplifier {
 
 	private static final Logger log = LoggerFactory.getLogger(HTMLTriplifier.class);
 	private static final String PROPERTY_SELECTOR = "html.selector";
 	private static final String PROPERTY_BROWSER = "html.browser";
+	public static final String PROPERTY_METADATA = "html.metadata";
 	private static final String PROPERTY_BROWSER_WAIT = "html.browser.wait";
 	private static final String PROPERTY_BROWSER_SCREENSHOT = "html.browser.screenshot";
 	private static final String PROPERTY_BROWSER_TIMEOUT = "html.browser.timeout";
@@ -77,13 +86,13 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
+			throws IOException, TriplifierHTTPException {
 
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
 			return DatasetGraphFactory.create();
-
 
 		String root = Triplifier.getRootArgument(properties, url);
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -92,14 +101,24 @@ public class HTMLTriplifier implements Triplifier {
 
 		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
 
+		log.trace(properties.toString());
+		if (properties.containsKey(PROPERTY_METADATA)
+				&& Boolean.parseBoolean(properties.getProperty(PROPERTY_METADATA))) {
+			log.trace("Extracting metadata");
+			try {
+				extractMetadata(url, properties, builder);
+			} catch (IOException | URISyntaxException | ExtractionException | TripleHandlerException e) {
+				e.printStackTrace();
+			}
+		}
+
 		log.trace("namespace {}\n root {}\ncharset {}\nselector {}", namespace, root, charset, selector);
 
 		Document doc;
 		// If location is a http or https, raise exception if status is not 200
 		log.debug("Loading URL: {}", url);
 
-
-		if(properties.containsKey(PROPERTY_BROWSER)){
+		if (properties.containsKey(PROPERTY_BROWSER)) {
 			doc = Jsoup.parse(useBrowserToNavigate(url.toString(), properties));
 		} else {
 			doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
@@ -142,10 +161,25 @@ public class HTMLTriplifier implements Triplifier {
 //		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
 //		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
 //		return dg;
+
 		return builder.getDatasetGraph();
 	}
 
-	private void populate(FacadeXGraphBuilder builder, String dataSourceId, Element element, boolean blank_nodes, String namespace) throws URISyntaxException {
+	private void extractMetadata(URL url, Properties properties, FacadeXGraphBuilder builder)
+			throws IOException, URISyntaxException, ExtractionException, TripleHandlerException {
+		Any23 runner = new Any23();
+		runner.setHTTPUserAgent("test-user-agent");
+		DocumentSource source = runner.createDocumentSource(url.toString());
+		TripleHandler handler = new MetadataWriter(builder);
+		try {
+			runner.extract(source, handler);
+		} finally {
+			handler.close();
+		}
+	}
+
+	private void populate(FacadeXGraphBuilder builder, String dataSourceId, Element element, boolean blank_nodes,
+			String namespace) throws URISyntaxException {
 
 		String tagName = element.tagName(); // tagname is the type
 //		Resource resource = toResource(model, element, blank_nodes, namespace);
@@ -161,7 +195,7 @@ public class HTMLTriplifier implements Triplifier {
 //			resource.addProperty(ResourceFactory.createProperty(DOM_NS + "innerText"), innerText);
 		}
 //		resource.addProperty(RDF.type, ResourceFactory.createResource(HTML_NS + tagName));
-		builder.addType(dataSourceId,resourceId, new URI(HTML_NS + tagName));
+		builder.addType(dataSourceId, resourceId, new URI(HTML_NS + tagName));
 		// attributes
 		for (Attribute attribute : element.attributes()) {
 			String key = attribute.getKey();
@@ -178,7 +212,7 @@ public class HTMLTriplifier implements Triplifier {
 			counter++;
 			if (child instanceof Element) {
 //				resource.addProperty(RDF.li(counter), toResource(model, (Element) child, blank_nodes, namespace));
-				builder.addContainer(dataSourceId, resourceId, counter, toResourceId((Element)  child, blank_nodes));
+				builder.addContainer(dataSourceId, resourceId, counter, toResourceId((Element) child, blank_nodes));
 				populate(builder, dataSourceId, (Element) child, blank_nodes, namespace);
 			} else {
 //				resource.addProperty(RDF.li(counter), child.outerHtml());
@@ -227,87 +261,91 @@ public class HTMLTriplifier implements Triplifier {
 		}
 	}
 
-	private String useBrowserToNavigate(String url, Properties properties){
-		// navigate to the page at url and return the HTML as a string 
+	private String useBrowserToNavigate(String url, Properties properties) {
+		// navigate to the page at url and return the HTML as a string
 		String browserProperty = properties.getProperty(PROPERTY_BROWSER);
 
 		// first pull out http headers that we need to pass to the browser
-		Map<String,String> props =   new HashMap<String,String>((Map) properties);
-		Map<String,String> headers = new HashMap<String,String>() ;
-		for(Map.Entry<String,String> entry:  props.entrySet()) { 
-			if(entry.getKey().matches("^" + HTTPHelper.HTTPHEADER_PREFIX + ".*")){ // TODO the dots need to be escaped in the regex
-				headers.put(entry.getKey().replaceAll("^" + HTTPHelper.HTTPHEADER_PREFIX,""), entry.getValue()) ;
+		Map<String, String> props = new HashMap<String, String>((Map) properties);
+		Map<String, String> headers = new HashMap<String, String>();
+		for (Map.Entry<String, String> entry : props.entrySet()) {
+			if (entry.getKey().matches("^" + HTTPHelper.HTTPHEADER_PREFIX + ".*")) { // TODO the dots need to be escaped
+																						// in the regex
+				headers.put(entry.getKey().replaceAll("^" + HTTPHelper.HTTPHEADER_PREFIX, ""), entry.getValue());
 			}
 		}
 		log.debug("HTTP headers passed to headless browser: {}", headers);
 
-		Playwright playwright = Playwright.create() ;
-		Browser browser ;
-		switch (browserProperty){
-			case "chromium":
-				log.info("using chromium");
-				browser = playwright.chromium().launch();
-				break;
-			case "firefox":
-				log.info("using firefox");
-				browser = playwright.firefox().launch();
-				break;
-			case "webkit":
-				log.info("using webkit");
-				browser = playwright.webkit().launch();
-				break;
-			default:
-				log.warn("\"" + browserProperty + "\"" + " is not a valid browser -- defaulting to chromium");
-				browser = playwright.chromium().launch();
-				break;
+		Playwright playwright = Playwright.create();
+		Browser browser;
+		switch (browserProperty) {
+		case "chromium":
+			log.info("using chromium");
+			browser = playwright.chromium().launch();
+			break;
+		case "firefox":
+			log.info("using firefox");
+			browser = playwright.firefox().launch();
+			break;
+		case "webkit":
+			log.info("using webkit");
+			browser = playwright.webkit().launch();
+			break;
+		default:
+			log.warn("\"" + browserProperty + "\"" + " is not a valid browser -- defaulting to chromium");
+			browser = playwright.chromium().launch();
+			break;
 		}
-		BrowserContext context = browser.newContext() ;
-		Page page = context.newPage() ;
+		BrowserContext context = browser.newContext();
+		Page page = context.newPage();
 		page.setExtraHTTPHeaders(headers);
-		Page.NavigateOptions options = new Page.NavigateOptions() ;
+		Page.NavigateOptions options = new Page.NavigateOptions();
 		// options.setWaitUntil(WaitUntilState.NETWORKIDLE);
 		// options.setWaitUntil(WaitUntilState.LOAD);
-		if(properties.containsKey(PROPERTY_BROWSER_TIMEOUT)){
+		if (properties.containsKey(PROPERTY_BROWSER_TIMEOUT)) {
 			Integer timeoutMilliseconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_TIMEOUT));
 			log.debug("headless browser navigating to url with timeout of {} milliseconds", timeoutMilliseconds);
 			options.setTimeout(timeoutMilliseconds);
-			page.navigate(url,options);
-		}else{
+			page.navigate(url, options);
+		} else {
 			page.navigate(url);
 		}
-		try{
-			if(properties.containsKey(PROPERTY_BROWSER_WAIT)){
+		try {
+			if (properties.containsKey(PROPERTY_BROWSER_WAIT)) {
 				Integer waitSeconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_WAIT));
 				log.debug("headless browser navigated to url and now will wait for {} seconds...", waitSeconds);
 				// sleep before we try to pull the HTML content out the the browser
 				java.util.concurrent.TimeUnit.SECONDS.sleep(waitSeconds);
 			}
-			if(properties.containsKey(PROPERTY_BROWSER_SCREENSHOT)){
+			if (properties.containsKey(PROPERTY_BROWSER_SCREENSHOT)) {
 				page.screenshot(new Page.ScreenshotOptions()
-					.setPath(Paths.get(new URI(properties.getProperty(PROPERTY_BROWSER_SCREENSHOT)))));
+						.setPath(Paths.get(new URI(properties.getProperty(PROPERTY_BROWSER_SCREENSHOT)))));
 			}
-		} catch (Exception ex){
-			System.out.println(ex) ;
+		} catch (Exception ex) {
+			System.out.println(ex);
 		}
 		String htmlFromBrowser = page.content() + getFrames(page.mainFrame());
-		// ^ TODO it would be better to put the iframes in the right place rather than simply appending them
-		// e.g. with    Frame's    setContent(String html, Frame.SetContentOptions options) 
+		// ^ TODO it would be better to put the iframes in the right place rather than
+		// simply appending them
+		// e.g. with Frame's setContent(String html, Frame.SetContentOptions options)
 		// OR
 		// it might be easier to have useBrowserToNavigate() return a List of strings
-		// so that when we triplify we can return a root node for each iframe + one for the actual page
+		// so that when we triplify we can return a root node for each iframe + one for
+		// the actual page
 		browser.close();
 		log.debug("HTML content: {}", htmlFromBrowser);
 		return htmlFromBrowser;
 	}
-	private String getFrames(Frame frame){
+
+	private String getFrames(Frame frame) {
 		// get the content from all of the iframes
-		String allFramesContent = "" ;
-		if(!frame.childFrames().isEmpty()){
-			for(Frame child: frame.childFrames()){
-				allFramesContent = allFramesContent + child.content() + getFrames(child) ;
+		String allFramesContent = "";
+		if (!frame.childFrames().isEmpty()) {
+			for (Frame child : frame.childFrames()) {
+				allFramesContent = allFramesContent + child.content() + getFrames(child);
 			}
 		}
-		return allFramesContent ;
+		return allFramesContent;
 	}
 
 	@Override
