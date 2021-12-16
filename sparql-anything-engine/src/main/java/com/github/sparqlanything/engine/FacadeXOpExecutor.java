@@ -203,8 +203,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 			try {
 				Properties p = getProperties(opService.getService().getURI(), opService);
 				DatasetGraph dg = getDatasetGraph(p, opService.getSubOp());
-				return QC.execute(opService.getSubOp(), input,
+				FacadeXExecutionContext ec = new FacadeXExecutionContext(
 						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+				return QC.execute(opService.getSubOp(), input, ec);
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
 					| IllegalAccessException | InvocationTargetException | NoSuchMethodException
 					| ClassNotFoundException e) {
@@ -326,7 +327,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			dg.begin(TxnType.READ);
 		}
 		logger.trace("union graph size {}",dg.getUnionGraph().size());
-		logger.trace("Default graph size {}",dg.getDefaultGraph().size());
+		logger.trace("Default graph size {}", dg.getDefaultGraph().size());
 		if(startedTransactionHere){
 			logger.debug("end small read txn");
 			dg.end();
@@ -529,12 +530,17 @@ public class FacadeXOpExecutor extends OpExecutor {
 	protected QueryIterator execute(final OpPath s, QueryIterator input) {
 //		logger.trace("Execute OpPath {} {}", s.toString(), Utils.queryIteratorToString( super.execute(s, input)));
 		logger.trace("Execute OpPath {} ", s.toString());
-		
+
 		return super.execute(s, input);
 
 	}
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
+
+		if(this.execCxt.getClass()!=FacadeXExecutionContext.class) {
+			return super.execute(opBGP, input);
+		}
+
 		// i think we can consider this the start of the query and therefore the read txn
 		boolean startedTransactionHere = false ;
 		if(this.execCxt.getDataset().supportsTransactions() && ! this.execCxt.getDataset().isInTransaction()){
@@ -544,6 +550,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 		// TODO where to end the read txn it?
 
+		
+		
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
 				this.execCxt.getDataset().getDefaultGraph().size());

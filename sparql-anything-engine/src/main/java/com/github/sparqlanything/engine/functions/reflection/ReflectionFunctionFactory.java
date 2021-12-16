@@ -21,17 +21,24 @@
 
 package com.github.sparqlanything.engine.functions.reflection;
 
-import org.apache.jena.query.QueryBuildException;
-import org.apache.jena.sparql.expr.ExprList;
-import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.function.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.jena.query.QueryBuildException;
+import org.apache.jena.sparql.expr.ExprList;
+import org.apache.jena.sparql.expr.NodeValue;
+import org.apache.jena.sparql.function.Function;
+import org.apache.jena.sparql.function.FunctionBase;
+import org.apache.jena.sparql.function.FunctionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ReflectionFunctionFactory {
 	public final static Logger logger = LoggerFactory.getLogger(ReflectionFunctionFactory.class);

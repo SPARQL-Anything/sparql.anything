@@ -22,6 +22,8 @@
 package com.github.sparqlanything.it;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -44,7 +46,6 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -195,7 +196,7 @@ public class Issues {
 			}
 		}
 
-		assertEquals(Sets.newHashSet("b", "d", "c"), slots);
+		assertEquals(Sets.newHashSet("d", "c"), slots);
 	}
 
 	/**
@@ -204,10 +205,10 @@ public class Issues {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	@Ignore
 	@Test
 	public void testIssue154() throws URISyntaxException, IOException {
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/e.sparql").toURI(), StandardCharsets.UTF_8);
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/e.sparql").toURI(),
+				StandardCharsets.UTF_8);
 		String location = getClass().getClassLoader().getResource("issues/a00002-1036.xml").toURI().toString();
 		Query query = QueryFactory.create(queryStr.replace("%%LOCATION%%", location));
 		Dataset ds = DatasetFactory.createGeneral();
@@ -215,6 +216,88 @@ public class Issues {
 		// XXX This process never ends!
 		Model rs = QueryExecutionFactory.create(query, ds).execConstruct();
 		rs.write(System.err, "TTL");
+	}
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/154
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void test2Issue154() throws URISyntaxException, IOException {
+		String location = getClass().getClassLoader().getResource("issues/issue154.xml").toURI().toString();
+
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue154.sparql").toURI(),
+				StandardCharsets.UTF_8);
+
+		Query query = QueryFactory.create(queryStr.replace("%%LOCATION%%", location));
+
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		Set<Set<String>> expectedResult = new HashSet<>();
+
+		expectedResult.addAll(Sets.newHashSet(Sets.newHashSet("Randall, Cynthia", "Lover Birds"),
+				Sets.newHashSet("Thurman, Paula", "Splish Splash"), Sets.newHashSet("Corets, Eva", "Oberon's Legacy"),
+				Sets.newHashSet("Corets, Eva", "The Sundered Grail"), Sets.newHashSet("Ralls, Kim", "Midnight Rain"),
+				Sets.newHashSet("Corets, Eva", "Maeve Ascendant"),
+				Sets.newHashSet("Gambardella, Matthew", "XML Developer's Guide")));
+
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+
+		Set<Set<String>> actualResult = new HashSet<>();
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		while (rs.hasNext()) {
+			QuerySolution querySolution = (QuerySolution) rs.next();
+			actualResult.add(Sets.newHashSet(querySolution.getLiteral("authorString").getValue().toString(),
+					querySolution.getLiteral("titleString").getValue().toString()));
+		}
+
+//		System.out.println(actualResult);
+
+		assertEquals(expectedResult, actualResult);
+
+	}
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/175
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue175() throws URISyntaxException, IOException {
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue175.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		String queryStr2 = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue175-2.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		assertFalse(QueryExecutionFactory.create(query, ds).execSelect().next());
+		assertFalse(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
+		assertTrue(QueryExecutionFactory.create(queryStr2, ds).execSelect().hasNext());
+	}
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/173
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue173() throws URISyntaxException, IOException {
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue173-1.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		String queryStr2 = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue173-2.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr2, ds).execSelect()));
+		assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
+		assertFalse(QueryExecutionFactory.create(queryStr2, ds).execSelect().hasNext());
 	}
 
 }

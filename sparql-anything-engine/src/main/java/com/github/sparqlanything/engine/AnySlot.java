@@ -45,13 +45,13 @@ public class AnySlot extends PFuncSimple {
 			ExecutionContext execCxt) {
 		Node s, o;
 
-		if (subject.isURI()) {
+		if (!subject.isVariable()) {
 			s = subject;
 		} else {
 			s = Node.ANY;
 		}
 
-		if (object.isURI() || object.isLiteral()) {
+		if (!object.isVariable()) {
 			o = object;
 		} else {
 			o = Node.ANY;
