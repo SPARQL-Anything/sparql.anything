@@ -151,21 +151,16 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		if (t == null) {
 			logger.trace("No triplifier");
-            // return TDB2Factory.createDataset().asDatasetGraph();
-			// maybe we don't need TDB2s for all these throw away graphs
 			return DatasetGraphFactory.create();
 		}
 
 		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op.toString());
 		dg = triplify(op, p, t);
-		// after triplification commit and end the txn
-		if(dg.supportsTransactions()){
-			logger.debug("triplification done -- commiting and ending the big write txn");
-			dg.commit();
-			dg.end();
-		}
-		// TODO after triplification should we end the (write) txn?
-		//   and maybe being another one for reading
+
+		logger.debug("triplification done -- commiting and ending the write txn");
+		dg.commit();
+		dg.end();
+
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
 			URL url = Triplifier.instantiateURL(urlLocation);
@@ -316,18 +311,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
 
-		boolean startedTransactionHere = false ;
-		if(dg.supportsTransactions() && !dg.isInTransaction()){
-			logger.debug("begin small read txn"); // TODO logger here  and log elsewhere
-			startedTransactionHere = true ;
-			dg.begin(TxnType.READ);
-		}
-		logger.trace("union graph size {}",dg.getUnionGraph().size());
+		logger.trace("Union graph size {}",dg.getUnionGraph().size());
 		logger.trace("Default graph size {}", dg.getDefaultGraph().size());
-		if(startedTransactionHere){
-			logger.debug("end small read txn");
-			dg.end();
-		}
 		return dg;
 	}
 
@@ -537,16 +522,14 @@ public class FacadeXOpExecutor extends OpExecutor {
 			return super.execute(opBGP, input);
 		}
 
-		// i think we can consider this the start of the query and therefore the read txn
-		boolean startedTransactionHere = false ;
-		if(this.execCxt.getDataset().supportsTransactions() && ! this.execCxt.getDataset().isInTransaction()){
-			logger.debug("begin big read txn"); // TODO logger here  and log elsewhere
-			startedTransactionHere = true ;
+		// i think we can consider this the start of the query execution and therefore the read txn.
+		// we won't end this read txn until the next query takes execution back through BaseFacadeXBuilder
+		if(!this.execCxt.getDataset().isInTransaction()){
+			// i think we need the test (instead of just unconditionally starting the txn) because if we postpone
+			// during a query execution, execution could pass through here again
+			logger.debug("begin read txn");
 			this.execCxt.getDataset().begin(TxnType.READ);
 		}
-		// TODO where to end the read txn it?
-
-		
 		
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
