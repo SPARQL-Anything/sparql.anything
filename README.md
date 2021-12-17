@@ -304,6 +304,8 @@ WHERE {
 |triplifier|It forces sparql.anything to use a specific triplifier for transforming the data source|A canonical name of a Java class|No value|
 |charset|The charset of the data source.|Any charset.|UTF-8|
 |metadata|It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;  |true/false|false|
+|ondisk|It tells sparql.anything to use an on disk graph (instead of the default in memory graph). The string should be a path to a directory where the on disk graph will be stored. Using an on disk graph is almost always slower (than using the default in memory graph) but with it you can triplify large files without running out of memory.|a path to a directory|not set|
+|ondisk.new|When using an on disk graph, it tells sparql.anything to delete the previous on disk graph and create a new one.|true|not set|
 
 \* It is mandatory to provide either the local or the content.
 
