@@ -172,7 +172,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 			logger.debug("Graph added to in-memory cache");
 		}
-		// TODO wrap this in a txn
+		// TODO wrap this in a txn or move it to a place where we are already in a txn
 		// logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
 
 //		else {

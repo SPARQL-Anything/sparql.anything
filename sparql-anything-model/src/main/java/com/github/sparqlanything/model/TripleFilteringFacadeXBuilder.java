@@ -174,7 +174,6 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
-		boolean startedTransactionHere = false ;
 		if (match(graph, subject, predicate, object)) {
 			datasetGraph.getGraph(graph).add(new Triple(subject, predicate, object));
 			return true;
