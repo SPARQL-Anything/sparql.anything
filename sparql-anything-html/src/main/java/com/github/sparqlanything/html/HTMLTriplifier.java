@@ -21,8 +21,6 @@
 
 package com.github.sparqlanything.html;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,17 +34,10 @@ import java.util.Set;
 
 import org.apache.any23.Any23;
 import org.apache.any23.extractor.ExtractionException;
-import org.apache.any23.http.HTTPClient;
 import org.apache.any23.source.DocumentSource;
-import org.apache.any23.source.HTTPDocumentSource;
-import org.apache.any23.writer.NTriplesWriter;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 //import org.apache.jena.graph.NodeFactory;
 //import org.apache.jena.query.DatasetFactory;
 //import org.apache.jena.rdf.model.AnonId;
