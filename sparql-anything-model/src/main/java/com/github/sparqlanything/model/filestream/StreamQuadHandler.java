@@ -18,10 +18,14 @@
 package com.github.sparqlanything.model.filestream;
 
 import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.TripleFilteringFacadeXBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
@@ -33,8 +37,10 @@ import java.util.Properties;
  * The QuadHandler interface shall be implemented by this StreamQuadHandler
  */
 public class StreamQuadHandler extends BaseFacadeXBuilder {
+	protected static final Logger log = LoggerFactory.getLogger(StreamQuadHandler.class);
 	private FileStreamerQueue  queue;
 	private Quad target;
+	private static final Node unionGraph = NodeFactory.createURI("urn:x-arq:UnionGraph");
 	protected StreamQuadHandler(Properties properties, Quad target, FileStreamerQueue queue) {
 		super(Triplifier.getResourceId(properties), DatasetGraphFactory.create(), properties);
 		this.target = target;
@@ -50,8 +56,9 @@ public class StreamQuadHandler extends BaseFacadeXBuilder {
 		if(p_null_string != null && object.isLiteral() && object.getLiteral().toString().equals(p_null_string)){
 			return false;
 		}
+		Quad q = new Quad(graph, subject, predicate, object);
 		if(match(graph, subject, predicate, object)) {
-			Quad q = new Quad(graph, subject, predicate, object);
+			log.trace("{} matches {}", q,target);
 			try {
 				queue.put(q);
 			} catch (InterruptedException e) {
@@ -61,10 +68,11 @@ public class StreamQuadHandler extends BaseFacadeXBuilder {
 		return true;
 	}
 
-	//  FIXME Duplicated code, see TripleFilteringFacadeXBuilder
+	// FIXME Duplicated code, see TripleFilteringFacadeXBuilder
+	// XXX Not the same code! This one includes matching the ARQ constant for union graphs
 	public boolean match(Node graph, Node subject, Node predicate, Node object) {
 		Quad q = target;
-		if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph))
+		if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph) || q.getGraph().matches(unionGraph))
 				&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
 				&& predicateMatch(q.getPredicate(), predicate)
 				&& (!q.getObject().isConcrete() || q.getObject().matches(object))) {
