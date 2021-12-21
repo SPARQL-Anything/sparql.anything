@@ -28,10 +28,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.github.sparqlanything.csv.CSVTriplifier;
+import com.github.sparqlanything.model.filestream.FileStreamDatasetGraph;
+import com.github.sparqlanything.model.filestream.FileStreamManager;
+import com.github.sparqlanything.model.filestream.FileStreamTriplifier;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.query.ARQ;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -274,16 +279,22 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		logger.debug("Execution strategy: {} {}", strategy, op.toString());
 		if (t != null) {
-			FacadeXGraphBuilder builder;
-			if (strategy == 1) {
-				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new TripleFilteringFacadeXBuilder(resourceId, op, p);
-			} else {
-				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new BaseFacadeXBuilder(resourceId, p);
-			}
 			try {
-				dg = t.triplify(p, builder);
+				if (strategy == 2){
+					// XXX Experimental, Triplifier must implement FileStreamTriplifier
+					FileStreamManager man = new FileStreamManager(ARQ.getContext(), p, (FileStreamTriplifier) t);
+					dg = new FileStreamDatasetGraph(man);
+				} else {
+					FacadeXGraphBuilder builder;
+					if (strategy == 1) {
+						logger.trace("Executing: {} [strategy={}]", p, strategy);
+						builder = new TripleFilteringFacadeXBuilder(resourceId, op, p);
+					} else {
+						logger.trace("Executing: {} [strategy={}]", p, strategy);
+						builder = new BaseFacadeXBuilder(resourceId, p);
+					}
+					dg = t.triplify(p, builder);
+				}
 			} catch (TriplifierHTTPException e) {
 				if (p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")) {
 					// as per https://www.w3.org/TR/sparql11-federated-query/#serviceFailure

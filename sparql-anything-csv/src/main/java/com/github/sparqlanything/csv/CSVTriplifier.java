@@ -21,14 +21,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import com.github.sparqlanything.model.TriplifierHTTPException;
+import com.github.sparqlanything.model.filestream.FileStreamTriplifier;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -42,7 +41,7 @@ import org.slf4j.LoggerFactory;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.Triplifier;
 
-public class CSVTriplifier implements Triplifier {
+public class CSVTriplifier implements FileStreamTriplifier {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
 	public final static String PROPERTY_DELIMITER = "csv.delimiter";
@@ -170,5 +169,10 @@ public class CSVTriplifier implements Triplifier {
 	@Override
 	public Set<String> getExtensions() {
 		return Sets.newHashSet("csv");
+	}
+
+	public List<String> getDataSourceIds(Properties properties){
+		String s = Triplifier.getRootArgument(properties);
+		return Arrays.asList(s);
 	}
 }
