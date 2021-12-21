@@ -256,16 +256,16 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 
 		URL url = Triplifier.getLocation(p);
-		String resourceId;
-		if (url == null) {
-			// XXX This method of passing content seems only supported by the
-			// TextTriplifier.
-			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
-			String id = Integer.toString(p.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
-			resourceId = "content:" + id;
-		} else {
-			resourceId = url.toString();
-		}
+		String resourceId = Triplifier.getResourceId(p);
+//		if (url == null) {
+//			// XXX This method of passing content seems only supported by the
+//			// TextTriplifier.
+//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
+//			String id = Integer.toString(p.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+//			resourceId = "content:" + id;
+//		} else {
+//			resourceId = url.toString();
+//		}
 
 		// logger.trace("No location, use content: {}",
 		// p.getProperty(IRIArgument.CONTENT.toString()));

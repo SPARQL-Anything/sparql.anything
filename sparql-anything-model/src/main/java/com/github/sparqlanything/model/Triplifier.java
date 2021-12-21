@@ -222,6 +222,19 @@ public interface Triplifier {
 		return getInputStream(url, properties, getCharsetArgument(properties));
 	}
 	
-	
+	public static String getResourceId(Properties properties) throws MalformedURLException {
+		String resourceId;
+		URL url = Triplifier.getLocation(properties);
+		if (url == null) {
+			// XXX This method of passing content seems only supported by the
+			// TextTriplifier.
+			log.trace("No location, use content: {}", properties.getProperty(IRIArgument.CONTENT.toString()));
+			String id = Integer.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+			resourceId = "content:" + id;
+		} else {
+			resourceId = url.toString();
+		}
+		return resourceId;
+	}
 
 }
