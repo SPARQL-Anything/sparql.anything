@@ -245,7 +245,6 @@ public interface Triplifier {
 		URL url = null;
 		try {
 			url = Triplifier.getLocation(properties);
-			resourceId = url.toString();
 		} catch (MalformedURLException e) {
 			log.error("Malformed url", e);
 		}
@@ -255,6 +254,8 @@ public interface Triplifier {
 			log.trace("No location, use content: {}", properties.getProperty(IRIArgument.CONTENT.toString()));
 			String id = Integer.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
 			resourceId = "content:" + id;
+		}else if(url != null){
+			resourceId = url.toString();
 		}
 		return resourceId;
 	}
