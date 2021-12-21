@@ -19,12 +19,14 @@ package com.github.sparqlanything.model.filestream;
 
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
 
 public class FileStreamer implements Runnable {
-
+	private static Logger log = LoggerFactory.getLogger(FileStreamer.class);
 	private final Properties properties;
 	private final Triplifier triplifier;
 	private final StreamQuadHandler handler;
@@ -39,8 +41,12 @@ public class FileStreamer implements Runnable {
 	@Override
 	public void run() {
 		try {
+			log.debug("start seeking quad: {}", handler.getTarget());
 			triplifier.triplify(properties, handler);
 			buffer.setFinished();
+			if(log.isDebugEnabled()) {
+				log.debug("finished seeking quad ({} found): {}", handler.debug, handler.getTarget());
+			}
 		} catch (IOException  | TriplifierHTTPException e) {
 			throw new RuntimeException(e);
 		}

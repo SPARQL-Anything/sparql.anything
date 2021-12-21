@@ -18,10 +18,13 @@
 package com.github.sparqlanything.model.filestream;
 
 import org.apache.jena.sparql.core.Quad;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 
 public class FileStreamQuadIterator implements Iterator<Quad> {
+	private static Logger log = LoggerFactory.getLogger(FileStreamQuadIterator.class);
 	private Quad next = null;
 	private FileStreamerQueue queue;
 	public FileStreamQuadIterator(FileStreamerQueue queue){
@@ -40,6 +43,7 @@ public class FileStreamQuadIterator implements Iterator<Quad> {
 				throw new RuntimeException(e);
 			}
 		}
+		log.debug("iteration completed");
 		return false;
 	}
 

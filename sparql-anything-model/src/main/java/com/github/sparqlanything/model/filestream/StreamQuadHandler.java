@@ -41,12 +41,16 @@ public class StreamQuadHandler extends BaseFacadeXBuilder {
 	private FileStreamerQueue  queue;
 	private Quad target;
 	private static final Node unionGraph = NodeFactory.createURI("urn:x-arq:UnionGraph");
+	public int debug = 0;
 	protected StreamQuadHandler(Properties properties, Quad target, FileStreamerQueue queue) {
 		super(Triplifier.getResourceId(properties), DatasetGraphFactory.create(), properties);
 		this.target = target;
 		this.queue = queue;
 	}
 
+	public Quad getTarget(){
+		return target;
+	}
 	/**
 	 * Do not populate the DG but send the quad to the listener
 	 */
@@ -59,6 +63,9 @@ public class StreamQuadHandler extends BaseFacadeXBuilder {
 		Quad q = new Quad(graph, subject, predicate, object);
 		if(match(graph, subject, predicate, object)) {
 			log.trace("{} matches {}", q,target);
+			if(log.isDebugEnabled()){
+				debug++;
+			}
 			try {
 				queue.put(q);
 			} catch (InterruptedException e) {

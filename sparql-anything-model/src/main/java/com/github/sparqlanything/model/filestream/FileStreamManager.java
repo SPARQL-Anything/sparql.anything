@@ -23,15 +23,9 @@ import org.apache.jena.sparql.util.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import static java.lang.Thread.State.TERMINATED;
 
 public class FileStreamManager {
 	private static Logger log = LoggerFactory.getLogger(FileStreamManager.class);
@@ -55,7 +49,7 @@ public class FileStreamManager {
 		StreamQuadHandler handler = new StreamQuadHandler(properties, target, buffer);
 		FileStreamer streamer = new FileStreamer(properties, triplifier, buffer, handler);
 		Thread worker = new Thread(streamer);
-		log.trace("Starting thread to seek {}", target);
+		log.debug("Starting thread to seek {}", target);
 		worker.start();
 		return new FileStreamQuadIterator(buffer);
 	}
