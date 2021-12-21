@@ -98,6 +98,7 @@ public interface Triplifier {
 		return charset;
 	}
 
+	@Deprecated
 	static String getRootArgument(Properties properties, URL url) {
 		if (url != null) {
 			return getRootArgument(properties, url.toString());
@@ -106,6 +107,23 @@ public interface Triplifier {
 		}
 	}
 
+	static String getRootArgument(Properties properties) {
+		try {
+			return getRootArgument(properties, Triplifier.getLocation(properties));
+		} catch (MalformedURLException e) {
+			log.error("Malformed url", e);
+			return getRootArgument(properties, (String) null);
+		}
+	}
+
+	/**
+	 * Implementation to be moved to getRootArgument(Properties)
+	 *
+	 * @param properties
+	 * @param url
+	 * @return
+	 */
+	@Deprecated
 	static String getRootArgument(Properties properties, String url) {
 		if (url != null) {
 			String root = null;
