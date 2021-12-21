@@ -245,6 +245,7 @@ public interface Triplifier {
 		URL url = null;
 		try {
 			url = Triplifier.getLocation(properties);
+			resourceId = url.toString();
 		} catch (MalformedURLException e) {
 			log.error("Malformed url", e);
 		}
