@@ -265,7 +265,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			if(globalStrategy!=null){
 				logger.warn("Local strategy {} overriding global strategy {}", localStrategy, globalStrategy);
 			}
-			strategy = Integer.getInteger(localStrategy);
+			strategy = Integer.parseInt(localStrategy);
 		} else if(globalStrategy!=null){
 			strategy = globalStrategy;
 		} else{
