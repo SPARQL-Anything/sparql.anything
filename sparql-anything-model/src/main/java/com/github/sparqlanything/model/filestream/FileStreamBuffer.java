@@ -15,23 +15,38 @@
  *
  */
 
-package com.github.sparqlanything.model;
+package com.github.sparqlanything.model.filestream;
 
-public enum IRIArgument {
+import org.apache.jena.sparql.core.Quad;
 
-	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace"), ROOT("root"), BLANK_NODES("blank-nodes"),
-	TRIPLIFIER("triplifier"), CHARSET("charset"), METADATA("metadata"), CONTENT("content"),
-	FROM_ARCHIVE("from-archive"), TRIM_STRINGS( "trim-strings" ), NULL_STRING( "null-string" ), STRATEGY("strategy");
+import java.util.ArrayList;
+import java.util.List;
 
-	private String s;
+public class FileStreamBuffer {
+	List<Quad> queue = new ArrayList<Quad>();
+	boolean completed = false;
 
-	IRIArgument(String s) {
-		this.s = s;
+	boolean isEmpty(){
+		return queue.isEmpty();
 	}
 
-	@Override
-	public String toString() {
-		return s;
+	void add(Quad quad){
+		queue.add(quad);
 	}
 
+	boolean isCompleted(){
+		return completed;
+	}
+
+	boolean isWaiting(){
+		return isEmpty() && !isCompleted();
+	}
+
+	Quad fetch(){
+		return queue.remove(0);
+	}
+
+	void setCompleted(){
+		completed = true;
+	}
 }

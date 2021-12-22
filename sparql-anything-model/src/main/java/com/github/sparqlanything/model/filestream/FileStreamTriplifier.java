@@ -15,23 +15,16 @@
  *
  */
 
-package com.github.sparqlanything.model;
+package com.github.sparqlanything.model.filestream;
 
-public enum IRIArgument {
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 
-	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace"), ROOT("root"), BLANK_NODES("blank-nodes"),
-	TRIPLIFIER("triplifier"), CHARSET("charset"), METADATA("metadata"), CONTENT("content"),
-	FROM_ARCHIVE("from-archive"), TRIM_STRINGS( "trim-strings" ), NULL_STRING( "null-string" ), STRATEGY("strategy");
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
 
-	private String s;
-
-	IRIArgument(String s) {
-		this.s = s;
-	}
-
-	@Override
-	public String toString() {
-		return s;
-	}
-
+public interface FileStreamTriplifier extends Triplifier {
+	public List<String> getDataSourceIds(Properties properties);
 }

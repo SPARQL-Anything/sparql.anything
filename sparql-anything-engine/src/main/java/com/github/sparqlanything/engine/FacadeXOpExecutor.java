@@ -28,10 +28,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.github.sparqlanything.csv.CSVTriplifier;
+import com.github.sparqlanything.model.filestream.FileStreamDatasetGraph;
+import com.github.sparqlanything.model.filestream.FileStreamManager;
+import com.github.sparqlanything.model.filestream.FileStreamTriplifier;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.query.ARQ;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.tdb2.TDB2Factory;
 import org.apache.jena.rdf.model.Model;
@@ -258,22 +263,34 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
 		DatasetGraph dg;
-		Integer strategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
-		if (strategy == null) {
+
+		Integer strategy = null;
+		// Local value for strategy?
+		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());
+		// Global value for strategy?
+		Integer globalStrategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
+		if(localStrategy != null){
+			if(globalStrategy!=null){
+				logger.warn("Local strategy {} overriding global strategy {}", localStrategy, globalStrategy);
+			}
+			strategy = Integer.parseInt(localStrategy);
+		} else if(globalStrategy!=null){
+			strategy = globalStrategy;
+		} else{
+			// Defaul strategy
 			strategy = 1;
 		}
-
 		URL url = Triplifier.getLocation(p);
-		String resourceId;
-		if (url == null) {
-			// XXX This method of passing content seems only supported by the
-			// TextTriplifier.
-			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
-			String id = Integer.toString(p.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
-			resourceId = "content:" + id;
-		} else {
-			resourceId = url.toString();
-		}
+		String resourceId = Triplifier.getResourceId(p);
+//		if (url == null) {
+//			// XXX This method of passing content seems only supported by the
+//			// TextTriplifier.
+//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
+//			String id = Integer.toString(p.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+//			resourceId = "content:" + id;
+//		} else {
+//			resourceId = url.toString();
+//		}
 
 		// logger.trace("No location, use content: {}",
 		// p.getProperty(IRIArgument.CONTENT.toString()));
@@ -282,16 +299,23 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		logger.debug("Execution strategy: {} {}", strategy, op.toString());
 		if (t != null) {
-			FacadeXGraphBuilder builder;
-			if (strategy == 1) {
-				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new TripleFilteringFacadeXBuilder(resourceId, op, p);
-			} else {
-				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new BaseFacadeXBuilder(resourceId, p);
-			}
 			try {
-				dg = t.triplify(p, builder);
+				if (strategy == 2){
+					logger.warn("Strategy 2 is experimental!");
+					// XXX Experimental, Triplifier must implement FileStreamTriplifier
+					FileStreamManager man = new FileStreamManager(ARQ.getContext(), p, (FileStreamTriplifier) t);
+					dg = new FileStreamDatasetGraph(man);
+				} else {
+					FacadeXGraphBuilder builder;
+					if (strategy == 1) {
+						logger.trace("Executing: {} [strategy={}]", p, strategy);
+						builder = new TripleFilteringFacadeXBuilder(resourceId, op, p);
+					} else {
+						logger.trace("Executing: {} [strategy={}]", p, strategy);
+						builder = new BaseFacadeXBuilder(resourceId, p);
+					}
+					dg = t.triplify(p, builder);
+				}
 			} catch (TriplifierHTTPException e) {
 				if (p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")) {
 					// as per https://www.w3.org/TR/sparql11-federated-query/#serviceFailure
@@ -311,8 +335,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
 
-		logger.trace("Union graph size {}",dg.getUnionGraph().size());
-		logger.trace("Default graph size {}", dg.getDefaultGraph().size());
+		// logger.trace("Union graph size {}",dg.getUnionGraph().size());
+		// logger.trace("Default graph size {}", dg.getDefaultGraph().size());
 		return dg;
 	}
 

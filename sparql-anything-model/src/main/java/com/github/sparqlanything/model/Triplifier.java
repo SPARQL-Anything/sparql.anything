@@ -98,6 +98,7 @@ public interface Triplifier {
 		return charset;
 	}
 
+	@Deprecated
 	static String getRootArgument(Properties properties, URL url) {
 		if (url != null) {
 			return getRootArgument(properties, url.toString());
@@ -106,6 +107,23 @@ public interface Triplifier {
 		}
 	}
 
+	static String getRootArgument(Properties properties) {
+		try {
+			return getRootArgument(properties, Triplifier.getLocation(properties));
+		} catch (MalformedURLException e) {
+			log.error("Malformed url", e);
+			return getRootArgument(properties, (String) null);
+		}
+	}
+
+	/**
+	 * Implementation to be moved to getRootArgument(Properties)
+	 *
+	 * @param properties
+	 * @param url
+	 * @return
+	 */
+	@Deprecated
 	static String getRootArgument(Properties properties, String url) {
 		if (url != null) {
 			String root = null;
@@ -222,6 +240,24 @@ public interface Triplifier {
 		return getInputStream(url, properties, getCharsetArgument(properties));
 	}
 	
-	
+	public static String getResourceId(Properties properties) {
+		String resourceId = null;
+		URL url = null;
+		try {
+			url = Triplifier.getLocation(properties);
+		} catch (MalformedURLException e) {
+			log.error("Malformed url", e);
+		}
+		if (url == null && properties.containsKey(IRIArgument.CONTENT.toString())) {
+			// XXX This method of passing content seems only supported by the
+			// TextTriplifier.
+			log.trace("No location, use content: {}", properties.getProperty(IRIArgument.CONTENT.toString()));
+			String id = Integer.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+			resourceId = "content:" + id;
+		}else if(url != null){
+			resourceId = url.toString();
+		}
+		return resourceId;
+	}
 
 }
