@@ -34,11 +34,15 @@ import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.junit.Test;
 import static org.junit.Assert.fail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.jena.query.TxnType;
 
 import com.github.sparqlanything.model.IRIArgument;
 
 public class CSVTriplifierTest {
 	private CSVTriplifier triplifier = new CSVTriplifier();
+	public static final Logger log = LoggerFactory.getLogger(CSVTriplifierTest.class);
 
 	@Test
 	public void testCsvNullStrings() throws IOException, TriplifierHTTPException {
@@ -114,5 +118,62 @@ public class CSVTriplifierTest {
 			Quad t = iter.next();
 			System.err.println(t);
 		}
+	}
+
+	@Test
+	public void testWithOnDiskGraph1 () throws IOException, TriplifierHTTPException {
+		Properties properties = new Properties();
+		properties.setProperty("namespace", "http://www.example.org#");
+		properties.setProperty("ondisk", "/tmp");
+		URL csv1 = getClass().getClassLoader().getResource("./test3.csv");
+		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
+		BasicPattern bp = new BasicPattern();
+		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
+					NodeFactory.createVariable("o")));
+		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXBuilder(csv1.toString(), properties));
+
+		// end the write txn because triplifiers don't do that, FacadeXOpExecutor does
+		graph.commit();
+		graph.end();
+
+		graph.begin(TxnType.READ);
+		Iterator<Quad> iter = graph.find(null, null, null, null);
+		Integer count=0 ;
+		while (iter.hasNext()) {
+			count++;
+			Quad t = iter.next();
+		}
+		if(count!=21){
+			fail("expected 21 quads but found " + count);
+		}
+		graph.end();
+	}
+
+	@Test
+	public void testWithOnDiskGraph2 () throws IOException, TriplifierHTTPException {
+		Properties properties = new Properties();
+		properties.setProperty("namespace", "http://www.example.org#");
+		properties.setProperty("ondisk", "/tmp");
+		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
+		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
+		BasicPattern bp = new BasicPattern();
+		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
+					NodeFactory.createVariable("o")));
+		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXBuilder(csv1.toString(), properties));
+		// end the write txn because triplifiers don't do that, FacadeXOpExecutor does
+		graph.commit();
+		graph.end();
+
+		graph.begin(TxnType.READ);
+		Iterator<Quad> iter = graph.find(null, null, null, null);
+		Integer count=0 ;
+		while (iter.hasNext()) {
+			count++;
+			Quad t = iter.next();
+		}
+		if(count!=13){
+			fail("expected 13 quads but found " + count);
+		}
+		graph.end();
 	}
 }

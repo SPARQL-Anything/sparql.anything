@@ -38,7 +38,7 @@ import java.nio.file.Files;
 import java.util.Properties;
 
 public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
-	private static final String PROPERTY_ONDISK_NEW = "ondisk.new";
+	private static final String PROPERTY_ONDISK_REUSE = "ondisk.reuse";
 	private static final String PROPERTY_ONDISK = "ondisk";
 	protected static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilder.class);
 	protected final Properties properties;
@@ -64,15 +64,17 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 		DatasetGraph dsg;
 		String TDB2Path = "" ;
 		boolean ONDISK = properties.containsKey(PROPERTY_ONDISK);
-		boolean ONDISK_NEW = properties.containsKey(PROPERTY_ONDISK_NEW); // TODO any string counts as "true"
+		boolean ONDISK_REUSE = properties.containsKey(PROPERTY_ONDISK_REUSE); // TODO any string counts as "true"
 
 		if(ONDISK){
-			if(BaseFacadeXBuilder.previousTDB2Path != "" && !ONDISK_NEW){
+			if(BaseFacadeXBuilder.previousTDB2Path != "" && ONDISK_REUSE){
 				TDB2Path = previousTDB2Path ;
 			}else{
 				try{
-					log.debug("deleting previous TDB2 at: {}",previousTDB2Path);
-					FileUtils.deleteDirectory(new File(previousTDB2Path)) ;
+					if(previousTDB2Path!=""){
+						log.debug("deleting previous TDB2 at: {}",previousTDB2Path);
+						FileUtils.deleteDirectory(new File(previousTDB2Path)) ;
+					}
 					if(Files.isDirectory(Paths.get(properties.getProperty(PROPERTY_ONDISK)))){
 						TDB2Path = Files.createTempDirectory(Paths.get(properties.getProperty(PROPERTY_ONDISK)),"").toString();
 					}else{
@@ -80,7 +82,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 								properties.getProperty(PROPERTY_ONDISK));
 						TDB2Path = Files.createTempDirectory(Paths.get("/tmp"),"").toString();
 					}
-					// store the TDB2Path for next time
+					// store the TDB2Path for next time (in case we want to reuse it or delete it)
 					BaseFacadeXBuilder.previousTDB2Path = TDB2Path;
 				}catch(Exception ex){
 					log.error(ex.toString());
