@@ -38,6 +38,7 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.tdb2.TDB2Factory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
@@ -68,6 +69,7 @@ import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.Symbol;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
+import org.apache.jena.query.TxnType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,6 +161,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op.toString());
 		dg = triplify(op, p, t);
+
+		logger.debug("triplification done -- commiting and ending the write txn");
+		dg.commit();
+		dg.end();
+
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
 			URL url = Triplifier.instantiateURL(urlLocation);
@@ -170,6 +177,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 			logger.debug("Graph added to in-memory cache");
 		}
+		// TODO wrap this in a txn or move it to a place where we are already in a txn
 		// logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
 
 //		else {
@@ -326,7 +334,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.error("No triplifier available for the input format!");
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
-		//logger.trace("Default graph size {}", dg.getDefaultGraph().size());
+
+		// logger.trace("Union graph size {}",dg.getUnionGraph().size());
+		// logger.trace("Default graph size {}", dg.getDefaultGraph().size());
 		return dg;
 	}
 
@@ -531,9 +541,18 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
-		
+
 		if(this.execCxt.getClass()!=FacadeXExecutionContext.class) {
 			return super.execute(opBGP, input);
+		}
+
+		// i think we can consider this the start of the query execution and therefore the read txn.
+		// we won't end this read txn until the next query takes execution back through BaseFacadeXBuilder
+		if(!this.execCxt.getDataset().isInTransaction()){
+			// i think we need the test (instead of just unconditionally starting the txn) because if we postpone
+			// during a query execution, execution could pass through here again
+			logger.debug("begin read txn");
+			this.execCxt.getDataset().begin(TxnType.READ);
 		}
 		
 		logger.trace("executing  BGP {}", opBGP.toString());

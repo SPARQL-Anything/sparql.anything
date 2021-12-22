@@ -131,6 +131,9 @@ public class CSVTriplifier implements FileStreamTriplifier {
 					log.trace(" > is data {}", rown);
 					// Rows
 					rown++;
+					if((rown % 10000)==0){
+						log.debug("current row num: {}", rown);
+					}
 					String rowContainerId = containerRowPrefix + rown;
 					builder.addContainer(dataSourceId, root, rown, rowContainerId);
 					CSVRecord record = recordIterator.next();

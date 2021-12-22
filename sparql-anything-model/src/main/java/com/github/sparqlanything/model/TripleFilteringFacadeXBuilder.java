@@ -100,8 +100,9 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 	}
 
 	public TripleFilteringFacadeXBuilder(String resourceId, Op op, Properties properties) {
-		this(resourceId, op, DatasetGraphFactory.create(), properties);
-//        this(resourceId, op, DatasetGraphFactory.createTxnMem(), properties);
+		// don't make a DatasetGraph here
+		// instead let BaseFacadeXBuilder do all the DatasetGraph making
+		this(resourceId, op, null, properties);
 	}
 //
 //	public TripleFilteringFacadeXBuilder(URL location, Op op, Properties properties) {
