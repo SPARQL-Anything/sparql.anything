@@ -59,7 +59,6 @@ public class FileStreamTest {
 		Assert.assertTrue(c == 16);
 	}
 
-	@Ignore
 	@Test
 	public void testQueryJoin() throws URISyntaxException, MalformedURLException {
 		Dataset kb = DatasetFactory.createGeneral();
@@ -75,8 +74,9 @@ public class FileStreamTest {
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
 		int c = 0;
 		while(rs.hasNext()){
+			rs.next();
 			c++;
 		}
-		Assert.assertTrue(c ==2);
+		Assert.assertTrue(c == 2);
 	}
 }
