@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class FileStreamManager {
 	private static Logger log = LoggerFactory.getLogger(FileStreamManager.class);
@@ -45,7 +46,7 @@ public class FileStreamManager {
 		// One thread shall read the file, and push the triples to a shared array
 		// The returned iterator shall wait until there is a triple to be returned from the array, and return it
 		Quad target = new Quad(g, s, p, o);
-		FileStreamerQueue buffer = new FileStreamerQueue();
+		LinkedBlockingQueue<Object> buffer = new LinkedBlockingQueue<Object>();
 		StreamQuadHandler handler = new StreamQuadHandler(properties, target, buffer);
 		FileStreamer streamer = new FileStreamer(properties, triplifier, buffer, handler);
 		Thread worker = new Thread(streamer);

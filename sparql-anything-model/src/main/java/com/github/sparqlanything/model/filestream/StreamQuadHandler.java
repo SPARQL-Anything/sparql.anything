@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * This is temporary and should be replaced by an alternative implementation of FacadeXGraphBuilder that does not populate a DG.
@@ -38,11 +39,11 @@ import java.util.Properties;
  */
 public class StreamQuadHandler extends BaseFacadeXBuilder {
 	protected static final Logger log = LoggerFactory.getLogger(StreamQuadHandler.class);
-	private FileStreamerQueue  queue;
+	private LinkedBlockingQueue<Object>  queue;
 	private Quad target;
 	private static final Node unionGraph = NodeFactory.createURI("urn:x-arq:UnionGraph");
 	public int debug = 0;
-	protected StreamQuadHandler(Properties properties, Quad target, FileStreamerQueue queue) {
+	protected StreamQuadHandler(Properties properties, Quad target, LinkedBlockingQueue<Object> queue) {
 		super(Triplifier.getResourceId(properties), DatasetGraphFactory.create(), properties);
 		this.target = target;
 		this.queue = queue;

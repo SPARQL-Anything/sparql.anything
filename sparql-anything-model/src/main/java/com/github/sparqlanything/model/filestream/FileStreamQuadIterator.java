@@ -22,34 +22,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class FileStreamQuadIterator implements Iterator<Quad> {
 	private static Logger log = LoggerFactory.getLogger(FileStreamQuadIterator.class);
+	public static final String ENDSIGNAL = "endsignal";
 	private Quad next = null;
-	private FileStreamerQueue queue;
-	public FileStreamQuadIterator(FileStreamerQueue queue){
+	private LinkedBlockingQueue<Object> queue;
+	public FileStreamQuadIterator(LinkedBlockingQueue<Object> queue){
 		this.queue = queue;
 	}
 	@Override
 	public boolean hasNext() {
-		while(!queue.hasFinished()){
-			try {
-				if(!queue.isEmpty()){
-					Quad o = queue.take();
-					next = o;
-					return true;
-				}
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
+		try {
+			Object o = queue.take();
+			if(o.equals(ENDSIGNAL)){
+				return false;
 			}
+			next = (Quad) o;
+			return true;
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
-		log.debug("iteration completed");
-		return false;
 	}
 
 	@Override
 	public Quad next() {
-		return next;
+		Quad n = next;
+		next = null;
+		return n;
 	}
 }
 

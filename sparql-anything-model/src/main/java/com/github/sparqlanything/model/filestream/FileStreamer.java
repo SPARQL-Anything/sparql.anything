@@ -24,15 +24,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class FileStreamer implements Runnable {
 	private static Logger log = LoggerFactory.getLogger(FileStreamer.class);
 	private final Properties properties;
 	private final Triplifier triplifier;
 	private final StreamQuadHandler handler;
-	private final FileStreamerQueue buffer;
+	private final LinkedBlockingQueue<Object> buffer;
 
-	public FileStreamer(Properties properties, Triplifier triplifier, FileStreamerQueue buffer, StreamQuadHandler handler){
+	public FileStreamer(Properties properties, Triplifier triplifier, LinkedBlockingQueue<Object> buffer, StreamQuadHandler handler){
 		this.properties = properties;
 		this.triplifier = triplifier;
 		this.handler = handler;
@@ -43,11 +44,11 @@ public class FileStreamer implements Runnable {
 		try {
 			log.debug("start seeking quad: {}", handler.getTarget());
 			triplifier.triplify(properties, handler);
-			buffer.setFinished();
+			buffer.put(FileStreamQuadIterator.ENDSIGNAL);
 			if(log.isDebugEnabled()) {
 				log.debug("finished seeking quad ({} found): {}", handler.debug, handler.getTarget());
 			}
-		} catch (IOException  | TriplifierHTTPException e) {
+		} catch (IOException | TriplifierHTTPException | InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 	}
