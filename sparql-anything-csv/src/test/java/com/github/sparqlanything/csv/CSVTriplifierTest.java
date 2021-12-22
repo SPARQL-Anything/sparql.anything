@@ -127,9 +127,6 @@ public class CSVTriplifierTest {
 		properties.setProperty("ondisk", "/tmp");
 		URL csv1 = getClass().getClassLoader().getResource("./test3.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
-		BasicPattern bp = new BasicPattern();
-		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
-					NodeFactory.createVariable("o")));
 		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXBuilder(csv1.toString(), properties));
 
 		// end the write txn because triplifiers don't do that, FacadeXOpExecutor does
@@ -156,9 +153,6 @@ public class CSVTriplifierTest {
 		properties.setProperty("ondisk", "/tmp");
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
-		BasicPattern bp = new BasicPattern();
-		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
-					NodeFactory.createVariable("o")));
 		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXBuilder(csv1.toString(), properties));
 		// end the write txn because triplifiers don't do that, FacadeXOpExecutor does
 		graph.commit();
