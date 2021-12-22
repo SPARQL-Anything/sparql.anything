@@ -170,7 +170,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 			logger.debug("Graph added to in-memory cache");
 		}
-		logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
+		// logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
 
 //		else {
 //			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
@@ -326,7 +326,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.error("No triplifier available for the input format!");
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
-		logger.trace("Default graph size {}", dg.getDefaultGraph().size());
+		//logger.trace("Default graph size {}", dg.getDefaultGraph().size());
 		return dg;
 	}
 
