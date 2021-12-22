@@ -255,11 +255,23 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
 		DatasetGraph dg;
-		Integer strategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
-		if (strategy == null) {
+
+		Integer strategy = null;
+		// Local value for strategy?
+		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());
+		// Global value for strategy?
+		Integer globalStrategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
+		if(localStrategy != null){
+			if(globalStrategy!=null){
+				logger.warn("Local strategy {} overriding global strategy {}", localStrategy, globalStrategy);
+			}
+			strategy = Integer.getInteger(localStrategy);
+		} else if(globalStrategy!=null){
+			strategy = globalStrategy;
+		} else{
+			// Defaul strategy
 			strategy = 1;
 		}
-
 		URL url = Triplifier.getLocation(p);
 		String resourceId = Triplifier.getResourceId(p);
 //		if (url == null) {
