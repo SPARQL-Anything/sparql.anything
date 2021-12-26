@@ -31,7 +31,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
 import com.github.sparqlanything.json.JSONTriplifier;
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
@@ -46,7 +46,7 @@ public class BaseTest {
 		try {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.CONTENT.toString(), "{\"a\":\"b\"}");
-			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXBuilder("test", p1));
+			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXGraphBuilder("test", p1));
 //			RDFDataMgr.write(System.out, g1, RDFFormat.TRIG);
 			Graph expected = GraphFactory.createDefaultGraph();
 			Node n = NodeFactory.createBlankNode();

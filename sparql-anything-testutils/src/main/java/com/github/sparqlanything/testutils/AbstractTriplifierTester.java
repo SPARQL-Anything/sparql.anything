@@ -45,7 +45,7 @@ import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 
@@ -223,10 +223,10 @@ public class AbstractTriplifierTester {
 		logger.debug("Graph name: {}", graphName);
 
 		if (!useDatasetGraph) {
-			this.result = triplifier.triplify(properties, new BaseFacadeXBuilder(graphName, properties))
+			this.result = triplifier.triplify(properties, new BaseFacadeXGraphBuilder(graphName, properties))
 					.getGraph(NodeFactory.createURI(graphName));
 		} else {
-			this.resultDatasetGraph = triplifier.triplify(properties, new BaseFacadeXBuilder(graphName, properties));
+			this.resultDatasetGraph = triplifier.triplify(properties, new BaseFacadeXGraphBuilder(graphName, properties));
 		}
 	}
 

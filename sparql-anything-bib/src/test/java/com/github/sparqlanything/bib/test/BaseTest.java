@@ -32,7 +32,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
 import com.github.sparqlanything.bib.BibtexTriplifier;
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
@@ -47,7 +47,7 @@ public class BaseTest {
 		try {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.CONTENT.toString(), "@article{Knuth1984, title={Literate Programming}}");
-			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXBuilder("test", p1));
+			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXGraphBuilder("test", p1));
 //			RDFDataMgr.write(System.out, g1, RDFFormat.TRIG);
 			Graph expected = GraphFactory.createDefaultGraph();
 			Node n = NodeFactory.createBlankNode();
@@ -74,7 +74,7 @@ public class BaseTest {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.CONTENT.toString(), "@article{Knuth1984, title={Literate Programming}}");
 			p1.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
-			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXBuilder("test", p1));
+			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXGraphBuilder("test", p1));
 			g1.find().forEachRemaining(q->{
 				assertFalse(q.getGraph().isBlank());
 				assertFalse(q.getSubject().isBlank());

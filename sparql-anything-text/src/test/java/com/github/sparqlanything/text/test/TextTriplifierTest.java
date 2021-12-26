@@ -35,7 +35,7 @@ import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
@@ -51,7 +51,7 @@ public class TextTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
+			DatasetGraph dg = tt.triplify(p, new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p));
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
 			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
@@ -73,7 +73,7 @@ public class TextTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.REGEX, "\\w+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
+			DatasetGraph dg = tt.triplify(p, new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p));
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph
@@ -105,7 +105,7 @@ public class TextTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.SPLIT, "\\s+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p, new BaseFacadeXBuilder(Triplifier.getLocation(p).toString(), p));
+			DatasetGraph dg = tt.triplify(p, new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p));
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph

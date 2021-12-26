@@ -23,9 +23,6 @@ import java.util.Properties;
 
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVisitor;
 import org.apache.jena.sparql.algebra.op.OpAssign;
@@ -62,7 +59,6 @@ import org.apache.jena.sparql.algebra.op.OpTopN;
 import org.apache.jena.sparql.algebra.op.OpTriple;
 import org.apache.jena.sparql.algebra.op.OpUnion;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.sparql.path.P_Alt;
 import org.apache.jena.sparql.path.P_Distinct;
@@ -85,11 +81,11 @@ import org.apache.jena.sparql.path.PathVisitor;
 /**
  *
  */
-public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
+public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder {
 	private final Op op;
 	private final List<Object> opComponents = new ArrayList<Object>();
 
-	public TripleFilteringFacadeXBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
+	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
 		super(resourceId, ds, properties);
 		this.op = op;
 		if (op != null) {
@@ -99,7 +95,7 @@ public class TripleFilteringFacadeXBuilder extends BaseFacadeXBuilder {
 		//
 	}
 
-	public TripleFilteringFacadeXBuilder(String resourceId, Op op, Properties properties) {
+	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, Properties properties) {
 		// don't make a DatasetGraph here
 		// instead let BaseFacadeXBuilder do all the DatasetGraph making
 		this(resourceId, op, null, properties);

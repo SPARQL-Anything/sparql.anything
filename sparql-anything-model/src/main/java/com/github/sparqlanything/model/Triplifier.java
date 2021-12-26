@@ -52,7 +52,7 @@ public interface Triplifier {
 
 	@Deprecated
 	default public DatasetGraph triplify(Properties properties) throws IOException, TriplifierHTTPException {
-		return triplify(properties, new BaseFacadeXBuilder(Triplifier.getLocation(properties).toString(), properties));
+		return triplify(properties, new BaseFacadeXGraphBuilder(Triplifier.getLocation(properties).toString(), properties));
 	}
 
 	DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)

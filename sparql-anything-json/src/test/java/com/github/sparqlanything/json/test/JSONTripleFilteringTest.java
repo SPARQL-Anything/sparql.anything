@@ -22,7 +22,7 @@ import com.github.sparqlanything.json.JSONTriplifier;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 
-import com.github.sparqlanything.model.TripleFilteringFacadeXBuilder;
+import com.github.sparqlanything.model.TripleFilteringFacadeXGraphBuilder;
 import org.apache.jena.graph.Node_Variable;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -45,7 +45,7 @@ public class JSONTripleFilteringTest {
 	public static final Logger log = LoggerFactory.getLogger(JSONTripleFilteringTest.class);
 
 	protected FacadeXGraphBuilder getTripleFilteringBuilder(URL url, Op op, Properties p){
-		return new TripleFilteringFacadeXBuilder(url.toString(), op, p);
+		return new TripleFilteringFacadeXGraphBuilder(url.toString(), op, p);
 	}
 
 	@Test

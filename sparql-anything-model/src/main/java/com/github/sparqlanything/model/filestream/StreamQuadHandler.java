@@ -17,8 +17,7 @@
 
 package com.github.sparqlanything.model.filestream;
 
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
-import com.github.sparqlanything.model.TripleFilteringFacadeXBuilder;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -37,7 +36,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * FacadeXBuilder interface should be the one extended by a QuadHandler interface
  * The QuadHandler interface shall be implemented by this StreamQuadHandler
  */
-public class StreamQuadHandler extends BaseFacadeXBuilder {
+public class StreamQuadHandler extends BaseFacadeXGraphBuilder {
 	protected static final Logger log = LoggerFactory.getLogger(StreamQuadHandler.class);
 	private LinkedBlockingQueue<Object>  queue;
 	private Quad target;

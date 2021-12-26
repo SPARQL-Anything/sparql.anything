@@ -17,19 +17,14 @@
 
 package com.github.sparqlanything.yaml;
 
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.util.iterator.ExtendedIterator;
-import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +45,7 @@ public class YAMLTest {
 		Triplifier t = new YAMLTriplifier();
 		Properties properties = new Properties();
 		properties.setProperty("location", url.toURI().toString());
-		DatasetGraph ds = t.triplify(properties, new BaseFacadeXBuilder(url.toString(), properties));
+		DatasetGraph ds = t.triplify(properties, new BaseFacadeXGraphBuilder(url.toString(), properties));
 		ExtendedIterator<Triple> triples = ds.getDefaultGraph().find();
 		while(triples.hasNext()){
 			logger.trace("{}",triples.next());

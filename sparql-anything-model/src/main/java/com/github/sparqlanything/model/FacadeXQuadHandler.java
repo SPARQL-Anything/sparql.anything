@@ -17,14 +17,8 @@
 
 package com.github.sparqlanything.model;
 
-import java.net.URI;
-
-import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
-import org.apache.jena.sparql.core.DatasetGraph;
 
-public interface FacadeXGraphBuilder extends FacadeXNodeBuilder, FacadeXQuadHandler, FacadeXComponentHandler {
-
-	DatasetGraph getDatasetGraph();
-
+public interface FacadeXQuadHandler {
+	boolean add(Node graph, Node subject, Node predicate, Node object);
 }

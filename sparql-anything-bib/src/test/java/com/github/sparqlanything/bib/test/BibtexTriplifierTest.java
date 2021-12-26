@@ -32,7 +32,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
 import com.github.sparqlanything.bib.BibtexTriplifier;
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 
@@ -46,7 +46,7 @@ public class BibtexTriplifierTest {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./test1.bib").toString());
-			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXBuilder("test", p1));
+			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXGraphBuilder("test", p1));
 
 //			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 			

@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.github.sparqlanything.csv.CSVTriplifier;
 import com.github.sparqlanything.model.filestream.FileStreamDatasetGraph;
 import com.github.sparqlanything.model.filestream.FileStreamManager;
 import com.github.sparqlanything.model.filestream.FileStreamTriplifier;
@@ -38,7 +37,6 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.tdb2.TDB2Factory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
@@ -75,10 +73,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.sparqlanything.facadeiri.FacadeIRIParser;
 import com.github.sparqlanything.metadata.MetadataTriplifier;
-import com.github.sparqlanything.model.BaseFacadeXBuilder;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.TripleFilteringFacadeXBuilder;
+import com.github.sparqlanything.model.TripleFilteringFacadeXGraphBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import com.github.sparqlanything.zip.FolderTriplifier;
@@ -309,10 +307,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 					FacadeXGraphBuilder builder;
 					if (strategy == 1) {
 						logger.trace("Executing: {} [strategy={}]", p, strategy);
-						builder = new TripleFilteringFacadeXBuilder(resourceId, op, p);
+						builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
 					} else {
 						logger.trace("Executing: {} [strategy={}]", p, strategy);
-						builder = new BaseFacadeXBuilder(resourceId, p);
+						builder = new BaseFacadeXGraphBuilder(resourceId, p);
 					}
 					dg = t.triplify(p, builder);
 				}

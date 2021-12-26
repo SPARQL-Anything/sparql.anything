@@ -37,10 +37,10 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.Properties;
 
-public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
+public class BaseFacadeXGraphBuilder implements FacadeXGraphBuilder {
 	private static final String PROPERTY_ONDISK_REUSE = "ondisk.reuse";
 	private static final String PROPERTY_ONDISK = "ondisk";
-	protected static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilder.class);
+	protected static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXGraphBuilder.class);
 	protected final Properties properties;
 	protected final Node mainGraphName;
 
@@ -55,7 +55,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	protected final String p_null_string;
 	protected static String previousTDB2Path = "";
 
-	public BaseFacadeXBuilder(String resourceId, Properties properties) {
+	public BaseFacadeXGraphBuilder(String resourceId, Properties properties) {
 		this(resourceId, null, properties);
 	}
 
@@ -67,7 +67,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 		boolean ONDISK_REUSE = properties.containsKey(PROPERTY_ONDISK_REUSE); // TODO any string counts as "true"
 
 		if(ONDISK){
-			if(BaseFacadeXBuilder.previousTDB2Path != "" && ONDISK_REUSE){
+			if(BaseFacadeXGraphBuilder.previousTDB2Path != "" && ONDISK_REUSE){
 				TDB2Path = previousTDB2Path ;
 			}else{
 				try{
@@ -83,7 +83,7 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 						TDB2Path = Files.createTempDirectory(Paths.get("/tmp"),"").toString();
 					}
 					// store the TDB2Path for next time (in case we want to reuse it or delete it)
-					BaseFacadeXBuilder.previousTDB2Path = TDB2Path;
+					BaseFacadeXGraphBuilder.previousTDB2Path = TDB2Path;
 				}catch(Exception ex){
 					log.error(ex.toString());
 				}
@@ -105,10 +105,10 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 		return dsg;
 	}
 
-	protected BaseFacadeXBuilder(String resourceId, DatasetGraph ds, Properties properties) {
+	protected BaseFacadeXGraphBuilder(String resourceId, DatasetGraph ds, Properties properties) {
 		this.properties = properties;
 		this.mainGraphName = NodeFactory.createURI(resourceId);
-		this.datasetGraph = BaseFacadeXBuilder.getDatasetGraph(properties);
+		this.datasetGraph = BaseFacadeXGraphBuilder.getDatasetGraph(properties);
 
 		// the single place to begin write txns
 		log.debug("begin write txn");
