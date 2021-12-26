@@ -17,17 +17,29 @@
 
 package com.github.sparqlanything.model;
 
-import java.net.URI;
-
-import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
-import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.ResourceFactory;
 
-public interface FacadeXGraphBuilder extends FacadeXNodeBuilder, FacadeXComponentHandler {
-//	boolean add(Node subject, Node predicate, Node object);
+public interface FacadeXNodeBuilder {
 
-	boolean add(Node graph, Node subject, Node predicate, Node object);
+	default Node container2URI(String container) {
+		return NodeFactory.createURI(container);
+	}
 
-	DatasetGraph getDatasetGraph();
+	default Node container2BlankNode(String container) {
+		return NodeFactory.createBlankNode(container);
+	}
 
+	default Node key2predicate(String namespace, String key) {
+		return NodeFactory.createURI(namespace + key);
+	}
+
+	default Node value2node(Object value) {
+		if (value instanceof Node) {
+			return (Node) value;
+		} else {
+			return ResourceFactory.createTypedLiteral(value).asNode();
+		}
+	}
 }

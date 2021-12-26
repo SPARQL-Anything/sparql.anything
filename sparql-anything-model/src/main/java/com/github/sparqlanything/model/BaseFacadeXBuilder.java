@@ -199,32 +199,26 @@ public class BaseFacadeXBuilder implements FacadeXGraphBuilder {
 				NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
 	}
 
-	@Override
 	public Node container2node(String container) {
 		if (p_blank_nodes) {
-			return NodeFactory.createBlankNode(container);
+			return FacadeXGraphBuilder.super.container2BlankNode(container);
+			//return NodeFactory.createBlankNode(container);
 		} else {
-			return NodeFactory.createURI(container);
+//			return NodeFactory.createURI(container);
+			return FacadeXGraphBuilder.super.container2URI(container);
 		}
 	}
 
-	@Override
 	public Node key2predicate(String key) {
-		return NodeFactory.createURI(this.p_namespace + key);
+		return FacadeXGraphBuilder.super.key2predicate(this.p_namespace, key);
 	}
 
-	@Override
 	public Node value2node(Object value) {
-		if (value instanceof Node) {
-			return (Node) value;
-		} else {
-			// trims_strings == true and if object is string, trim it
-			if(p_trim_strings && value instanceof String){
-				value = ((String)value).trim();
-			}
-
-			return ResourceFactory.createTypedLiteral(value).asNode();
+		// trims_strings == true and if object is string, trim it
+		if(p_trim_strings && value instanceof String){
+			value = ((String)value).trim();
 		}
+		return FacadeXGraphBuilder.super.value2node(value);
 	}
 
 	/**
