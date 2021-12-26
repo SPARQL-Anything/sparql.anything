@@ -37,22 +37,14 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.Properties;
 
-public class BaseFacadeXGraphBuilder implements FacadeXGraphBuilder {
+public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	private static final String PROPERTY_ONDISK_REUSE = "ondisk.reuse";
 	private static final String PROPERTY_ONDISK = "ondisk";
 	protected static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXGraphBuilder.class);
-	protected final Properties properties;
-	protected final Node mainGraphName;
 
 	// when using a TDB2 this is defined 
 	protected static Dataset dataset = null; // TODO making this static is a kludge maybe
 	protected final DatasetGraph datasetGraph;
-	//
-	protected final boolean p_blank_nodes;
-	protected final String p_namespace;
-	protected final String p_root;
-	protected final boolean p_trim_strings;
-	protected final String p_null_string;
 	protected static String previousTDB2Path = "";
 
 	public BaseFacadeXGraphBuilder(String resourceId, Properties properties) {
@@ -106,19 +98,13 @@ public class BaseFacadeXGraphBuilder implements FacadeXGraphBuilder {
 	}
 
 	protected BaseFacadeXGraphBuilder(String resourceId, DatasetGraph ds, Properties properties) {
-		this.properties = properties;
-		this.mainGraphName = NodeFactory.createURI(resourceId);
+		super(resourceId, properties);
 		this.datasetGraph = BaseFacadeXGraphBuilder.getDatasetGraph(properties);
 
 		// the single place to begin write txns
 		log.debug("begin write txn");
 		this.datasetGraph.begin(TxnType.WRITE);
 
-		this.p_blank_nodes = Triplifier.getBlankNodeArgument(properties);
-		this.p_trim_strings = Triplifier.getTrimStringsArgument(properties);
-		this.p_null_string = Triplifier.getNullStringArgument(properties);
-		this.p_namespace = Triplifier.getNamespaceArgument(properties);
-		this.p_root = Triplifier.getRootArgument(properties, resourceId);
 	}
 
 //	@Deprecated
@@ -143,82 +129,6 @@ public class BaseFacadeXGraphBuilder implements FacadeXGraphBuilder {
 		}
 		datasetGraph.getGraph(graph).add(t);
 		return true;
-	}
-
-	@Override
-	public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey),
-				container2node(childContainerId));
-	}
-
-	@Override
-	public boolean addContainer(String dataSourceId, String containerId, URI customKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId),
-				NodeFactory.createURI(customKey.toString()), container2node(childContainerId));
-	}
-
-	@Override
-	public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
-				container2node(childContainerId));
-	}
-
-	@Override
-	public boolean addType(String dataSourceId, String containerId, String typeId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(),
-				NodeFactory.createURI(typeId));
-	}
-
-	@Override
-	public boolean addType(String dataSourceId, String containerId, URI type) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(),
-				NodeFactory.createURI(type.toString()));
-	}
-
-	@Override
-	public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey),
-				value2node(value));
-	}
-
-	@Override
-	public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
-				value2node(value));
-	}
-
-	@Override
-	public boolean addValue(String dataSourceId, String containerId, URI customKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId),
-				NodeFactory.createURI(customKey.toString()), value2node(value));
-	}
-
-	@Override
-	public boolean addRoot(String dataSourceId, String rootId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(rootId), RDF.type.asNode(),
-				NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
-	}
-
-	public Node container2node(String container) {
-		if (p_blank_nodes) {
-			return FacadeXGraphBuilder.super.container2BlankNode(container);
-			//return NodeFactory.createBlankNode(container);
-		} else {
-//			return NodeFactory.createURI(container);
-			return FacadeXGraphBuilder.super.container2URI(container);
-		}
-	}
-
-	public Node key2predicate(String key) {
-		return FacadeXGraphBuilder.super.key2predicate(this.p_namespace, key);
-	}
-
-	public Node value2node(Object value) {
-		// trims_strings == true and if object is string, trim it
-		if(p_trim_strings && value instanceof String){
-			value = ((String)value).trim();
-		}
-		return FacadeXGraphBuilder.super.value2node(value);
 	}
 
 	/**
