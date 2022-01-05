@@ -77,6 +77,8 @@ public final class FacadeX {
 					new String[] { "text/html" });
 			Registry.registerTriplifier("com.github.sparqlanything.text.TextTriplifier", new String[] { "txt" },
 					new String[] { "text/plain" });
+			Registry.registerTriplifier("com.github.sparqlanything.markdown.MARKDOWNTriplifier", new String[] { "md" },
+					new String[] { "text/markdown", "text/x-markdown" });
 			Registry.registerTriplifier("com.github.sparqlanything.docs.DocxTriplifier", new String[] { "docx" },
 					new String[] { "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
 			Registry.registerTriplifier("com.github.sparqlanything.zip.TarTriplifier", new String[] { "tar" },
