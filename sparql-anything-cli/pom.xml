@@ -38,55 +38,7 @@
 
 		<dependency>
 			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-json</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
 			<artifactId>sparql-anything-engine</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-csv</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-xml</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-binary</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-text</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-html</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-markdown</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-yaml</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
