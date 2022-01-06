@@ -18,14 +18,21 @@
 package com.github.sparqlanything.model.filestream;
 
 import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.TripleFilteringFacadeXGraphBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -36,76 +43,97 @@ import java.util.concurrent.LinkedBlockingQueue;
  * FacadeXBuilder interface should be the one extended by a QuadHandler interface
  * The QuadHandler interface shall be implemented by this StreamQuadHandler
  */
-public class StreamQuadHandler extends BaseFacadeXGraphBuilder {
+public class StreamQuadHandler extends TripleFilteringFacadeXGraphBuilder {
 	protected static final Logger log = LoggerFactory.getLogger(StreamQuadHandler.class);
 	private LinkedBlockingQueue<Object>  queue;
-	private Quad target;
 	private static final Node unionGraph = NodeFactory.createURI("urn:x-arq:UnionGraph");
 	public int debug = 0;
-	protected StreamQuadHandler(Properties properties, Quad target, LinkedBlockingQueue<Object> queue) {
-		super(Triplifier.getResourceId(properties), DatasetGraphFactory.create(), properties);
-		this.target = target;
+
+	private ContainerNodeWrapper root = null;
+	private ContainerNodeWrapper currentContainer = null;
+	private ContainerNodeWrapper nextContainer = null;
+	private Quad target;
+
+	protected StreamQuadHandler(Properties properties, Quad target, Op op, LinkedBlockingQueue<Object> queue) {
+		super(Triplifier.getResourceId(properties), op, DatasetGraphFactory.create(), properties);
 		this.queue = queue;
+		this.target = target;
+	}
+
+	public ContainerNodeWrapper getRoot(){
+		return root;
 	}
 
 	public Quad getTarget(){
 		return target;
 	}
+
 	/**
 	 * Do not populate the DG but send the quad to the listener
 	 */
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
-		// XXX Duplicated code, shall be done by the superclass, here we should only intercept the triple.
-		if(p_null_string != null && object.isLiteral() && object.getLiteral().toString().equals(p_null_string)){
-			return false;
-		}
-		Quad q = new Quad(graph, subject, predicate, object);
-		if(match(graph, subject, predicate, object)) {
-			log.trace("{} matches {}", q,target);
+		if (match(graph, subject, predicate, object)) {
+			Quad q = new Quad(graph, subject, predicate, object);
 			if(log.isDebugEnabled()){
+				log.trace("{} matches ", q);
 				debug++;
 			}
 			try {
-				queue.put(q);
+				Quad rewrittenQuad = rewrite(q);
+				queue.put(rewrittenQuad);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
-		}
-		return true;
-	}
-
-	// FIXME Duplicated code, see TripleFilteringFacadeXBuilder
-	// XXX Not the same code! This one includes matching the ARQ constant for union graphs
-	public boolean match(Node graph, Node subject, Node predicate, Node object) {
-		Quad q = target;
-		if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph) || q.getGraph().matches(unionGraph))
-				&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
-				&& predicateMatch(q.getPredicate(), predicate)
-				&& (!q.getObject().isConcrete() || q.getObject().matches(object))) {
 			return true;
 		}
 		return false;
 	}
 
-
-	/**
-	 * FIXME Duplicated code, see TripleFilteringFacadeXBuilder
-	 * @param queryPredicate
-	 * @param dataPredicate
-	 * @return
-	 */
-	private boolean predicateMatch(Node queryPredicate, Node dataPredicate) {
-		// If queryPredicate is fx:anySLot match any container membership property
-		if (queryPredicate.isConcrete()
-				&& queryPredicate.getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")) {
-			if (dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")) {
-				return true;
-			} else {
-				return false;
-			}
+	private Quad rewrite(Quad q) {
+		// Subjects are always containers.
+		Node subject = q.getSubject();
+		// Is the first container being explored?
+		if(currentContainer == null){
+			ContainerURIWrapper container = new ContainerURIWrapper(hashCode(), subject.getURI());
+			subject = container;
+			currentContainer = container;
+		} else if( ((Node) currentContainer).getURI().equals(subject.getURI()) ) {
+			// Is the same URI as the current container under exploration?
+			subject = (Node) currentContainer;
+		} else if( nextContainer != null && ((Node) nextContainer).getURI().equals(subject.getURI()) ) {
+			// Is this the next container?
+			currentContainer = nextContainer;
+			nextContainer = null;
+		} else if( ((Node) currentContainer.getParent()).getURI().equals(subject.getURI()) )  {
+			// Is the subject the parent of the current container?
+			// The container is "closed"
+			currentContainer.setCompleted();
+			currentContainer = currentContainer.getParent();
+		} else {
+			throw new RuntimeException("Inconsistent state");
 		}
-		return (!queryPredicate.isConcrete() || queryPredicate.matches(dataPredicate));
+
+		if(q.getPredicate().getURI().equals(RDF.type.getURI()) && q.getObject().getURI().equals(Triplifier.FACADE_X_TYPE_ROOT)){
+			// Is it the root declaration?
+			currentContainer.setRoot(true);
+			this.root = currentContainer;
+		}
+
+		Node object = q.getObject();
+		if(object.isURI()){
+			// Prepare next container
+			ContainerURIWrapper container = new ContainerURIWrapper(hashCode(), object.getURI());
+			object = container;
+			nextContainer = container;
+			nextContainer.setParent(currentContainer, q.getPredicate());
+		}
+
+		// Remember data in current container
+		Quad rewrittenQuad = new Quad(q.getGraph(), subject, q.getPredicate(), object);
+		currentContainer.add(rewrittenQuad);
+		return new Quad(q.getGraph(), subject, q.getPredicate(), object);
 	}
+
 
 }

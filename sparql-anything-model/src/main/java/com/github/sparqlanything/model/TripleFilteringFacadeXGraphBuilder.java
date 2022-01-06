@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVisitor;
@@ -84,7 +85,7 @@ import org.apache.jena.sparql.path.PathVisitor;
 public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder {
 	private final Op op;
 	private final List<Object> opComponents = new ArrayList<Object>();
-
+	private static final Node unionGraph = NodeFactory.createURI("urn:x-arq:UnionGraph");
 	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
 		super(resourceId, ds, properties);
 		this.op = op;
@@ -95,6 +96,9 @@ public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder 
 		//
 	}
 
+	public Op getOp(){
+		return op;
+	}
 	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, Properties properties) {
 		// don't make a DatasetGraph here
 		// instead let BaseFacadeXBuilder do all the DatasetGraph making
@@ -110,14 +114,9 @@ public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder 
 			return true;
 
 		for (Object o : opComponents) {
-
 			if (o instanceof Quad) {
 				Quad q = (Quad) o;
-				if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph))
-						&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
-						&& predicateMatch(q.getPredicate(), predicate) // (!q.getPredicate().isConcrete() ||
-																		// q.getPredicate().matches(predicate))
-						&& (!q.getObject().isConcrete() || q.getObject().matches(object))) {
+				if(matchQuad(q, graph, subject, predicate, object)){
 					return true;
 				}
 			} else if (o instanceof Triple) {
@@ -129,6 +128,17 @@ public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder 
 					return true;
 				}
 			}
+		}
+		return false;
+	}
+
+	protected boolean matchQuad(Quad q, Node graph, Node subject, Node predicate, Node object){
+		if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph) || q.getGraph().matches(unionGraph))
+				&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
+				&& predicateMatch(q.getPredicate(), predicate) // (!q.getPredicate().isConcrete() ||
+				// q.getPredicate().matches(predicate))
+				&& (!q.getObject().isConcrete() || q.getObject().matches(object))) {
+			return true;
 		}
 		return false;
 	}

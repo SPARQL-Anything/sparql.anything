@@ -44,6 +44,7 @@ public class FileStreamer implements Runnable {
 		try {
 			log.debug("start seeking quad: {}", handler.getTarget());
 			triplifier.triplify(properties, handler);
+			handler.getRoot().setCompleted();
 			buffer.put(FileStreamQuadIterator.ENDSIGNAL);
 			if(log.isDebugEnabled()) {
 				log.debug("finished seeking quad ({} found): {}", handler.debug, handler.getTarget());

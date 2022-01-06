@@ -18,6 +18,7 @@
 package com.github.sparqlanything.model.filestream;
 
 import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.sparql.util.Context;
 import org.slf4j.Logger;
@@ -34,25 +35,35 @@ public class FileStreamManager {
 	private final Context context;
 	private final Properties properties;
 	private final FileStreamTriplifier triplifier;
+	private final Op op;
 
-	public FileStreamManager(Context context, Properties properties, FileStreamTriplifier triplifier){
+	public FileStreamManager(Context context, Op op, Properties properties, FileStreamTriplifier triplifier){
 		this.context = context;
+		this.op = op;
 		this.properties = properties;
 		this.triplifier = triplifier;
 	}
 
-	public Iterator<Quad> find(Node g, Node s, Node p, Node o){
+	private Iterator<Quad> streamFromFile(Quad target){
 		// Run Triplifier, intercept triples which are useful to answer the pattern, return them as quads
 		// One thread shall read the file, and push the triples to a shared array
 		// The returned iterator shall wait until there is a triple to be returned from the array, and return it
-		Quad target = new Quad(g, s, p, o);
 		LinkedBlockingQueue<Object> buffer = new LinkedBlockingQueue<Object>();
-		StreamQuadHandler handler = new StreamQuadHandler(properties, target, buffer);
+		StreamQuadHandler handler = new StreamQuadHandler(properties, target, op, buffer);
 		FileStreamer streamer = new FileStreamer(properties, triplifier, buffer, handler);
 		Thread worker = new Thread(streamer);
 		log.debug("Starting thread to seek {}", target);
 		worker.start();
 		return new FileStreamQuadIterator(buffer);
+	}
+
+	public Iterator<Quad> find(Node g, Node s, Node p, Node o){
+		Quad target = new Quad(g, s, p, o);
+		if(s instanceof ContainerNodeWrapper){
+			return ((ContainerNodeWrapper)s).find(g, s, p, o);
+		}else{
+			return streamFromFile(target);
+		}
 	}
 
 	public List<String> getDataSourceIds(){

@@ -301,7 +301,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 				if (strategy == 2){
 					logger.warn("Strategy 2 is experimental!");
 					// XXX Experimental, Triplifier must implement FileStreamTriplifier
-					FileStreamManager man = new FileStreamManager(ARQ.getContext(), p, (FileStreamTriplifier) t);
+					p.put(IRIArgument.BLANK_NODES.name(), "false");
+					FileStreamManager man = new FileStreamManager(ARQ.getContext(), op, p, (FileStreamTriplifier) t);
 					dg = new FileStreamDatasetGraph(man);
 				} else {
 					FacadeXGraphBuilder builder;
