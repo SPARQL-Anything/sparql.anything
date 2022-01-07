@@ -111,19 +111,13 @@ public class SpreadsheetTriplifier implements Triplifier {
 		int rown = 0; // this counts the LI index not the spreadsheet rows
 		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
 
-//		Iterator<Row> rowIterator = s.rowIterator();
 		for (int rowNum = s.getFirstRowNum(); rowNum <= s.getLastRowNum(); rowNum++) {
-//		while (rowIterator.hasNext()) {
 			// Header
 			if (headers && rowNum == 0) {
-//				Row row = rowIterator.next();
 				Row row = s.getRow(rowNum);
-//				Iterator<Cell> cellIterator = row.cellIterator();
 				int colid = 0;
 				for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
-				//while (cellIterator.hasNext()) {
 					colid++;
-					//Cell cell = (Cell) cellIterator.next();
 					Cell cell = row.getCell(cellNum);
 					String colstring = cellToString(cell);
 					String colname = colstring.strip();
@@ -141,8 +135,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 				}
 
 			}else{
-			// Data
-		//	if (rowIterator.hasNext()) {
+				// Data
 				// Rows
 				rown++;
 				Node row;
@@ -156,12 +149,9 @@ public class SpreadsheetTriplifier implements Triplifier {
 				Iterator<Cell> cellIterator = record.cellIterator();
 				int colid = 0;
 				for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
-//					while (cellIterator.hasNext()) {
-//					Cell cell = cellIterator.next();
 					Cell cell = record.getCell(cellNum);
 					String value = cellToString(cell);
 					colid++;
-//					System.err.println(colid + " " + value);
 					Node property;
 					if (headers && headers_map.containsKey(colid)) {
 						property = NodeFactory
@@ -171,7 +161,6 @@ public class SpreadsheetTriplifier implements Triplifier {
 					}
 
 					g.add(new Triple(row, property, NodeFactory.createLiteral(value)));
-
 				}
 			}
 		}
