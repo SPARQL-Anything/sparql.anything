@@ -32,6 +32,7 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
@@ -107,7 +108,7 @@ public class TestTriplifier {
 //			ModelFactory.createModelForGraph(dg.getGraph(NodeFactory.createURI(root + "Sheet2"))).write(System.out,"TTL");
 //			ModelFactory.createModelForGraph(gs2).write(System.out, "TTL");
 //			ModelFactory.createModelForGraph(gs2).difference(ModelFactory.createModelForGraph(dg.getGraph(NodeFactory.createURI(root + "Sheet2")))).write(System.out,"TTL");
-
+//			System.out.println(ModelFactory.createModelForGraph(dg.getGraph(NodeFactory.createURI(root + "Sheet1"))).write(System.err, "TTL"));
 			assertTrue(dg.getGraph(NodeFactory.createURI(root + "Sheet1")).isIsomorphicWith(gs1));
 			assertTrue(dg.getGraph(NodeFactory.createURI(root + "Sheet2")).isIsomorphicWith(gs2));
 

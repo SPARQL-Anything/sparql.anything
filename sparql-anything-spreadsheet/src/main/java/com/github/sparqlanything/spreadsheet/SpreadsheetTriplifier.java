@@ -108,23 +108,28 @@ public class SpreadsheetTriplifier implements Triplifier {
 		// Add type Root
 		g.add(new Triple(document, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 
-		int rown = 0;
+		int rown = 0; // this counts the LI index not the spreadsheet rows
 		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
 
-		Iterator<Row> rowIterator = s.rowIterator();
-		while (rowIterator.hasNext()) {
+//		Iterator<Row> rowIterator = s.rowIterator();
+		for (int rowNum = s.getFirstRowNum(); rowNum <= s.getLastRowNum(); rowNum++) {
+//		while (rowIterator.hasNext()) {
 			// Header
-			if (headers && rown == 0) {
-				Row row = rowIterator.next();
-				Iterator<Cell> cellIterator = row.cellIterator();
+			if (headers && rowNum == 0) {
+//				Row row = rowIterator.next();
+				Row row = s.getRow(rowNum);
+//				Iterator<Cell> cellIterator = row.cellIterator();
 				int colid = 0;
-				while (cellIterator.hasNext()) {
+				for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+				//while (cellIterator.hasNext()) {
 					colid++;
-					Cell cell = (Cell) cellIterator.next();
-
+					//Cell cell = (Cell) cellIterator.next();
+					Cell cell = row.getCell(cellNum);
 					String colstring = cellToString(cell);
 					String colname = colstring.strip();
-
+					if("".equals(colname)){
+						colname = Integer.toString(colid);
+					}
 					int c = 0;
 					while (headers_map.containsValue(colname)) {
 						c++;
@@ -133,12 +138,11 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 					log.trace("adding colname >{}<", colname);
 					headers_map.put(colid, colname);
-
 				}
 
-			}
+			}else{
 			// Data
-			if (rowIterator.hasNext()) {
+		//	if (rowIterator.hasNext()) {
 				// Rows
 				rown++;
 				Node row;
@@ -148,14 +152,16 @@ public class SpreadsheetTriplifier implements Triplifier {
 					row = NodeFactory.createURI(root + "_Row_" + rown);
 				}
 				g.add(new Triple(document, RDF.li(rown).asNode(), row));
-				Row record = rowIterator.next();
+				Row record = s.getRow(rowNum);
 				Iterator<Cell> cellIterator = record.cellIterator();
 				int colid = 0;
-				while (cellIterator.hasNext()) {
-					Cell cell = cellIterator.next();
+				for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
+//					while (cellIterator.hasNext()) {
+//					Cell cell = cellIterator.next();
+					Cell cell = record.getCell(cellNum);
 					String value = cellToString(cell);
 					colid++;
-
+//					System.err.println(colid + " " + value);
 					Node property;
 					if (headers && headers_map.containsKey(colid)) {
 						property = NodeFactory
@@ -174,7 +180,9 @@ public class SpreadsheetTriplifier implements Triplifier {
 	}
 
 	private String cellToString(Cell cell) {
-
+		if(cell == null){
+			return "";
+		}
 		if (cell.getCellType() == CellType.BOOLEAN) {
 			return String.valueOf(cell.getBooleanCellValue());
 		} else if (cell.getCellType() == CellType.FORMULA) {
