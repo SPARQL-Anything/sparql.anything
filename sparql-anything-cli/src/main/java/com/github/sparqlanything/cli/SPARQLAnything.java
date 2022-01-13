@@ -48,6 +48,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
+// import org.apache.jena.sparql.core.DatasetImpl;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -161,10 +162,15 @@ public class SPARQLAnything {
 //			pw.println(QueryExecutionFactory.create(q, kb).execAsk());
 		} else if (q.isDescribeType() || q.isConstructType()) {
 			Model m;
+			Dataset d = null;
 			if (q.isConstructType()) {
-				m = QueryExecutionFactory.create(q, kb).execConstruct();
+				d = QueryExecutionFactory.create(q, kb).execConstructDataset();
+				// .execConstructDataset (instead of .execConstruct) so we can construct quads too
+				// as described here: https://jena.apache.org/documentation/query/construct-quad.html
+				m = d.getDefaultModel();
 			} else {
 				m = QueryExecutionFactory.create(q, kb).execDescribe();
+				// d = new DatasetImpl(m);
 			}
 			if (format.equals("JSON")) {
 				// JSON-LD
@@ -180,7 +186,10 @@ public class SPARQLAnything {
 				RDFDataMgr.write(pw, m, Lang.NT);
 			} else if (format.equals("NQ")) {
 				// NQ
-				RDFDataMgr.write(pw, m, Lang.NQ);
+				RDFDataMgr.write(pw, d, Lang.NQ);
+			} else if (format.equals("TRIG")) {
+				// TRIG
+				RDFDataMgr.write(pw, d, Lang.TRIG);
 			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
