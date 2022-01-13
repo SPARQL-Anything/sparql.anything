@@ -65,7 +65,7 @@ public class FileStreamTest {
 		}
 		Assert.assertTrue(c == 16);
 	}
-	@Ignore
+
 	@Test
 	public void testQueryJoin() throws URISyntaxException, MalformedURLException {
 		Dataset kb = DatasetFactory.createGeneral();
@@ -76,7 +76,7 @@ public class FileStreamTest {
 						"PREFIX xyz: <http://sparql.xyz/facade-x/data/>\n" +
 //						"SELECT * WHERE { SERVICE <x-sparql-anything:csv.headers=true,strategy=2,location="
 //						+ location + "> { ?a ?b ?c }} ");
-						"SELECT ?a ?b ?c ?d WHERE { SERVICE <x-sparql-anything:csv.headers=true,strategy=2,blank_nodes=false,location="
+						"SELECT ?a ?b ?c ?d WHERE { SERVICE <x-sparql-anything:csv.headers=true,strategy=2,blank-nodes=false,location="
 						+ location + "> { [] xyz:A ?a ; xyz:B ?b ; xyz:C ?c ; xyz:D ?d . filter(?d != \"\") }} ");
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
 		int c = 0;

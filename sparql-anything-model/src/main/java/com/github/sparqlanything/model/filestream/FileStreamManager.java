@@ -24,9 +24,7 @@ import org.apache.jena.sparql.util.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class FileStreamManager {
@@ -36,6 +34,8 @@ public class FileStreamManager {
 	private final Properties properties;
 	private final FileStreamTriplifier triplifier;
 	private final Op op;
+	private List<Object> index;
+	private boolean streamInProgress = false;
 
 	public FileStreamManager(Context context, Op op, Properties properties, FileStreamTriplifier triplifier){
 		this.context = context;
@@ -46,11 +46,12 @@ public class FileStreamManager {
 
 	private Iterator<Quad> streamFromFile(Quad target){
 		// Run Triplifier, intercept triples which are useful to answer the pattern, return them as quads
-		// One thread shall read the file, and push the triples to a shared array
-		// The returned iterator shall wait until there is a triple to be returned from the array, and return it
+		// To store indexes of relevant quads
+		index = Collections.synchronizedList(new ArrayList<Object>());
+		// To stream the currently requested Quads
 		LinkedBlockingQueue<Object> buffer = new LinkedBlockingQueue<Object>();
-		StreamQuadHandler handler = new StreamQuadHandler(properties, target, op, buffer);
-		FileStreamer streamer = new FileStreamer(properties, triplifier, buffer, handler);
+		StreamQuadHandler handler = new StreamQuadHandler(properties, target, op, buffer, index);
+		FileStreamer streamer = new FileStreamer(properties, triplifier, buffer, index, handler);
 		Thread worker = new Thread(streamer);
 		log.debug("Starting thread to seek {}", target);
 		worker.start();
@@ -59,9 +60,10 @@ public class FileStreamManager {
 
 	public Iterator<Quad> find(Node g, Node s, Node p, Node o){
 		Quad target = new Quad(g, s, p, o);
-		if(s instanceof ContainerNodeWrapper){
-			return ((ContainerNodeWrapper)s).find(g, s, p, o);
-		}else{
+		if (streamInProgress) {
+			return new FileStreamIndexIterator(index, new Quad(g,s,p,o));
+		} else {
+			streamInProgress = true;
 			return streamFromFile(target);
 		}
 	}
@@ -70,7 +72,7 @@ public class FileStreamManager {
 		return triplifier.getDataSourceIds(properties);
 	}
 
-	public Context getContext(){
+	public Context getContext() {
 		return context;
 	}
 }

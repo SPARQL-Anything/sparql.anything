@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -32,20 +33,23 @@ public class FileStreamer implements Runnable {
 	private final Triplifier triplifier;
 	private final StreamQuadHandler handler;
 	private final LinkedBlockingQueue<Object> buffer;
+	private final List<Object> index;
 
-	public FileStreamer(Properties properties, Triplifier triplifier, LinkedBlockingQueue<Object> buffer, StreamQuadHandler handler){
+	public FileStreamer(Properties properties, Triplifier triplifier, LinkedBlockingQueue<Object> buffer, List<Object> index, StreamQuadHandler handler){
 		this.properties = properties;
 		this.triplifier = triplifier;
 		this.handler = handler;
 		this.buffer = buffer;
+		this.index = index;
 	}
 	@Override
 	public void run() {
 		try {
 			log.debug("start seeking quad: {}", handler.getTarget());
 			triplifier.triplify(properties, handler);
-			handler.getRoot().setCompleted();
 			buffer.put(FileStreamQuadIterator.ENDSIGNAL);
+			index.add(FileStreamQuadIterator.ENDSIGNAL);
+
 			if(log.isDebugEnabled()) {
 				log.debug("finished seeking quad ({} found): {}", handler.debug, handler.getTarget());
 			}
