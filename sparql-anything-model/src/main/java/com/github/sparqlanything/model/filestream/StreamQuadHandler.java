@@ -44,9 +44,9 @@ public class StreamQuadHandler extends TripleFilteringFacadeXGraphBuilder {
 	private static final Node unionGraph = NodeFactory.createURI("urn:x-arq:UnionGraph");
 	public int debug = 0;
 	private Quad target;
-	private List<Object> index;
+	private FileStreamIndex index;
 
-	protected StreamQuadHandler(Properties properties, Quad target, Op op, LinkedBlockingQueue<Object> queue, List<Object> index) {
+	protected StreamQuadHandler(Properties properties, Quad target, Op op, LinkedBlockingQueue<Object> queue, FileStreamIndex index) {
 		super(Triplifier.getResourceId(properties), op, DatasetGraphFactory.create(), properties);
 		this.queue = queue;
 		this.target = target;

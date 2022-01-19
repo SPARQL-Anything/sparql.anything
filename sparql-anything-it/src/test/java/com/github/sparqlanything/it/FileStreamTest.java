@@ -81,7 +81,7 @@ public class FileStreamTest {
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
 		int c = 0;
 		while(rs.hasNext()){
-			rs.next();
+			System.out.println(rs.next());
 			c++;
 		}
 		Assert.assertTrue(c == 2);

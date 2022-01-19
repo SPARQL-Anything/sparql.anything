@@ -36,6 +36,7 @@ public class FileStreamQuadIterator implements Iterator<Quad> {
 	public boolean hasNext() {
 		try {
 			Object o = queue.take();
+			log.trace("hasNext {}", o);
 			if(o.equals(ENDSIGNAL)){
 				return false;
 			}
@@ -48,6 +49,7 @@ public class FileStreamQuadIterator implements Iterator<Quad> {
 
 	@Override
 	public Quad next() {
+		log.trace("next {}", next);
 		Quad n = next;
 		next = null;
 		return n;

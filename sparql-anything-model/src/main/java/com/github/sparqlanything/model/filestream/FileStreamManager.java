@@ -34,7 +34,8 @@ public class FileStreamManager {
 	private final Properties properties;
 	private final FileStreamTriplifier triplifier;
 	private final Op op;
-	private List<Object> index;
+//	private List<Object> index;
+	private FileStreamIndex index;
 	private boolean streamInProgress = false;
 
 	public FileStreamManager(Context context, Op op, Properties properties, FileStreamTriplifier triplifier){
@@ -47,7 +48,7 @@ public class FileStreamManager {
 	private Iterator<Quad> streamFromFile(Quad target){
 		// Run Triplifier, intercept triples which are useful to answer the pattern, return them as quads
 		// To store indexes of relevant quads
-		index = Collections.synchronizedList(new ArrayList<Object>());
+		index = new FileStreamIndex(); // Collections.synchronizedList(new ArrayList<Object>());
 		// To stream the currently requested Quads
 		LinkedBlockingQueue<Object> buffer = new LinkedBlockingQueue<Object>();
 		StreamQuadHandler handler = new StreamQuadHandler(properties, target, op, buffer, index);
@@ -61,7 +62,7 @@ public class FileStreamManager {
 	public Iterator<Quad> find(Node g, Node s, Node p, Node o){
 		Quad target = new Quad(g, s, p, o);
 		if (streamInProgress) {
-			return new FileStreamIndexIterator(index, new Quad(g,s,p,o));
+			return index.find(g,s,p,o);
 		} else {
 			streamInProgress = true;
 			return streamFromFile(target);

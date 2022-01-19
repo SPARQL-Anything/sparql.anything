@@ -33,9 +33,9 @@ public class FileStreamer implements Runnable {
 	private final Triplifier triplifier;
 	private final StreamQuadHandler handler;
 	private final LinkedBlockingQueue<Object> buffer;
-	private final List<Object> index;
+	private final FileStreamIndex index;
 
-	public FileStreamer(Properties properties, Triplifier triplifier, LinkedBlockingQueue<Object> buffer, List<Object> index, StreamQuadHandler handler){
+	public FileStreamer(Properties properties, Triplifier triplifier, LinkedBlockingQueue<Object> buffer, FileStreamIndex index, StreamQuadHandler handler){
 		this.properties = properties;
 		this.triplifier = triplifier;
 		this.handler = handler;
@@ -48,7 +48,7 @@ public class FileStreamer implements Runnable {
 			log.debug("start seeking quad: {}", handler.getTarget());
 			triplifier.triplify(properties, handler);
 			buffer.put(FileStreamQuadIterator.ENDSIGNAL);
-			index.add(FileStreamQuadIterator.ENDSIGNAL);
+			index.setCompleted();
 
 			if(log.isDebugEnabled()) {
 				log.debug("finished seeking quad ({} found): {}", handler.debug, handler.getTarget());
