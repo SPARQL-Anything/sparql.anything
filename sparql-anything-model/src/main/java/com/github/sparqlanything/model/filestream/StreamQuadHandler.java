@@ -40,22 +40,17 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class StreamQuadHandler extends TripleFilteringFacadeXGraphBuilder {
 	protected static final Logger log = LoggerFactory.getLogger(StreamQuadHandler.class);
-	private LinkedBlockingQueue<Object>  queue;
+//	private LinkedBlockingQueue<Object>  queue;
 	private static final Node unionGraph = NodeFactory.createURI("urn:x-arq:UnionGraph");
-	public int debug = 0;
 	private Quad target;
 	private FileStreamIndex index;
 
-	protected StreamQuadHandler(Properties properties, Quad target, Op op, LinkedBlockingQueue<Object> queue, FileStreamIndex index) {
+	protected StreamQuadHandler(Properties properties, Quad target, Op op, FileStreamIndex index) {
 		super(Triplifier.getResourceId(properties), op, DatasetGraphFactory.create(), properties);
-		this.queue = queue;
+//		this.queue = queue;
 		this.target = target;
 		this.index = index;
 	}
-
-//	public Node getRoot(){
-//		return root;
-//	}
 
 	public Quad getTarget(){
 		return target;
@@ -67,19 +62,14 @@ public class StreamQuadHandler extends TripleFilteringFacadeXGraphBuilder {
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 		Quad q = new Quad(graph, subject, predicate, object);
-		if(log.isDebugEnabled()){
-			log.trace("{} matches ", q);
-			debug++;
-		}
-
 		if (match(graph, subject, predicate, object)) {
 			// Relevant to any of following invocations
-			try {
+//			try {
 				index.add(q);
-				queue.put(q);
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
+//				queue.put(q);
+//			} catch (InterruptedException e) {
+//				throw new RuntimeException(e);
+//			}
 			return true;
 		}
 		return false;

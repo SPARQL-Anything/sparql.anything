@@ -61,7 +61,7 @@ public class FileStreamIndex {
 
 	}
 
-	public synchronized void add(Quad q){
+	public void add(Quad q){
 
 		if(completed == true) {
 			throw new RuntimeException();
@@ -84,7 +84,7 @@ public class FileStreamIndex {
 		add(spo_index, Triple.of(q.getSubject(),q.getPredicate(),q.getObject()), q);
 	}
 
-	public synchronized void add(Map index, Object key, Quad value){
+	public void add(Map index, Object key, Quad value){
 		safeGetIndex(index, key).add(value);
 		// Generate Union Graph Equivalent
 		Quad uq = new Quad(UNIONGRAPH, value.getSubject(), value.getPredicate(), value.getObject());
@@ -94,10 +94,12 @@ public class FileStreamIndex {
 	}
 
 	private List<Quad> safeGetIndex(Map ix, Object key){
-		if(!ix.containsKey(key)){
-			ix.put(key, new ArrayList<>());
+		synchronized (ix) {
+			if (!ix.containsKey(key)) {
+				ix.put(key, new ArrayList<>());
+			}
+			return (List<Quad>) ix.get(key);
 		}
-		return (List<Quad>) ix.get(key);
 	}
 
 	private List<Quad> selectIndex(Quad target){
@@ -150,7 +152,7 @@ public class FileStreamIndex {
 
 		return index;
 	}
-	public synchronized Iterator<Quad> find (Node graph, Node s, Node p, Node o ) {
+	public Iterator<Quad> find (Node graph, Node s, Node p, Node o ) {
 		final Quad target = new Quad(graph, s,p,o);
 		final List<Quad> ix = selectIndex(target);
 		return new Iterator<Quad>() {
@@ -158,26 +160,49 @@ public class FileStreamIndex {
 			Quad next = null;
 			@Override
 			public boolean hasNext() {
-				if(index.contains(target) && next == null){
-					next = target;
-					return true;
-				}else if(index.contains(target)){
-					return false;
-				}
-				// Otherwise, iterate over index
-				while(!isCompleted() || x < ix.size() ){
-					if(ix.size() <= x){
-						// Wait
-						continue;
-					}
-					Quad qq = ix.get(x);
-					x++;
-					if(target.getGraph().matches(qq.getGraph())
-							&& target.getSubject().matches(qq.getSubject()) &&
-							target.getPredicate().matches(qq.getPredicate()) &&
-							target.getObject().matches(qq.getObject())){
-						next = qq;
+				L.trace("hasNext() seeking target: {}", target);
+				synchronized (ix) {
+					if (ix.contains(target) && next == null) {
+						next = target;
 						return true;
+					} else if (ix.contains(target)) {
+						return false;
+					}
+					// Otherwise, iterate over index
+					while (!isCompleted() || x < ix.size()) {
+						if (ix.size() <= x) {
+							// Wait
+							continue;
+						}
+						Quad qq = ix.get(x);
+						x++;
+
+						boolean mg = false;
+						boolean ms = false;
+						boolean mp = false;
+						boolean mo = false;
+						if (!target.getGraph().isConcrete() || target.getGraph().matches(qq.getGraph())){
+							// If target graph is variable or [], only match with qq not in Union Graph
+							if(!target.getGraph().isConcrete() && qq.getGraph().matches(UNIONGRAPH)){
+								mg = false;
+							} else {
+								mg = true;
+							}
+						}
+						if (!target.getSubject().isConcrete() || target.getSubject().matches(qq.getSubject())){
+							ms = true;
+						}
+						if (!target.getPredicate().isConcrete() || target.getPredicate().matches(qq.getPredicate())){
+							mp = true;
+						}
+						if (!target.getObject().isConcrete() || target.getObject().matches(qq.getObject())){
+							mo = true;
+						}
+						if(mg && ms && mp && mo){
+							next = qq;
+							L.trace("hasNext() {}", next);
+							return true;
+						}
 					}
 				}
 				return false;
@@ -185,6 +210,7 @@ public class FileStreamIndex {
 
 			@Override
 			public Quad next() {
+				L.trace("next() {}", next);
 				Quad ret = next;
 				next = null;
 				return ret;

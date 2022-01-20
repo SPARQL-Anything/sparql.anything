@@ -45,28 +45,34 @@ public class FileStreamManager {
 		this.triplifier = triplifier;
 	}
 
-	private Iterator<Quad> streamFromFile(Quad target){
+	private void streamFromFile(Quad target){
 		// Run Triplifier, intercept triples which are useful to answer the pattern, return them as quads
 		// To store indexes of relevant quads
 		index = new FileStreamIndex(); // Collections.synchronizedList(new ArrayList<Object>());
 		// To stream the currently requested Quads
-		LinkedBlockingQueue<Object> buffer = new LinkedBlockingQueue<Object>();
-		StreamQuadHandler handler = new StreamQuadHandler(properties, target, op, buffer, index);
-		FileStreamer streamer = new FileStreamer(properties, triplifier, buffer, index, handler);
+//		LinkedBlockingQueue<Object> buffer = new LinkedBlockingQueue<Object>();
+		StreamQuadHandler handler = new StreamQuadHandler(properties, target, op, index);
+		FileStreamer streamer = new FileStreamer(properties, triplifier, index, handler);
 		Thread worker = new Thread(streamer);
 		log.debug("Starting thread to seek {}", target);
 		worker.start();
-		return new FileStreamQuadIterator(buffer);
+		//return new FileStreamQuadIterator(buffer);
 	}
 
 	public Iterator<Quad> find(Node g, Node s, Node p, Node o){
 		Quad target = new Quad(g, s, p, o);
-		if (streamInProgress) {
-			return index.find(g,s,p,o);
-		} else {
+		log.debug("find {}", target);
+		if (!streamInProgress) {
+//
+//		} else {
 			streamInProgress = true;
-			return streamFromFile(target);
+			log.debug("start reading file {}", target);
+			streamFromFile(target);
 		}
+		log.debug("stream in progress {}", target);
+		Iterator<Quad> it = index.find(g,s,p,o);
+		log.debug("iterator ready {}", it);
+		return it;
 	}
 
 	public List<String> getDataSourceIds(){

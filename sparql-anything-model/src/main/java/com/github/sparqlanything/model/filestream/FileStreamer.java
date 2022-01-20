@@ -32,28 +32,27 @@ public class FileStreamer implements Runnable {
 	private final Properties properties;
 	private final Triplifier triplifier;
 	private final StreamQuadHandler handler;
-	private final LinkedBlockingQueue<Object> buffer;
+//	private final LinkedBlockingQueue<Object> buffer;
 	private final FileStreamIndex index;
 
-	public FileStreamer(Properties properties, Triplifier triplifier, LinkedBlockingQueue<Object> buffer, FileStreamIndex index, StreamQuadHandler handler){
+	public FileStreamer(Properties properties, Triplifier triplifier, FileStreamIndex index, StreamQuadHandler handler){
 		this.properties = properties;
 		this.triplifier = triplifier;
 		this.handler = handler;
-		this.buffer = buffer;
+//		this.buffer = buffer;
 		this.index = index;
 	}
 	@Override
 	public void run() {
 		try {
-			log.debug("start seeking quad: {}", handler.getTarget());
-			triplifier.triplify(properties, handler);
-			buffer.put(FileStreamQuadIterator.ENDSIGNAL);
-			index.setCompleted();
-
 			if(log.isDebugEnabled()) {
-				log.debug("finished seeking quad ({} found): {}", handler.debug, handler.getTarget());
+				log.debug("streaming started, seeking quad: {}", handler.getTarget());
 			}
-		} catch (IOException | TriplifierHTTPException | InterruptedException e) {
+			triplifier.triplify(properties, handler);
+//			buffer.put(FileStreamQuadIterator.ENDSIGNAL);
+			index.setCompleted();
+			log.debug("streaming finished");
+		} catch (IOException | TriplifierHTTPException e) {
 			throw new RuntimeException(e);
 		}
 	}
