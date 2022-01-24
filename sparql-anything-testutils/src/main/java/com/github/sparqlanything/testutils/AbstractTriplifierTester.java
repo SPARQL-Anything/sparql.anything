@@ -219,7 +219,7 @@ public class AbstractTriplifierTester {
 	protected void perform() throws TriplifierHTTPException, IOException, URISyntaxException {
 		logger.debug("{} (perform)", name.getMethodName());
 		logger.info("{}", properties);
-		String graphName = Triplifier.getRootArgument(properties, url);
+		String graphName = Triplifier.getRootArgument(properties);
 		logger.debug("Graph name: {}", graphName);
 
 		if (!useDatasetGraph) {

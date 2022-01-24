@@ -80,7 +80,7 @@ public class BinaryTriplifier implements Triplifier {
 			logger.warn("Using default encoding (Base64)");
 		}
 
-		String root = Triplifier.getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties);
 //		Charset charset = getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 //		String namespace = url.toString() + "#";

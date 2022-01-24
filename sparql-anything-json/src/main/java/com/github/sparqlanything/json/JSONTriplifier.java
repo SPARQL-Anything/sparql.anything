@@ -47,7 +47,7 @@ public class JSONTriplifier implements Triplifier {
 	}
 
 	private String getRootId(URL url, String dataSourceId, Properties properties) {
-		return Triplifier.getRootArgument(properties, url);
+		return Triplifier.getRootArgument(properties);
 	}
 
 	private void transform(URL url, Properties properties, FacadeXGraphBuilder builder)

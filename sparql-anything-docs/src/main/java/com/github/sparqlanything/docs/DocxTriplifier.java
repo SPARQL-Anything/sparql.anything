@@ -55,7 +55,7 @@ public class DocxTriplifier implements Triplifier {
 		if (url == null)
 			return builder.getDatasetGraph();
 
-		String root = Triplifier.getRootArgument(properties, url.toString());
+		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
 		String namespace = Triplifier.getNamespaceArgument(properties);
 		boolean mergeParagraphs = Boolean.parseBoolean(properties.getProperty(MERGE_PARAGRAPHS, "false"));

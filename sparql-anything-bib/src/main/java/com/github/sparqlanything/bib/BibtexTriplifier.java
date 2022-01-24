@@ -56,7 +56,7 @@ public class BibtexTriplifier implements Triplifier {
 		if (url == null && (content == null || content.isEmpty()))
 			return dg;
 
-		String root = Triplifier.getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
 		String namespace = Triplifier.getNamespaceArgument(properties);
 

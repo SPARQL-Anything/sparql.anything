@@ -43,7 +43,7 @@ public class YAMLTriplifier implements Triplifier {
 	}
 
 	private String getRootId(URL url, String dataSourceId, Properties properties) {
-		return Triplifier.getRootArgument(properties, url);
+		return Triplifier.getRootArgument(properties);
 	}
 
 	protected void transform(URL url, Properties properties, FacadeXGraphBuilder builder)

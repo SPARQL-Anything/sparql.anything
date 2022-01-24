@@ -85,7 +85,7 @@ public class HTMLTriplifier implements Triplifier {
 		if (url == null)
 			return DatasetGraphFactory.create();
 
-		String root = Triplifier.getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		String namespace = Triplifier.getNamespaceArgument(properties);

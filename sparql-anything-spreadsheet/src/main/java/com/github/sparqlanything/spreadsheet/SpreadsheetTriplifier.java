@@ -67,7 +67,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 		URL url = Triplifier.getLocation(properties);
 		if (url == null)
 			return dg;
-		String root = Triplifier.getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties);
 //		Charset charset = getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		String namespace = Triplifier.getNamespaceArgument(properties);

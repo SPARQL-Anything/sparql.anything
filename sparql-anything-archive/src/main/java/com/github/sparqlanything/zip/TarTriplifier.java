@@ -61,7 +61,7 @@ public class TarTriplifier implements Triplifier {
 		if (url == null)
 			return dg;
 
-		String root = Triplifier.getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");

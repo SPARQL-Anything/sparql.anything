@@ -65,7 +65,7 @@ public class XMLTriplifier implements Triplifier {
 
 		String namespace = Triplifier.getNamespaceArgument(properties);
 		String dataSourceId = url.toString();
-		String root = Triplifier.getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties);
 
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		// TODO allow users to configure XML parser via properties

@@ -69,7 +69,7 @@ public class TestTriplifier {
 				System.err.println(graphNodes.next());
 			}
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p, doc)))
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p)))
 					.isIsomorphicWith(expectedGraph));
 
 			p.setProperty(DocxTriplifier.MERGE_PARAGRAPHS, "true");
@@ -96,7 +96,7 @@ public class TestTriplifier {
 			expectedGraph.add(new Triple(n, RDF.li(6).asNode(), NodeFactory.createLiteral("", XSDDatatype.XSDstring)));
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p, doc)))
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p)))
 					.isIsomorphicWith(expectedGraph));
 
 		} catch (IOException e) {
@@ -210,7 +210,7 @@ public class TestTriplifier {
 					.add(new Triple(row4, RDF.li(5).asNode(), NodeFactory.createLiteral("45", XSDDatatype.XSDstring)));
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p, doc)))
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p)))
 					.isIsomorphicWith(expectedGraph));
 
 			if (!dg.getDefaultGraph().isIsomorphicWith(expectedGraph)) {
@@ -295,7 +295,7 @@ public class TestTriplifier {
 			}
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p, doc)))
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p)))
 					.isIsomorphicWith(expectedGraph));
 
 		} catch (IOException e) {

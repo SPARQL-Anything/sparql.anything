@@ -47,7 +47,7 @@ public class CSVTriplifier implements Triplifier {
 	public final static String PROPERTY_NULLSTRING = "csv.null-string";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException{
+	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		URL url = Triplifier.getLocation(properties);
 		log.debug("Location: {}", url);
@@ -65,14 +65,14 @@ public class CSVTriplifier implements Triplifier {
 			format = format.withNullString(properties.getProperty(PROPERTY_NULLSTRING)) ;
 		}
 		if(properties.containsKey(PROPERTY_DELIMITER)){
-			System.out.println("Setting delimiter to " + properties.getProperty(PROPERTY_DELIMITER));
+			log.debug("Setting delimiter to {}", properties.getProperty(PROPERTY_DELIMITER));
 			if(properties.getProperty(PROPERTY_DELIMITER).length() != 1){
 				throw new IOException("Bad value for property " + PROPERTY_DELIMITER + ": string length must be 1, " + Integer.toString(properties.getProperty(PROPERTY_DELIMITER).length()) + " given");
 			}
 			format = format.withDelimiter(properties.getProperty(PROPERTY_DELIMITER).charAt(0)) ;
 		}
 
-		String root = Triplifier.getRootArgument(properties, url);
+		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 		String namespace = Triplifier.getNamespaceArgument(properties);
@@ -88,7 +88,7 @@ public class CSVTriplifier implements Triplifier {
 		log.debug("Use headers: {}", headers);
 		Reader in = null;
 		
-		String dataSourceId = Triplifier.getRootArgument(properties, url); // url.toString();
+		String dataSourceId = Triplifier.getRootArgument(properties); // there is always 1 data source id
 		String containerRowPrefix = url.toString() + "#row";
 		// Add type Root
 		builder.addRoot(dataSourceId, root);

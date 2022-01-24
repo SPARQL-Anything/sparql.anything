@@ -53,11 +53,11 @@ public class TextTriplifier implements Triplifier {
 		URL url = Triplifier.getLocation(properties);
 		if (url == null) {
 			value = properties.getProperty(IRIArgument.CONTENT.toString(), "");
-			root = Triplifier.getRootArgument(properties, Integer.toString(value.hashCode()));
-			dataSourceId = root; // Use the hashed value //builder.getMainGraphName().getURI();
+			root = Triplifier.getRootArgument(properties);
+			dataSourceId = root; //
 		} else {
 			value = readFromURL(url, properties);
-			root = Triplifier.getRootArgument(properties, url.toString());
+			root = Triplifier.getRootArgument(properties);
 			dataSourceId = root;
 		}
 
