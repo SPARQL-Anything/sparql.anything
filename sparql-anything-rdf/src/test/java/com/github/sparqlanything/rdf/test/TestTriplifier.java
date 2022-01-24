@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -54,7 +57,9 @@ public class TestTriplifier {
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		DatasetGraph dg;
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -69,7 +74,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -84,7 +91,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -99,7 +108,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -114,7 +125,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -129,7 +142,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getGraph(NodeFactory.createURI("http://example.org/g")).isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -144,7 +159,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getGraph(NodeFactory.createURI("http://example.org/g")).isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -159,7 +176,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getGraph(NodeFactory.createURI("http://example.org/g")).isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -174,7 +193,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 		try {
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			assertTrue(dg.getGraph(NodeFactory.createURI("http://example.org/g")).isIsomorphicWith(getTestGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();

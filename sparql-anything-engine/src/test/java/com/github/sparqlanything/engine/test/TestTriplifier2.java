@@ -42,13 +42,7 @@ public class TestTriplifier2 implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not tested yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-
+	
 		DatasetGraph dg = DatasetGraphFactory.create();
 		Graph g = GraphFactory.createGraphMem();
 

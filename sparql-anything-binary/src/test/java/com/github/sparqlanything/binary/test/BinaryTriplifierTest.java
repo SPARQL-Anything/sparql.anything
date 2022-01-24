@@ -26,6 +26,8 @@ import java.net.URL;
 import java.util.Properties;
 
 import com.github.sparqlanything.binary.BinaryTriplifier;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -48,14 +50,16 @@ public class BinaryTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = bt.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			bt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
 			expectedGraph.add(new Triple(n,RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(new Triple(n, RDF.li(1).asNode(),
 					NodeFactory.createLiteral("dGhpcyBpcyBhIHRlc3Q=", XSDDatatype.XSDbase64Binary)));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

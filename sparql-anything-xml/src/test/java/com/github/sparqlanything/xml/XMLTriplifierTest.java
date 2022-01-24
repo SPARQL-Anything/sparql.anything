@@ -27,7 +27,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
-import com.github.sparqlanything.model.TriplifierHTTPException;
+import com.github.sparqlanything.model.*;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
@@ -36,9 +36,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.Triplifier;
 
 public class XMLTriplifierTest {
 	private XMLTriplifier triplifier = new XMLTriplifier();
@@ -51,8 +48,9 @@ public class XMLTriplifierTest {
 
 		URL xml1 = getClass().getClassLoader().getResource("./test1.xml");
 		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
-
-		DatasetGraph graph = triplifier.triplify(properties);
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(xml1.toString(), properties);
+		triplifier.triplify(properties, builder);
+		DatasetGraph graph = builder.getDatasetGraph();
 		Iterator<Quad> iter = graph.find(null, null, RDF.type.asNode(),
 				NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
 		Assert.assertTrue(iter.hasNext());
@@ -65,7 +63,10 @@ public class XMLTriplifierTest {
 		properties.setProperty("blank-nodes", "false");
 		URL xml1 = getClass().getClassLoader().getResource("./test1.xml");
 		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
-		DatasetGraph graph = triplifier.triplify(properties);
+		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(xml1.toString(), properties);
+		triplifier.triplify(properties, builder);
+		DatasetGraph graph = builder.getDatasetGraph();
 //        ModelFactory.createModelForGraph(graph.getDefaultGraph()).write(System.out,"TTL");
 		Iterator<Quad> iter = graph.find(null, null, null, null);
 		while (iter.hasNext()) {

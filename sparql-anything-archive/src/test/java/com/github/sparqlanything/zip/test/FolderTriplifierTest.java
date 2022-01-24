@@ -28,6 +28,8 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.zip.FolderTriplifier;
 import com.github.sparqlanything.zip.ZipTriplifier;
 import org.apache.jena.graph.NodeFactory;
@@ -47,10 +49,9 @@ public class FolderTriplifierTest {
 
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
-
-//			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
-
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 			Set<String> expected = new HashSet<>();
 
 			expected.add("");
@@ -92,8 +93,9 @@ public class FolderTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 			p.setProperty(ZipTriplifier.MATCHES.toString(), "[^j]*");
-			DatasetGraph dg = tt.triplify(p);
-
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
 			Set<String> expected = new HashSet<>();
@@ -131,8 +133,9 @@ public class FolderTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
-
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
 			Set<String> expected = new HashSet<>();

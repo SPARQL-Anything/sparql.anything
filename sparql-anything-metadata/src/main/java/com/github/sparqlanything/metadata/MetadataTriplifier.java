@@ -51,12 +51,12 @@ public class MetadataTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not implemented yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
+//		// TODO Not implemented yet
+//		return triplify(properties);
+//	}
+//
+//	@Override
+//	public DatasetGraph triplify(Properties properties) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
 
@@ -64,7 +64,7 @@ public class MetadataTriplifier implements Triplifier {
 			return DatasetGraphFactory.create();
 
 		DatasetGraph dg = DatasetGraphFactory.create();
-		Graph g = GraphFactory.createGraphMem();
+//		Graph g = GraphFactory.createGraphMem();
 
 //		String defaultNamespace = url.toString() + "/";
 //		String namespace = null;
@@ -79,41 +79,39 @@ public class MetadataTriplifier implements Triplifier {
 //			namespace = defaultNamespace;
 //		}
 
-		String namespace = url.toString() + "#";
+		//String namespace = url.toString() + "#";
 
-		Node n = NodeFactory.createURI(url.toString());
+//		Node n = NodeFactory.createURI(url.toString());
+		String dataSourceId = Triplifier.getRootArgument(properties);
+		String root = dataSourceId;
 		File f = new File(FilenameUtils.getName(url.getFile()));
 		FileUtils.copyURLToFile(url, f);
-
-		readBasicAttributes(f.toPath(), g, n, namespace);
+		readBasicAttributes(f.toPath(), dataSourceId, root, builder);
 		try {
-			readMetadata(f, g, n, namespace);
+			readMetadata(f, dataSourceId, root, builder);
 		} catch (ImageProcessingException | IOException e) {
 			e.printStackTrace();
 		}
 
-		dg.setDefaultGraph(g);
+		dg = builder.getDatasetGraph();
 
 		f.delete();
 
 		return dg;
 	}
 
-	private void readBasicAttributes(Path p, Graph g, Node n, String namespace) throws IOException {
+	private void readBasicAttributes(Path p, String dataSourceId, String root, FacadeXGraphBuilder builder) throws IOException {
 		BasicFileAttributes attr = Files.readAttributes(p, BasicFileAttributes.class);
-
-		g.add(new Triple(n, NodeFactory.createURI(namespace + "size"),
-				NodeFactory.createLiteral(attr.size() + "", XSDDatatype.XSDinteger)));
+		builder.addValue(dataSourceId, root, "size", attr.size());
 	}
 
-	private void readMetadata(File f, Graph g, Node n, String namespace) throws IOException, ImageProcessingException {
+	private void readMetadata(File f, String dataSourceId, String root, FacadeXGraphBuilder builder) throws IOException, ImageProcessingException {
 
 		Metadata metadata = ImageMetadataReader.readMetadata(f);
 
 		for (Directory directory : metadata.getDirectories()) {
 			for (Tag tag : directory.getTags()) {
-				g.add(new Triple(n, NodeFactory.createURI(namespace + tag.getTagName()),
-						NodeFactory.createLiteral(tag.getDescription())));
+				builder.addValue(dataSourceId, root, tag.getTagName(), tag.getDescription());
 			}
 		}
 

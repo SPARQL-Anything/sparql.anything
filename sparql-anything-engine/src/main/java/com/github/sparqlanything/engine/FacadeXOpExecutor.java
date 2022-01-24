@@ -332,8 +332,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	private void createMetadataGraph(DatasetGraph dg, Properties p) throws IOException {
 		if (triplifyMetadata(p)) {
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(Triplifier.getRootArgument(p), p);
+			metadataTriplifier.triplify(p, builder);
 			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI),
-					metadataTriplifier.triplify(p).getDefaultGraph());
+					builder.getDatasetGraph().getDefaultGraph());
 		}
 	}
 

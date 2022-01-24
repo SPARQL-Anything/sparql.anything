@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.spreadsheet.SpreadsheetTriplifier;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -51,7 +53,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 
 			String root = spreadsheet.toString() + "#";
 
@@ -125,9 +129,11 @@ public class TestTriplifier {
 		p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 		DatasetGraph dg;
 		try {
-			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
-			dg = st.triplify(p);
 
+			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 			dg.find(null, null, null, null).forEachRemaining(q -> {
 				assertTrue(!q.getSubject().isBlank());
 				assertTrue(!q.getPredicate().isBlank());
@@ -150,7 +156,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 
 			dg.find(null, null, null, null).forEachRemaining(q -> {
 				boolean condition = q.getPredicate().getURI().startsWith(namespace)
@@ -172,7 +180,9 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 
 			String root = spreadsheet.toString() + "#";
 
@@ -249,7 +259,9 @@ public class TestTriplifier {
 
 			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
 
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 
 			String root = spreadsheet.toString() + "#";
 

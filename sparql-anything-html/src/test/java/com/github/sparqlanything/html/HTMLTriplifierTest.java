@@ -24,6 +24,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -50,8 +52,11 @@ public class HTMLTriplifierTest {
 	@Test
 	public void test1() throws URISyntaxException, IOException, TriplifierHTTPException {
 		Properties p = new Properties();
-		p.setProperty(IRIArgument.LOCATION.toString(), new URL(getTestLocation(name.getMethodName())).toString());
-		DatasetGraph dataset = html2rdf.triplify(p);
+		URL url = new URL(getTestLocation(name.getMethodName()));
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+		html2rdf.triplify(p, builder);
+		DatasetGraph dataset = builder.getDatasetGraph();
 //        Iterator<Quad> iter = dataset.find(null,null,null,null);
 //        while(iter.hasNext()){
 //            Quad t = iter.next();
@@ -66,13 +71,11 @@ public class HTMLTriplifierTest {
 	@Test
 	public void test2() throws URISyntaxException, IOException, TriplifierHTTPException {
 		Properties p = new Properties();
-		p.setProperty(IRIArgument.LOCATION.toString(), new URL(getTestLocation(name.getMethodName())).toString());
-		DatasetGraph dataset = html2rdf.triplify(p);
-//        Iterator<Quad> iter = dataset.find(null,null,null,null);
-//        while(iter.hasNext()){
-//            Quad t = iter.next();
-//            System.err.println(t);
-//        }
+		URL url = new URL(getTestLocation(name.getMethodName()));
+		p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+		html2rdf.triplify(p, builder);
+		DatasetGraph dataset = builder.getDatasetGraph();
 		Model m = ModelFactory.createModelForGraph(dataset.getDefaultGraph());
 		m.setNsPrefix("xhtml", "http://www.w3.org/1999/xhtml#");
 		m.setNsPrefix("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
@@ -89,7 +92,9 @@ public class HTMLTriplifierTest {
 		try {
 			URL spreadsheet = new URL(getTestLocation(name.getMethodName()));
 			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
-			dg = st.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
 
 			dg.find(null, null, null, null).forEachRemaining(q -> {
 				log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());

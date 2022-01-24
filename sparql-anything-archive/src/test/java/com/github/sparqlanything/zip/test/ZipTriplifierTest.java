@@ -25,11 +25,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.zip.ZipTriplifier;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
@@ -47,7 +50,9 @@ public class ZipTriplifierTest {
 			URL url = getClass().getClassLoader().getResource("test.zip").toURI().toURL();
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
@@ -59,7 +64,7 @@ public class ZipTriplifierTest {
 			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral("test.xml")));
 			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("test.txt")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
@@ -76,7 +81,9 @@ public class ZipTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 			p.setProperty(ZipTriplifier.MATCHES.toString(), ".*\\.(csv|json)");
-			DatasetGraph dg = tt.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
@@ -88,7 +95,7 @@ public class ZipTriplifierTest {
 //			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral("test.xml")));
 //			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("test.txt")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
@@ -103,9 +110,11 @@ public class ZipTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 
-//			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
+			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createURI(url.toString() + "#");
@@ -115,7 +124,7 @@ public class ZipTriplifierTest {
 			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral("test.xml")));
 			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("test.txt")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();

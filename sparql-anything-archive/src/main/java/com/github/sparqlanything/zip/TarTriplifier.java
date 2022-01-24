@@ -48,49 +48,24 @@ public class TarTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not implemented yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		DatasetGraph dg = DatasetGraphFactory.create();
-
-		URL url = Triplifier.getLocation(properties);
-
-		if (url == null)
-			return dg;
-
-		String root = Triplifier.getRootArgument(properties);
+		URL location = Triplifier.getLocation(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		String root = Triplifier.getRootArgument(properties);
+		String dataSourceId = root;
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
-		logger.trace("BN nodes {}", blank_nodes);
-
-		Node rootResource;
-		if (!blank_nodes) {
-			if (root == null) {
-				rootResource = NodeFactory.createURI(url.toString());
-			} else {
-				rootResource = NodeFactory.createURI(root);
-			}
-		} else {
-			rootResource = NodeFactory.createBlankNode();
-		}
-
 		Graph g = GraphFactory.createDefaultGraph();
-		g.add(new Triple(rootResource, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+		builder.addRoot(dataSourceId, root);
 
 		try {
 			TarArchiveInputStream debInputStream = (TarArchiveInputStream) new ArchiveStreamFactory()
-					.createArchiveInputStream("tar", url.openStream(), charset.toString());
+					.createArchiveInputStream("tar", location.openStream(), charset.toString());
 			int i = 1;
 			TarArchiveEntry entry = null;
 			while ((entry = (TarArchiveEntry) debInputStream.getNextEntry()) != null) {
 
 				if (entry.getName().matches(matches)) {
-					g.add(new Triple(rootResource, RDF.li(i).asNode(), NodeFactory.createLiteral(entry.getName())));
+					builder.addValue(dataSourceId, root, i, entry.getName());
 					i++;
 				}
 
@@ -100,10 +75,7 @@ public class TarTriplifier implements Triplifier {
 			throw new IOException(e);
 		}
 
-		dg.setDefaultGraph(g);
-		dg.addGraph(NodeFactory.createURI(url.toString()), g);
-
-		return dg;
+		return builder.getDatasetGraph();
 	}
 
 	@Override

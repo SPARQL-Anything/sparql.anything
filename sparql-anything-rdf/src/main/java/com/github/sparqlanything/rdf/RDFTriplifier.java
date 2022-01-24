@@ -42,19 +42,12 @@ public class RDFTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not implemented yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
 			return DatasetGraphFactory.create();
 
-		DatasetGraph dg = DatasetGraphFactory.create();
+		DatasetGraph dg = builder.getDatasetGraph();
 		logger.info("URL {}", url.toString());
 		RDFDataMgr.read(dg, url.toString());
 		return dg;

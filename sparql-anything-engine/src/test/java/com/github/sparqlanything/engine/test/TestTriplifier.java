@@ -34,12 +34,6 @@ public class TestTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not tested yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
 		return TriplifierRegistryTest.createExampleGraph();
 	}
 

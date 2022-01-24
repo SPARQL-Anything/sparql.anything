@@ -49,39 +49,15 @@ public class FolderTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not implemented yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		DatasetGraph dg = DatasetGraphFactory.create();
-
 		URL url = Triplifier.getLocation(properties);
 
-		if (url == null)
-			return dg;
-
 		String root = Triplifier.getRootArgument(properties);
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		String dataSourceId = root;
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
-		logger.trace("BN nodes {}", blank_nodes);
 		logger.trace("Matches {}", matches);
 
-		Node rootResource;
-		if (!blank_nodes) {
-			if (root == null) {
-				rootResource = NodeFactory.createURI(url.toString());
-			} else {
-				rootResource = NodeFactory.createURI(root);
-			}
-		} else {
-			rootResource = NodeFactory.createBlankNode();
-		}
-
-		Graph g = GraphFactory.createDefaultGraph();
-		g.add(new Triple(rootResource, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+		builder.addRoot(dataSourceId, root);
 
 		try {
 			Path path = Paths.get(url.toURI());
@@ -89,20 +65,15 @@ public class FolderTriplifier implements Triplifier {
 			Files.walk(path).forEach(p -> {
 				logger.trace("{} matches? {}", p.toString(), path.toString().matches(matches));
 				if (p.toString().matches(matches)) {
-					g.add(new Triple(rootResource, RDF.li(i.getAndIncrement()).asNode(),
-							NodeFactory.createLiteral(p.toUri().toString())));
+					builder.addValue(dataSourceId, root, i.getAndIncrement(), p.toUri().toString());
 				}
-
 			});
 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 
-		dg.setDefaultGraph(g);
-		dg.addGraph(NodeFactory.createURI(url.toString()), g);
-
-		return dg;
+		return builder.getDatasetGraph();
 	}
 
 	@Override

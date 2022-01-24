@@ -56,17 +56,9 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not implemented yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		DatasetGraph dg = DatasetGraphFactory.create();
 
 		URL url = Triplifier.getLocation(properties);
-		if (url == null)
-			return dg;
+
 		String root = Triplifier.getRootArgument(properties);
 //		Charset charset = getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
@@ -84,29 +76,24 @@ public class SpreadsheetTriplifier implements Triplifier {
 		Workbook wb = WorkbookFactory.create(url.openStream());
 
 		wb.sheetIterator().forEachRemaining(s -> {
-			String uriGraph = root + Triplifier.toSafeURIString(s.getSheetName());
-			Graph g = toGraph(s, uriGraph, namespace, blank_nodes, headers.get());
-			dg.addGraph(NodeFactory.createURI(uriGraph), g);
+			String dataSourceId = root + Triplifier.toSafeURIString(s.getSheetName());
+			String sheetRoot = dataSourceId;
+//			Graph g = toGraph(s, uriGraph, namespace, blank_nodes, headers.get());
+			populate(s, dataSourceId, sheetRoot, builder, headers.get());
+//			dg.addGraph(NodeFactory.createURI(uriGraph), g);
 		});
 
-		dg.setDefaultGraph(dg.getUnionGraph());
+//		dg.setDefaultGraph(dg.getUnionGraph());
 
-		return dg;
+		return builder.getDatasetGraph();
 	}
 
-	private Graph toGraph(Sheet s, String root, String namespace, boolean blank_nodes, boolean headers) {
-		Graph g = GraphFactory.createGraphMem();
-
-		Node document;
-
-		if (blank_nodes) {
-			document = NodeFactory.createBlankNode();
-		} else {
-			document = NodeFactory.createURI(root + "_root");
-		}
+//	private Graph toGraph(Sheet s, String root, String namespace, boolean blank_nodes, boolean headers) {
+	private void populate(Sheet s, String dataSourceId, String root, FacadeXGraphBuilder builder, boolean headers) {
 
 		// Add type Root
-		g.add(new Triple(document, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+//		g.add(new Triple(document, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+		builder.addRoot(dataSourceId, root);
 
 		int rown = 0; // this counts the LI index not the spreadsheet rows
 		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
@@ -138,13 +125,14 @@ public class SpreadsheetTriplifier implements Triplifier {
 				// Data
 				// Rows
 				rown++;
-				Node row;
-				if (blank_nodes) {
-					row = NodeFactory.createBlankNode();
-				} else {
-					row = NodeFactory.createURI(root + "_Row_" + rown);
-				}
-				g.add(new Triple(document, RDF.li(rown).asNode(), row));
+				String row = root + "_Row_" + rown;
+//				if (blank_nodes) {
+//					row = NodeFactory.createBlankNode();
+//				} else {
+//					row = NodeFactory.createURI(root + "_Row_" + rown);
+//				}
+				builder.addContainer(dataSourceId, root, rown, row);
+//				g.add(new Triple(document, RDF.li(rown).asNode(), row));
 				Row record = s.getRow(rowNum);
 				Iterator<Cell> cellIterator = record.cellIterator();
 				int colid = 0;
@@ -154,18 +142,19 @@ public class SpreadsheetTriplifier implements Triplifier {
 					colid++;
 					Node property;
 					if (headers && headers_map.containsKey(colid)) {
-						property = NodeFactory
-								.createURI(namespace + Triplifier.toSafeURIString(headers_map.get(colid)));
+						builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value );
+//						property = NodeFactory
+//								.createURI(namespace + Triplifier.toSafeURIString(headers_map.get(colid)));
 					} else {
-						property = RDF.li(colid).asNode();
+						builder.addValue(dataSourceId, row, colid, value );
 					}
 
-					g.add(new Triple(row, property, NodeFactory.createLiteral(value)));
+//					g.add(new Triple(row, property, NodeFactory.createLiteral(value)));
 				}
 			}
 		}
 
-		return g;
+//		return g;
 	}
 
 	private String cellToString(Cell cell) {

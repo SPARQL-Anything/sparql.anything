@@ -25,6 +25,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.zip.ZipTriplifier;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -48,9 +50,9 @@ public class TarTriplifierTest {
 			URL url = getClass().getClassLoader().getResource("test.tar").toURI().toURL();
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
-
-//			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
@@ -61,7 +63,7 @@ public class TarTriplifierTest {
 			expectedGraph.add(new Triple(n, RDF.li(5).asNode(), NodeFactory.createLiteral("test/test.txt")));
 			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test/")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
@@ -76,7 +78,10 @@ public class TarTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 			p.setProperty(ZipTriplifier.MATCHES.toString(), "test/.*\\..*");
-			DatasetGraph dg = tt.triplify(p);
+
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
@@ -89,7 +94,7 @@ public class TarTriplifierTest {
 			expectedGraph.add(new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("test/test.txt")));
 //			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test/")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
@@ -104,7 +109,9 @@ public class TarTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			tt.triplify(p, builder);
+			DatasetGraph dg = builder.getDatasetGraph();
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
@@ -117,7 +124,7 @@ public class TarTriplifierTest {
 			expectedGraph.add(new Triple(n, RDF.li(5).asNode(), NodeFactory.createLiteral("test/test.txt")));
 			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test/")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
-			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
+			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();

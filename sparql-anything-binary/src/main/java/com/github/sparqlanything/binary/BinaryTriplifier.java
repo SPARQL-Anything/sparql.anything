@@ -53,21 +53,8 @@ public class BinaryTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		// TODO Not implemented yet
-		return triplify(properties);
-	}
-
-	@Override
-	public DatasetGraph triplify(Properties properties) throws IOException {
-		DatasetGraph dg = DatasetGraphFactory.create();
 
 		URL url = Triplifier.getLocation(properties);
-
-		if (url == null)
-			return dg;
-
-		Graph g = GraphFactory.createGraphMem();
-
 		Encoding encoding = Encoding.BASE64;
 
 		if (properties.contains(ENCODING)) {
@@ -81,21 +68,10 @@ public class BinaryTriplifier implements Triplifier {
 		}
 
 		String root = Triplifier.getRootArgument(properties);
+		String dataSourceId = root;
 //		Charset charset = getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 //		String namespace = url.toString() + "#";
-
-		Node n;
-		if (!blank_nodes) {
-			if (root == null) {
-				n = NodeFactory.createURI(url.toString());
-			} else {
-				n = NodeFactory.createURI(root);
-			}
-
-		} else {
-			n = NodeFactory.createBlankNode();
-		}
 
 		String value;
 		byte[] file = downloadUrl(url);
@@ -109,14 +85,11 @@ public class BinaryTriplifier implements Triplifier {
 			break;
 		}
 		// Add root
-		g.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+		builder.addRoot(dataSourceId, root);
 		// Add content
-		g.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary)));
+		builder.addValue(dataSourceId, root, 1, NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary));
 
-		dg.addGraph(NodeFactory.createURI(url.toString()), g);
-		dg.setDefaultGraph(g);
-
-		return dg;
+		return builder.getDatasetGraph();
 	}
 
 	private byte[] downloadUrl(URL toDownload) {

@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
@@ -92,7 +93,9 @@ public class CSVTriplifierTest {
 
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
-		DatasetGraph graph = triplifier.triplify(properties);
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(csv1.toString(), properties);
+		triplifier.triplify(properties, builder);
+		DatasetGraph graph = builder.getDatasetGraph();
 		Iterator<Quad> iter = graph.find(null, null, null, null);
 		while (iter.hasNext()) {
 			Quad t = iter.next();
@@ -112,7 +115,9 @@ public class CSVTriplifierTest {
 
 		URL csv1 = getClass().getClassLoader().getResource("./test.tsv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
-		DatasetGraph graph = triplifier.triplify(properties);
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(csv1.toString(), properties);
+		triplifier.triplify(properties, builder);
+		DatasetGraph graph = builder.getDatasetGraph();
 		Iterator<Quad> iter = graph.find(null, null, null, null);
 		while (iter.hasNext()) {
 			Quad t = iter.next();
