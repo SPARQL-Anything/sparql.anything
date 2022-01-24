@@ -28,9 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.github.sparqlanything.model.filestream.FileStreamDatasetGraph;
-import com.github.sparqlanything.model.filestream.FileStreamManager;
-import com.github.sparqlanything.model.filestream.FileStreamTriplifier;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -298,23 +295,17 @@ public class FacadeXOpExecutor extends OpExecutor {
 		logger.debug("Execution strategy: {} {}", strategy, op.toString());
 		if (t != null) {
 			try {
-				if (strategy == 2){
-					logger.warn("Strategy 2 is experimental!");
-					// XXX Experimental, Triplifier must implement FileStreamTriplifier
-					p.put(IRIArgument.BLANK_NODES.name(), "false");
-					FileStreamManager man = new FileStreamManager(ARQ.getContext(), op, p, (FileStreamTriplifier) t);
-					dg = new FileStreamDatasetGraph(man);
+
+				FacadeXGraphBuilder builder;
+				if (strategy == 1) {
+					logger.trace("Executing: {} [strategy={}]", p, strategy);
+					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
 				} else {
-					FacadeXGraphBuilder builder;
-					if (strategy == 1) {
-						logger.trace("Executing: {} [strategy={}]", p, strategy);
-						builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
-					} else {
-						logger.trace("Executing: {} [strategy={}]", p, strategy);
-						builder = new BaseFacadeXGraphBuilder(resourceId, p);
-					}
-					dg = t.triplify(p, builder);
+					logger.trace("Executing: {} [strategy={}]", p, strategy);
+					builder = new BaseFacadeXGraphBuilder(resourceId, p);
 				}
+				dg = t.triplify(p, builder);
+
 			} catch (TriplifierHTTPException e) {
 				if (p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")) {
 					// as per https://www.w3.org/TR/sparql11-federated-query/#serviceFailure
