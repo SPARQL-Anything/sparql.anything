@@ -82,9 +82,9 @@ public class JSONTripleFilteringTest {
 		bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"),
 				ResourceFactory.createPlainLiteral("Comedy").asNode()));
 		DatasetGraph g1;
-		FacadeXGraphBuilder builder = getTripleFilteringBuilder(url, bgp, properties);
 		properties.setProperty(IRIArgument.LOCATION.toString(),
 				url.toString());
+		FacadeXGraphBuilder builder = getTripleFilteringBuilder(url, bgp, properties);
 		g1 = jt.triplify(properties, builder);
 		// Only four triples matching the BGP
 		log.info("Size is: {}", g1.getDefaultGraph().size());

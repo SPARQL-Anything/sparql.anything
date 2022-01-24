@@ -38,6 +38,12 @@ import java.util.Properties;
 public class TripleFilteringFacadeXBuilderTest {
     public static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilderTest.class);
 
+	private static Properties getProperties(){
+		Properties p = new Properties();
+		p.put("location", "http://www.example.org/");
+		return p;
+	}
+
     /**
      * BGP, 1, {? ? L}
      */
@@ -46,7 +52,7 @@ public class TripleFilteringFacadeXBuilderTest {
         OpBGP bgp = new OpBGP();
         bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, new Properties());
+        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Resource g = ResourceFactory.createResource("http://www.example.org/");
         f.add(g.asNode(), ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
         Assert.assertTrue(f.getModel().size() == 1);
@@ -62,7 +68,7 @@ public class TripleFilteringFacadeXBuilderTest {
         OpBGP bgp = new OpBGP();
         bgp.getPattern().add(new Triple(Node_Variable.ANY, new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, new Properties());
+        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
         f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
         Assert.assertTrue(f.getModel().size() == 1);
@@ -80,7 +86,7 @@ public class TripleFilteringFacadeXBuilderTest {
         OpBGP bgp = new OpBGP();
         bgp.getPattern().add(new Triple(Node_Variable.ANY, property.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, new Properties());
+        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
 		//
         f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
@@ -106,7 +112,7 @@ public class TripleFilteringFacadeXBuilderTest {
         bgp.getPattern().add(new Triple(Node_Variable.ANY, property1.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
         bgp.getPattern().add(new Triple(Node_Variable.ANY, property2.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, new Properties());
+        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
 		//
         f.add(g, ResourceFactory.createResource().asNode(), property1.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
@@ -131,7 +137,7 @@ public class TripleFilteringFacadeXBuilderTest {
         bgp.getPattern().add(new Triple(resource1, property1, resource3));
         bgp.getPattern().add(new Triple(resource2, property2, resource4));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, new Properties());
+        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
 		//
         f.add(g,ResourceFactory.createResource().asNode(), property1, NodeFactory.createLiteral("Hello world"));
@@ -170,7 +176,7 @@ public class TripleFilteringFacadeXBuilderTest {
         bgp.getPattern().add(new Triple(resource2, property2, resource4));
         bgp.getPattern().add(new Triple(Node_Variable.ANY, new Node_Variable("p"), Node_Variable.ANY));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, new Properties());
+        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
         //
         f.add(g, NodeFactory.createBlankNode(), property1, NodeFactory.createLiteral("Hello world"));
@@ -202,7 +208,7 @@ public class TripleFilteringFacadeXBuilderTest {
 
         OpQuadPattern qp = new OpQuadPattern(new Node_Variable("g"), bgp.getPattern());
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", qp, new Properties());
+        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", qp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
         f.add(g, NodeFactory.createBlankNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
         Assert.assertTrue(f.getModel().size() == 1);
@@ -229,7 +235,7 @@ public class TripleFilteringFacadeXBuilderTest {
 
         OpQuadPattern qp = new OpQuadPattern(NodeFactory.createURI("http://www.example.org/"), bgp.getPattern());
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", qp, new Properties());
+        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", qp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
         //
         f.add(g, ResourceFactory.createResource().asNode(), property1, ResourceFactory.createPlainLiteral("Hello world").asNode());
