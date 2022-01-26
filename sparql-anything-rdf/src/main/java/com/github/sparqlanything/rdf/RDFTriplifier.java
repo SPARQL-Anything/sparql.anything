@@ -41,16 +41,15 @@ public class RDFTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(RDFTriplifier.class);
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
-			return DatasetGraphFactory.create();
+			return ;
 
 		DatasetGraph dg = builder.getDatasetGraph();
 		logger.info("URL {}", url.toString());
 		RDFDataMgr.read(dg, url.toString());
-		return dg;
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public class TextTriplifier implements Triplifier {
 	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
+	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 
 		String value;
@@ -126,7 +126,6 @@ public class TextTriplifier implements Triplifier {
 			}
 
 		}
-		return builder.getDatasetGraph();
 	}
 
 	private static String readFromURL(URL url, Properties properties) throws IOException, TriplifierHTTPException {

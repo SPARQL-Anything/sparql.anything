@@ -41,23 +41,19 @@ public class TestTriplifier2 implements Triplifier {
 	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-	
-		DatasetGraph dg = DatasetGraphFactory.create();
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+
 		Graph g = GraphFactory.createGraphMem();
 
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
-			return DatasetGraphFactory.create();
+			return;
 
 		String content = IOUtils.toString(url, Charset.defaultCharset());
 
-		g.add(new Triple(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "s"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "p"),
-				NodeFactory.createLiteral(content)));
-		dg.addGraph(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "g"), g);
-		dg.setDefaultGraph(g);
-		return dg;
+		builder.add(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "g"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "s"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "p"),
+				NodeFactory.createLiteral(content));
 	}
 
 	@Override

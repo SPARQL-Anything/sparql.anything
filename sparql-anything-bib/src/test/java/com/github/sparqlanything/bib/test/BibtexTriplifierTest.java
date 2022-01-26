@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -46,7 +47,10 @@ public class BibtexTriplifierTest {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./test1.bib").toString());
-			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXGraphBuilder("test", p1));
+//			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXGraphBuilder("test", p1));
+			FacadeXGraphBuilder b =  new BaseFacadeXGraphBuilder("test", p1);
+			jt.triplify(p1, b);
+			DatasetGraph g1 = b.getDatasetGraph();
 
 //			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 			

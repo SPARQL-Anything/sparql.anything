@@ -49,11 +49,11 @@ public class DocxTriplifier implements Triplifier {
 	private static final Logger logger = LoggerFactory.getLogger(DocxTriplifier.class);
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
 		if (url == null)
-			return builder.getDatasetGraph();
+			return;
 
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
@@ -158,8 +158,6 @@ public class DocxTriplifier implements Triplifier {
 		}
 
 		is.close();
-
-		return builder.getDatasetGraph();
 	}
 
 	@Override

@@ -57,11 +57,11 @@ public class XMLTriplifier implements Triplifier {
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
-			return DatasetGraphFactory.create();
+			return;
 
 		String namespace = Triplifier.getNamespaceArgument(properties);
 		String dataSourceId = url.toString();
@@ -182,7 +182,6 @@ public class XMLTriplifier implements Triplifier {
 				charBuilder.append(event.asCharacters().getData().trim());
 			}
 		}
-		return builder.getDatasetGraph();
 	}
 
 	private String toIRI(QName qname, String namespace) {

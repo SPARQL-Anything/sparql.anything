@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
+import com.github.sparqlanything.model.*;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -35,10 +36,6 @@ import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
-import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.Triplifier;
-import com.github.sparqlanything.model.TriplifierHTTPException;
 import com.github.sparqlanything.text.TextTriplifier;
 
 public class TextTriplifierTest {
@@ -51,7 +48,10 @@ public class TextTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p, new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p));
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			tt.triplify(p, b);
+			DatasetGraph dg = b.getDatasetGraph();
+
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
 			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
@@ -73,7 +73,10 @@ public class TextTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.REGEX, "\\w+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p, new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p));
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			tt.triplify(p, b);
+			DatasetGraph dg = b.getDatasetGraph();
+
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph
@@ -105,7 +108,9 @@ public class TextTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.SPLIT, "\\s+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			DatasetGraph dg = tt.triplify(p, new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p));
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			tt.triplify(p, b);
+			DatasetGraph dg = b.getDatasetGraph();
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph

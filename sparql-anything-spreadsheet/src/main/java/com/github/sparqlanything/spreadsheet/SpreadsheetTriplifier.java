@@ -47,18 +47,23 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import com.github.sparqlanything.model.Triplifier;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class SpreadsheetTriplifier implements Triplifier {
 
-//	private static Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
+	private static Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
 
 	public final static String PROPERTY_HEADERS = "spreadsheet.headers";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
-
+		if(url == null){
+			logger.warn("No location provided");
+			return;
+		}
 		String root = Triplifier.getRootArgument(properties);
 //		Charset charset = getCharsetArgument(properties);
 		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
@@ -84,8 +89,6 @@ public class SpreadsheetTriplifier implements Triplifier {
 		});
 
 //		dg.setDefaultGraph(dg.getUnionGraph());
-
-		return builder.getDatasetGraph();
 	}
 
 //	private Graph toGraph(Sheet s, String root, String namespace, boolean blank_nodes, boolean headers) {

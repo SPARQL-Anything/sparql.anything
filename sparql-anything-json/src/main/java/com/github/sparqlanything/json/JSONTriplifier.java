@@ -195,7 +195,7 @@ public class JSONTriplifier implements Triplifier {
 	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
+	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 		URL url = Triplifier.getLocation(properties);
 //		logger.trace("Triplifying ", url.toString());
@@ -205,7 +205,7 @@ public class JSONTriplifier implements Triplifier {
 //		if (logger.isDebugEnabled()) {
 //			logger.debug("Number of triples: {} ", builder.getMainGraph().size());
 //		}
-		return builder.getDatasetGraph();
+//		return builder.getDatasetGraph();
 	}
 
 	@Override

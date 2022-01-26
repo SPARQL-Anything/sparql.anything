@@ -52,9 +52,13 @@ public class BinaryTriplifier implements Triplifier {
 	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
+		if(url == null){
+			logger.warn("No location provided");
+			return;
+		}
 		Encoding encoding = Encoding.BASE64;
 
 		if (properties.contains(ENCODING)) {
@@ -88,8 +92,6 @@ public class BinaryTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId, root);
 		// Add content
 		builder.addValue(dataSourceId, root, 1, NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary));
-
-		return builder.getDatasetGraph();
 	}
 
 	private byte[] downloadUrl(URL toDownload) {

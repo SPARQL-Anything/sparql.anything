@@ -98,11 +98,10 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
+	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 		URL url = Triplifier.getLocation(properties);
 		transform(url, properties, builder);
-		return builder.getDatasetGraph();
 	}
 
 	@Override

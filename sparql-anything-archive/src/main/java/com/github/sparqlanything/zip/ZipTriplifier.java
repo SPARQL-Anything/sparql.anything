@@ -46,10 +46,13 @@ public class ZipTriplifier implements Triplifier {
 	public static final String MATCHES = "archive.matches";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
-
+		if(url == null){
+			logger.warn("No location provided");
+			return;
+		}
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -66,8 +69,6 @@ public class ZipTriplifier implements Triplifier {
 				i++;
 			}
 		}
-
-		return builder.getDatasetGraph();
 	}
 
 	@Override

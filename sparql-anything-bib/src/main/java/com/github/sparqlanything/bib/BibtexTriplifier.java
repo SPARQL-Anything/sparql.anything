@@ -48,13 +48,12 @@ public class BibtexTriplifier implements Triplifier {
 	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		DatasetGraph dg = DatasetGraphFactory.create();
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
 		String content = properties.getProperty(IRIArgument.CONTENT.toString());
 		if (url == null && (content == null || content.isEmpty()))
-			return dg;
+			return;
 
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
@@ -90,8 +89,6 @@ public class BibtexTriplifier implements Triplifier {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
-		return builder.getDatasetGraph();
 	}
 
 	@Override

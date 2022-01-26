@@ -18,6 +18,7 @@
 package com.github.sparqlanything.yaml;
 
 import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Node;
@@ -45,7 +46,9 @@ public class YAMLTest {
 		Triplifier t = new YAMLTriplifier();
 		Properties properties = new Properties();
 		properties.setProperty("location", url.toURI().toString());
-		DatasetGraph ds = t.triplify(properties, new BaseFacadeXGraphBuilder(url.toString(), properties));
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(url.toString(), properties);
+		t.triplify(properties, b);
+		DatasetGraph ds = b.getDatasetGraph();
 		ExtendedIterator<Triple> triples = ds.getDefaultGraph().find();
 		while(triples.hasNext()){
 			logger.trace("{}",triples.next());

@@ -60,7 +60,8 @@ public class JSONTripleFilteringTest {
 		properties.setProperty(IRIArgument.LOCATION.toString(),
 				url.toString());
 		FacadeXGraphBuilder builder = getTripleFilteringBuilder(url, bgp, properties);
-		g1 = jt.triplify(properties, builder);
+		jt.triplify(properties, builder);
+		g1 = builder.getDatasetGraph();
 		// Only two triples matching the BGP
 		log.info("Size is: {}", g1.getDefaultGraph().size());
 		Iterator<Quad> quads = g1.find();
@@ -85,7 +86,9 @@ public class JSONTripleFilteringTest {
 		properties.setProperty(IRIArgument.LOCATION.toString(),
 				url.toString());
 		FacadeXGraphBuilder builder = getTripleFilteringBuilder(url, bgp, properties);
-		g1 = jt.triplify(properties, builder);
+		jt.triplify(properties, builder);
+		g1 = builder.getDatasetGraph();
+
 		// Only four triples matching the BGP
 		log.info("Size is: {}", g1.getDefaultGraph().size());
 		Iterator<Quad> quads = g1.find();

@@ -77,13 +77,13 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
+	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
-			return DatasetGraphFactory.create();
+			return;
 
 		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -153,7 +153,7 @@ public class HTMLTriplifier implements Triplifier {
 //		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
 //		return dg;
 
-		return builder.getDatasetGraph();
+//		return builder.getDatasetGraph();
 	}
 
 	private void extractMetadata(URL url, Properties properties, FacadeXGraphBuilder builder)

@@ -50,14 +50,12 @@ public class MetadataTriplifier implements Triplifier {
 
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
-			return DatasetGraphFactory.create();
-
-		DatasetGraph dg = DatasetGraphFactory.create();
+			return;
 
 		String dataSourceId = Triplifier.getRootArgument(properties);
 		String root = dataSourceId;
@@ -70,11 +68,7 @@ public class MetadataTriplifier implements Triplifier {
 			e.printStackTrace();
 		}
 
-		dg = builder.getDatasetGraph();
-
 		f.delete();
-
-		return dg;
 	}
 
 	private void readBasicAttributes(Path p, String dataSourceId, String root, FacadeXGraphBuilder builder) throws IOException {

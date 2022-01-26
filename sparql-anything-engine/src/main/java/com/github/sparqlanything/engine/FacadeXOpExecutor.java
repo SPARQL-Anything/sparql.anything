@@ -304,8 +304,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 					logger.trace("Executing: {} [strategy={}]", p, strategy);
 					builder = new BaseFacadeXGraphBuilder(resourceId, p);
 				}
-				dg = t.triplify(p, builder);
-
+				t.triplify(p, builder);
+				dg = builder.getDatasetGraph();
 			} catch (TriplifierHTTPException e) {
 				if (p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")) {
 					// as per https://www.w3.org/TR/sparql11-federated-query/#serviceFailure
@@ -313,7 +313,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 					// endpoint should be ignored"
 					//
 					// so ignore errors by just returning an empty graph
-					logger.warn("Errors encountered but the silent keyword was specified");
+					logger.warn("Errors encountered but the silent keyword was specified. Returning empty graph.");
 					dg = DatasetFactory.create().asDatasetGraph();
 				} else {
 					throw new IOException(e.toString());
@@ -321,7 +321,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			}
 		} else {
 			// If triplifier is null, return an empty graph
-			logger.error("No triplifier available for the input format!");
+			logger.error("No triplifier available for the input format! Returning empty graph.");
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
 

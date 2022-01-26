@@ -61,7 +61,9 @@ public class CSVTriplifierTest {
 		BasicPattern bp = new BasicPattern();
 		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
 					NodeFactory.createVariable("o")));
-		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXGraphBuilder(csv1.toString(), properties));
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(csv1.toString(), properties);
+		triplifier.triplify(properties, b);
+		DatasetGraph graph = b.getDatasetGraph();
 		// with csv.null-string set to nullString we should not see any quads with nullString in the object position
 		if(graph.find(Node.ANY,Node.ANY,Node.ANY,NodeFactory.createLiteral(nullString)).hasNext()){
 			fail("csv.null-string didn't work for: \"" +  nullString + "\"");
@@ -77,8 +79,9 @@ public class CSVTriplifierTest {
 		BasicPattern bp = new BasicPattern();
 		bp.add(new Triple(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
 					NodeFactory.createVariable("o")));
-		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXGraphBuilder(csv1.toString(), properties));
-
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(csv1.toString(), properties);
+		triplifier.triplify(properties, b);
+		DatasetGraph graph = b.getDatasetGraph();
 		Graph expected = GraphFactory.createGraphMem();
 
 
@@ -132,7 +135,10 @@ public class CSVTriplifierTest {
 		properties.setProperty("ondisk", "/tmp");
 		URL csv1 = getClass().getClassLoader().getResource("./test3.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
-		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXGraphBuilder(csv1.toString(), properties));
+
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(csv1.toString(), properties);
+		triplifier.triplify(properties, b);
+		DatasetGraph graph = b.getDatasetGraph();
 
 		// end the write txn because triplifiers don't do that, FacadeXOpExecutor does
 		graph.commit();
@@ -158,7 +164,9 @@ public class CSVTriplifierTest {
 		properties.setProperty("ondisk", "/tmp");
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
-		DatasetGraph graph = triplifier.triplify(properties, new BaseFacadeXGraphBuilder(csv1.toString(), properties));
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(csv1.toString(), properties);
+		triplifier.triplify(properties, b);
+		DatasetGraph graph = b.getDatasetGraph();
 		// end the write txn because triplifiers don't do that, FacadeXOpExecutor does
 		graph.commit();
 		graph.end();

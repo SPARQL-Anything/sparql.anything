@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -221,12 +222,12 @@ public class AbstractTriplifierTester {
 		logger.info("{}", properties);
 		String graphName = Triplifier.getRootArgument(properties);
 		logger.debug("Graph name: {}", graphName);
-
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(graphName, properties);
+		triplifier.triplify(properties, b);
 		if (!useDatasetGraph) {
-			this.result = triplifier.triplify(properties, new BaseFacadeXGraphBuilder(graphName, properties))
-					.getGraph(NodeFactory.createURI(graphName));
+			this.result = b.getDatasetGraph().getGraph(NodeFactory.createURI(graphName));
 		} else {
-			this.resultDatasetGraph = triplifier.triplify(properties, new BaseFacadeXGraphBuilder(graphName, properties));
+			this.resultDatasetGraph = b.getDatasetGraph();
 		}
 	}
 

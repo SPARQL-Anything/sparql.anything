@@ -18,6 +18,7 @@
 package com.github.sparqlanything.engine.test;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.sparql.core.DatasetGraph;
 
 import com.github.sparqlanything.model.Triplifier;
+import org.apache.jena.sparql.core.Quad;
 
 public class TestTriplifier implements Triplifier {
 
@@ -33,8 +35,14 @@ public class TestTriplifier implements Triplifier {
 	}
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-		return TriplifierRegistryTest.createExampleGraph();
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+//		return
+		DatasetGraph dg = TriplifierRegistryTest.createExampleGraph();
+		Iterator<Quad> quad = dg.find();
+		while(quad.hasNext()){
+			Quad q = quad.next();
+			builder.add(q.getGraph(), q.getSubject(), q.getPredicate(), q.getObject());
+		}
 	}
 
 	@Override

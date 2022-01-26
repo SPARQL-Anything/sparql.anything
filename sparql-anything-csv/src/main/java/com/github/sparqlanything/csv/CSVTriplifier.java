@@ -47,12 +47,12 @@ public class CSVTriplifier implements Triplifier {
 	public final static String PROPERTY_NULLSTRING = "csv.null-string";
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		URL url = Triplifier.getLocation(properties);
 		log.debug("Location: {}", url);
 		if (url == null)
-			return DatasetGraphFactory.create();
+			return;
 
 		CSVFormat format;
 		try {
@@ -160,7 +160,6 @@ public class CSVTriplifier implements Triplifier {
 			log.error("{} :: {}", e.getMessage(), url);
 			throw new IOException(e);
 		}
-		return builder.getDatasetGraph();
 	}
 
 	@Override

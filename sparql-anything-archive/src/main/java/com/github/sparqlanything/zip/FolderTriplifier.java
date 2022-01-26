@@ -48,9 +48,12 @@ public class FolderTriplifier implements Triplifier {
 
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 		URL url = Triplifier.getLocation(properties);
-
+		if(url == null){
+			logger.warn("No location provided");
+			return;
+		}
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
@@ -72,8 +75,6 @@ public class FolderTriplifier implements Triplifier {
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-
-		return builder.getDatasetGraph();
 	}
 
 	@Override

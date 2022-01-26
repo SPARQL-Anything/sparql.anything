@@ -50,7 +50,7 @@ public interface Triplifier {
 
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
 
-	DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
+	void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException;
 
 	public Set<String> getMimeTypes();

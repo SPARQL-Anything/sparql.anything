@@ -47,8 +47,12 @@ public class TarTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(TarTriplifier.class);
 
 	@Override
-	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 		URL location = Triplifier.getLocation(properties);
+		if(location == null){
+			logger.warn("No location provided");
+			return;
+		}
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
@@ -74,8 +78,6 @@ public class TarTriplifier implements Triplifier {
 		} catch (ArchiveException e) {
 			throw new IOException(e);
 		}
-
-		return builder.getDatasetGraph();
 	}
 
 	@Override
