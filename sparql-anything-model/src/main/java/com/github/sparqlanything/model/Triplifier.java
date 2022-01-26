@@ -50,11 +50,6 @@ public interface Triplifier {
 
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
 
-//	@Deprecated
-//	default public DatasetGraph triplify(Properties properties) throws IOException, TriplifierHTTPException {
-//		return triplify(properties, new BaseFacadeXGraphBuilder(Triplifier.getLocation(properties).toString(), properties));
-//	}
-
 	DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException;
 
