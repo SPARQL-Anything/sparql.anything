@@ -51,12 +51,6 @@ public class MetadataTriplifier implements Triplifier {
 
 	@Override
 	public DatasetGraph triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-//		// TODO Not implemented yet
-//		return triplify(properties);
-//	}
-//
-//	@Override
-//	public DatasetGraph triplify(Properties properties) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
 
@@ -64,24 +58,7 @@ public class MetadataTriplifier implements Triplifier {
 			return DatasetGraphFactory.create();
 
 		DatasetGraph dg = DatasetGraphFactory.create();
-//		Graph g = GraphFactory.createGraphMem();
 
-//		String defaultNamespace = url.toString() + "/";
-//		String namespace = null;
-//
-//		if (properties.containsKey(IRIArgument.NAMESPACE.toString())) {
-//			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
-//			if (namespace.trim().length() == 0) {
-//				logger.warn("Unsupported parameter value for 'namespace', using default (no location+/).");
-//				namespace = defaultNamespace;
-//			}
-//		} else {
-//			namespace = defaultNamespace;
-//		}
-
-		//String namespace = url.toString() + "#";
-
-//		Node n = NodeFactory.createURI(url.toString());
 		String dataSourceId = Triplifier.getRootArgument(properties);
 		String root = dataSourceId;
 		File f = new File(FilenameUtils.getName(url.getFile()));
