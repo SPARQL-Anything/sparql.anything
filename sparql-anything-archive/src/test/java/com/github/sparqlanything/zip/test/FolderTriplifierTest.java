@@ -38,9 +38,11 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.junit.Test;
 
 import com.github.sparqlanything.model.IRIArgument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FolderTriplifierTest {
-
+	private static final Logger L = LoggerFactory.getLogger(FolderTriplifierTest.class);
 	@Test
 	public void test1() throws MalformedURLException {
 		FolderTriplifier tt = new FolderTriplifier();
@@ -67,7 +69,7 @@ public class FolderTriplifierTest {
 						actual.add(q.getObject().getLiteralLexicalForm()
 								.replace(Paths.get(url.toURI()).toUri().toString(), ""));
 					} catch (URISyntaxException e) {
-						e.printStackTrace();
+						L.error("",e);
 					}
 				}
 			});
@@ -75,7 +77,7 @@ public class FolderTriplifierTest {
 			assertEquals(expected, actual);
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 
@@ -113,7 +115,7 @@ public class FolderTriplifierTest {
 						actual.add(q.getObject().getLiteralLexicalForm()
 								.replace(Paths.get(url.toURI()).toUri().toString(), ""));
 					} catch (URISyntaxException e) {
-						e.printStackTrace();
+						L.error("",e);
 					}
 				}
 			});
@@ -121,7 +123,7 @@ public class FolderTriplifierTest {
 			assertEquals(expected, actual);
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 
@@ -153,7 +155,7 @@ public class FolderTriplifierTest {
 						actual.add(q.getObject().getLiteralLexicalForm()
 								.replace(Paths.get(url.toURI()).toUri().toString(), ""));
 					} catch (URISyntaxException e) {
-						e.printStackTrace();
+						L.error("",e);
 					}
 				}
 			});
@@ -161,7 +163,7 @@ public class FolderTriplifierTest {
 			assertEquals(expected, actual);
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 

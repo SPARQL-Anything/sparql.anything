@@ -40,9 +40,11 @@ import org.junit.Test;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.zip.TarTriplifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TarTriplifierTest {
-
+	private static final Logger L = LoggerFactory.getLogger(TarTriplifierTest.class);
 	@Test
 	public void test1() throws MalformedURLException {
 		TarTriplifier tt = new TarTriplifier();
@@ -66,7 +68,7 @@ public class TarTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 
@@ -97,7 +99,7 @@ public class TarTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 
@@ -127,7 +129,7 @@ public class TarTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 

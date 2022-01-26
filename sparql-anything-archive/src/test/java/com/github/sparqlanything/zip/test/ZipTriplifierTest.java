@@ -40,9 +40,11 @@ import org.junit.Test;
 
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ZipTriplifierTest {
-
+	private static final Logger L = LoggerFactory.getLogger(ZipTriplifierTest.class);
 	@Test
 	public void test1() throws MalformedURLException {
 		ZipTriplifier tt = new ZipTriplifier();
@@ -67,7 +69,7 @@ public class ZipTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 
@@ -98,7 +100,7 @@ public class ZipTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 
@@ -127,7 +129,7 @@ public class ZipTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			L.error("",e);
 		}
 	}
 

@@ -32,9 +32,11 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
 import com.github.sparqlanything.json.JSONTriplifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BaseTest {
-
+	private static final Logger L = LoggerFactory.getLogger(BaseTest.class);
 	@Test
 	public void testContent() throws TriplifierHTTPException {
 
@@ -55,7 +57,7 @@ public class BaseTest {
 			assertTrue(g1.getDefaultGraph().isIsomorphicWith(expected));
 
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			L.error("",e1);
 		}
 
 	}

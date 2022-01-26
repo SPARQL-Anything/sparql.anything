@@ -73,7 +73,7 @@ public class FolderTriplifier implements Triplifier {
 			});
 
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
+			logger.error("",e);
 		}
 	}
 
