@@ -29,19 +29,13 @@ import org.apache.jena.sparql.core.DatasetGraph;
  */
 public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder {
 	private final Op op;
-//	private List<Object> opComponents;
 	private OpComponentsAnalyser analyser;
+	
 	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
 		super(resourceId, ds, properties);
 		this.op = op;
-//		if (op != null) {
-			analyser = new OpComponentsAnalyser();
-			op.visit(analyser);
-//			opComponents = collector.getOpComponents();
-//		}else{
-//			opComponents = Collections.emptyList();
-//		}
-		//
+		analyser = new OpComponentsAnalyser();
+		op.visit(analyser);
 	}
 
 	public Op getOp(){
@@ -52,34 +46,6 @@ public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder 
 		// instead let BaseFacadeXBuilder do all the DatasetGraph making
 		this(resourceId, op, null, properties);
 	}
-//
-//	public TripleFilteringFacadeXBuilder(URL location, Op op, Properties properties) {
-//		this(location.toString(), op, properties);
-//	}
-
-
-//
-//	@Override
-//	@Deprecated
-//	public void add(Resource subject, Property predicate, RDFNode object) {
-//		if (match(mainGraphName, subject.asNode(), predicate.asNode(), object.asNode())) {
-//			datasetGraph.getGraph(mainGraphName).add(new Triple(subject.asNode(), predicate.asNode(), object.asNode()));
-//		}
-//	}
-
-	/**
-	 * Triples are added to the main data source / graph Triplifiers generating
-	 * multiple data sources / graphs, should use add(Node g, Node s, Node p, Node
-	 * o) instead
-	 */
-//	@Override
-//	public boolean add(Node subject, Node predicate, Node object) {
-//		if (match(mainGraphName, subject, predicate, object)) {
-//			datasetGraph.getGraph(mainGraphName).add(new Triple(subject, predicate, object));
-//			return true;
-//		}
-//		return false;
-//	}
 
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
