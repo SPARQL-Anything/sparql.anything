@@ -65,6 +65,14 @@ public interface Triplifier {
 		return blank_nodes;
 	}
 
+	static boolean getSliceArgument(Properties properties) {
+		boolean slice = false;
+		if (properties.containsKey(IRIArgument.SLICE.toString())) {
+			slice = Boolean.parseBoolean(properties.getProperty(IRIArgument.SLICE.toString()));
+		}
+		return slice;
+	}
+
 	static boolean getTrimStringsArgument(Properties properties) {
 		boolean trim_strings = false;
 		if (properties.containsKey(IRIArgument.TRIM_STRINGS.toString())) {

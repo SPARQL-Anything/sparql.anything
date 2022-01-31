@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.github.sparqlanything.model.*;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.jena.atlas.io.IndentedWriter;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -38,6 +40,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.shared.PrefixMapping;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.algebra.op.OpPath;
@@ -46,21 +49,17 @@ import org.apache.jena.sparql.algebra.op.OpPropFunc;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.algebra.op.OpTable;
 import org.apache.jena.sparql.algebra.table.TableUnit;
-import org.apache.jena.sparql.core.BasicPattern;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.apache.jena.sparql.core.Var;
+import org.apache.jena.sparql.core.*;
+import org.apache.jena.sparql.core.mem.DatasetGraphInMemory;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
-import org.apache.jena.sparql.engine.iterator.QueryIterDefaulting;
-import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
-import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
+import org.apache.jena.sparql.engine.iterator.*;
 import org.apache.jena.sparql.engine.join.Join;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
+import org.apache.jena.sparql.serializer.SerializationContext;
 import org.apache.jena.sparql.util.Symbol;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
@@ -70,12 +69,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.sparqlanything.facadeiri.FacadeIRIParser;
 import com.github.sparqlanything.metadata.MetadataTriplifier;
-import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.TripleFilteringFacadeXGraphBuilder;
-import com.github.sparqlanything.model.Triplifier;
-import com.github.sparqlanything.model.TriplifierHTTPException;
 import com.github.sparqlanything.zip.FolderTriplifier;
 
 public class FacadeXOpExecutor extends OpExecutor {
@@ -135,10 +128,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return super.exec(opProc, input);
 	}
 
-	private DatasetGraph getDatasetGraph(Properties p, Op op) throws IOException, InstantiationException,
+	private DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException, InstantiationException,
 			IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		DatasetGraph dg = null;
-
+		if(t == null){
+			return DatasetGraphFactory.create();
+		}
 		// If the operation was already executed in a previous call, reuse the same
 		// in-memory graph
 		// XXX Future implementations may use a caching system
@@ -147,12 +142,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		logger.trace("Properties extracted: {}", p.toString());
 		String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
-		Triplifier t = getTriplifier(p);
-
-		if (t == null) {
-			logger.trace("No triplifier");
-			return DatasetGraphFactory.create();
-		}
 
 		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op.toString());
 		dg = triplify(op, p, t);
@@ -193,18 +182,75 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.trace("Facade-X uri: {}", opService.getService());
 			try {
 				Properties p = getProperties(opService.getService().getURI(), opService);
-				DatasetGraph dg = getDatasetGraph(p, opService.getSubOp());
+				Triplifier t = getTriplifier(p);
+
+				if (t == null) {
+					logger.warn("No triplifier found");
+					return QueryIterNullIterator.create(execCxt);
+				}
+
+				if(Triplifier.getSliceArgument(p)) {
+					// Execute with slicing
+					if (t instanceof Slicer) {
+						final Slicer slicer = (Slicer) t;
+						final Iterable<Slice> it = slicer.slice(p);
+						final Iterator<Slice> iterator = it.iterator();
+						final String resourceId = Triplifier.getResourceId(p);
+						return new QueryIter(execCxt){
+							QueryIterator current = null;
+
+							@Override
+							protected boolean hasNextBinding() {
+								if(current == null || !current.hasNext()){
+									if(iterator.hasNext()) {
+										// Execute and set current
+										DatasetGraph dg = new DatasetGraphInMemory();
+										FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), dg, p);
+										slicer.triplify(iterator.next(), p, builder);
+										FacadeXExecutionContext ec = new FacadeXExecutionContext(
+												new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+										current = QC.execute(opService.getSubOp(), input, ec);
+									} else {
+										return false;
+									}
+								}
+								return current.hasNext();
+							}
+
+							@Override
+							protected Binding moveToNextBinding() {
+								return current.nextBinding();
+							}
+
+							@Override
+							protected void closeIterator() {
+								current.close();
+							}
+
+							@Override
+							protected void requestCancel() {
+								current.cancel();
+							}
+						};
+
+					} else {
+						logger.warn("Slicing is not supported by triplifier: {}", t.getClass().getName());
+					}
+				}
+
+				// Execute with default, bulk method
+				DatasetGraph dg = getDatasetGraph(t, p, opService.getSubOp());
 				FacadeXExecutionContext ec = new FacadeXExecutionContext(
 						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 				return QC.execute(opService.getSubOp(), input, ec);
+
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
 					| IllegalAccessException | InvocationTargetException | NoSuchMethodException
-					| ClassNotFoundException e) {
+					| ClassNotFoundException | TriplifierHTTPException e) {
 				logger.error("An error occurred", e);
 				throw new RuntimeException(e);
 			} catch (UnboundVariableException e) {
 				// Proceed with the next operation
-//				logger.trace("Unbound variables, BGP {}", e.getOpBGP().toString());
 				OpBGP fakeBGP = extractFakePattern(e.getOpBGP());
 				if (e.getOpTable() != null) {
 					logger.trace("Executing table");
@@ -213,7 +259,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 					return postponeService(opService, qIter);
 				} else if (e.getOpExtend() != null) {
 					logger.trace("Executing op extend");
-
 					QueryIterator qIter = exec(e.getOpExtend().getSubOp(), input);
 					qIter = new QueryIterAssign(qIter, e.getOpExtend().getVarExprList(), execCxt, true);
 					return postponeService(opService, qIter);
@@ -569,7 +614,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				if (this.execCxt.getDataset().isEmpty()) {
 					// we only need to call getDatasetGraph() if we have an empty one
 					// otherwise we could triplify the same data multiple times
-					dg = getDatasetGraph(p, opBGP);
+					dg = getDatasetGraph(getTriplifier(p), p, opBGP);
 				} else {
 					dg = this.execCxt.getDataset();
 				}

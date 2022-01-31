@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,11 @@
 
 package com.github.sparqlanything.model;
 
-public enum IRIArgument {
+import java.io.InputStream;
 
-	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace"), ROOT("root"), BLANK_NODES("blank-nodes"),
-	TRIPLIFIER("triplifier"), CHARSET("charset"), METADATA("metadata"), CONTENT("content"),
-	FROM_ARCHIVE("from-archive"), TRIM_STRINGS( "trim-strings" ), NULL_STRING( "null-string" ), STRATEGY("strategy"), SLICE("slice");
-
-	private String s;
-
-	IRIArgument(String s) {
-		this.s = s;
-	}
-
-	@Override
-	public String toString() {
-		return s;
-	}
-
+public interface Slice<T> {
+	T get();
+	int iteration();
+	String getDatasourceId();
+	String getRootId();
 }
