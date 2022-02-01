@@ -37,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 public class AbstractExecutionTester {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractExecutionTester.class);
 
+	protected static final String FILENAME_PLACEHOLDER = "%%fileName%%";
 	protected Dataset dataset = null;
 	protected Query query = null;
 	protected URI expectedFile = null;
@@ -72,7 +73,22 @@ public class AbstractExecutionTester {
 	protected void prepareQuery() throws IOException, URISyntaxException {
 		String queryFileName = name.getMethodName().substring(4) + ".sparql";
 		URI queryFile = getClass().getClassLoader().getResource(queryFileName).toURI();
-		query = QueryFactory.create(IOUtils.toString(queryFile, StandardCharsets.UTF_8));
+		String queryStr = IOUtils.toString(queryFile, StandardCharsets.UTF_8);
+		queryStr = prepareQueryString(queryStr);
+		query = QueryFactory.create(queryStr);
+	}
+
+	protected String prepareQueryString(String queryStr){
+		// Extension point
+		if(queryStr.contains(FILENAME_PLACEHOLDER)){
+			String fileName = name.getMethodName().substring(4) + "Input";
+			String filePath = getClass().getClassLoader().getResource(".").getPath();
+			String file = filePath + "/" + fileName;
+			queryStr = queryStr.replace(FILENAME_PLACEHOLDER, file);
+			logger.debug("Input file name: {}" , file);
+		}
+		logger.debug("queryStr: {}", queryStr);
+		return queryStr;
 	}
 
 	protected void prepareDataset(){

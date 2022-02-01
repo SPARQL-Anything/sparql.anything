@@ -23,9 +23,16 @@ import org.junit.Test;
 public class ExecutionsTest extends AbstractExecutionTester {
 
 	@Test
-	public void testSliceSelect1(){
+	public void testPlainSelect(){
 		// Testing is working :)
 		Assert.assertTrue(result.getResultVars().contains("A"));
 		Assert.assertTrue(result.next().getLiteral("A").getBoolean());
+	}
+
+	@Test
+	public void testExecutionSelect(){
+		// Testing is working :)
+		Assert.assertTrue(result.getResultVars().contains("B"));
+		Assert.assertTrue(result.next().getLiteral("B").getBoolean());
 	}
 }
