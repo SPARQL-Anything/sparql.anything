@@ -133,86 +133,14 @@ public class AbstractTriplifierTester {
 	protected void inspect() {
 		logger.debug("{} (inspect)", name.getMethodName());
 		if (!useDatasetGraph) {
-			if (logger.isDebugEnabled()) {
-				ExtendedIterator<Triple> it = expected.find();
-				while (it.hasNext()) {
-					Triple t = it.next();
-					logger.trace("E>> {}", t);
-
-					if (!result.contains(t)) {
-						logger.debug("{} not found in result", t);
-						logger.debug("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
-								t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
-								(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
-										? t.getObject().getLiteralDatatypeURI()
-										: "");
-					}
-				}
-				it = result.find();
-				while (it.hasNext()) {
-					Triple t = it.next();
-					logger.trace("<<R {}", t);
-					if (!expected.contains(t)) {
-						logger.debug("{} not found in expected", t);
-						logger.debug("(T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
-								t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
-								(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
-										? t.getObject().getLiteralDatatypeURI()
-										: "");
-					}
-				}
-			}
-
+			TestUtils.printDebugDiff(expected, result);
 			if (printWholeGraph) {
-				ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
-				RDFDataMgr.write(baosExpected, this.expected, Lang.TTL);
-				ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
-				RDFDataMgr.write(baosResult, this.result, Lang.TTL);
-				logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nResult\n\n{}", baosExpected.toString(),
-						baosResult.toString());
-
+				TestUtils.printWholeGraph(expected, result);
 			}
 		} else {
-			if (logger.isDebugEnabled()) {
-				Iterator<Quad> it = this.expectedDatasetGraph.find();
-				while (it.hasNext()) {
-					Quad q = it.next();
-					logger.trace("E>> {}", q);
-
-					if (!resultDatasetGraph.contains(q)) {
-						logger.debug("{} not found in result", q);
-						logger.debug("(T) {} {} {} {} {}", q.getSubject().getClass().getSimpleName(),
-								q.getPredicate().getClass().getSimpleName(), q.getObject().getClass().getSimpleName(),
-								(q.getObject().isLiteral() && q.getObject().getLiteralDatatypeURI() != null)
-										? q.getObject().getLiteralDatatypeURI()
-										: "",
-								q.getGraph().getClass().getSimpleName());
-					}
-				}
-				it = this.resultDatasetGraph.find();
-				while (it.hasNext()) {
-					Quad t = it.next();
-					logger.trace("<<R {}", t);
-					if (!expectedDatasetGraph.contains(t)) {
-						logger.debug("{} not found in expected", t);
-						logger.debug("(T) {} {} {} {} {}", t.getSubject().getClass().getSimpleName(),
-								t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
-								(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
-										? t.getObject().getLiteralDatatypeURI()
-										: "",
-								t.getGraph().getClass().getSimpleName());
-					}
-				}
-			}
-
+			TestUtils.printDebugDiff(this.expectedDatasetGraph, this.resultDatasetGraph);
 			if (printWholeGraph) {
-				ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
-				RDFDataMgr.write(baosExpected, replaceLocation(this.expectedDatasetGraph), Lang.NQ);
-				ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
-				RDFDataMgr.write(baosResult, this.resultDatasetGraph, Lang.NQ);
-				logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nResult\n\n{}", baosExpected.toString(),
-						baosResult.toString());
-
+				TestUtils.printWholeGraph(replaceLocation(this.expectedDatasetGraph), this.resultDatasetGraph);
 			}
 		}
 	}
@@ -231,33 +159,12 @@ public class AbstractTriplifierTester {
 		}
 	}
 
+
 	protected void assertResultIsIsomorphicWithExpected() {
 		if (!useDatasetGraph) {
 			assertTrue(this.result.isIsomorphicWith(expected));
 		} else {
-			Iterator<Node> it = this.expectedDatasetGraph.listGraphNodes();
-			Set<String> expectedGraphUris = new HashSet<>();
-			while (it.hasNext()) {
-				expectedGraphUris.add(it.next().getURI());
-			}
-
-			it = this.resultDatasetGraph.listGraphNodes();
-			Set<String> resultGraphUris = new HashSet<>();
-
-			while (it.hasNext()) {
-				resultGraphUris.add(it.next().getURI());
-			}
-
-			assertTrue((this.expectedDatasetGraph.getDefaultGraph()
-					.isIsomorphicWith(this.resultDatasetGraph.getDefaultGraph())));
-			assertEquals(expectedGraphUris, resultGraphUris);
-
-			it = this.expectedDatasetGraph.listGraphNodes();
-			while (it.hasNext()) {
-				Node g = (Node) it.next();
-				assertTrue(resultDatasetGraph.containsGraph(g));
-				assertTrue(expectedDatasetGraph.getGraph(g).isIsomorphicWith(this.resultDatasetGraph.getGraph(g)));
-			}
+			TestUtils.assertIsomorphic(this.expectedDatasetGraph, this.resultDatasetGraph);
 		}
 	}
 

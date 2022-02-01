@@ -29,14 +29,15 @@
 	<artifactId>sparql-anything-testutils</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
-			<artifactId>sparql-anything-model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>compile</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.github.sparqlanything</groupId>
+            <artifactId>sparql-anything-model</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>
