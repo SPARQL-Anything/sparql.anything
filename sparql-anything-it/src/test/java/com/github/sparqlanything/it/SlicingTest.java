@@ -17,22 +17,28 @@
 
 package com.github.sparqlanything.it;
 
+import org.apache.jena.query.QuerySolution;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ExecutionsTest extends AbstractExecutionTester {
+public class SlicingTest extends AbstractExecutionTester {
 
 	@Test
-	public void testPlainSelect(){
-		// Testing is working :)
-		Assert.assertTrue(result.getResultVars().contains("A"));
-		Assert.assertTrue(result.next().getLiteral("A").getBoolean());
-	}
+	public void testSliceSelect (){
+		Assert.assertTrue(result.getResultVars().contains("X"));
 
-	@Test
-	public void testExecutionSelect(){
-		// Testing with placeholder replacement is working :)
-		Assert.assertTrue(result.getResultVars().contains("B"));
-		Assert.assertTrue(result.next().getLiteral("B").getBoolean());
+		QuerySolution qs;
+		qs = result.next();
+		System.out.println(qs);
+		Assert.assertTrue(qs.getLiteral("X").getString().equals("a1"));
+		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b1"));
+		Assert.assertTrue(qs.getLiteral("Z").getString().equals("c1"));
+
+		qs = result.next();
+		System.out.println(qs);
+		Assert.assertTrue(qs.getLiteral("X").getString().equals("a2"));
+		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b2"));
+		Assert.assertTrue(qs.getLiteral("Z").getString().equals("c2"));
+
 	}
 }
