@@ -37,11 +37,7 @@ import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
@@ -81,60 +77,17 @@ import io.github.basilapi.basil.sparql.VariablesBinder;
 
 public class SPARQLAnything {
 
-	private static final String QUERY = "q";
-	private static final String QUERY_LONG = "query";
-
-	private static final String OUTPUT = "o";
-	private static final String OUTPUT_LONG = "output";
-
-	private static final String FORMAT = "f";
-	private static final String FORMAT_LONG = "format";
-
-	private static final String INPUT = "i";
-	private static final String INPUT_LONG = "input";
-
-	private static final String LOAD = "l";
-	private static final String LOAD_LONG = "load";
-
-	private static final String STRATEGY = "s";
-	private static final String STRATEGY_LONG = "strategy";
-
-	private static final String OUTPUTPATTERN = "p";
-	private static final String OUTPUTPATTERN_LONG = "output-pattern";
-
-	private static final String VALUES = "v";
-	private static final String VALUES_LONG = "values";
 
 	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
-
-	private static String getQuery(String queryArgument) throws IOException {
-		String query = queryArgument;
-		File queryFile = new File(queryArgument);
-		if (queryFile.exists()) {
-			logger.trace("Loading query from file");
-			// LOAD query from file
-			BufferedReader br = new BufferedReader(new FileReader(queryFile));
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-				sb.append('\n');
-			}
-			query = sb.toString();
-			br.close();
-		}
-		return query;
-	}
 
 	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
-	private static void executeQuery(CommandLine commandLine, Dataset kb, String query, PrintStream pw)
+	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw)
 			throws FileNotFoundException {
-		logger.trace("Executing Query: {}", query);
-		Query q = QueryFactory.create(query);
-		String format = getFormat(q, commandLine);
+		String format = outputFormat;
+		Query q = query;
 		if (q.isSelectType()) {
 			if (format.equals("JSON")) {
 				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execSelect());
@@ -196,33 +149,13 @@ public class SPARQLAnything {
 		}
 	}
 
-	private static PrintStream getPrintWriter(CommandLine commandLine, String fileName) throws FileNotFoundException {
+	private static PrintStream getPrintWriter(String fileName) throws FileNotFoundException {
 
 		if (fileName != null) {
 			return new PrintStream(new File(fileName));
 		}
 
 		return System.out;
-	}
-
-	private static String getFormat(Query q, CommandLine commandLine) throws FileNotFoundException {
-		if (commandLine.hasOption(FORMAT)) {
-			return commandLine.getOptionValue(FORMAT).toUpperCase();
-		}
-
-		// Set default format for query type and STDOUT or FILE
-		if (commandLine.getOptionValue(OUTPUT) != null) {
-			if (q.isAskType() || q.isSelectType()) {
-				return "JSON";
-			} else if (q.isConstructType() || q.isDescribeType()) {
-				return "TTL";
-			}
-		}
-		//
-		if (q.isDescribeType() || q.isConstructType()) {
-			return "TTL";
-		}
-		return "TEXT";
 	}
 
 	public static Query bindParameters(Specification specification, QuerySolution qs) throws Exception {
@@ -458,46 +391,11 @@ public class SPARQLAnything {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("SPARQL anything");
-		Options options = new Options();
-
-		options.addOption(Option.builder(QUERY).argName("query").hasArg().required(true)
-				.desc("The path to the file storing the query to execute or the query itself.").longOpt(QUERY_LONG)
-				.build());
-
-		options.addOption(Option.builder(OUTPUT).argName("file").hasArg()
-				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
-
-		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
-				"OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
-				.longOpt(INPUT_LONG).build());
-
-		options.addOption(Option.builder(LOAD).argName("load").hasArg().desc(
-				"OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
-				.longOpt(LOAD_LONG).build());
-
-		options.addOption(Option.builder(FORMAT).argName("string").hasArg().desc(
-				"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]")
-				.longOpt(FORMAT_LONG).build());
-
-		options.addOption(Option.builder(STRATEGY).argName("strategy").hasArg().optionalArg(true).desc(
-				"OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.")
-				.longOpt(STRATEGY_LONG).build());
-
-		options.addOption(Option.builder(OUTPUTPATTERN).argName("outputPattern").hasArg().desc(
-				"OPTIONAL - Output filename pattern, e.g. 'myfile-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
-				.longOpt(OUTPUTPATTERN_LONG).build());
-
-		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true).desc(
-				"OPTIONAL - Values passed as input to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The passed argument must follow the syntax: var_name=var_value. Multiple arguments are allowed. The query is repeated for each set of values.")
-				.longOpt(VALUES_LONG).build());
-		CommandLine commandLine = null;
-
-		CommandLineParser cmdLineParser = new DefaultParser();
+		CLI cli = new CLI();
 		try {
-			commandLine = cmdLineParser.parse(options, args);
-			String query = getQuery(commandLine.getOptionValue(QUERY));
-			Integer strategy = (commandLine.hasOption(STRATEGY) ? Integer.valueOf(commandLine.getOptionValue(STRATEGY))
-					: null);
+			cli.parse(args);
+			String query = cli.getQuery();
+			Integer strategy = cli.getStrategy();
 			if (strategy != null) {
 				if (strategy == 1 || strategy == 0 || strategy == 2) {
 					ARQ.getContext().set(FacadeXOpExecutor.strategy, strategy);
@@ -509,7 +407,7 @@ public class SPARQLAnything {
 			initSPARQLAnythingEngine();
 
 			Dataset kb = null;
-			String load = commandLine.getOptionValue(LOAD);
+			String load = cli.getLoad();
 			if (load != null) {
 
 				logger.info("Loading data from: {}", load);
@@ -549,16 +447,17 @@ public class SPARQLAnything {
 			} else {
 				kb = DatasetFactory.createGeneral();
 			}
-			String inputFile = commandLine.getOptionValue(INPUT);
-			String outputFileName = commandLine.getOptionValue(OUTPUT);
-			String outputPattern = commandLine.getOptionValue(OUTPUTPATTERN);
-			String[] values = commandLine.getOptionValues(VALUES);
+			String inputFile = cli.getInputFile();
+			String outputFileName = cli.getOutputFile();
+			String outputPattern = cli.getOutputPattern();
+			String[] values = cli.getValues();
 			if (outputPattern != null && outputFileName != null) {
 				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
 			}
 			if (inputFile == null && values == null) {
 				logger.debug("No input file");
-				executeQuery(commandLine, kb, query, getPrintWriter(commandLine, outputFileName));
+				Query q = QueryFactory.create(query);
+				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName));
 			} else {
 
 				if (inputFile != null && values != null) {
@@ -576,7 +475,6 @@ public class SPARQLAnything {
 				// Specifications
 				Specification specification = SpecificationFactory.create("", query);
 				// Iterate over parameters
-//				List<String> variables = parameters.getResultVars();
 				while (parameters.hasNext()) {
 					QuerySolution qs = parameters.nextSolution();
 					Query q;
@@ -598,7 +496,10 @@ public class SPARQLAnything {
 						// else stays null and output goes to STDOUT
 					}
 					try {
-						executeQuery(commandLine, kb, q.toString(), getPrintWriter(commandLine, outputFile));
+
+						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile));
+
+						logger.trace("Executing Query: {}", query);
 					} catch (Exception e1) {
 						logger.error(
 								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
@@ -611,11 +512,7 @@ public class SPARQLAnything {
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
 		} catch (ParseException e) {
-			HelpFormatter formatter = new HelpFormatter();
-			String version = SPARQLAnything.class.getPackage().getImplementationVersion();
-			formatter.printHelp(
-					"java -jar sparql.anything-" + version + "  -q query [-f format] [-i filepath]  [-l path] [-o filepath]",
-					options);
+			cli.printHelp();
 		}
 	}
 }
