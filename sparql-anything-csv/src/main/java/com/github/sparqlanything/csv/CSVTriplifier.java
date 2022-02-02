@@ -219,6 +219,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					@Override
 					public Slice next() {
 						rown++;
+						log.trace("next slice: {}", rown);
 						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, root, headers_map);
 					}
 				};

@@ -190,35 +190,65 @@ public class FacadeXOpExecutor extends OpExecutor {
 				}
 
 				if(Triplifier.getSliceArgument(p)) {
+
 					// Execute with slicing
 					if (t instanceof Slicer) {
+						logger.trace("Execute with slicing");
 						final Slicer slicer = (Slicer) t;
 						final Iterable<Slice> it = slicer.slice(p);
 						final Iterator<Slice> iterator = it.iterator();
 						final String resourceId = Triplifier.getResourceId(p);
 						return new QueryIter(execCxt){
 							QueryIterator current = null;
-
 							@Override
 							protected boolean hasNextBinding() {
-								if(current == null || !current.hasNext()){
+								logger.trace("hasNextBinding? ");
+								logger.info("current: {}", current != null ? current.hasNext() : "null");
+								while(current == null || !current.hasNext()){
 									if(iterator.hasNext()) {
+										Slice slice = iterator.next();
+										logger.info("Executing on slice: {}", slice.iteration());
 										// Execute and set current
-										DatasetGraph dg = new DatasetGraphInMemory();
-										FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), dg, p);
-										slicer.triplify(iterator.next(), p, builder);
+										FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
+										slicer.triplify(slice, p, builder);
+										DatasetGraph dg = builder.getDatasetGraph();
+										logger.trace("Executing on next slice: {} ({})", slice.iteration(), dg.size());
 										FacadeXExecutionContext ec = new FacadeXExecutionContext(
 												new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-										current = QC.execute(opService.getSubOp(), input, ec);
+										logger.info("Op {}", opService.getSubOp());
+										logger.info("OpName {}", opService.getSubOp().getName());
+										/**
+										 * input needs to be reset before each execution, otherwise the executor will skip subsequent executions
+										 * since input bindings have been flushed!
+										 */
+										QueryIterator cloned;
+										if(input instanceof QueryIterRoot){
+											cloned = QueryIterRoot.create(ec);
+										}else{
+											cloned = QueryIter.materialize(input);
+										}
+										current = QC.execute(opService.getSubOp(), cloned, ec);
+										logger.info("Set current. hasNext? {}", current.hasNext());
+										if(current.hasNext()){
+											logger.trace("Break.");
+											break;
+										}
 									} else {
+										logger.trace("Slices finished");
+										/**
+										 * Input iterator can be closed
+										 */
+										input.cancel();
 										return false;
 									}
 								}
+								logger.trace("hasNextBinding? {}", current.hasNext());
 								return current.hasNext();
 							}
 
 							@Override
 							protected Binding moveToNextBinding() {
+								logger.trace("moveToNextBinding");
 								return current.nextBinding();
 							}
 
@@ -629,8 +659,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 				| ClassNotFoundException | IOException e) {
 			logger.error(e.getMessage());
 		}
-		logger.trace("Execute default {} {}", opBGP.toString(), excludeOpPropFunction(opBGP).toString());
-		return super.execute(excludeOpPropFunction(opBGP), input2);
+		logger.info("Execute default {} {}", opBGP.toString(), excludeOpPropFunction(opBGP).toString());
+		QueryIterator current = super.execute(excludeOpPropFunction(opBGP), input2);
+		return current;
 	}
 
 	private boolean triplifyMetadata(Properties p) {
