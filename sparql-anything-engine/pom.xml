@@ -121,7 +121,6 @@
 			<groupId>com.github.sparqlanything</groupId>
 			<artifactId>sparql-anything-binary</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -142,7 +141,6 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>junit</groupId>
