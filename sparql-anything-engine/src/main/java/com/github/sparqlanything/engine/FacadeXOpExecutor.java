@@ -203,20 +203,20 @@ public class FacadeXOpExecutor extends OpExecutor {
 							@Override
 							protected boolean hasNextBinding() {
 								logger.trace("hasNextBinding? ");
-								logger.info("current: {}", current != null ? current.hasNext() : "null");
+								logger.debug("current: {}", current != null ? current.hasNext() : "null");
 								while(current == null || !current.hasNext()){
 									if(iterator.hasNext()) {
 										Slice slice = iterator.next();
-										logger.info("Executing on slice: {}", slice.iteration());
+										logger.debug("Executing on slice: {}", slice.iteration());
 										// Execute and set current
 										FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
 										slicer.triplify(slice, p, builder);
 										DatasetGraph dg = builder.getDatasetGraph();
-										logger.trace("Executing on next slice: {} ({})", slice.iteration(), dg.size());
+										logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
 										FacadeXExecutionContext ec = new FacadeXExecutionContext(
 												new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-										logger.info("Op {}", opService.getSubOp());
-										logger.info("OpName {}", opService.getSubOp().getName());
+										logger.trace("Op {}", opService.getSubOp());
+										logger.trace("OpName {}", opService.getSubOp().getName());
 										/**
 										 * input needs to be reset before each execution, otherwise the executor will skip subsequent executions
 										 * since input bindings have been flushed!
@@ -228,7 +228,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 											cloned = QueryIter.materialize(input);
 										}
 										current = QC.execute(opService.getSubOp(), cloned, ec);
-										logger.info("Set current. hasNext? {}", current.hasNext());
+										logger.debug("Set current. hasNext? {}", current.hasNext());
 										if(current.hasNext()){
 											logger.trace("Break.");
 											break;
@@ -659,7 +659,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				| ClassNotFoundException | IOException e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Execute default {} {}", opBGP.toString(), excludeOpPropFunction(opBGP).toString());
+		logger.debug("Execute default {} {}", opBGP.toString(), excludeOpPropFunction(opBGP).toString());
 		QueryIterator current = super.execute(excludeOpPropFunction(opBGP), input2);
 		return current;
 	}
