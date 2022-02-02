@@ -103,7 +103,7 @@ public class AbstractExecutionTester {
 			result = QueryExecutionFactory.create(query, dataset).execSelect();
 		} else if (query.isConstructType()) {
 			if(outputFormat.equals("NQ")) {
-				resultDataset = 	QueryExecutionFactory.create(query, dataset).execConstructDataset();
+				resultDataset = QueryExecutionFactory.create(query, dataset).execConstructDataset();
 			}else{
 				resultGraph = QueryExecutionFactory.create(query, dataset).execConstruct().getGraph();
 			}
