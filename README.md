@@ -307,6 +307,7 @@ WHERE {
 |ondisk|It tells sparql.anything to use an on disk graph (instead of the default in memory graph). The string should be a path to a directory where the on disk graph will be stored. Using an on disk graph is almost always slower (than using the default in memory graph) but with it you can triplify large files without running out of memory.|a path to a directory|not set|
 |ondisk.reuse|When using an on disk graph, it tells sparql.anything to reuse the previous on disk graph.|true|not set|
 |strategy|The execution strategy. 0 = in memory, all triples; 1 = in memory, only triples matching any of the triple patterns in the where clause|0,1|1|
+|slice|The resources is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV|true/false|false|
 
 \* It is mandatory to provide either the local or the content.
 
