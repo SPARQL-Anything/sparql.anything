@@ -19,6 +19,7 @@ package com.github.sparqlanything.cli;
 
 import org.apache.commons.cli.*;
 import org.apache.jena.query.Query;
+import org.apache.jena.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -164,6 +165,9 @@ public class CLI {
 
 		// Set default format for query type and STDOUT or FILE
 		if (commandLine.getOptionValue(CLI.OUTPUT) != null) {
+			// Guess the format from the extension
+			return FileUtils.guessLang(commandLine.getOptionValue(CLI.OUTPUT));
+		} else {
 			if (q.isAskType() || q.isSelectType()) {
 				return "JSON";
 			} else if (q.isConstructType() || q.isDescribeType()) {
