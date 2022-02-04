@@ -1,8 +1,9 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml/badge.svg?branch=v0.4-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml)
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v0.4-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v0.4-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
+[![How to](https://img.shields.io/badge/How%20to%3F-cite-green.svg)](#how-to-cite-our-work)
+[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml/badge.svg?branch=v0.6-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml)
+[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v0.6-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
+[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v0.6-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
 
 # SPARQL Anything
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
@@ -429,7 +430,7 @@ The system supports the following functions for string manipulation (See [issue 
 - `fx:String.trim` wraps [`java.lang.String.trim`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 
 The system supports the following functions operating on strings that contain words (See [issue 121](https://github.com/SPARQL-Anything/sparql.anything/issues/121)):
-- 
+ 
 - `WordUtils.capitalize` wraps [`org.apache.commons.text.WordUtils.capitalize`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalize(java.lang.String))
 - `WordUtils.capitalizeFully` wraps [`org.apache.commons.text.WordUtils.capitalizeFully`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalizeFully(java.lang.String))
 - `WordUtils.initials` wraps [`org.apache.commons.text.WordUtils.initials`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#initials(java.lang.String))
