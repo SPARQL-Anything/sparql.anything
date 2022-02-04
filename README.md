@@ -910,7 +910,18 @@ In the second case, all RDF files in the folder are loaded in memory before exec
 
 ## Query templates and variable bindings
 
-SPARQL Anything uses the BASIL convention for variable names in queries. Variable bindings can be passed in two ways:
+SPARQL Anything uses the [BASIL convention for variable names in queries](https://github.com/basilapi/basil/wiki/SPARQL-variable-name-convention-for-WEB-API-parameters-mapping). 
+
+The syntax is based on the underscore character: '_', and can be easily learned by examples:
+
+- `?_name` The variable specifies the API mandatory parameter _name_. The value is incorporated in the query as plain literal.
+- `?__name` The parameter _name_ is optional.
+- `?_name_iri` The variable is substituted with the parameter value as a IRI.
+- `?_name_en` The parameter value is considered as literal with the language 'en' (e.g., en,it,es, etc.).
+- `?_name_integer` The parameter value is considered as literal and the XSD datatype 'integer' is added during substitution.
+- `?_name_prefix_datatype` The parameter value is considered as literal and the datatype 'prefix:datatype' is added during substitution. The prefix must be specified according to the SPARQL syntax.
+
+Variable bindings can be passed in two ways:
 
 - Inline arguments, using the option `-v|--values`
 - Passing an SPARQL Result Set file, using the option `-i|--input`
