@@ -5,7 +5,7 @@ edit_uri: null
 site_description: SPARQL Anything online documentation
 theme:
   name: readthedocs
-nav:
+#nav: null
 sticky_navigation: true
 markdown_extensions:
   - tables
