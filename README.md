@@ -829,7 +829,7 @@ WHERE {
 
 ### Format specific options
 
-<details><summary>HTML</summary>
+#### HTML
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
@@ -840,10 +840,7 @@ WHERE {
 |html.browser.screenshot|When using a browser to nagivate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here.|a file URI e.g. "file:///tmp/screenshot.png" |No Value|
 |html.metadata|It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. (cf. [issue 164](https://github.com/SPARQL-Anything/sparql.anything/issues/164))|true/false|false|
 
-</details>
-
-
-<details><summary>CSV</summary>
+#### CSV
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
@@ -852,55 +849,39 @@ WHERE {
 |csv.delimiter|The column delimiter, usually `,`,`;`,`\t`, ...|any single char|`,`|
 |csv.null-string|It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.|any string|not set|
 
-</details>
 
-<details><summary>BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO</summary>
+#### BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
 |bin.encoding|The encoding to use for generating the representation of the file.|BASE64|BASE64|
 
-</details>
-
-
-
-<details><summary>TXT</summary>
+#### TXT
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
 |txt.regex|It tells sparql.anything to evaluate a regular expression on the data source. In this case the slots will be filled with the bindings of the regex.|Any valid regular expression|No value|
 |txt.group|It tells sparql.anything to generate slots by using a specific group of the regular expression.|Any integer|No value|
 |txt.split|It tells sparql.anything to split the input around the matches of the give regular expression.|Any valid regular expression|No value|
-</details>
 
-
-<details><summary>Archive: ZIP, Tar, folder</summary>
+#### File system and archives (Zip, Tar)
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
 |archive.matches|It tells sparql.anything to evaluate a regular expression on the filenames within the archives. In this case the slots will be filled with the files that match the regex only.|Any valid regular expression|.*|
 
-</details>
-
-
-<details><summary>Spreadsheet: XLS, XLSx</summary>
+#### Spreadsheet: XLS, XLSx
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
 |spreadsheet.headers|It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.|true/false|false|
 
-</details>
-
-
-
-<details><summary>Document: DOCx</summary>
+#### Document: DOCx
 
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
 |docs.table-headers|It tells the document triplifier to use the headers of the tables within the document file for minting the properties of the generated triples.|true/false|false|
 |docs.merge-paragraphs|It tells the document triplifier to merge all the paragraphs of the document into a single slot (new line characters are preserved)|true/false|false|
-
-</details>
 
 
 ### HTTP options
