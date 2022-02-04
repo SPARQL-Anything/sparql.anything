@@ -736,7 +736,7 @@ Facade-X RDF:
 </details>
 
 
-## IRI schema and triplification options
+## Configuration
 
 SPARQL Anything will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
 
