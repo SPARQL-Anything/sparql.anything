@@ -3,7 +3,9 @@ repo_url: https://github.com/SPARQL-Anything/sparql.anything
 repo_name: GitHub
 edit_uri: null
 site_description: SPARQL Anything online documentation
-#theme: readthedocs
+theme:
+  name: readthedocs
 nav:
+sticky_navigation: true
 markdown_extensions:
   - tables
