@@ -113,7 +113,9 @@ The data is interpreted as in the following examples (using default settings).
 
 <details><summary>JSON</summary>
 Data:
-<pre>{<br>  "stringArg":"stringValue",<br>  "intArg":1,<br>  "booleanArg":true,<br>  "nullArg": null,<br>  "arr":[0,1]<br>}</pre>
+```json
+{<br>  "stringArg":"stringValue",<br>  "intArg":1,<br>  "booleanArg":true,<br>  "nullArg": null,<br>  "arr":[0,1]<br>}
+```
 Facade-X RDF:
 <pre>@prefix xyz:    &lt;http://sparql.xyz/facade-x/data/&gt; .<br>@prefix fx:   &lt;http://sparql.xyz/facade-x/ns/&gt; .<br/>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .<br>@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .<br>[ a fx:root ; <br>  xyz:arr         [  <br>                   rdf:_1  "0"^^xsd:int ;<br>                   rdf:_2  "1"^^xsd:int<br>                 ] ;<br>  xyz:booleanArg  true ;<br>  xyz:intArg      "1"^^xsd:int ;<br>  xyz:stringArg   "stringValue"<br>] .</pre>
 </details>
@@ -470,7 +472,7 @@ BIND ( IRI( CONCAT ( STR (myns:), "dummy-entity", STR(1) ) AS ?myentity )
 ```
 See also [issue 106](https://github.com/SPARQL-Anything/sparql.anything/issues/106)
 
-## Download and Usage
+## Usage
 ### Command line interface
 
 An executable JAR can be obtained from the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
