@@ -114,10 +114,29 @@ The data is interpreted as in the following examples (using default settings).
 <details><summary>JSON</summary>
 Data:
 ```json
-{<br>  "stringArg":"stringValue",<br>  "intArg":1,<br>  "booleanArg":true,<br>  "nullArg": null,<br>  "arr":[0,1]<br>}
+{
+    "stringArg": "stringValue",
+    "intArg": 1,
+    "booleanArg": true,
+    "nullArg": null,
+    "arr": [ 0, 1 ]
+}
 ```
 Facade-X RDF:
-<pre>@prefix xyz:    &lt;http://sparql.xyz/facade-x/data/&gt; .<br>@prefix fx:   &lt;http://sparql.xyz/facade-x/ns/&gt; .<br/>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .<br>@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .<br>[ a fx:root ; <br>  xyz:arr         [  <br>                   rdf:_1  "0"^^xsd:int ;<br>                   rdf:_2  "1"^^xsd:int<br>                 ] ;<br>  xyz:booleanArg  true ;<br>  xyz:intArg      "1"^^xsd:int ;<br>  xyz:stringArg   "stringValue"<br>] .</pre>
+```turtle
+@prefix xyz:    &lt;http://sparql.xyz/facade-x/data/&gt; .
+@prefix fx:   &lt;http://sparql.xyz/facade-x/ns/&gt; .
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+[ a fx:root ; 
+    xyz:arr [
+        rdf:_1  "0"^^xsd:int ;
+        rdf:_2  "1"^^xsd:int ] ;
+    xyz:booleanArg  true ;
+    xyz:intArg "1"^^xsd:int ;
+    xyz:stringArg "stringValue"
+] .
+```
 </details>
 
 <details><summary>HTML</summary>
