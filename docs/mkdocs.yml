@@ -1,2 +1,10 @@
+site_name: SPARQL Anything
+repo_url: https://github.com/SPARQL-Anything/sparql.anything
+repo_name: GitHub
+edit_uri: null
+site_description: SPARQL Anything online documentation
+theme:
+  name: readthedocs
+nav:
 markdown_extensions:
   - tables
