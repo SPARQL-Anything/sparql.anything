@@ -141,6 +141,7 @@ Facade-X RDF:
 
 <details><summary>BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO </summary>
 Data:
+
 ![Image example](https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg)
 
 Facade-X RDF:
