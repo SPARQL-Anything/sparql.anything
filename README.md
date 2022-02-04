@@ -368,7 +368,7 @@ Facade-X RDF:
 <details><summary>Spreadsheets: XLS, XLSx</summary>
 Data:
 
-[Input File](https://github.com/SPARQL-Anything/sparql.anything/raw/v0.6-DEV/sparql.anything.spreadsheet/src/main/resources/testResources/Book1.xlsx) 
+Link to file: [Book1.xslx](https://github.com/SPARQL-Anything/sparql.anything/raw/v0.6-DEV/sparql.anything.spreadsheet/src/main/resources/testResources/Book1.xlsx) 
 
 Facade-X RDF:
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
