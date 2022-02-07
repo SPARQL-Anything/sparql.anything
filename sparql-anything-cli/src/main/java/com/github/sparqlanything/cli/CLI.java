@@ -19,7 +19,9 @@ package com.github.sparqlanything.cli;
 
 import org.apache.commons.cli.*;
 import org.apache.jena.query.Query;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.util.FileUtils;
+import org.joda.time.format.FormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Locale;
 
 public class CLI {
 	private static final Logger logger = LoggerFactory.getLogger(CLI.class);
@@ -60,13 +63,9 @@ public class CLI {
 		init();
 	}
 
-	public void parse(String[] args) throws IOException {
+	public void parse(String[] args) throws MissingOptionException, ParseException {
 		CommandLineParser cmdLineParser = new DefaultParser();
-		try {
-			this.commandLine = cmdLineParser.parse(options, args);
-		} catch (ParseException e) {
-			throw new IOException(e);
-		}
+		this.commandLine = cmdLineParser.parse(options, args);
 	}
 
 	private static String getQuery(String queryArgument) throws IOException {
@@ -158,26 +157,51 @@ public class CLI {
 		return commandLine.getOptionValues(CLI.VALUES);
 	}
 
+	public static String guessLang(String name) {
+		String suffix = FileUtils.getFilenameExt(name).toLowerCase(Locale.ROOT);
+		if (suffix.equals("n3")) {
+			return Lang.N3.getName();
+		} else if (suffix.equals("nq")) {
+			return Lang.NQ.getName();
+		} else if (suffix.equals("json")) {
+			return "JSON";
+		} else if (suffix.equals("csv")) {
+			return "CSV";
+		} else if (suffix.equals("txt")) {
+			return "TEXT";
+		} else if (suffix.equals("xml")) {
+			return "xml";
+		} else if (suffix.equals("nt")) {
+			return Lang.NTRIPLES.getName();
+		} else if (suffix.equals("ttl")) {
+			return Lang.TTL.getName();
+		} else if (suffix.equals("rdf")) {
+			return Lang.RDFXML.getName();
+		} else {
+			return suffix.equals("owl") ? Lang.RDFXML.getName() : null;
+		}
+	}
 	public String getFormat(Query q) {
 		if (commandLine.hasOption(CLI.FORMAT)) {
 			return commandLine.getOptionValue(CLI.FORMAT).toUpperCase();
 		}
+		String format = null;
 
 		// Set default format for query type and STDOUT or FILE
 		if (commandLine.getOptionValue(CLI.OUTPUT) != null) {
 			// Guess the format from the extension
-			return FileUtils.guessLang(commandLine.getOptionValue(CLI.OUTPUT));
-		} else {
+			format = guessLang(commandLine.getOptionValue(CLI.OUTPUT));
+		}
+
+		if(format == null){
 			if (q.isAskType() || q.isSelectType()) {
-				return "JSON";
+				return Lang.CSV.getName();
 			} else if (q.isConstructType() || q.isDescribeType()) {
-				return "TTL";
+				return Lang.TTL.getName();
+			} else if (q.isDescribeType() || q.isConstructType()) {
+				return Lang.TTL.getName();
 			}
 		}
-		//
-		if (q.isDescribeType() || q.isConstructType()) {
-			return "TTL";
-		}
-		return "TEXT";
+		return format;
 	}
 }

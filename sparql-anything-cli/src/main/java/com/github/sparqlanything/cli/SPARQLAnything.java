@@ -63,6 +63,7 @@ import org.apache.jena.sparql.core.ResultBinding;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.update.UpdateExecutionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,28 +126,33 @@ public class SPARQLAnything {
 				m = QueryExecutionFactory.create(q, kb).execDescribe();
 				// d = new DatasetImpl(m);
 			}
-			if (format.equals("JSON")) {
-				// JSON-LD
+			if (format.equals("JSON") || format.equals(Lang.JSONLD.getName()) ) {
+				// JSON-LD format.equals(Lang.JSONLD11.getName())
 				RDFDataMgr.write(pw, m, Lang.JSONLD);
+			} else if ( format.equals(Lang.JSONLD11.getName()) ) {
+				RDFDataMgr.write(pw, m, Lang.JSONLD11);
 			} else if (format.equals("XML")) {
 				// RDF/XML
 				RDFDataMgr.write(pw, m, Lang.RDFXML);
-			} else if (format.equals("TTL")) {
+			} else if (format.equals("TTL") || format.equals(Lang.TURTLE.getName())) {
 				// TURTLE
 				RDFDataMgr.write(pw, m, Lang.TTL);
-			} else if (format.equals("NT")) {
+			} else if (format.equals("NT") || format.equals(Lang.NTRIPLES.getName())) {
 				// N-Triples
 				RDFDataMgr.write(pw, m, Lang.NT);
-			} else if (format.equals("NQ")) {
+			} else if (format.equals("NQ") || format.equals(Lang.NQUADS.getName())) {
 				// NQ
 				RDFDataMgr.write(pw, d, Lang.NQ);
-			} else if (format.equals("TRIG")) {
+			} else if (format.equals(Lang.TRIG.getName())) {
 				// TRIG
 				RDFDataMgr.write(pw, d, Lang.TRIG);
+			} else if (format.equals(Lang.TRIX.getName())) {
+				// TRIG
+				RDFDataMgr.write(pw, d, Lang.TRIX);
 			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
-		}
+		} 
 	}
 
 	private static PrintStream getPrintWriter(String fileName) throws FileNotFoundException {
@@ -391,7 +397,11 @@ public class SPARQLAnything {
 
 	public static void main(String[] args) throws Exception {
 		logger.info("SPARQL anything");
+
 		CLI cli = new CLI();
+		if(args.length == 0){
+			cli.printHelp();
+		}
 		try {
 			cli.parse(args);
 			String query = cli.getQuery();
@@ -511,7 +521,11 @@ public class SPARQLAnything {
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
+		} catch(org.apache.commons.cli.MissingOptionException e1){
+			logger.error("{}",e1.getMessage());
+			cli.printHelp();
 		} catch (ParseException e) {
+			logger.error("{}",e.getMessage());
 			cli.printHelp();
 		}
 	}
