@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>com.github.sparqlanything</groupId>
 		<artifactId>sparql-anything-parent</artifactId>
-		<version>0.6.0</version>
+		<version>0.7.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>sparql-anything-xml</artifactId>
