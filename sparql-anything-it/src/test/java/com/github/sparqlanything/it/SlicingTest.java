@@ -27,8 +27,31 @@ public class SlicingTest extends AbstractExecutionTester {
 	public void testSliceSelect (){
 		Assert.assertTrue(result.getResultVars().contains("X"));
 
+		QuerySolution ex;
 		QuerySolution qs;
 		qs = result.next();
+//		ex = expected.next();
+		System.out.println(qs);
+		Assert.assertTrue(qs.getLiteral("X").getString().equals("a1"));
+		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b1"));
+		Assert.assertTrue(qs.getLiteral("Z").getString().equals("c1"));
+
+		qs = result.next();
+		System.out.println(qs);
+		Assert.assertTrue(qs.getLiteral("X").getString().equals("a2"));
+		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b2"));
+		Assert.assertTrue(qs.getLiteral("Z").getString().equals("c2"));
+
+	}
+
+	@Test
+	public void testSliceSelect2 (){
+		Assert.assertTrue(result.getResultVars().contains("X"));
+
+		QuerySolution ex;
+		QuerySolution qs;
+		qs = result.next();
+//		ex = expected.next();
 		System.out.println(qs);
 		Assert.assertTrue(qs.getLiteral("X").getString().equals("a1"));
 		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b1"));

@@ -42,12 +42,8 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.shared.PrefixMapping;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.OpBGP;
-import org.apache.jena.sparql.algebra.op.OpPath;
-import org.apache.jena.sparql.algebra.op.OpProcedure;
-import org.apache.jena.sparql.algebra.op.OpPropFunc;
-import org.apache.jena.sparql.algebra.op.OpService;
-import org.apache.jena.sparql.algebra.op.OpTable;
+import org.apache.jena.sparql.algebra.OpVisitor;
+import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.algebra.table.TableUnit;
 import org.apache.jena.sparql.core.*;
 import org.apache.jena.sparql.core.mem.DatasetGraphInMemory;
@@ -198,6 +194,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 						final Iterable<Slice> it = slicer.slice(p);
 						final Iterator<Slice> iterator = it.iterator();
 						final String resourceId = Triplifier.getResourceId(p);
+						final List<Binding> elements = new ArrayList<>() ;
+						for ( ; input.hasNext() ; )
+							elements.add(input.nextBinding()) ;
+
 						return new QueryIter(execCxt){
 							QueryIterator current = null;
 							@Override
@@ -222,11 +222,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 										 * since input bindings have been flushed!
 										 */
 										QueryIterator cloned;
-										if(input instanceof QueryIterRoot){
-											cloned = QueryIterRoot.create(ec);
-										}else{
-											cloned = QueryIter.materialize(input);
-										}
+										cloned = QueryIterPlainWrapper.create(elements.iterator());
 										current = QC.execute(opService.getSubOp(), cloned, ec);
 										logger.debug("Set current. hasNext? {}", current.hasNext());
 										if(current.hasNext()){
@@ -239,6 +235,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 										 * Input iterator can be closed
 										 */
 										input.cancel();
+										// Make sure the original Op is executed
+										// XXX Maybe there is a better qay of doing it?
+										ExecutionContext exc = new ExecutionContext(DatasetGraphFactory.create());
+										QC.execute(opService.getSubOp(), QueryIterNullIterator.create(exc), exc);
 										return false;
 									}
 								}
@@ -683,4 +683,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return false;
 	}
 
+	@Override
+	protected QueryIterator execute(OpJoin opJoin, QueryIterator input) {
+		if(this.execCxt.getClass()!=FacadeXExecutionContext.class) {
+			return super.execute(opJoin, input);
+		}
+		return super.execute(opJoin, input);
+	}
 }
