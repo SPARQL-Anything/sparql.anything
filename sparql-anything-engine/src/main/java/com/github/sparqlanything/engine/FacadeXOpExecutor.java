@@ -28,7 +28,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.github.sparqlanything.model.*;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Slice;
+import com.github.sparqlanything.model.Slicer;
+import com.github.sparqlanything.model.TripleFilteringFacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -39,13 +46,28 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.*;
+import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpJoin;
+import org.apache.jena.sparql.algebra.op.OpPath;
+import org.apache.jena.sparql.algebra.op.OpProcedure;
+import org.apache.jena.sparql.algebra.op.OpPropFunc;
+import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.algebra.op.OpTable;
 import org.apache.jena.sparql.algebra.table.TableUnit;
-import org.apache.jena.sparql.core.*;
+import org.apache.jena.sparql.core.BasicPattern;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
+import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.iterator.*;
+import org.apache.jena.sparql.engine.iterator.QueryIter;
+import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
+import org.apache.jena.sparql.engine.iterator.QueryIterDefaulting;
+import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
+import org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper;
+import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
+import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.engine.join.Join;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
@@ -346,20 +368,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 		URL url = Triplifier.getLocation(p);
 		String resourceId = Triplifier.getResourceId(p);
-//		if (url == null) {
-//			// XXX This method of passing content seems only supported by the
-//			// TextTriplifier.
-//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
-//			String id = Integer.toString(p.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
-//			resourceId = "content:" + id;
-//		} else {
-//			resourceId = url.toString();
-//		}
-
-		// logger.trace("No location, use content: {}",
-		// p.getProperty(IRIArgument.CONTENT.toString()));
-//			dg = t.triplify(p);
-//			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
 
 		logger.debug("Execution strategy: {} {}", strategy, op.toString());
 		if (t != null) {
