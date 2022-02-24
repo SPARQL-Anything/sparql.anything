@@ -21,7 +21,6 @@ import org.apache.commons.cli.*;
 import org.apache.jena.query.Query;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.util.FileUtils;
-import org.joda.time.format.FormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
