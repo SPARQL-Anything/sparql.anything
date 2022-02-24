@@ -17,22 +17,13 @@
 
 package com.github.sparqlanything.cli;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.regex.Pattern;
-
+import com.github.sparqlanything.engine.FacadeX;
+import com.github.sparqlanything.engine.FacadeXOpExecutor;
+import com.github.sparqlanything.engine.TriplifierRegisterException;
+import io.github.basilapi.basil.sparql.QueryParameter;
+import io.github.basilapi.basil.sparql.Specification;
+import io.github.basilapi.basil.sparql.SpecificationFactory;
+import io.github.basilapi.basil.sparql.VariablesBinder;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
@@ -60,14 +51,21 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sparqlanything.engine.FacadeX;
-import com.github.sparqlanything.engine.FacadeXOpExecutor;
-import com.github.sparqlanything.engine.TriplifierRegisterException;
-
-import io.github.basilapi.basil.sparql.QueryParameter;
-import io.github.basilapi.basil.sparql.Specification;
-import io.github.basilapi.basil.sparql.SpecificationFactory;
-import io.github.basilapi.basil.sparql.VariablesBinder;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.regex.Pattern;
 
 public class SPARQLAnything {
 
@@ -389,11 +387,19 @@ public class SPARQLAnything {
 	}
 
 	public static void main(String[] args) throws Exception {
+
+		Long duration = null;
+		if(logger.isTraceEnabled()){
+			duration = System.currentTimeMillis();
+			logger.trace("Process starts: {}",duration);
+		}
+
 		logger.info("SPARQL anything");
 
 		CLI cli = new CLI();
 		if(args.length == 0){
 			cli.printHelp();
+			return;
 		}
 		try {
 			cli.parse(args);
@@ -520,6 +526,10 @@ public class SPARQLAnything {
 		} catch (ParseException e) {
 			logger.error("{}",e.getMessage());
 			cli.printHelp();
+		}
+		if(logger.isTraceEnabled()) {
+			logger.trace("Process ends: {}", System.currentTimeMillis());
+			logger.trace("Duration (ms): {}", System.currentTimeMillis() - duration);
 		}
 	}
 }
