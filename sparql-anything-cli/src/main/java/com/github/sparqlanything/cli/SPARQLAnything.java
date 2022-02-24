@@ -71,6 +71,7 @@ public class SPARQLAnything {
 
 
 	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
+	private static Long duration = null;
 
 	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
@@ -78,6 +79,9 @@ public class SPARQLAnything {
 
 	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw)
 			throws FileNotFoundException {
+		if(logger.isTraceEnabled()) {
+			logger.trace("[time] Before executeQuery: {}", System.currentTimeMillis() - duration);
+		}
 		String format = outputFormat;
 		Query q = query;
 		if (q.isSelectType()) {
@@ -143,7 +147,10 @@ public class SPARQLAnything {
 			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
-		} 
+		}
+		if(logger.isTraceEnabled()) {
+			logger.trace("[time] After executeQuery: {}", System.currentTimeMillis() - duration);
+		}
 	}
 
 	private static PrintStream getPrintWriter(String fileName) throws FileNotFoundException {
@@ -388,10 +395,9 @@ public class SPARQLAnything {
 
 	public static void main(String[] args) throws Exception {
 
-		Long duration = null;
 		if(logger.isTraceEnabled()){
 			duration = System.currentTimeMillis();
-			logger.trace("Process starts: {}",duration);
+			logger.trace("[time] Process starts: {}",duration);
 		}
 
 		logger.info("SPARQL anything");
@@ -412,14 +418,21 @@ public class SPARQLAnything {
 					logger.error("Invalid value for parameter 'strategy': {}", strategy);
 				}
 			}
-
+			if(logger.isTraceEnabled()) {
+				logger.trace("[time] Before init: {}", System.currentTimeMillis() - duration);
+			}
 			initSPARQLAnythingEngine();
-
+			if(logger.isTraceEnabled()) {
+				logger.trace("[time] After init: {}", System.currentTimeMillis() - duration);
+			}
 			Dataset kb = null;
 			String load = cli.getLoad();
 			if (load != null) {
 
 				logger.info("Loading data from: {}", load);
+				if(logger.isTraceEnabled()) {
+					logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
+				}
 				File loadSource = new File(load);
 				if (loadSource.isDirectory()) {
 
@@ -452,6 +465,9 @@ public class SPARQLAnything {
 				} else {
 					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
 					return;
+				}
+				if(logger.isTraceEnabled()) {
+					logger.trace("[time] After load: {}", System.currentTimeMillis() - duration);
 				}
 			} else {
 				kb = DatasetFactory.createGeneral();
@@ -528,8 +544,7 @@ public class SPARQLAnything {
 			cli.printHelp();
 		}
 		if(logger.isTraceEnabled()) {
-			logger.trace("Process ends: {}", System.currentTimeMillis());
-			logger.trace("Duration (ms): {}", System.currentTimeMillis() - duration);
+			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);
 		}
 	}
 }
