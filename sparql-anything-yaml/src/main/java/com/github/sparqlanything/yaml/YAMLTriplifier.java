@@ -23,7 +23,6 @@ import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.sparql.core.DatasetGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.snakeyaml.engine.v2.api.Load;
@@ -32,7 +31,11 @@ import org.snakeyaml.engine.v2.api.LoadSettings;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 public class YAMLTriplifier implements Triplifier {
 

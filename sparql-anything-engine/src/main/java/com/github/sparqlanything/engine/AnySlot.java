@@ -17,9 +17,6 @@
 
 package com.github.sparqlanything.engine;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.Var;
@@ -32,6 +29,9 @@ import org.apache.jena.sparql.pfunction.PFuncSimple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class AnySlot extends PFuncSimple {
 	private static final Logger logger = LoggerFactory.getLogger(AnySlot.class);

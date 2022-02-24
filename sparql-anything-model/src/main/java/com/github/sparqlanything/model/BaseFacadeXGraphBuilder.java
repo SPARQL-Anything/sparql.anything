@@ -17,24 +17,22 @@
 
 package com.github.sparqlanything.model;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.tdb2.TDB2Factory;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.query.Dataset;
-import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.query.TxnType;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
+import org.apache.jena.tdb2.TDB2Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.io.FileUtils;
-import org.apache.jena.query.TxnType;
 
-import java.net.URI;
 import java.io.File;
-import java.nio.file.Paths;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements FacadeXGraphBuilder {

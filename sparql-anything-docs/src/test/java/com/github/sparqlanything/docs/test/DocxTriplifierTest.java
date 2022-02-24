@@ -17,12 +17,11 @@
 
 package com.github.sparqlanything.docs.test;
 
-import java.util.Properties;
-
-import org.junit.Test;
-
 import com.github.sparqlanything.docs.DocxTriplifier;
 import com.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.junit.Test;
+
+import java.util.Properties;
 
 public class DocxTriplifierTest extends AbstractTriplifierTester {
 

@@ -17,15 +17,14 @@
 
 package com.github.sparqlanything.engine;
 
-import java.util.Iterator;
-
+import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.algebra.op.OpGraph;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
 
-import com.github.sparqlanything.model.Triplifier;
+import java.util.Iterator;
 
 public class Utils {
 

@@ -17,10 +17,10 @@
 
 package com.github.sparqlanything.fuseki;
 
-import java.io.IOException;
-
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
+
+import java.io.IOException;
 
 public class TransformerConfiguration {
 

@@ -17,14 +17,9 @@
 
 package com.github.sparqlanything.engine.test;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-
+import com.github.sparqlanything.engine.FacadeXOpExecutor;
+import com.github.sparqlanything.engine.TriplifierRegister;
+import com.github.sparqlanything.engine.TriplifierRegisterException;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
@@ -48,9 +43,13 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.junit.Test;
 
-import com.github.sparqlanything.engine.FacadeXOpExecutor;
-import com.github.sparqlanything.engine.TriplifierRegister;
-import com.github.sparqlanything.engine.TriplifierRegisterException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+
+import static org.junit.Assert.assertTrue;
 
 public class TriplifierRegistryTest {
 	public static String PREFIX = "http://example.org/";

@@ -20,9 +20,7 @@ package com.github.sparqlanything.csv;
 import com.github.sparqlanything.model.Slice;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.InputStream;
 import java.util.LinkedHashMap;
-import java.util.Properties;
 
 public class CSVSlice implements Slice<CSVRecord> {
 	private CSVRecord record;

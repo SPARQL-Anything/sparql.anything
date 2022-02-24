@@ -19,8 +19,6 @@ package com.github.sparqlanything.it;
 
 import com.github.sparqlanything.csv.CSVTriplifier;
 import com.github.sparqlanything.testutils.AbstractTriplifierTester;
-import org.apache.jena.base.Sys;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Test;
 
 import java.util.Properties;

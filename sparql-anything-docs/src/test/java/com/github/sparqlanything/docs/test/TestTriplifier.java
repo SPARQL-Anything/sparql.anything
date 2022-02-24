@@ -17,14 +17,11 @@
 
 package com.github.sparqlanything.docs.test;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Properties;
-
+import com.github.sparqlanything.docs.DocxTriplifier;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -39,10 +36,12 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.github.sparqlanything.docs.DocxTriplifier;
-import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.Triplifier;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Properties;
+
+import static org.junit.Assert.assertTrue;
 
 public class TestTriplifier {
 

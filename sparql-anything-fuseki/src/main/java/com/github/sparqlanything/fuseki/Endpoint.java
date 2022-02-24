@@ -17,6 +17,8 @@
 
 package com.github.sparqlanything.fuseki;
 
+import com.github.sparqlanything.engine.FacadeX;
+import com.github.sparqlanything.model.Triplifier;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -32,9 +34,6 @@ import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.sparql.engine.main.QC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.sparqlanything.engine.FacadeX;
-import com.github.sparqlanything.model.Triplifier;
 
 public class Endpoint {
 

@@ -17,9 +17,9 @@
 
 package com.github.sparqlanything.metadata.test;
 
-import java.net.MalformedURLException;
-
 import org.junit.Test;
+
+import java.net.MalformedURLException;
 
 public class MetadataTriplifierTest {
 

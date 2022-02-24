@@ -17,8 +17,6 @@
 
 package com.github.sparqlanything.model.test;
 
-import static org.junit.Assert.assertEquals;
-
 import com.github.sparqlanything.model.Triplifier;
 import org.junit.Assert;
 import org.junit.Test;

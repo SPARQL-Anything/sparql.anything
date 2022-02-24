@@ -17,11 +17,10 @@
 
 package com.github.sparqlanything.html;
 
-import java.util.Properties;
-
+import com.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.junit.Test;
 
-import com.github.sparqlanything.testutils.AbstractTriplifierTester;
+import java.util.Properties;
 
 public class HTMLMicrodataTest extends AbstractTriplifierTester {
 

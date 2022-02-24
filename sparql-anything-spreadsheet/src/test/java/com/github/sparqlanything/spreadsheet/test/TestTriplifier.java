@@ -21,27 +21,25 @@
 
 package com.github.sparqlanything.spreadsheet.test;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Properties;
-
 import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.spreadsheet.SpreadsheetTriplifier;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.Triplifier;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Properties;
+
+import static org.junit.Assert.assertTrue;
 
 public class TestTriplifier {
 

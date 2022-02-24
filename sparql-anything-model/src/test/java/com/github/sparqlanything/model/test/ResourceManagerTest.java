@@ -17,7 +17,9 @@
 
 package com.github.sparqlanything.model.test;
 
-import static org.junit.Assert.assertEquals;
+import com.github.sparqlanything.model.ResourceManager;
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,10 +28,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import org.apache.commons.compress.archivers.ArchiveException;
-import org.junit.Test;
-
-import com.github.sparqlanything.model.ResourceManager;
+import static org.junit.Assert.assertEquals;
 
 public class ResourceManagerTest {
 

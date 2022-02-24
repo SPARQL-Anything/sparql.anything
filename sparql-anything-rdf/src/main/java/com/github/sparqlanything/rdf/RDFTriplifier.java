@@ -21,20 +21,18 @@
 
 package com.github.sparqlanything.rdf;
 
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
+import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
-
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.sparqlanything.model.Triplifier;
 
 public class RDFTriplifier implements Triplifier {
 

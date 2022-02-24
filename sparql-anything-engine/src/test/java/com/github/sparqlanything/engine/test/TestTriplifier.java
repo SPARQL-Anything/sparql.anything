@@ -17,17 +17,16 @@
 
 package com.github.sparqlanything.engine.test;
 
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
+import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.Quad;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
-
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.sparql.core.DatasetGraph;
-
-import com.github.sparqlanything.model.Triplifier;
-import org.apache.jena.sparql.core.Quad;
 
 public class TestTriplifier implements Triplifier {
 

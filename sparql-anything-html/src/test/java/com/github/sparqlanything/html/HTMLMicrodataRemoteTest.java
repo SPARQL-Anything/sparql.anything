@@ -16,15 +16,14 @@
  */
 package com.github.sparqlanything.html;
 
+import com.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.apache.jena.riot.RDFDataMgr;
+import org.junit.Test;
+
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
-
-import org.apache.jena.riot.RDFDataMgr;
-import org.junit.Test;
-
-import com.github.sparqlanything.testutils.AbstractTriplifierTester;
 
 public class HTMLMicrodataRemoteTest extends AbstractTriplifierTester {
 

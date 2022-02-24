@@ -17,12 +17,11 @@
 
 package com.github.sparqlanything.json.test;
 
-import com.github.sparqlanything.model.TriplifierHTTPException;
 import com.github.sparqlanything.json.JSONTriplifier;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
-
 import com.github.sparqlanything.model.TripleFilteringFacadeXGraphBuilder;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Node_Variable;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.ResourceFactory;

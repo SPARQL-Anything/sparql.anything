@@ -17,33 +17,21 @@
 
 package com.github.sparqlanything.html;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.HTTPHelper;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.Frame;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
 import org.apache.any23.Any23;
 import org.apache.any23.extractor.ExtractionException;
 import org.apache.any23.source.DocumentSource;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-//import org.apache.jena.graph.NodeFactory;
-//import org.apache.jena.query.DatasetFactory;
-//import org.apache.jena.rdf.model.AnonId;
-//import org.apache.jena.rdf.model.Model;
-//import org.apache.jena.rdf.model.ModelFactory;
-//import org.apache.jena.rdf.model.Resource;
-//import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-//import org.apache.jena.vocabulary.RDF;
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Attribute;
@@ -54,15 +42,16 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.HTTPHelper;
-import com.github.sparqlanything.model.Triplifier;
-import com.github.sparqlanything.model.TriplifierHTTPException;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Frame;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 public class HTMLTriplifier implements Triplifier {
 

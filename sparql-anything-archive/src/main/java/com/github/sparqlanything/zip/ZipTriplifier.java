@@ -17,6 +17,13 @@
 
 package com.github.sparqlanything.zip;
 
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
+import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.graph.NodeFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -24,21 +31,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.graph.Graph;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.apache.jena.sparql.graph.GraphFactory;
-import org.apache.jena.vocabulary.RDF;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.sparqlanything.model.Triplifier;
 
 public class ZipTriplifier implements Triplifier {
 

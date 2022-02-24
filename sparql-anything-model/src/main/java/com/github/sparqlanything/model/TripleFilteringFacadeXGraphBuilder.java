@@ -17,12 +17,12 @@
 
 package com.github.sparqlanything.model;
 
-import java.util.Properties;
-
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
+
+import java.util.Properties;
 
 /**
  *

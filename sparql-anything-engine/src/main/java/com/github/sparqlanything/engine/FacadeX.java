@@ -17,9 +17,17 @@
 
 package com.github.sparqlanything.engine;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
+import com.github.sparqlanything.engine.functions.After;
+import com.github.sparqlanything.engine.functions.Backward;
+import com.github.sparqlanything.engine.functions.Before;
+import com.github.sparqlanything.engine.functions.Entity;
+import com.github.sparqlanything.engine.functions.Forward;
+import com.github.sparqlanything.engine.functions.Next;
+import com.github.sparqlanything.engine.functions.Previous;
+import com.github.sparqlanything.engine.functions.Serial;
+import com.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.rdf.RDFTriplifier;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.jena.query.ARQ;
@@ -33,17 +41,8 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sparqlanything.engine.functions.After;
-import com.github.sparqlanything.engine.functions.Backward;
-import com.github.sparqlanything.engine.functions.Before;
-import com.github.sparqlanything.engine.functions.Entity;
-import com.github.sparqlanything.engine.functions.Forward;
-import com.github.sparqlanything.engine.functions.Next;
-import com.github.sparqlanything.engine.functions.Previous;
-import com.github.sparqlanything.engine.functions.Serial;
-import com.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
-import com.github.sparqlanything.model.Triplifier;
-import com.github.sparqlanything.rdf.RDFTriplifier;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 public final class FacadeX {
 

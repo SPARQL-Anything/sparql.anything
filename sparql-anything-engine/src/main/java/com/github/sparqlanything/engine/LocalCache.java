@@ -17,11 +17,7 @@
 
 package com.github.sparqlanything.engine;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Properties;
-
+import com.github.sparqlanything.model.HTTPHelper;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -29,7 +25,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sparqlanything.model.HTTPHelper;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Properties;
 
 public class LocalCache {
 

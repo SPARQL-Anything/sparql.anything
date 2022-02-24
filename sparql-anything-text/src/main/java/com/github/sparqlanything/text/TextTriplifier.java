@@ -17,6 +17,15 @@
 
 package com.github.sparqlanything.text;
 
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.commons.io.IOUtils;
+import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -25,17 +34,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.github.sparqlanything.model.TriplifierHTTPException;
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import org.apache.commons.io.IOUtils;
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.Triplifier;
 
 public class TextTriplifier implements Triplifier {
 

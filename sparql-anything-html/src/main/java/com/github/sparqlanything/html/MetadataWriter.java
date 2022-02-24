@@ -16,6 +16,7 @@
  */
 package com.github.sparqlanything.html;
 
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.apache.any23.extractor.ExtractionContext;
 import org.apache.any23.writer.TripleHandlerException;
 import org.apache.any23.writer.TripleWriterHandler;
@@ -26,8 +27,6 @@ import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
-
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

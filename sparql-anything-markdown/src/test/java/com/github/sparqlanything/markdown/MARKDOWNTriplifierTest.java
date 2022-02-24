@@ -19,8 +19,8 @@ package com.github.sparqlanything.markdown;
 
 import com.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.junit.Ignore;
 import org.junit.Test;
+
 import java.util.Properties;
 
 import static org.junit.Assert.assertTrue;

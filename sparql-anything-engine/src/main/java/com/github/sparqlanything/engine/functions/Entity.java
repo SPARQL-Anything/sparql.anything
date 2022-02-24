@@ -17,12 +17,12 @@
 
 package com.github.sparqlanything.engine.functions;
 
-import java.util.List;
-
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase;
+
+import java.util.List;
 
 public class Entity extends FunctionBase implements FXFunction {
 

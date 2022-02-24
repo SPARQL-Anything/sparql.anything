@@ -17,11 +17,7 @@
 
 package com.github.sparqlanything.it;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.github.sparqlanything.engine.FacadeX;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
@@ -36,7 +32,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sparqlanything.engine.FacadeX;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ItTripleFilteringTest {
     private static final Logger log = LoggerFactory.getLogger(ItTripleFilteringTest.class);

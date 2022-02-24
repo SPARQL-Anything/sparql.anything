@@ -17,8 +17,7 @@
 
 package com.github.sparqlanything.engine.test;
 
-import static org.junit.Assert.assertEquals;
-
+import com.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.jena.query.ARQ;
@@ -33,7 +32,7 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.github.sparqlanything.engine.FacadeX;
+import static org.junit.Assert.assertEquals;
 
 public class FunctionsTest {
 

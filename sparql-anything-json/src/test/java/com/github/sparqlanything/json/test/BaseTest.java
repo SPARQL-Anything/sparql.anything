@@ -17,12 +17,12 @@
 
 package com.github.sparqlanything.json.test;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.util.Properties;
-
-import com.github.sparqlanything.model.*;
+import com.github.sparqlanything.json.JSONTriplifier;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -30,10 +30,13 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
-
-import com.github.sparqlanything.json.JSONTriplifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Properties;
+
+import static org.junit.Assert.assertTrue;
 
 public class BaseTest {
 	private static final Logger L = LoggerFactory.getLogger(BaseTest.class);

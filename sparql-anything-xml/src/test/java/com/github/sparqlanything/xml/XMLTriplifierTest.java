@@ -22,12 +22,11 @@
 
 package com.github.sparqlanything.xml;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Properties;
-
-import com.github.sparqlanything.model.*;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
@@ -36,6 +35,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Properties;
 
 public class XMLTriplifierTest {
 	private XMLTriplifier triplifier = new XMLTriplifier();

@@ -17,15 +17,7 @@
 
 package com.github.sparqlanything.model.test;
 
-import org.apache.jena.graph.*;
-import org.apache.jena.sparql.core.Quad;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class StreamWithMemorySandbox {
 

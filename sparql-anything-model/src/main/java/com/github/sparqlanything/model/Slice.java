@@ -17,8 +17,6 @@
 
 package com.github.sparqlanything.model;
 
-import java.io.InputStream;
-
 public interface Slice<T> {
 	T get();
 	int iteration();

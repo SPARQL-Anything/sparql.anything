@@ -17,7 +17,17 @@
 
 package com.github.sparqlanything.zip.test;
 
-import static org.junit.Assert.assertEquals;
+import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.zip.FolderTriplifier;
+import com.github.sparqlanything.zip.ZipTriplifier;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -28,18 +38,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.zip.FolderTriplifier;
-import com.github.sparqlanything.zip.ZipTriplifier;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.junit.Test;
-
-import com.github.sparqlanything.model.IRIArgument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertEquals;
 
 public class FolderTriplifierTest {
 	private static final Logger L = LoggerFactory.getLogger(FolderTriplifierTest.class);

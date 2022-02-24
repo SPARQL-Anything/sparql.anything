@@ -17,6 +17,16 @@
 
 package com.github.sparqlanything.bib;
 
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.jbibtex.BibTeXDatabase;
+import org.jbibtex.BibTeXParser;
+import org.jbibtex.ParseException;
+import org.jbibtex.TokenMgrException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,19 +37,6 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.jbibtex.BibTeXDatabase;
-import org.jbibtex.BibTeXParser;
-import org.jbibtex.ParseException;
-import org.jbibtex.TokenMgrException;
-
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.Triplifier;
-import com.github.sparqlanything.model.TriplifierHTTPException;
 
 public class BibtexTriplifier implements Triplifier {
 

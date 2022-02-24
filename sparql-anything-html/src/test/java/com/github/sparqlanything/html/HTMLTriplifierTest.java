@@ -17,15 +17,9 @@
 
 package com.github.sparqlanything.html;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Properties;
-
 import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -36,7 +30,12 @@ import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.sparqlanything.model.IRIArgument;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Properties;
+
+import static org.junit.Assert.assertTrue;
 
 public class HTMLTriplifierTest {
 	public static final Logger log = LoggerFactory.getLogger(HTMLTriplifierTest.class);

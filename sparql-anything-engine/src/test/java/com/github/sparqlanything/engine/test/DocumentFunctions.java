@@ -18,7 +18,6 @@
 package com.github.sparqlanything.engine.test;
 
 import com.github.sparqlanything.engine.FacadeX;
-
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.junit.Test;

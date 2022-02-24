@@ -17,6 +17,15 @@
 
 package com.github.sparqlanything.model;
 
+import com.google.common.escape.UnicodeEscaper;
+import com.google.common.net.PercentEscaper;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -27,17 +36,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Set;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.compress.archivers.ArchiveException;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.escape.UnicodeEscaper;
-import com.google.common.net.PercentEscaper;
 
 public interface Triplifier {
 

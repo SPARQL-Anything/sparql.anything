@@ -21,15 +21,14 @@
 
 package com.github.sparqlanything.facadeiri;
 
-import java.nio.CharBuffer;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.sparqlanything.facadeiri.antlr.FacadeIRIBaseListener;
 import com.github.sparqlanything.facadeiri.antlr.FacadeIRIParser;
 import com.github.sparqlanything.model.IRIArgument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.CharBuffer;
+import java.util.Properties;
 
 
 public class ParameterListener extends FacadeIRIBaseListener {

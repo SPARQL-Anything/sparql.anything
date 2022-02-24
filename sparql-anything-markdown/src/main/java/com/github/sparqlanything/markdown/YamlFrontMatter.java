@@ -17,13 +17,7 @@
 
 package com.github.sparqlanything.markdown;
 
-import org.commonmark.node.Block;
 import org.commonmark.node.CustomBlock;
-import org.commonmark.node.CustomNode;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class YamlFrontMatter extends CustomBlock {
 	private String content = null;
