@@ -981,10 +981,10 @@ The system supports the following functions operating on strings that are URLs (
 - `fx:URLEncoder.encode` wraps [`java.net.URLEncoder.encode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLEncoder.html#encode(java.lang.String,java.lang.String))
 - `fx:URLEncoder.encode` wraps [`java.net.URLEncoder.encode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLDecoder.html#decode(java.lang.String,java.lang.String))
 
-### The function `fx:Serial`:
+### The function `fx:serial`:
 The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.
 
-### The function `fx:Entity`
+### The function `fx:entity`
 The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).
 ```
 BIND ( fx:entity ( myns:, "dummy-entity", 1) AS ?myentity) 
@@ -992,6 +992,9 @@ BIND ( fx:entity ( myns:, "dummy-entity", 1) AS ?myentity)
 BIND ( IRI( CONCAT ( STR (myns:), "dummy-entity", STR(1) ) AS ?myentity )
 ```
 See also [issue 106](https://github.com/SPARQL-Anything/sparql.anything/issues/106)
+
+### The function `fx:literal`
+The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).
 
 ## Usage
 ### Command line interface
