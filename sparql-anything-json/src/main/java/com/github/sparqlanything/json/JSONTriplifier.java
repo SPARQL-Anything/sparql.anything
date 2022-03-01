@@ -40,36 +40,36 @@ public class JSONTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
-	private String[] getDataSources(URL url) {
-		return new String[] { url.toString() };
-	}
-
-	private String getRootId(URL url, String dataSourceId, Properties properties) {
-		return Triplifier.getRootArgument(properties);
-	}
+//	private String[] getDataSources(URL url) {
+//		return new String[] { url.toString() };
+//	}
+//
+//	private String getRootId(URL url, String dataSourceId, Properties properties) {
+//		return Triplifier.getRootArgument(properties);
+//	}
 
 	private void transform(URL url, Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 
-		final InputStream us = Triplifier.getInputStream(url, properties);
+		final InputStream us = Triplifier.getInputStream(properties);
 
 		JsonFactory factory = JsonFactory.builder().build();
 		JsonParser parser = factory.createParser(us);
 
 		try {
 			// Only 1 data source expected
-			String dataSourceId;
-			if (properties.containsKey(IRIArgument.ROOT.toString())) {
-				logger.trace("Setting Data source Id using Root argument");
-				dataSourceId = properties.getProperty(IRIArgument.ROOT.toString());
-			} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
-				logger.trace("Setting Data source Id using Content argument");
-				dataSourceId = Triplifier.XYZ_NS
-						+ DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString()));
-			} else {
-				dataSourceId = getDataSources(url)[0];
-			}
-			transformJSON(parser, dataSourceId, getRootId(url, dataSourceId, properties), builder);
+			String dataSourceId = Triplifier.getRootArgument(properties);
+//			if (properties.containsKey(IRIArgument.ROOT.toString())) {
+//				logger.trace("Setting Data source Id using Root argument");
+//				dataSourceId = properties.getProperty(IRIArgument.ROOT.toString());
+//			} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
+//				logger.trace("Setting Data source Id using Content argument");
+//				dataSourceId = Triplifier.XYZ_NS
+//						+ DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString()));
+//			} else {
+//				dataSourceId = Triplifier.getRootArgument(properties); //getDataSources(url)[0];
+//			}
+			transformJSON(parser, dataSourceId, Triplifier.getRootArgument(properties), builder);
 		} finally {
 			us.close();
 		}

@@ -73,7 +73,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 
 	private final static Logger logger = LoggerFactory.getLogger(MARKDOWNTriplifier.class);
 
-	private URL url;
+//	private URL url;
 	private Properties properties;
 	private FacadeXGraphBuilder builder;
 	private String dataSourceId;
@@ -83,8 +83,8 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	private int lastLevel = 0;
 	private Map<String,Integer> lastSlot;
 
-	private void before(URL url, Properties properties, FacadeXGraphBuilder builder, String dataSourceId, String rootId){
-		this.url = url;
+	private void before(Properties properties, FacadeXGraphBuilder builder, String dataSourceId, String rootId){
+//		this.url = url;
 		this.properties = properties;
 		this.builder = builder;
 		this.dataSourceId = dataSourceId;
@@ -96,7 +96,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	}
 
 	private void after(){
-		url = null;
+//		url = null;
 		properties = null;
 		builder = null;
 		dataSourceId = null;
@@ -106,10 +106,10 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		this.lastSlot = null;
 	}
 
-	private void transform(URL url, Properties properties, FacadeXGraphBuilder builder)
+	private void transform(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 
-		final InputStream us = Triplifier.getInputStream(url, properties);
+		final InputStream us = Triplifier.getInputStream(properties);
 		final InputStreamReader reader = new InputStreamReader(us);
 		List<Extension> extensions = Arrays.asList(TablesExtension.create(), YamlFrontMatterGathererExtension.create());
 		Parser parser = Parser.builder().extensions(extensions).build();
@@ -120,7 +120,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 			String dataSourceId = Triplifier.getRootArgument(properties);
 			rootId = dataSourceId;
 			logger.trace("ds {} root {}", dataSourceId, rootId);
-			before(url, properties, builder, dataSourceId, rootId);
+			before(properties, builder, dataSourceId, rootId);
 			document.accept(this);
 		} finally {
 			us.close();
@@ -132,7 +132,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 		URL url = Triplifier.getLocation(properties);
-		transform(url, properties, builder);
+		transform(properties, builder);
 	}
 
 	@Override

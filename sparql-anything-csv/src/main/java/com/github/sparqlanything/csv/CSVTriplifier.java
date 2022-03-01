@@ -112,10 +112,10 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		URL url = Triplifier.getLocation(properties);
-		log.debug("Location: {}", url);
-		if (url == null)
-			return;
+//		URL url = Triplifier.getLocation(properties);
+//		log.debug("Location: {}", url);
+//		if (url == null)
+//			return;
 
 		CSVFormat format = buildFormat(properties);
 		String root = Triplifier.getRootArgument(properties);
@@ -126,7 +126,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		// Add type Root
 		builder.addRoot(dataSourceId, root);
 		try {
-			final InputStream is = Triplifier.getInputStream(url, properties);
+			final InputStream is = Triplifier.getInputStream(properties);
 			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
 			Iterable<CSVRecord> records = format.parse(in);
 			Iterator<CSVRecord> recordIterator = records.iterator();
@@ -148,7 +148,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 			}
 			log.debug("{} records", rown);
 		} catch (IllegalArgumentException e) {
-			log.error("{} :: {}", e.getMessage(), url);
+			log.error("{} :: {}", e.getMessage(), Triplifier.getResourceId(properties));
 			throw new IOException(e);
 		}
 	}
@@ -193,10 +193,10 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 
-		URL url = Triplifier.getLocation(properties);
-		log.debug("Location: {}", url);
-		if (url == null)
-			return Collections.emptySet();
+//		URL url = Triplifier.getLocation(properties);
+//		log.debug("Location: {}", url);
+//		if (url == null)
+//			return Collections.emptySet();
 
 		CSVFormat format = buildFormat(properties);
 		String root = Triplifier.getRootArgument(properties);
@@ -204,9 +204,9 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 		boolean headers = hasHeaders(properties);
 		String dataSourceId = Triplifier.getRootArgument(properties); // there is always 1 data source id
-		String containerRowPrefix = url.toString() + "#row";
+		String containerRowPrefix = root + "#row";
 
-		final InputStream is = Triplifier.getInputStream(url, properties);
+		final InputStream is = Triplifier.getInputStream(properties);
 		Reader in = new InputStreamReader(new BOMInputStream(is), charset);
 
 		Iterable<CSVRecord> records = format.parse(in);

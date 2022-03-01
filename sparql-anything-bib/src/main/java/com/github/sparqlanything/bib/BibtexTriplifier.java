@@ -47,10 +47,10 @@ public class BibtexTriplifier implements Triplifier {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
-		URL url = Triplifier.getLocation(properties);
+//		URL url = Triplifier.getLocation(properties);
 		String content = properties.getProperty(IRIArgument.CONTENT.toString());
-		if (url == null && (content == null || content.isEmpty()))
-			return;
+//		if (url == null && (content == null || content.isEmpty()))
+//			return;
 
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
@@ -59,7 +59,7 @@ public class BibtexTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId, root);
 
 		try {
-			InputStream is = Triplifier.getInputStream(url, properties);
+			InputStream is = Triplifier.getInputStream(properties);
 			BibTeXParser bibtexParser = new BibTeXParser();
 			Reader reader = new InputStreamReader(is);
 			BibTeXDatabase bibDB = bibtexParser.parse(reader);

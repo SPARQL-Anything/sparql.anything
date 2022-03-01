@@ -41,37 +41,37 @@ public class YAMLTriplifier implements Triplifier {
 
 	private static final Logger logger = LoggerFactory.getLogger(YAMLTriplifier.class);
 
-	private String[] getDataSources(URL url) {
-		return new String[] { url.toString() };
-	}
+//	private String[] getDataSources(URL url) {
+//		return new String[] { url.toString() };
+//	}
+//
+//	private String getRootId(String dataSourceId, Properties properties) {
+//		return Triplifier.getRootArgument(properties);
+//	}
 
-	private String getRootId(URL url, String dataSourceId, Properties properties) {
-		return Triplifier.getRootArgument(properties);
-	}
-
-	protected void transform(URL url, Properties properties, FacadeXGraphBuilder builder)
+	protected void transform(Properties properties, FacadeXGraphBuilder builder)
 		throws IOException, TriplifierHTTPException {
 
-		final InputStream is = Triplifier.getInputStream(url, properties);
+		final InputStream is = Triplifier.getInputStream(properties);
 
 		LoadSettings settings = LoadSettings.builder().setLabel("Custom user configuration").build();
 		Load load = new Load(settings);
 
 		try {
 			// Only 1 data source expected
-			String dataSourceId;
-			if (properties.containsKey(IRIArgument.ROOT.toString())) {
-				logger.trace("Setting Data source Id using Root argument");
-				dataSourceId = properties.getProperty(IRIArgument.ROOT.toString());
-			} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
-				logger.trace("Setting Data source Id using Content argument");
-				dataSourceId = Triplifier.XYZ_NS
-						+ DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString()));
-			} else {
-				dataSourceId = getDataSources(url)[0];
-			}
+			String dataSourceId = Triplifier.getRootArgument(properties);
+//			if (properties.containsKey(IRIArgument.ROOT.toString())) {
+//				logger.trace("Setting Data source Id using Root argument");
+//				dataSourceId = properties.getProperty(IRIArgument.ROOT.toString());
+//			} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
+//				logger.trace("Setting Data source Id using Content argument");
+//				dataSourceId = Triplifier.XYZ_NS
+//						+ DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString()));
+//			} else {
+//				dataSourceId = getDataSources(url)[0];
+//			}
 			Iterable<Object> iter = load.loadAllFromInputStream(is);
-			transformYAML(iter, dataSourceId, getRootId(url, dataSourceId, properties), builder);
+			transformYAML(iter, dataSourceId, Triplifier.getRootArgument(properties), builder);
 		} finally {
 			is.close();
 		}
@@ -166,9 +166,9 @@ public class YAMLTriplifier implements Triplifier {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
-		URL url = Triplifier.getLocation(properties);
+//		URL url = Triplifier.getLocation(properties);
 
-		transform(url, properties, builder);
+		transform(properties, builder);
 
 //		if (logger.isDebugEnabled()) {
 //			logger.debug("Number of triples: {} ", builder.getMainGraph().size());
