@@ -442,11 +442,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 			InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		Triplifier t;
 
-//		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString())) {
-//			logger.error("Neither location nor content provided");
-////			throw new RuntimeException("Neither location nor content provided");
-//			return null;
-//		}
+		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString()) && !p.containsKey(IRIArgument.COMMAND.toString())) {
+			logger.error("Neither location nor content provided");
+//			throw new RuntimeException("Neither location nor content provided");
+			return null;
+		}
 
 		if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
 			logger.trace("Triplifier enforced");
