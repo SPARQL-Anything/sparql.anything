@@ -811,6 +811,7 @@ WHERE {
 |-|-|-|-|
 |location*|The URL of the data source.|Any valid URL.|-|
 |content*|The content to be triplified.|Any valid literal.|-|
+|command*|An external command line to be executed. The output is handled according to the option 'media-type'|Any valid literal.|-|
 |root|The IRI of generated root resource.|Any valid IRI.|location + '#' (in case of location argument is set) or 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in case of content argument set) |
 |media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml, image/png, text/html, application/octet-stream, application/json, image/jpeg, image/tiff, image/bmp, text/csv, image/vnd.microsoft.icon,text/plain |No value (the media-type will be guessed from the the file extension)|
 |namespace|The namespace prefix for the properties that will be generated.|Any valid namespace prefix.|http://sparql.xyz/facade-x/data/|
@@ -825,7 +826,7 @@ WHERE {
 |strategy|The execution strategy. 0 = in memory, all triples; 1 = in memory, only triples matching any of the triple patterns in the where clause|0,1|1|
 |slice|The resources is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row)|true/false|false|
 
-\* It is mandatory to provide either the local or the content.
+\* It is mandatory to provide either the local or content or command.
 
 ### Format specific options
 
