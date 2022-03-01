@@ -441,12 +441,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private Triplifier getTriplifier(Properties p) throws InstantiationException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		Triplifier t;
-		String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
-		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString())) {
-			logger.error("Neither location nor content provided");
-//			throw new RuntimeException("Neither location nor content provided");
-			return null;
-		}
+
+//		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString())) {
+//			logger.error("Neither location nor content provided");
+////			throw new RuntimeException("Neither location nor content provided");
+//			return null;
+//		}
 
 		if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
 			logger.trace("Triplifier enforced");
@@ -459,7 +459,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 							.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString())))
 					.getConstructor().newInstance();
 		} else if (p.containsKey(IRIArgument.LOCATION.toString())) {
-
+			String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 			File f = new File(p.get(IRIArgument.LOCATION.toString()).toString().replace("file://", ""));
 
 			logger.trace("Use location {}, exists on local FS? {}, is directory? {}", f.getAbsolutePath(), f.exists(),
