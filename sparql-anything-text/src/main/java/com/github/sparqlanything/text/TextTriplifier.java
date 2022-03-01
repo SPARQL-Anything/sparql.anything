@@ -48,16 +48,19 @@ public class TextTriplifier implements Triplifier {
 		String value;
 		String root;
 		String dataSourceId;
-		URL url = Triplifier.getLocation(properties);
-		if (url == null) {
-			value = properties.getProperty(IRIArgument.CONTENT.toString(), "");
-			root = Triplifier.getRootArgument(properties);
-			dataSourceId = root; //
-		} else {
-			value = readFromURL(url, properties);
-			root = Triplifier.getRootArgument(properties);
-			dataSourceId = root;
-		}
+		//URL url = Triplifier.getLocation(properties);
+//		if (url == null) {
+//			value = properties.getProperty(IRIArgument.CONTENT.toString(), "");
+//			root = Triplifier.getRootArgument(properties);
+//			dataSourceId = root; //
+//		} else {
+//			value = readFromURL(url, properties);
+//			root = Triplifier.getRootArgument(properties);
+//			dataSourceId = root;
+//		}
+		root = Triplifier.getRootArgument(properties);
+		dataSourceId = root; //
+		value = IOUtils.toString(Triplifier.getInputStream(properties), Triplifier.getCharsetArgument(properties));
 
 //		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 
@@ -126,13 +129,13 @@ public class TextTriplifier implements Triplifier {
 		}
 	}
 
-	private static String readFromURL(URL url, Properties properties) throws IOException, TriplifierHTTPException {
-		StringWriter sw = new StringWriter();
-		InputStream is = Triplifier.getInputStream(url, properties);
-		IOUtils.copy(is, sw, Triplifier.getCharsetArgument(properties));
-		return sw.toString();
-
-	}
+//	private static String readFromURL(URL url, Properties properties) throws IOException, TriplifierHTTPException {
+//		StringWriter sw = new StringWriter();
+//		InputStream is = Triplifier.getInputStream(properties);
+//		IOUtils.copy(is, sw, Triplifier.getCharsetArgument(properties));
+//		return sw.toString();
+//
+//	}
 
 	@Override
 	public Set<String> getMimeTypes() {

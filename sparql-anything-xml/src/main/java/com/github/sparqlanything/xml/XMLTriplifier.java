@@ -54,13 +54,13 @@ public class XMLTriplifier implements Triplifier {
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
-		URL url = Triplifier.getLocation(properties);
-
-		if (url == null)
-			return;
+//		URL url = Triplifier.getLocation(properties);
+//
+//		if (url == null)
+//			return;
 
 		String namespace = Triplifier.getNamespaceArgument(properties);
-		String dataSourceId = url.toString();
+		String dataSourceId = Triplifier.getRootArgument(properties);
 		String root = Triplifier.getRootArgument(properties);
 
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
@@ -77,7 +77,7 @@ public class XMLTriplifier implements Triplifier {
 		StringBuilder charBuilder = null;
 		//
 		try {
-			InputStream is = Triplifier.getInputStream(url, properties);
+			InputStream is = Triplifier.getInputStream(properties);
 			eventReader = inputFactory.createXMLEventReader(is);
 		} catch (XMLStreamException e) {
 			throw new IOException(e);

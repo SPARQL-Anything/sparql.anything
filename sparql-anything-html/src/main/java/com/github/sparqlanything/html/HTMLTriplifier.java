@@ -69,10 +69,10 @@ public class HTMLTriplifier implements Triplifier {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 
-		URL url = Triplifier.getLocation(properties);
-
-		if (url == null)
-			return;
+//		URL url = Triplifier.getLocation(properties);
+//
+//		if (url == null)
+//			return;
 
 		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -84,8 +84,9 @@ public class HTMLTriplifier implements Triplifier {
 		log.trace(properties.toString());
 		if (properties.containsKey(PROPERTY_METADATA)
 				&& Boolean.parseBoolean(properties.getProperty(PROPERTY_METADATA))) {
-			log.trace("Extracting metadata");
+			log.trace("Extracting metadata (needs HTTP location)");
 			try {
+				URL url = Triplifier.getLocation(properties);
 				extractMetadata(url, properties, builder);
 			} catch (IOException | URISyntaxException | ExtractionException | TripleHandlerException e) {
 				e.printStackTrace();
@@ -96,12 +97,14 @@ public class HTMLTriplifier implements Triplifier {
 
 		Document doc;
 		// If location is a http or https, raise exception if status is not 200
-		log.debug("Loading URL: {}", url);
 
+		URL url = Triplifier.getLocation(properties);
 		if (properties.containsKey(PROPERTY_BROWSER)) {
+			log.debug("Browser used (needs an HTTP location): {}", url);
+			log.debug("Loading URL: {}", url);
 			doc = Jsoup.parse(useBrowserToNavigate(url.toString(), properties));
 		} else {
-			doc = Jsoup.parse(Triplifier.getInputStream(url, properties), charset.toString(), url.toString());
+			doc = Jsoup.parse(Triplifier.getInputStream(properties), charset.toString(), Triplifier.getResourceId(properties));
 		}
 
 //		Model model = ModelFactory.createDefaultModel();
@@ -109,7 +112,7 @@ public class HTMLTriplifier implements Triplifier {
 		Elements elements = doc.select(selector);
 //		Resource rootResource = null;
 		String rootResourceId = null;
-		String dataSourceId = url.toString();
+		String dataSourceId = (url != null) ? url.toString() : root;
 		if (elements.size() > 1) {
 			// Create a root container
 			rootResourceId = root;

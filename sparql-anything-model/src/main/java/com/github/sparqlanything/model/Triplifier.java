@@ -26,10 +26,12 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -152,6 +154,8 @@ public interface Triplifier {
 
 		} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
 			return XYZ_NS + DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString())) + "#";
+		} else if (properties.containsKey(IRIArgument.COMMAND.toString())) {
+			return XYZ_NS + DigestUtils.md5Hex(properties.getProperty(IRIArgument.COMMAND.toString())) + "#";
 		}
 		throw new RuntimeException("No location nor content provided!");
 	}
@@ -193,8 +197,16 @@ public interface Triplifier {
 		return null;
 	}
 
-	private static InputStream getInputStream(URL url, Properties properties, Charset charset)
+	private static InputStream getInputStream(Properties properties, Charset charset)
 			throws IOException, TriplifierHTTPException {
+
+		if(properties.containsKey(IRIArgument.COMMAND.toString())){
+			String command = properties.getProperty(IRIArgument.COMMAND.toString());
+			Runtime rt = Runtime.getRuntime();
+			String[] commands = {command};
+			Process proc = rt.exec(commands);
+			return proc.getInputStream();
+		}
 
 		if (properties.containsKey(IRIArgument.CONTENT.toString())) {
 			return new ByteArrayInputStream(properties.get(IRIArgument.CONTENT.toString()).toString().getBytes());
@@ -202,6 +214,8 @@ public interface Triplifier {
 
 		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString())) {
 
+
+			URL url = Triplifier.getLocation(properties);
 			// If local throw exception
 			if (url.getProtocol().equals("file")) {
 				log.debug("Getting input stream from file");
@@ -225,6 +239,7 @@ public interface Triplifier {
 			log.debug("Other protocol: {}", url.getProtocol());
 			return url.openStream();
 		}
+
 		// Handle archives differently
 		URL urlArchive = instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
 		try {
@@ -236,9 +251,9 @@ public interface Triplifier {
 		}
 	}
 
-	public static InputStream getInputStream(URL url, Properties properties)
+	public static InputStream getInputStream(Properties properties)
 			throws IOException, TriplifierHTTPException {
-		return getInputStream(url, properties, getCharsetArgument(properties));
+		return getInputStream(properties, getCharsetArgument(properties));
 	}
 	
 	public static String getResourceId(Properties properties) {
@@ -249,6 +264,11 @@ public interface Triplifier {
 		} catch (MalformedURLException e) {
 			log.error("Malformed url", e);
 		}
+		if (url == null && properties.containsKey(IRIArgument.COMMAND.toString())) {
+			log.trace("No location, use command: {}", properties.getProperty(IRIArgument.COMMAND.toString()));
+			String id = Integer.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+			resourceId = "command:" + id;
+		}else
 		if (url == null && properties.containsKey(IRIArgument.CONTENT.toString())) {
 			// XXX This method of passing content seems only supported by the
 			// TextTriplifier.
