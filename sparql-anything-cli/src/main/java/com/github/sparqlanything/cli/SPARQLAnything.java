@@ -25,6 +25,7 @@ import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.VariablesBinder;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -516,7 +517,7 @@ public class SPARQLAnything {
 						outputFile = prepareOutputFromPattern(outputPattern, qs);
 					} else {
 						if (outputFileName != null) {
-							outputFile = outputFileName + "-" + parameters.getRowNumber();
+							outputFile = FilenameUtils.removeExtension(outputFileName) + "-" + parameters.getRowNumber() + "." + FilenameUtils.getExtension(outputFileName);
 						}
 						// else stays null and output goes to STDOUT
 					}
