@@ -203,7 +203,7 @@ public interface Triplifier {
 		if(properties.containsKey(IRIArgument.COMMAND.toString())){
 			String command = properties.getProperty(IRIArgument.COMMAND.toString());
 			Runtime rt = Runtime.getRuntime();
-			String[] commands = {command};
+			String[] commands = {command.substring(0, command.indexOf(' ') ) , command.substring(command.indexOf(' ')) };
 			Process proc = rt.exec(commands);
 			return proc.getInputStream();
 		}
