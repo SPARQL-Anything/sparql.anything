@@ -15,7 +15,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-ENV VERSION "0.6.0"
+ENV VERSION "0.7.0-SNAPSHOT"
 
 # normal
 CMD cd /app && mvn clean install && \
