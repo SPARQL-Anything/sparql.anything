@@ -108,6 +108,10 @@ public class YAMLTriplifier implements Triplifier {
 		for(Map.Entry<?,?> entry: o.entrySet()){
 			Object key = entry.getKey();
 			Object value = entry.getValue();
+			if( value == null){
+				log.warn("skipping {} because value is null", key);
+				continue;
+			}
 			transformStringKeyValue((String) key, value, dataSourceId, containerId, builder);
 		}
 	}
