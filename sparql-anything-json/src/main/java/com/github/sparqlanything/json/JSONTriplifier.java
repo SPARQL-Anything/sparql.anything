@@ -141,6 +141,8 @@ public class JSONTriplifier implements Triplifier {
 			FacadeXGraphBuilder builder) throws IOException {
 
 		JsonToken token;
+		Integer coercedInt;
+		String coercedStr;
 
 		while ((token = parser.nextToken()) != JsonToken.END_OBJECT) {
 
@@ -166,7 +168,18 @@ public class JSONTriplifier implements Triplifier {
 					break;
 				case VALUE_NUMBER_INT:
 					logger.trace("{} int", k);
-					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), parser.getValueAsInt());
+					coercedInt = null;
+					coercedStr = null;
+					Boolean kIsInteger = true ; // assume it is
+					try{
+						coercedInt = parser.getValueAsInt() ;
+					} catch (Exception e){ // could tighten this to com.fasterxml.jackson.core.exc.InputCoercionException
+						logger.warn("{} can not be parsed as an integer -- treating it as a string", k);
+						kIsInteger = false ;
+						coercedStr = parser.getValueAsString() ;
+					}
+					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), 
+							         kIsInteger ? coercedInt : coercedStr);
 					break;
 				case VALUE_STRING:
 					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
