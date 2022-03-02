@@ -193,7 +193,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(Heading node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 
 		handleContainer(node);
@@ -214,7 +216,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(ListItem node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		logger.trace("[Spans {}]", node.getSourceSpans());
 		handleContainer(node);
@@ -224,7 +228,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(OrderedList node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		logger.trace("[Delimiter] {}", node.getDelimiter());
 		logger.trace("[Start number] {}", node.getStartNumber());
@@ -236,7 +242,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(BulletList node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		handleContainer(node);
 		super.visit(node);
@@ -245,7 +253,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(Paragraph node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		logger.trace("[SourceSpans] {}", node.getSourceSpans());
 		handleContainer(node);
@@ -255,7 +265,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(Text node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		//logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		logger.trace("[Literal] {}", node.getLiteral());
 		logger.trace("[SourceSpans] {}", node.getSourceSpans());
@@ -267,7 +279,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	public void visit(Link node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 		logger.trace("[toString {}] {}", node.getClass(), node.toString());
-		//logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		handleContainer(node);
 		if(node.getTitle() != null) {
@@ -282,7 +296,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(BlockQuote node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		handleContainer(node);
 		super.visit(node);
@@ -292,7 +308,9 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	public void visit(Emphasis node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
 //		logger.trace("[toString {}] {}", node.getClass(), node.toString());
-		//logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
+			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
+		}
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		handleContainer(node);
 		super.visit(node);
