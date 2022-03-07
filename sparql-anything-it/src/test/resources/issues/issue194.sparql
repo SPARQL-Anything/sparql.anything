@@ -1,0 +1,20 @@
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?s
+WHERE {
+	SERVICE <x-sparql-anything:> {
+		fx:properties fx:location "https://raw.githubusercontent.com/luigi-asprino/external-components/patch-1/components/sparql-anything.md" . #file:///Users/ed4565/Development/polifonia/ecosystem-knowledge-graph/./ecosystem/content/_external-components/components/sparql-anything.md" .
+		[] a xyz:YamlFrontMatter ; fx:anySlot ?yaml
+					
+		SERVICE <x-sparql-anything:> {
+			fx:properties fx:content ?yaml ; 
+			fx:triplifier "com.github.sparqlanything.yaml.YAMLTriplifier" .
+			?s <http://sparql.xyz/facade-x/data/name> "SPARQL Anything" .
+			BIND ( ?yaml as ?content )
+		}
+	}
+}

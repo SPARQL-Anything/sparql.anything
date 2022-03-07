@@ -294,4 +294,20 @@ public class Issues {
 		assertFalse(QueryExecutionFactory.create(queryStr2, ds).execSelect().hasNext());
 	}
 
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/194
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue194() throws URISyntaxException, IOException {
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue194.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
+		assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
+	}
+
 }
