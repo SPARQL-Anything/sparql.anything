@@ -931,7 +931,8 @@ In the first case, the engine computes the cardinal product of all the variables
 
 In the second case, the query is executed for each set of bindings in the result set.
 
-## Advanced features
+## Functions and magic properties
+SPARQL Anything is built on Apache Jena, see a list of supported functions on the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
 ### Working with sequences
 #### The `fx:anySlot` magic property
 The execution engine is sensible to the magic property 
