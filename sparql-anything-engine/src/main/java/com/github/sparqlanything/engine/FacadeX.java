@@ -25,6 +25,7 @@ import com.github.sparqlanything.engine.functions.Forward;
 import com.github.sparqlanything.engine.functions.Literal;
 import com.github.sparqlanything.engine.functions.Next;
 import com.github.sparqlanything.engine.functions.Previous;
+import com.github.sparqlanything.engine.functions.RemoveTags;
 import com.github.sparqlanything.engine.functions.Serial;
 import com.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
 import com.github.sparqlanything.model.Triplifier;
@@ -159,6 +160,7 @@ public final class FacadeX {
 				ReflectionFunctionFactory.get().makeFunction(String.class, "stripLeading"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.stripTrailing",
 				ReflectionFunctionFactory.get().makeFunction(String.class, "stripTrailing"));
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.removeTags", RemoveTags.class);
 
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.md2Hex",
 				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "md2Hex"));
