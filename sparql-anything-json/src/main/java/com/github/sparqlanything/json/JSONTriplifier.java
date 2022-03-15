@@ -21,10 +21,10 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Slice;
+import com.github.sparqlanything.model.Slicer;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.slf4j.Logger;
@@ -33,10 +33,14 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
-public class JSONTriplifier implements Triplifier {
+import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
+import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
+
+public class JSONTriplifier implements Triplifier, Slicer {
 
 	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
@@ -90,14 +94,9 @@ public class JSONTriplifier implements Triplifier {
 		}
 
 	}
-
-	private void transformArray(JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder)
+	private void transformArrayItem(int i, JsonToken token, JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder)
 			throws IOException {
-		int i = 0;
-		JsonToken token;
-
-		while ((token = parser.nextToken()) != JsonToken.END_ARRAY) {
-			switch (token) {
+		switch (token) {
 			case START_ARRAY:
 				String childContainerIdarr = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
 				builder.addContainer(dataSourceId, containerId, i + 1, childContainerIdarr);
@@ -131,7 +130,15 @@ public class JSONTriplifier implements Triplifier {
 				// NOP
 				break;
 
-			}
+		}
+	}
+	private void transformArray(JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder)
+			throws IOException {
+		int i = 0;
+		JsonToken token;
+
+		while ((token = parser.nextToken()) != END_ARRAY) {
+			transformArrayItem(i, token, parser, dataSourceId, containerId, builder);
 			i++;
 		}
 
@@ -144,62 +151,61 @@ public class JSONTriplifier implements Triplifier {
 		Integer coercedInt;
 		String coercedStr;
 
-		while ((token = parser.nextToken()) != JsonToken.END_OBJECT) {
-
+		while ((token = parser.nextToken()) != END_OBJECT) {
 			if (token == JsonToken.FIELD_NAME) {
 				String k = parser.getText();
 				token = parser.nextToken();
-
 				switch (token) {
-				case START_ARRAY:
-					String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
-					builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerIdArr);
-					transformArray(parser, dataSourceId, childContainerIdArr, builder);
-					break;
-				case START_OBJECT:
-					String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
-					builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
-					transformObject(parser, dataSourceId, childContainerId, builder);
-					break;
-				case VALUE_NUMBER_FLOAT:
-					logger.trace("{} float", k);
-					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
-							parser.getValueAsDouble());
-					break;
-				case VALUE_NUMBER_INT:
-					logger.trace("{} int", k);
-					coercedInt = null;
-					coercedStr = null;
-					Boolean kIsInteger = true ; // assume it is
-					try{
-						coercedInt = parser.getValueAsInt() ;
-					} catch (Exception e){ // could tighten this to com.fasterxml.jackson.core.exc.InputCoercionException
-						logger.warn("{} can not be parsed as an integer -- treating it as a string", k);
-						kIsInteger = false ;
-						coercedStr = parser.getValueAsString() ;
-					}
-					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), 
-							         kIsInteger ? coercedInt : coercedStr);
-					break;
-				case VALUE_STRING:
-					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
-							parser.getValueAsString());
-					break;
-				case VALUE_FALSE:
-				case VALUE_TRUE:
-					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
-							parser.getValueAsBoolean());
-					break;
-				case END_ARRAY:
-				case END_OBJECT:
-				case FIELD_NAME:
-				case VALUE_EMBEDDED_OBJECT:
-				case NOT_AVAILABLE:
-				case VALUE_NULL:
-				default:
-					break;
+					case START_ARRAY:
+						String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
+						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerIdArr);
+						transformArray(parser, dataSourceId, childContainerIdArr, builder);
+						break;
+					case START_OBJECT:
+						String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
+						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
+						transformObject(parser, dataSourceId, childContainerId, builder);
+						break;
+					case VALUE_NUMBER_FLOAT:
+						logger.trace("{} float", k);
+						builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
+								parser.getValueAsDouble());
+						break;
+					case VALUE_NUMBER_INT:
+						logger.trace("{} int", k);
+						coercedInt = null;
+						coercedStr = null;
+						Boolean kIsInteger = true; // assume it is
+						try {
+							coercedInt = parser.getValueAsInt();
+						} catch (Exception e) { // could tighten this to com.fasterxml.jackson.core.exc.InputCoercionException
+							logger.warn("{} can not be parsed as an integer -- treating it as a string", k);
+							kIsInteger = false;
+							coercedStr = parser.getValueAsString();
+						}
+						builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
+								kIsInteger ? coercedInt : coercedStr);
+						break;
+					case VALUE_STRING:
+						builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
+								parser.getValueAsString());
+						break;
+					case VALUE_FALSE:
+					case VALUE_TRUE:
+						builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
+								parser.getValueAsBoolean());
+						break;
+					case END_ARRAY:
+					case END_OBJECT:
+					case FIELD_NAME:
+					case VALUE_EMBEDDED_OBJECT:
+					case NOT_AVAILABLE:
+					case VALUE_NULL:
+					default:
+						break;
 				}
-
+			}else{
+				throw new IOException("Unexpected token in object");
 			}
 		}
 
@@ -227,5 +233,90 @@ public class JSONTriplifier implements Triplifier {
 	@Override
 	public Set<String> getExtensions() {
 		return Sets.newHashSet("json");
+	}
+
+	@Override
+	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+		final InputStream us = Triplifier.getInputStream(properties);
+
+		JsonFactory factory = JsonFactory.builder().build();
+		JsonParser parser = factory.createParser(us);
+
+		JsonToken token = parser.nextToken();
+		// If the root is an array.
+		if(token == JsonToken.START_ARRAY){
+
+		} else {
+			throw new IOException("Not a JSON array");
+		}
+
+		try {
+			// Only 1 data source expected
+			String rootId = Triplifier.getRootArgument(properties);
+			String dataSourceId = rootId;
+			return new Iterable<Slice>() {
+				JsonToken next = null;
+				@Override
+				public Iterator<Slice> iterator() {
+					log.debug("Iterating slices");
+					return new Iterator<Slice>() {
+						int sln = 0;
+
+						@Override
+						public boolean hasNext() {
+							if(next != null){
+								return true;
+							}
+							try {
+								next = parser.nextToken();
+								while(next == JsonToken.END_ARRAY || next == END_OBJECT){
+									next = parser.nextToken();
+								}
+							} catch (IOException e) {
+								next = null;
+								return false;
+							}
+							if(next != null){
+								return true;
+							}else{
+								return false;
+							}
+
+						}
+
+						@Override
+						public Slice next() {
+							if(next == null){
+								return null;
+							}
+							sln++;
+							log.trace("next slice: {}", sln);
+							JsonToken tk = next;
+							next = null;
+							return JSONSlice.makeSlice(tk, parser, sln, rootId, dataSourceId);
+						}
+					};
+				}
+			};
+		}finally{
+			us.close();
+		}
+	}
+
+	private void processSlice(int iteration, String rootId, String dataSourceId, JsonToken token, JsonParser parser, FacadeXGraphBuilder builder){
+		String sliceContainerId = StringUtils.join(rootId , "#slice" , iteration);
+		builder.addContainer(dataSourceId, rootId, iteration, sliceContainerId);
+
+	}
+							@Override
+	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
+		JSONSlice jslice = (JSONSlice) slice;
+		try {
+			builder.addRoot(jslice.getDatasourceId(), jslice.getRootId());
+			// Method is 0-indexed
+			transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(), jslice.getRootId(), builder);
+		} catch (IOException e) {
+			log.error("An error occurred while transforming slice {}: {}", slice.iteration(), e);
+		}
 	}
 }
