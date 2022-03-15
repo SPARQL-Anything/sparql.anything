@@ -43,12 +43,13 @@ public class TestUtils {
 	public static final void printDebugDiff(Graph left, Graph right){
 		if (logger.isDebugEnabled()) {
 			ExtendedIterator<Triple> it = left.find();
+			logger.debug(">> Test left items are also in right");
 			while (it.hasNext()) {
 				Triple t = it.next();
 				logger.trace(">> {}", t);
 
 				if (!right.contains(t)) {
-					logger.debug(">> {} not found in left", t);
+					logger.debug(">> {} not found in right", t);
 					logger.debug(">> (T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
 							t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
 							(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
@@ -57,11 +58,12 @@ public class TestUtils {
 				}
 			}
 			it = right.find();
+			logger.debug(">> Test right items are also in left");
 			while (it.hasNext()) {
 				Triple t = it.next();
 				logger.trace("<< {}", t);
 				if (!left.contains(t)) {
-					logger.debug("<< {} not found in expected", t);
+					logger.debug("<< {} not found in left", t);
 					logger.debug("<< (T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
 							t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
 							(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
