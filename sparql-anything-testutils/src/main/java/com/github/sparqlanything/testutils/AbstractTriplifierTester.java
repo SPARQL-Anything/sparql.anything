@@ -19,6 +19,8 @@ package com.github.sparqlanything.testutils;
 
 import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Slice;
+import com.github.sparqlanything.model.Slicer;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Graph;
@@ -38,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Properties;
 
 import static org.junit.Assert.assertTrue;
@@ -86,7 +89,15 @@ public class AbstractTriplifierTester {
 	protected void prepare() throws URISyntaxException {
 		logger.debug("{} (prepare)", name.getMethodName());
 		// Root is Document
-		String fileName = name.getMethodName().substring(4) + "." + extension;
+		// Ignore content after '$', to allow multiple methods to reuse the same files
+		String fileName;
+		if(name.getMethodName().contains("$")){
+			fileName = name.getMethodName().substring(4);
+			fileName = fileName.substring(0, fileName.indexOf('$'));
+			fileName = fileName + "." + extension;
+		}else{
+			fileName = name.getMethodName().substring(4) + "." + extension;
+		}
 		logger.debug("Input filename: {}", fileName);
 		url = getClass().getClassLoader().getResource(fileName);
 		properties.setProperty("location", url.toURI().toString());
@@ -95,7 +106,14 @@ public class AbstractTriplifierTester {
 		properties.setProperty("root", "http://www.example.org/document");
 		//
 		// RDF file name
-		String rdfFileName = name.getMethodName().substring(4) + "." + expectedExtension;
+		String rdfFileName;
+		if(name.getMethodName().contains("$")){
+			rdfFileName = name.getMethodName().substring(4);
+			rdfFileName = rdfFileName.substring(0, rdfFileName.indexOf('$'));
+			rdfFileName = rdfFileName + "." + expectedExtension;
+		}else{
+			rdfFileName = name.getMethodName().substring(4) + "." + expectedExtension;
+		}
 		if (!useDatasetGraph) {
 			expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString())
 					.getGraph();
@@ -124,6 +142,7 @@ public class AbstractTriplifierTester {
 
 	protected void inspect() {
 		logger.debug("{} (inspect)", name.getMethodName());
+		logger.debug("Expected (left) VS Result (right)");
 		if (!useDatasetGraph) {
 			TestUtils.printDebugDiff(expected, result);
 			if (printWholeGraph) {
@@ -143,7 +162,17 @@ public class AbstractTriplifierTester {
 		String graphName = Triplifier.getRootArgument(properties);
 		logger.debug("Graph name: {}", graphName);
 		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(graphName, properties);
-		triplifier.triplify(properties, b);
+		if(properties.containsKey("slice")){
+			final Slicer slicer = (Slicer) triplifier;
+			final Iterable<Slice> it = slicer.slice(properties);
+			final Iterator<Slice> iterator = it.iterator();
+			while(iterator.hasNext()) {
+				Slice slice = iterator.next();
+				slicer.triplify(slice, properties, b);
+			}
+		}else{
+			triplifier.triplify(properties, b);
+		}
 		if (!useDatasetGraph) {
 			this.result = b.getDatasetGraph().getGraph(NodeFactory.createURI(graphName));
 		} else {
