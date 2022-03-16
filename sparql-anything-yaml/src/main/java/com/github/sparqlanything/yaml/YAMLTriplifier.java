@@ -118,7 +118,11 @@ public class YAMLTriplifier implements Triplifier {
 
 
 	private void transformStringKeyValue(String key, Object value, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
-			key = Triplifier.toSafeURIString(key);
+		if(value == null){
+			log.warn("skipping {} because value is null", key);
+			return;
+		}
+		key = Triplifier.toSafeURIString(key);
 			if(value instanceof String){
 				builder.addValue(dataSourceId, containerId, (String) key, value);
 			} else if(value instanceof Integer){
@@ -134,6 +138,7 @@ public class YAMLTriplifier implements Triplifier {
 			} else if(value instanceof List){
 				String childId = containerId + "/" + key;
 				List list = (List) value;
+				builder.addContainer(dataSourceId, containerId, (String) key, childId);
 				for(int x=0; x<list.size(); x++){
 					transformIntKeyValue(x+1, list.get(x), dataSourceId, childId, builder);
 				}
@@ -143,6 +148,10 @@ public class YAMLTriplifier implements Triplifier {
 	}
 
 	private void transformIntKeyValue(int key, Object value, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
+		if(value == null){
+			log.warn("skipping {} because value is null", key);
+			return;
+		}
 		if(value instanceof String){
 			builder.addValue(dataSourceId, containerId, (Integer) key, value);
 		} else if(value instanceof Integer){
