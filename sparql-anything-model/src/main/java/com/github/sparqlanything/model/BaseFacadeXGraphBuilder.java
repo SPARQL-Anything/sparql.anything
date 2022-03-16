@@ -38,7 +38,7 @@ import java.util.Properties;
 public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements FacadeXGraphBuilder {
 	private static final String PROPERTY_ONDISK_REUSE = "ondisk.reuse";
 	private static final String PROPERTY_ONDISK = "ondisk";
-	protected static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXGraphBuilder.class);
+	protected static final Logger log = LoggerFactory.getLogger(BaseFacadeXGraphBuilder.class);
 
 	// when using a TDB2 this is defined 
 	protected static Dataset dataset = null; // TODO making this static is a kludge maybe
