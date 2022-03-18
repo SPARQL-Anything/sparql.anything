@@ -35,6 +35,12 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 		}else if(name.getMethodName().equals("testSliceArray$2")){
 			properties.setProperty("blank-nodes", "false");
 			properties.setProperty("slice", "true");
+		}else if(name.getMethodName().equals("testSliceArray_2$1")){
+			properties.setProperty("blank-nodes", "false");
+//			properties.setProperty("slice", "true");
+		}else if(name.getMethodName().equals("testSliceArray_2$2")){
+			properties.setProperty("blank-nodes", "false");
+			properties.setProperty("slice", "true");
 		}
 	}
 	@Test
@@ -43,6 +49,15 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	}
 	@Test
 	public void testSliceArray$2(){
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testSliceArray_2$1(){
+		assertResultIsIsomorphicWithExpected();
+	}
+	@Test
+	public void testSliceArray_2$2(){
 		assertResultIsIsomorphicWithExpected();
 	}
 }

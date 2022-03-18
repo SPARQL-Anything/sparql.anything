@@ -1,0 +1,17 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix fx:   <http://sparql.xyz/facade-x/ns/>.
+@prefix xyz:  <http://sparql.xyz/facade-x/data/>.
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document> a fx:root ;
+    rdf:_1 <http://www.example.org/document/_1> ;
+    rdf:_2 <http://www.example.org/document/_2> ;
+    rdf:_3 <http://www.example.org/document/_3> ;
+    rdf:_4 <http://www.example.org/document/_4>
+    .
+
+<http://www.example.org/document/_1> xyz:letter "A" ; xyz:number "1"^^xsd:int ; xyz:boolean true .
+<http://www.example.org/document/_2> xyz:letter "B" ; xyz:number "2"^^xsd:int ; xyz:boolean false .
+<http://www.example.org/document/_3> xyz:letter "C" ; xyz:number "3"^^xsd:int ; xyz:boolean true .
+<http://www.example.org/document/_4> xyz:letter "D" ; xyz:number "4"^^xsd:int ; xyz:boolean false .

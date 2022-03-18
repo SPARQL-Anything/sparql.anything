@@ -1,0 +1,6 @@
+[
+  {"letter" : "A", "number": 1, "boolean": true},
+  {"letter" : "B", "number": 2, "boolean": false},
+  {"letter" : "C", "number": 3, "boolean": true},
+  {"letter" : "D", "number": 4, "boolean": false}
+]
