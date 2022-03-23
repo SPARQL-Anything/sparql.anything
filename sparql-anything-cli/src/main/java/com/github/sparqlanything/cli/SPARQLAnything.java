@@ -394,11 +394,17 @@ public class SPARQLAnything {
 		return new ArgValuesAsResultSet(values);
 	}
 
+	static {
+		if(logger.isTraceEnabled()){
+			duration = System.currentTimeMillis();
+			logger.trace("[time] Load main class: {}",duration);
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
 
 		if(logger.isTraceEnabled()){
-			duration = System.currentTimeMillis();
-			logger.trace("[time] Process starts: {}",duration);
+			logger.trace("[time] Process starts: {}", System.currentTimeMillis() - duration);
 		}
 
 		logger.info("SPARQL anything");
