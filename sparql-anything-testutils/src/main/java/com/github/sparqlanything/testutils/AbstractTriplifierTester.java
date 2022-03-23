@@ -59,8 +59,11 @@ public class AbstractTriplifierTester {
 	protected DatasetGraph expectedDatasetGraph;
 	protected DatasetGraph resultDatasetGraph;
 
+	protected Exception resultException = null;
+
 	private boolean printWholeGraph = false;
 	protected boolean useDatasetGraph = false;
+	protected boolean throwsException = false;
 
 	protected String expectedExtension;
 	private static final String locationUriGraph = "location";
@@ -130,14 +133,23 @@ public class AbstractTriplifierTester {
 	@Before
 	public void run() throws URISyntaxException, TriplifierHTTPException, IOException {
 		logger.info("{} (run)", name.getMethodName());
-		// Template method
-		prepare();
-		//
-		properties(properties);
-		//
-		perform();
-		//
-		inspect();
+
+		try {
+			// Template method
+			prepare();
+			//
+			properties(properties);
+			//
+			perform();
+			//
+			inspect();
+		}catch(Exception e){
+			if (throwsException) {
+				resultException = e;
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	protected void inspect() {
