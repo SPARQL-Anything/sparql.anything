@@ -50,6 +50,10 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 		}else if(name.getMethodName().equals("testSliceArray_2$2")){
 			properties.setProperty("blank-nodes", "false");
 			properties.setProperty("slice", "true");
+		}else if(name.getMethodName().equals("testSliceArray_2$3")){
+			properties.setProperty("blank-nodes", "false");
+			properties.setProperty("slice", "true");
+			properties.setProperty("json.path", "$.*");
 		}else if(name.getMethodName().equals("testValueTypes_1$1")){
 			properties.setProperty("blank-nodes", "false");
 			//properties.setProperty("slice", "true");
@@ -64,43 +68,59 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	}
 
 	@Test
-	public void testSliceArray$1(){ assertResultIsIsomorphicWithExpected(); }
+	public void testSliceArray$1(){
+		L.info("Test simple array (one go)");
+		assertResultIsIsomorphicWithExpected();
+	}
 
 	@Test
 	public void testSliceArray$2(){
+		L.info("Test simple array (slicing)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray$3(){
-		RDFDataMgr.write(System.err, result, Lang.N3);
+		L.info("Test simple array (slicing + JsonPath)");
+		// RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray_2$1(){
+		L.info("Test array of objects (one go)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray_2$2(){
+		L.info("Test array of objects (slicing)");
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testSliceArray_2$3(){
+		L.info("Test array of objects (slicing + JsonPath)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testValueTypes_1$1(){
+		L.info("Test json value types (one go)");
 		// RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testValueTypes_1$2(){
+		L.info("Test json value types (slicing)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testValueTypes_1$3(){
+		L.info("Test json value types (slicing + JsonPath)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
