@@ -62,7 +62,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 //		return Triplifier.getRootArgument(properties);
 //	}
 
-	private void transform(URL url, Properties properties, FacadeXGraphBuilder builder)
+	private void transform(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 
 		final InputStream us = Triplifier.getInputStream(properties);
@@ -295,9 +295,8 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
-		URL url = Triplifier.getLocation(properties);
 		// TODO Add support for JsonPath
-		transform(url, properties, builder);
+		transform(properties, builder);
 	}
 
 	@Override
