@@ -36,6 +36,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -196,6 +199,42 @@ public interface Triplifier {
 		}
 		return null;
 	}
+
+	/**
+	 * Get all values from a property key.
+	 * Supports single and multi-valued, e.g.
+	 *
+	 *  - key.name = value
+	 *  - key.name.0 = value0
+	 *  - key.name.1 = value1
+	 *
+	 * @param properties
+	 * @param prefix
+	 * @return
+	 */
+	static List<String> getPropertyValues(Properties properties, String prefix){
+		List<String> values = new ArrayList<String>();
+		if(properties.containsKey(prefix)){
+			values.add(properties.getProperty(prefix));
+		}
+		int i = 0; // Starts with 0
+		String propName = prefix + "." + Integer.toString(i);
+		if(properties.containsKey(propName)){
+			values.add(properties.getProperty(propName));
+		}
+		i++;
+		// ... or starts with 1
+		propName = prefix + "." + Integer.toString(i);
+
+		while(properties.containsKey(propName)){
+			values.add(properties.getProperty(propName));
+			i++;
+			propName = prefix + "." + Integer.toString(i);
+		}
+		return values;
+	}
+
+
 
 	private static InputStream getInputStream(Properties properties, Charset charset)
 			throws IOException, TriplifierHTTPException {

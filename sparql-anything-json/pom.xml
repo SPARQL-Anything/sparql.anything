@@ -56,7 +56,13 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
+
+		<dependency>
+			<groupId>com.github.jsurfer</groupId>
+			<artifactId>jsurfer-jackson</artifactId>
+		</dependency>
+
+		<dependency>
             <groupId>com.github.sparqlanything</groupId>
             <artifactId>sparql-anything-testutils</artifactId>
 			<version>${project.version}</version>

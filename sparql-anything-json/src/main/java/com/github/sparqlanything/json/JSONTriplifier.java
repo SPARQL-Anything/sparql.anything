@@ -27,13 +27,23 @@ import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.jsfr.json.Collector;
+import org.jsfr.json.JacksonParser;
+import org.jsfr.json.JsonSurfer;
+import org.jsfr.json.ValueBox;
+import org.jsfr.json.provider.JacksonProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -132,6 +142,48 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 		}
 	}
+
+	private void transformArrayItem(int i, Object o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
+		if(o instanceof List) {
+			String childContainerIdarr = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
+			builder.addContainer(dataSourceId, containerId, i + 1, childContainerIdarr);
+			transformArray((List) o, dataSourceId, childContainerIdarr, builder);
+		}else if(o instanceof Map){
+			String childContainerId = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
+			builder.addContainer(dataSourceId, containerId, i + 1, childContainerId);
+			transformMap((Map) o, dataSourceId, childContainerId, builder);
+		}else if(o instanceof Boolean){
+			builder.addValue(dataSourceId, containerId, i + 1, (Boolean) o);
+		}else if(o instanceof Double ) {
+			builder.addValue(dataSourceId, containerId, i + 1, (double) o);
+		}else if( o instanceof Long){
+			String asString = ((Long) o).toString();
+			int asInt = ((Long) o).intValue();
+			if(asString.equals(Integer.toString(asInt))) {
+				builder.addValue(dataSourceId, containerId, i + 1, ((Long) o).intValue());
+			}else{
+				builder.addValue(dataSourceId, containerId, i + 1, ((Long) o).doubleValue());
+			}
+		}else if(o instanceof Integer){
+			builder.addValue(dataSourceId, containerId, i + 1, (Integer) o);
+		}else if(o instanceof String){
+			builder.addValue(dataSourceId, containerId, i + 1, (String) o);
+		}else{
+			throw new RuntimeException("Unsupported value type: " + o.getClass() );
+		}
+	}
+
+	private void transformArray(List o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
+		int i = 0;
+		Object item;
+		Iterator<Object> it = o.iterator();
+
+		while ( it.hasNext() ){
+			transformArrayItem(i, o, dataSourceId, containerId, builder);
+			i++;
+		}
+	}
+
 	private void transformArray(JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder)
 			throws IOException {
 		int i = 0;
@@ -141,7 +193,6 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			transformArrayItem(i, token, parser, dataSourceId, containerId, builder);
 			i++;
 		}
-
 	}
 
 	private void transformObject(JsonParser parser, String dataSourceId, String containerId,
@@ -211,18 +262,52 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	}
 
+	private void transformMap(Map o, String dataSourceId, String containerId,
+								 FacadeXGraphBuilder builder) {
+		Integer coercedInt;
+		String coercedStr;
+		Iterator<Map.Entry> it = o.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = it.next();
+			String k = (String) entry.getKey();
+			Object val = entry.getValue();
+			if(val instanceof List) {
+				String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
+				builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerIdArr);
+				transformArray((List) val, dataSourceId, childContainerIdArr, builder);
+			}else if(val instanceof Map){
+				String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
+				builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
+				transformMap((Map)val, dataSourceId, childContainerId, builder);
+			}else if(val instanceof Double){
+				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), (double) val);
+			}else if(val instanceof Long){
+				// What datatype is supposed to be long. If cast to int has the same form, keep integer, otherwise double
+				String asString = ((Long) val).toString();
+				int asInt = ((Long) val).intValue();
+				if(asString.equals(Integer.toString(asInt))){
+					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Long) val).intValue());
+				}else{
+					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Long) val).doubleValue());
+				}
+			}else if(val instanceof Integer){
+				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), (Integer) val);
+			}else if(val instanceof Boolean){
+				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), (Boolean) val);
+			}else if(val instanceof String){
+				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), (String) val);
+			}else{
+				throw new RuntimeException("Unsupported value type: " + val.getClass() );
+			}
+		}
+	}
+
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 		URL url = Triplifier.getLocation(properties);
-//		logger.trace("Triplifying ", url.toString());
-
+		// TODO Add support for JsonPath
 		transform(url, properties, builder);
-
-//		if (logger.isDebugEnabled()) {
-//			logger.debug("Number of triples: {} ", builder.getMainGraph().size());
-//		}
-//		return builder.getDatasetGraph();
 	}
 
 	@Override
@@ -235,16 +320,13 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		return Sets.newHashSet("json");
 	}
 
-	@Override
-	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	private Iterable<Slice> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
 		final InputStream us = Triplifier.getInputStream(properties);
-
 		JsonFactory factory = JsonFactory.builder().build();
 		JsonParser parser = factory.createParser(us);
-
 		JsonToken token = parser.nextToken();
 		// If the root is an array.
-		if(token == JsonToken.START_ARRAY){
+		if (token == JsonToken.START_ARRAY) {
 
 		} else {
 			throw new IOException("Not a JSON array");
@@ -256,6 +338,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			String dataSourceId = rootId;
 			return new Iterable<Slice>() {
 				JsonToken next = null;
+
 				@Override
 				public Iterator<Slice> iterator() {
 					log.debug("Iterating slices");
@@ -264,21 +347,21 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 						@Override
 						public boolean hasNext() {
-							if(next != null){
+							if (next != null) {
 								return true;
 							}
 							try {
 								next = parser.nextToken();
-								while(next == JsonToken.END_ARRAY || next == END_OBJECT){
+								while (next == JsonToken.END_ARRAY || next == END_OBJECT) {
 									next = parser.nextToken();
 								}
 							} catch (IOException e) {
 								next = null;
 								return false;
 							}
-							if(next != null){
+							if (next != null) {
 								return true;
-							}else{
+							} else {
 								return false;
 							}
 
@@ -286,7 +369,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 						@Override
 						public Slice next() {
-							if(next == null){
+							if (next == null) {
 								return null;
 							}
 							sln++;
@@ -298,9 +381,99 @@ public class JSONTriplifier implements Triplifier, Slicer {
 					};
 				}
 			};
-		}finally{
+		} finally {
 			us.close();
 		}
+	}
+
+
+
+	private Iterable<Slice> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
+		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
+		final InputStream us = Triplifier.getInputStream(properties);
+		Collector collector = surfer.collector(us);
+		List<String> jsonPathExpr = new ArrayList<String>();
+		final Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
+		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+		for(String jpath: jsonPaths) {
+			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
+			matches.add(m);
+		}
+
+		try (us){
+			collector.exec();
+			Iterator<ValueBox<Collection<Object>>> matchesIterator = matches.iterator();
+			// Only 1 data source expected
+			String rootId = Triplifier.getRootArgument(properties);
+			String dataSourceId = rootId;
+			return new Iterable<Slice>() {
+				@Override
+				public Iterator<Slice> iterator() {
+
+					log.debug("Iterating slices");
+					return new Iterator<Slice>() {
+						int sln = 0;
+						Object next = null;
+						Iterator<Object> objectIterator = null;
+
+						Object nextObject(){
+							Object toReturn = null;
+							// Iterate until there is a match!
+							while(objectIterator == null || !objectIterator.hasNext()){
+								if(matchesIterator.hasNext()){
+									objectIterator = matchesIterator.next().get().iterator();
+								} else {
+									// No more iterators
+									objectIterator = null;
+									break;
+								}
+							}
+							if(objectIterator != null && objectIterator.hasNext()){
+								toReturn = objectIterator.next();
+							}
+							return toReturn;
+						}
+
+						@Override
+						public boolean hasNext() {
+							if (next != null) {
+								return true;
+							}
+							next = nextObject();
+//
+							if (next != null) {
+								return true;
+							} else {
+								return false;
+							}
+
+						}
+
+						@Override
+						public Slice next() {
+							if (next == null) {
+								return null;
+							}
+							sln++;
+							log.trace("next slice: {}", sln);
+							Object obj = next;
+							next = null;
+							return JSONPathSlice.makeSlice(obj, sln, rootId, dataSourceId);
+						}
+					};
+				}
+			};
+		}
+	}
+
+	@Override
+	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+		if(properties.containsKey("json.path") || properties.containsKey("json.path.1`")){
+			return sliceFromJSONPath(properties);
+		}else {
+			return sliceFromArray(properties);
+		}
+
 	}
 
 	private void processSlice(int iteration, String rootId, String dataSourceId, JsonToken token, JsonParser parser, FacadeXGraphBuilder builder){
@@ -308,13 +481,20 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		builder.addContainer(dataSourceId, rootId, iteration, sliceContainerId);
 
 	}
-							@Override
+
+	@Override
 	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
-		JSONSlice jslice = (JSONSlice) slice;
+		builder.addRoot(slice.getDatasourceId(), slice.getRootId());
 		try {
-			builder.addRoot(jslice.getDatasourceId(), jslice.getRootId());
-			// Method is 0-indexed
-			transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(), jslice.getRootId(), builder);
+			if(slice instanceof JSONSlice){
+				JSONSlice jslice = (JSONSlice) slice;
+				// Method is 0-indexed
+				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(), jslice.getRootId(), builder);
+			} else if(slice instanceof JSONPathSlice){
+				JSONPathSlice jslice = (JSONPathSlice) slice;
+				// Method is 0-indexed
+				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getDatasourceId(), jslice.getRootId(), builder);
+			}
 		} catch (IOException e) {
 			log.error("An error occurred while transforming slice {}: {}", slice.iteration(), e);
 		}

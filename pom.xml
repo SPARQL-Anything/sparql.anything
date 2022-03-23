@@ -395,6 +395,12 @@
 				<version>2.3.28</version>
 			</dependency>
 
+			<dependency>
+				<groupId>com.github.jsurfer</groupId>
+				<artifactId>jsurfer-jackson</artifactId>
+				<version>1.6.3</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

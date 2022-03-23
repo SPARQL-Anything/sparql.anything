@@ -1,0 +1,6 @@
+[
+  {"string" : "A", "integer": 1, "float": 1.0, "boolean": true},
+  {"string" : "B", "integer": 2, "float": 2.0,  "boolean": false},
+  {"string" : "C", "integer": 3, "float": 3.0, "boolean": true},
+  {"string" : "D", "integer": 4, "float": 4.0, "boolean": false}
+]

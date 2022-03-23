@@ -17,6 +17,10 @@
 
 package com.github.sparqlanything.json.test;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.sparqlanything.json.JSONTriplifier;
 import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
@@ -29,12 +33,25 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.jsfr.json.Collector;
+import org.jsfr.json.JacksonParser;
+import org.jsfr.json.JsonSurfer;
+import org.jsfr.json.JsonSurferJackson;
+import org.jsfr.json.ValueBox;
+import org.jsfr.json.compiler.JsonPathCompiler;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import static org.junit.Assert.assertTrue;
 
@@ -64,5 +81,35 @@ public class BaseTest {
 		}
 
 	}
-
+//
+//	@Test
+//	public void jsonPathTest(){
+//		InputStream is = getClass().getClassLoader().getResourceAsStream("testarray.json");
+////		InputStream is = getClass().getClassLoader().getResourceAsStream("SliceArray_2.json");
+//////		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
+////		Collector collector = surfer.collector(is);
+////		ValueBox<Collection<Object>> matches = collector.collectAll("$.*");
+////		collector.exec();
+//		final List<JsonParser> parsers = new ArrayList<JsonParser>();
+//		JsonSurfer surfer = JsonSurferJackson.createSurfer(new JsonFactory(){
+//			@Override
+//			public JsonParser createParser(InputStream f) throws IOException {
+//				parsers.add (super.createParser(f));
+//				return parsers.get(parsers.size() - 1);
+//			}
+//		});
+//		Collector collector = surfer.collector(is);
+//		ValueBox<Collection<Object>> matches = collector.collectAll("$.*");
+//		collector.exec();
+//		Iterator<Object> iter = matches.get().iterator();
+//		while(iter.hasNext()){
+//			Object o = iter.next();
+//			System.err.println(o.getClass());
+//			//ObjectNode on = (ObjectNode) o;
+//			Iterator<Entry> iten = ((Map) o).entrySet().iterator();
+//			while(iten.hasNext() ) {
+//				System.err.println(iten.next());
+//			}
+//		}
+//	}
 }

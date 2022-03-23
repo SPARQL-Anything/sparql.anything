@@ -17,29 +17,22 @@
 
 package com.github.sparqlanything.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.github.sparqlanything.model.Slice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JSONSlice implements Slice<JsonToken> {
-	private static Logger logger = LoggerFactory.getLogger(JSONSlice.class);
-	private JsonToken token;
-	private JsonParser parser;
+public class JSONPathSlice implements Slice<Object> {
+	private static Logger logger = LoggerFactory.getLogger(JSONPathSlice.class);
+	private Object object;
 	private int iteration;
 	private String dataSourceId;
 	private String rootId;
 
-	private JSONSlice(){}
+	private JSONPathSlice(){}
 
 	@Override
-	public JsonToken get() {
-		return token;
-	}
-
-	public JsonParser getParser() {
-		return parser;
+	public Object get() {
+		return object;
 	}
 
 	@Override
@@ -57,10 +50,9 @@ public class JSONSlice implements Slice<JsonToken> {
 		return rootId;
 	}
 
-	public static JSONSlice makeSlice(JsonToken token, JsonParser parser, int iteration, String rootId, String dataSourceId){
-		JSONSlice r = new JSONSlice();
-		r.token = token;
-		r.parser = parser;
+	public static JSONPathSlice makeSlice(Object object, int iteration, String rootId, String dataSourceId){
+		JSONPathSlice r = new JSONPathSlice();
+		r.object = object;
 		r.iteration = iteration;
 		r.dataSourceId = dataSourceId;
 		r.rootId = rootId;
