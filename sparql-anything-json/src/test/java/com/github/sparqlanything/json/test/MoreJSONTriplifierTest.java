@@ -34,6 +34,8 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	}
 	@Override
 	protected void properties(Properties properties) {
+
+		// SliceArray
 		if(name.getMethodName().equals("testSliceArray$1")){
 			properties.setProperty("blank-nodes", "false");
 //			properties.setProperty("slice", "true");
@@ -48,17 +50,21 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("blank-nodes", "false");
 //			properties.setProperty("slice", "true");
 			properties.setProperty("json.path", "$.*");
-		}else if(name.getMethodName().equals("testSliceArray_2$1")){
+		}
+		// SliceArray_2
+		if(name.getMethodName().equals("testSliceArray_2$1")){
 			properties.setProperty("blank-nodes", "false");
 //			properties.setProperty("slice", "true");
 		}else if(name.getMethodName().equals("testSliceArray_2$2")){
 			properties.setProperty("blank-nodes", "false");
 			properties.setProperty("slice", "true");
-		}else if(name.getMethodName().equals("testSliceArray_2$3")){
+		} else if(name.getMethodName().equals("testSliceArray_2$3")){
 			properties.setProperty("blank-nodes", "false");
 			properties.setProperty("slice", "true");
 			properties.setProperty("json.path", "$.*");
-		}else if(name.getMethodName().equals("testValueTypes_1$1")){
+		}
+		// ValueTypes
+		if(name.getMethodName().equals("testValueTypes_1$1")){
 			properties.setProperty("blank-nodes", "false");
 			//properties.setProperty("slice", "true");
 		}else if(name.getMethodName().equals("testValueTypes_1$2")){
@@ -68,6 +74,11 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("blank-nodes", "false");
 			properties.setProperty("slice", "true");
 			properties.setProperty("json.path", "$.*");
+		}
+		// Object
+		if(name.getMethodName().equals("testObject$1")){
+			properties.setProperty("blank-nodes", "false");
+//			properties.setProperty("slice", "true");
 		}
 	}
 
@@ -148,4 +159,12 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
+
+	@Test
+	public void testObject$1(){
+		L.info("Test simple Json object (one go)");
+		//RDFDataMgr.write(System.err, result, Lang.N3);
+		assertResultIsIsomorphicWithExpected();
+	}
+
 }
