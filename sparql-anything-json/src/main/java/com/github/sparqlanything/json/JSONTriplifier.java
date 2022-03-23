@@ -73,16 +73,6 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		try {
 			// Only 1 data source expected
 			String dataSourceId = Triplifier.getRootArgument(properties);
-//			if (properties.containsKey(IRIArgument.ROOT.toString())) {
-//				logger.trace("Setting Data source Id using Root argument");
-//				dataSourceId = properties.getProperty(IRIArgument.ROOT.toString());
-//			} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
-//				logger.trace("Setting Data source Id using Content argument");
-//				dataSourceId = Triplifier.XYZ_NS
-//						+ DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString()));
-//			} else {
-//				dataSourceId = Triplifier.getRootArgument(properties); //getDataSources(url)[0];
-//			}
 			transformJSON(parser, dataSourceId, Triplifier.getRootArgument(properties), builder);
 		} finally {
 			us.close();
@@ -385,8 +375,6 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			us.close();
 		}
 	}
-
-
 
 	private Iterable<Slice> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
 		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
