@@ -21,6 +21,7 @@ import com.github.sparqlanything.json.JSONTriplifier;
 import com.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 //			properties.setProperty("slice", "true");
 			properties.setProperty("json.path", "$.*");
 		}
+
 		// SliceArray_2
 		if(name.getMethodName().equals("testSliceArray_2$1")){
 			properties.setProperty("blank-nodes", "false");
@@ -62,7 +64,12 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("blank-nodes", "false");
 			properties.setProperty("slice", "true");
 			properties.setProperty("json.path", "$.*");
+		} else if(name.getMethodName().equals("testSliceArray_2$4")){
+			properties.setProperty("blank-nodes", "false");
+//			properties.setProperty("slice", "true");
+			properties.setProperty("json.path", "$.*");
 		}
+
 		// ValueTypes
 		if(name.getMethodName().equals("testValueTypes_1$1")){
 			properties.setProperty("blank-nodes", "false");
@@ -79,6 +86,10 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 		if(name.getMethodName().equals("testObject$1")){
 			properties.setProperty("blank-nodes", "false");
 //			properties.setProperty("slice", "true");
+		}else if(name.getMethodName().equals("testObject$2")){
+			properties.setProperty("blank-nodes", "false");
+			properties.setProperty("slice", "true"); // --> Throws an exception!!!
+			throwsException = true;
 		}
 	}
 
@@ -165,6 +176,13 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 		L.info("Test simple Json object (one go)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testObject$2(){
+		L.info("Test simple Json object (slicing) --> Should throw an exception");
+		//RDFDataMgr.write(System.err, result, Lang.N3);
+		Assert.assertTrue(resultException.getMessage().equals("Not a JSON array"));
 	}
 
 }
