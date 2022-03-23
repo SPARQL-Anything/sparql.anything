@@ -82,6 +82,7 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("slice", "true");
 			properties.setProperty("json.path", "$.*");
 		}
+
 		// Object
 		if(name.getMethodName().equals("testObject$1")){
 			properties.setProperty("blank-nodes", "false");
@@ -90,6 +91,17 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("blank-nodes", "false");
 			properties.setProperty("slice", "true"); // --> Throws an exception!!!
 			throwsException = true;
+		}else if(name.getMethodName().equals("testObject$3")){
+			properties.setProperty("blank-nodes", "false");
+			properties.setProperty("slice", "true");
+			properties.setProperty("json.path", "$");
+		}
+
+		// SliceObject
+		if(name.getMethodName().equals("testSliceObject$3")){
+			properties.setProperty("blank-nodes", "false");
+			properties.setProperty("slice", "true");
+			properties.setProperty("json.path", "$.content");
 		}
 	}
 
@@ -185,4 +197,17 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 		Assert.assertTrue(resultException.getMessage().equals("Not a JSON array"));
 	}
 
+//	@Test
+//	public void testObject$3(){
+//		L.info("Test simple Json object (slicing + JsonPath: $.*)");
+//		RDFDataMgr.write(System.err, result, Lang.N3);
+//		assertResultIsIsomorphicWithExpected();
+//	}
+
+	@Test
+	public void testSliceObject$3(){
+		L.info("Test simple Json object (slicing + JsonPath)");
+		RDFDataMgr.write(System.err, result, Lang.N3);
+//		Assert.assertTrue(resultException.getMessage().equals("Not a JSON array"));
+	}
 }
