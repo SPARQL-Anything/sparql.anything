@@ -295,8 +295,41 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
-		// TODO Add support for JsonPath
-		transform(properties, builder);
+
+		if(properties.containsKey("json.path") || properties.containsKey("json.path.1`")){
+			transformFromJSONPath(properties, builder);
+		}else {
+			transform(properties, builder);
+		}
+	}
+
+	private void transformFromJSONPath(Properties properties, FacadeXGraphBuilder builder) throws TriplifierHTTPException, IOException {
+		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
+		final InputStream us = Triplifier.getInputStream(properties);
+		Collector collector = surfer.collector(us);
+		Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
+		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+		for(String jpath: jsonPaths) {
+			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
+			matches.add(m);
+		}
+
+		try (us) {
+			collector.exec();
+			Iterator<ValueBox<Collection<Object>>> matchesIterator = matches.iterator();
+			// Only 1 data source expected
+			String rootId = Triplifier.getRootArgument(properties);
+			String dataSourceId = rootId;
+			builder.addRoot(dataSourceId, rootId);
+			int c = 0;
+			while(matchesIterator.hasNext()){
+				Iterator<Object> it = matchesIterator.next().get().iterator();
+				while(it.hasNext()){
+					transformArrayItem(c, it.next(), dataSourceId, rootId, builder);
+					c++;
+				}
+			}
+		}
 	}
 
 	@Override

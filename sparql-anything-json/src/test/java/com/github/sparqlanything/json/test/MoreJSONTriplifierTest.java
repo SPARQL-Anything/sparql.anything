@@ -44,6 +44,10 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("blank-nodes", "false");
 			properties.setProperty("slice", "true");
 			properties.setProperty("json.path", "$.*");
+		}else if(name.getMethodName().equals("testSliceArray$4")){
+			properties.setProperty("blank-nodes", "false");
+//			properties.setProperty("slice", "true");
+			properties.setProperty("json.path", "$.*");
 		}else if(name.getMethodName().equals("testSliceArray_2$1")){
 			properties.setProperty("blank-nodes", "false");
 //			properties.setProperty("slice", "true");
@@ -87,6 +91,13 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	}
 
 	@Test
+	public void testSliceArray$4(){
+		L.info("Test simple array (one go + JsonPath)");
+		//RDFDataMgr.write(System.err, result, Lang.N3);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
 	public void testSliceArray_2$1(){
 		L.info("Test array of objects (one go)");
 		assertResultIsIsomorphicWithExpected();
@@ -101,6 +112,12 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	@Test
 	public void testSliceArray_2$3(){
 		L.info("Test array of objects (slicing + JsonPath)");
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testSliceArray_2$4(){
+		L.info("Test array of objects (one go + JsonPath)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
@@ -121,6 +138,13 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	@Test
 	public void testValueTypes_1$3(){
 		L.info("Test json value types (slicing + JsonPath)");
+		//RDFDataMgr.write(System.err, result, Lang.N3);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testValueTypes_1$4(){
+		L.info("Test json value types (one go + JsonPath)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
