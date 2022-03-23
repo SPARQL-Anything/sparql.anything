@@ -1,0 +1,38 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix fx:   <http://sparql.xyz/facade-x/ns/>.
+@prefix xyz:  <http://sparql.xyz/facade-x/data/>.
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document/_1>
+        <http://sparql.xyz/facade-x/data/boolean>
+                true ;
+        <http://sparql.xyz/facade-x/data/letter>
+                "A" ;
+        <http://sparql.xyz/facade-x/data/number>
+                "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+<http://www.example.org/document>
+        a       <http://sparql.xyz/facade-x/ns/root> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document/_1> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document/_2> .
+
+<http://www.example.org/document/_2/next>
+        <http://sparql.xyz/facade-x/data/boolean>
+                true ;
+        <http://sparql.xyz/facade-x/data/letter>
+                "X" ;
+        <http://sparql.xyz/facade-x/data/number>
+                "1.1"^^<http://www.w3.org/2001/XMLSchema#double> .
+
+<http://www.example.org/document/_2>
+        <http://sparql.xyz/facade-x/data/boolean>
+                false ;
+        <http://sparql.xyz/facade-x/data/letter>
+                "B" ;
+        <http://sparql.xyz/facade-x/data/next>
+                <http://www.example.org/document/_2/next> ;
+        <http://sparql.xyz/facade-x/data/number>
+                "2"^^<http://www.w3.org/2001/XMLSchema#int> .

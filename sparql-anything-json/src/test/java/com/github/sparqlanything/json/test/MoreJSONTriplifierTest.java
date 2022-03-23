@@ -103,6 +103,14 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("slice", "true");
 			properties.setProperty("json.path", "$.content");
 		}
+
+		// testMultiJsonPath$1
+		if(name.getMethodName().equals("testMultiJsonPath$1")){
+			properties.setProperty("blank-nodes", "false");
+			// properties.setProperty("slice", "true");
+			properties.setProperty("json.path.1", "$..[?(@.letter == 'A')]");
+			properties.setProperty("json.path.2", "$..[?(@.number == 2)]");
+		}
 	}
 
 	@Test
@@ -207,7 +215,17 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	@Test
 	public void testSliceObject$3(){
 		L.info("Test simple Json object (slicing + JsonPath)");
-		RDFDataMgr.write(System.err, result, Lang.N3);
+//		RDFDataMgr.write(System.err, result, Lang.N3);
+		assertResultIsIsomorphicWithExpected();
 //		Assert.assertTrue(resultException.getMessage().equals("Not a JSON array"));
+	}
+
+	@Test
+	public void testMultiJsonPath$1(){
+		L.info("Test multiple json paths (one go + JsonPath)");
+		System.out.println(result.size());
+		RDFDataMgr.write(System.err, result, Lang.N3);
+		// XXX output graph is not deterministic as the order of the solutions can change ...
+		Assert.assertTrue(result.size() == 13);
 	}
 }

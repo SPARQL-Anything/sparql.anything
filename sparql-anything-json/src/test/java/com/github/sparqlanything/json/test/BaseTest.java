@@ -39,6 +39,8 @@ import org.jsfr.json.JsonSurfer;
 import org.jsfr.json.JsonSurferJackson;
 import org.jsfr.json.ValueBox;
 import org.jsfr.json.compiler.JsonPathCompiler;
+import org.jsfr.json.provider.JacksonProvider;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,34 +84,27 @@ public class BaseTest {
 
 	}
 //
-//	@Test
-//	public void jsonPathTest(){
-//		InputStream is = getClass().getClassLoader().getResourceAsStream("testarray.json");
-////		InputStream is = getClass().getClassLoader().getResourceAsStream("SliceArray_2.json");
-//////		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
-////		Collector collector = surfer.collector(is);
-////		ValueBox<Collection<Object>> matches = collector.collectAll("$.*");
-////		collector.exec();
-//		final List<JsonParser> parsers = new ArrayList<JsonParser>();
-//		JsonSurfer surfer = JsonSurferJackson.createSurfer(new JsonFactory(){
-//			@Override
-//			public JsonParser createParser(InputStream f) throws IOException {
-//				parsers.add (super.createParser(f));
-//				return parsers.get(parsers.size() - 1);
-//			}
-//		});
-//		Collector collector = surfer.collector(is);
-//		ValueBox<Collection<Object>> matches = collector.collectAll("$.*");
-//		collector.exec();
-//		Iterator<Object> iter = matches.get().iterator();
-//		while(iter.hasNext()){
-//			Object o = iter.next();
-//			System.err.println(o.getClass());
-//			//ObjectNode on = (ObjectNode) o;
-//			Iterator<Entry> iten = ((Map) o).entrySet().iterator();
-//			while(iten.hasNext() ) {
-//				System.err.println(iten.next());
-//			}
-//		}
-//	}
+	@Ignore
+	@Test
+	public void jsonPathTest(){
+		InputStream is = getClass().getClassLoader().getResourceAsStream("MultiJsonPath.json");
+//		InputStream is = getClass().getClassLoader().getResourceAsStream("SliceArray_2.json");
+		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
+		Collector collector = surfer.collector(is);
+		ValueBox<Collection<Object>> matches = collector.collectAll("$..[?(@.number == 1.2)]");
+		collector.exec();
+
+		Iterator<Object> iter = matches.get().iterator();
+		while(iter.hasNext()){
+			Object o = iter.next();
+			System.err.println(o.getClass());
+			//ObjectNode on = (ObjectNode) o;
+			if(o instanceof Map) {
+				Iterator<Entry> iten = ((Map) o).entrySet().iterator();
+				while (iten.hasNext()) {
+					System.err.println(" > " + iten.next());
+				}
+			}
+		}
+	}
 }

@@ -296,19 +296,20 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 
-		if(properties.containsKey("json.path") || properties.containsKey("json.path.1`")){
-			transformFromJSONPath(properties, builder);
+		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+		if(!jsonPaths.isEmpty()){
+			transformFromJSONPath(properties, builder, jsonPaths);
 		}else {
 			transform(properties, builder);
 		}
 	}
 
-	private void transformFromJSONPath(Properties properties, FacadeXGraphBuilder builder) throws TriplifierHTTPException, IOException {
+	private void transformFromJSONPath(Properties properties, FacadeXGraphBuilder builder, List<String> jsonPaths) throws TriplifierHTTPException, IOException {
 		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
 		final InputStream us = Triplifier.getInputStream(properties);
 		Collector collector = surfer.collector(us);
 		Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+
 		for(String jpath: jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
 			matches.add(m);
@@ -488,7 +489,8 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
-		if(properties.containsKey("json.path") || properties.containsKey("json.path.1`")){
+		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+		if(!jsonPaths.isEmpty()){
 			return sliceFromJSONPath(properties);
 		}else {
 			return sliceFromArray(properties);
