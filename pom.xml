@@ -401,6 +401,14 @@
 				<version>1.6.3</version>
 			</dependency>
 
+			<!-- https://mvnrepository.com/artifact/com.ximpleware/vtd-xml -->
+			<dependency>
+				<groupId>com.ximpleware</groupId>
+				<artifactId>vtd-xml</artifactId>
+				<version>2.13.4</version>
+			</dependency>
+
+
 		</dependencies>
 	</dependencyManagement>
 

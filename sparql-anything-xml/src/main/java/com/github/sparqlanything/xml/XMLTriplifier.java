@@ -22,8 +22,20 @@
 package com.github.sparqlanything.xml;
 
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Slice;
+import com.github.sparqlanything.model.Slicer;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
+import com.ximpleware.AutoPilot;
+import com.ximpleware.EncodingException;
+import com.ximpleware.NavException;
+import com.ximpleware.ParseException;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,20 +56,136 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-public class XMLTriplifier implements Triplifier {
+public class XMLTriplifier implements Triplifier, Slicer {
 
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
-	@Override
-	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
-//		URL url = Triplifier.getLocation(properties);
-//
-//		if (url == null)
-//			return;
+	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
+
+		String namespace = Triplifier.getNamespaceArgument(properties);
+		String dataSourceId = Triplifier.getRootArgument(properties);
+		String root = Triplifier.getRootArgument(properties);
+
+		builder.addRoot(dataSourceId, root);
+		try {
+			VTDGen vg = new VTDGen();
+			byte[] bytes = IOUtils.toByteArray(Triplifier.getInputStream(properties));
+			vg.setDoc(bytes);
+			vg.parse(false);
+			VTDNav vn = vg.getNav();
+			Iterator<String> xit = xpaths.iterator();
+			while(xit.hasNext()) {
+				String xpath = xit.next();
+				log.debug("Evaluating XPath: {}", xpath);
+				//		vg.parse(false);  // set namespace awareness to true
+				AutoPilot ap = new AutoPilot(vn);
+				//ap.declareXPathNameSpace("ns1","http://purl.org/dc/elements/1.1/");
+				ap.selectXPath(xpath);
+				int result = -1;
+				int count = 1;
+				while ((result = ap.evalXPath()) != -1) {
+					transformFromXPath(vn, result, count, root, dataSourceId, properties, builder);
+					count++;
+				}
+				log.debug("XPath: {} matches", count);
+			}
+
+		} catch (XPathEvalException | NavException | ParseException | XPathParseException e){
+			log.error("Error while evaluating XPath expression");
+			throw new IOException(e);
+		}
+	}
+
+	public int transformFromXPath(VTDNav vn, int result, int child, String parentId, String dataSourceId, Properties properties, FacadeXGraphBuilder builder) throws NavException {
+		log.trace(" -- index: {} type: {}", result, vn.getTokenType(result));
+		switch (vn.getTokenType(result)) {
+			case VTDNav.TOKEN_STARTING_TAG:
+				String tag = vn.toString(result);
+				log.trace(" -- tag: {} ", tag);
+				String childId = String.join("", parentId , "/" , Integer.toString(child), ":", tag);
+				builder.addContainer(dataSourceId, parentId, child, childId);
+
+				// Attributes
+				int attrCount = vn.getAttrCount();
+				log.trace(" -- attr count: {}", attrCount);
+				int increment = 0;
+				if (attrCount > 0) {
+					for (int i = result + 1; i <= result + attrCount; i += 2) {
+						// Not sure why but sometime attrCount is not reliable
+						if(vn.getTokenType(i) != VTDNav.TOKEN_ATTR_NAME){
+							break;
+						}
+						String key =  vn.toString(i);
+						String value = vn.toString(i + 1);
+						log.trace(" -- attr: {} = {}", key, value);
+						builder.addValue(dataSourceId, childId, key, value);
+						increment += 2;
+					}
+				}
+				// Get the text
+				int t = vn.getText(); // get the index of the text (char data or CDATA)
+				if (t != -1) {
+					String text = vn.toNormalizedString(t);
+					log.trace(" -- text: {}", text);
+					builder.addValue(dataSourceId, childId, 1, text);
+				}
+
+				// Iterate on Children until complete
+				int tokenDepth = vn.getTokenDepth(result);
+				int index = result + increment;
+				int childc = 1;
+				while(true){
+					index++;
+					int type =  vn.getTokenType(index);
+					String s = vn.toString(index);
+					int d = vn.getTokenDepth(index);
+					// If type is element and depth is not greater than tokenDepth, break!
+					if((type == VTDNav.TOKEN_STARTING_TAG && d <=tokenDepth) || (type == VTDNav.TOKEN_STARTING_TAG && s.equals(""))){
+						break;
+					}
+					log.trace( " ...  index: {} depth: {} type: {} string: {}", index, d, type, s);
+					index = transformFromXPath(vn, index, childc, childId, dataSourceId, properties, builder);
+					childc++;
+				}
+				return index - 1;
+			case VTDNav.TOKEN_ATTR_NAME:
+				// Attribute
+				String name = vn.toString(result);
+				String value = vn.toString(result + 1);
+				log.trace("Attribute {} = {}", name, value);
+				String attrChildId = String.join("", parentId , "/" , Integer.toString(child), ":", name);
+				builder.addContainer(dataSourceId, parentId, child, attrChildId);
+				builder.addValue(dataSourceId, attrChildId, name, value);
+				return result + 1;
+			case VTDNav.TOKEN_ATTR_VAL:
+				// Attribute value
+				log.trace("Attribute value: {}", vn.toString(result));
+				builder.addValue(dataSourceId, parentId, child, vn.toString(result));
+				break;
+			case VTDNav.TOKEN_CHARACTER_DATA:
+				// Text
+				String text = vn.toNormalizedString(result);
+				log.trace("Text: {}", text);
+				builder.addValue(dataSourceId, parentId, child, vn.toString(result));
+				break;
+			case VTDNav.TOKEN_DEC_ATTR_NAME:
+				log.trace("Attribute (dec): {} = {}", vn.toString(result), vn.toString(result + 1));
+				return result + 1;
+			case VTDNav.TOKEN_DEC_ATTR_VAL:
+				log.trace("Attribute value (dec) ", vn.toString(result));
+				break;
+			default:
+				log.warn("Ignored event: {} {}", vn.getTokenType(result), vn.toString(result));
+		}
+		return result;
+	}
+
+	public void transformSAX(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		String namespace = Triplifier.getNamespaceArgument(properties);
 		String dataSourceId = Triplifier.getRootArgument(properties);
@@ -137,7 +265,7 @@ public class XMLTriplifier implements Triplifier {
 				log.trace("element open: {} [{}]", path, stack.size());
 
 				// XXX Create an RDF resource
-				String resourceId = path.substring(1);
+				String resourceId = StringUtils.join("", root, path);
 				// If this is the root
 				if (isRoot) {
 					// Add type root
@@ -202,5 +330,26 @@ public class XMLTriplifier implements Triplifier {
 	@Override
 	public Set<String> getExtensions() {
 		return Sets.newHashSet("xml");
+	}
+
+
+	@Override
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
+		List<String> xpaths = Triplifier.getPropertyValues(properties, "xml.path");
+		if(!xpaths.isEmpty()){
+			transformWithXPath(xpaths, properties, builder);
+		}else{
+			transformSAX(properties, builder);
+		}
+	}
+
+	@Override
+	public Iterable<Slice> slice(Properties p) throws IOException, TriplifierHTTPException {
+		return null;
+	}
+
+	@Override
+	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
+
 	}
 }

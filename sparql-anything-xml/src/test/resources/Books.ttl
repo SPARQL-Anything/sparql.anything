@@ -1,0 +1,92 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix fx:   <http://sparql.xyz/facade-x/ns/>.
+@prefix xyz:  <http://sparql.xyz/facade-x/data/>.
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
+
+
+<http://www.example.org/document/books/2:book/4:price> a xyz:price ;
+        rdf:_1 "5.95" .
+
+<http://www.example.org/document/books/2:book/2:title> a xyz:title ;
+        rdf:_1 "Midnight Rain" .
+
+<http://www.example.org/document/books/1:book/4:price> a xyz:price ;
+        rdf:_1 "44.95" .
+
+<http://www.example.org/document/books/1:book> a xyz:book ;
+        rdf:_1 <http://www.example.org/document/books/1:book/1:author> ;
+        rdf:_2 <http://www.example.org/document/books/1:book/2:title> ;
+        rdf:_3 <http://www.example.org/document/books/1:book/3:genre> ;
+        rdf:_4 <http://www.example.org/document/books/1:book/4:price> ;
+        rdf:_5 <http://www.example.org/document/books/1:book/5:publish_date> ;
+        rdf:_6 <http://www.example.org/document/books/1:book/6:description> ;
+  xyz:isbn "978-3-12-148410-0" .
+
+<http://www.example.org/document/books/1:book/2:title> a xyz:title ;
+        rdf:_1 "XML Developer's Guide" .
+
+<http://www.example.org/document/books> a xyz:books , <http://sparql.xyz/facade-x/ns/root> ;
+        rdf:_1 <http://www.example.org/document/books/1:book> ;
+        rdf:_2 <http://www.example.org/document/books/2:book> ;
+        rdf:_3 <http://www.example.org/document/books/3:book> .
+
+<http://www.example.org/document/books/2:book/1:author> a xyz:author ;
+        rdf:_1 "Ralls, Kim" .
+
+<http://www.example.org/document/books/2:book> a xyz:book ;
+        rdf:_1 <http://www.example.org/document/books/2:book/1:author> ;
+        rdf:_2 <http://www.example.org/document/books/2:book/2:title> ;
+        rdf:_3 <http://www.example.org/document/books/2:book/3:genre> ;
+        rdf:_4 <http://www.example.org/document/books/2:book/4:price> ;
+        rdf:_5 <http://www.example.org/document/books/2:book/5:publish_date> ;
+        rdf:_6 <http://www.example.org/document/books/2:book/6:description> ;
+  xyz:isbn "928-3-16-148410-0" .
+
+<http://www.example.org/document/books/2:book/6:description> a xyz:description ;
+        rdf:_1 "A former architect battles corporate zombies,\n            an evil sorceress, and her own childhood to become queenof the world." .
+
+<http://www.example.org/document/books/3:book/3:genre> a xyz:genre ;
+        rdf:_1 "Fantasy" .
+
+<http://www.example.org/document/books/1:book/5:publish_date> a xyz:publish_date ;
+        rdf:_1 "2000-10-01" .
+
+<http://www.example.org/document/books/1:book/1:author> a xyz:author ;
+        rdf:_1 "Gambardella, Matthew" .
+
+<http://www.example.org/document/books/1:book/6:description> a xyz:description ;
+        rdf:_1 "An in-depth look at creating applications\n            with XML." .
+
+<http://www.example.org/document/books/2:book/3:genre> a xyz:genre ;
+        rdf:_1 "Fantasy" .
+
+<http://www.example.org/document/books/3:book> a xyz:book ;
+        rdf:_1 <http://www.example.org/document/books/3:book/1:author> ;
+        rdf:_2 <http://www.example.org/document/books/3:book/2:title> ;
+        rdf:_3 <http://www.example.org/document/books/3:book/3:genre> ;
+        rdf:_4 <http://www.example.org/document/books/3:book/4:price> ;
+        rdf:_5 <http://www.example.org/document/books/3:book/5:publish_date> ;
+        rdf:_6 <http://www.example.org/document/books/3:book/6:description> ;
+  xyz:isbn "432-3-16-143110-1" .
+
+<http://www.example.org/document/books/3:book/4:price> a xyz:price ;
+        rdf:_1 "5.95" .
+
+<http://www.example.org/document/books/2:book/5:publish_date> a xyz:publish_date ;
+        rdf:_1 "2000-12-16" .
+
+<http://www.example.org/document/books/1:book/3:genre> a xyz:genre ;
+        rdf:_1 "Computer" .
+
+<http://www.example.org/document/books/3:book/1:author> a xyz:author ;
+        rdf:_1 "Corets, Eva" .
+
+<http://www.example.org/document/books/3:book/5:publish_date> a xyz:publish_date ;
+        rdf:_1 "2000-11-17" .
+
+<http://www.example.org/document/books/3:book/2:title> a xyz:title ;
+        rdf:_1 "Maeve Ascendant" .
+
+<http://www.example.org/document/books/3:book/6:description> a xyz:description ;
+        rdf:_1 "After the collapse of a nanotechnology\n            society in England, the young survivors lay thefoundation for a new society." .

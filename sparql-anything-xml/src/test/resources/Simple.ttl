@@ -1,0 +1,17 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix fx:   <http://sparql.xyz/facade-x/ns/>.
+@prefix xyz:  <http://sparql.xyz/facade-x/data/>.
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document/simple>
+        a       <http://sparql.xyz/facade-x/data/simple> , <http://sparql.xyz/facade-x/ns/root> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document/simple/1:element> .
+
+<http://www.example.org/document/simple/1:element>
+        a       <http://sparql.xyz/facade-x/data/element> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "Some text here" ;
+        <http://sparql.xyz/facade-x/data/attr1>
+                "food" .

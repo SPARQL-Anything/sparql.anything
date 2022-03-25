@@ -33,10 +33,24 @@
 			<artifactId>sparql-anything-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.ximpleware/vtd-xml -->
+		<dependency>
+			<groupId>com.ximpleware</groupId>
+			<artifactId>vtd-xml</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.github.sparqlanything</groupId>
+			<artifactId>sparql-anything-testutils</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
