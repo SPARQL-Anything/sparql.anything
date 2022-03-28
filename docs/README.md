@@ -385,12 +385,15 @@ Facade-X RDF:
 <details><summary>Spreadsheets: XLS, XLSx</summary>
 Data:
 
-Link to file: [Book1.xslx](https://github.com/SPARQL-Anything/sparql.anything/raw/v0.6-DEV/sparql.anything.spreadsheet/src/main/resources/testResources/Book1.xlsx) 
+Link to file: `https://github.com/SPARQL-Anything/sparql.anything/raw/v0.6-DEV/sparql.anything.spreadsheet/src/main/resources/testResources/Book1.xlsx`
+
 
 Facade-X RDF:
+
+```turtle
+
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 @prefix fx: <http://sparql.xyz/facade-x/ns/>
-```turtle
 
 <https://github.com/SPARQL-Anything/sparql.anything/raw/v0.6-DEV/sparql.anything.spreadsheet/src/main/resources/testResources/Book1.xlsx#Sheet1> {
 _:b0    rdf:_1 "A2" ;
@@ -471,10 +474,12 @@ _:b7    a       fx:root ;
 
 <details><summary>Documents: DOCx</summary>
 Data:
-[Input File](https://github.com/SPARQL-Anything/sparql.anything/raw/v0.5-DEV/sparql-anything-docs/src/test/resources/Doc1.docx)
+
+Link to file: `https://github.com/SPARQL-Anything/sparql.anything/raw/v0.5-DEV/sparql-anything-docs/src/test/resources/Doc1.docx`
+
 Facade-X RDF:
 
-```
+```turtle
 <http://www.example.org/document>
         a       <http://sparql.xyz/facade-x/data/Document> , <http://sparql.xyz/facade-x/ns/root> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
@@ -518,7 +523,11 @@ Facade-X RDF:
 
 <details><summary>Image Metadata</summary>
 Data:
-![Image example](https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg)
+
+[Image here](ttps://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg)
+
+<img src="https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg"/>
+
 
 Facade-X RDF:
 
@@ -725,14 +734,46 @@ Facade-X RDF:
 <details><summary>Markdown</summary>
 Data:
 
-```
-# Title<br>The following list of issues:<br><br>- first issue<br>- second issue<br><br>---<br>Footer paragraph.
+```markdown
+# Title
+
+The following list of issues:
+
+- first issue
+- second issue
+
+---
+
+Footer paragraph.
 ```
 
 Facade-X RDF:
 
-```
-@prefix fx: <http://sparql.xyz/facade-x/ns/> .<br>@prefix xyz: <http://sparql.xyz/facade-x/data/> .<br>@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .<br>@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.<br><br>[] a fx:root, xyz:Document ;<br> rdf:_1 [<br>    a xyz:Heading ;<br>    rdf:_1 "Title"^^xsd:string ;<br>    xyz:level "1"^^xsd:int<br> ] ;<br> rdf:_2 [<br>    a xyz:Paragraph ;<br>    rdf:_1 "The following list of issues:"^^xsd:string<br> ] ;<br> rdf:_3 [<br>    a xyz:BulletList ;<br>    rdf:_1 [<br>        a xyz:ListItem ;<br>        rdf:_1 [<br>            a xyz:Paragraph ;<br>            rdf:_1 "first issue"^^xsd:string<br>        ]<br>    ] ;<br>    rdf:_2 [<br>        a xyz:ListItem ;<br>        rdf:_1 [<br>            a xyz:Paragraph ;<br>            rdf:_1 "second issue"^^xsd:string<br>        ]<br>    ]<br> ] ;<br> rdf:_4 [<br>    a xyz:ThematicBreak<br> ] ;<br> rdf:_5 [<br>     a xyz:Paragraph ;<br>     rdf:_1 "Footer paragraph."^^xsd:string<br>  ] .<br>
+```turtle
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+[] a fx:root, xyz:Document ;
+   rdf:_1 [ 
+       a xyz:Heading ;
+	   rdf:_1 "Title"^^xsd:string ;
+	   xyz:level "1"^^xsd:int ] ;
+   rdf:_2 [
+       a xyz:Paragraph ;
+	   rdf:_1 "The following list of issues:"^^xsd:string ] ;
+   rdf:_3 [
+	   a xyz:BulletList ;
+	   rdf:_1 [
+	      a xyz:ListItem ;
+		  rdf:_1 [ a xyz:Paragraph ; rdf:_1 "first issue"^^xsd:string ]] ;
+	   rdf:_2 [
+	   	  a xyz:ListItem ;
+		  rdf:_1 [ a xyz:Paragraph ; rdf:_1 "second issue"^^xsd:string ] ] ] ;
+	rdf:_4 [ a xyz:ThematicBreak ] ;
+	rdf:_5 [ a xyz:Paragraph ; rdf:_1 "Footer paragraph."^^xsd:string ] .
+
 ```
 
 </details>
