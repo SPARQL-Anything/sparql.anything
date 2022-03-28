@@ -325,9 +325,9 @@ Facade-X RDF:
 
 Data:
 
-[Image here](ttps://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg)
+Link to image: `https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg`
 
-<img src="https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg"/>
+<p><img src="https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg"/></p>
 
 Facade-X RDF:
 
@@ -524,9 +524,9 @@ Facade-X RDF:
 <details><summary>Image Metadata</summary>
 Data:
 
-[Image here](ttps://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg)
+Link to image: `https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg`
 
-<img src="https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg"/>
+<p><img src="https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg"/></p>
 
 
 Facade-X RDF:
