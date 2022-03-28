@@ -9,6 +9,7 @@
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
 Main features:
+
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#configuration)) and build knowledge graphs with `CONSTRUCT` queries
 - [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar, Markdown, YAML, Bibtex, DOCx (see [configuration](#format-specific-options))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
@@ -20,8 +21,9 @@ Main features:
 - Slice large CSV files with an iterator-like execution style (soon [JSON](https://github.com/SPARQL-Anything/sparql.anything/issues/202) and [XML](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
 - Supports an [on-disk option](#general-purpose-options) (with Apache Jena TDB2)
 
-## Facade-X
+## Concept
 SPARQL Anything uses a single generic abstraction for all data source formats called Facade-X.
+### Facade-X
 Facade-X is a simplistic meta-model used by SPARQL Anything transformers to generate RDF data from diverse data sources.
 Intuitively, Facade-X uses a subset of RDF as a general approach to represent the source content *as-it-is* but in RDF.
 The model combines two types of elements: containers and literals.
@@ -44,7 +46,7 @@ This is a generic example of a Facade-X data object (more examples below):
 ] .
 ```
 
-## Querying anything
+### Querying anything
 SPARQL Anything extends the Apache Jena ARQ processors by *overloading* the SERVICE operator, as in the following example:
 
 Suppose having this JSON file as input (also available at ``https://sparql-anything.cc/example1.json``)
