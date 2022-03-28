@@ -822,7 +822,7 @@ WHERE {
 |Option name|Description|Valid Values|Default Value|
 |-|-|-|-|
 |location*|The URL of the data source.|Any valid URL.|-|
-|content*|The content to be triplified.|Any valid literal.|-|
+|content*|The content to be transformed.|Any valid literal.|-|
 |command*|An external command line to be executed. The output is handled according to the option 'media-type'|Any valid literal.|-|
 |root|The IRI of generated root resource.|Any valid IRI.|location + '#' (in case of location argument is set) or 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in case of content argument set) |
 |media-type|The media-type of the data source.|Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml, image/png, text/html, application/octet-stream, application/json, image/jpeg, image/tiff, image/bmp, text/csv, image/vnd.microsoft.icon,text/plain |No value (the media-type will be guessed from the the file extension)|
@@ -836,9 +836,9 @@ WHERE {
 |ondisk|It tells sparql.anything to use an on disk graph (instead of the default in memory graph). The string should be a path to a directory where the on disk graph will be stored. Using an on disk graph is almost always slower (than using the default in memory graph) but with it you can triplify large files without running out of memory.|a path to a directory|not set|
 |ondisk.reuse|When using an on disk graph, it tells sparql.anything to reuse the previous on disk graph.|true|not set|
 |strategy|The execution strategy. 0 = in memory, all triples; 1 = in memory, only triples matching any of the triple patterns in the where clause|0,1|1|
-|slice|The resources is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row)|true/false|false|
+|slice|The resources is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row); JSON (when array slice by item, when json object requires `json.path`); XML (requires `xml.path`) |true/false|false|
 
-\* It is mandatory to provide either the local or content or command.
+\* It is mandatory to provide either `location`, `content`, or `command`.
 
 ### Format specific options
 
@@ -861,6 +861,18 @@ WHERE {
 |csv.headers|It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.|true/false|false|
 |csv.delimiter|The column delimiter, usually `,`,`;`,`\t`, ...|any single char|`,`|
 |csv.null-string|It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.|any string|not set|
+
+#### JSON
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|json.path|One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions.|Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))||
+
+#### XML
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|xml.path|One or more XPath expressions as filters. E.g. `xml.path=value` or `xml.path.1`, `xml.path.2`,`...` to add multiple expressions.|Any valid XPath||
 
 
 #### BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO
