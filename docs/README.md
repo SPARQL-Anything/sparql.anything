@@ -125,7 +125,8 @@ and get this result without caring of transforming JSON to RDF.
 Currently, SPARQL Anything supports the following list of formats but the possibilities are limitless!
 The data is interpreted as in the following examples (using default settings).
 
-<details><summary>JSON</summary>
+### JSON
+
 Data:
 
 ```json
@@ -154,11 +155,9 @@ Facade-X RDF:
     xyz:stringArg "stringValue"
 ] .
 ```
-</details>
 
+### HTML
 
-
-<details><summary>HTML</summary>
 Data:
 
 ```html
@@ -193,10 +192,8 @@ Facade-X RDF:
           ]
 ] .
 ```
+### XML
 
-</details>
-
-<details><summary>XML</summary>
 Data:
 
 ```xml
@@ -276,9 +273,8 @@ Facade-X RDF:
 ] .
 ```
 
-</details>
+### CSV
 
-<details><summary>CSV</summary>
 Data:
 
 ```csv
@@ -319,9 +315,7 @@ Facade-X RDF:
 
 ```
 
-</details>
-
-<details><summary>BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO </summary>
+### Binary (BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO)
 
 Data:
 
@@ -339,9 +333,8 @@ Facade-X RDF:
     .
 ```
 
-</details>
+### TXT
 
-<details><summary>TXT</summary>
 Data:
 
 ```txt
@@ -357,9 +350,8 @@ Facade-X RDF:
     rdf:_1 "Hello World!" .
 ```
 
-</details>
+### File system and archives (ZIP, Tar)
 
-<details><summary>Archive: ZIP, Tar, File System folder</summary>
 Data:
 
 ```bash
@@ -380,9 +372,8 @@ Facade-X RDF:
  rdf:_3 "file.xml" ] .
 ```
 
-</details>
+### Spreadsheets: XLS, XLSx
 
-<details><summary>Spreadsheets: XLS, XLSx</summary>
 Data:
 
 Link to file: `https://github.com/SPARQL-Anything/sparql.anything/raw/v0.6-DEV/sparql.anything.spreadsheet/src/main/resources/testResources/Book1.xlsx`
@@ -470,9 +461,8 @@ _:b7    a       fx:root ;
 }
 ```
 
-</details>
+### Documents: DOCx
 
-<details><summary>Documents: DOCx</summary>
 Data:
 
 Link to file: `https://github.com/SPARQL-Anything/sparql.anything/raw/v0.5-DEV/sparql-anything-docs/src/test/resources/Doc1.docx`
@@ -519,9 +509,8 @@ Facade-X RDF:
                 "Paragraph2" .
 ```
 
-</details>
+### EXIF Metadata
 
-<details><summary>Image Metadata</summary>
 Data:
 
 Link to image: `https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg`
@@ -684,9 +673,8 @@ Facade-X RDF:
         <http://sparql.xyz/facade-x/data/size>          7958 . 
 ```
 
-</details>
+### Bibtex
 
-<details><summary>Bibtex</summary>
 Data:
 
 ```
@@ -729,9 +717,8 @@ Facade-X RDF:
 
 ```
 
-</details>
+### Markdown
 
-<details><summary>Markdown</summary>
 Data:
 
 ```markdown
@@ -776,9 +763,8 @@ Facade-X RDF:
 
 ```
 
-</details>
+### YAML
 
-<details><summary>YAML</summary>
 Data:
 
 ```yaml
@@ -806,7 +792,7 @@ Facade-X RDF:
 	.
 ```
 
-</details>
+
 
 
 ## Configuration
