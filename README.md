@@ -781,14 +781,29 @@ Facade-X RDF:
 <details><summary>YAML</summary>
 Data:
 
-```
-foo: bar<br>pleh: help<br>stuff:<br>  foo: bar<br>  bar: foo
+```yaml
+foo: bar
+pleh: help
+stuff:
+  foo: bar
+  bar: foo
 ```
 
 Facade-X RDF:
 
-```
-@prefix fx: <http://sparql.xyz/facade-x/ns/> .<br>@prefix xyz: <http://sparql.xyz/facade-x/data/> .<br>@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .<br>@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.<br><br>[ a fx:root ;<br>    xyz:foo "bar"^^xsd:string ;<br>    xyz:pleh "help"^^xsd:string ;<br>    xyz:stuff [<br>        xyz:foo "bar"^^xsd:string ;<br>        xyz:bar "foo"^^xsd:string<br>    ]<br>]
+```turtle
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+[ a fx:root ; 
+  xyz:foo "bar"^^xsd:string ; 
+  xyz:pleh "help"^^xsd:string ; 
+  xyz:stuff [ 
+  	xyz:foo "bar"^^xsd:string ; 
+	xyz:bar "foo"^^xsd:string ]]
+	.
 ```
 
 </details>
