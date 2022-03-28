@@ -36,6 +36,7 @@ import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,37 +66,94 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
+	private VTDNav buildVTDNav(Properties properties) throws TriplifierHTTPException, IOException, ParseException {
+		VTDGen vg = new VTDGen();
+		byte[] bytes = IOUtils.toByteArray(Triplifier.getInputStream(properties));
+		vg.setDoc(bytes);
+		// TODO Support namespaces
+		vg.parse(false);
+		VTDNav vn = vg.getNav();
+		return vn;
+	}
+
+	private Iterator<Pair<VTDNav,Integer>> evaluateXPaths(VTDNav vn, List<String> xpaths){
+		return new Iterator<Pair<VTDNav, Integer>>() {
+			int count = 0;
+			Iterator<String> xit = xpaths.iterator();
+			Pair<VTDNav, Integer> next = null;
+			AutoPilot ap = new AutoPilot(vn);
+			String xpath = null;
+			@Override
+			public boolean hasNext() {
+				try {
+					if (next != null) {
+						return true;
+					}
+					// If XPath is already loaded, move to the next result
+					int result = -1;
+					if( xpath != null ){
+						result = ap.evalXPath();
+						if(result == -1){
+							// No more results with this XPath
+							xpath = null;
+						}
+					}
+					// Look for next xpath with results
+					while (xpath == null && xit.hasNext()) {
+						// If XPath is available, load it and move to the next result
+						xpath = xit.next();
+						log.debug("Evaluating XPath: {}", xpath);
+						ap.selectXPath(xpath);
+						result = ap.evalXPath();
+						if(result == -1){
+							xpath = null;
+						}else{
+							// Stop here for now
+							break;
+						}
+					}
+
+					if(result == -1){
+						// No more results
+						return false;
+					}else{
+						// Prepare next result
+						next = Pair.of(vn, result);
+						return true;
+					}
+				}catch(XPathParseException|XPathEvalException|NavException e){
+					throw new RuntimeException(e);
+				}
+			}
+
+			@Override
+			public Pair<VTDNav, Integer> next() {
+				Pair<VTDNav, Integer> toReturn = next;
+				next = null;
+				return toReturn;
+			}
+		};
+	}
+
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		String namespace = Triplifier.getNamespaceArgument(properties);
 		String dataSourceId = Triplifier.getRootArgument(properties);
 		String root = Triplifier.getRootArgument(properties);
 
 		builder.addRoot(dataSourceId, root);
 		try {
-			VTDGen vg = new VTDGen();
-			byte[] bytes = IOUtils.toByteArray(Triplifier.getInputStream(properties));
-			vg.setDoc(bytes);
-			vg.parse(false);
-			VTDNav vn = vg.getNav();
+			VTDNav vn = buildVTDNav(properties);
 			Iterator<String> xit = xpaths.iterator();
-			while(xit.hasNext()) {
-				String xpath = xit.next();
-				log.debug("Evaluating XPath: {}", xpath);
-				//		vg.parse(false);  // set namespace awareness to true
-				AutoPilot ap = new AutoPilot(vn);
-				//ap.declareXPathNameSpace("ns1","http://purl.org/dc/elements/1.1/");
-				ap.selectXPath(xpath);
-				int result = -1;
-				int count = 1;
-				while ((result = ap.evalXPath()) != -1) {
-					transformFromXPath(vn, result, count, root, dataSourceId, properties, builder);
-					count++;
-				}
-				log.debug("XPath: {} matches", count);
+			Iterator<Pair<VTDNav,Integer>> it = evaluateXPaths(vn,xpaths);
+			int count = 1;
+			while(it.hasNext()) {
+				Pair<VTDNav,Integer> next = it.next();
+				transformFromXPath(next.getKey(), next.getValue(), count, root, dataSourceId, properties, builder);
+				count++;
 			}
+			log.debug("XPath: {} matches", count);
 
-		} catch (XPathEvalException | NavException | ParseException | XPathParseException e){
+		} catch (NavException | ParseException e){
 			log.error("Error while evaluating XPath expression");
 			throw new IOException(e);
 		}
@@ -105,7 +163,9 @@ public class XMLTriplifier implements Triplifier, Slicer {
 		log.trace(" -- index: {} type: {}", result, vn.getTokenType(result));
 		switch (vn.getTokenType(result)) {
 			case VTDNav.TOKEN_STARTING_TAG:
-				String tag = vn.toString(result);
+				String tag = null;
+				tag = vn.toString(result);
+
 				log.trace(" -- tag: {} ", tag);
 				String childId = String.join("", parentId , "/" , Integer.toString(child), ":", tag);
 				builder.addContainer(dataSourceId, parentId, child, childId);
@@ -344,12 +404,55 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public Iterable<Slice> slice(Properties p) throws IOException, TriplifierHTTPException {
-		return null;
+	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+		final String dataSourceId = Triplifier.getRootArgument(properties);
+		final String root = Triplifier.getRootArgument(properties);
+		List<String> xpaths = Triplifier.getPropertyValues(properties, "xml.path");
+
+		try {
+			VTDNav vn = buildVTDNav(properties);
+			Iterator<String> xit = xpaths.iterator();
+			final Iterator<Pair<VTDNav, Integer>> it = evaluateXPaths(vn, xpaths);
+			return new Iterable<Slice>() {
+				@Override
+				public Iterator<Slice> iterator() {
+
+					return new Iterator<Slice>() {
+						int theCount = 1;
+
+						@Override
+						public boolean hasNext() {
+							return it.hasNext();
+						}
+
+						@Override
+						public Slice next() {
+							Pair<VTDNav, Integer> pair = it.next();
+							int c = theCount;
+							theCount++;
+							return XPathSlice.make(pair.getKey(), pair.getValue(), c, root, dataSourceId);
+						}
+					};
+				}
+			};
+		}catch (Exception e){
+			throw new RuntimeException((e));
+		}
 	}
 
 	@Override
-	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
-
+	public void triplify(Slice slice, Properties properties, FacadeXGraphBuilder builder) {
+		builder.addRoot(slice.getDatasourceId(), slice.getRootId());
+		if(slice instanceof XPathSlice) {
+			XPathSlice xs = (XPathSlice) slice;
+			try {
+				transformFromXPath(xs.get().getKey(), xs.get().getValue(), xs.iteration(), slice.getRootId(), slice.getDatasourceId(),
+				properties,  builder);
+			} catch (NavException e) {
+				throw new RuntimeException(e);
+			}
+		}else {
+			throw new RuntimeException("Not the expected slice (" + XPathSlice.class.toString() + ")");
+		}
 	}
 }

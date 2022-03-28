@@ -21,11 +21,13 @@ import com.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
 public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
-
+	private final Logger L = LoggerFactory.getLogger(MoreXMLTriplifierTest.class);
 	public MoreXMLTriplifierTest() {
 		super(new XMLTriplifier(), new Properties(), "xml", "ttl");
 	}
@@ -41,24 +43,39 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 		if(name.getMethodName().equals("testBooks_1$1")){
 			properties.put("blank-nodes", "false");
 			properties.put("xml.path", "//book");
+		}else
+		if(name.getMethodName().equals("testSliceBooks$1")){
+			properties.put("blank-nodes", "false");
+			properties.put("slice", "true");
+			properties.put("xml.path", "//book");
 		}
 	}
 
 	@Test
 	public void testSimple$1(){
+		L.info("Test XML (one go)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testBooks$1(){
+		L.info("Test XML books (one go)");
 //		RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testBooks_1$1(){
-		RDFDataMgr.write(System.err, result, Lang.TTL);
+		L.info("Test XML books (XPath //book, one go)");
+		//RDFDataMgr.write(System.err, result, Lang.TTL);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testSliceBooks$1(){
+		L.info("Test XML books (XPath //book, with slicing)");
+		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 }
