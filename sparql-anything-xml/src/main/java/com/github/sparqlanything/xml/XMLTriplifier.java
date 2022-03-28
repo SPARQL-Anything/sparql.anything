@@ -66,6 +66,8 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
+	public static final String PROPERTY_XPATH = "xml.path";
+
 	private VTDNav buildVTDNav(Properties properties) throws TriplifierHTTPException, IOException, ParseException {
 		VTDGen vg = new VTDGen();
 		byte[] bytes = IOUtils.toByteArray(Triplifier.getInputStream(properties));
@@ -395,7 +397,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
-		List<String> xpaths = Triplifier.getPropertyValues(properties, "xml.path");
+		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
 		if(!xpaths.isEmpty()){
 			transformWithXPath(xpaths, properties, builder);
 		}else{
@@ -407,7 +409,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		final String dataSourceId = Triplifier.getRootArgument(properties);
 		final String root = Triplifier.getRootArgument(properties);
-		List<String> xpaths = Triplifier.getPropertyValues(properties, "xml.path");
+		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
 
 		try {
 			VTDNav vn = buildVTDNav(properties);

@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -53,7 +52,7 @@ import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 public class JSONTriplifier implements Triplifier, Slicer {
 
 	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
-
+	public static final String PROPERTY_JSONPATH = "json.path";
 //	private String[] getDataSources(URL url) {
 //		return new String[] { url.toString() };
 //	}
@@ -415,7 +414,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		Collector collector = surfer.collector(us);
 		List<String> jsonPathExpr = new ArrayList<String>();
 		final Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH);
 		for(String jpath: jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
 			matches.add(m);
@@ -489,7 +488,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH);
 		if(!jsonPaths.isEmpty()){
 			return sliceFromJSONPath(properties);
 		}else {
