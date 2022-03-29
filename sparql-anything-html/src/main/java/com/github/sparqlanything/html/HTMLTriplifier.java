@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -104,7 +105,9 @@ public class HTMLTriplifier implements Triplifier {
 			log.debug("Loading URL: {}", url);
 			doc = Jsoup.parse(useBrowserToNavigate(url.toString(), properties));
 		} else {
-			doc = Jsoup.parse(Triplifier.getInputStream(properties), charset.toString(), Triplifier.getResourceId(properties));
+			try(InputStream is = Triplifier.getInputStream(properties)) {
+				doc = Jsoup.parse(is, charset.toString(), Triplifier.getResourceId(properties));
+			}
 		}
 
 //		Model model = ModelFactory.createDefaultModel();
@@ -141,6 +144,7 @@ public class HTMLTriplifier implements Triplifier {
 				throw new IOException(e);
 			}
 		}
+
 //		DatasetGraph dg = DatasetFactory.create(model).asDatasetGraph();
 //		dg.addGraph(NodeFactory.createURI(url.toString()), model.getGraph());
 //		return dg;

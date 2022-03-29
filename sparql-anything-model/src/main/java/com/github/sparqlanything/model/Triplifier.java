@@ -242,9 +242,30 @@ public interface Triplifier {
 		if(properties.containsKey(IRIArgument.COMMAND.toString())){
 			String command = properties.getProperty(IRIArgument.COMMAND.toString());
 			Runtime rt = Runtime.getRuntime();
-			String[] commands = {command.substring(0, command.indexOf(' ') ) , command.substring(command.indexOf(' ')) };
+			//String[] commands = {command.substring(0, command.indexOf(' ') ) , command.substring(command.indexOf(' ')) };
+			//String[] commands = command.split(" ");
+			// Credit: https://stackoverflow.com/a/18893443/1035608
+			String[] commands =command.split("(?x)   " +
+					"\\s          " +   // Split on space
+					"(?=        " +   // Followed by
+					"  (?:      " +   // Start a non-capture group
+					"    [^\"]* " +   // 0 or more non-quote characters
+					"    \"     " +   // 1 quote
+					"    [^\"]* " +   // 0 or more non-quote characters
+					"    \"     " +   // 1 quote
+					"  )*       " +   // 0 or more repetition of non-capture group (multiple of 2 quotes will be even)
+					"  [^\"]*   " +   // Finally 0 or more non-quotes
+					"  $        " +   // Till the end  (This is necessary, else every space will satisfy the condition)
+					")          "     // End look-ahead
+			);
+			log.info("Running command: {}", commands);
 			Process proc = rt.exec(commands);
-			return proc.getInputStream();
+//			String errors = IOUtils.toString(proc.getErrorStream());
+//			if(!errors.equals("")){
+//				log.error("STDERR: {}", errors);
+//			}
+			InputStream is = proc.getInputStream();
+			return is;
 		}
 
 		if (properties.containsKey(IRIArgument.CONTENT.toString())) {

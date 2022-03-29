@@ -64,17 +64,14 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	private void transform(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
 
-		final InputStream us = Triplifier.getInputStream(properties);
-
 		JsonFactory factory = JsonFactory.builder().build();
-		JsonParser parser = factory.createParser(us);
 
-		try {
+
+		try(InputStream us = Triplifier.getInputStream(properties)) {
+			JsonParser parser = factory.createParser(us);
 			// Only 1 data source expected
 			String dataSourceId = Triplifier.getRootArgument(properties);
 			transformJSON(parser, dataSourceId, Triplifier.getRootArgument(properties), builder);
-		} finally {
-			us.close();
 		}
 	}
 
@@ -345,16 +342,16 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	private Iterable<Slice> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
 		final InputStream us = Triplifier.getInputStream(properties);
 		JsonFactory factory = JsonFactory.builder().build();
-		JsonParser parser = factory.createParser(us);
-		JsonToken token = parser.nextToken();
-		// If the root is an array.
-		if (token == JsonToken.START_ARRAY) {
+		try (us){
+			JsonParser parser = factory.createParser(us);
+			JsonToken token = parser.nextToken();
+			// If the root is an array.
+			if (token == JsonToken.START_ARRAY) {
 
-		} else {
-			throw new IOException("Not a JSON array");
-		}
+			} else {
+				throw new IOException("Not a JSON array");
+			}
 
-		try {
 			// Only 1 data source expected
 			String rootId = Triplifier.getRootArgument(properties);
 			String dataSourceId = rootId;

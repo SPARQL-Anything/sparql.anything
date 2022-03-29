@@ -26,6 +26,8 @@ import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXParser;
 import org.jbibtex.ParseException;
 import org.jbibtex.TokenMgrException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +41,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BibtexTriplifier implements Triplifier {
-
+	private static final Logger logger = LoggerFactory.getLogger(BibtexTriplifier.class);
 	public BibtexTriplifier() {
 
 	}
@@ -58,8 +60,8 @@ public class BibtexTriplifier implements Triplifier {
 
 		builder.addRoot(dataSourceId, root);
 
-		try {
-			InputStream is = Triplifier.getInputStream(properties);
+		try (InputStream is = Triplifier.getInputStream(properties)){
+
 			BibTeXParser bibtexParser = new BibTeXParser();
 			Reader reader = new InputStreamReader(is);
 			BibTeXDatabase bibDB = bibtexParser.parse(reader);
@@ -77,14 +79,9 @@ public class BibtexTriplifier implements Triplifier {
 				});
 			});
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (TriplifierHTTPException e) {
-			e.printStackTrace();
-		} catch (TokenMgrException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
+		} catch (IOException|TriplifierHTTPException|TokenMgrException|ParseException e) {
+			logger.error("", e);
+			throw new IOException(e);
 		}
 	}
 

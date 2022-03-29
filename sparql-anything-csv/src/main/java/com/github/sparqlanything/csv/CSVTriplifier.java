@@ -49,6 +49,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
 	public final static String PROPERTY_DELIMITER = "csv.delimiter";
+	public final static String PROPERTY_QUOTECHAR = "csv.quote-char";
 	public final static String PROPERTY_NULLSTRING = "csv.null-string";
 
 	public static CSVFormat buildFormat(Properties properties) throws IOException {
@@ -61,6 +62,10 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		}
 		if(properties.containsKey(PROPERTY_NULLSTRING)){
 			format = format.withNullString(properties.getProperty(PROPERTY_NULLSTRING)) ;
+		}
+		if(properties.containsKey(PROPERTY_QUOTECHAR)){
+			log.debug("Setting quote char to '{}'", properties.getProperty(PROPERTY_QUOTECHAR).charAt(0));
+			format = format.withQuote(properties.getProperty(PROPERTY_QUOTECHAR).charAt(0)) ;
 		}
 		if(properties.containsKey(PROPERTY_DELIMITER)){
 			log.debug("Setting delimiter to {}", properties.getProperty(PROPERTY_DELIMITER));
@@ -125,8 +130,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 		// Add type Root
 		builder.addRoot(dataSourceId, root);
-		try {
-			final InputStream is = Triplifier.getInputStream(properties);
+		InputStream is = Triplifier.getInputStream(properties);
+		try (is){
 			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
 			Iterable<CSVRecord> records = format.parse(in);
 			Iterator<CSVRecord> recordIterator = records.iterator();
@@ -206,34 +211,35 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		String dataSourceId = Triplifier.getRootArgument(properties); // there is always 1 data source id
 		String containerRowPrefix = root + "#row";
 
-		final InputStream is = Triplifier.getInputStream(properties);
-		Reader in = new InputStreamReader(new BOMInputStream(is), charset);
+		try(InputStream is = Triplifier.getInputStream(properties)) {
+			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
 
-		Iterable<CSVRecord> records = format.parse(in);
-		final Iterator<CSVRecord> recordIterator = records.iterator();
-		final LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties);
+			Iterable<CSVRecord> records = format.parse(in);
+			final Iterator<CSVRecord> recordIterator = records.iterator();
+			final LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties);
 
-		return new Iterable<Slice>() {
-			@Override
-			public Iterator<Slice> iterator() {
-				log.debug("Iterating slices");
-				return new Iterator<Slice>() {
-					int rown = 0;
+			return new Iterable<Slice>() {
+				@Override
+				public Iterator<Slice> iterator() {
+					log.debug("Iterating slices");
+					return new Iterator<Slice>() {
+						int rown = 0;
 
-					@Override
-					public boolean hasNext() {
-						return recordIterator.hasNext();
-					}
+						@Override
+						public boolean hasNext() {
+							return recordIterator.hasNext();
+						}
 
-					@Override
-					public Slice next() {
-						rown++;
-						log.trace("next slice: {}", rown);
-						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, root, headers_map);
-					}
-				};
-			}
-		};
+						@Override
+						public Slice next() {
+							rown++;
+							log.trace("next slice: {}", rown);
+							return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, root, headers_map);
+						}
+					};
+				}
+			};
+		}
 	}
 
 	@Override
