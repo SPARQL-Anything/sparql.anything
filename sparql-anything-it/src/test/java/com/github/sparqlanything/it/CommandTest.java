@@ -26,6 +26,7 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.main.QC;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -66,6 +67,21 @@ public class CommandTest {
 		if(platform == OS.MAC) {
 			QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 			Query query = QueryFactory.create(IOUtils.toString(getClass().getClassLoader().getResourceAsStream("commands/echo.sparql"), StandardCharsets.UTF_8));
+			ResultSet rs1 = QueryExecutionFactory.create(query, DatasetGraphFactory.create()).execSelect();
+			while (rs1.hasNext()) {
+				System.err.println(rs1.next());
+			}
+		}else{
+			log.warn("Skipping test (platform not supported) {}", name.getMethodName());
+		}
+	}
+
+	@Ignore
+	@Test
+	public void testGit() throws IOException {
+		if(platform == OS.MAC) {
+			QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+			Query query = QueryFactory.create(IOUtils.toString(getClass().getClassLoader().getResourceAsStream("commands/logs.sparql"), StandardCharsets.UTF_8));
 			ResultSet rs1 = QueryExecutionFactory.create(query, DatasetGraphFactory.create()).execSelect();
 			while (rs1.hasNext()) {
 				System.err.println(rs1.next());

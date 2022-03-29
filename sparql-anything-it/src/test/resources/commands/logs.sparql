@@ -1,0 +1,24 @@
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz:  <http://sparql.xyz/facade-x/data/>
+
+
+CONSTRUCT { ?x ?y ?z }
+WHERE {
+	SERVICE <x-sparql-anything:> {
+		fx:properties fx:command "/usr/bin/git --no-pager log --date=local --all --pretty=%h,%an,%ad,'%s'" ;
+		    fx:charset "ASCII" ;
+		    fx:csv.delimiter "," ;
+		    fx:csv.null-string "" ;
+		    fx:csv.quote-char "'" ;
+			fx:media-type "text/csv" .
+		?x ?y ?z
+	}
+}
+
+
+
+
+
