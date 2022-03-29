@@ -207,39 +207,40 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 
-		boolean headers = hasHeaders(properties);
+//		boolean headers = hasHeaders(properties);
 		String dataSourceId = Triplifier.getRootArgument(properties); // there is always 1 data source id
-		String containerRowPrefix = root + "#row";
+//		String containerRowPrefix = root + "#row";
 
-		try(InputStream is = Triplifier.getInputStream(properties)) {
-			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
+		// XXX How do we close the inputstream?
+		final InputStream is = Triplifier.getInputStream(properties);
 
-			Iterable<CSVRecord> records = format.parse(in);
-			final Iterator<CSVRecord> recordIterator = records.iterator();
-			final LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties);
+		Reader in = new InputStreamReader(new BOMInputStream(is), charset);
 
-			return new Iterable<Slice>() {
-				@Override
-				public Iterator<Slice> iterator() {
-					log.debug("Iterating slices");
-					return new Iterator<Slice>() {
-						int rown = 0;
+		Iterable<CSVRecord> records = format.parse(in);
+		final Iterator<CSVRecord> recordIterator = records.iterator();
+		final LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties);
 
-						@Override
-						public boolean hasNext() {
-							return recordIterator.hasNext();
-						}
+		return new Iterable<Slice>() {
+			@Override
+			public Iterator<Slice> iterator() {
+				log.debug("Iterating slices");
+				return new Iterator<Slice>() {
+					int rown = 0;
 
-						@Override
-						public Slice next() {
-							rown++;
-							log.trace("next slice: {}", rown);
-							return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, root, headers_map);
-						}
-					};
-				}
-			};
-		}
+					@Override
+					public boolean hasNext() {
+						return recordIterator.hasNext();
+					}
+
+					@Override
+					public Slice next() {
+						rown++;
+						log.trace("next slice: {}", rown);
+						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, root, headers_map);
+					}
+				};
+			}
+		};
 	}
 
 	@Override

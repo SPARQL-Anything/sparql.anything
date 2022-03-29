@@ -340,69 +340,66 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	}
 
 	private Iterable<Slice> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
+		// XXX How do we close the input stream?
 		final InputStream us = Triplifier.getInputStream(properties);
 		JsonFactory factory = JsonFactory.builder().build();
-		try (us){
-			JsonParser parser = factory.createParser(us);
-			JsonToken token = parser.nextToken();
-			// If the root is an array.
-			if (token == JsonToken.START_ARRAY) {
+		JsonParser parser = factory.createParser(us);
+		JsonToken token = parser.nextToken();
+		// If the root is an array.
+		if (token == JsonToken.START_ARRAY) {
 
-			} else {
-				throw new IOException("Not a JSON array");
-			}
-
-			// Only 1 data source expected
-			String rootId = Triplifier.getRootArgument(properties);
-			String dataSourceId = rootId;
-			return new Iterable<Slice>() {
-				JsonToken next = null;
-
-				@Override
-				public Iterator<Slice> iterator() {
-					log.debug("Iterating slices");
-					return new Iterator<Slice>() {
-						int sln = 0;
-
-						@Override
-						public boolean hasNext() {
-							if (next != null) {
-								return true;
-							}
-							try {
-								next = parser.nextToken();
-								while (next == JsonToken.END_ARRAY || next == END_OBJECT) {
-									next = parser.nextToken();
-								}
-							} catch (IOException e) {
-								next = null;
-								return false;
-							}
-							if (next != null) {
-								return true;
-							} else {
-								return false;
-							}
-
-						}
-
-						@Override
-						public Slice next() {
-							if (next == null) {
-								return null;
-							}
-							sln++;
-							log.trace("next slice: {}", sln);
-							JsonToken tk = next;
-							next = null;
-							return JSONSlice.makeSlice(tk, parser, sln, rootId, dataSourceId);
-						}
-					};
-				}
-			};
-		} finally {
-			us.close();
+		} else {
+			throw new IOException("Not a JSON array");
 		}
+
+		// Only 1 data source expected
+		String rootId = Triplifier.getRootArgument(properties);
+		String dataSourceId = rootId;
+		return new Iterable<Slice>() {
+			JsonToken next = null;
+
+			@Override
+			public Iterator<Slice> iterator() {
+				log.debug("Iterating slices");
+				return new Iterator<Slice>() {
+					int sln = 0;
+
+					@Override
+					public boolean hasNext() {
+						if (next != null) {
+							return true;
+						}
+						try {
+							next = parser.nextToken();
+							while (next == JsonToken.END_ARRAY || next == END_OBJECT) {
+								next = parser.nextToken();
+							}
+						} catch (IOException e) {
+							next = null;
+							return false;
+						}
+						if (next != null) {
+							return true;
+						} else {
+							return false;
+						}
+
+					}
+
+					@Override
+					public Slice next() {
+						if (next == null) {
+							return null;
+						}
+						sln++;
+						log.trace("next slice: {}", sln);
+						JsonToken tk = next;
+						next = null;
+						return JSONSlice.makeSlice(tk, parser, sln, rootId, dataSourceId);
+					}
+				};
+			}
+		};
 	}
 
 	private Iterable<Slice> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
