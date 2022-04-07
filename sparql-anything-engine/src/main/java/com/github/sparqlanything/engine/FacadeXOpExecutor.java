@@ -224,7 +224,16 @@ public class FacadeXOpExecutor extends OpExecutor {
 										Slice slice = iterator.next();
 										logger.debug("Executing on slice: {}", slice.iteration());
 										// Execute and set current
-										FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
+										FacadeXGraphBuilder builder;
+										Integer strategy = detectStrategy(p);
+										if (strategy == 1) {
+											logger.trace("Executing: {} [strategy={}]", p, strategy);
+											builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
+										} else {
+											logger.trace("Executing: {} [strategy={}]", p, strategy);
+											builder = new BaseFacadeXGraphBuilder(resourceId, p);
+										}
+										//FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
 										slicer.triplify(slice, p, builder);
 										DatasetGraph dg = builder.getDatasetGraph();
 										logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
@@ -346,9 +355,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		};
 	}
 
-	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
-		DatasetGraph dg;
-
+	private int detectStrategy(Properties p){
 		Integer strategy = null;
 		// Local value for strategy?
 		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());
@@ -365,6 +372,29 @@ public class FacadeXOpExecutor extends OpExecutor {
 			// Defaul strategy
 			strategy = 1;
 		}
+		return strategy;
+	}
+
+	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
+		DatasetGraph dg;
+
+		Integer strategy = detectStrategy(p);
+//		null;
+//		// Local value for strategy?
+//		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());
+//		// Global value for strategy?
+//		Integer globalStrategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
+//		if(localStrategy != null){
+//			if(globalStrategy!=null){
+//				logger.warn("Local strategy {} overriding global strategy {}", localStrategy, globalStrategy);
+//			}
+//			strategy = Integer.parseInt(localStrategy);
+//		} else if(globalStrategy!=null){
+//			strategy = globalStrategy;
+//		} else{
+//			// Defaul strategy
+//			strategy = 1;
+//		}
 		URL url = Triplifier.getLocation(p);
 		String resourceId = Triplifier.getResourceId(p);
 
