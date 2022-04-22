@@ -33,6 +33,7 @@ import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -310,4 +311,17 @@ public class Issues {
 		assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
 	}
 
+	/**
+	 * TODO See #241 - Currently returns results but ends with a SOE
+	 */
+	@Ignore
+	@Test
+	public void testIssue241() throws Exception {
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue241.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
+		//assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
+	}
 }
