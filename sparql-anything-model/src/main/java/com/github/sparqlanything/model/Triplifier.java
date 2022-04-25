@@ -75,6 +75,14 @@ public interface Triplifier {
 		}
 		return slice;
 	}
+	
+	static boolean useRDFsMember(Properties properties) {
+		boolean use_rdfs_member = false;
+		if (properties.containsKey(IRIArgument.USE_RDFS_MEMBER.toString())) {
+			use_rdfs_member = Boolean.parseBoolean(properties.getProperty(IRIArgument.USE_RDFS_MEMBER.toString()));
+		}
+		return use_rdfs_member;
+	}
 
 	static boolean getTrimStringsArgument(Properties properties) {
 		boolean trim_strings = false;

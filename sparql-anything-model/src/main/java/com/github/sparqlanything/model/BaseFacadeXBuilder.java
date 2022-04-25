@@ -20,6 +20,7 @@ package com.github.sparqlanything.model;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 
 import java.net.URI;
 import java.util.Properties;
@@ -33,6 +34,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	protected final String p_root;
 	protected final boolean p_trim_strings;
 	protected final String p_null_string;
+	protected final boolean p_use_rdfs_member;
 
 	public BaseFacadeXBuilder(String resourceId, Properties properties) {
 		this.properties = properties;
@@ -42,6 +44,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		this.p_root = Triplifier.getRootArgument(properties);
 		this.p_trim_strings = Triplifier.getTrimStringsArgument(properties);
 		this.p_null_string = Triplifier.getNullStringArgument(properties);
+		this.p_use_rdfs_member = Triplifier.useRDFsMember(properties);
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId) {
@@ -55,8 +58,13 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
-				container2node(childContainerId));
+		if (p_use_rdfs_member) {
+			return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDFS.member.asNode(),
+					container2node(childContainerId));
+		} else {
+			return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
+					container2node(childContainerId));
+		}
 	}
 
 	public boolean addType(String dataSourceId, String containerId, String typeId) {
@@ -75,8 +83,15 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
-				value2node(value));
+
+		if (p_use_rdfs_member) {
+			return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDFS.member.asNode(),
+					value2node(value));
+		} else {
+			return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
+					value2node(value));
+		}
+
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, URI customKey, Object value) {
@@ -92,7 +107,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	public Node container2node(String container) {
 		if (p_blank_nodes) {
 			return container2BlankNode(container);
-			//return NodeFactory.createBlankNode(container);
+			// return NodeFactory.createBlankNode(container);
 		} else {
 //			return NodeFactory.createURI(container);
 			return container2URI(container);

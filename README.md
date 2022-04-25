@@ -884,6 +884,7 @@ WHERE {
 |ondisk.reuse|When using an on disk graph, it tells sparql.anything to reuse the previous on disk graph.|true|not set|
 |strategy|The execution strategy. 0 = in memory, all triples; 1 = in memory, only triples matching any of the triple patterns in the where clause|0,1|1|
 |slice|The resources is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row); JSON (when array slice by item, when json object requires `json.path`); XML (requires `xml.path`) |true/false|false|
+|use-rdfs-member|It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...) |true/false|false|
 
 \* It is mandatory to provide either `location`, `content`, or `command`.
 
