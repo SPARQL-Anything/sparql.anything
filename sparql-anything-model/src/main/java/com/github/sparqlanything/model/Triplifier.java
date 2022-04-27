@@ -53,8 +53,7 @@ public interface Triplifier {
 
 	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
 
-	void triplify(Properties properties, FacadeXGraphBuilder builder)
-			throws IOException, TriplifierHTTPException;
+	void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException;
 
 	public Set<String> getMimeTypes();
 
@@ -75,7 +74,7 @@ public interface Triplifier {
 		}
 		return slice;
 	}
-	
+
 	static boolean useRDFsMember(Properties properties) {
 		boolean use_rdfs_member = false;
 		if (properties.containsKey(IRIArgument.USE_RDFS_MEMBER.toString())) {
@@ -184,7 +183,7 @@ public interface Triplifier {
 		return XYZ_NS;
 	}
 
-	static UnicodeEscaper basicEscaper = new PercentEscaper("%", false);
+	static UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
 	public static String toSafeURIString(String s) {
 		return basicEscaper.escape(s);
@@ -209,32 +208,29 @@ public interface Triplifier {
 	}
 
 	/**
-	 * Get all values from a property key.
-	 * Supports single and multi-valued, e.g.
+	 * Get all values from a property key. Supports single and multi-valued, e.g.
 	 *
-	 *  - key.name = value
-	 *  - key.name.0 = value0
-	 *  - key.name.1 = value1
+	 * - key.name = value - key.name.0 = value0 - key.name.1 = value1
 	 *
 	 * @param properties
 	 * @param prefix
 	 * @return
 	 */
-	static List<String> getPropertyValues(Properties properties, String prefix){
+	static List<String> getPropertyValues(Properties properties, String prefix) {
 		List<String> values = new ArrayList<String>();
-		if(properties.containsKey(prefix)){
+		if (properties.containsKey(prefix)) {
 			values.add(properties.getProperty(prefix));
 		}
 		int i = 0; // Starts with 0
 		String propName = prefix + "." + Integer.toString(i);
-		if(properties.containsKey(propName)){
+		if (properties.containsKey(propName)) {
 			values.add(properties.getProperty(propName));
 		}
 		i++;
 		// ... or starts with 1
 		propName = prefix + "." + Integer.toString(i);
 
-		while(properties.containsKey(propName)){
+		while (properties.containsKey(propName)) {
 			values.add(properties.getProperty(propName));
 			i++;
 			propName = prefix + "." + Integer.toString(i);
@@ -242,29 +238,27 @@ public interface Triplifier {
 		return values;
 	}
 
-
-
 	private static InputStream getInputStream(Properties properties, Charset charset)
 			throws IOException, TriplifierHTTPException {
 
-		if(properties.containsKey(IRIArgument.COMMAND.toString())){
+		if (properties.containsKey(IRIArgument.COMMAND.toString())) {
 			String command = properties.getProperty(IRIArgument.COMMAND.toString());
 			Runtime rt = Runtime.getRuntime();
-			//String[] commands = {command.substring(0, command.indexOf(' ') ) , command.substring(command.indexOf(' ')) };
-			//String[] commands = command.split(" ");
+			// String[] commands = {command.substring(0, command.indexOf(' ') ) ,
+			// command.substring(command.indexOf(' ')) };
+			// String[] commands = command.split(" ");
 			// Credit: https://stackoverflow.com/a/18893443/1035608
-			String[] commands =command.split("(?x)   " +
-					"\\s          " +   // Split on space
-					"(?=        " +   // Followed by
-					"  (?:      " +   // Start a non-capture group
-					"    [^\"]* " +   // 0 or more non-quote characters
-					"    \"     " +   // 1 quote
-					"    [^\"]* " +   // 0 or more non-quote characters
-					"    \"     " +   // 1 quote
-					"  )*       " +   // 0 or more repetition of non-capture group (multiple of 2 quotes will be even)
-					"  [^\"]*   " +   // Finally 0 or more non-quotes
-					"  $        " +   // Till the end  (This is necessary, else every space will satisfy the condition)
-					")          "     // End look-ahead
+			String[] commands = command.split("(?x)   " + "\\s          " + // Split on space
+					"(?=        " + // Followed by
+					"  (?:      " + // Start a non-capture group
+					"    [^\"]* " + // 0 or more non-quote characters
+					"    \"     " + // 1 quote
+					"    [^\"]* " + // 0 or more non-quote characters
+					"    \"     " + // 1 quote
+					"  )*       " + // 0 or more repetition of non-capture group (multiple of 2 quotes will be even)
+					"  [^\"]*   " + // Finally 0 or more non-quotes
+					"  $        " + // Till the end (This is necessary, else every space will satisfy the condition)
+					")          " // End look-ahead
 			);
 			log.info("Running command: {}", commands);
 			Process proc = rt.exec(commands);
@@ -281,7 +275,6 @@ public interface Triplifier {
 		}
 
 		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString())) {
-
 
 			URL url = Triplifier.getLocation(properties);
 			// If local throw exception
@@ -319,11 +312,10 @@ public interface Triplifier {
 		}
 	}
 
-	public static InputStream getInputStream(Properties properties)
-			throws IOException, TriplifierHTTPException {
+	public static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
 		return getInputStream(properties, getCharsetArgument(properties));
 	}
-	
+
 	public static String getResourceId(Properties properties) {
 		String resourceId = null;
 		URL url = null;
@@ -334,16 +326,17 @@ public interface Triplifier {
 		}
 		if (url == null && properties.containsKey(IRIArgument.COMMAND.toString())) {
 			log.trace("No location, use command: {}", properties.getProperty(IRIArgument.COMMAND.toString()));
-			String id = Integer.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+			String id = Integer
+					.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
 			resourceId = "command:" + id;
-		}else
-		if (url == null && properties.containsKey(IRIArgument.CONTENT.toString())) {
+		} else if (url == null && properties.containsKey(IRIArgument.CONTENT.toString())) {
 			// XXX This method of passing content seems only supported by the
 			// TextTriplifier.
 			log.trace("No location, use content: {}", properties.getProperty(IRIArgument.CONTENT.toString()));
-			String id = Integer.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+			String id = Integer
+					.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
 			resourceId = "content:" + id;
-		}else if(url != null){
+		} else if (url != null) {
 			resourceId = url.toString();
 		}
 		return resourceId;

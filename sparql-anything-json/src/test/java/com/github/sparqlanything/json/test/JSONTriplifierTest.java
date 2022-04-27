@@ -200,7 +200,7 @@ public class JSONTriplifierTest {
 		Resource r = m.createResource();
 		m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		m.add(r, m.createProperty(Triplifier.XYZ_NS + "ab%20cd"), m.createTypedLiteral("ef"));
-		m.add(r, m.createProperty(Triplifier.XYZ_NS + "ab%2Dcd"), m.createTypedLiteral("ef"));
+		m.add(r, m.createProperty(Triplifier.XYZ_NS + "ab-cd"), m.createTypedLiteral("ef"));
 
 		DatasetGraph g1;
 		try {
