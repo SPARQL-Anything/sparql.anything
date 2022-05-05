@@ -49,6 +49,7 @@ import org.apache.jena.sparql.core.ResultBinding;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.sparql.mgt.Explain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -418,6 +419,9 @@ public class SPARQLAnything {
 			cli.parse(args);
 			String query = cli.getQuery();
 			Integer strategy = cli.getStrategy();
+			if(cli.explain()) {
+				ARQ.setExecutionLogging(Explain.InfoLevel.ALL);
+			}
 			if (strategy != null) {
 				if (strategy == 1 || strategy == 0 || strategy == 2) {
 					ARQ.getContext().set(FacadeXOpExecutor.strategy, strategy);

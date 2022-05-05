@@ -62,6 +62,10 @@ public class CLI {
 
 	public static final String VALUES = "v";
 	public static final String VALUES_LONG = "values";
+
+	public static final String EXPLAIN = "e";
+	public static final String EXPLAIN_LONG = "explain";
+
 	private Options options;
 	private CommandLine commandLine = null;
 
@@ -104,6 +108,9 @@ public class CLI {
 
 		options.addOption(Option.builder(OUTPUT).argName("file").hasArg()
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
+
+		options.addOption(Option.builder(EXPLAIN).argName("explain").hasArg(false)
+				.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
 
 		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
 						"OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
@@ -209,5 +216,9 @@ public class CLI {
 			}
 		}
 		return format;
+	}
+
+	public boolean explain() {
+		return commandLine.hasOption(CLI.EXPLAIN);
 	}
 }
