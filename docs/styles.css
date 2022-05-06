@@ -24,7 +24,13 @@ table tbody td,
 table thead th,
 table.docutils,
 table.docutils tbody td,
-table.docutils thead th
+table.docutils thead th,
+.wy-table thead,
+.rst-content table.docutils thead,
+.rst-content table.field-list thead
+div.wy-table thead,
+div.rst-content table.docutils thead,
+div.rst-content table.field-list thead
 {
     white-space: break-spaces;
 }
