@@ -6,6 +6,7 @@ site_description: SPARQL Anything online documentation
 theme:
   name: readthedocs
 #nav: null
+extra_css: [styles.css]
 sticky_navigation: true
 markdown_extensions:
   - tables

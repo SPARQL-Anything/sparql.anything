@@ -884,6 +884,7 @@ WHERE {
 |ondisk.reuse|When using an on disk graph, it tells sparql.anything to reuse the previous on disk graph.|true|not set|
 |strategy|The execution strategy. 0 = in memory, all triples; 1 = in memory, only triples matching any of the triple patterns in the where clause|0,1|1|
 |slice|The resources is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row); JSON (when array slice by item, when json object requires `json.path`); XML (requires `xml.path`) |true/false|false|
+|use-rdfs-member|It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...) |true/false|false|
 
 \* It is mandatory to provide either `location`, `content`, or `command`.
 
@@ -907,6 +908,7 @@ WHERE {
 |csv.format|The format of the input CSV file.|Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache's commons CSV library|Default|
 |csv.headers|It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.|true/false|false|
 |csv.delimiter|The column delimiter, usually `,`,`;`,`\t`, ...|any single char|`,`|
+|csv.quote-char|The quoting character|any single char|`"`|
 |csv.null-string|It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.|any string|not set|
 
 #### JSON
