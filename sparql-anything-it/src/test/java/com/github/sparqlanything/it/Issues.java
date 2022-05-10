@@ -32,6 +32,7 @@ import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.engine.main.QC;
+import org.checkerframework.checker.units.qual.m;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -312,6 +313,24 @@ public class Issues {
 	}
 
 	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/255
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue255() throws URISyntaxException, IOException {
+		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue255.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		qs = qs.replace("%%location%%",
+				getClass().getClassLoader().getResource("issues/issue255.json").toURI().toString());
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Model r = QueryExecutionFactory.create(qs, ds).execConstruct();
+		assertEquals(4L, r.size());
+	}
+
+	/**
 	 * TODO See #241 - Currently returns results but ends with a SOE
 	 */
 	@Ignore
@@ -322,6 +341,7 @@ public class Issues {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
-		//assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
+		// assertTrue(QueryExecutionFactory.create(queryStr,
+		// ds).execSelect().hasNext());
 	}
 }

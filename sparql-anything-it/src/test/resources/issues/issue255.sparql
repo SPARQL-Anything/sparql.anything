@@ -1,0 +1,8 @@
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:json.path=$.arr,location=%%location%%>
+      { ?s  ?p  ?o }
+  }

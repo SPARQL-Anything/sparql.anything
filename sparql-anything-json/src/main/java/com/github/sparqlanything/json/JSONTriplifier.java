@@ -159,13 +159,13 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		}
 	}
 
-	private void transformArray(List o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
+	private void transformArray(List<Object> o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
 		int i = 0;
-		Object item;
+//		Object item;
 		Iterator<Object> it = o.iterator();
 
 		while ( it.hasNext() ){
-			transformArrayItem(i, o, dataSourceId, containerId, builder);
+			transformArrayItem(i, it.next(), dataSourceId, containerId, builder);
 			i++;
 		}
 	}
