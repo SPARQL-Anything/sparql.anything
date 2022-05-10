@@ -160,7 +160,7 @@ Facade-X RDF:
 ] .
 ```
 
-[More details on the JSON format](format/JSON.md)
+[More details](format/JSON.md)
 
 
 ### HTML
