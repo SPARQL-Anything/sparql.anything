@@ -127,7 +127,7 @@ The data is interpreted as in the following examples (using default settings).
 
 A detailed description of the interpretation can be found in the following page:
 
-- [JSON](formats/JSON.md)
+- [JSON](format/JSON.md)
 
 ### JSON
 
@@ -160,7 +160,7 @@ Facade-X RDF:
 ] .
 ```
 
-[More details on the JSON format](formats/JSON.md)
+[More details on the JSON format](format/JSON.md)
 
 
 ### HTML
