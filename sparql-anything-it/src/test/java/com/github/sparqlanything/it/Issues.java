@@ -31,6 +31,8 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
 import org.checkerframework.checker.units.qual.m;
 import org.junit.Assert;
@@ -40,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -328,6 +331,28 @@ public class Issues {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Model r = QueryExecutionFactory.create(qs, ds).execConstruct();
 		assertEquals(4L, r.size());
+	}
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/256
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue256() throws URISyntaxException, IOException {
+		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue256.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		String out = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue256.ttl").toURI(),
+				StandardCharsets.UTF_8);
+		Model expected = ModelFactory.createDefaultModel();
+		RDFDataMgr.read(expected, getClass().getClassLoader().getResource("issues/issue256.ttl").toURI().toString());
+		qs = qs.replace("%%location%%",
+				getClass().getClassLoader().getResource("issues/issue256.json").toURI().toString());
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Model r = QueryExecutionFactory.create(qs, ds).execConstruct();
+		assertTrue(expected.isIsomorphicWith(r));
 	}
 
 	/**

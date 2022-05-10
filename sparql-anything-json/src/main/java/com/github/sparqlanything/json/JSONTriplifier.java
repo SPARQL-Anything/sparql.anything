@@ -304,7 +304,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
 		final InputStream us = Triplifier.getInputStream(properties);
 		Collector collector = surfer.collector(us);
-		Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
+		List<ValueBox<Collection<Object>>> matches = new ArrayList<ValueBox<Collection<Object>>>();
 
 		for(String jpath: jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);

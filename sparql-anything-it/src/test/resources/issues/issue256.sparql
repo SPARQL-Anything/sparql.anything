@@ -1,0 +1,11 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=%%location%%>
+      { fx:properties
+                  fx:json.path.1  "$[?(@.name==\"Friends\")].stars" ;
+                  fx:json.path.2  "$[?(@.name==\"Cougar Town\")].stars" . ?s  ?p  ?o }
+  }
