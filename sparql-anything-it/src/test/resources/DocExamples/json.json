@@ -1,0 +1,7 @@
+{
+    "stringArg": "stringValue",
+    "intArg": 1,
+    "booleanArg": true,
+    "nullArg": null,
+    "arr": [ 0, 1 ]
+}
