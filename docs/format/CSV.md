@@ -96,3 +96,85 @@ Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs
 Default
 
 #### Examples
+
+##### Input
+
+```
+
+Sepal length	Sepal width	Petal length	Petal width	Species
+5.1	3.5	1.4	0.2	I. setosa
+4.9	3.0	1.4	0.2	I. setosa
+4.7	3.2	1.3	0.2	I. setosa
+4.6	3.1	1.5	0.2	I. setosa
+5.0	3.6	1.4	0.2	I. setosa
+
+```
+
+Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
+
+##### Use Case 1: Constructing a Facade-X RDF graph out of the TSV file above available at https://sparql-anything.cc/examples/simple.tsv
+
+###### Query
+
+```
+
+CONSTRUCT
+  {
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.format=TDF>
+      { ?s  ?p  ?o }
+  }
+
+```
+
+###### Result
+
+```
+
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type  fx:root ;
+  rdf:_1    [ rdf:_1  "Sepal length" ;
+              rdf:_2  "Sepal width" ;
+              rdf:_3  "Petal length" ;
+              rdf:_4  "Petal width" ;
+              rdf:_5  "Species"
+            ] ;
+  rdf:_2    [ rdf:_1  "5.1" ;
+              rdf:_2  "3.5" ;
+              rdf:_3  "1.4" ;
+              rdf:_4  "0.2" ;
+              rdf:_5  "I. setosa"
+            ] ;
+  rdf:_3    [ rdf:_1  "4.9" ;
+              rdf:_2  "3.0" ;
+              rdf:_3  "1.4" ;
+              rdf:_4  "0.2" ;
+              rdf:_5  "I. setosa"
+            ] ;
+  rdf:_4    [ rdf:_1  "4.7" ;
+              rdf:_2  "3.2" ;
+              rdf:_3  "1.3" ;
+              rdf:_4  "0.2" ;
+              rdf:_5  "I. setosa"
+            ] ;
+  rdf:_5    [ rdf:_1  "4.6" ;
+              rdf:_2  "3.1" ;
+              rdf:_3  "1.5" ;
+              rdf:_4  "0.2" ;
+              rdf:_5  "I. setosa"
+            ] ;
+  rdf:_6    [ rdf:_1  "5.0" ;
+              rdf:_2  "3.6" ;
+              rdf:_3  "1.4" ;
+              rdf:_4  "0.2" ;
+              rdf:_5  "I. setosa"
+            ]
+] .
+
+```

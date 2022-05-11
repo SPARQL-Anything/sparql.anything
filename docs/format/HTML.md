@@ -121,6 +121,8 @@ No value
 </html>
 ```
 
+Located at [https://sparql-anything.cc/examples/simple.html](https://sparql-anything.cc/examples/simple.html)
+
 ##### Use Case 1: Selecting text contained in elements of the class "paragraph"
 
 ###### Query
@@ -161,7 +163,7 @@ No value
 
 ##### Input
 
-##### UC1: TODO
+##### Use Case 1: TODO
 
 ###### Query
 
@@ -193,7 +195,7 @@ any integer
 
 ##### Input
 
-##### UC1: TODO
+##### Use Case 1: TODO
 
 ###### Query
 
@@ -226,7 +228,7 @@ No Value
 
 ##### Input
 
-##### UC1: TODO
+##### Use Case 1: TODO
 
 ###### Query
 
@@ -308,6 +310,8 @@ false
 </html>
 
 ```
+
+Located at https://sparql-anything.cc/examples/Microdata1.html
 
 ##### UC1: Extract triples embedded in the web page at the following address https://sparql-anything.cc/examples/Microdata1.html
 
