@@ -160,12 +160,12 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("text/csv");
+		return Sets.newHashSet("text/csv", "text/tab-separated-values");
 	}
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("csv");
+		return Sets.newHashSet("csv", "tsv", "tab");
 	}
 
 	public List<String> getDataSourceIds(Properties properties){
