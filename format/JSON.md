@@ -47,7 +47,7 @@ Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/J
 
 Not set
 
-#### Example
+#### Examples
 
 ##### Input
 
@@ -108,7 +108,7 @@ CONSTRUCT
     ?s ?p ?o .
   }
 WHERE
-  { SERVICE <x-sparql-anything:location=json.json>
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json>
       { fx:properties
                   fx:json.path  "$[?(@.name==\"Friends\")]" .
         ?s        ?p            ?o
@@ -159,7 +159,7 @@ PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?language
 WHERE
-  { SERVICE <x-sparql-anything:location=json2.json>
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json>
       { fx:properties
                   fx:json.path  "$[?(@.name==\"Friends\")]" .
         _:b0      xyz:language  ?language
@@ -175,4 +175,60 @@ WHERE
 -------------
 | "English" |
 -------------
+```
+
+
+#### Use Case 3: Retrieving the lists of stars of the TV Series named "Friends" and "Cougar Town".
+
+
+##### Query
+
+```
+
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT
+  {
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json>
+      { fx:properties
+                  fx:json.path.1  "$[?(@.name==\"Friends\")].stars" ;
+                  fx:json.path.2  "$[?(@.name==\"Cougar Town\")].stars" .
+        ?s        ?p              ?o
+      }
+  }
+
+```
+
+
+##### Result
+
+
+```
+
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type  fx:root ;
+  rdf:_1    [ rdf:_1  "Jennifer Aniston" ;
+              rdf:_2  "Courteney Cox" ;
+              rdf:_3  "Lisa Kudrow" ;
+              rdf:_4  "Matt LeBlanc" ;
+              rdf:_5  "Matthew Perry" ;
+              rdf:_6  "David Schwimmer"
+            ] ;
+  rdf:_2    [ rdf:_1  "Courteney Cox" ;
+              rdf:_2  "David Arquette" ;
+              rdf:_3  "Bill Lawrence" ;
+              rdf:_4  "Linda Videtti Figueiredo" ;
+              rdf:_5  "Blake McCormick"
+            ]
+] .
+
 ```
