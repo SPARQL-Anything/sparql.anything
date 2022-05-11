@@ -145,4 +145,28 @@ WHERE
 
 It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](../BROWSER.md).
 
-|html.browser|It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](BROWSER.md).|chromium\|webkit\|firefox|No Value|
+#### Valid Values
+
+chromium\|webkit\|firefox
+
+#### Default Value
+
+No value
+
+#### Examples
+
+##### Input
+
+##### UC1: TODO
+
+###### Query
+
+```
+TODO
+```
+
+###### Result
+
+```
+TODO
+```
