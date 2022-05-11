@@ -41,7 +41,7 @@ One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.pat
 
 #### Valid Values
 
-Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))
+Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer))
 
 #### Default Value
 
