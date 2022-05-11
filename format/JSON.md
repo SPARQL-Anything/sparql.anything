@@ -5,6 +5,7 @@ The syntax defines three types of elements:
 - *objects*, a set of key-value pairs, where keys are supposed to be unique;
 - *values*, which are either strings, numbers, boolean, or the primitive 'null';
 - and, *arrays*, which specify sequences (containing other arrays, objects, or values).
+
 SPARQL Anything interprets objects and arrays as containers:
 - SPARQL Anything reuses *rdf:Property* to link objects to values.
 - Arrays are represented by the ordered sequence component.
