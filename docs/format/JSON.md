@@ -6,12 +6,12 @@ The syntax defines three types of elements:
 - *values*, which are either strings, numbers, boolean, or the primitive 'null';
 - and, *arrays*, which specify sequences (containing other arrays, objects, or values).
 
-SPARQL Anything interprets objects and arrays as containers:
-- SPARQL Anything reuses *rdf:Property* to link objects to values.
+According to Facade-X model, SPARQL Anything interprets objects and arrays as containers:
+- RDF properties are used to link objects to values.
 - Arrays are represented by the ordered sequence component.
 - Values are expressed as *rdf:Literal*, selecting relevant XSD datatypes from the RDFS specification: *xsd:string*, *xsd:boolean*, *xsd:int*, *xsd:float*
 
-Currently, SPARQL Anything ignores fields with the 'null' value.
+Currently, fields with the 'null' value are ignored.
 <!-- However, we may decide to represent it as blank node or to create a primitive entity to express it, for example, similar to \tt{rdf:nil}.}.  -->
 
 ## Default transformation
@@ -26,6 +26,21 @@ Currently, SPARQL Anything ignores fields with the 'null' value.
     "nullArg": null,
     "arr": [ 0, 1 ]
 }
+```
+
+### Query
+
+``
+
+CONSTRUCT
+  {
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.json>
+      { ?s  ?p  ?o }
+  }
+
 ```
 
 ### Facade-X RDF
@@ -46,6 +61,13 @@ Currently, SPARQL Anything ignores fields with the 'null' value.
 ```
 
 ## Options
+
+### Summary
+
+|Option name|Description|Valid Values|Default Value|
+|-|-|-|-|
+|json.path|One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions.|Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))||
+
 
 ### json.path
 

@@ -128,6 +128,7 @@ The data is interpreted as in the following examples (using default settings).
 A detailed description of the interpretation can be found in the following page:
 
 - [JSON](format/JSON.md)
+- [HTML](format/HTML.md)
 
 ### JSON
 
@@ -181,24 +182,40 @@ Data:
 Facade-X RDF:
 
 ```turtle
-@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xhtml: <http://www.w3.org/1999/xhtml#> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
-[ a       xhtml:html, fx:root ;
-  rdf:_1  [ a       xhtml:head ;
-            rdf:_1  [ a       xhtml:title ;
-                      rdf:_1  "Hello world!"
-                    ]
-          ] ;
-  rdf:_2  [ a       xhtml:body ;
-            rdf:_1  [ a            xhtml:p ;
-                      rdf:_1       "Hello world" ;
-                      xhtml:class  "paragraph"
-                    ]
-          ]
+[ rdf:type          xhtml:html , fx:root ;
+  rdf:_1            [ rdf:type          xhtml:head ;
+                      rdf:_1            [ rdf:type          xhtml:title ;
+                                          rdf:_1            "Hello world!" ;
+                                          whatwg:innerHTML  "Hello world!" ;
+                                          whatwg:innerText  "Hello world!"
+                                        ] ;
+                      whatwg:innerHTML  "<title>Hello world!</title>" ;
+                      whatwg:innerText  "Hello world! Hello world!"
+                    ] ;
+  rdf:_2            [ rdf:type          xhtml:body ;
+                      rdf:_1            [ rdf:type          xhtml:p ;
+                                          rdf:_1            "Hello world" ;
+                                          xhtml:class       "paragraph" ;
+                                          whatwg:innerHTML  "Hello world" ;
+                                          whatwg:innerText  "Hello world"
+                                        ] ;
+                      whatwg:innerHTML  "<p class=\"paragraph\">Hello world</p>" ;
+                      whatwg:innerText  "Hello world Hello world"
+                    ] ;
+  whatwg:innerHTML  "<head> \n <title>Hello world!</title> \n</head> \n<body> \n <p class=\"paragraph\">Hello world</p>  \n</body>" ;
+  whatwg:innerText  "Hello world! Hello world Hello world! Hello world! Hello world Hello world"
 ] .
 ```
+
+[More details](format/HTML.md)
+
 ### XML
 
 Data:
