@@ -178,10 +178,10 @@ WHERE
 ```
 
 
-#### Use Case 3: Retrieving the lists of stars of the TV Series named "Friends" and "Cougar Town".
+##### Use Case 3: Retrieving the lists of stars of the TV Series named "Friends" and "Cougar Town".
 
 
-##### Query
+###### Query
 
 ```
 
@@ -205,7 +205,7 @@ WHERE
 ```
 
 
-##### Result
+###### Result
 
 
 ```
