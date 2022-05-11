@@ -14,6 +14,10 @@ According to Facade-X model, SPARQL Anything interprets objects and arrays as co
 Currently, fields with the 'null' value are ignored.
 <!-- However, we may decide to represent it as blank node or to create a primitive entity to express it, for example, similar to \tt{rdf:nil}.}.  -->
 
+## Supported file extensions
+
+.json
+
 ## Default transformation
 
 ### Data

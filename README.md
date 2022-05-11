@@ -129,6 +129,7 @@ A detailed description of the interpretation can be found in the following page:
 
 - [JSON](format/JSON.md)
 - [HTML](format/HTML.md)
+- [CSV](format/CSV.md)
 
 ### JSON
 
@@ -338,6 +339,8 @@ Facade-X RDF:
 ] .
 
 ```
+
+[More details](format/CSV.md)
 
 ### Binary (BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO)
 

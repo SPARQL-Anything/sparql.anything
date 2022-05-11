@@ -8,6 +8,10 @@ According to the Facade-X model, SPARQL Anything uses:
 - Container membership properties for specifying relations to child elements in the DOM tree.  These may include text, which can be expressed as RDF literals of type *xsd:string*.
 - Tag names are used to type the container. Specifically, the tag name is used to mint a URI that identifies the class of the corresponding containers.
 
+## Supported file extensions
+
+.html
+
 ## Default Transformation
 
 ### Data
