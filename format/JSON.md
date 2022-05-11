@@ -93,11 +93,9 @@ Input:
 ]
 ```
 
-##### Case 1
+##### Use Case 1: Constructing a Facade-X RDF Graph only only containers that match the Json Path ``$[?(@.name=="Friends")]``.
 
-Intention: Constructing a Facade-X RDF Graph only only containers that match the Json Path ``$[?(@.name=="Friends")]``.
-
-Query
+###### Query
 
 ```
 
@@ -119,7 +117,7 @@ WHERE
 
 ```
 
-Result
+###### Result
 
 ```turtle
 
@@ -150,11 +148,9 @@ Result
 
 ```
 
-##### Case 2
+##### Use Case 2: Retrieving the language of the TV series named "Friends".
 
-Intention: Retrieving the language of the TV series named "Friends".
-
-Query
+###### Query
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
@@ -171,7 +167,7 @@ WHERE
   }
 ```
 
-Result
+###### Result
 
 ```
 -------------
