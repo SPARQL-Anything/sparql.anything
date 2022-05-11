@@ -2,7 +2,7 @@
 
 ## Default transformation
 
-Data:
+### Data
 
 ```json
 {
@@ -14,7 +14,7 @@ Data:
 }
 ```
 
-Facade-X RDF:
+### Facade-X RDF
 
 ```turtle
 @prefix xyz:    <http://sparql.xyz/facade-x/data/> .
