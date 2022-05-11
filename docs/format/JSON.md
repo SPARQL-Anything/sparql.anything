@@ -1,5 +1,18 @@
 # JSON
 
+The JavaScript Object Notation is specified by [ECMA](https://www.ecma-international.org/publications-and-standards/standards/ecma-404/).
+The syntax defines three types of elements:
+- *objects*, a set of key-value pairs, where keys are supposed to be unique;
+- *values*, which are either strings, numbers, boolean, or the primitive 'null';
+- and, *arrays*, which specify sequences (containing other arrays, objects, or values).
+SPARQL Anything interprets objects and arrays as containers:
+- SPARQL Anything reuses *rdf:Property* to link objects to values.
+- Arrays are represented by the ordered sequence component.
+- Values are expressed as *rdf:Literal*, selecting relevant XSD datatypes from the RDFS specification: *xsd:string*, *xsd:boolean*, *xsd:int*, *xsd:float*
+
+Currently, SPARQL Anything ignores fields with the 'null' value.
+<!-- However, we may decide to represent it as blank node or to create a primitive entity to express it, for example, similar to \tt{rdf:nil}.}.  -->
+
 ## Default transformation
 
 ### Data
@@ -50,6 +63,8 @@ Not set
 #### Examples
 
 ##### Input
+
+Located at [https://sparql-anything.cc/example1.json](https://sparql-anything.cc/example1.json)
 
 ```json
 [
