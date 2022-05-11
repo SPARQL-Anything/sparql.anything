@@ -106,7 +106,35 @@ No value
 
 ##### Input
 
-##### Use Case 1:
+```html
+<html>
+   <head>
+      <title>Hello world!</title>
+   </head>
+   <body>
+      <p class="paragraph">Hello world</p>
+   </body>
+</html>
+```
+
+##### Use Case 1: Selecting text contained in elements of the class "paragraph"
 
 ###### Query
+
+```
+SELECT  ?text
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.html,html.selector=.paragraph>
+      { ?s  whatwg:innerText  ?text }
+  }
+```
+
 ###### Result
+
+```
+-----------------
+| text          |
+=================
+| "Hello world" |
+-----------------
+```
