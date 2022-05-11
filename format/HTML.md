@@ -170,3 +170,202 @@ TODO
 ```
 TODO
 ```
+
+### html.browser.timeout
+
+#### Description
+
+When using a browser to nagivate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout.
+
+#### Valid Values
+
+any integer
+
+#### Default Value
+
+30000
+
+#### Examples
+
+##### Input
+
+##### UC1: TODO
+
+###### Query
+
+```
+TODO
+```
+
+###### Result
+
+```
+TODO
+```
+
+
+### html.browser.wait
+
+#### Description
+
+When using a browser to nagivate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML.
+
+#### Valid Values
+
+any integer
+
+#### Default Value
+
+No Value
+
+#### Examples
+
+##### Input
+
+##### UC1: TODO
+
+###### Query
+
+```
+TODO
+```
+
+###### Result
+
+```
+TODO
+```
+
+### html.browser.screenshot
+
+#### Description
+
+When using a browser to navigate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here.
+
+#### Valid Values
+
+a file URI e.g. "file:///tmp/screenshot.png"
+
+#### Default Value
+
+No Value
+
+#### Examples
+
+##### Input
+
+##### UC1: TODO
+
+###### Query
+
+```
+TODO
+```
+
+###### Result
+
+```
+TODO
+```
+
+
+### html.metadata
+
+#### Description
+
+It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. (cf. [issue 164](https://github.com/SPARQL-Anything/sparql.anything/issues/164))
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+false
+
+#### Examples
+
+##### Input
+
+```html
+
+<!DOCTYPE html>
+<html>
+
+<body>
+
+	<div itemscope itemtype="https://schema.org/Movie">
+		<h1 itemprop="name">Avatar</h1>
+		<span>Director: James Cameron (born August 16, 1954)</span>
+	</div>
+
+</body>
+
+</html>
+
+```
+
+##### UC1: Extract triples embedded in the web page at the following address https://sparql-anything.cc/examples/Microdata1.html
+
+###### Query
+
+```
+
+CONSTRUCT
+  {
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Microdata1.html,html.metadata=true>
+      { GRAPH ?g
+          { ?s  ?p  ?o }
+      }
+  }
+
+```
+
+###### Result
+
+```
+
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type          fx:root , xhtml:html ;
+  rdf:_1            [ rdf:type  xhtml:head ] ;
+  rdf:_2            [ rdf:type          xhtml:body ;
+                      rdf:_1            [ rdf:type          xhtml:div ;
+                                          rdf:_1            [ rdf:type          xhtml:h1 ;
+                                                              rdf:_1            "Avatar" ;
+                                                              xhtml:itemprop    "name" ;
+                                                              whatwg:innerHTML  "Avatar" ;
+                                                              whatwg:innerText  "Avatar"
+                                                            ] ;
+                                          rdf:_2            [ rdf:type          xhtml:span ;
+                                                              rdf:_1            "Director: James Cameron (born August 16, 1954)" ;
+                                                              whatwg:innerHTML  "Director: James Cameron (born August 16, 1954)" ;
+                                                              whatwg:innerText  "Director: James Cameron (born August 16, 1954)"
+                                                            ] ;
+                                          xhtml:itemscope   "" ;
+                                          xhtml:itemtype    "https://schema.org/Movie" ;
+                                          whatwg:innerHTML  "<h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>" ;
+                                          whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)"
+                                        ] ;
+                      whatwg:innerHTML  "<div itemscope itemtype=\"https://schema.org/Movie\"> \n <h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span> \n</div>" ;
+                      whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)"
+                    ] ;
+  whatwg:innerHTML  "<head></head>\n<body> \n <div itemscope itemtype=\"https://schema.org/Movie\"> \n  <h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span> \n </div>  \n</body>" ;
+  whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)  Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)"
+] .
+
+<https://sparql-anything.cc/examples/Microdata1.html>
+        <http://www.w3.org/1999/xhtml/microdata#item>
+                [ rdf:type                   <https://schema.org/Movie> ;
+                  <https://schema.org/name>  "Avatar"
+                ] .
+
+```
