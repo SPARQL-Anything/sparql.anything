@@ -211,8 +211,8 @@ public class JSONTriplifierTest {
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
 
-//			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
-//			m.write(System.out,"TTL");
+			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
+			m.write(System.out,"TTL");
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();

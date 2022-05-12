@@ -183,7 +183,9 @@ public class CSVTriplifier implements Triplifier, Slicer {
 			log.trace(" > > row {} cell {} is <{}>", rown, cellid, value);
 			cellid++;
 			if (headers_map.containsKey(cellid)) {
-				String colname = URLEncodedUtils.formatSegments(headers_map.get(cellid)).substring(1);
+//				String colname = URLEncodedUtils.formatSegments(headers_map.get(cellid)).substring(1);
+				String colname = headers_map.get(cellid);
+				log.trace("> > > colname >{}< (URL Encoded) >{}<",headers_map.get(cellid),colname);
 				if(value != null){
 					builder.addValue(dataSourceId, rowContainerId, colname, value);
 				}

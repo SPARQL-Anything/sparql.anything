@@ -66,8 +66,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 		JsonFactory factory = JsonFactory.builder().build();
 
-
-		try(InputStream us = Triplifier.getInputStream(properties)) {
+		try (InputStream us = Triplifier.getInputStream(properties)) {
 			JsonParser parser = factory.createParser(us);
 			// Only 1 data source expected
 			String dataSourceId = Triplifier.getRootArgument(properties);
@@ -90,72 +89,74 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		}
 
 	}
-	private void transformArrayItem(int i, JsonToken token, JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder)
-			throws IOException {
+
+	private void transformArrayItem(int i, JsonToken token, JsonParser parser, String dataSourceId, String containerId,
+			FacadeXGraphBuilder builder) throws IOException {
 		switch (token) {
-			case START_ARRAY:
-				String childContainerIdarr = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
-				builder.addContainer(dataSourceId, containerId, i + 1, childContainerIdarr);
-				transformArray(parser, dataSourceId, childContainerIdarr, builder);
-				break;
-			case START_OBJECT:
-				String childContainerId = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
-				builder.addContainer(dataSourceId, containerId, i + 1, childContainerId);
-				transformObject(parser, dataSourceId, childContainerId, builder);
-				break;
-			case VALUE_FALSE:
-			case VALUE_TRUE:
-				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsBoolean());
-				break;
-			case VALUE_NUMBER_FLOAT:
-				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsDouble());
-				break;
-			case VALUE_NUMBER_INT:
-				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsInt());
-				break;
-			case VALUE_STRING:
-				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsString());
-				break;
-			case VALUE_NULL:
-			case END_ARRAY:
-			case END_OBJECT:
-			case FIELD_NAME:
-			case VALUE_EMBEDDED_OBJECT:
-			case NOT_AVAILABLE:
-			default:
-				// NOP
-				break;
+		case START_ARRAY:
+			String childContainerIdarr = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
+			builder.addContainer(dataSourceId, containerId, i + 1, childContainerIdarr);
+			transformArray(parser, dataSourceId, childContainerIdarr, builder);
+			break;
+		case START_OBJECT:
+			String childContainerId = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
+			builder.addContainer(dataSourceId, containerId, i + 1, childContainerId);
+			transformObject(parser, dataSourceId, childContainerId, builder);
+			break;
+		case VALUE_FALSE:
+		case VALUE_TRUE:
+			builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsBoolean());
+			break;
+		case VALUE_NUMBER_FLOAT:
+			builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsDouble());
+			break;
+		case VALUE_NUMBER_INT:
+			builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsInt());
+			break;
+		case VALUE_STRING:
+			builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsString());
+			break;
+		case VALUE_NULL:
+		case END_ARRAY:
+		case END_OBJECT:
+		case FIELD_NAME:
+		case VALUE_EMBEDDED_OBJECT:
+		case NOT_AVAILABLE:
+		default:
+			// NOP
+			break;
 
 		}
 	}
 
-	private void transformArrayItem(int i, Object o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
-		if(o instanceof List) {
+	private void transformArrayItem(int i, Object o, String dataSourceId, String containerId,
+			FacadeXGraphBuilder builder) {
+		if (o instanceof List) {
 			String childContainerIdarr = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
 			builder.addContainer(dataSourceId, containerId, i + 1, childContainerIdarr);
 			transformArray((List) o, dataSourceId, childContainerIdarr, builder);
-		}else if(o instanceof Map){
+		} else if (o instanceof Map) {
 			String childContainerId = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
 			builder.addContainer(dataSourceId, containerId, i + 1, childContainerId);
 			transformMap((Map) o, dataSourceId, childContainerId, builder);
-		}else if(o instanceof Boolean){
+		} else if (o instanceof Boolean) {
 			builder.addValue(dataSourceId, containerId, i + 1, (Boolean) o);
-		}else if(o instanceof Double ) {
+		} else if (o instanceof Double) {
 			builder.addValue(dataSourceId, containerId, i + 1, (double) o);
-		}else if( o instanceof Long){
+		} else if (o instanceof Long) {
 			String asString = ((Long) o).toString();
 			int asInt = ((Long) o).intValue();
-			if(asString.equals(Integer.toString(asInt))) {
+			if (asString.equals(Integer.toString(asInt))) {
 				builder.addValue(dataSourceId, containerId, i + 1, ((Long) o).intValue());
-			}else{
+			} else {
 				builder.addValue(dataSourceId, containerId, i + 1, ((Long) o).doubleValue());
 			}
-		}else if(o instanceof Integer){
+		} else if (o instanceof Integer) {
 			builder.addValue(dataSourceId, containerId, i + 1, (Integer) o);
-		}else if(o instanceof String){
+		} else if (o instanceof String) {
 			builder.addValue(dataSourceId, containerId, i + 1, (String) o);
-		}else{
-			throw new RuntimeException("Unsupported value type: " + o.getClass() );
+		} else {
+			throw new RuntimeException("Unsupported value type: " + o.getClass());
 		}
 	}
 
@@ -164,7 +165,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 //		Object item;
 		Iterator<Object> it = o.iterator();
 
-		while ( it.hasNext() ){
+		while (it.hasNext()) {
 			transformArrayItem(i, it.next(), dataSourceId, containerId, builder);
 			i++;
 		}
@@ -193,63 +194,59 @@ public class JSONTriplifier implements Triplifier, Slicer {
 				String k = parser.getText();
 				token = parser.nextToken();
 				switch (token) {
-					case START_ARRAY:
-						String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
-						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerIdArr);
-						transformArray(parser, dataSourceId, childContainerIdArr, builder);
-						break;
-					case START_OBJECT:
-						String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
-						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
-						transformObject(parser, dataSourceId, childContainerId, builder);
-						break;
-					case VALUE_NUMBER_FLOAT:
-						logger.trace("{} float", k);
-						builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
-								parser.getValueAsDouble());
-						break;
-					case VALUE_NUMBER_INT:
-						logger.trace("{} int", k);
-						coercedInt = null;
-						coercedStr = null;
-						Boolean kIsInteger = true; // assume it is
-						try {
-							coercedInt = parser.getValueAsInt();
-						} catch (Exception e) { // could tighten this to com.fasterxml.jackson.core.exc.InputCoercionException
-							logger.warn("{} can not be parsed as an integer -- treating it as a string", k);
-							kIsInteger = false;
-							coercedStr = parser.getValueAsString();
-						}
-						builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
-								kIsInteger ? coercedInt : coercedStr);
-						break;
-					case VALUE_STRING:
-						builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
-								parser.getValueAsString());
-						break;
-					case VALUE_FALSE:
-					case VALUE_TRUE:
-						builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
-								parser.getValueAsBoolean());
-						break;
-					case END_ARRAY:
-					case END_OBJECT:
-					case FIELD_NAME:
-					case VALUE_EMBEDDED_OBJECT:
-					case NOT_AVAILABLE:
-					case VALUE_NULL:
-					default:
-						break;
+				case START_ARRAY:
+					String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
+					builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerIdArr);
+					transformArray(parser, dataSourceId, childContainerIdArr, builder);
+					break;
+				case START_OBJECT:
+					String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
+					builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
+					transformObject(parser, dataSourceId, childContainerId, builder);
+					break;
+				case VALUE_NUMBER_FLOAT:
+					logger.trace("{} float", k);
+					builder.addValue(dataSourceId, containerId, k, parser.getValueAsDouble());
+					break;
+				case VALUE_NUMBER_INT:
+					logger.trace("{} int", k);
+					coercedInt = null;
+					coercedStr = null;
+					Boolean kIsInteger = true; // assume it is
+					try {
+						coercedInt = parser.getValueAsInt();
+					} catch (Exception e) { // could tighten this to
+											// com.fasterxml.jackson.core.exc.InputCoercionException
+						logger.warn("{} can not be parsed as an integer -- treating it as a string", k);
+						kIsInteger = false;
+						coercedStr = parser.getValueAsString();
+					}
+					builder.addValue(dataSourceId, containerId, k, kIsInteger ? coercedInt : coercedStr);
+					break;
+				case VALUE_STRING:
+					builder.addValue(dataSourceId, containerId, k, parser.getValueAsString());
+					break;
+				case VALUE_FALSE:
+				case VALUE_TRUE:
+					builder.addValue(dataSourceId, containerId, k, parser.getValueAsBoolean());
+					break;
+				case END_ARRAY:
+				case END_OBJECT:
+				case FIELD_NAME:
+				case VALUE_EMBEDDED_OBJECT:
+				case NOT_AVAILABLE:
+				case VALUE_NULL:
+				default:
+					break;
 				}
-			}else{
+			} else {
 				throw new IOException("Unexpected token in object");
 			}
 		}
 
 	}
 
-	private void transformMap(Map o, String dataSourceId, String containerId,
-								 FacadeXGraphBuilder builder) {
+	private void transformMap(Map o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
 		Integer coercedInt;
 		String coercedStr;
 		Iterator<Map.Entry> it = o.entrySet().iterator();
@@ -257,33 +254,35 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			Map.Entry entry = it.next();
 			String k = (String) entry.getKey();
 			Object val = entry.getValue();
-			if(val instanceof List) {
+			if (val instanceof List) {
 				String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
 				builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerIdArr);
 				transformArray((List) val, dataSourceId, childContainerIdArr, builder);
-			}else if(val instanceof Map){
+			} else if (val instanceof Map) {
 				String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
 				builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
-				transformMap((Map)val, dataSourceId, childContainerId, builder);
-			}else if(val instanceof Double){
+				transformMap((Map) val, dataSourceId, childContainerId, builder);
+			} else if (val instanceof Double) {
 				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), (double) val);
-			}else if(val instanceof Long){
-				// What datatype is supposed to be long. If cast to int has the same form, keep integer, otherwise double
+			} else if (val instanceof Long) {
+				// What datatype is supposed to be long. If cast to int has the same form, keep
+				// integer, otherwise double
 				String asString = ((Long) val).toString();
 				int asInt = ((Long) val).intValue();
-				if(asString.equals(Integer.toString(asInt))){
+				if (asString.equals(Integer.toString(asInt))) {
 					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Long) val).intValue());
-				}else{
-					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), ((Long) val).doubleValue());
+				} else {
+					builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k),
+							((Long) val).doubleValue());
 				}
-			}else if(val instanceof Integer){
+			} else if (val instanceof Integer) {
 				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), (Integer) val);
-			}else if(val instanceof Boolean){
+			} else if (val instanceof Boolean) {
 				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), (Boolean) val);
-			}else if(val instanceof String){
+			} else if (val instanceof String) {
 				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), (String) val);
-			}else{
-				throw new RuntimeException("Unsupported value type: " + val.getClass() );
+			} else {
+				throw new RuntimeException("Unsupported value type: " + val.getClass());
 			}
 		}
 	}
@@ -293,20 +292,21 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			throws IOException, TriplifierHTTPException {
 
 		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
-		if(!jsonPaths.isEmpty()){
+		if (!jsonPaths.isEmpty()) {
 			transformFromJSONPath(properties, builder, jsonPaths);
-		}else {
+		} else {
 			transform(properties, builder);
 		}
 	}
 
-	private void transformFromJSONPath(Properties properties, FacadeXGraphBuilder builder, List<String> jsonPaths) throws TriplifierHTTPException, IOException {
+	private void transformFromJSONPath(Properties properties, FacadeXGraphBuilder builder, List<String> jsonPaths)
+			throws TriplifierHTTPException, IOException {
 		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
 		final InputStream us = Triplifier.getInputStream(properties);
 		Collector collector = surfer.collector(us);
 		List<ValueBox<Collection<Object>>> matches = new ArrayList<ValueBox<Collection<Object>>>();
 
-		for(String jpath: jsonPaths) {
+		for (String jpath : jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
 			matches.add(m);
 		}
@@ -319,9 +319,9 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			String dataSourceId = rootId;
 			builder.addRoot(dataSourceId, rootId);
 			int c = 0;
-			while(matchesIterator.hasNext()){
+			while (matchesIterator.hasNext()) {
 				Iterator<Object> it = matchesIterator.next().get().iterator();
-				while(it.hasNext()){
+				while (it.hasNext()) {
 					transformArrayItem(c, it.next(), dataSourceId, rootId, builder);
 					c++;
 				}
@@ -409,12 +409,12 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		List<String> jsonPathExpr = new ArrayList<String>();
 		final Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
 		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH);
-		for(String jpath: jsonPaths) {
+		for (String jpath : jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
 			matches.add(m);
 		}
 
-		try (us){
+		try (us) {
 			collector.exec();
 			Iterator<ValueBox<Collection<Object>>> matchesIterator = matches.iterator();
 			// Only 1 data source expected
@@ -430,11 +430,11 @@ public class JSONTriplifier implements Triplifier, Slicer {
 						Object next = null;
 						Iterator<Object> objectIterator = null;
 
-						Object nextObject(){
+						Object nextObject() {
 							Object toReturn = null;
 							// Iterate until there is a match!
-							while(objectIterator == null || !objectIterator.hasNext()){
-								if(matchesIterator.hasNext()){
+							while (objectIterator == null || !objectIterator.hasNext()) {
+								if (matchesIterator.hasNext()) {
 									objectIterator = matchesIterator.next().get().iterator();
 								} else {
 									// No more iterators
@@ -442,7 +442,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 									break;
 								}
 							}
-							if(objectIterator != null && objectIterator.hasNext()){
+							if (objectIterator != null && objectIterator.hasNext()) {
 								toReturn = objectIterator.next();
 							}
 							return toReturn;
@@ -483,16 +483,17 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH);
-		if(!jsonPaths.isEmpty()){
+		if (!jsonPaths.isEmpty()) {
 			return sliceFromJSONPath(properties);
-		}else {
+		} else {
 			return sliceFromArray(properties);
 		}
 
 	}
 
-	private void processSlice(int iteration, String rootId, String dataSourceId, JsonToken token, JsonParser parser, FacadeXGraphBuilder builder){
-		String sliceContainerId = StringUtils.join(rootId , "#slice" , iteration);
+	private void processSlice(int iteration, String rootId, String dataSourceId, JsonToken token, JsonParser parser,
+			FacadeXGraphBuilder builder) {
+		String sliceContainerId = StringUtils.join(rootId, "#slice", iteration);
 		builder.addContainer(dataSourceId, rootId, iteration, sliceContainerId);
 
 	}
@@ -501,14 +502,16 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
 		builder.addRoot(slice.getDatasourceId(), slice.getRootId());
 		try {
-			if(slice instanceof JSONSlice){
+			if (slice instanceof JSONSlice) {
 				JSONSlice jslice = (JSONSlice) slice;
 				// Method is 0-indexed
-				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(), jslice.getRootId(), builder);
-			} else if(slice instanceof JSONPathSlice){
+				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(),
+						jslice.getRootId(), builder);
+			} else if (slice instanceof JSONPathSlice) {
 				JSONPathSlice jslice = (JSONPathSlice) slice;
 				// Method is 0-indexed
-				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getDatasourceId(), jslice.getRootId(), builder);
+				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getDatasourceId(), jslice.getRootId(),
+						builder);
 			}
 		} catch (IOException e) {
 			log.error("An error occurred while transforming slice {}: {}", slice.iteration(), e);

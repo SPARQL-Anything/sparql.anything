@@ -17,7 +17,18 @@
 
 package com.github.sparqlanything.it;
 
-import com.github.sparqlanything.engine.FacadeX;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.ARQ;
@@ -34,25 +45,13 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
-import org.checkerframework.checker.units.qual.m;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.github.sparqlanything.engine.FacadeX;
 
 public class Issues {
 
@@ -342,8 +341,6 @@ public class Issues {
 	@Test
 	public void testIssue256() throws URISyntaxException, IOException {
 		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue256.sparql").toURI(),
-				StandardCharsets.UTF_8);
-		String out = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue256.ttl").toURI(),
 				StandardCharsets.UTF_8);
 		Model expected = ModelFactory.createDefaultModel();
 		RDFDataMgr.read(expected, getClass().getClassLoader().getResource("issues/issue256.ttl").toURI().toString());

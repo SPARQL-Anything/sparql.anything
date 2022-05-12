@@ -32,7 +32,7 @@ public interface FacadeXNodeBuilder {
 	}
 
 	default Node key2predicate(String namespace, String key) {
-		return NodeFactory.createURI(namespace + key);
+		return NodeFactory.createURI(namespace + Triplifier.toSafeURIString(key));
 	}
 
 	default Node value2node(Object value) {

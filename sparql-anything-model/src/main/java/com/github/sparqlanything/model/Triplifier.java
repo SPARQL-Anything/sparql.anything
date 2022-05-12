@@ -186,6 +186,7 @@ public interface Triplifier {
 	static UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
 	public static String toSafeURIString(String s) {
+		// s = s.replaceAll("\\s", "_");
 		return basicEscaper.escape(s);
 	}
 

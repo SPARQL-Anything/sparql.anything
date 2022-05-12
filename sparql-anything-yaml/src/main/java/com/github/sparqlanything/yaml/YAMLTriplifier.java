@@ -122,7 +122,7 @@ public class YAMLTriplifier implements Triplifier {
 			log.warn("skipping {} because value is null", key);
 			return;
 		}
-		key = Triplifier.toSafeURIString(key);
+//		key = Triplifier.toSafeURIString(key);
 			if(value instanceof String){
 				builder.addValue(dataSourceId, containerId, (String) key, value);
 			} else if(value instanceof Integer){
