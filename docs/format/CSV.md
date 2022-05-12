@@ -186,7 +186,6 @@ WHERE
 
 ### csv.headers
 
-|csv.headers||true/false|false|
 
 #### Description
 
