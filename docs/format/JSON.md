@@ -18,6 +18,10 @@ Currently, fields with the 'null' value are ignored.
 
 .json
 
+## Supported media types
+
+application/json, application/problem+json
+
 ## Default transformation
 
 ### Data

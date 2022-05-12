@@ -12,6 +12,10 @@ According to the Facade-X model, SPARQL Anything uses:
 
 .html
 
+## Supported media types
+
+text/html
+
 ## Default Transformation
 
 ### Data

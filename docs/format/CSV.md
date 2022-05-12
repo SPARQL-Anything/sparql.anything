@@ -8,6 +8,10 @@ A CSV can be represented as a list of lists in which the outer list captures the
 
 .csv, .tsv, .tab
 
+## Supported media types
+
+text/csv, text/tab-separated-values
+
 ## Default Transformation
 
 
@@ -112,7 +116,7 @@ Sepal length	Sepal width	Petal length	Petal width	Species
 
 Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
 
-##### Use Case 1: Constructing a Facade-X RDF graph out of the TSV file above available at https://sparql-anything.cc/examples/simple.tsv
+##### Use Case 1: Constructing a Facade-X RDF graph out of the TSV file available at https://sparql-anything.cc/examples/simple.tsv
 
 ###### Query
 
@@ -177,4 +181,53 @@ WHERE
             ]
 ] .
 
+```
+
+
+### csv.headers
+
+|csv.headers||true/false|false|
+
+#### Description
+
+It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+false
+
+#### Examples
+
+##### Input
+
+```
+
+Sepal length	Sepal width	Petal length	Petal width	Species
+5.1	3.5	1.4	0.2	I. setosa
+4.9	3.0	1.4	0.2	I. setosa
+4.7	3.2	1.3	0.2	I. setosa
+4.6	3.1	1.5	0.2	I. setosa
+5.0	3.6	1.4	0.2	I. setosa
+
+```
+
+Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
+
+
+##### Use Case 1: Retrieving the sepal width of the species having sepal length greater that 4.9
+
+###### Query
+
+```
+TODO
+```
+
+###### Result
+
+```
+TODO
 ```
