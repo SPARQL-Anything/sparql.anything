@@ -105,7 +105,7 @@ Default
 
 ```
 
-Sepal length	Sepal width	Petal length	Petal width	Species
+Sepal_length	Sepal_width	Petal_length	Petal_width	Species
 5.1	3.5	1.4	0.2	I. setosa
 4.9	3.0	1.4	0.2	I. setosa
 4.7	3.2	1.3	0.2	I. setosa
@@ -143,10 +143,10 @@ WHERE
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
 [ rdf:type  fx:root ;
-  rdf:_1    [ rdf:_1  "Sepal length" ;
-              rdf:_2  "Sepal width" ;
-              rdf:_3  "Petal length" ;
-              rdf:_4  "Petal width" ;
+  rdf:_1    [ rdf:_1  "Sepal_length" ;
+              rdf:_2  "Sepal_width" ;
+              rdf:_3  "Petal_length" ;
+              rdf:_4  "Petal_width" ;
               rdf:_5  "Species"
             ] ;
   rdf:_2    [ rdf:_1  "5.1" ;
@@ -206,7 +206,7 @@ false
 
 ```
 
-Sepal length	Sepal width	Petal length	Petal width	Species
+Sepal_length	Sepal_width	Petal_length	Petal_width	Species
 5.1	3.5	1.4	0.2	I. setosa
 4.9	3.0	1.4	0.2	I. setosa
 4.7	3.2	1.3	0.2	I. setosa
@@ -218,16 +218,31 @@ Sepal length	Sepal width	Petal length	Petal width	Species
 Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
 
 
-##### Use Case 1: Retrieving the sepal width of the species having sepal length greater that 4.9
+##### Use Case 1: Compute the average petal length of the species having sepal length greater that 4.9
 
 ###### Query
 
 ```
-TODO
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  (AVG(xsd:float(?petalLength)) AS ?avgPetalLength)
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true,csv.format=TDF>
+      { ?s  xyz:Sepal_length  ?length ;
+            xyz:Petal_length  ?petalLength
+        FILTER ( xsd:float(?length) > 4.9 )
+      }
+  }
+
 ```
 
 ###### Result
 
 ```
-TODO
+---------------------------------------------------
+| avgPetalLength                                  |
+===================================================
+| "1.4"^^<http://www.w3.org/2001/XMLSchema#float> |
+---------------------------------------------------
 ```
