@@ -165,7 +165,7 @@ No value
 
 #### Examples
 
-Please refer to the @justin2004's [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
+Please refer to the [justin2004](https://github.com/justin2004)'s [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
 ### html.browser.timeout
 
@@ -183,7 +183,7 @@ any integer
 
 #### Examples
 
-Please refer to the @justin2004's [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
+Please refer to the [justin2004](https://github.com/justin2004)'s [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
 
 ### html.browser.wait
@@ -202,7 +202,7 @@ No Value
 
 #### Examples
 
-Please refer to the @justin2004's [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
+Please refer to the [justin2004](https://github.com/justin2004)'s [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
 ### html.browser.screenshot
 
@@ -220,7 +220,7 @@ No Value
 
 #### Examples
 
-Please refer to the @justin2004's [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
+Please refer to the [justin2004](https://github.com/justin2004)'s [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
 
 ### html.metadata
