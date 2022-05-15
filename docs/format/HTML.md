@@ -165,21 +165,7 @@ No value
 
 #### Examples
 
-##### Input
-
-##### Use Case 1: TODO
-
-###### Query
-
-```
-TODO
-```
-
-###### Result
-
-```
-TODO
-```
+Please refer to the @justin2004's [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
 ### html.browser.timeout
 
@@ -197,21 +183,7 @@ any integer
 
 #### Examples
 
-##### Input
-
-##### Use Case 1: TODO
-
-###### Query
-
-```
-TODO
-```
-
-###### Result
-
-```
-TODO
-```
+Please refer to the @justin2004's [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
 
 ### html.browser.wait
@@ -230,21 +202,7 @@ No Value
 
 #### Examples
 
-##### Input
-
-##### Use Case 1: TODO
-
-###### Query
-
-```
-TODO
-```
-
-###### Result
-
-```
-TODO
-```
+Please refer to the @justin2004's [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
 ### html.browser.screenshot
 
@@ -262,21 +220,7 @@ No Value
 
 #### Examples
 
-##### Input
-
-##### UC1: TODO
-
-###### Query
-
-```
-TODO
-```
-
-###### Result
-
-```
-TODO
-```
+Please refer to the @justin2004's [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
 
 ### html.metadata

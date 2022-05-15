@@ -26,6 +26,8 @@ jamie@example.com,Jamie,Smith
 
 ```
 
+Located at https://sparql-anything.cc/examples/simple.csv
+
 ### Query
 
 ```
@@ -217,7 +219,7 @@ Sepal_length	Sepal_width	Petal_length	Petal_width	Species
 Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
 
 
-##### Use Case 1: Compute the average petal length of the species having sepal length greater that 4.9
+##### Use Case 1: Compute the average petal length of the species having sepal length greater than 4.9
 
 ###### Query
 
@@ -250,52 +252,139 @@ WHERE
 
 #### Description
 
+It sets the  column delimiter, usually ,;\t etc.
+
 #### Valid Values
+
+Any single character
 
 #### Default Value
 
+``,``
+
 #### Examples
+
 
 ##### Input
 
-##### Use Case 1: TODO
+```
+
+Sepal_length	Sepal_width	Petal_length	Petal_width	Species
+5.1	3.5	1.4	0.2	I. setosa
+4.9	3.0	1.4	0.2	I. setosa
+4.7	3.2	1.3	0.2	I. setosa
+4.6	3.1	1.5	0.2	I. setosa
+5.0	3.6	1.4	0.2	I. setosa
+
+```
+
+Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
+
+##### Use Case 1: Compute the maximum petal length of the species having sepal length less than 4.9
 
 ###### Query
 
 ```
-TODO
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+SELECT  (MAX(xsd:float(?petalLength)) AS ?maxPetalLength)
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true>
+      { fx:properties
+                  fx:csv.delimiter  "\t" .
+        ?s        xyz:Sepal_length  ?length ;
+                  xyz:Petal_length  ?petalLength
+        FILTER ( xsd:float(?length) < 4.9 )
+      }
+  }
 ```
 
 ###### Result
 
 ```
-TODO
+---------------------------------------------------
+| maxPetalLength                                  |
+===================================================
+| "1.5"^^<http://www.w3.org/2001/XMLSchema#float> |
+---------------------------------------------------
+
 ```
 
 ### csv.quote-char
 
 #### Description
 
+It sets the quoting character
+
 #### Valid Values
 
+Any single character
+
 #### Default Value
+
+``"``
 
 #### Examples
 
 ##### Input
 
-##### Use Case 1: TODO
+```csv
+email,name,surname
+laura@example.com,'Laura, Nancy',Grey
+craig@example.com,Craig,Johnson
+mary@example.com,Mary,Jenkins
+jamie@example.com,Jamie,Smith
+
+```
+
+Located at https://sparql-anything.cc/examples/csv_with_commas.csv
+
+##### Use Case 1: Constructing a Facade-X RDF graph out of the CSV available at https://sparql-anything.cc/examples/csv_with_commas.csv
 
 ###### Query
 
 ```
-TODO
+CONSTRUCT
+  {
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/csv_with_commas.csv,csv.headers=true,csv.quote-char='>
+      { ?s  ?p  ?o }
+  }
+
 ```
 
 ###### Result
 
 ```
-TODO
+
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type  fx:root ;
+  rdf:_1    [ xyz:email    "laura@example.com" ;
+              xyz:name     "Laura, Nancy" ;
+              xyz:surname  "Grey"
+            ] ;
+  rdf:_2    [ xyz:email    "craig@example.com" ;
+              xyz:name     "Craig" ;
+              xyz:surname  "Johnson"
+            ] ;
+  rdf:_3    [ xyz:email    "mary@example.com" ;
+              xyz:name     "Mary" ;
+              xyz:surname  "Jenkins"
+            ] ;
+  rdf:_4    [ xyz:email    "jamie@example.com" ;
+              xyz:name     "Jamie" ;
+              xyz:surname  "Smith"
+            ]
+] .
+
 ```
 
 ### csv.null-string
