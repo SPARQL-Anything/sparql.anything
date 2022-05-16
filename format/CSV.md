@@ -15,7 +15,7 @@ text/csv, text/tab-separated-values
 ## Default Transformation
 
 
-### Data:
+### Data
 
 ```csv
 email,name,surname
@@ -391,26 +391,62 @@ WHERE
 
 #### Description
 
+It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.
+
 #### Valid Values
 
+Any String
+
 #### Default Value
+
+Not set
 
 #### Examples
 
 ##### Input
 
-##### Use Case 1: TODO
+```csv
+
+email,name,surname
+laura@example.com,Laura,Grey
+craig@example.com,Craig,Johnson
+,Mary,Jenkins
+jamie@example.com,Jamie,Smith
+
+```
+
+Located at https://sparql-anything.cc/examples/simple_with_null.csv
+
+
+##### Use Case 1: Retrieving name surname of who doesn't have an email address.
 
 ###### Query
 
 ```
-TODO
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+SELECT  ?name ?surname
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple_with_null.csv,csv.headers=true>
+      { fx:properties
+                  fx:csv.null-string  "" .
+        ?c        xyz:name            ?name ;
+                  xyz:surname         ?surname
+        FILTER NOT EXISTS { ?c  xyz:email  ?email }
+      }
+  }
+
 ```
 
 ###### Result
 
 ```
-TODO
+----------------------
+| name   | surname   |
+======================
+| "Mary" | "Jenkins" |
+----------------------
 ```
 
 <!--
