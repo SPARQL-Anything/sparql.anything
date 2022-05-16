@@ -100,23 +100,23 @@ public class DocumentationExampleSandbox {
 		m.write(System.out, "TTL");
 
 		query = QueryFactory.create(
-				"PREFIX whatwg: <https://html.spec.whatwg.org/#> SELECT ?text WHERE { SERVICE <x-sparql-anything:location=" + location + ",html.selector=.paragraph> { ?s whatwg:innerText ?text} }");
+				"PREFIX whatwg: <https://html.spec.whatwg.org/#> SELECT ?text WHERE { SERVICE <x-sparql-anything:location="
+						+ location + ",html.selector=.paragraph> { ?s whatwg:innerText ?text} }");
 		System.out.println(query.toString(Syntax.defaultQuerySyntax));
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-		
-		
+
 		location = "https://sparql-anything.cc/examples/Microdata1.html";
-		query = QueryFactory.create(
-				"CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location + ",html.metadata=true> {GRAPH ?g {?s ?p ?o}} }");
+		query = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location
+				+ ",html.metadata=true> {GRAPH ?g {?s ?p ?o}} }");
 		System.out.println(query.toString(Syntax.defaultQuerySyntax));
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 		m = QueryExecutionFactory.create(query, ds).execConstruct();
 		m.setNsPrefixes(prefixes);
 		m.write(System.out, "TTL");
-		
+
 		location = "https://sparql-anything.cc/examples/Microdata1.html";
-		query = QueryFactory.create(
-				"CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location + ",html.metadata=false> {GRAPH ?g {?s ?p ?o}} }");
+		query = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location
+				+ ",html.metadata=false> {GRAPH ?g {?s ?p ?o}} }");
 		System.out.println(query.toString(Syntax.defaultQuerySyntax));
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 		m = QueryExecutionFactory.create(query, ds).execConstruct();
@@ -124,50 +124,70 @@ public class DocumentationExampleSandbox {
 		m.write(System.out, "TTL");
 
 	}
-	
+
 	public static void csv() throws URISyntaxException {
 //		String location = DocumentationExampleSandbox.class.getClassLoader().getResource("DocExamples/simple.html")
 //				.toURI().toString();
 		String location = "https://sparql-anything.cc/examples/simple.csv";
 		Query query = QueryFactory.create(
 				"CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location + "> { ?s ?p ?o} }");
-
 		Dataset ds = DatasetFactory.createGeneral();
-
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+//
+//		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefixes(prefixes);
+//		m.write(System.out, "TTL");
+//
+//		location = "https://sparql-anything.cc/examples/simple.tsv";
+//		query = QueryFactory.create(
+//				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (AVG(xsd:float(?petalLength)) AS ?avgPetalLength) WHERE { SERVICE <x-sparql-anything:location="
+//						+ location + ",csv.headers=true,csv.format=TDF> { "
+//						+ "?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength ."
+//						+ "FILTER(xsd:float(?length)>4.9) " + "} }");
+//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//
+//		query = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location
+//				+ ",csv.format=TDF> {?s ?p ?o} }");
+//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+//		m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefixes(prefixes);
+//		m.write(System.out, "TTL");
+//
+//		location = DocumentationExampleSandbox.class.getClassLoader().getResource("DocExamples/simple.csv").toURI()
+//				.toString();
+//
+//		query = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location
+//				+ ",csv.headers=true> {?s ?p ?o} }");
+//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+//		m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefixes(prefixes);
+//		m.write(System.out, "TTL");
+//
+//		location = "https://sparql-anything.cc/examples/simple.tsv";
+//		String qs = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (MAX(xsd:float(?petalLength)) AS ?maxPetalLength) WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true> { fx:properties fx:csv.delimiter \"\\t\" . ?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength .FILTER(xsd:float(?length)<4.9) } }\n";
+//		System.out.println(qs);
+//		query = QueryFactory.create(qs);
+//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		
+//		location="https://sparql-anything.cc/examples/csv_with_commas.csv";
+//		query = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location
+//				+ ",csv.headers=true,csv.quote-char='> {?s ?p ?o} }");
+//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+//		m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefixes(prefixes);
+//		m.write(System.out, "TTL");
 
-		System.out.println(query.toString(Syntax.defaultSyntax));
-
-		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
-		m.setNsPrefixes(prefixes);
-		m.write(System.out, "TTL");
-		
-		
-		location = "https://sparql-anything.cc/examples/simple.tsv";
+		location = "https://sparql-anything.cc/examples/simple_with_null.csv";
 		query = QueryFactory.create(
-				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (AVG(xsd:float(?petalLength)) AS ?avgPetalLength) WHERE { SERVICE <x-sparql-anything:location=" + location + ",csv.headers=true,csv.format=TDF> { "
-						+ "?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength ."
-						+ "FILTER(xsd:float(?length)>4.9) "
-						+ "} }");
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?name ?surname WHERE { SERVICE <x-sparql-anything:location="
+						+ location
+						+ ",csv.headers=true> {fx:properties fx:csv.null-string \"\" . ?c xyz:name ?name . ?c xyz:surname ?surname . FILTER NOT EXISTS { ?c xyz:email ?email} } }");
 		System.out.println(query.toString(Syntax.defaultQuerySyntax));
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-		
-		query = QueryFactory.create(
-				"CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location + ",csv.format=TDF> {?s ?p ?o} }");
-		System.out.println(query.toString(Syntax.defaultQuerySyntax));
-		m = QueryExecutionFactory.create(query, ds).execConstruct();
-		m.setNsPrefixes(prefixes);
-		m.write(System.out, "TTL");
-		
-		location = DocumentationExampleSandbox.class.getClassLoader().getResource("DocExamples/simple.csv")
-				.toURI().toString();
-		
-		query = QueryFactory.create(
-				"CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location + ",csv.headers=true> {?s ?p ?o} }");
-		System.out.println(query.toString(Syntax.defaultQuerySyntax));
-		m = QueryExecutionFactory.create(query, ds).execConstruct();
-		m.setNsPrefixes(prefixes);
-		m.write(System.out, "TTL");
+
 //		
 //		location = "https://sparql-anything.cc/examples/Microdata1.html";
 //		query = QueryFactory.create(
@@ -194,7 +214,7 @@ public class DocumentationExampleSandbox {
 //		prefixes.put("whatwg", "https://html.spec.whatwg.org/#");
 //
 //		html1();
-		
+
 		csv();
 	}
 
