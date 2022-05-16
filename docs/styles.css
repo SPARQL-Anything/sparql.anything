@@ -18,7 +18,7 @@
 div.rst-content pre code {
     white-space: pre-wrap;
 }
-/*
+
 table,
 table tbody td,
 table thead th,
@@ -33,4 +33,8 @@ div.rst-content table.docutils thead,
 div.rst-content table.field-list thead
 {
     white-space: break-spaces;
-}*/
+}
+
+.rst-content table.docutils {
+    display: inline-table;
+}
