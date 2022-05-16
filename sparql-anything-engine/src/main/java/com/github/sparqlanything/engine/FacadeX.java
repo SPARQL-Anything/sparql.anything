@@ -71,7 +71,7 @@ public final class FacadeX {
 			Registry.registerTriplifier("com.github.sparqlanything.bib.BibtexTriplifier",
 					new String[] { "bib", "bibtex" }, new String[] { "application/x-bibtex" });
 			Registry.registerTriplifier("com.github.sparqlanything.xml.XMLTriplifier", new String[] { "xml" },
-					new String[] { "application/xml" });
+					new String[] { "application/xml", "text/xml" });
 			Registry.registerTriplifier("com.github.sparqlanything.csv.CSVTriplifier", new String[] { "csv", "tsv", "tab" },
 					new String[] { "text/csv", "text/tab-separated-values" });
 			Registry.registerTriplifier("com.github.sparqlanything.html.HTMLTriplifier", new String[] { "html" },
