@@ -333,6 +333,29 @@ public class Issues {
 	}
 
 	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/260
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue260() throws URISyntaxException, IOException {
+		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue260.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		qs = qs.replace("%%location%%",
+				getClass().getClassLoader().getResource("issues/issue260.csv").toURI().toString());
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
+		int numberOfResults = 0;
+		while (rs.hasNext()) {
+			numberOfResults++;
+			rs.next();
+		}
+		assertEquals(1, numberOfResults);
+	}
+
+	/**
 	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/256
 	 *
 	 * @throws URISyntaxException

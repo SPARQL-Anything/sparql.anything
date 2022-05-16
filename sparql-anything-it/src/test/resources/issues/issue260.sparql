@@ -1,0 +1,13 @@
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+SELECT  ?name ?surname
+WHERE
+  { SERVICE <x-sparql-anything:location=%%location%%,csv.headers=true,strategy=1>
+      { fx:properties
+                  fx:csv.null-string  "" .
+        ?c        xyz:name            ?name ;
+                  xyz:surname         ?surname
+        FILTER NOT EXISTS { ?c  xyz:email  ?email }
+      }
+  }

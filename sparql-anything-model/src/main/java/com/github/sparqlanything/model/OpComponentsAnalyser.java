@@ -17,6 +17,10 @@
 
 package com.github.sparqlanything.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -56,6 +60,19 @@ import org.apache.jena.sparql.algebra.op.OpTopN;
 import org.apache.jena.sparql.algebra.op.OpTriple;
 import org.apache.jena.sparql.algebra.op.OpUnion;
 import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.sparql.expr.Expr;
+import org.apache.jena.sparql.expr.ExprAggregator;
+import org.apache.jena.sparql.expr.ExprFunction0;
+import org.apache.jena.sparql.expr.ExprFunction1;
+import org.apache.jena.sparql.expr.ExprFunction2;
+import org.apache.jena.sparql.expr.ExprFunction3;
+import org.apache.jena.sparql.expr.ExprFunctionN;
+import org.apache.jena.sparql.expr.ExprFunctionOp;
+import org.apache.jena.sparql.expr.ExprNone;
+import org.apache.jena.sparql.expr.ExprTripleTerm;
+import org.apache.jena.sparql.expr.ExprVar;
+import org.apache.jena.sparql.expr.ExprVisitor;
+import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.path.P_Alt;
 import org.apache.jena.sparql.path.P_Distinct;
 import org.apache.jena.sparql.path.P_FixedLength;
@@ -76,22 +93,19 @@ import org.apache.jena.sparql.path.PathVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class OpComponentsAnalyser implements OpVisitor {
 	private final Logger log = LoggerFactory.getLogger(OpComponentsAnalyser.class);
 	private static final Node unionGraph = NodeFactory.createURI("urn:x-arq:UnionGraph");
 	private final List<Object> opComponents = new ArrayList<Object>();
 
-	public List<Object> getOpComponents(){
+	public List<Object> getOpComponents() {
 		return Collections.unmodifiableList(opComponents);
 	}
 
 	@Override
 	public void visit(OpBGP opBGP) {
 		log.trace(" - OpBGP - ", opBGP);
+		log.trace("{}:", opBGP.getPattern().getList().toString());
 		opComponents.addAll(opBGP.getPattern().getList());
 	}
 
@@ -234,7 +248,123 @@ public class OpComponentsAnalyser implements OpVisitor {
 
 	@Override
 	public void visit(OpFilter opFilter) {
+		log.trace("Sub Op Filter - {}", opFilter.getSubOp().getClass().toString());
+		opFilter.getExprs().getList().forEach(e -> {
+			log.trace("Exp - {} - {}", e.toString(), e.getClass().toString());
+			extractFromExpression(e);
+		});
 		opFilter.getSubOp().visit(this);
+
+	}
+
+	private List<Object> extractFromExpression(Expr e) {
+		List<Object> result = new ArrayList<>();
+		OpComponentsAnalyser oca = this;
+		e.visit(new ExprVisitor() {
+
+			@Override
+			public void visit(ExprNone exprNone) {
+				log.trace("Expr - exprNone");
+			}
+
+			@Override
+			public void visit(ExprAggregator eAgg) {
+				log.trace("Expr - eAgg");
+				eAgg.visit(this);
+
+			}
+
+			@Override
+			public void visit(ExprVar nv) {
+				log.trace("Expr - ExprVar");
+
+			}
+
+			@Override
+			public void visit(NodeValue nv) {
+				log.trace("Expr - NodeValue");
+				if (nv.getNode().isURI()) {
+					opComponents.add(new Triple(Node.ANY, nv.getNode(), Node.ANY));
+				}
+			}
+
+			@Override
+			public void visit(ExprTripleTerm tripleTerm) {
+				log.trace("Expr - tripleTerm");
+				opComponents.add(tripleTerm.getTriple());
+			}
+
+			@Override
+			public void visit(ExprFunctionOp funcOp) {
+				log.trace("Expr - funcOp");
+				if (funcOp.isGraphPattern()) {
+					funcOp.getGraphPattern().visit(oca);
+				}
+				funcOp.getArgs().forEach(e -> {
+					log.trace("Arg - {}", e.getClass().toString());
+					e.visit(this);
+				});
+
+			}
+
+			@Override
+			public void visit(ExprFunctionN func) {
+				log.trace("Expr - funcOp - N");
+				if (func.isGraphPattern()) {
+					func.getGraphPattern().visit(oca);
+				}
+				func.getArgs().forEach(e -> {
+					e.visit(this);
+				});
+			}
+
+			@Override
+			public void visit(ExprFunction3 func) {
+				log.trace("Expr - funcOp - 3");
+				if (func.isGraphPattern()) {
+					func.getGraphPattern().visit(oca);
+				}
+				func.getArgs().forEach(e -> {
+					e.visit(this);
+				});
+			}
+
+			@Override
+			public void visit(ExprFunction2 func) {
+				log.trace("Expr - funcOp - 2");
+				if (func.isGraphPattern()) {
+					func.getGraphPattern().visit(oca);
+				}
+				func.getArgs().forEach(e -> {
+					e.visit(this);
+				});
+
+			}
+
+			@Override
+			public void visit(ExprFunction1 func) {
+				log.trace("Expr - funcOp - 1");
+				if (func.isGraphPattern()) {
+					func.getGraphPattern().visit(oca);
+				}
+				func.getArgs().forEach(e -> {
+					e.visit(this);
+				});
+			}
+
+			@Override
+			public void visit(ExprFunction0 func) {
+				log.trace("Expr - funcOp - 0");
+				if (func.isGraphPattern()) {
+					func.getGraphPattern().visit(oca);
+				}
+				func.getArgs().forEach(e -> {
+					e.visit(this);
+				});
+			}
+		});
+
+		return result;
 	}
 
 	@Override
@@ -365,7 +495,7 @@ public class OpComponentsAnalyser implements OpVisitor {
 		for (Object o : opComponents) {
 			if (o instanceof Quad) {
 				Quad q = (Quad) o;
-				if(matchQuad(q, graph, subject, predicate, object)){
+				if (matchQuad(q, graph, subject, predicate, object)) {
 					return true;
 				}
 			} else if (o instanceof Triple) {
@@ -381,7 +511,7 @@ public class OpComponentsAnalyser implements OpVisitor {
 		return false;
 	}
 
-	protected boolean matchQuad(Quad q, Node graph, Node subject, Node predicate, Node object){
+	protected boolean matchQuad(Quad q, Node graph, Node subject, Node predicate, Node object) {
 		if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph) || q.getGraph().matches(unionGraph))
 				&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
 				&& predicateMatch(q.getPredicate(), predicate) // (!q.getPredicate().isConcrete() ||
@@ -404,4 +534,5 @@ public class OpComponentsAnalyser implements OpVisitor {
 		}
 		return (!queryPredicate.isConcrete() || queryPredicate.matches(dataPredicate));
 	}
+
 }
