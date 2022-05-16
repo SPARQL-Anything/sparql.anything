@@ -48,6 +48,9 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 			properties.put("blank-nodes", "false");
 			properties.put("slice", "true");
 			properties.put("xml.path", "//book");
+		}else if(name.getMethodName().equals("testBooks_2$1")){
+			properties.put("blank-nodes", "false");
+			properties.put("xml.path", "//book");
 		}
 	}
 
@@ -68,6 +71,13 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 	@Test
 	public void testBooks_1$1(){
 		L.info("Test XML books (XPath //book, one go)");
+		//RDFDataMgr.write(System.err, result, Lang.TTL);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testBooks_2$1(){
+		L.info("Test XML books (XPath //book, one go) -- different input but same output as _1");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
