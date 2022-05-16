@@ -4,13 +4,20 @@ A comma-separated values (CSV) file is a text file that uses a comma to separate
 
 A CSV can be represented as a list of lists in which the outer list captures the sequence of data records (representable as containers), while the inner list captures the sequence of primitive values within a record.
 
-## Supported file extensions
+## Extensions
 
-.csv, .tsv, .tab
+SPARQL Anything selects this transformer for the following file extensions:
 
-## Supported media types
+- .csv
+- .tsv
+- .tab
 
-text/csv, text/tab-separated-values
+## Media types
+
+SPARQL Anything selects this transformer for the following media types:
+
+- text/csv
+- text/tab-separated-values
 
 ## Default Transformation
 
@@ -86,7 +93,9 @@ WHERE
 |csv.quote-char|The quoting character|any single char|`"`|
 |csv.null-string|It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.|any string|not set|
 
-### csv.format
+---
+
+### `csv.format`
 
 #### Description
 
@@ -99,7 +108,7 @@ Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs
 
 #### Default Value
 
-Default
+`Default`
 
 #### Examples
 
