@@ -8,13 +8,17 @@ According to the Facade-X model, SPARQL Anything uses:
 - Container membership properties for specifying relations to child elements in the DOM tree.  These may include text, which can be expressed as RDF literals of type *xsd:string*.
 - Tag names are used to type the container. Specifically, the tag name is used to mint a URI that identifies the class of the corresponding containers.
 
-## Supported file extensions
+## Extensions
 
-.html
+SPARQL Anything selects this transformer for the following file extensions:
 
-## Supported media types
+- .html
 
-text/html
+## Media types
+
+SPARQL Anything selects this transformer for the following media types:
+
+- text/html
 
 ## Default Transformation
 
@@ -95,8 +99,9 @@ WHERE
 |html.browser.screenshot|When using a browser to nagivate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here.|a file URI e.g. "file:///tmp/screenshot.png" |No Value|
 |html.metadata|It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. (cf. [issue 164](https://github.com/SPARQL-Anything/sparql.anything/issues/164))|true/false|false|
 
+---
 
-### html.selector
+### `html.selector`
 
 #### Description
 
@@ -149,7 +154,9 @@ WHERE
 -----------------
 ```
 
-### html.browser
+---
+
+### `html.browser`
 
 #### Description
 
@@ -167,7 +174,9 @@ No value
 
 Please refer to the [justin2004](https://github.com/justin2004)'s [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
-### html.browser.timeout
+---
+
+### `html.browser.timeout`
 
 #### Description
 
@@ -185,8 +194,9 @@ any integer
 
 Please refer to the [justin2004](https://github.com/justin2004)'s [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
+---
 
-### html.browser.wait
+### `html.browser.wait`
 
 #### Description
 
@@ -204,7 +214,9 @@ No Value
 
 Please refer to the [justin2004](https://github.com/justin2004)'s [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
-### html.browser.screenshot
+---
+
+### `html.browser.screenshot`
 
 #### Description
 
@@ -222,8 +234,9 @@ No Value
 
 Please refer to the [justin2004](https://github.com/justin2004)'s [blogpost on Scraping Webpages with SPARQL](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
 
+---
 
-### html.metadata
+### `html.metadata`
 
 #### Description
 

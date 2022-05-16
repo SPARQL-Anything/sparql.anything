@@ -194,8 +194,9 @@ WHERE
 
 ```
 
+---
 
-### csv.headers
+### `csv.headers`
 
 
 #### Description
@@ -204,11 +205,11 @@ It tells the CSV triplifier to use the headers of the CSV file for minting the p
 
 #### Valid Values
 
-true/false
+`true/false`
 
 #### Default Value
 
-false
+`false`
 
 #### Examples
 
@@ -257,7 +258,9 @@ WHERE
 ---------------------------------------------------
 ```
 
-### csv.delimiter
+---
+
+### `csv.delimiter`
 
 #### Description
 
@@ -321,7 +324,9 @@ WHERE
 
 ```
 
-### csv.quote-char
+---
+
+### `csv.quote-char`
 
 #### Description
 
@@ -396,7 +401,7 @@ WHERE
 
 ```
 
-### csv.null-string
+### `csv.null-string`
 
 #### Description
 

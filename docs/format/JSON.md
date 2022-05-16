@@ -14,13 +14,18 @@ According to Facade-X model, SPARQL Anything interprets objects and arrays as co
 Currently, fields with the 'null' value are ignored.
 <!-- However, we may decide to represent it as blank node or to create a primitive entity to express it, for example, similar to \tt{rdf:nil}.}.  -->
 
-## Supported file extensions
+## Extensions
 
-.json
+SPARQL Anything selects this transformer for the following file extensions:
 
-## Supported media types
+- .json
 
-application/json, application/problem+json
+## Media types
+
+SPARQL Anything selects this transformer for the following media types:
+
+- application/json
+- application/problem+json
 
 ## Default transformation
 
@@ -77,7 +82,7 @@ WHERE
 |json.path|One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions.|Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))||
 
 
-### json.path
+### `json.path`
 
 #### Description
 
