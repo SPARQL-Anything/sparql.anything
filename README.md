@@ -130,6 +130,7 @@ A detailed description of the interpretation can be found in the following page:
 - [JSON](format/JSON.md)
 - [HTML](format/HTML.md)
 - [CSV](format/CSV.md)
+- [XML](format/XML.md)
 
 ### JSON
 
