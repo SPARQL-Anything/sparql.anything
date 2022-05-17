@@ -17,8 +17,13 @@
 
 package com.github.sparqlanything.binary;
 
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.Triplifier;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Properties;
+import java.util.Set;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -26,12 +31,8 @@ import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Properties;
-import java.util.Set;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
 
 public class BinaryTriplifier implements Triplifier {
 
@@ -47,7 +48,7 @@ public class BinaryTriplifier implements Triplifier {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
-		if(url == null){
+		if (url == null) {
 			logger.warn("No location provided");
 			return;
 		}
@@ -66,7 +67,7 @@ public class BinaryTriplifier implements Triplifier {
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
 //		Charset charset = getCharsetArgument(properties);
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+//		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 //		String namespace = url.toString() + "#";
 
 		String value;
