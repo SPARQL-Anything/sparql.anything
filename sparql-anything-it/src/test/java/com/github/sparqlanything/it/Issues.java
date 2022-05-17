@@ -374,6 +374,25 @@ public class Issues {
 		Model r = QueryExecutionFactory.create(qs, ds).execConstruct();
 		assertTrue(expected.isIsomorphicWith(r));
 	}
+	
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/264
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue264() throws URISyntaxException, IOException {
+		String location = getClass().getClassLoader().getResource("issues/issue264.txt").toURI().toString();
+		Query qs = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT ?line WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.regex \"(.*)\\\\n\" ; fx:txt.group 1 . ?s fx:anySlot ?line} }");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
+		while (rs.hasNext()) {
+			assertEquals("Hello world!", rs.next().get("line").asLiteral().getValue().toString());
+		}
+	}
 
 	/**
 	 * TODO See #241 - Currently returns results but ends with a SOE

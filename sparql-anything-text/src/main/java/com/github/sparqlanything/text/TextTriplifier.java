@@ -17,23 +17,20 @@
 
 package com.github.sparqlanything.text;
 
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.Triplifier;
-import com.github.sparqlanything.model.TriplifierHTTPException;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.net.URL;
-import java.util.Properties;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 
 public class TextTriplifier implements Triplifier {
 
@@ -75,6 +72,7 @@ public class TextTriplifier implements Triplifier {
 		Pattern pattern = null;
 		if (properties.containsKey(REGEX)) {
 			String regexString = properties.getProperty(REGEX);
+			logger.trace("Regex {}", regexString);
 			try {
 				pattern = Pattern.compile(regexString);
 				// TODO flags
@@ -87,7 +85,8 @@ public class TextTriplifier implements Triplifier {
 		}
 
 		int group = -1;
-		if (properties.contains(GROUP) && pattern != null) {
+		if (properties.containsKey(GROUP) && pattern != null) {
+			logger.trace("Group property set");
 			try {
 				int gr = Integer.parseInt(properties.getProperty(GROUP));
 				if (gr >= 0) {
@@ -101,12 +100,15 @@ public class TextTriplifier implements Triplifier {
 		}
 
 		if (pattern != null) {
+			logger.trace("Instantiating the matcher group {}", group);
 			Matcher m = pattern.matcher(value);
 			int count = 1;
 			while (m.find()) {
-				if (group > 1) {
+				if (group >= 1) {
+					logger.trace("Adding value from group {}: slot {} - {}",group ,count, m.group(group));
 					builder.addValue(dataSourceId, rootResourceId, count, m.group(group));
 				} else {
+					logger.trace("Adding value {} {}", count, m.group());
 					builder.addValue(dataSourceId, rootResourceId, count, m.group());
 				}
 				count++;
