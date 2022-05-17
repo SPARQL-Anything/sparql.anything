@@ -4,6 +4,8 @@ package com.github.sparqlanything.it;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
@@ -200,6 +202,46 @@ public class DocumentationExampleSandbox {
 
 	}
 
+	public static void binary() throws URISyntaxException {
+		String location = "https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg";
+		Query query = QueryFactory.create(
+				"CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location + "> { ?s ?p ?o} }");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		System.out.println(query.toString(Syntax.defaultSyntax));
+		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefixes(prefixes);
+		m.write(System.out, "TTL");
+	}
+
+	public static void txt() throws URISyntaxException {
+		String location = "https://sparql-anything.cc/examples/simple.txt";
+		Query query = QueryFactory.create(
+				"CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=" + location + "> { ?s ?p ?o} }");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		System.out.println(query.toString(Syntax.defaultSyntax));
+		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefixes(prefixes);
+		m.write(System.out, "TTL");
+		
+		
+		query = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT ?line WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.regex \".*\\\\n\" . ?s fx:anySlot ?line} }");
+		System.out.println(query.toString(Syntax.defaultSyntax));
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+		
+		query = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT ?line WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.regex \"(.*)\\\\n\" ; fx:txt.group 1 . ?s fx:anySlot ?line} }");
+		System.out.println(query.toString(Syntax.defaultSyntax));
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+		
+		query = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT ?line WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.split \"\\\\n\" . ?s fx:anySlot ?line} }");
+		System.out.println(query.toString(Syntax.defaultSyntax));
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+	}
+
 	public static void main(String[] args) throws URISyntaxException {
 		prefixes.put("xyz", "http://sparql.xyz/facade-x/data/");
 		prefixes.put("fx", "http://sparql.xyz/facade-x/ns/");
@@ -215,7 +257,17 @@ public class DocumentationExampleSandbox {
 //
 //		html1();
 
-		csv();
+//		csv();
+
+//		binary();
+		
+		txt();
+		
+//		Pattern p = Pattern.compile(".*\n");
+//		Matcher m = p.matcher("Hello world!\nHello world\n");
+//		if(m.find()) {
+//			System.out.println(m.group());
+//		}
 	}
 
 }
