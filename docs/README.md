@@ -132,6 +132,7 @@ A detailed description of the interpretation can be found in the following page:
 - [CSV](format/CSV.md)
 - [XML](format/XML.md)
 - [Binary](format/Binary.md)
+- [TXT](format/TXT.md)
 
 ### JSON
 
