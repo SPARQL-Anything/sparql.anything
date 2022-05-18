@@ -133,6 +133,7 @@ A detailed description of the interpretation can be found in the following page:
 - [XML](format/XML.md)
 - [Binary](format/Binary.md)
 - [TXT](format/TXT.md)
+- [Markdown](format/Markdown.md)
 
 ### JSON
 
