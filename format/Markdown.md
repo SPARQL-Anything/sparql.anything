@@ -2,13 +2,15 @@
 
 Markdown is a lightweight markup language for
 writing formatted documents inspired to conventions of web posting. We can
-interpret a document (compiled with a Word processor or specified in Markdown
-syntax) as a sequence of blocks (e.g. paragraphs, lists, headings, code blocks).
+interpret a Markdown document as a sequence of blocks (e.g. paragraphs, lists, headings, code blocks).
 Some blocks (e.g. list items) contain other blocks, whereas others contain inline
-contents (e.g. links, images etc.). A document can be represented as a list of typed
-containers. Where the type denotes the kind of block (e.g. heading, paragraph,
+contents (e.g. links, images etc.). 
+In SPARQL Anything, a document is represented as a list of typed
+containers. 
+Where the type denotes the kind of block (e.g. heading, paragraph,
 emphasised text, link, image etc.); lists are needed for specifying the sequence
-of the blocks. Additional attributes such as the depth of the header or the type
+of the blocks. 
+Additional attributes such as the depth of the header or the type
 of list (bullets, numbers, etc...) can be also supported, relying on the key-value
 structure.
 
