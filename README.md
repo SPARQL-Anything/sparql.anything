@@ -127,13 +127,13 @@ The data is interpreted as in the following examples (using default settings).
 
 A detailed description of the interpretation can be found in the following page:
 
-- [JSON](format/JSON.md)
-- [HTML](format/HTML.md)
-- [CSV](format/CSV.md)
-- [XML](format/XML.md)
-- [Binary](format/Binary.md)
-- [TXT](format/TXT.md)
-- [Markdown](format/Markdown.md)
+- [JSON](formats/JSON.md)
+- [HTML](formats/HTML.md)
+- [CSV](formats/CSV.md)
+- [XML](formats/XML.md)
+- [Binary](formats/Binary.md)
+- [TXT](formats/TXT.md)
+- [Markdown](formats/Markdown.md)
 
 ### JSON
 
