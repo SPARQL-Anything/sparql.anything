@@ -13,6 +13,7 @@ Main features:
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#configuration)) and build knowledge graphs with `CONSTRUCT` queries
 - [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar, Markdown, YAML, Bibtex, DOCx (see [configuration](#format-specific-options))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
+- Generates RDF and RDF-Star datasets (thanks to Apache Jena)
 - Full fledged [HTTP client](#http-options) to query Web APIs (headers, authentication, all methods supported)
 - [Functions library](#functions-and-magic-properties) for RDF sequences, strings, hashes, easy entity building, ...
 - Combine multiple SERVICE clauses into complex data integration queries (thanks to SPARQL)
@@ -127,13 +128,13 @@ The data is interpreted as in the following examples (using default settings).
 
 A detailed description of the interpretation can be found in the following page:
 
-- [JSON](format/JSON.md)
-- [HTML](format/HTML.md)
-- [CSV](format/CSV.md)
-- [XML](format/XML.md)
-- [Binary](format/Binary.md)
-- [TXT](format/TXT.md)
-- [Markdown](format/Markdown.md)
+- [JSON](formats/JSON.md)
+- [HTML](formats/HTML.md)
+- [CSV](formats/CSV.md)
+- [XML](formats/XML.md)
+- [Binary](formats/Binary.md)
+- [TXT](formats/TXT.md)
+- [Markdown](formats/Markdown.md)
 
 ### JSON
 
