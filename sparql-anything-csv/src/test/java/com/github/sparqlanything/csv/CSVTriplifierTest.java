@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
@@ -161,7 +162,10 @@ public class CSVTriplifierTest {
 	public void testWithOnDiskGraph2 () throws IOException, TriplifierHTTPException {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
-		properties.setProperty("ondisk", "/tmp");
+		//properties.setProperty("ondisk", "/tmp");
+		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "/tmp/");
+		tmp.mkdirs();
+		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
 		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(csv1.toString(), properties);
