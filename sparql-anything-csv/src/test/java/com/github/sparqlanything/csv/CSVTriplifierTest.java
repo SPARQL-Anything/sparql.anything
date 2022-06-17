@@ -133,7 +133,10 @@ public class CSVTriplifierTest {
 	public void testWithOnDiskGraph1 () throws IOException, TriplifierHTTPException {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
-		properties.setProperty("ondisk", "/tmp");
+//		properties.setProperty("ondisk", "/tmp");
+		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "/tmp/");
+		tmp.mkdirs();
+		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		URL csv1 = getClass().getClassLoader().getResource("./test3.csv");
 		properties.setProperty(IRIArgument.LOCATION.toString(), csv1.toString());
 
