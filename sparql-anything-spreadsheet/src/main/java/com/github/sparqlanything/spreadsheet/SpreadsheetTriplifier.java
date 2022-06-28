@@ -21,10 +21,14 @@
 
 package com.github.sparqlanything.spreadsheet;
 
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.Triplifier;
+import java.io.IOException;
+import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.graph.Node;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,13 +38,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.Triplifier;
 
 public class SpreadsheetTriplifier implements Triplifier {
 
@@ -52,14 +51,14 @@ public class SpreadsheetTriplifier implements Triplifier {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		URL url = Triplifier.getLocation(properties);
-		if(url == null){
+		if (url == null) {
 			logger.warn("No location provided");
 			return;
 		}
 		String root = Triplifier.getRootArgument(properties);
 //		Charset charset = getCharsetArgument(properties);
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
-		String namespace = Triplifier.getNamespaceArgument(properties);
+//		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+//		String namespace = Triplifier.getNamespaceArgument(properties);
 
 		AtomicBoolean headers = new AtomicBoolean();
 		try {
@@ -103,7 +102,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 					Cell cell = row.getCell(cellNum);
 					String colstring = cellToString(cell);
 					String colname = colstring.strip();
-					if("".equals(colname)){
+					if ("".equals(colname)) {
 						colname = Integer.toString(colid);
 					}
 					int c = 0;
@@ -116,44 +115,37 @@ public class SpreadsheetTriplifier implements Triplifier {
 					headers_map.put(colid, colname);
 				}
 
-			}else{
-				// Data
+			} else {
 				// Rows
 				rown++;
 				String row = root + "_Row_" + rown;
-//				if (blank_nodes) {
-//					row = NodeFactory.createBlankNode();
-//				} else {
-//					row = NodeFactory.createURI(root + "_Row_" + rown);
-//				}
 				builder.addContainer(dataSourceId, root, rown, row);
-//				g.add(new Triple(document, RDF.li(rown).asNode(), row));
 				Row record = s.getRow(rowNum);
-				Iterator<Cell> cellIterator = record.cellIterator();
-				int colid = 0;
-				for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
-					Cell cell = record.getCell(cellNum);
-					String value = cellToString(cell);
-					colid++;
-					Node property;
-					if (headers && headers_map.containsKey(colid)) {
-						builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value );
-//						property = NodeFactory
-//								.createURI(namespace + Triplifier.toSafeURIString(headers_map.get(colid)));
-					} else {
-						builder.addValue(dataSourceId, row, colid, value );
+				logger.trace("Reading Row {} from sheet {}", rowNum, s.getSheetName());
+
+				if (record != null) {
+					int colid = 0;
+					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
+						Cell cell = record.getCell(cellNum);
+						String value = cellToString(cell);
+						colid++;
+						if (headers && headers_map.containsKey(colid)) {
+							builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)),
+									value);
+						} else {
+							builder.addValue(dataSourceId, row, colid, value);
+						}
+
 					}
 
-//					g.add(new Triple(row, property, NodeFactory.createLiteral(value)));
 				}
 			}
 		}
 
-//		return g;
 	}
 
 	private String cellToString(Cell cell) {
-		if(cell == null){
+		if (cell == null) {
 			return "";
 		}
 		if (cell.getCellType() == CellType.BOOLEAN) {
