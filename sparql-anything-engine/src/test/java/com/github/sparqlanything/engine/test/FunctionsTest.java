@@ -112,6 +112,17 @@ public class FunctionsTest {
 	}
 
 	@Test
+	public void cardinal() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "SELECT ?four WHERE {"
+				+ "BIND(fx:cardinal(rdf:_4) as ?four)" + "}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int four = result.next().get("four").asLiteral().getInt();
+		Assert.assertEquals(4, four);
+	}
+
+	@Test
 	public void substring1() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "SELECT ?ob WHERE {"
