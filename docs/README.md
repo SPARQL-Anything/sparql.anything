@@ -1049,13 +1049,13 @@ This property matches the RDF container membership properties (e.g. ``rdf:_1``, 
 #### Functions on container membership properties
 The system supports the following functions on container membership properties (See [issue 78](https://github.com/SPARQL-Anything/sparql.anything/issues/78)):
 
-- `fx:cardinal(?a)` returns the corresponding cardinal integer from ?a (rdf:\_24 -> 24)
-- `fx:before(?a, ?b)` returns `true` if ?a and ?b are container membership properties and ?a is lower than ?b, false otherwise
-- `fx:after(?a, ?b)`  returns `true` if ?a and ?b are container membership properties and ?a is higher than ?b, false otherwise
-- `fx:previous(?a)` returns the container membership property that preceeds ?a (rdf:\_2 -> rdf:\_1)
-- `fx:next(?b)` returns the container membership property that succeedes ?b (rdf:\_1 -> rdf:\_2)
-- `fx:forward(?a, ?b)` returns the container membership property that follows ?a of ?b steps (rdf:\_2, 5 -> rdf:\_7)
-- `fx:backward(?a, ?b)` returns the container membership property that preceeds ?a of ?b steps (rdf:\_24, 4 -> rdf:\_20)
+- `fx:cardinal(?a)` returns the corresponding cardinal integer from `?a` (`rdf:_24` -> `24`)
+- `fx:before(?a, ?b)` returns `true` if `?a` and `?b` are container membership properties and `?a` is lower than `?b`, `false` otherwise
+- `fx:after(?a, ?b)`  returns `true` if `?a` and `?b` are container membership properties and `?a` is higher than `?b`, `false` otherwise
+- `fx:previous(?a)` returns the container membership property that preceeds `?a` (`rdf:_2` -> `rdf:_1`)
+- `fx:next(?b)` returns the container membership property that succeedes `?b` (`rdf:_1` -> `rdf:_2`)
+- `fx:forward(?a, ?b)` returns the container membership property that follows `?a` of `?b` steps (`rdf:_2, 5` -> `rdf:_7`)
+- `fx:backward(?a, ?b)` returns the container membership property that preceeds `?a` of `?b` steps (`rdf:_24, 4` -> `rdf:_20`)
 
 ### Working with strings
 The system supports the following functions for string manipulation (See [issue 104](https://github.com/SPARQL-Anything/sparql.anything/issues/104) and [issue 121](https://github.com/SPARQL-Anything/sparql.anything/issues/121)):
