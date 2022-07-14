@@ -33,3 +33,4 @@ public class Literal extends FunctionBase2 {
 		throw new ExprEvalTypeException("Can only work with args (string,iri) or (string,string[2])"); // # NodeValue.NONE.getConstant();
 	}
 }
+
