@@ -1105,6 +1105,9 @@ See also [issue 106](https://github.com/SPARQL-Anything/sparql.anything/issues/1
 ### The function `fx:literal`
 The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).
 
+### The function `fx:bnode`
+The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case).
+
 ## Usage
 ### Command line interface
 
