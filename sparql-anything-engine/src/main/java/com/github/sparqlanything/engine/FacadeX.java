@@ -20,6 +20,7 @@ package com.github.sparqlanything.engine;
 import com.github.sparqlanything.engine.functions.After;
 import com.github.sparqlanything.engine.functions.Backward;
 import com.github.sparqlanything.engine.functions.Before;
+import com.github.sparqlanything.engine.functions.Bnode;
 import com.github.sparqlanything.engine.functions.Cardinal;
 import com.github.sparqlanything.engine.functions.Entity;
 import com.github.sparqlanything.engine.functions.Forward;
@@ -132,6 +133,7 @@ public final class FacadeX {
 		log.trace("Enabling functions");
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "entity", Entity.class);
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "literal", Literal.class);
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "bnode", Bnode.class);
 		log.trace("Enabling collection functions");
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "previous", Previous.class);
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "next", Next.class);
