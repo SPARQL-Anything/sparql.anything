@@ -135,6 +135,12 @@ A detailed description of the interpretation can be found in the following page:
 - [Binary](formats/Binary.md)
 - [TXT](formats/TXT.md)
 - [Markdown](formats/Markdown.md)
+- [File system and archives (ZIP, Tar)](https://github.com/SPARQL-Anything/sparql.anything#file-system-and-archives-zip-tar)
+- [Spreadsheets: XLS, XLSx](https://github.com/SPARQL-Anything/sparql.anything#spreadsheets-xls-xlsx)
+- [Documents: DOCx](https://github.com/SPARQL-Anything/sparql.anything#documents-docx)
+- [EXIF Metadata](https://github.com/SPARQL-Anything/sparql.anything#exif-metadata)
+- [Bibtex](https://github.com/SPARQL-Anything/sparql.anything#bibtex)
+- [YAML](https://github.com/SPARQL-Anything/sparql.anything#yaml)
 
 ### JSON
 
