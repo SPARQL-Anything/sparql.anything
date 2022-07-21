@@ -13,7 +13,7 @@ Main features:
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#configuration)) and build knowledge graphs with `CONSTRUCT` queries
 - [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar, Markdown, YAML, Bibtex, DOCx (see [configuration](#format-specific-options))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
-- Generates RDF and RDF-Star datasets (thanks to Apache Jena)
+- Generates RDF, RDF-Star, and tabular data (thanks to SPARQL) 
 - Full fledged [HTTP client](#http-options) to query Web APIs (headers, authentication, all methods supported)
 - [Functions library](#functions-and-magic-properties) for RDF sequences, strings, hashes, easy entity building, ...
 - Combine multiple SERVICE clauses into complex data integration queries (thanks to SPARQL)
