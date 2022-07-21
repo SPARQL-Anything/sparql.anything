@@ -125,7 +125,7 @@ and get this result without caring of transforming JSON to RDF.
 Currently, SPARQL Anything supports the following list of formats but the possibilities are limitless!
 The data is interpreted as in the following examples (using default settings).
 
-A detailed description of the interpretation can be found in the following page:
+A detailed description of the interpretation can be found in the following pages:
 
 - [JSON](formats/JSON.md)
 - [HTML](formats/HTML.md)
