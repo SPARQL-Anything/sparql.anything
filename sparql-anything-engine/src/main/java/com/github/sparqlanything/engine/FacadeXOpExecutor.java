@@ -301,7 +301,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
 					| IllegalAccessException | InvocationTargetException | NoSuchMethodException
 					| ClassNotFoundException | TriplifierHTTPException e) {
-				logger.error("An error occurred", e);
+				logger.error("An error occurred: {}", e.getMessage());
 				throw new RuntimeException(e);
 			} catch (UnboundVariableException e) {
 				// Proceed with the next operation
@@ -412,8 +412,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 				}
 				t.triplify(p, builder);
 				dg = builder.getDatasetGraph();
-			} catch (TriplifierHTTPException e) {
-				if (p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")) {
+			} catch (Exception e) {
+				if (p.containsKey(PROPERTY_OPSERVICE_SILENT) && p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")) {
 					// as per https://www.w3.org/TR/sparql11-federated-query/#serviceFailure
 					// if silent is specified "errors encountered while accessing a remote SPARQL
 					// endpoint should be ignored"
@@ -422,7 +422,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 					logger.warn("Errors encountered but the silent keyword was specified. Returning empty graph.");
 					dg = DatasetFactory.create().asDatasetGraph();
 				} else {
-					throw new IOException(e.toString());
+					throw new IOException(e);
 				}
 			}
 		} else {
@@ -519,24 +519,25 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		Properties properties;
 
+		// Parse IRI only if contains properties
 		if (!url.equals(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
 			FacadeIRIParser p = new FacadeIRIParser(url);
 			properties = p.getProperties();
-
-			// Setting defaults
-			// namespace <urn:facade-x/ns#>
-			if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
-				logger.trace("Setting default value for namespace: {}", Triplifier.XYZ_NS);
-				properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
-			}
-			if (opService.getSilent()) {
-				// we can only see if silent was specified at the OpService so we need to stash
-				// a boolean
-				// at this point so we can use it when we triplify further down the Op tree
-				properties.setProperty(PROPERTY_OPSERVICE_SILENT, "true");
-			}
 		} else {
 			properties = new Properties();
+		}
+
+		// Setting defaults
+		if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
+			logger.trace("Setting default value for namespace: {}", Triplifier.XYZ_NS);
+			properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
+		}
+		// Setting silent
+		if (opService.getSilent()) {
+			// we can only see if silent was specified at the OpService so we need to stash
+			// a boolean
+			// at this point so we can use it when we triplify further down the Op tree
+			properties.setProperty(PROPERTY_OPSERVICE_SILENT, "true");
 		}
 
 		Op next = opService.getSubOp();

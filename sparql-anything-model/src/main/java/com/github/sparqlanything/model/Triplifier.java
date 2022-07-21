@@ -288,9 +288,9 @@ public interface Triplifier {
 			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
 				CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
 				if (!HTTPHelper.isSuccessful(response)) {
-					log.error("Request unsuccesful: {}", response.getStatusLine().toString());
-					log.error("Response: {}", response.toString());
-					log.error("Response body: {}",
+					log.trace("Request unsuccesful: {}", response.getStatusLine().toString());
+					log.trace("Response: {}", response.toString());
+					log.trace("Response body: {}",
 							IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
 					throw new TriplifierHTTPException(response.getStatusLine().toString());
 				}
