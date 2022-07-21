@@ -49,6 +49,7 @@
         <dependency>
             <groupId>com.github.sparqlanything</groupId>
             <artifactId>sparql-anything-testutils</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
