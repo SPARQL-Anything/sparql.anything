@@ -46,6 +46,11 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.github.sparqlanything</groupId>
+            <artifactId>sparql-anything-testutils</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>
