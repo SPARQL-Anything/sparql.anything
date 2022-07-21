@@ -22,7 +22,7 @@ Main features:
 - Slice large CSV files with an iterator-like execution style (soon [JSON](https://github.com/SPARQL-Anything/sparql.anything/issues/202) and [XML](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
 - Supports an [on-disk option](#general-purpose-options) (with Apache Jena TDB2)
 
-## Concept
+## Quickstart
 SPARQL Anything uses a single generic abstraction for all data source formats called Facade-X.
 ### Facade-X
 Facade-X is a simplistic meta-model used by SPARQL Anything transformers to generate RDF data from diverse data sources.
@@ -121,7 +121,6 @@ and get this result without caring of transforming JSON to RDF.
 | "Friends"     |
 
 
-
 ## Supported Formats
 Currently, SPARQL Anything supports the following list of formats but the possibilities are limitless!
 The data is interpreted as in the following examples (using default settings).
@@ -135,12 +134,12 @@ A detailed description of the interpretation can be found in the following page:
 - [Binary](formats/Binary.md)
 - [TXT](formats/TXT.md)
 - [Markdown](formats/Markdown.md)
-- [File system and archives (ZIP, Tar)](https://github.com/SPARQL-Anything/sparql.anything#file-system-and-archives-zip-tar)
-- [Spreadsheets: XLS, XLSx](https://github.com/SPARQL-Anything/sparql.anything#spreadsheets-xls-xlsx)
-- [Documents: DOCx](https://github.com/SPARQL-Anything/sparql.anything#documents-docx)
-- [EXIF Metadata](https://github.com/SPARQL-Anything/sparql.anything#exif-metadata)
-- [Bibtex](https://github.com/SPARQL-Anything/sparql.anything#bibtex)
-- [YAML](https://github.com/SPARQL-Anything/sparql.anything#yaml)
+- [File system and archives (ZIP, Tar)](#file-system-and-archives-zip-tar)
+- [Spreadsheets: XLS, XLSx](#spreadsheets-xls-xlsx)
+- [Documents: DOCx](#documents-docx)
+- [EXIF Metadata](#exif-metadata)
+- [Bibtex](#bibtex)
+- [YAML](#yaml)
 
 ### JSON
 

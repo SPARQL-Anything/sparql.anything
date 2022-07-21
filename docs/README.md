@@ -13,7 +13,7 @@ Main features:
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#configuration)) and build knowledge graphs with `CONSTRUCT` queries
 - [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar, Markdown, YAML, Bibtex, DOCx (see [configuration](#format-specific-options))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
-- Generates RDF and RDF-Star datasets (thanks to Apache Jena)
+- Generates RDF, RDF-Star, and tabular data (thanks to SPARQL) 
 - Full fledged [HTTP client](#http-options) to query Web APIs (headers, authentication, all methods supported)
 - [Functions library](#functions-and-magic-properties) for RDF sequences, strings, hashes, easy entity building, ...
 - Combine multiple SERVICE clauses into complex data integration queries (thanks to SPARQL)
@@ -22,7 +22,7 @@ Main features:
 - Slice large CSV files with an iterator-like execution style (soon [JSON](https://github.com/SPARQL-Anything/sparql.anything/issues/202) and [XML](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
 - Supports an [on-disk option](#general-purpose-options) (with Apache Jena TDB2)
 
-## Concept
+## Quickstart
 SPARQL Anything uses a single generic abstraction for all data source formats called Facade-X.
 ### Facade-X
 Facade-X is a simplistic meta-model used by SPARQL Anything transformers to generate RDF data from diverse data sources.
@@ -121,7 +121,6 @@ and get this result without caring of transforming JSON to RDF.
 | "Friends"     |
 
 
-
 ## Supported Formats
 Currently, SPARQL Anything supports the following list of formats but the possibilities are limitless!
 The data is interpreted as in the following examples (using default settings).
@@ -135,6 +134,12 @@ A detailed description of the interpretation can be found in the following page:
 - [Binary](formats/Binary.md)
 - [TXT](formats/TXT.md)
 - [Markdown](formats/Markdown.md)
+- [File system and archives (ZIP, Tar)](#file-system-and-archives-zip-tar)
+- [Spreadsheets: XLS, XLSx](#spreadsheets-xls-xlsx)
+- [Documents: DOCx](#documents-docx)
+- [EXIF Metadata](#exif-metadata)
+- [Bibtex](#bibtex)
+- [YAML](#yaml)
 
 ### JSON
 
