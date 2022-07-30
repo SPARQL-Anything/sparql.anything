@@ -21,6 +21,8 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
@@ -30,6 +32,7 @@ import java.util.Properties;
 public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder {
 	private final Op op;
 	private OpComponentsAnalyser analyser;
+	private Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXGraphBuilder.class);
 	
 	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
 		super(resourceId, ds, properties);
@@ -50,7 +53,8 @@ public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder 
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 		if (analyser.match(graph, subject, predicate, object)) {
-			datasetGraph.getGraph(graph).add(new Triple(subject, predicate, object));
+//			datasetGraph.getGraph(graph).add(new Triple(subject, predicate, object));
+			super.add(graph, subject, predicate, object);
 			return true;
 		}
 		return false;
