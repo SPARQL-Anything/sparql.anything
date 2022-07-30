@@ -420,16 +420,34 @@ public class Issues {
 	 * @throws IOException
 	 */
 	@Test
-	public void testIssueONDISK() throws URISyntaxException, IOException {
-		String location = getClass().getClassLoader().getResource("issues/issue264.txt").toURI().toString();
+	public void testIssue280() throws URISyntaxException, IOException {
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+
+		String location = getClass().getClassLoader().getResource("issues/issue280.json").toURI().toString();
+
 		Query qs = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT * WHERE { SERVICE <x-sparql-anything:location=" + location + ",ondisk=/Users/lgu/Desktop/tmp> {?s ?p ?o} }");
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
+						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
+						"SELECT ?o WHERE { " +
+						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=/Users/lgu/Desktop/tmp> { " +
+						" GRAPH  ?g {?s xyz:name ?o} } }");
+
+//		System.out.println(location);
+//		System.out.println(qs.toString(Syntax.defaultSyntax));
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
-		System.out.println(ResultSetFormatter.asText(rs));
-//		while (rs.hasNext()) {
-//			assertEquals("Hello world!", rs.next().get("line").asLiteral().getValue().toString());
-//		}
+//		System.out.println(ResultSetFormatter.asText(rs));
+		Set<String> results = new HashSet<>();
+		while (rs.hasNext()) {
+			results.add(rs.next().get("o").asLiteral().getValue().toString());
+		}
+//		System.out.println(results);
+		assertTrue(results.contains("Friends"));
+		assertTrue(results.contains("Cougar Town"));
 	}
 }

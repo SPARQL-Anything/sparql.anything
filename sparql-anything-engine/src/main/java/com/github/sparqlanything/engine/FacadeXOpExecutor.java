@@ -33,6 +33,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.TxnType;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -159,6 +160,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		logger.debug("triplification done -- commiting and ending the write txn");
 		dg.commit();
+		dg.end();
+
+		dg.begin(ReadWrite.READ);
+		logger.debug("Size default graph {}", dg.getDefaultGraph().size());
+		logger.debug("Size of the graph {}: {}",p.getProperty(IRIArgument.LOCATION.toString()), dg.getGraph(NodeFactory.createURI(p.getProperty(IRIArgument.LOCATION.toString())+"#")).size());
 		dg.end();
 
 		if (urlLocation != null) {
@@ -294,6 +300,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 				// Execute with default, bulk method
 				DatasetGraph dg = getDatasetGraph(t, p, opService.getSubOp());
+				logger.trace("Execute with default method dg is in transaction? {} transaction type {}", dg.isInTransaction(), dg.transactionType());
+				if(!dg.isInTransaction()){
+					logger.debug("begin read txn");
+					dg.begin(TxnType.READ);
+				}
+
 				FacadeXExecutionContext ec = new FacadeXExecutionContext(
 						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 				return QC.execute(opService.getSubOp(), input, ec);
@@ -653,7 +665,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.debug("begin read txn");
 			this.execCxt.getDataset().begin(TxnType.READ);
 		}
-		
+
+		this.execCxt.getDataset().listGraphNodes().forEachRemaining(g->{logger.trace("Graph {}", g.toString());});
+
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
 				this.execCxt.getDataset().getDefaultGraph().size());
