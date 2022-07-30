@@ -54,8 +54,7 @@ public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder 
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 		if (analyser.match(graph, subject, predicate, object)) {
 //			datasetGraph.getGraph(graph).add(new Triple(subject, predicate, object));
-			super.add(graph, subject, predicate, object);
-			return true;
+			return super.add(graph, subject, predicate, object);
 		}
 		return false;
 	}
