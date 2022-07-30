@@ -385,13 +385,17 @@ public class Issues {
 	public void testIssue264() throws URISyntaxException, IOException {
 		String location = getClass().getClassLoader().getResource("issues/issue264.txt").toURI().toString();
 		Query qs = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT ?line WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.regex \"(.*)\\\\n\" ; fx:txt.group 1 . ?s fx:anySlot ?line} }");
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT * WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.regex \"(.*)\" ; fx:txt.group 1 . ?s ?p ?o FILTER(ISLITERAL(?o))} }");
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
+//		System.out.println(ResultSetFormatter.asText(rs));
+		Set<String> results = new HashSet<>();
 		while (rs.hasNext()) {
-			assertEquals("Hello world!", rs.next().get("line").asLiteral().getValue().toString());
+			results.add(rs.next().get("o").asLiteral().getValue().toString());
 		}
+//		System.out.println(results);
+		assertTrue(results.contains("Hello world!"));
 	}
 
 	/**
@@ -407,5 +411,25 @@ public class Issues {
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
 		// assertTrue(QueryExecutionFactory.create(queryStr,
 		// ds).execSelect().hasNext());
+	}
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/264
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssueONDISK() throws URISyntaxException, IOException {
+		String location = getClass().getClassLoader().getResource("issues/issue264.txt").toURI().toString();
+		Query qs = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT * WHERE { SERVICE <x-sparql-anything:location=" + location + ",ondisk=/Users/lgu/Desktop/tmp> {?s ?p ?o} }");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
+		System.out.println(ResultSetFormatter.asText(rs));
+//		while (rs.hasNext()) {
+//			assertEquals("Hello world!", rs.next().get("line").asLiteral().getValue().toString());
+//		}
 	}
 }
