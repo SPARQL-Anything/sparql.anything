@@ -42,6 +42,8 @@ import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunction;
 import org.apache.jena.sparql.pfunction.PropertyFunctionFactory;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
+import org.apache.jena.tdb.TDB;
+import org.apache.jena.tdb2.TDB2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,6 +107,10 @@ public final class FacadeX {
 			Registry.registerTriplifier("com.github.sparqlanything.binary.BinaryTriplifier",
 					new String[] { "png", "jpeg", "jpg", "bmp", "tiff", "tif", "ico" },
 					new String[] { "image/png", "image/jpeg", "image/bmp", "image/tiff", "image/vnd.microsoft.icon" });
+
+
+//			TDB.getContext().set(TDB.symUnionDefaultGraph, true) ;
+//			TDB2.getContext().set(TDB2.symUnionDefaultGraph, true);
 
 		} catch (TriplifierRegisterException e) {
 			throw new RuntimeException(e);

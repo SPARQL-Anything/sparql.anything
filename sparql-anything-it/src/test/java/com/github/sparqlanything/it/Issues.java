@@ -31,20 +31,13 @@ import java.util.Set;
 
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
-import org.apache.jena.query.Syntax;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.tdb.TDB;
+import org.apache.jena.tdb2.TDB2;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -421,25 +414,26 @@ public class Issues {
 	 */
 	@Test
 	public void testIssue280() throws URISyntaxException, IOException {
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
 
 		String location = getClass().getClassLoader().getResource("issues/issue280.json").toURI().toString();
 
 		Query qs = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
 						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
-						"SELECT ?o WHERE { " +
+						"SELECT * WHERE { " +
 						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=/Users/lgu/Desktop/tmp> { " +
-						" GRAPH  ?g {?s xyz:name ?o} } }");
+						" ?s xyz:name ?o }  }");
 
 //		System.out.println(location);
 //		System.out.println(qs.toString(Syntax.defaultSyntax));
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
 		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
 //		System.out.println(ResultSetFormatter.asText(rs));
 		Set<String> results = new HashSet<>();

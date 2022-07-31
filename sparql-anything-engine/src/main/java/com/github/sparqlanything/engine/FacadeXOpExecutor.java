@@ -19,14 +19,7 @@ package com.github.sparqlanything.engine;
 
 import com.github.sparqlanything.facadeiri.FacadeIRIParser;
 import com.github.sparqlanything.metadata.MetadataTriplifier;
-import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import com.github.sparqlanything.model.FacadeXGraphBuilder;
-import com.github.sparqlanything.model.IRIArgument;
-import com.github.sparqlanything.model.Slice;
-import com.github.sparqlanything.model.Slicer;
-import com.github.sparqlanything.model.TripleFilteringFacadeXGraphBuilder;
-import com.github.sparqlanything.model.Triplifier;
-import com.github.sparqlanything.model.TriplifierHTTPException;
+import com.github.sparqlanything.model.*;
 import com.github.sparqlanything.zip.FolderTriplifier;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
@@ -40,13 +33,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.OpBGP;
-import org.apache.jena.sparql.algebra.op.OpJoin;
-import org.apache.jena.sparql.algebra.op.OpPath;
-import org.apache.jena.sparql.algebra.op.OpProcedure;
-import org.apache.jena.sparql.algebra.op.OpPropFunc;
-import org.apache.jena.sparql.algebra.op.OpService;
-import org.apache.jena.sparql.algebra.op.OpTable;
+import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.algebra.table.TableUnit;
 import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -55,13 +42,7 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.iterator.QueryIter;
-import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
-import org.apache.jena.sparql.engine.iterator.QueryIterDefaulting;
-import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
-import org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper;
-import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
-import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
+import org.apache.jena.sparql.engine.iterator.*;
 import org.apache.jena.sparql.engine.join.Join;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
@@ -76,27 +57,31 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class FacadeXOpExecutor extends OpExecutor {
 
-	private TriplifierRegister triplifierRegister;
 	public final static String PROPERTY_OPSERVICE_SILENT = "opservice.silent";
-
-	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
-	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
-
-	private Map<String, DatasetGraph> executedFacadeXIris;
-
-	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
 	// TODO
 //	private final static Symbol audit = Symbol.create("facade-x-audit");
 	public final static Symbol strategy = Symbol.create("facade-x-strategy");
+	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
+	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
+	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
+	private final TriplifierRegister triplifierRegister;
+	private final Map<String, DatasetGraph> executedFacadeXIris;
+
+	public FacadeXOpExecutor(ExecutionContext execCxt) {
+		super(execCxt);
+		triplifierRegister = TriplifierRegister.getInstance();
+
+		if (!execCxt.getContext().isDefined(inMemoryCache)) {
+			logger.trace("Initialising in-memory cache");
+			execCxt.getContext().set(inMemoryCache, new HashMap<String, DatasetGraph>());
+		}
+
+		executedFacadeXIris = execCxt.getContext().get(inMemoryCache);
+	}
 
 	protected QueryIterator execute(OpPropFunc opPropFunc, QueryIterator input) {
 		logger.trace(opPropFunc.toString());
@@ -119,18 +104,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 				new PropFuncArg(t.getSubject()), new PropFuncArg(t.getObject()), OpTable.create(new TableUnit()));
 	}
 
-	public FacadeXOpExecutor(ExecutionContext execCxt) {
-		super(execCxt);
-		triplifierRegister = TriplifierRegister.getInstance();
-
-		if (!execCxt.getContext().isDefined(inMemoryCache)) {
-			logger.trace("Initialising in-memory cache");
-			execCxt.getContext().set(inMemoryCache, new HashMap<String, DatasetGraph>());
-		}
-
-		executedFacadeXIris = execCxt.getContext().get(inMemoryCache);
-	}
-
 	private String getInMemoryCacheKey(Properties properties, Op op) {
 		return properties.toString() + op.toString();
 	}
@@ -143,7 +116,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException, InstantiationException,
 			IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		DatasetGraph dg = null;
-		if(t == null){
+		if (t == null) {
 			return DatasetGraphFactory.create();
 		}
 		// If the operation was already executed in a previous call, reuse the same
@@ -152,10 +125,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op)))
 			return executedFacadeXIris.get(getInMemoryCacheKey(p, op));
 
-		logger.trace("Properties extracted: {}", p.toString());
+		logger.trace("Properties extracted: {}", p);
 		String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 
-		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op.toString());
+		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op);
 		dg = triplify(op, p, t);
 
 		logger.debug("triplification done -- commiting and ending the write txn");
@@ -164,7 +137,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		dg.begin(ReadWrite.READ);
 		logger.debug("Size default graph {}", dg.getDefaultGraph().size());
-		logger.debug("Size of the graph {}: {}",p.getProperty(IRIArgument.LOCATION.toString()), dg.getGraph(NodeFactory.createURI(p.getProperty(IRIArgument.LOCATION.toString())+"#")).size());
+		logger.debug("Size of the graph {}: {}", p.getProperty(IRIArgument.LOCATION.toString()), dg.getGraph(NodeFactory.createURI(p.getProperty(IRIArgument.LOCATION.toString()) + "#")).size());
 		dg.end();
 
 		if (urlLocation != null) {
@@ -192,7 +165,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
-		logger.trace("SERVICE uri: {} {}", opService.getService(), opService.toString());
+		logger.trace("SERVICE uri: {} {}", opService.getService(), opService);
 		if (opService.getService().isVariable())
 			return postponeService(opService, input);
 		if (opService.getService().isURI() && isFacadeXURI(opService.getService().getURI())) {
@@ -206,7 +179,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 					return QueryIterNullIterator.create(execCxt);
 				}
 
-				if(Triplifier.getSliceArgument(p)) {
+				if (Triplifier.getSliceArgument(p)) {
 
 					// Execute with slicing
 					if (t instanceof Slicer) {
@@ -215,18 +188,19 @@ public class FacadeXOpExecutor extends OpExecutor {
 						final Iterable<Slice> it = slicer.slice(p);
 						final Iterator<Slice> iterator = it.iterator();
 						final String resourceId = Triplifier.getResourceId(p);
-						final List<Binding> elements = new ArrayList<>() ;
-						for ( ; input.hasNext() ; )
-							elements.add(input.nextBinding()) ;
+						final List<Binding> elements = new ArrayList<>();
+						for (; input.hasNext(); )
+							elements.add(input.nextBinding());
 
-						return new QueryIter(execCxt){
+						return new QueryIter(execCxt) {
 							QueryIterator current = null;
+
 							@Override
 							protected boolean hasNextBinding() {
 								logger.trace("hasNextBinding? ");
 								logger.debug("current: {}", current != null ? current.hasNext() : "null");
-								while(current == null || !current.hasNext()){
-									if(iterator.hasNext()) {
+								while (current == null || !current.hasNext()) {
+									if (iterator.hasNext()) {
 										Slice slice = iterator.next();
 										logger.debug("Executing on slice: {}", slice.iteration());
 										// Execute and set current
@@ -255,7 +229,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 										cloned = QueryIterPlainWrapper.create(elements.iterator());
 										current = QC.execute(opService.getSubOp(), cloned, ec);
 										logger.debug("Set current. hasNext? {}", current.hasNext());
-										if(current.hasNext()){
+										if (current.hasNext()) {
 											logger.trace("Break.");
 											break;
 										}
@@ -301,18 +275,24 @@ public class FacadeXOpExecutor extends OpExecutor {
 				// Execute with default, bulk method
 				DatasetGraph dg = getDatasetGraph(t, p, opService.getSubOp());
 				logger.trace("Execute with default method dg is in transaction? {} transaction type {}", dg.isInTransaction(), dg.transactionType());
-				if(!dg.isInTransaction()){
+				if (!dg.isInTransaction()) {
 					logger.debug("begin read txn");
 					dg.begin(TxnType.READ);
 				}
 
-				FacadeXExecutionContext ec = new FacadeXExecutionContext(
-						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+				FacadeXExecutionContext ec;
+				if (p.containsKey(IRIArgument.ONDISK.toString())) {
+					ec = new FacadeXExecutionContext(
+							new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
+				} else {
+					ec = new FacadeXExecutionContext(
+							new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+				}
 				return QC.execute(opService.getSubOp(), input, ec);
 
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
-					| IllegalAccessException | InvocationTargetException | NoSuchMethodException
-					| ClassNotFoundException | TriplifierHTTPException e) {
+					 | IllegalAccessException | InvocationTargetException | NoSuchMethodException
+					 | ClassNotFoundException | TriplifierHTTPException e) {
 				logger.error("An error occurred: {}", e.getMessage());
 				throw new RuntimeException(e);
 			} catch (UnboundVariableException e) {
@@ -367,20 +347,20 @@ public class FacadeXOpExecutor extends OpExecutor {
 		};
 	}
 
-	private int detectStrategy(Properties p){
+	private int detectStrategy(Properties p) {
 		Integer strategy = null;
 		// Local value for strategy?
 		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());
 		// Global value for strategy?
 		Integer globalStrategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
-		if(localStrategy != null){
-			if(globalStrategy!=null){
+		if (localStrategy != null) {
+			if (globalStrategy != null) {
 				logger.warn("Local strategy {} overriding global strategy {}", localStrategy, globalStrategy);
 			}
 			strategy = Integer.parseInt(localStrategy);
-		} else if(globalStrategy!=null){
+		} else if (globalStrategy != null) {
 			strategy = globalStrategy;
-		} else{
+		} else {
 			// Defaul strategy
 			strategy = 1;
 		}
@@ -575,7 +555,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 					logger.trace("OpExtend {}", vis.getOpExtend());
 					Iterator<Var> vars = vis.getOpExtend().getVarExprList().getVars().iterator();
 					while (vars.hasNext()) {
-						Var var = (Var) vars.next();
+						Var var = vars.next();
 						if (var.getName().equals(e.getVariableName())) {
 							e.setOpExtend(vis.getOpExtend());
 						}
@@ -597,7 +577,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
 				if (t.getObject().isURI()) {
 					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""),
-							t.getObject().getURI().toString());
+							t.getObject().getURI());
 				} else if (t.getObject().isLiteral()) {
 					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""),
 							t.getObject().getLiteral().getValue().toString());
@@ -653,20 +633,22 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 
-		if(this.execCxt.getClass()!=FacadeXExecutionContext.class) {
+		if (this.execCxt.getClass() != FacadeXExecutionContext.class) {
 			return super.execute(opBGP, input);
 		}
 
 		// i think we can consider this the start of the query execution and therefore the read txn.
 		// we won't end this read txn until the next query takes execution back through BaseFacadeXBuilder
-		if(!this.execCxt.getDataset().isInTransaction()){
+		if (!this.execCxt.getDataset().isInTransaction()) {
 			// i think we need the test (instead of just unconditionally starting the txn) because if we postpone
 			// during a query execution, execution could pass through here again
 			logger.debug("begin read txn");
 			this.execCxt.getDataset().begin(TxnType.READ);
 		}
 
-		this.execCxt.getDataset().listGraphNodes().forEachRemaining(g->{logger.trace("Graph {}", g.toString());});
+		this.execCxt.getDataset().listGraphNodes().forEachRemaining(g -> {
+			logger.trace("Graph {}", g.toString());
+		});
 
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
@@ -681,11 +663,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		Properties p = new Properties();
 		try {
-			logger.debug("Input BGP {} ", opBGP.toString());
+			logger.debug("Input BGP {} ", opBGP);
 			extractPropertiesFromOpGraph(p, opBGP);
 			if (p.size() > 0) {
 				// if we have FX properties we at least need to excludeFXProperties()
-				logger.trace("BGP Properties {}", p.toString());
+				logger.trace("BGP Properties {}", p);
 				DatasetGraph dg;
 				if (this.execCxt.getDataset().isEmpty()) {
 					// we only need to call getDatasetGraph() if we have an empty one
@@ -702,10 +684,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 			OpBGP fakeBGP = extractFakePattern(opBGP);
 			return postponeBGP(excludeOpPropFunction(opBGP), QC.executeDirect(fakeBGP.getPattern(), input2, execCxt));
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
-				| ClassNotFoundException | IOException e) {
+				 | ClassNotFoundException | IOException e) {
 			logger.error(e.getMessage());
 		}
-		logger.debug("Execute default {} {}", opBGP.toString(), excludeOpPropFunction(opBGP).toString());
+		logger.debug("Execute default {} {}", opBGP, excludeOpPropFunction(opBGP));
 		QueryIterator current = super.execute(excludeOpPropFunction(opBGP), input2);
 		return current;
 	}
@@ -723,15 +705,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	private boolean isFacadeXURI(String uri) {
-		if (uri.startsWith(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
-			return true;
-		}
-		return false;
+		return uri.startsWith(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA);
 	}
 
 	@Override
 	protected QueryIterator execute(OpJoin opJoin, QueryIterator input) {
-		if(this.execCxt.getClass()!=FacadeXExecutionContext.class) {
+		if (this.execCxt.getClass() != FacadeXExecutionContext.class) {
 			return super.execute(opJoin, input);
 		}
 		return super.execute(opJoin, input);

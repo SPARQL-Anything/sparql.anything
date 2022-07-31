@@ -36,8 +36,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements FacadeXGraphBuilder {
-	private static final String PROPERTY_ONDISK_REUSE = "ondisk.reuse";
-	private static final String PROPERTY_ONDISK = "ondisk";
+
 	protected static final Logger log = LoggerFactory.getLogger(BaseFacadeXGraphBuilder.class);
 
 	// when using a TDB2 this is defined 
@@ -53,8 +52,8 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 	public static DatasetGraph getDatasetGraph(Properties properties){
 		DatasetGraph dsg;
 		String TDB2Path = "" ;
-		boolean ONDISK = properties.containsKey(PROPERTY_ONDISK);
-		boolean ONDISK_REUSE = properties.containsKey(PROPERTY_ONDISK_REUSE); // TODO any string counts as "true"
+		boolean ONDISK = properties.containsKey(IRIArgument.ONDISK.toString());
+		boolean ONDISK_REUSE = properties.containsKey(IRIArgument.ONDISK_REUSE.toString()); // TODO any string counts as "true"
 
 		if(ONDISK){
 			if(BaseFacadeXGraphBuilder.previousTDB2Path != "" && ONDISK_REUSE){
@@ -65,11 +64,11 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 						log.debug("deleting previous TDB2 at: {}",previousTDB2Path);
 						FileUtils.deleteDirectory(new File(previousTDB2Path)) ;
 					}
-					if(Files.isDirectory(Paths.get(properties.getProperty(PROPERTY_ONDISK)))){
-						TDB2Path = Files.createTempDirectory(Paths.get(properties.getProperty(PROPERTY_ONDISK)),"").toString();
+					if(Files.isDirectory(Paths.get(properties.getProperty(IRIArgument.ONDISK.toString())))){
+						TDB2Path = Files.createTempDirectory(Paths.get(properties.getProperty(IRIArgument.ONDISK.toString())),"").toString();
 					}else{
 						log.debug("the specified path is not a directory: {}\nusing /tmp instead", 
-								properties.getProperty(PROPERTY_ONDISK));
+								properties.getProperty(IRIArgument.ONDISK.toString()));
 						TDB2Path = Files.createTempDirectory(Paths.get("/tmp"),"").toString();
 					}
 					// store the TDB2Path for next time (in case we want to reuse it or delete it)
