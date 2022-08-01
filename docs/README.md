@@ -207,7 +207,7 @@ Facade-X RDF:
 ] .
 ```
 
-[More details](format/JSON.md)
+[More details](formats/JSON.md)
 
 
 ### HTML
@@ -260,7 +260,7 @@ Facade-X RDF:
 ] .
 ```
 
-[More details](format/HTML.md)
+[More details](formats/HTML.md)
 
 ### XML
 
@@ -342,6 +342,7 @@ Facade-X RDF:
           ]
 ] .
 ```
+[More details](formats/XML.md)
 
 ### CSV
 
@@ -385,7 +386,7 @@ Facade-X RDF:
 
 ```
 
-[More details](format/CSV.md)
+[More details](formats/CSV.md)
 
 ### Binary (BIN, PNG, JPEG, JPG, BMP, TIFF, TIF, ICO)
 
@@ -405,6 +406,8 @@ Facade-X RDF:
     .
 ```
 
+[More details](formats/Binary.md)
+
 ### TXT
 
 Data:
@@ -421,6 +424,8 @@ Facade-X RDF:
 [] a fx:root ;
     rdf:_1 "Hello World!" .
 ```
+
+[More details](formats/TXT.md)
 
 ### File system and archives (ZIP, Tar)
 
@@ -443,6 +448,8 @@ Facade-X RDF:
  rdf:_2 "file.json" ;
  rdf:_3 "file.xml" ] .
 ```
+
+[More details](formats/Archive.md)
 
 ### Spreadsheets: XLS, XLSx
 
