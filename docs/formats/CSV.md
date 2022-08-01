@@ -22,7 +22,7 @@ SPARQL Anything selects this transformer for the following media types:
 ## Default Transformation
 
 
-### Data
+### Data
 
 ```csv
 email,name,surname

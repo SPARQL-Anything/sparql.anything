@@ -120,6 +120,17 @@ and get this result without caring of transforming JSON to RDF.
 | "Cougar Town" |
 | "Friends"     |
 
+### Executing the query with the SPARQL Anything CLI
+SPARQL Anything requires `Java >= 11` to be installed in your operating system.
+Download the latest version of the SPARQL Anything command line from the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
+The command line is a file named `sparql-anything-<version>.jar`. 
+Prepare a file with the query above and name it, for example `query.sparql`.
+The query can be executed as follows:
+
+```bash
+java -jar sparql-anything-0.7.0.jar -q query.sparql
+```
+See the [usage section](#Usage) section for details on the command line interface.
 
 ## Supported Formats
 Currently, SPARQL Anything supports the following list of formats but the possibilities are limitless!

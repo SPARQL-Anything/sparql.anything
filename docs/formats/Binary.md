@@ -30,7 +30,7 @@ SPARQL Anything selects this transformer for the following media types:
 ## Default Transformation
 
 
-### Data
+### Data
 
 <p><img src="https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg"/></p>
 
