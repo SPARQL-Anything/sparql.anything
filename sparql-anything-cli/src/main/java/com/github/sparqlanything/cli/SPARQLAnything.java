@@ -447,13 +447,13 @@ public class SPARQLAnything {
 				File loadSource = new File(load);
 				if (loadSource.isDirectory()) {
 
-					logger.info("Loading from directory: {}", loadSource);
+					logger.info("Loading files from directory: {}", loadSource);
 					// If directory, load all files
 					List<String> list = new ArrayList<String>();
 					Path base = Paths.get(".");
 					File[] files = loadSource.listFiles();
 					for (File f : files) {
-						logger.info("Adding location: {}", f);
+						logger.info("Adding file to be loaded: {}", f);
 						list.add(base.relativize(f.toPath()).toString());
 					}
 					kb = DatasetFactory.createGeneral();
@@ -465,14 +465,26 @@ public class SPARQLAnything {
 							kb.addNamedModel(l, m);
 						} catch (Exception e) {
 							logger.error("An error occurred while loading {}", l);
+							logger.error(" - Problem was: ", e.getMessage());
+							if(logger.isDebugEnabled()){
+								logger.error("",e);
+							}
 						}
 					}
 					logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
 				} else if (loadSource.isFile()) {
 					// If it is a file, load it
-					logger.info("Load location: {}", loadSource);
+					logger.info("Load file: {}", loadSource);
 					Path base = Paths.get(".");
-					kb = DatasetFactory.create(base.relativize(loadSource.toPath()).toString());
+					try{
+						kb = DatasetFactory.create(base.relativize(loadSource.toPath()).toString());
+					} catch (Exception e) {
+						logger.error("An error occurred while loading {}", l);
+						logger.error(" - Problem was: ", e.getMessage());
+						if(logger.isDebugEnabled()){
+							logger.error("",e);
+						}
+				}
 				} else {
 					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
 					return;
