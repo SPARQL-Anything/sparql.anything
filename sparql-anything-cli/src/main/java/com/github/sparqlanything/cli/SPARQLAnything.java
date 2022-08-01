@@ -449,22 +449,23 @@ public class SPARQLAnything {
 
 					logger.info("Loading files from directory: {}", loadSource);
 					// If directory, load all files
-					List<String> list = new ArrayList<String>();
-					Path base = Paths.get(".");
+					List<File> list = new ArrayList<File>();
+					//Path base = Paths.get(".");
 					File[] files = loadSource.listFiles();
 					for (File f : files) {
 						logger.info("Adding file to be loaded: {}", f);
-						list.add(base.relativize(f.toPath()).toString());
+//						list.add(base.relativize(f.toPath()));
+						list.add(f);
 					}
 					kb = DatasetFactory.createGeneral();
-					for (String l : list) {
+					for (File f : list) {
 						try {
 							Model m = ModelFactory.createDefaultModel();
 							// read into the model.
-							m.read(l);
-							kb.addNamedModel(l, m);
+							m.read(f.getAbsolutePath());
+							kb.addNamedModel(f.toURI().toString(), m);
 						} catch (Exception e) {
-							logger.error("An error occurred while loading {}", l);
+							logger.error("An error occurred while loading {}", f);
 							logger.error(" - Problem was: ", e.getMessage());
 							if(logger.isDebugEnabled()){
 								logger.error("",e);
