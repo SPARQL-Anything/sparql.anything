@@ -173,8 +173,8 @@ A detailed description of the interpretation can be found in the following pages
 - [Spreadsheets: XLS, XLSx](formats/Spreadsheet.md)
 - [Documents: DOCx](formats/Word_Processing_Document.md)
 - [EXIF Metadata](formats/Metadata.md)
-- [Bibtex](format)
-- [YAML](formats/Bibtex.md)
+- [Bibtex](format/Bibtex.md)
+- [YAML](formats/YAML.md)
 
 ### JSON
 
