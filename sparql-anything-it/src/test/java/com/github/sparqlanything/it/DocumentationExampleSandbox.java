@@ -26,6 +26,59 @@ public class DocumentationExampleSandbox {
 
 	private static Map<String, String> prefixes = new HashMap<String, String>();
 
+	public static void doc(){
+		String queryString = "CONSTRUCT\n" +
+				"  {\n" +
+				"    ?s ?p ?o .\n" +
+				"  }\n" +
+				"WHERE\n" +
+				"  { SERVICE <x-sparql-anything:https://sparql-anything.cc/examples/Doc1.docx>\n" +
+				"      { ?s  ?p  ?o }\n" +
+				"  }";
+		Query query = QueryFactory.create(queryString);
+		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefixes(prefixes);
+
+		m.write(System.out, "TTL");
+
+		// Query 2
+		queryString = "CONSTRUCT\n" +
+				"  {\n" +
+				"    ?s ?p ?o .\n" +
+				"  }\n" +
+				"WHERE\n" +
+				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Doc1.docx,docs.table-headers=true>\n" +
+				"      { ?s  ?p  ?o }\n" +
+				"  }";
+		query = QueryFactory.create(queryString);
+		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+		m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefixes(prefixes);
+		m.write(System.out, "TTL");
+
+		// query 3
+		queryString = "CONSTRUCT\n" +
+				"  {\n" +
+				"    ?s ?p ?o .\n" +
+				"  }\n" +
+				"WHERE\n" +
+				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Doc1.docx,docs.merge-paragraphs=true>\n" +
+				"      { ?s  ?p  ?o }\n" +
+				"  }";
+		query = QueryFactory.create(queryString);
+		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+		m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefixes(prefixes);
+		m.write(System.out, "TTL");
+
+	}
+
 	public static void spreadsheet(){
 		String queryString = "CONSTRUCT\n" +
 				"  {\n" +
@@ -392,7 +445,8 @@ public class DocumentationExampleSandbox {
 
 //		archive();
 
-		spreadsheet();
+//		spreadsheet();
+		doc();
 	}
 
 }
