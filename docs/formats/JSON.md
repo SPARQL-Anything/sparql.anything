@@ -43,7 +43,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Query
 
-``
+```
 
 CONSTRUCT
   {
@@ -56,7 +56,7 @@ WHERE
 
 ```
 
-### Facade-X RDF
+### Facade-X RDF
 
 ```turtle
 @prefix xyz:    <http://sparql.xyz/facade-x/data/> .

@@ -51,7 +51,9 @@ public class TarTriplifier implements Triplifier {
 		String dataSourceId = root;
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
-		Graph g = GraphFactory.createDefaultGraph();
+		logger.trace("Matches {}", matches);
+
+//		Graph g = GraphFactory.createDefaultGraph();
 		builder.addRoot(dataSourceId, root);
 
 		try {

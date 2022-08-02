@@ -24,6 +24,55 @@ public class DocumentationExampleSandbox {
 
 	private static Map<String, String> prefixes = new HashMap<String, String>();
 
+	public static void archive(){
+		String queryString = "CONSTRUCT\n" +
+				"  {\n" +
+				"    ?s ?p ?o .\n" +
+				"  }\n" +
+				"WHERE\n" +
+				"  { SERVICE <x-sparql-anything:location=/Users/lgu/Desktop/example.tar>\n" +
+				"      { ?s  ?p  ?o }\n" +
+				"  }";
+		Query query = QueryFactory.create(queryString);
+		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefixes(prefixes);
+
+		m.write(System.out, "TTL");
+
+		// Query 2
+		queryString = "PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>\n" +
+				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"\n" +
+				"CONSTRUCT\n" +
+				"  {\n" +
+				"    ?s1 ?p1 ?o1 .\n" +
+				"  }\n" +
+				"WHERE\n" +
+				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/example.tar>\n" +
+				"      { fx:properties fx:archive.matches  \".*txt|.*csv\" .\n" +
+				"        ?s        fx:anySlot            ?file1 .\n" +
+				"        SERVICE <x-sparql-anything:> {\n" +
+				"            fx:properties fx:location ?file1 .\n" +
+				"            fx:properties fx:from-archive \"https://sparql-anything.cc/examples/example.tar\" .\n" +
+				"            ?s1 ?p1 ?o1 .\n" +
+				"        }\n" +
+				"      }\n" +
+				"  }";
+		query = QueryFactory.create(queryString);
+		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+		m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefixes(prefixes);
+		m.write(System.out, "TTL");
+
+	}
+
 	public static void json1() throws URISyntaxException {
 //		String location = DocumentationExampleSandbox.class.getClassLoader().getResource("DocExamples/json.json")
 //				.toURI().toString();
@@ -261,13 +310,15 @@ public class DocumentationExampleSandbox {
 
 //		binary();
 		
-		txt();
+//		txt();
 		
 //		Pattern p = Pattern.compile(".*\n");
 //		Matcher m = p.matcher("Hello world!\nHello world\n");
 //		if(m.find()) {
 //			System.out.println(m.group());
 //		}
+
+		archive();
 	}
 
 }
