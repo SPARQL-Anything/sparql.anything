@@ -1,6 +1,7 @@
 # Word Processor Documents
 
 A word processor is a computer program that provides for input, editing, formatting, and output of text, often with some additional features.
+[[From Wikipedia](https://en.wikipedia.org/wiki/Word_processor)]
 
 ## Extensions
 

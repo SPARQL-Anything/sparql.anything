@@ -1,6 +1,7 @@
 # Archive File
 
-An archive file is a computer file that is composed of one or more files. 
+An archive file is a computer file that is composed of one or more files.
+[[From Wikipedia](https://en.wikipedia.org/wiki/Archive_file)]
 
 ## Extensions
 
