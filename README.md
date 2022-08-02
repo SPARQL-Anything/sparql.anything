@@ -176,6 +176,7 @@ A detailed description of the interpretation can be found in the following pages
 - [Bibtex](format/Bibtex.md)
 - [YAML](formats/YAML.md)
 
+<!--
 ### JSON
 
 Data:
@@ -870,7 +871,7 @@ Facade-X RDF:
 	xyz:bar "foo"^^xsd:string ]]
 	.
 ```
-
+-->
 
 
 
@@ -968,6 +969,7 @@ WHERE {
 
 \* It is mandatory to provide either `location`, `content`, or `command`.
 
+<!--
 ### Format specific options
 
 #### HTML
@@ -1036,7 +1038,7 @@ WHERE {
 |-|-|-|-|
 |docs.table-headers|It tells the document triplifier to use the headers of the tables within the document file for minting the properties of the generated triples.|true/false|false|
 |docs.merge-paragraphs|It tells the document triplifier to merge all the paragraphs of the document into a single slot (new line characters are preserved)|true/false|false|
-
+-->
 
 ### HTTP options
 SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
