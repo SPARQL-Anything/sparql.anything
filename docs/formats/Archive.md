@@ -1,7 +1,9 @@
-# Archive File
+# Archive Files and Directories
 
-An archive file is a computer file that is composed of one or more files.
-[[From Wikipedia](https://en.wikipedia.org/wiki/Archive_file)]
+Archives and directories can be seen as files with the purpose of collecting other files.
+
+According to the Facade-X metamodel archives and directories can be seen as lists of filenames.
+
 
 ## Extensions
 
@@ -60,6 +62,47 @@ WHERE
   rdf:_3    "example/test.json" ;
   rdf:_4    "example/test.xml" ;
   rdf:_5    "example/test.txt"
+] .
+```
+
+### Data: Directory  `/Users/lgu/Desktop/example`
+
+```
+/Users/lgu/Desktop/example
+├── test.csv
+├── test.json
+├── test.txt
+└── test.xml
+```
+
+### Query
+
+```
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=/Users/lgu/Desktop/example>
+      { ?s  ?p  ?o }
+  }
+
+```
+
+### Facade-X RDF
+
+```turtle
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type  fx:root ;
+  rdf:_1    "file:///Users/lgu/Desktop/example/" ;
+  rdf:_2    "file:///Users/lgu/Desktop/example/test.csv" ;
+  rdf:_3    "file:///Users/lgu/Desktop/example/test.json" ;
+  rdf:_4    "file:///Users/lgu/Desktop/example/test.xml" ;
+  rdf:_5    "file:///Users/lgu/Desktop/example/test.txt"
 ] .
 ```
 

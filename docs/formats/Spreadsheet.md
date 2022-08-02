@@ -1,8 +1,8 @@
 # Spreadsheet documents
 
-A spreadsheet is a computer application for computation, organization, analysis and storage of data in tabular form. 
-Each cell may contain either numeric or text data, or the results of formulas that automatically calculate and display a value based on the contents of other cells.   
-
+Spreadsheets are files that organise data as a collection of named tables.
+Similarly to CSV, each table of a spreadsheet can be seen as a container of data records.
+Each container is then stored in a different RDF graph.
 
 ## Extensions
 

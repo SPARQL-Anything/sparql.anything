@@ -1,10 +1,9 @@
 # YAML
 
-YAML is a human-readable data-serialization language. 
-It is commonly used for configuration files and in applications where data is being stored or transmitted. 
-YAML targets many of the same communications applications as Extensible Markup Language (XML) but has a minimal syntax which intentionally differs from SGML.
-It uses both Python-style indentation to indicate nesting, and a more compact format that uses [...] for lists and {...} for maps thus JSON files are valid YAML 1.2.
-[[From Wikipedia](https://en.wikipedia.org/wiki/YAML)]
+YAML is a lightweight, human-readable data-serialization language.
+YAML is a ``superset'' of JSON (any JSON file can be specified in YAML) and, similarly to JSON, data can be organised in lists or associative arrays.
+However, differently from JSON, comments and custom data types are allowed.
+Therefore, in addition to the basic data structures required for capturing JSON files, *instance-of* is needed for representing custom data types.
 
 ## Extensions
 
