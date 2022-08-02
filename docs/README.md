@@ -169,12 +169,12 @@ A detailed description of the interpretation can be found in the following pages
 - [Binary](formats/Binary.md)
 - [TXT](formats/TXT.md)
 - [Markdown](formats/Markdown.md)
-- [File system and archives (ZIP, Tar)](#file-system-and-archives-zip-tar)
-- [Spreadsheets: XLS, XLSx](#spreadsheets-xls-xlsx)
-- [Documents: DOCx](#documents-docx)
-- [EXIF Metadata](#exif-metadata)
-- [Bibtex](#bibtex)
-- [YAML](#yaml)
+- [File system and archives (ZIP, Tar)](formats/Archive.md)
+- [Spreadsheets: XLS, XLSx](formats/Spreadsheet.md)
+- [Documents: DOCx](formats/Word_Processing_Document.md)
+- [EXIF Metadata](formats/Metadata.md)
+- [Bibtex](format)
+- [YAML](formats/Bibtex.md)
 
 ### JSON
 
