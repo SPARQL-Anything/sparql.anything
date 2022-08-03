@@ -1166,27 +1166,31 @@ An executable JAR can be obtained from the [Releases](https://github.com/spice-h
 The jar can be executed as follows:
 
 ```
-usage: java -jar sparql.anything-<version> -q query [-f format] [-i
-            filepath]  [-l path] [-o filepath]
- -f,--format <string>                  OPTIONAL -  Format of the output
-                                       file. Supported values: JSON, XML,
-                                       CSV, TEXT, TTL, NT, NQ. [Default:
-                                       TEXT or TTL]
- -i,--input <input>                    OPTIONAL - The path to a SPARQL
-                                       result set file to be used as
-                                       input. When present, the query is
-                                       pre-processed by substituting
-                                       variable names with values from the
-                                       bindings provided. The query is
-                                       repeated for each set of bindings
-                                       in the input result set.
+usage: java -jar sparql.anything-<version>  -q query [-f <output
+            format>] [-v <filepath | name=value> ... ]  [-l path] [-o
+            filepath]
+ -q,--query <query>                    The path to the file storing the
+                                       query to execute or the query
+                                       itself.
+ -o,--output <file>                    OPTIONAL - The path to the output
+                                       file. [Default: STDOUT]
+ -e,--explain                          OPTIONAL - Explain query execution
  -l,--load <load>                      OPTIONAL - The path to one RDF file
                                        or a folder including a set of
                                        files to be loaded. When present,
                                        the data is loaded in memory and
                                        the query executed against it.
- -o,--output <file>                    OPTIONAL - The path to the output
-                                       file. [Default: STDOUT]
+ -f,--format <string>                  OPTIONAL -  Format of the output
+                                       file. Supported values: JSON, XML,
+                                       CSV, TEXT, TTL, NT, NQ. [Default:
+                                       TEXT or TTL]
+ -s,--strategy <strategy>              OPTIONAL - Strategy for query
+                                       evaluation. Possible values: '1' -
+                                       triple filtering (default), '0' -
+                                       triplify all data. The system
+                                       fallbacks to '0' when the strategy
+                                       is not implemented yet for the
+                                       given resource type.
  -p,--output-pattern <outputPattern>   OPTIONAL - Output filename pattern,
                                        e.g. 'myfile-?friendName.json'.
                                        Variables should start with '?' and
@@ -1195,26 +1199,31 @@ usage: java -jar sparql.anything-<version> -q query [-f format] [-i
                                        in combination with 'input' and is
                                        ignored otherwise. This option
                                        overrides 'output'.
- -q,--query <query>                    The path to the file storing the
-                                       query to execute or the query
-                                       itself.
- -s,--strategy <strategy>              OPTIONAL - Strategy for query
-                                       evaluation. Possible values: '1' -
-                                       triple filtering (default), '0' -
-                                       triplify all data. The system
-                                       fallbacks to '0' when the strategy
-                                       is not implemented yet for the
-                                       given resource type.
  -v,--values <values>                  OPTIONAL - Values passed as input
-                                       to a query template. When present,
-                                       the query is pre-processed by
-                                       substituting variable names with
-                                       the values provided. The passed
-                                       argument must follow the syntax:
-                                       var_name=var_value. Multiple
-                                       arguments are allowed. The query is
-                                       repeated for each set of values.
-
+                                       parameter to a query template. When
+                                       present, the query is pre-processed
+                                       by substituting variable names with
+                                       the values provided. The argument
+                                       can be used in two ways. (1)
+                                       Providing a single SPARQL ResultSet
+                                       file. In this case, the query is
+                                       executed for each set of bindings
+                                       in the input result set. Only 1
+                                       file is allowed. (2) Named variable
+                                       bindings: the argument value must
+                                       follow the syntax:
+                                       var_name=var_value. The argument
+                                       can be passed multiple times and
+                                       the query repeated for each set of
+                                       values.
+ -i,--input <input>                    [Deprecated] OPTIONAL - The path to
+                                       a SPARQL result set file to be used
+                                       as input. When present, the query
+                                       is pre-processed by substituting
+                                       variable names with values from the
+                                       bindings provided. The query is
+                                       repeated for each set of bindings
+                                       in the input result set.
 ```
 Logging can be configured adding the following option (SLF4J):
 ```

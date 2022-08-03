@@ -514,12 +514,17 @@ public class SPARQLAnything {
 				}
 				ResultSet parameters = null;
 				if (inputFile != null) {
-					logger.debug("Input file given");
+					// XXX Deprecated by Issue #277
+					logger.warn("[Deprecated] Input file given [please use --values instead]");
 					// Load the file
 					parameters = ResultSetFactory.load(inputFile);
 				} else {
-					logger.debug("Values given");
-					parameters = new ArgValuesAsResultSet(values);
+					if(values.length == 1 && new File(values[0]).exists()){
+						logger.debug("Input file name given");
+						parameters = ResultSetFactory.load(values[0]);
+					}else {
+						parameters = new ArgValuesAsResultSet(values);
+					}
 				}
 				// Specifications
 				Specification specification = SpecificationFactory.create("", query);
