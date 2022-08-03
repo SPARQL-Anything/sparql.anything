@@ -10,17 +10,17 @@ SPARQL Anything is a system for Semantic Web re-engineering that allows users to
 
 Main features:
 
-- Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#configuration)) and build knowledge graphs with `CONSTRUCT` queries
-- [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar, Markdown, YAML, Bibtex, DOCx (see [configuration](#format-specific-options))
+- Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](Configuration.md)) and build knowledge graphs with `CONSTRUCT` queries
+- [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar, Markdown, YAML, Bibtex, DOCx (see [pages dedicated to single formats](#supported-formats))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
 - Generates RDF, RDF-Star, and tabular data (thanks to SPARQL) 
-- Full fledged [HTTP client](#http-options) to query Web APIs (headers, authentication, all methods supported)
+- Full fledged [HTTP client](Configuration.md#http-options) to query Web APIs (headers, authentication, all methods supported)
 - [Functions library](#functions-and-magic-properties) for RDF sequences, strings, hashes, easy entity building, ...
 - Combine multiple SERVICE clauses into complex data integration queries (thanks to SPARQL)
 - Query templates (using [BASIL variables](#query-templates-and-variable-bindings))
 - Save and reuse SPARQL `Results Sets` as input for [parametric queries](#query-templates-and-variable-bindings)
 - Slice large CSV files with an iterator-like execution style (soon [JSON](https://github.com/SPARQL-Anything/sparql.anything/issues/202) and [XML](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
-- Supports an [on-disk option](#general-purpose-options) (with Apache Jena TDB2)
+- Supports an [on-disk option](Configuration.md) (with Apache Jena TDB2)
 
 ## Quickstart
 SPARQL Anything uses a single generic abstraction for all data source formats called Facade-X.
@@ -874,7 +874,7 @@ Facade-X RDF:
 -->
 
 
-
+<!--
 ## Configuration
 
 SPARQL Anything will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
@@ -968,6 +968,7 @@ WHERE {
 |use-rdfs-member|It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...) |true/false|false|
 
 \* It is mandatory to provide either `location`, `content`, or `command`.
+-->
 
 <!--
 ### Format specific options
@@ -1040,6 +1041,7 @@ WHERE {
 |docs.merge-paragraphs|It tells the document triplifier to merge all the paragraphs of the document into a single slot (new line characters are preserved)|true/false|false|
 -->
 
+<!--
 ### HTTP options
 SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
 
@@ -1056,6 +1058,7 @@ SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
 |http.auth.user|Authentication: user name|||
 |http.auth.password|Authentication: password|||
 |http.redirect|Follow redirect?|true,false|true|
+-->
 
 ## Query static RDF files
 
