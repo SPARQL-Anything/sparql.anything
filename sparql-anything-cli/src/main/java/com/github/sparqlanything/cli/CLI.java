@@ -112,10 +112,6 @@ public class CLI {
 		options.addOption(Option.builder(EXPLAIN).argName("explain").hasArg(false)
 				.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
 
-		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
-						"OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
-				.longOpt(INPUT_LONG).build());
-
 		options.addOption(Option.builder(LOAD).argName("load").hasArg().desc(
 						"OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
 				.longOpt(LOAD_LONG).build());
@@ -133,8 +129,12 @@ public class CLI {
 				.longOpt(OUTPUTPATTERN_LONG).build());
 
 		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true).desc(
-						"OPTIONAL - Values passed as input to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The passed argument must follow the syntax: var_name=var_value. Multiple arguments are allowed. The query is repeated for each set of values.")
+						"OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The argument can be used in two ways. (1) Providing a single SPARQL ResultSet file. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed. (2) Named variable bindings: the argument value must follow the syntax: var_name=var_value. The argument can be passed multiple times and the query repeated for each set of values.")
 				.longOpt(VALUES_LONG).build());
+		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
+						"[Deprecated] OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
+				.longOpt(INPUT_LONG).build());
+
 	}
 
 	public void printHelp(){
