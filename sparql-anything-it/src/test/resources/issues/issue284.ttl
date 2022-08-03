@@ -1,0 +1,5 @@
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+<http://example.com/10>
+        <http://example.com/id>  "10"^^<http://www.w3.org/2001/XMLSchema#int> .

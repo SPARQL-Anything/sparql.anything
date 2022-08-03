@@ -17,9 +17,19 @@
 
 package com.github.sparqlanything.it;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.github.sparqlanything.engine.FacadeX;
+import org.apache.commons.compress.utils.Sets;
+import org.apache.commons.io.IOUtils;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.sparql.engine.main.QC;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,22 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.compress.utils.Sets;
-import org.apache.commons.io.IOUtils;
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.tdb.TDB;
-import org.apache.jena.tdb2.TDB2;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.sparqlanything.engine.FacadeX;
+import static org.junit.Assert.*;
 
 public class Issues {
 
@@ -78,7 +73,7 @@ public class Issues {
 //		System.out.println(ResultSetFormatter.asText(rs1));
 		List<String> list1 = new ArrayList<>();
 		while (rs1.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs1.next();
+			QuerySolution querySolution = rs1.next();
 //			System.out.println(querySolution);
 			list1.add(querySolution.getLiteral("a").getValue().toString());
 		}
@@ -87,7 +82,7 @@ public class Issues {
 //		System.out.println(ResultSetFormatter.asText(rs2));
 		List<String> list2 = new ArrayList<>();
 		while (rs2.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs2.next();
+			QuerySolution querySolution = rs2.next();
 //			System.out.println(querySolution);
 			list2.add(querySolution.getLiteral("a").getValue().toString());
 		}
@@ -120,7 +115,7 @@ public class Issues {
 		ResultSet rs1 = QueryExecutionFactory.create(query1, ds).execSelect();
 		Set<String> results = new HashSet<>();
 		while (rs1.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs1.next();
+			QuerySolution querySolution = rs1.next();
 			results.add(querySolution.getLiteral("r").getValue().toString());
 		}
 		assertEquals(Sets.newHashSet("A1"), results);
@@ -137,7 +132,7 @@ public class Issues {
 
 		results = new HashSet<>();
 		while (rs2.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs2.next();
+			QuerySolution querySolution = rs2.next();
 			results.add(querySolution.getLiteral("r").getValue().toString());
 		}
 		assertEquals(Sets.newHashSet("A1"), results);
@@ -181,7 +176,7 @@ public class Issues {
 //		System.out.println(ResultSetFormatter.asText(rs));
 		Set<String> slots = new HashSet<>();
 		while (rs.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs.next();
+			QuerySolution querySolution = rs.next();
 			if (querySolution.get("slot").isLiteral()) {
 				slots.add(querySolution.get("slot").asLiteral().getValue().toString());
 			}
@@ -240,7 +235,7 @@ public class Issues {
 		Set<Set<String>> actualResult = new HashSet<>();
 		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
 		while (rs.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs.next();
+			QuerySolution querySolution = rs.next();
 			actualResult.add(Sets.newHashSet(querySolution.getLiteral("authorString").getValue().toString(),
 					querySolution.getLiteral("titleString").getValue().toString()));
 		}
@@ -367,7 +362,7 @@ public class Issues {
 		Model r = QueryExecutionFactory.create(qs, ds).execConstruct();
 		assertTrue(expected.isIsomorphicWith(r));
 	}
-	
+
 	/**
 	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/264
 	 *
@@ -407,7 +402,7 @@ public class Issues {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/264
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/280
 	 *
 	 * @throws URISyntaxException
 	 * @throws IOException
@@ -443,5 +438,75 @@ public class Issues {
 //		System.out.println(results);
 		assertTrue(results.contains("Friends"));
 		assertTrue(results.contains("Cougar Town"));
+	}
+
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/284
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue284() throws URISyntaxException, IOException {
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+
+		String location = getClass().getClassLoader().getResource("issues/issue284.json").toURI().toString();
+		String locationExpected = getClass().getClassLoader().getResource("issues/issue284.ttl").toURI().toString();
+
+//		Query qs = QueryFactory.create(
+//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
+//						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
+//						"SELECT ?id WHERE { " +
+//						"SERVICE <x-sparql-anything:location=" + location + "> { " +
+//						" ?s xyz:students/fx:anySlot/xyz:ID ?id }  }");
+
+//		System.out.println(location);
+//		System.out.println(qs.toString(Syntax.defaultSyntax));
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+//		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
+//		System.out.println(ResultSetFormatter.asText(rs));
+
+
+		Query qs = QueryFactory.create("PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/>\n" +
+				"base  <http://example.com/base/> \n" +
+				"\n" +
+				"CONSTRUCT\n" +
+				"  {\n" +
+				"    ?subject0 <http://example.com/id> ?0 .\n" +
+				" }\n" +
+				"WHERE\n" +
+				"  {\n" +
+				"    SERVICE <x-sparql-anything:location=" + location + ">\n" +
+				"      {\n" +
+				"      \t?s0   xyz:students/fx:anySlot ?iterator0 . \n" +
+				"        ?iterator0  xyz:ID    ?0;\n" +
+				"        bind(fx:entity(\"http://example.com/\", ?0) as ?subject0)\n" +
+				"      }\n" +
+				"  }");
+
+//		System.out.println(qs.toString());
+
+		Model m = QueryExecutionFactory.create(qs, ds).execConstruct();
+
+		Model expected = ModelFactory.createDefaultModel();
+		RDFDataMgr.read(expected, locationExpected);
+
+		assertTrue(m.isIsomorphicWith(expected));
+
+//		Set<String> results = new HashSet<>();
+//		while (rs.hasNext()) {
+//			results.add(rs.next().get("o").asLiteral().getValue().toString());
+//		}
+////		System.out.println(results);
+//		assertTrue(results.contains("Friends"));
+//		assertTrue(results.contains("Cougar Town"));
 	}
 }
