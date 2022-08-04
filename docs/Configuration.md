@@ -1,6 +1,9 @@
 # Configuration
 
-SPARQL Anything will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
+SPARQL Anything behaves as a standard SPARQL query engine. 
+For example, the SPARQL Anything server will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
+In addition, SPARQL Anything provides a rich Command Line Interface (CLI). 
+For information for how to run SPARQL Anything, please see the [quickstart](README.md#Quickstart) and [usage](README.md#usage) sections of the documentation.
 
 ## Passing triplification options via SERVICE IRI
 
