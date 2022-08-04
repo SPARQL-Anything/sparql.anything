@@ -77,7 +77,7 @@ WHERE {
 | [content](#content)*          | The content to be transformed.                                                                                                                                                                                                                                                                                                                | Any valid literal.                                                                                                                                                                                                                                           | -                                                                                                                                                    |
 | [command](#command)*          | An external command line to be executed. The output is handled according to the option 'media-type'                                                                                                                                                                                                                                           | Any valid literal.                                                                                                                                                                                                                                           | -                                                                                                                                                    |
 | [from-archive](#from-archive) | The filename of the resource to be triplified within an archive.                                                                                                                                                                                                                                                                              | Any filename.                                                                                                                                                                                                                                                | -                                                                                                                                                    |
-| root                          | The IRI of generated root resource.                                                                                                                                                                                                                                                                                                           | Any valid IRI.                                                                                                                                                                                                                                               | location + '#' (in case of location argument is set) or 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in case of content argument set) |
+| [root](#root)                 | The IRI of generated root resource.                                                                                                                                                                                                                                                                                                           | Any valid IRI.                                                                                                                                                                                                                                               | location + '#' (in case of location argument is set) or 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in case of content argument set) |
 | media-type                    | The media-type of the data source.                                                                                                                                                                                                                                                                                                            | Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type). Supported media-types: application/xml, image/png, text/html, application/octet-stream, application/json, image/jpeg, image/tiff, image/bmp, text/csv, image/vnd.microsoft.icon,text/plain | No value (the media-type will be guessed from the the file extension)                                                                                |
 | namespace                     | The namespace prefix for the properties that will be generated.                                                                                                                                                                                                                                                                               | Any valid namespace prefix.                                                                                                                                                                                                                                  | http://sparql.xyz/facade-x/data/                                                                                                                     |
 | blank-nodes                   | It tells sparql.anything to generate blank nodes or not.                                                                                                                                                                                                                                                                                      | true/false                                                                                                                                                                                                                                                   | true                                                                                                                                                 |
@@ -252,7 +252,7 @@ Any filename
 
 #### Default Value
 
--
+Not set
 
 #### Examples
 
@@ -287,7 +287,153 @@ WHERE
 
 ```
 
+### root
+
+The IRI of generated root resource.
+
+#### Valid Values
+
+Any valid IRI.
+
+#### Default Value
+
+location + '#' (in case of location argument is set) or 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in case of content argument set)
+
+#### Examples
+
+#### UC1: Set the root of the Facade-X model generated from https://sparql-anything.cc/example1.json as http://example.org/myRoot
+
 ```
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:location     "https://sparql-anything.cc/example1.json" ;
+                  fx:root         "http://example.org/myRoot" ;
+                  fx:blank-nodes  false .
+        ?s        ?p              ?o
+      }
+  }
+```
+
+Result
+
+```
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+
+<http://example.org/myRoot/_2/stars>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "Courteney Cox" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                "David Arquette" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                "Bill Lawrence" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
+                "Linda Videtti Figueiredo" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5>
+                "Blake McCormick" .
+
+<http://example.org/myRoot>
+        a       fx:root ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://example.org/myRoot/_1> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://example.org/myRoot/_2> .
+
+<http://example.org/myRoot/_2/genres>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "Comedy" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                "Romance" .
+
+<http://example.org/myRoot/_1>
+        <http://sparql.xyz/facade-x/data/genres>
+                <http://example.org/myRoot/_1/genres> ;
+        <http://sparql.xyz/facade-x/data/language>
+                "English" ;
+        <http://sparql.xyz/facade-x/data/name>
+                "Friends" ;
+        <http://sparql.xyz/facade-x/data/premiered>
+                "1994-09-22" ;
+        <http://sparql.xyz/facade-x/data/stars>
+                <http://example.org/myRoot/_1/stars> ;
+        <http://sparql.xyz/facade-x/data/status>
+                "Ended" ;
+        <http://sparql.xyz/facade-x/data/summary>
+                "Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan." .
+
+<http://example.org/myRoot/_1/genres>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "Comedy" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                "Romance" .
+
+<http://example.org/myRoot/_1/stars>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "Jennifer Aniston" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                "Courteney Cox" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                "Lisa Kudrow" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
+                "Matt LeBlanc" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5>
+                "Matthew Perry" ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_6>
+                "David Schwimmer" .
+
+<http://example.org/myRoot/_2>
+        <http://sparql.xyz/facade-x/data/genres>
+                <http://example.org/myRoot/_2/genres> ;
+        <http://sparql.xyz/facade-x/data/language>
+                "English" ;
+        <http://sparql.xyz/facade-x/data/name>
+                "Cougar Town" ;
+        <http://sparql.xyz/facade-x/data/premiered>
+                "2009-09-23" ;
+        <http://sparql.xyz/facade-x/data/stars>
+                <http://example.org/myRoot/_2/stars> ;
+        <http://sparql.xyz/facade-x/data/status>
+                "Ended" ;
+        <http://sparql.xyz/facade-x/data/summary>
+                "Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself." .
+```
+
+#### UC2: Set the root of the Facade-X model generated from the string "Hello World!" as http://example.org/myRoot
+
+```
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content      "Hello World!" ;
+                  fx:root         "http://example.org/myRoot" ;
+                  fx:blank-nodes  false .
+        ?s        ?p              ?o
+      }
+  }
+```
+
+Result
+
+```
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+
+<http://example.org/myRoot> a fx:root ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello World!" .
+```
+
+**Note**: blank-nodes=false is needed for generating named entities instead of blank nodes.
 
 <!--
 ### 
@@ -308,19 +454,21 @@ WHERE
 ```
 -->
 
+
+
 ## HTTP options
 SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
 
-|Option name|Description|Valid Values| Default Value |
-|-----------|-----------|------------|---------------|
-|http.client.*|Calls methods on the HTTPClient Java object. E.g. `http.client.useSystemProperties=false` means to avoid inheriting Java system properties (Default 'yes')|
-|http.client.useSystemProperties|Use Java System Properties to configure the HTTP Client.|true/false| true          |
-|http.header.*|To add headers to the HTTP request. E.g. `http.header.accept=application/json`|||
-|http.query.*|To add parameters to the query string. E.g. `http.query.var=value` or `http.query.var.1=value` to add more variable of the same name|||
-|http.form.*|To add parameters to the POST content. E.g. `http.form.var=value` or `http.form.var.1=value` to add more variable of the same name|||
-|http.method|HTTP Method|GET,POST,...| GET           |
-|http.payload| Sets the payload of the request|||
-|http.protocol|Protocol|0.9,1.0,1.1| 1.1           |
-|http.auth.user|Authentication: user name|||
-|http.auth.password|Authentication: password|||
-|http.redirect|Follow redirect?|true,false| true          |
+| Option name                     | Description                                                                                                                                                | Valid Values | Default Value |
+|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
+| http.client.*                   | Calls methods on the HTTPClient Java object. E.g. `http.client.useSystemProperties=false` means to avoid inheriting Java system properties (Default 'yes') |
+| http.client.useSystemProperties | Use Java System Properties to configure the HTTP Client.                                                                                                   | true/false   | true          |
+| http.header.*                   | To add headers to the HTTP request. E.g. `http.header.accept=application/json`                                                                             |||
+| http.query.*                    | To add parameters to the query string. E.g. `http.query.var=value` or `http.query.var.1=value` to add more variable of the same name                       |||
+| http.form.*                     | To add parameters to the POST content. E.g. `http.form.var=value` or `http.form.var.1=value` to add more variable of the same name                         |||
+| http.method                     | HTTP Method                                                                                                                                                | GET,POST,... | GET           |
+| http.payload                    | Sets the payload of the request                                                                                                                            |||
+| http.protocol                   | Protocol                                                                                                                                                   | 0.9,1.0,1.1  | 1.1           |
+| http.auth.user                  | Authentication: user name                                                                                                                                  |||
+| http.auth.password              | Authentication: password                                                                                                                                   |||
+| http.redirect                   | Follow redirect?                                                                                                                                           | true,false   | true          |
