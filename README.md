@@ -1188,7 +1188,7 @@ The function `fx:literal( ?a , ?b )` builds a literal from the string representa
 The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case).
 
 ## Usage
-### Command line interface
+### Command Line Interface (CLI)
 
 An executable JAR can be obtained from the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
 
