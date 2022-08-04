@@ -608,6 +608,43 @@ public class DocumentationExampleSandbox {
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 	}
 
+	public static void options() throws URISyntaxException {
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+
+//		query = QueryFactory.create(
+//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(*) AS ?c) WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content \"one,two,tree\" ; fx:txt.split \",\" . ?s fx:anySlot ?o} }");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//
+//		query = QueryFactory.create(
+//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(*) AS ?c) WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '[\"one\",\"two\",\"three\", \"four\"]' ; fx:media-type \"application/json\" . ?s fx:anySlot ?o} }");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+
+//		query = QueryFactory.create(
+//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(?o) AS ?nOfItems)  WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:command 'echo [\"one\",\"two\",\"three\", \"four\"]' ; fx:media-type \"application/json\" .  ?s fx:anySlot ?o} }");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+
+		query = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location 'https://sparql-anything.cc/example1.json' ; fx:root 'http://example.org/myRoot' ; fx:blank-nodes false . ?s ?p ?o} }");
+		System.out.println(query.toString(Syntax.defaultSyntax));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
+
+
+		query = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content 'Hello World!' ; fx:root 'http://example.org/myRoot' ; fx:blank-nodes false . ?s ?p ?o} }");
+		System.out.println(query.toString(Syntax.defaultSyntax));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
+
+
+	}
+
 	public static void main(String[] args) throws URISyntaxException {
 		prefixes.put("xyz", "http://sparql.xyz/facade-x/data/");
 		prefixes.put("fx", "http://sparql.xyz/facade-x/ns/");
@@ -640,7 +677,8 @@ public class DocumentationExampleSandbox {
 //		doc();
 //		yaml();
 //		metadata();
-		bibtex();
+//		bibtex();
+		options();
 	}
 
 }
