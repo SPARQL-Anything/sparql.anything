@@ -1071,8 +1071,9 @@ This feature is enabled with the command line argument `-l|--load` that accepts 
 In the second case, all RDF files in the folder are loaded in memory before execution.
 -->
 
-## Query templates and variable bindings
+## Query templates and variable bindings (CLI only)
 
+The SPARQL Anything CLI supports parametrised queries.
 SPARQL Anything uses the [BASIL convention for variable names in queries](https://github.com/basilapi/basil/wiki/SPARQL-variable-name-convention-for-WEB-API-parameters-mapping).
 
 The syntax is based on the underscore character: '_', and can be easily learned by examples:
@@ -1084,14 +1085,35 @@ The syntax is based on the underscore character: '_', and can be easily learned 
 - `?_name_integer` The parameter value is considered as literal and the XSD datatype 'integer' is added during substitution.
 - `?_name_prefix_datatype` The parameter value is considered as literal and the datatype 'prefix:datatype' is added during substitution. The prefix must be specified according to the SPARQL syntax.
 
-Variable bindings can be passed in two ways:
+Variable bindings can be passed in two ways via the CLI argument `-v|--values`:
 
-- Inline arguments, using the option `-v|--values`
-- Passing an SPARQL Result Set file, using the option `-i|--input`
+- Inline arguments, e.g.: `-v paramName=value1 -v paramName=value2 -v paramName2=other` 
+- Passing an SPARQL Result Set file, e.g.: `-v selectResult.xml`
 
 In the first case, the engine computes the cardinal product of all the variables bindings included and execute the query for each one of the resulting set of bindings.
 
 In the second case, the query is executed for each set of bindings in the result set.
+
+The following is an example of how parameter can be used in a query:
+```sparql
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+
+SELECT ?seriesName
+WHERE {
+    SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
+        ?tvSeries xyz:name ?seriesName .
+        ?tvSeries xyz:stars ?star .
+        ?star fx:anySlot ?_starName .
+    }
+
+}
+```
+The value of `?_starName` can be passed via the CLI as follows:
+```bash
+java -jar sparql-anything-<version>.jar -q query.sparql -v starName="Courteney Cox"
+```
 
 ## Functions and magic properties
 SPARQL Anything is built on Apache Jena, see a list of supported functions on the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
