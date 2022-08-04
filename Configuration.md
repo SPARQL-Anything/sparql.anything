@@ -78,7 +78,7 @@ WHERE {
 | [command](#command)*          | An external command line to be executed. The output is handled according to the option 'media-type'                                                                                                                                                                                                                                           | Any valid literal.                                                                                                                                                                    | \*                                                                                                                                                   |
 | [from-archive](#from-archive) | The filename of the resource to be triplified within an archive.                                                                                                                                                                                                                                                                              | Any filename.                                                                                                                                                                         | No value                                                                                                                                             |
 | [root](#root)                 | The IRI of generated root resource.                                                                                                                                                                                                                                                                                                           | Any valid IRI.                                                                                                                                                                        | location + '#' (in case of location argument is set) or 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in case of content argument set) |
-| media-type                    | The media-type of the data source.                                                                                                                                                                                                                                                                                                            | Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type).  Supported media types are specified in the [pages dedicated to the supported formats](README.md#supported-formats) | No value (the media-type will be guessed from the the file extension)                                                                                |
+| [media-type](#media-type)     | The media-type of the data source.                                                                                                                                                                                                                                                                                                            | Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type).  Supported media types are specified in the [pages dedicated to the supported formats](README.md#supported-formats) | No value (the media-type will be guessed from the the file extension)                                                                                |
 | namespace                     | The namespace prefix for the properties that will be generated.                                                                                                                                                                                                                                                                               | Any valid namespace prefix.                                                                                                                                                           | http://sparql.xyz/facade-x/data/                                                                                                                     |
 | blank-nodes                   | It tells sparql.anything to generate blank nodes or not.                                                                                                                                                                                                                                                                                      | true/false                                                                                                                                                                            | true                                                                                                                                                 |
 | trim-strings                  | Trim all string literals.                                                                                                                                                                                                                                                                                                                     | true/false                                                                                                                                                                            | false                                                                                                                                                |
@@ -435,6 +435,42 @@ Result
 
 **Note**: blank-nodes=false is needed for generating named entities instead of blank nodes.
 
+
+
+
+
+###  media-type
+
+The media-type of the data source.
+
+#### Valid Values
+
+Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type).  Supported media types are specified in the [pages dedicated to the supported formats](README.md#supported-formats)
+
+#### Default Value
+
+No value (the media-type will be guessed from the file extension).
+
+#### Examples
+
+##### UC1: Enforcing media-type for content string to count the number of elements in the JSON Array ["one", "two", "three", "four"]
+
+
+```
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+SELECT  (count(*) AS ?c)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
+                  fx:media-type  "application/json" .
+        ?s        fx:anySlot     ?o
+      }
+  }
+```
+
+
 <!--
 ### 
 
@@ -447,7 +483,7 @@ Result
 
 #### Examples
 
-#### UC1:
+##### UC1:
 
 ```
 
