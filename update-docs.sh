@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git add README.md .readthedocs.yaml mkdocs.yaml Configuration.md
+git add README.md .readthedocs.yaml mkdocs.yaml Configuration.md src/test/java/com/github/sparqlanything/it/DocumentationExampleSandbox.java
 git add formats/*
 cp -f README.md docs/
 cp -f BROWSER.md docs/
