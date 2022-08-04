@@ -176,6 +176,8 @@ A detailed description of the interpretation can be found in the following pages
 - [Bibtex](formats/Bibtex.md)
 - [YAML](formats/YAML.md)
 
+... and, of course, the triples generated from the these formats can be integrated with the content of any [RDF Static file](formats/RDF_Files.md)
+
 <!--
 ### JSON
 
@@ -1060,12 +1062,14 @@ SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
 |http.redirect|Follow redirect?|true,false|true|
 -->
 
+<!--
 ## Query static RDF files
 
 The SPARQL Anything engine can load static RDF files in memory and perform the query against it, alongside any `x-sparql-anything` service clause.
 RDF files produced by previous SPARQL Anything processes can joined with data coming from additional resources.
 This feature is enabled with the command line argument `-l|--load` that accepts a file or a directory.
 In the second case, all RDF files in the folder are loaded in memory before execution.
+-->
 
 ## Query templates and variable bindings
 
