@@ -85,7 +85,7 @@ WHERE {
 | [namespace](#namespace)       | The namespace prefix for the properties that will be generated.                                                                                                                                                                                                                                                                               | Any valid namespace prefix.                                                                                                                                                           | http://sparql.xyz/facade-x/data/                                                                                                                     |
 | [blank-nodes](#blank-nodes)   | It tells SPARQL Anything to generate blank nodes or not.                                                                                                                                                                                                                                                                                      | true/false                                                                                                                                                                            | true                                                                                                                                                 |
 | [trim-strings](#trim-strings) | Trim all string literals.                                                                                                                                                                                                                                                                                                                     | true/false                                                                                                                                                                            | false                                                                                                                                                |
-| null-string                   | Do not produce triples where the specificed string would be in the object position of the triple.                                                                                                                                                                                                                                             | any string                                                                                                                                                                            | not set                                                                                                                                              |
+| [null-string](#null-string)   | Do not produce triples where the specified string would be in the object position of the triple.                                                                                                                                                                                                                                              | Any string                                                                                                                                                                            | not set                                                                                                                                              |
 | triplifier                    | It forces sparql.anything to use a specific triplifier for transforming the data source                                                                                                                                                                                                                                                       | A canonical name of a Java class                                                                                                                                                      | No value                                                                                                                                             |
 | charset                       | The charset of the data source.                                                                                                                                                                                                                                                                                                               | Any charset.                                                                                                                                                                          | UTF-8                                                                                                                                                |
 | metadata                      | It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;                                                                                                                                                                                | true/false                                                                                                                                                                            | false                                                                                                                                                |
@@ -623,7 +623,7 @@ false
 
 #### Examples
 
-##### UC1: Transform the JSON Object {"name":"Vincent", "surname": "Vega", "performer" : {"name": "John ", "surname": " Travolta"} } by trimming strings
+##### UC1: Transform the JSON Object {"name":"Vincent", "surname": "Vega", "performer" : {"name": "John ", "surname": " Travolta"} } and trim the strings "John " and " Travolta"
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -645,6 +645,55 @@ WHERE
 ```
 
 ```turtle
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ a              fx:root ;
+  xyz:name       "Vincent" ;
+  xyz:performer  [ xyz:name     "John" ;
+                   xyz:surname  "Travolta"
+                 ] ;
+  xyz:surname    "Vega"
+] .
+```
+
+### null-string
+
+Do not produce triples where the specified string would be in the object position of the triple.
+
+#### Valid Values
+
+Any string
+
+#### Default Value
+
+No value
+
+#### Examples
+
+##### UC1: Transform the JSON Object {"name":"Vincent", "surname": "Vega", "ID": "myNull", "performer" : {"name": "John", "surname": "Travolta"} } and consider the string "myNull" as null
+
+```
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"ID\": \"myNull\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"} }" ;
+                  fx:media-type   "application/json" ;
+                  fx:null-string  "myNull" .
+        ?s        ?p              ?o
+      }
+  }
+```
+
+Result
+
+```
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 

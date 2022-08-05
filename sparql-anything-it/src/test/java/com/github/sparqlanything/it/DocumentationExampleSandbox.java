@@ -609,10 +609,11 @@ public class DocumentationExampleSandbox {
 	}
 
 	public static void options() throws URISyntaxException {
-		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
+		Model m;
 
 //		query = QueryFactory.create(
 //				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(*) AS ?c) WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content \"one,two,tree\" ; fx:txt.split \",\" . ?s fx:anySlot ?o} }");
@@ -657,6 +658,29 @@ public class DocumentationExampleSandbox {
 //		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
+//		query = QueryFactory.create(
+//				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+//						"\n" +
+//						"CONSTRUCT \n" +
+//						"  { \n" +
+//						"    ?s ?p ?o .\n" +
+//						"  }\n" +
+//						"WHERE\n" +
+//						"  { SERVICE <x-sparql-anything:>\n" +
+//						"      { fx:properties\n" +
+//						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John \", \"surname\": \" Travolta\"} }' ;\n" +
+//						"                  fx:media-type         \"application/json\" ;\n" +
+////						"                  fx:namespace         \"http://example.org/myNamespace/\" ;\n" +
+//						"                  fx:trim-strings  true .\n" +
+//						"        ?s        ?p              ?o\n" +
+//						"      }\n" +
+//						"  }");
+////		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+//		m.write(System.out, "TTL");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
 
 		query = QueryFactory.create(
 				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
@@ -668,20 +692,18 @@ public class DocumentationExampleSandbox {
 						"WHERE\n" +
 						"  { SERVICE <x-sparql-anything:>\n" +
 						"      { fx:properties\n" +
-						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John \", \"surname\": \" Travolta\"} }' ;\n" +
+						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\", \"ID\": \"myNull\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"} }' ;\n" +
 						"                  fx:media-type         \"application/json\" ;\n" +
 //						"                  fx:namespace         \"http://example.org/myNamespace/\" ;\n" +
-						"                  fx:trim-strings  true .\n" +
+						"                  fx:null-string  \"myNull\" .\n" +
 						"        ?s        ?p              ?o\n" +
 						"      }\n" +
 						"  }");
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m = QueryExecutionFactory.create(query, ds).execConstruct();
 		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
 		m.write(System.out, "TTL");
 		System.out.println(query.toString(Syntax.defaultSyntax));
-
-
 	}
 
 	public static void main(String[] args) throws URISyntaxException {
