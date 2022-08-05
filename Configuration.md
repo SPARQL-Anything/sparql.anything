@@ -572,7 +572,7 @@ true
 
 #### Examples
 
-##### UC1: Transform the JSON Object {"name":"Vincent", "surname": "Vega"} into RDF without using blank nodes
+##### UC1: Transform the JSON Object {"name":"Vincent", "surname": "Vega", "performer" : {"name": "John", "surname": "Travolta"} } into RDF without using blank nodes
 
 ```
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -584,7 +584,7 @@ CONSTRUCT
 WHERE
   { SERVICE <x-sparql-anything:>
       { fx:properties
-                  fx:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\"}" ;
+                  fx:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"}}" ;
                   fx:media-type   "application/json" ;
                   fx:blank-nodes  false .
         ?s        ?p              ?o
@@ -595,15 +595,18 @@ WHERE
 Result
 
 ```
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+<http://sparql.xyz/facade-x/data/8e6a66944bcc9366cad8377556ea2302#>
+        a              fx:root ;
+        xyz:name       "Vincent" ;
+        xyz:performer  <http://sparql.xyz/facade-x/data/8e6a66944bcc9366cad8377556ea2302#/performer> ;
+        xyz:surname    "Vega" .
 
-<http://sparql.xyz/facade-x/data/6ab8ac25064e6d5ab7d8d7b855fddfa1#>
-        a       fx:root ;
-        <http://sparql.xyz/facade-x/data/name>
-                "Vincent" ;
-        <http://sparql.xyz/facade-x/data/surname>
-                "Vega" .
+<http://sparql.xyz/facade-x/data/8e6a66944bcc9366cad8377556ea2302#/performer>
+        xyz:name     "John" ;
+        xyz:surname  "Travolta" .
 ```
 
 <!--

@@ -668,7 +668,7 @@ public class DocumentationExampleSandbox {
 						"WHERE\n" +
 						"  { SERVICE <x-sparql-anything:>\n" +
 						"      { fx:properties\n" +
-						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\"}' ;\n" +
+						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"}}' ;\n" +
 						"                  fx:media-type         \"application/json\" ;\n" +
 //						"                  fx:namespace         \"http://example.org/myNamespace/\" ;\n" +
 						"                  fx:blank-nodes  false .\n" +
@@ -676,7 +676,9 @@ public class DocumentationExampleSandbox {
 						"      }\n" +
 						"  }");
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
+		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+		m.write(System.out, "TTL");
 		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
