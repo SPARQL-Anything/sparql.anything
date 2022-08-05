@@ -82,7 +82,7 @@ WHERE {
 | [from-archive](#from-archive) | The filename of the resource to be triplified within an archive.                                                                                                                                                                                                                                                                              | Any filename.                                                                                                                                                                         | No value                                                                                                                                             |
 | [root](#root)                 | The IRI of generated root resource.                                                                                                                                                                                                                                                                                                           | Any valid IRI.                                                                                                                                                                        | location + '#' (in case of location argument is set) or 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in case of content argument set) |
 | [media-type](#media-type)     | The media-type of the data source.                                                                                                                                                                                                                                                                                                            | Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type).  Supported media types are specified in the [pages dedicated to the supported formats](README.md#supported-formats) | No value (the media-type will be guessed from the the file extension)                                                                                |
-| namespace                     | The namespace prefix for the properties that will be generated.                                                                                                                                                                                                                                                                               | Any valid namespace prefix.                                                                                                                                                           | http://sparql.xyz/facade-x/data/                                                                                                                     |
+| [namespace](#namespace)       | The namespace prefix for the properties that will be generated.                                                                                                                                                                                                                                                                               | Any valid namespace prefix.                                                                                                                                                           | http://sparql.xyz/facade-x/data/                                                                                                                     |
 | blank-nodes                   | It tells sparql.anything to generate blank nodes or not.                                                                                                                                                                                                                                                                                      | true/false                                                                                                                                                                            | true                                                                                                                                                 |
 | trim-strings                  | Trim all string literals.                                                                                                                                                                                                                                                                                                                     | true/false                                                                                                                                                                            | false                                                                                                                                                |
 | null-string                   | Do not produce triples where the specificed string would be in the object position of the triple.                                                                                                                                                                                                                                             | any string                                                                                                                                                                            | not set                                                                                                                                              |
@@ -540,9 +540,6 @@ Result
 **Note**: blank-nodes=false is needed for generating named entities instead of blank nodes.
 
 
-
-
-
 ###  media-type
 
 The media-type of the data source.
@@ -584,9 +581,54 @@ Result
 -----
 ```
 
+### namespace
+
+The namespace prefix for the properties that will be generated.
+
+#### Valid Values
+
+Any valid namespace prefix.
+
+#### Default Value
+
+http://sparql.xyz/facade-x/data/
+
+#### Examples
+
+##### UC1: Set the namespace prefix to http://example.org/myNamespace/
+
+```
+
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "{\"name\":\"Tim\"}" ;
+                  fx:namespace   "http://example.org/nyNamespace/" ;
+                  fx:media-type  "application/json" .
+        ?s        ?p             ?o
+      }
+  }
+
+```
+
+Result
+
+```
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+
+[ a       fx:root ;
+  <http://example.org/nyNamespace/name>
+          "Tim"
+] .
+```
 
 <!--
-### 
 
 
 #### Valid Values 

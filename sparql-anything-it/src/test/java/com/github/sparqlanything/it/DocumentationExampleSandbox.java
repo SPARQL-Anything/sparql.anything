@@ -619,28 +619,28 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 //
-		query = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(*) AS ?c) WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '[\"one\",\"two\",\"three\", \"four\"]' ; fx:media-type \"application/json\" . ?s fx:anySlot ?o} }");
-		System.out.println(query.toString(Syntax.defaultSyntax));
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		query = QueryFactory.create(
+//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(*) AS ?c) WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '[\"one\",\"two\",\"three\", \"four\"]' ; fx:media-type \"application/json\" . ?s fx:anySlot ?o} }");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 
 //		query = QueryFactory.create(
 //				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(?o) AS ?nOfItems)  WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:command 'echo [\"one\",\"two\",\"three\", \"four\"]' ; fx:media-type \"application/json\" .  ?s fx:anySlot ?o} }");
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 
-		query = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location 'https://sparql-anything.cc/example1.json' ; fx:root 'http://example.org' ; fx:blank-nodes false . ?s ?p ?o} }");
-		System.out.println(query.toString(Syntax.defaultSyntax));
-//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
+//		query = QueryFactory.create(
+//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location 'https://sparql-anything.cc/example1.json' ; fx:root 'http://example.org' ; fx:blank-nodes false . ?s ?p ?o} }");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+////		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
 
 
 		query = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content 'Hello World!' ; fx:root 'http://example.org' ; fx:blank-nodes false . ?s ?p ?o} }");
-		System.out.println(query.toString(Syntax.defaultSyntax));
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '{\"name\":\"Tim\"}' ; fx:namespace \"http://example.org/nyNamespace/\" ; fx:media-type \"application/json\" . ?s ?p ?o} }");
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
+		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
 	}
