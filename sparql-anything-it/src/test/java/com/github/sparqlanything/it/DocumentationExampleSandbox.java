@@ -636,8 +636,45 @@ public class DocumentationExampleSandbox {
 //		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
 
 
+//		query = QueryFactory.create(
+//				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+//						"\n" +
+//						"CONSTRUCT \n" +
+//						"  { \n" +
+//						"    ?s ?p ?o .\n" +
+//						"  }\n" +
+//						"WHERE\n" +
+//						"  { SERVICE <x-sparql-anything:>\n" +
+//						"      { fx:properties\n" +
+//						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\"}' ;\n" +
+//						"                  fx:media-type         \"application/json\" ;\n" +
+//						"                  fx:root         \"http://example.org/myRoot\" ;\n" +
+//						"                  fx:blank-nodes  false .\n" +
+//						"        ?s        ?p              ?o\n" +
+//						"      }\n" +
+//						"  }");
+////		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+
 		query = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '{\"name\":\"Tim\"}' ; fx:namespace \"http://example.org/nyNamespace/\" ; fx:media-type \"application/json\" . ?s ?p ?o} }");
+				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+						"\n" +
+						"CONSTRUCT \n" +
+						"  { \n" +
+						"    ?s ?p ?o .\n" +
+						"  }\n" +
+						"WHERE\n" +
+						"  { SERVICE <x-sparql-anything:>\n" +
+						"      { fx:properties\n" +
+						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\"}' ;\n" +
+						"                  fx:media-type         \"application/json\" ;\n" +
+//						"                  fx:namespace         \"http://example.org/myNamespace/\" ;\n" +
+						"                  fx:blank-nodes  false .\n" +
+						"        ?s        ?p              ?o\n" +
+						"      }\n" +
+						"  }");
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 		QueryExecutionFactory.create(query, ds).execConstruct().write(System.out, "TTL");
 		System.out.println(query.toString(Syntax.defaultSyntax));

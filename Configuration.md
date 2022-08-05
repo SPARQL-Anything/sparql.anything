@@ -405,11 +405,9 @@ location + '#' (in case of location argument is set) or 'http://sparql.xyz/facad
 
 #### Examples
 
-##### UC1: Set the root of the Facade-X model generated from https://sparql-anything.cc/example1.json as http://example.org/myRoot
+##### UC1: Set the root of the Facade-X model generated from the JSON Object {"name":"Vincent", "surname": "Vega"} as http://example.org/myRoot
 
 ```
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
-
 CONSTRUCT 
   { 
     ?s ?p ?o .
@@ -417,7 +415,8 @@ CONSTRUCT
 WHERE
   { SERVICE <x-sparql-anything:>
       { fx:properties
-                  fx:location     "https://sparql-anything.cc/example1.json" ;
+                  fx:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\"}" ;
+                  fx:media-type   "application/json" ;
                   fx:root         "http://example.org/myRoot" ;
                   fx:blank-nodes  false .
         ?s        ?p              ?o
@@ -430,82 +429,12 @@ Result
 ```
 @prefix fx: <http://sparql.xyz/facade-x/ns/> .
 
-<http://example.org/myRoot/_2/stars>
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                "Courteney Cox" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                "David Arquette" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                "Bill Lawrence" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
-                "Linda Videtti Figueiredo" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5>
-                "Blake McCormick" .
-
 <http://example.org/myRoot>
         a       fx:root ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                <http://example.org/myRoot/_1> ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                <http://example.org/myRoot/_2> .
-
-<http://example.org/myRoot/_2/genres>
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                "Comedy" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                "Romance" .
-
-<http://example.org/myRoot/_1>
-        <http://sparql.xyz/facade-x/data/genres>
-                <http://example.org/myRoot/_1/genres> ;
-        <http://sparql.xyz/facade-x/data/language>
-                "English" ;
         <http://sparql.xyz/facade-x/data/name>
-                "Friends" ;
-        <http://sparql.xyz/facade-x/data/premiered>
-                "1994-09-22" ;
-        <http://sparql.xyz/facade-x/data/stars>
-                <http://example.org/myRoot/_1/stars> ;
-        <http://sparql.xyz/facade-x/data/status>
-                "Ended" ;
-        <http://sparql.xyz/facade-x/data/summary>
-                "Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan." .
-
-<http://example.org/myRoot/_1/genres>
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                "Comedy" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                "Romance" .
-
-<http://example.org/myRoot/_1/stars>
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                "Jennifer Aniston" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                "Courteney Cox" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                "Lisa Kudrow" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
-                "Matt LeBlanc" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5>
-                "Matthew Perry" ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_6>
-                "David Schwimmer" .
-
-<http://example.org/myRoot/_2>
-        <http://sparql.xyz/facade-x/data/genres>
-                <http://example.org/myRoot/_2/genres> ;
-        <http://sparql.xyz/facade-x/data/language>
-                "English" ;
-        <http://sparql.xyz/facade-x/data/name>
-                "Cougar Town" ;
-        <http://sparql.xyz/facade-x/data/premiered>
-                "2009-09-23" ;
-        <http://sparql.xyz/facade-x/data/stars>
-                <http://example.org/myRoot/_2/stars> ;
-        <http://sparql.xyz/facade-x/data/status>
-                "Ended" ;
-        <http://sparql.xyz/facade-x/data/summary>
-                "Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself." .
+                "Vincent" ;
+        <http://sparql.xyz/facade-x/data/surname>
+                "Vega" .
 ```
 
 ##### UC2: Set the root of the Facade-X model generated from the string "Hello World!" as http://example.org/myRoot
@@ -538,7 +467,6 @@ Result
 ```
 
 **Note**: blank-nodes=false is needed for generating named entities instead of blank nodes.
-
 
 ###  media-type
 
@@ -595,7 +523,7 @@ http://sparql.xyz/facade-x/data/
 
 #### Examples
 
-##### UC1: Set the namespace prefix to http://example.org/myNamespace/
+##### UC1: Set the namespace prefix to http://example.org/myNamespace/ for the properties generated from the JSON Object {"name":"Vincent", "surname": "Vega"}
 
 ```
 
@@ -608,9 +536,9 @@ CONSTRUCT
 WHERE
   { SERVICE <x-sparql-anything:>
       { fx:properties
-                  fx:content     "{\"name\":\"Tim\"}" ;
-                  fx:namespace   "http://example.org/nyNamespace/" ;
-                  fx:media-type  "application/json" .
+                  fx:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\"}" ;
+                  fx:media-type  "application/json" ;
+                  fx:namespace   "http://example.org/myNamespace/" .
         ?s        ?p             ?o
       }
   }
@@ -623,9 +551,59 @@ Result
 @prefix fx: <http://sparql.xyz/facade-x/ns/> .
 
 [ a       fx:root ;
-  <http://example.org/nyNamespace/name>
-          "Tim"
+  <http://example.org/myNamespace/name>
+          "Vincent" ;
+  <http://example.org/myNamespace/surname>
+          "Vega"
 ] .
+```
+
+### blank-nodes
+
+It tells SPARQL Anything to generate blank nodes or not.
+
+#### Valid Values
+
+`true/false`
+
+#### Default Value
+
+true
+
+#### Examples
+
+##### UC1: Transform the JSON Object {"name":"Vincent", "surname": "Vega"} into RDF without using blank nodes
+
+```
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\"}" ;
+                  fx:media-type   "application/json" ;
+                  fx:blank-nodes  false .
+        ?s        ?p              ?o
+      }
+  }
+```
+
+Result
+
+```
+
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+
+<http://sparql.xyz/facade-x/data/6ab8ac25064e6d5ab7d8d7b855fddfa1#>
+        a       fx:root ;
+        <http://sparql.xyz/facade-x/data/name>
+                "Vincent" ;
+        <http://sparql.xyz/facade-x/data/surname>
+                "Vega" .
 ```
 
 <!--
