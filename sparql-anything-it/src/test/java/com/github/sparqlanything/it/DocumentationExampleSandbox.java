@@ -682,6 +682,30 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
+//		query = QueryFactory.create(
+//				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+//						"\n" +
+//						"CONSTRUCT \n" +
+//						"  { \n" +
+//						"    ?s ?p ?o .\n" +
+//						"  }\n" +
+//						"WHERE\n" +
+//						"  { SERVICE <x-sparql-anything:>\n" +
+//						"      { fx:properties\n" +
+//						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\", \"ID\": \"myNull\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"} }' ;\n" +
+//						"                  fx:media-type         \"application/json\" ;\n" +
+////						"                  fx:namespace         \"http://example.org/myNamespace/\" ;\n" +
+//						"                  fx:null-string  \"myNull\" .\n" +
+//						"        ?s        ?p              ?o\n" +
+//						"      }\n" +
+//						"  }");
+////		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+//		m.write(System.out, "TTL");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+
 		query = QueryFactory.create(
 				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
 						"\n" +
@@ -692,11 +716,9 @@ public class DocumentationExampleSandbox {
 						"WHERE\n" +
 						"  { SERVICE <x-sparql-anything:>\n" +
 						"      { fx:properties\n" +
-						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\", \"ID\": \"myNull\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"} }' ;\n" +
-						"                  fx:media-type         \"application/json\" ;\n" +
-//						"                  fx:namespace         \"http://example.org/myNamespace/\" ;\n" +
-						"                  fx:null-string  \"myNull\" .\n" +
-						"        ?s        ?p              ?o\n" +
+						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\" }' ;\n" +
+						"                  fx:triplifier         \"com.github.sparqlanything.json.JSONTriplifier\" ;\n" +
+						"       . ?s        ?p              ?o\n" +
 						"      }\n" +
 						"  }");
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));

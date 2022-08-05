@@ -86,7 +86,7 @@ WHERE {
 | [blank-nodes](#blank-nodes)   | It tells SPARQL Anything to generate blank nodes or not.                                                                                                                                                                                                                                                                                      | true/false                                                                                                                                                                            | true                                                                                                                                                 |
 | [trim-strings](#trim-strings) | Trim all string literals.                                                                                                                                                                                                                                                                                                                     | true/false                                                                                                                                                                            | false                                                                                                                                                |
 | [null-string](#null-string)   | Do not produce triples where the specified string would be in the object position of the triple.                                                                                                                                                                                                                                              | Any string                                                                                                                                                                            | not set                                                                                                                                              |
-| triplifier                    | It forces sparql.anything to use a specific triplifier for transforming the data source                                                                                                                                                                                                                                                       | A canonical name of a Java class                                                                                                                                                      | No value                                                                                                                                             |
+| [triplifier](#triplifier)               | It forces sparql.anything to use a specific triplifier for transforming the data source                                                                                                                                                                                                                                                       | A canonical name of a Java class                                                                                                                                                      | No value                                                                                                                                             |
 | charset                       | The charset of the data source.                                                                                                                                                                                                                                                                                                               | Any charset.                                                                                                                                                                          | UTF-8                                                                                                                                                |
 | metadata                      | It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;                                                                                                                                                                                | true/false                                                                                                                                                                            | false                                                                                                                                                |
 | ondisk                        | It tells sparql.anything to use an on disk graph (instead of the default in memory graph). The string should be a path to a directory where the on disk graph will be stored. Using an on disk graph is almost always slower (than using the default in memory graph) but with it you can triplify large files without running out of memory. | a path to a directory                                                                                                                                                                 | not set                                                                                                                                              |
@@ -705,6 +705,52 @@ Result
   xyz:surname    "Vega"
 ] .
 ```
+
+### triplifier
+
+It forces SPARQL Anything to use a specific triplifier for transforming the data source.
+
+#### Valid Values
+
+A canonical name of a Java class
+
+#### Default Value
+
+No value
+
+#### Examples
+
+##### UC1: Transform the JSON Object {"name":"Vincent", "surname": "Vega"" } (provided as a content string)into RDF by using the JSON Triplifier
+
+```
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\" }" ;
+                  fx:triplifier  "com.github.sparqlanything.json.JSONTriplifier" .
+        ?s        ?p             ?o
+      }
+  }
+```
+
+Result
+
+```
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ a            fx:root ;
+  xyz:name     "Vincent" ;
+  xyz:surname  "Vega"
+] .
+```
+
 <!--
 
 
