@@ -127,6 +127,13 @@ WHERE {
 }
 ```
 
+Result
+
+| seriesName    |
+|---------------|
+| "Cougar Town" |
+| "Friends"     |
+
 ##### UC2: Retrieving from /absolute/path/to/example1.json the names of the TV Series starring Courtney Cox.
 
 ```
@@ -143,6 +150,13 @@ WHERE {
 }
 ```
 
+Result
+
+| seriesName    |
+|---------------|
+| "Cougar Town" |
+| "Friends"     |
+
 ##### UC2: Retrieving from relative/path/to/example1.json the names of the TV Series starring Courtney Cox.
 
 ```
@@ -158,6 +172,13 @@ WHERE {
     }
 }
 ```
+
+Result
+
+| seriesName    |
+|---------------|
+| "Cougar Town" |
+| "Friends"     |
 
 ### content
 
@@ -191,6 +212,16 @@ WHERE
   }
 ```
 
+Result
+
+```
+-----
+| c |
+=====
+| 4 |
+-----
+```
+
 
 ##### UC2: Count the number of items in the JSON Array `["one","two","three"]`
 
@@ -206,6 +237,16 @@ WHERE
         ?s        fx:anySlot     ?o
       }
   }
+```
+
+Result
+
+```
+-----
+| c |
+=====
+| 4 |
+-----
 ```
 
 ### command
@@ -243,6 +284,16 @@ WHERE
         ?s        fx:anySlot     ?o
       }
   }
+```
+
+Result
+
+```
+------------
+| nOfItems |
+============
+|    4     |
+------------
 ```
 
 ### from-archive
@@ -287,6 +338,56 @@ WHERE
           }
       }
   }
+
+```
+
+Result
+
+```turtle
+
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type  fx:root ;
+  rdf:_1    [ rdf:_1  "Year" ;
+              rdf:_2  "Make" ;
+              rdf:_3  "Model" ;
+              rdf:_4  "Description" ;
+              rdf:_5  "Price"
+            ] ;
+  rdf:_2    [ rdf:_1  "1997" ;
+              rdf:_2  "Ford" ;
+              rdf:_3  "E350" ;
+              rdf:_4  "ac, abs, moon" ;
+              rdf:_5  "3000.00"
+            ] ;
+  rdf:_3    [ rdf:_1  "1999" ;
+              rdf:_2  "Chevy" ;
+              rdf:_3  "Venture \"Extended Edition\"" ;
+              rdf:_4  "" ;
+              rdf:_5  "4900.00"
+            ] ;
+  rdf:_4    [ rdf:_1  "1999" ;
+              rdf:_2  "Chevy" ;
+              rdf:_3  "Venture \"Extended Edition, Very Large\"" ;
+              rdf:_4  "" ;
+              rdf:_5  "5000.00"
+            ] ;
+  rdf:_5    [ rdf:_1  "1996" ;
+              rdf:_2  "Jeep" ;
+              rdf:_3  "Grand Cherokee" ;
+              rdf:_4  "MUST SELL!\nair, moon roof, loaded" ;
+              rdf:_5  "4799.00"
+            ]
+] .
+
+[ rdf:type  fx:root ;
+  rdf:_1    "this is a test"
+] .
+
+
 
 ```
 
@@ -471,6 +572,16 @@ WHERE
         ?s        fx:anySlot     ?o
       }
   }
+```
+
+Result
+
+```
+-----
+| c |
+=====
+| 4 |
+-----
 ```
 
 

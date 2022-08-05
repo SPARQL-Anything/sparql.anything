@@ -619,10 +619,10 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 //
-//		query = QueryFactory.create(
-//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(*) AS ?c) WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '[\"one\",\"two\",\"three\", \"four\"]' ; fx:media-type \"application/json\" . ?s fx:anySlot ?o} }");
-//		System.out.println(query.toString(Syntax.defaultSyntax));
-//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+		query = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(*) AS ?c) WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '[\"one\",\"two\",\"three\", \"four\"]' ; fx:media-type \"application/json\" . ?s fx:anySlot ?o} }");
+		System.out.println(query.toString(Syntax.defaultSyntax));
+		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 
 //		query = QueryFactory.create(
 //				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (COUNT(?o) AS ?nOfItems)  WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:command 'echo [\"one\",\"two\",\"three\", \"four\"]' ; fx:media-type \"application/json\" .  ?s fx:anySlot ?o} }");
