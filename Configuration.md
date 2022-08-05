@@ -609,6 +609,53 @@ Result
         xyz:surname  "Travolta" .
 ```
 
+### trim-strings
+
+Trim all string literals.
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+false
+
+#### Examples
+
+##### UC1: Transform the JSON Object {"name":"Vincent", "surname": "Vega", "performer" : {"name": "John ", "surname": " Travolta"} } by trimming strings
+
+```sparql
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content       "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John \", \"surname\": \" Travolta\"} }" ;
+                  fx:media-type    "application/json" ;
+                  fx:trim-strings  true .
+        ?s        ?p               ?o
+      }
+  }
+
+```
+
+```turtle
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ a              fx:root ;
+  xyz:name       "Vincent" ;
+  xyz:performer  [ xyz:name     "John" ;
+                   xyz:surname  "Travolta"
+                 ] ;
+  xyz:surname    "Vega"
+] .
+```
 <!--
 
 

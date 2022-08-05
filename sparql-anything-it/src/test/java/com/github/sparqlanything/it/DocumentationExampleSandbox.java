@@ -668,10 +668,10 @@ public class DocumentationExampleSandbox {
 						"WHERE\n" +
 						"  { SERVICE <x-sparql-anything:>\n" +
 						"      { fx:properties\n" +
-						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"}}' ;\n" +
+						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John \", \"surname\": \" Travolta\"} }' ;\n" +
 						"                  fx:media-type         \"application/json\" ;\n" +
 //						"                  fx:namespace         \"http://example.org/myNamespace/\" ;\n" +
-						"                  fx:blank-nodes  false .\n" +
+						"                  fx:trim-strings  true .\n" +
 						"        ?s        ?p              ?o\n" +
 						"      }\n" +
 						"  }");
