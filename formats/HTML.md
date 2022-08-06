@@ -20,6 +20,10 @@ SPARQL Anything selects this transformer for the following media types:
 
 - text/html
 
+## Default implementation
+
+- [com.github.sparqlanything.html.HTMLTriplifier](../sparql-anything-html/src/main/java/com/github/sparqlanything/html/HTMLTriplifier.java)
+
 ## Default Transformation
 
 ### Data

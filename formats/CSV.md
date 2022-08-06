@@ -12,6 +12,10 @@ SPARQL Anything selects this transformer for the following file extensions:
 - .tsv
 - .tab
 
+## Default implementation
+
+- [com.github.sparqlanything.csv.CSVTriplifier](../sparql-anything-csv/src/main/java/com/github/sparqlanything/csv/CSVTriplifier.java)
+
 ## Media types
 
 SPARQL Anything selects this transformer for the following media types:

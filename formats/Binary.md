@@ -27,6 +27,10 @@ SPARQL Anything selects this transformer for the following media types:
 - image/tiff
 - image/vnd.microsoft.icon
 
+## Default implementation
+
+- [com.github.sparqlanything.binary.BinaryTriplifier](../sparql-anything-binary/src/main/java/com/github/sparqlanything/binary/BinaryTriplifier.java)
+
 ## Default Transformation
 
 

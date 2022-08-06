@@ -20,6 +20,10 @@ SPARQL Anything selects this transformer for the following file extensions:
 
 - .json
 
+## Default implementation
+
+- [com.github.sparqlanything.json.JSONTriplifier](../sparql-anything-json/src/main/java/com/github/sparqlanything/json/JSONTriplifier.java)
+
 ## Media types
 
 SPARQL Anything selects this transformer for the following media types:

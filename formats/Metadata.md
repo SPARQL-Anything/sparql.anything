@@ -11,6 +11,10 @@ At the moment SPARQL Anything is able to extract [EXIF metadata](https://en.wiki
 Metadata transformer has to be invoked explicitly by setting the `metadata` option as `true`.
 In this case metadata is extracted from the data source and stored in the named graph with URI <http://sparql.xyz/facade-x/data/metadata>
 
+## Default implementation
+
+- [com.github.sparqlanything.metadata.MetadataTriplifier](../sparql-anything-metadata/src/main/java/com/github/sparqlanything/metadata/MetadataTriplifier.java)
+
 ## Default Transformation
 
 

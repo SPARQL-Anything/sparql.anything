@@ -14,7 +14,7 @@ Additional attributes such as the depth of the header or the type
 of list (bullets, numbers, etc...) can be also supported, relying on the key-value
 structure.
 
-SPARQL Anyrhing relies on the [CommonMark](https://github.com/commonmark/commonmark-java) Java implementation of Commons Markdown.
+SPARQL Anything relies on the [CommonMark](https://github.com/commonmark/commonmark-java) Java implementation of Commons Markdown.
 
 ## Extensions
 
@@ -29,10 +29,14 @@ SPARQL Anything selects this transformer for the following media types:
 - text/markdown
 - text/x-markdown
 
+## Default implementation
+
+- [com.github.sparqlanything.markdown.MARKDOWNTriplifier](../sparql-anything-markdown/src/main/java/com/github/sparqlanything/markdown/MARKDOWNTriplifier.java)
+
 ## Default Transformation
 
 
-### Data
+### Data
 
 ```markdown
 # Title
