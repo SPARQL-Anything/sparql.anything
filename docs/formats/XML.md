@@ -19,6 +19,10 @@ SPARQL Anything selects this transformer for the following media types:
 - text/xml
 - application/xml
 
+## Default implementation
+
+- [com.github.sparqlanything.xml.XMLTriplifier](../sparql-anything-xml/src/main/java/com/github/sparqlanything/xml/XMLTriplifier.java)
+
 ## Default Transformation
 
 ### Data

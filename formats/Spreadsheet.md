@@ -11,12 +11,17 @@ SPARQL Anything selects this transformer for the following file extensions:
 - xls
 - xlsx
 
+
 ## Media types
 
 SPARQL Anything selects this transformer for the following media types:
 
 - application/vnd.ms-excel
 - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+## Default implementation
+
+- [com.github.sparqlanything.spreadsheet.SpreadsheetTriplifier](../sparql-anything-spreadsheet/src/main/java/com/github/sparqlanything/spreadsheet/SpreadsheetTriplifier.java)
 
 ## Default Transformation
 

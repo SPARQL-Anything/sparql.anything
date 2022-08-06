@@ -18,6 +18,10 @@ SPARQL Anything selects this transformer for the following media types:
 
 - application/vnd.openxmlformats-officedocument.wordprocessingml.document
 
+## Default implementation
+
+- [com.github.sparqlanything.docs.DocxTriplifier](../sparql-anything-docs/src/main/java/com/github/sparqlanything/docs/DocxTriplifier.java)
+
 ## Default Transformation
 
 
