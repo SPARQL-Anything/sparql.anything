@@ -19,6 +19,12 @@ SPARQL Anything selects this transformer for the following media types:
 - application/zip
 - application/x-tar
 
+## Default implementation
+
+- Tar: [com.github.sparqlanything.zip.TarTriplifier](sparql-anything-archive/src/main/java/com/github/sparqlanything/zip/TarTriplifier.java)
+- Zip: [com.github.sparqlanything.zip.ZipTriplifier](sparql-anything-archive/src/main/java/com/github/sparqlanything/zip/ZipTriplifier.java)
+- File-system directories: [com.github.sparqlanything.zip.FolderTriplifier](sparql-anything-archive/src/main/java/com/github/sparqlanything/zip/FolderTriplifier.java)
+
 ## Default Transformation
 
 
