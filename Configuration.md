@@ -86,8 +86,8 @@ WHERE {
 | [blank-nodes](#blank-nodes)   | It tells SPARQL Anything to generate blank nodes or not.                                                                                                                                                                                                                                                                                      | true/false                                                                                                                                                                            | true                                                                                                                                                 |
 | [trim-strings](#trim-strings) | Trim all string literals.                                                                                                                                                                                                                                                                                                                     | true/false                                                                                                                                                                            | false                                                                                                                                                |
 | [null-string](#null-string)   | Do not produce triples where the specified string would be in the object position of the triple.                                                                                                                                                                                                                                              | Any string                                                                                                                                                                            | not set                                                                                                                                              |
-| [triplifier](#triplifier)               | It forces sparql.anything to use a specific triplifier for transforming the data source                                                                                                                                                                                                                                                       | A canonical name of a Java class                                                                                                                                                      | No value                                                                                                                                             |
-| charset                       | The charset of the data source.                                                                                                                                                                                                                                                                                                               | Any charset.                                                                                                                                                                          | UTF-8                                                                                                                                                |
+| [triplifier](#triplifier)     | It forces sparql.anything to use a specific triplifier for transforming the data source                                                                                                                                                                                                                                                       | A canonical name of a Java class                                                                                                                                                      | No value                                                                                                                                             |
+| [charset](#charset)           | The charset of the data source.                                                                                                                                                                                                                                                                                                               | Any charset.                                                                                                                                                                          | UTF-8                                                                                                                                                |
 | metadata                      | It tells sparql.anything to extract metadata from the data source and to store it in the named graph with URI &lt;http://sparql.xyz/facade-x/data/metadata&gt;                                                                                                                                                                                | true/false                                                                                                                                                                            | false                                                                                                                                                |
 | ondisk                        | It tells sparql.anything to use an on disk graph (instead of the default in memory graph). The string should be a path to a directory where the on disk graph will be stored. Using an on disk graph is almost always slower (than using the default in memory graph) but with it you can triplify large files without running out of memory. | a path to a directory                                                                                                                                                                 | not set                                                                                                                                              |
 | ondisk.reuse                  | When using an on disk graph, it tells sparql.anything to reuse the previous on disk graph.                                                                                                                                                                                                                                                    | true                                                                                                                                                                                  | not set                                                                                                                                              |
@@ -748,6 +748,51 @@ Result
 [ a            fx:root ;
   xyz:name     "Vincent" ;
   xyz:surname  "Vega"
+] .
+```
+
+### charset
+
+The charset of the data source.
+
+#### Valid Values
+
+Any charset.
+
+#### Default Value
+
+UTF-8
+
+#### Examples
+
+##### UC1: Triplify the UTF-16 file located at https://sparql-anything.cc/examples/utf16.txt  
+
+```
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:location  "https://sparql-anything.cc/examples/utf16.txt" ;
+                  fx:charset   "UTF16" .
+        ?s        ?p           ?o
+      }
+  }
+```
+
+Result
+
+```
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ a       fx:root ;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+          "UTF-16 test file"
 ] .
 ```
 

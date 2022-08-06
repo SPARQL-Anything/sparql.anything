@@ -1,32 +1,22 @@
-
 package com.github.sparqlanything.it;
 
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSetFormatter;
-import org.apache.jena.query.Syntax;
+import com.github.sparqlanything.engine.FacadeX;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
 
-import com.github.sparqlanything.engine.FacadeX;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DocumentationExampleSandbox {
 
-	private static Map<String, String> prefixes = new HashMap<String, String>();
+	private static final Map<String, String> prefixes = new HashMap<String, String>();
 
-	public static void bibtex(){
+	public static void bibtex() {
 		String queryString = "CONSTRUCT\n" +
 				"  {\n" +
 				"    ?s ?p ?o .\n" +
@@ -79,7 +69,7 @@ public class DocumentationExampleSandbox {
 
 	}
 
-	public static void doc(){
+	public static void doc() {
 		String queryString = "CONSTRUCT\n" +
 				"  {\n" +
 				"    ?s ?p ?o .\n" +
@@ -132,7 +122,7 @@ public class DocumentationExampleSandbox {
 
 	}
 
-	public static void yaml(){
+	public static void yaml() {
 		String queryString = "CONSTRUCT\n" +
 				"  {\n" +
 				"    ?s ?p ?o .\n" +
@@ -185,7 +175,7 @@ public class DocumentationExampleSandbox {
 
 	}
 
-	public static void spreadsheet(){
+	public static void spreadsheet() {
 		String queryString = "CONSTRUCT\n" +
 				"  {\n" +
 				"    GRAPH ?g { ?s ?p ?o }\n" +
@@ -255,7 +245,7 @@ public class DocumentationExampleSandbox {
 
 	}
 
-	public static void metadata(){
+	public static void metadata() {
 		String queryString = "CONSTRUCT\n" +
 				"  {\n" +
 				"    GRAPH ?g { ?s ?p ?o }\n" +
@@ -325,7 +315,7 @@ public class DocumentationExampleSandbox {
 
 	}
 
-	public static void archive(){
+	public static void archive() {
 		String queryString = "CONSTRUCT\n" +
 				"  {\n" +
 				"    ?s ?p ?o .\n" +
@@ -590,18 +580,18 @@ public class DocumentationExampleSandbox {
 		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
 		m.setNsPrefixes(prefixes);
 		m.write(System.out, "TTL");
-		
-		
+
+
 		query = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT ?line WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.regex \".*\\\\n\" . ?s fx:anySlot ?line} }");
 		System.out.println(query.toString(Syntax.defaultSyntax));
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-		
+
 		query = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT ?line WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.regex \"(.*)\\\\n\" ; fx:txt.group 1 . ?s fx:anySlot ?line} }");
 		System.out.println(query.toString(Syntax.defaultSyntax));
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-		
+
 		query = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT ?line WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.split \"\\\\n\" . ?s fx:anySlot ?line} }");
 		System.out.println(query.toString(Syntax.defaultSyntax));
@@ -706,29 +696,37 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
-		query = QueryFactory.create(
-				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
-						"\n" +
-						"CONSTRUCT \n" +
-						"  { \n" +
-						"    ?s ?p ?o .\n" +
-						"  }\n" +
-						"WHERE\n" +
-						"  { SERVICE <x-sparql-anything:>\n" +
-						"      { fx:properties\n" +
-						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\" }' ;\n" +
-						"                  fx:triplifier         \"com.github.sparqlanything.json.JSONTriplifier\" ;\n" +
-						"       . ?s        ?p              ?o\n" +
-						"      }\n" +
-						"  }");
+//		query = QueryFactory.create(
+//				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+//						"\n" +
+//						"CONSTRUCT \n" +
+//						"  { \n" +
+//						"    ?s ?p ?o .\n" +
+//						"  }\n" +
+//						"WHERE\n" +
+//						"  { SERVICE <x-sparql-anything:>\n" +
+//						"      { fx:properties\n" +
+//						"                  fx:content     '{\"name\":\"Vincent\", \"surname\": \"Vega\" }' ;\n" +
+//						"                  fx:triplifier         \"com.github.sparqlanything.json.JSONTriplifier\" ;\n" +
+//						"       . ?s        ?p              ?o\n" +
+//						"      }\n" +
+//						"  }");
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+//		m.write(System.out, "TTL");
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+
+		query = QueryFactory.create("PREFIX  fx:   <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location 'https://sparql-anything.cc/examples/utf16.txt' ; fx:charset 'UTF16' . ?s ?p ?o  } }");
 		m = QueryExecutionFactory.create(query, ds).execConstruct();
 		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
 		m.write(System.out, "TTL");
 		System.out.println(query.toString(Syntax.defaultSyntax));
+		
 	}
 
-	public static void main(String[] args) throws URISyntaxException {
+	public static void main(String[] args) throws URISyntaxException, IOException {
 		prefixes.put("xyz", "http://sparql.xyz/facade-x/data/");
 		prefixes.put("fx", "http://sparql.xyz/facade-x/ns/");
 		prefixes.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
@@ -746,9 +744,9 @@ public class DocumentationExampleSandbox {
 //		csv();
 
 //		binary();
-		
+
 //		txt();
-		
+
 //		Pattern p = Pattern.compile(".*\n");
 //		Matcher m = p.matcher("Hello world!\nHello world\n");
 //		if(m.find()) {
@@ -762,6 +760,8 @@ public class DocumentationExampleSandbox {
 //		metadata();
 //		bibtex();
 		options();
+
+//		FileUtils.write(new File("/Users/lgu/Desktop/utf16.txt"), "UTF-16 test file", Charset.forName("UTF16"));
 	}
 
 }
