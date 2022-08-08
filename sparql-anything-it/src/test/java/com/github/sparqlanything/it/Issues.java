@@ -409,11 +409,11 @@ public class Issues {
 	 */
 	@Test
 	public void testIssue280() throws URISyntaxException, IOException {
-		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
-		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
-		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
-		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
-		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
 
 		String location = getClass().getClassLoader().getResource("issues/issue280.json").toURI().toString();
 
