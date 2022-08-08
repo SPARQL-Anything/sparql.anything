@@ -725,7 +725,13 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
-		query = QueryFactory.create("PREFIX  fx:   <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '{\"name\":\"Vincent\", \"surname\": \"Vega\" }' ; fx:ondisk '/tmp' ; fx:media-type 'application/json' . ?s ?p ?o  } }");
+		query = QueryFactory.create("PREFIX  fx:   <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '{\"name\":\"Vincent\", \"surname\": \"Vega\" }' ; fx:ondisk '/tmp/' ; fx:media-type 'application/json' . ?s ?p ?o  } }");
+		m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+		m.write(System.out, "TTL");
+		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		query = QueryFactory.create("PREFIX  fx:   <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:content '{\"name\":\"Vincent\", \"surname\": \"Vega\" }' ; fx:ondisk '/tmp/' ; fx:ondisk.reuse true ; fx:media-type 'application/json' . ?s ?p ?o  } }");
 		m = QueryExecutionFactory.create(query, ds).execConstruct();
 		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
 		m.write(System.out, "TTL");
