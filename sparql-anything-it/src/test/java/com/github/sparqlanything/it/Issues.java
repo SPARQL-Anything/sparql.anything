@@ -421,7 +421,7 @@ public class Issues {
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
 						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
 						"SELECT * WHERE { " +
-						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=/Users/lgu/Desktop/tmp> { " +
+						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=/tmp> { " +
 						" ?s xyz:name ?o }  }");
 
 //		System.out.println(location);
@@ -436,6 +436,21 @@ public class Issues {
 			results.add(rs.next().get("o").asLiteral().getValue().toString());
 		}
 //		System.out.println(results);
+		assertTrue(results.contains("Friends"));
+		assertTrue(results.contains("Cougar Town"));
+
+
+
+		qs = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"/tmp\" .  " +
+						" ?s xyz:name ?o }  }");
+
+
+		rs = QueryExecutionFactory.create(qs, ds).execSelect();
+		results = new HashSet<>();
+		while (rs.hasNext()) {
+			results.add(rs.next().get("o").asLiteral().getValue().toString());
+		}
 		assertTrue(results.contains("Friends"));
 		assertTrue(results.contains("Cougar Town"));
 	}

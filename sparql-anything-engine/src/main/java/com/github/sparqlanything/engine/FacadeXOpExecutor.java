@@ -91,8 +91,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private List<Triple> getPropFuncTriples(BasicPattern e) {
 		List<Triple> result = new ArrayList<>();
 		e.forEach(t -> {
-			if (t.getPredicate().isURI()
-					&& t.getPredicate().getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")) {
+			if (t.getPredicate().isURI() && t.getPredicate().getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")) {
 				result.add(t);
 			}
 		});
@@ -100,8 +99,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	private OpPropFunc getOpPropFuncAnySlot(Triple t) {
-		return new OpPropFunc(NodeFactory.createURI(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot"),
-				new PropFuncArg(t.getSubject()), new PropFuncArg(t.getObject()), OpTable.create(new TableUnit()));
+		return new OpPropFunc(NodeFactory.createURI(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot"), new PropFuncArg(t.getSubject()), new PropFuncArg(t.getObject()), OpTable.create(new TableUnit()));
 	}
 
 	private String getInMemoryCacheKey(Properties properties, Op op) {
@@ -113,8 +111,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return super.exec(opProc, input);
 	}
 
-	private DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException, InstantiationException,
-			IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
+	private DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		DatasetGraph dg = null;
 		if (t == null) {
 			return DatasetGraphFactory.create();
@@ -166,8 +163,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
 		logger.trace("SERVICE uri: {} {}", opService.getService(), opService);
-		if (opService.getService().isVariable())
-			return postponeService(opService, input);
+		if (opService.getService().isVariable()) return postponeService(opService, input);
 		if (opService.getService().isURI() && isFacadeXURI(opService.getService().getURI())) {
 			logger.trace("Facade-X uri: {}", opService.getService());
 			try {
@@ -217,8 +213,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 										slicer.triplify(slice, p, builder);
 										DatasetGraph dg = builder.getDatasetGraph();
 										logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
-										FacadeXExecutionContext ec = new FacadeXExecutionContext(
-												new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+										FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 										logger.trace("Op {}", opService.getSubOp());
 										logger.trace("OpName {}", opService.getSubOp().getName());
 										/**
@@ -282,17 +277,15 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 				FacadeXExecutionContext ec;
 				if (p.containsKey(IRIArgument.ONDISK.toString())) {
-					ec = new FacadeXExecutionContext(
-							new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
+					ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
 				} else {
-					ec = new FacadeXExecutionContext(
-							new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+					ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 				}
 				return QC.execute(opService.getSubOp(), input, ec);
 
-			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException
-					 | IllegalAccessException | InvocationTargetException | NoSuchMethodException
-					 | ClassNotFoundException | TriplifierHTTPException e) {
+			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
+					 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+					 ClassNotFoundException | TriplifierHTTPException e) {
 				logger.error("An error occurred: {}", e.getMessage());
 				throw new RuntimeException(e);
 			} catch (UnboundVariableException e) {
@@ -432,16 +425,14 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (triplifyMetadata(p)) {
 			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(Triplifier.getRootArgument(p), p);
 			metadataTriplifier.triplify(p, builder);
-			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI),
-					builder.getDatasetGraph().getDefaultGraph());
+			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI), builder.getDatasetGraph().getDefaultGraph());
 		}
 	}
 
 	private void createAuditGraph(DatasetGraph dg, Properties p, URL url) {
 		if (p.containsKey("audit") && (p.get("audit").equals("1") || p.get("audit").equals("true"))) {
 			logger.info("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
-			logger.info("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(),
-					NodeFactory.createURI(url.toString()));
+			logger.info("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(), NodeFactory.createURI(url.toString()));
 			String SD = "http://www.w3.org/ns/sparql-service-description#";
 			Model audit = ModelFactory.createDefaultModel();
 			Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
@@ -460,8 +451,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 	}
 
-	private Triplifier getTriplifier(Properties p) throws InstantiationException, IllegalAccessException,
-			InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
+	private Triplifier getTriplifier(Properties p) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		Triplifier t;
 
 		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString()) && !p.containsKey(IRIArgument.COMMAND.toString())) {
@@ -472,20 +462,15 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
 			logger.trace("Triplifier enforced");
-			t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString())).getConstructor()
-					.newInstance();
+			t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString())).getConstructor().newInstance();
 		} else if (p.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
 			logger.trace("MimeType enforced");
-			t = (Triplifier) Class
-					.forName(triplifierRegister
-							.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString())))
-					.getConstructor().newInstance();
+			t = (Triplifier) Class.forName(triplifierRegister.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString()))).getConstructor().newInstance();
 		} else if (p.containsKey(IRIArgument.LOCATION.toString())) {
 			String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 			File f = new File(p.get(IRIArgument.LOCATION.toString()).toString().replace("file://", ""));
 
-			logger.trace("Use location {}, exists on local FS? {}, is directory? {}", f.getAbsolutePath(), f.exists(),
-					f.isDirectory());
+			logger.trace("Use location {}, exists on local FS? {}, is directory? {}", f.getAbsolutePath(), f.exists(), f.isDirectory());
 
 			if (f.exists() && f.isDirectory()) {
 				logger.trace("Return folder triplifier");
@@ -501,8 +486,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		} else {
 			logger.trace("No location provided, using the Text triplifier");
-			t = (Triplifier) Class.forName("com.github.sparqlanything.text.TextTriplifier").getConstructor()
-					.newInstance();
+			t = (Triplifier) Class.forName("com.github.sparqlanything.text.TextTriplifier").getConstructor().newInstance();
 		}
 		return t;
 	}
@@ -544,8 +528,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				if (vis.hasTable()) {
 					logger.trace(vis.getOpTable().toString());
 					logger.trace("BGP {}", vis.getBGP());
-					logger.trace("Contains variable names {}",
-							vis.getOpTable().getTable().getVarNames().contains(e.getVariableName()));
+					logger.trace("Contains variable names {}", vis.getOpTable().getTable().getVarNames().contains(e.getVariableName()));
 					if (vis.getOpTable().getTable().getVarNames().contains(e.getVariableName())) {
 						e.setOpTable(vis.getOpTable());
 					}
@@ -576,11 +559,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 		for (Triple t : bgp.getPattern().getList()) {
 			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
 				if (t.getObject().isURI()) {
-					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""),
-							t.getObject().getURI());
+					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""), t.getObject().getURI());
 				} else if (t.getObject().isLiteral()) {
-					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""),
-							t.getObject().getLiteral().getValue().toString());
+					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""), t.getObject().getLiteral().getValue().toString());
 				} else if (t.getObject().isVariable()) {
 					throw new UnboundVariableException(t.getObject().getName(), bgp);
 				}
@@ -605,8 +586,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private OpBGP excludeFXProperties(OpBGP bgp) {
 		BasicPattern result = new BasicPattern();
 		for (Triple t : bgp.getPattern().getList()) {
-			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES))
-				continue;
+			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) continue;
 			result.add(t);
 		}
 		return new OpBGP(result);
@@ -615,8 +595,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	private OpBGP excludeOpPropFunction(OpBGP bgp) {
 		BasicPattern result = new BasicPattern();
 		for (Triple t : bgp.getPattern().getList()) {
-			if (t.getPredicate().isURI()
-					&& t.getPredicate().getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot"))
+			if (t.getPredicate().isURI() && t.getPredicate().getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot"))
 				continue;
 			result.add(t);
 		}
@@ -651,8 +630,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		});
 
 		logger.trace("executing  BGP {}", opBGP.toString());
-		logger.trace("Size: {} {}", this.execCxt.getDataset().size(),
-				this.execCxt.getDataset().getDefaultGraph().size());
+		logger.trace("Size: {} {}", this.execCxt.getDataset().size(), this.execCxt.getDataset().getDefaultGraph().size());
 
 		List<Triple> l = getPropFuncTriples(opBGP.getPattern());
 		logger.trace("Triples with OpFunc: {}", l.size());
@@ -676,15 +654,23 @@ public class FacadeXOpExecutor extends OpExecutor {
 				} else {
 					dg = this.execCxt.getDataset();
 				}
-				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2,
-						new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+
+
+				ExecutionContext ec;
+				if (p.containsKey(IRIArgument.ONDISK.toString())) {
+					ec = new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor());
+				} else {
+					ec = new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor());
+				}
+
+				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2, ec);
 			}
 		} catch (UnboundVariableException e) {
 			logger.trace("Unbound variables");
 			OpBGP fakeBGP = extractFakePattern(opBGP);
 			return postponeBGP(excludeOpPropFunction(opBGP), QC.executeDirect(fakeBGP.getPattern(), input2, execCxt));
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
-				 | ClassNotFoundException | IOException e) {
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+				 ClassNotFoundException | IOException e) {
 			logger.error(e.getMessage());
 		}
 		logger.debug("Execute default {} {}", opBGP, excludeOpPropFunction(opBGP));
