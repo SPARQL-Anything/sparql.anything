@@ -738,7 +738,23 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
 //		query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?seriesName (GROUP_CONCAT(?star) AS ?cast) WHERE {     SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {         ?tvSeries xyz:name ?seriesName .         ?tvSeries xyz:stars ?star .     } } GROUP BY ?seriesName");
-		query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?seriesName (GROUP_CONCAT(?star) AS ?cast) WHERE {     SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {         ?tvSeries xyz:name ?seriesName .         ?tvSeries xyz:stars ?star .     } } GROUP BY ?seriesName");
+//		query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?seriesName (GROUP_CONCAT(?star) AS ?cast) WHERE {     SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {         ?tvSeries xyz:name ?seriesName .         ?tvSeries xyz:stars ?star .     } } GROUP BY ?seriesName");
+//		m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+//		m.write(System.out, "TTL");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+
+//		query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?name ?surname ?movie WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simpleArray.json,slice=true> { ?p xyz:name ?name ; xyz:surname ?surname ; xyz:movie ?movie } }");
+//		m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+//		m.write(System.out, "TTL");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+
+		query = QueryFactory.create("PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT * WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simpleArray.json,slice=true> { ?p1 xyz:name ?name1 ; xyz:surname ?surname1 ; xyz:movie ?movie . ?p2 xyz:name ?name2 ; xyz:surname ?surname2 ; xyz:movie ?movie FILTER(?p1 != ?p2)} }");
 //		m = QueryExecutionFactory.create(query, ds).execConstruct();
 //		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
 //		m.write(System.out, "TTL");
