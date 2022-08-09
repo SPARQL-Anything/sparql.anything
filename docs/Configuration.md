@@ -92,8 +92,8 @@ WHERE {
 | [ondisk](#ondisk)               | It tells SPARQL Anything to use an on disk graph (instead of the default in memory graph). The string should be a path to a directory where the on disk graph will be stored. Using an on disk graph is almost always slower (than using the default in memory graph) but with it you can triplify large files without running out of memory. | A path to a directory                                                                                                                                                                 | No value                                                                                                                                             |
 | [ondisk.reuse](#ondisk.reuse)   | When using an on disk graph, it tells sparql.anything to reuse the previous on disk graph.                                                                                                                                                                                                                                                   | true                                                                                                                                                                                  | not set                                                                                                                                              |
 | [strategy](#strategy)           | The execution strategy. 0 = in memory, all triples; 1 = in memory, only triples matching any of the triple patterns in the where clause                                                                                                                                                                                                      | 0,1                                                                                                                                                                                   | 1                                                                                                                                                    |
-| [slice](#slice)                     | The resource is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row); JSON (when array slice by item, when json object requires `json.path`); XML (requires `xml.path`)                                                                                                                             | true/false                                                                                                                                                                            | false                                                                                                                                                |
-| use-rdfs-member                 | It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...)                                                                                                                                                                                                              | true/false                                                                                                                                                                            | false                                                                                                                                                |
+| [slice](#slice)                 | The resource is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row); JSON (when array slice by item, when json object requires `json.path`); XML (requires `xml.path`)                                                                                                                             | true/false                                                                                                                                                                            | false                                                                                                                                                |
+| [use-rdfs-member](#use-rdfs-member)            | It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...)                                                                                                                                                                                                              | true/false                                                                                                                                                                            | false                                                                                                                                                |
 
 \* It is mandatory to provide either `location`, `content`, or `command`.
 
@@ -1009,6 +1009,56 @@ Result
 | p1 | name1 | surname1 | movie | p2 | name2 | surname2 |
 =========================================================
 ---------------------------------------------------------
+```
+
+### use-rdfs-member
+
+It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...)
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+false
+
+#### Examples
+
+##### UC1: Using rdfs:member instead of container membership properties for triplifying the JSON Array [1,2,3]
+
+```
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:use-rdfs-member  true ;
+                  fx:content          "[1,2,3]" ;
+                  fx:media-type       "application/json" .
+        ?s        ?p                  ?o
+      }
+  }
+```
+
+Result
+
+```
+@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:  <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type     fx:root ;
+  rdfs:member  "3"^^xsd:int , "2"^^xsd:int , "1"^^xsd:int
+] .
 ```
 
 <!--
