@@ -7,21 +7,51 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 **NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
 
 
-| Name                                                      | Type           | Description                                                                                      |
-|-----------------------------------------------------------|----------------|--------------------------------------------------------------------------------------------------|
+| Name                     | Type           | Description                                                                                      |
+|--------------------------|----------------|--------------------------------------------------------------------------------------------------|
 | [fx:anySlot](#fxanySlot) | Magic Property | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...). |
-
 
 
 ## Working with sequences
 
 ### fx:anySlot
 
-The execution engine is sensible to the magic property
-
-``<http://sparql.xyz/facade-x/ns/anySlot>``
+The execution engine is sensible to the magic property ``fx:anySlot``.
 
 This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).
+
+### Example
+
+Query 
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?slot
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[1,2,3]" ;
+                  fx:media-type  "application/json" .
+        ?s        fx:anySlot     ?slot
+      }
+  }
+```
+
+Result
+
+```
+-----------------------------------------------
+| slot                                        |
+===============================================
+| "1"^^<http://www.w3.org/2001/XMLSchema#int> |
+| "2"^^<http://www.w3.org/2001/XMLSchema#int> |
+| "3"^^<http://www.w3.org/2001/XMLSchema#int> |
+-----------------------------------------------
+```
 
 
 
