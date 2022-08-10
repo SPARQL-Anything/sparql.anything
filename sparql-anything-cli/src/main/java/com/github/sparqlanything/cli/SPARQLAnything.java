@@ -192,7 +192,9 @@ public class SPARQLAnything {
 			logger.error("Available query parameters not sufficient: {}", qs.toString());
 			throw new Exception(ms.toString());
 		}
-		return binder.toQuery();
+		Query q = binder.toQuery();
+		logger.trace("Query after bindParameters: \n{}\n", q);
+		return q;
 	}
 
 	public static String prepareOutputFromPattern(String template, QuerySolution qs) {
@@ -553,7 +555,7 @@ public class SPARQLAnything {
 
 						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile));
 
-						logger.trace("Executing Query: {}", query);
+						logger.trace("Executing Query: {}", q);
 					} catch (Exception e1) {
 						logger.error(
 								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
