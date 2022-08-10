@@ -552,10 +552,8 @@ public class SPARQLAnything {
 						// else stays null and output goes to STDOUT
 					}
 					try {
-
-						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile));
-
 						logger.trace("Executing Query: {}", q);
+						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile));
 					} catch (Exception e1) {
 						logger.error(
 								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
