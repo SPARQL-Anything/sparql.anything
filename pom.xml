@@ -362,7 +362,7 @@
 			<dependency>
 				<groupId>io.github.basilapi</groupId>
 				<artifactId>sparql</artifactId>
-				<version>0.8.0</version>
+				<version>0.8.3</version>
 				<exclusions>
 					<exclusion>
 						<groupId>org.apache.jena</groupId>
