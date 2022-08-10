@@ -323,7 +323,16 @@ java -jar sparql-anything-<version>.jar -q query.sparql -v starName="Courteney C
 ```
 
 ## Functions and magic properties
-SPARQL Anything is built on Apache Jena, see a list of supported functions on the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
+
+SPARQL Anything provides a number of magical functions and properties to facilitate the users in querying the sources and constructing knowledge graphs.
+
+**NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
+
+| Name                                                       | Type           | Description                                                                                      |
+|------------------------------------------------------------|----------------|--------------------------------------------------------------------------------------------------|
+| [fx:anySlot](Functions_AND_MAGIC_PROPERTIES.md#fx:anySlot) | Magic Property | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...). |
+
+<!--
 ### Working with sequences
 #### The `fx:anySlot` magic property
 The execution engine is sensible to the magic property
@@ -393,6 +402,7 @@ The function `fx:literal( ?a , ?b )` builds a literal from the string representa
 
 ### The function `fx:bnode`
 The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case).
+--> 
 
 ## Usage
 ### Command Line Interface (CLI)
