@@ -328,9 +328,9 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 
 **NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
 
-| Name                                                       | Type           | Description                                                                                      |
-|------------------------------------------------------------|----------------|--------------------------------------------------------------------------------------------------|
-| [fx:anySlot](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fx:anySlot) | Magic Property | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...). |
+| Name                                                      | Type           | Description                                                                                      |
+|-----------------------------------------------------------|----------------|--------------------------------------------------------------------------------------------------|
+| [fx:anySlot](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxanySlot) | Magic Property | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...). |
 
 <!--
 ### Working with sequences
