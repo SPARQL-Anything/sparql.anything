@@ -9,7 +9,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 
 | Name                                                      | Type           | Description                                                                                      |
 |-----------------------------------------------------------|----------------|--------------------------------------------------------------------------------------------------|
-| [fx:anySlot](Functions_AND_MAGIC_PROPERTIES.md#fxanySlot) | Magic Property | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...). |
+| [fx:anySlot](#fxanySlot) | Magic Property | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...). |
 
 
 
