@@ -304,6 +304,17 @@ public class ItTest {
 		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
 	}
 
+	@Ignore // Ignoring as we don't want HTTP dependent builds
+	@Test
+	public void triplifyRDFHTTP() throws IOException, URISyntaxException {
+		String location = "https://sparql.xyz/facade-x/ns/index.ttl"; //getClass().getClassLoader().getResource("nquads.nq").toURI().toString();
+		Query query = QueryFactory.create("ASK { SERVICE <x-sparql-anything:location=" + location
+				+ "> {{?s ?p ?o}} }");
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
+	}
+
 	@Test
 	public void triplifyExternal() throws IOException, URISyntaxException {
 		Query query = QueryFactory.create(
