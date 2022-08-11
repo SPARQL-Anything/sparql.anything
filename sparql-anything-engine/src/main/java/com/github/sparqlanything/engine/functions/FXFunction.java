@@ -17,25 +17,34 @@
 
 package com.github.sparqlanything.engine.functions;
 
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.vocabulary.RDF;
 
 public interface FXFunction {
 
-	default boolean isContainerMembershipProperty(NodeValue... nodeValues){
-		for (NodeValue nodeValue: nodeValues) {
-			if(!nodeValue.isIRI() || !nodeValue.asNode().getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")){
+	default boolean isContainerMembershipProperty(NodeValue... nodeValues) {
+		for (NodeValue nodeValue : nodeValues) {
+			if (!nodeValue.isIRI() || !nodeValue.asNode().getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")) {
 				return false;
 			}
 		}
 		return true;
 	}
 
+
+	default boolean isSlotConsistent(int number) {
+		return number > 0;
+	}
+
 	default int getInt(NodeValue nodeValue) {
 		return Integer.parseInt(nodeValue.asNode().getURI().substring(44));
 	}
 
-	default NodeValue asContainerMembershipProperty(int number){
-		return NodeValue.makeNode(RDF.li(number).asNode());
+	default NodeValue asContainerMembershipProperty(int number) {
+		if (isSlotConsistent(number)) {
+			return NodeValue.makeNode(RDF.li(number).asNode());
+		}
+		throw new ExprEvalException("Illegal container membership property with index " + number);
 	}
 }

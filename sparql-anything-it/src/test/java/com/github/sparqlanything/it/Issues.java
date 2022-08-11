@@ -524,4 +524,64 @@ public class Issues {
 //		assertTrue(results.contains("Friends"));
 //		assertTrue(results.contains("Cougar Town"));
 	}
+
+
+	/**
+			* See https://github.com/SPARQL-Anything/sparql.anything/issues/291
+			*
+			* @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue291() throws URISyntaxException, IOException {
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		Model m;
+
+		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?slot ?p (fx:backward(?p, 3) AS ?backward3) (fx:backward(?p, 1) AS ?backward1) (fx:previous(?p) AS ?previous) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p ?slot  . FILTER(?p != rdf:type)} }");
+//		m = QueryExecutionFactory.create(query, ds).execConstruct();
+//		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+//		m.setNsPrefix("rdfs", RDFS.uri);
+//		m.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+//		m.write(System.out, "TTL");
+		Set<String> backward3 = new HashSet<>();
+		Set<String> backward1 = new HashSet<>();
+		Set<String> previous = new HashSet<>();
+
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		while (rs.hasNext()){
+			QuerySolution qs = rs.next();
+			if(qs.contains("backward3")){
+				backward3.add(qs.getResource("backward3").getURI());
+			}
+			if(qs.contains("backward1")){
+				backward1.add(qs.getResource("backward1").getURI());
+			}
+			if(qs.contains("previous")){
+				previous.add(qs.getResource("previous").getURI());
+			}
+		}
+
+//		System.out.println(backward3);
+//		System.out.println(backward1);
+//		System.out.println(previous);
+		assertEquals(Sets.newHashSet(), backward3);
+		assertEquals(Sets.newHashSet("http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.w3.org/1999/02/22-rdf-syntax-ns#_2"), backward1);
+		assertEquals(Sets.newHashSet("http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.w3.org/1999/02/22-rdf-syntax-ns#_2"), previous);
+
+
+
+	}
+
+
+
 }
