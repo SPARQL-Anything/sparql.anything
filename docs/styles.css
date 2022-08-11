@@ -35,6 +35,7 @@ div.rst-content table.field-list thead
     white-space: break-spaces;
 }
 
+.rst-content .section table.docutils,
 .rst-content table.docutils {
     display: inline-table;
 }
