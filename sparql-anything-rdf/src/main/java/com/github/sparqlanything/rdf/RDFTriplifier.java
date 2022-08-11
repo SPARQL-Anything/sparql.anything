@@ -84,16 +84,23 @@ public class RDFTriplifier implements Triplifier {
 		}
 	}
 	public static Lang getRDFLang(Properties properties, String url, Header contentType){
+		Lang lang = null;
 		// Version from HTTP content type response
 		if(contentType != null){
-			return RDFLanguages.contentTypeToLang(contentType.getValue());
+			lang = RDFLanguages.contentTypeToLang(contentType.getValue().substring(0,contentType.getValue().indexOf(';') ));
 		}
-		// Version from HTTP accept header
-		if(properties.containsKey(HTTPHelper.HTTPHEADER_PREFIX + "accept")){
-			return RDFLanguages.contentTypeToLang(properties.getProperty(HTTPHelper.HTTPHEADER_PREFIX + "accept"));
+		// Version from expected content type (HTTP accept header)
+		if(lang == null && properties.containsKey(HTTPHelper.HTTPHEADER_PREFIX + "accept")){
+			lang = RDFLanguages.contentTypeToLang(properties.getProperty(HTTPHelper.HTTPHEADER_PREFIX + "accept"));
 		}
-		// Version from location file extension
-		return RDFLanguages.filenameToLang(url);
+		if(lang == null) {
+			// Version from location file extension
+			lang = RDFLanguages.filenameToLang(url);
+		}
+		if(lang == null){
+			log.warn("Failed to determine RDF lang");
+		}
+		return lang;
 	}
 
 	@Override
