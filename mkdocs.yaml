@@ -6,10 +6,12 @@ site_description: SPARQL Anything online documentation
 theme:
   name: readthedocs
 nav:
-  - Introduction: 'README.md'
-  - Configuration: 'Configuration.md'
-  - Functions: 'FUNCTIONS_AND_MAGIC_PROPERTIES.md'
-  - 'Formats':
+  - Reference:
+    - Introduction: 'README.md'
+    - Configuration: 'Configuration.md'
+    - Functions: 'FUNCTIONS_AND_MAGIC_PROPERTIES.md'
+    - Docker: 'BROWSER.md'
+  - 'Guide on formats':
       - CSV: 'formats/CSV.md'
       - JSON: 'formats/JSON.md'
       - XML: 'formats/XML.md'
@@ -23,7 +25,6 @@ nav:
       - RDF: 'formats/RDF.md'
       - Spreadsheet: 'formats/Spreadsheet.md'
       - Word: 'formats/Word_Processing_Documents.md'
-  - Docker: 'BROWSER.md'
 extra_css: [styles.css]
 sticky_navigation: true
 markdown_extensions:
