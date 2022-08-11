@@ -5,6 +5,7 @@ git add formats/*
 cp -f README.md docs/
 cp -f BROWSER.md docs/
 cp -f Configuration.md docs/
+cp -f ConfiguFUNCTIONS_AND_MAGIC_PROPERTIESration.md docs/
 cp -f LICENSE docs/
 cp -r formats docs/
 git add docs/*
