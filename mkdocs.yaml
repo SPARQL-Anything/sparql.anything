@@ -6,13 +6,23 @@ site_description: SPARQL Anything online documentation
 theme:
   name: readthedocs
 nav:
-  - Reference: 'README.md'
-  - Configuration: 'CONFIGURATION.md'
+  - Introduction: 'README.md'
+  - Configuration: 'Configuration.md'
   - Functions: 'FUNCTIONS_AND_MAGIC_PROPERTIES.md'
   - 'Formats':
       - CSV: 'formats/CSV.md'
+      - JSON: 'formats/JSON.md'
       - XML: 'formats/XML.md'
       - HTML: 'formats/HTML.md'
+      - YAML: 'formats/YAML.md'
+      - Markdown: 'formats/Markdown.md'
+      - Bibtex: 'formats/Bibtex.md'
+      - Binary: 'formats/Binary.md'
+      - Archive: 'formats/Archive.md'
+      - TXT: 'formats/TXT.md'
+      - RDF: 'formats/RDF.md'
+      - Spreadsheet: 'formats/Spreadsheet.md'
+      - Word: 'formats/Word_Processing_Documents.md'
   - Docker: 'BROWSER.md'
 extra_css: [styles.css]
 sticky_navigation: true
