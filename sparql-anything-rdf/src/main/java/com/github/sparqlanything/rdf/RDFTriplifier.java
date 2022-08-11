@@ -22,15 +22,26 @@
 package com.github.sparqlanything.rdf;
 
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
+import com.github.sparqlanything.model.HTTPHelper;
 import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.protocol.HTTP;
 import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFLanguages;
+import org.apache.jena.riot.lang.LangEngine;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
@@ -47,7 +58,42 @@ public class RDFTriplifier implements Triplifier {
 
 		DatasetGraph dg = builder.getDatasetGraph();
 		logger.info("URL {}", url.toString());
-		RDFDataMgr.read(dg, url.toString());
+		try {
+			InputStream is;
+			Header contentType;
+			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
+				CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
+				if (!HTTPHelper.isSuccessful(response)) {
+					log.warn("Request unsuccessful: {}", response.getStatusLine().toString());
+					if(log.isTraceEnabled()){
+						log.trace("Response: {}", response.toString());
+						log.trace("Response body: {}",IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
+					}
+					throw new TriplifierHTTPException(response.getStatusLine().toString());
+				}
+				is = response.getEntity().getContent();
+				contentType = response.getFirstHeader(HTTP.CONTENT_TYPE);
+			} else {
+				is = Triplifier.getInputStream(properties);
+				contentType = null;
+			}
+			RDFDataMgr.read(dg, is, getRDFLang(properties, url.toString(), contentType));
+		} catch (TriplifierHTTPException e) {
+			logger.error("", e.getMessage());
+			throw new IOException(e);
+		}
+	}
+	public static Lang getRDFLang(Properties properties, String url, Header contentType){
+		// Version from HTTP content type response
+		if(contentType != null){
+			return RDFLanguages.contentTypeToLang(contentType.getValue());
+		}
+		// Version from HTTP accept header
+		if(properties.containsKey(HTTPHelper.HTTPHEADER_PREFIX + "accept")){
+			return RDFLanguages.contentTypeToLang(properties.getProperty(HTTPHelper.HTTPHEADER_PREFIX + "accept"));
+		}
+		// Version from location file extension
+		return RDFLanguages.filenameToLang(url);
 	}
 
 	@Override
