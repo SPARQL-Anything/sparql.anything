@@ -1,0 +1,7 @@
+# Tutorials
+Here is a list of step-by-step tutorials covering several features of SPARQL Anything:
+
+- [SPARQL Anything showcase: open data from the Tate Gallery](https://github.com/SPARQL-Anything/showcase-tate): this tutorial covers formats such as CSV and JSON and features such as the function `fx:anySlot` and the chaining of multiple `SERVICE` clauses. It is based on the SPARQL Anything [CLI](README.md#Usage).
+- [Construct a knowledge graph of artists and artworks of the IMMA museum website](https://github.com/SPARQL-Anything/showcase-imma): This showcase demonstrates the use of SPARQL Anything for constructing a Knowledge Graph from data encoded in HTML pages. Apart from examples with the HTML input format, it covers features such as parametrised queries and the use of SPARQL result set files as parameters. It is based on the SPARQL Anything [CLI](README.md#Usage).
+- [Construct a knowledge graph from YAML annotations in Markdown file headers](https://github.com/SPARQL-Anything/showcase-polifonia-ecosystem): A short but complex case demonstrating how to chain multiple transformations starting from a set of Markdown files, queried to extract the YAML header, which is in turn queried to derive the annotations, that are in turn projected into a KG!
+- [MusicXML Showcase](https://github.com/SPARQL-Anything/showcase-musicxml): An advanced application of SPARQL Anything to query MusicXML files and derive note sequences, computing n-grams, and populating a Music Notation ontology.
