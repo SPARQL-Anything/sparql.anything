@@ -39,6 +39,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFactory;
 import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.sparql.resultset.ResultsFormat;
 import org.apache.jena.query.ResultSetRewindable;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -56,6 +57,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -79,7 +82,7 @@ public class SPARQLAnything {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
-	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw)
+	private static void executeQuery(String outputFormat, Dataset kb, Query query, OutputStream os)
 			throws FileNotFoundException {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Before executeQuery: {}", System.currentTimeMillis() - duration);
@@ -88,29 +91,29 @@ public class SPARQLAnything {
 		Query q = query;
 		if (q.isSelectType()) {
 			if (format.equals("JSON")) {
-				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execSelect());
+				ResultSetFormatter.outputAsJSON(os, QueryExecutionFactory.create(q, kb).execSelect());
 			} else if (format.equals("XML")) {
-				ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(q, kb).execSelect());
+				ResultSetFormatter.outputAsXML(os, QueryExecutionFactory.create(q, kb).execSelect());
 			} else if (format.equals("CSV")) {
-				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execSelect());
+				ResultSetFormatter.outputAsCSV(os, QueryExecutionFactory.create(q, kb).execSelect());
 			} else if (format.equals("TEXT")) {
-				pw.println(ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect()));
+				ResultSetFormatter.output(os,QueryExecutionFactory.create(q, kb).execSelect(),ResultsFormat.FMT_TEXT);
 			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
 		} else if (q.isAskType()) {
 			if (format.equals("JSON")) {
-				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execAsk());
+				ResultSetFormatter.outputAsJSON(os, QueryExecutionFactory.create(q, kb).execAsk());
 			} else if (format.equals("XML")) {
-				ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(q, kb).execAsk());
+				ResultSetFormatter.outputAsXML(os, QueryExecutionFactory.create(q, kb).execAsk());
 			} else if (format.equals("CSV")) {
-				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
+				ResultSetFormatter.outputAsCSV(os, QueryExecutionFactory.create(q, kb).execAsk());
 			} else if (format.equals("TEXT")) {
-				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
+				ResultSetFormatter.outputAsCSV(os, QueryExecutionFactory.create(q, kb).execAsk());
 			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
-//			pw.println(QueryExecutionFactory.create(q, kb).execAsk());
+//			os.println(QueryExecutionFactory.create(q, kb).execAsk());
 		} else if (q.isDescribeType() || q.isConstructType()) {
 			Model m;
 			Dataset d = null;
@@ -125,27 +128,27 @@ public class SPARQLAnything {
 			}
 			if (format.equals("JSON") || format.equals(Lang.JSONLD.getName()) ) {
 				// JSON-LD format.equals(Lang.JSONLD11.getName())
-				RDFDataMgr.write(pw, m, Lang.JSONLD);
+				RDFDataMgr.write(os, m, Lang.JSONLD);
 			} else if ( format.equals(Lang.JSONLD11.getName()) ) {
-				RDFDataMgr.write(pw, m, Lang.JSONLD11);
+				RDFDataMgr.write(os, m, Lang.JSONLD11);
 			} else if (format.equals("XML")) {
 				// RDF/XML
-				RDFDataMgr.write(pw, m, Lang.RDFXML);
+				RDFDataMgr.write(os, m, Lang.RDFXML);
 			} else if (format.equals("TTL") || format.equals(Lang.TURTLE.getName())) {
 				// TURTLE
-				RDFDataMgr.write(pw, m, Lang.TTL);
+				RDFDataMgr.write(os, m, Lang.TTL);
 			} else if (format.equals("NT") || format.equals(Lang.NTRIPLES.getName())) {
 				// N-Triples
-				RDFDataMgr.write(pw, m, Lang.NT);
+				RDFDataMgr.write(os, m, Lang.NT);
 			} else if (format.equals("NQ") || format.equals(Lang.NQUADS.getName())) {
 				// NQ
-				RDFDataMgr.write(pw, d, Lang.NQ);
+				RDFDataMgr.write(os, d, Lang.NQ);
 			} else if (format.equals(Lang.TRIG.getName())) {
 				// TRIG
-				RDFDataMgr.write(pw, d, Lang.TRIG);
+				RDFDataMgr.write(os, d, Lang.TRIG);
 			} else if (format.equals(Lang.TRIX.getName())) {
 				// TRIG
-				RDFDataMgr.write(pw, d, Lang.TRIX);
+				RDFDataMgr.write(os, d, Lang.TRIX);
 			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
@@ -155,10 +158,10 @@ public class SPARQLAnything {
 		}
 	}
 
-	private static PrintStream getPrintWriter(String fileName) throws FileNotFoundException {
+	private static OutputStream getOutputStream(String fileName, boolean append) throws FileNotFoundException {
 
 		if (fileName != null) {
-			return new PrintStream(new File(fileName));
+			return new FileOutputStream(new File(fileName), append);
 		}
 
 		return System.out;
@@ -508,7 +511,7 @@ public class SPARQLAnything {
 			if (inputFile == null && values == null) {
 				logger.debug("No input file");
 				Query q = QueryFactory.create(query);
-				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName));
+				executeQuery(cli.getFormat(q), kb, q, getOutputStream(outputFileName, cli.getOutputAppend()));
 			} else {
 
 				if (inputFile != null && values != null) {
@@ -553,7 +556,7 @@ public class SPARQLAnything {
 					}
 					try {
 						logger.trace("Executing Query: {}", q);
-						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile));
+						executeQuery(cli.getFormat(q), kb, q, getOutputStream(outputFile, cli.getOutputAppend()));
 					} catch (Exception e1) {
 						logger.error(
 								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
