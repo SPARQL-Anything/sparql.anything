@@ -6,7 +6,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.vocabulary.RDFS;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -783,7 +782,6 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
-
 //		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?slot (fx:cardinal(?p) AS ?cardinal) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p ?slot  . FILTER(?p != rdf:type)} }");
 ////		m = QueryExecutionFactory.create(query, ds).execConstruct();
 ////		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
@@ -804,14 +802,14 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
-		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT  (fx:after(?p1, ?p2) AS ?p1_after_p2) (fx:after(?p2, ?p1) AS ?p2_after_p1)  (fx:after(?p1, ?p1) AS ?p1_after_p1)  WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p1 1  ; ?p2 2 } }");
-//		m = QueryExecutionFactory.create(query, ds).execConstruct();
-//		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
-//		m.setNsPrefix("rdfs", RDFS.uri);
-//		m.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
-//		m.write(System.out, "TTL");
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-		System.out.println(query.toString(Syntax.defaultSyntax));
+//		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT  (fx:after(?p1, ?p2) AS ?p1_after_p2) (fx:after(?p2, ?p1) AS ?p2_after_p1)  (fx:after(?p1, ?p1) AS ?p1_after_p1)  WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p1 1  ; ?p2 2 } }");
+////		m = QueryExecutionFactory.create(query, ds).execConstruct();
+////		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+////		m.setNsPrefix("rdfs", RDFS.uri);
+////		m.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+////		m.write(System.out, "TTL");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
 //				query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?slot ?p (fx:previous(?p) AS ?previous) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p ?slot  . FILTER(?p != rdf:type)} }");
@@ -824,7 +822,17 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
-		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?slot ?p (fx:next(?p) AS ?next) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p ?slot  . FILTER(?p != rdf:type)} }");
+//		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?slot ?p (fx:next(?p) AS ?next) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p ?slot  . FILTER(?p != rdf:type)} }");
+////		m = QueryExecutionFactory.create(query, ds).execConstruct();
+////		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+////		m.setNsPrefix("rdfs", RDFS.uri);
+////		m.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+////		m.write(System.out, "TTL");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+
+		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?slot ?p (fx:forward(?p, 3) AS ?forward) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p ?slot  . FILTER(?p != rdf:type)} }");
 //		m = QueryExecutionFactory.create(query, ds).execConstruct();
 //		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
 //		m.setNsPrefix("rdfs", RDFS.uri);
@@ -833,7 +841,7 @@ public class DocumentationExampleSandbox {
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 		System.out.println(query.toString(Syntax.defaultSyntax));
 
-		
+
 	}
 
 	public static void main(String[] args) throws URISyntaxException, IOException {

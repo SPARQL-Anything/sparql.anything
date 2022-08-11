@@ -285,7 +285,55 @@ Result
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 ```
 
+### fx:forward
+
+`fx:forward(?a, ?b)` returns the container membership property that follows `?a` of `?b` steps (`rdf:_2, 5` -> `rdf:_7`)
+
+
+#### Input
+
+A container membership property and an integer
+
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?slot ?p (fx:forward(?p, 3) AS ?forward)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[1,2,3]" ;
+                  fx:media-type  "application/json" .
+        ?s        ?p             ?slot
+        FILTER ( ?p != rdf:type )
+      }
+  }
+
+```
+
+Result
+
+```
+---------------------------------------------------------------------------------------------------------------------------------------------------
+| slot                                        | p                                               | forward                                         |
+===================================================================================================================================================
+| "1"^^<http://www.w3.org/2001/XMLSchema#int> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4> |
+| "2"^^<http://www.w3.org/2001/XMLSchema#int> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5> |
+| "3"^^<http://www.w3.org/2001/XMLSchema#int> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_6> |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+```
+
+
+
+
+
 <!--
+
 ### 
 
 
@@ -305,7 +353,6 @@ Result
 
 <!--
 
-- `fx:next(?b)` returns the container membership property that succeedes `?b` (`rdf:_1` -> `rdf:_2`)
 - `fx:forward(?a, ?b)` returns the container membership property that follows `?a` of `?b` steps (`rdf:_2, 5` -> `rdf:_7`)
 - `fx:backward(?a, ?b)` returns the container membership property that preceeds `?a` of `?b` steps (`rdf:_24, 4` -> `rdf:_20`)
 
