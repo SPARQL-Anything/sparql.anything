@@ -5,7 +5,15 @@ edit_uri: null
 site_description: SPARQL Anything online documentation
 theme:
   name: readthedocs
-#nav: null
+nav:
+  - Reference: 'README.md'
+  - Configuration: 'CONFIGURATION.md'
+  - Functions: 'FUNCTIONS_AND_MAGIC_PROPERTIES.md'
+  - 'Formats':
+      - CSV: 'formats/CSV.md'
+      - XML: 'formats/XML.md'
+      - HTML: 'formats/HTML.md'
+  - Docker: 'BROWSER.md'
 extra_css: [styles.css]
 sticky_navigation: true
 markdown_extensions:
