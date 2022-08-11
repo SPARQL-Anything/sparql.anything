@@ -134,7 +134,7 @@ Result
 
 #### Input
 
-Conainer membership properties
+Container membership properties
 
 #### Example
 
@@ -166,6 +166,44 @@ Result
 ----------------------------------------------
 ```
 
+### fx:after
+
+`fx:after(?a, ?b)`  returns `true` if `?a` and `?b` are container membership properties and `?a` is higher than `?b`, `false` otherwise
+
+#### Input
+
+Container membership properties
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  (fx:after(?p1, ?p2) AS ?p1_after_p2) (fx:after(?p2, ?p1) AS ?p2_after_p1) (fx:after(?p1, ?p1) AS ?p1_after_p1)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[1,2,3]" ;
+                  fx:media-type  "application/json" .
+        ?s        ?p1            1 ;
+                  ?p2            2
+      }
+  }
+```
+
+Result
+
+```
+-------------------------------------------
+| p1_after_p2 | p2_after_p1 | p1_after_p1 |
+===========================================
+| false       | true        | false       |
+-------------------------------------------
+```
+
 <!--
 ### 
 
@@ -184,8 +222,8 @@ Result
 ```
 -->
 
-- `fx:before(?a, ?b)` returns `true` if `?a` and `?b` are container membership properties and `?a` is lower than `?b`, `false` otherwise
-- `fx:after(?a, ?b)`  returns `true` if `?a` and `?b` are container membership properties and `?a` is higher than `?b`, `false` otherwise
+<!--
+
 - `fx:previous(?a)` returns the container membership property that preceeds `?a` (`rdf:_2` -> `rdf:_1`)
 - `fx:next(?b)` returns the container membership property that succeedes `?b` (`rdf:_1` -> `rdf:_2`)
 - `fx:forward(?a, ?b)` returns the container membership property that follows `?a` of `?b` steps (`rdf:_2, 5` -> `rdf:_7`)
@@ -241,3 +279,4 @@ The function `fx:literal( ?a , ?b )` builds a literal from the string representa
 
 ### The function `fx:bnode`
 The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case).
+-->
