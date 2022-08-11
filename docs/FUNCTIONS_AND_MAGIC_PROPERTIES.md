@@ -244,6 +244,47 @@ Result
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 ```
 
+
+### fx:next
+
+`fx:next(?b)` returns the container membership property that succeedes `?b` (`rdf:_1` -> `rdf:_2`)
+
+#### Input
+
+Container membership property
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?slot ?p (fx:next(?p) AS ?next)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[1,2,3]" ;
+                  fx:media-type  "application/json" .
+        ?s        ?p             ?slot
+        FILTER ( ?p != rdf:type )
+      }
+  }
+```
+
+Result
+
+```
+---------------------------------------------------------------------------------------------------------------------------------------------------
+| slot                                        | p                                               | next                                            |
+===================================================================================================================================================
+| "1"^^<http://www.w3.org/2001/XMLSchema#int> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> |
+| "2"^^<http://www.w3.org/2001/XMLSchema#int> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> |
+| "3"^^<http://www.w3.org/2001/XMLSchema#int> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4> |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+```
+
 <!--
 ### 
 
