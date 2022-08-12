@@ -42,7 +42,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:URLEncoder.encode(?string)](#fxurlencoderencode)                     | Function                | String, String                         | String                        | `fx:URLEncoder.encode` wraps [`java.net.URLEncoder.encode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLEncoder.html#encode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
 | [fx:URLDecoder.decode(?string)](#fxurldecoderdecode)                     | Function                | String, String                         | String                        | `fx:URLDecoder.decode` wraps [`java.net.URLDecoder.decode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLDecoder.html#decode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
 | [fx:serial(?a ... ?n)](#fxserial)                                        | Function                | Any sequence of nodes                  | Integer                       | The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.                                                                                                                                                                      |
-| [fx:entity(?a ... ?n)](#fxentity)                                        | Function                | Any node                               |                               | The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).                                                                                                                                                                                                                                     |
+| [fx:entity(?a ... ?n)](#fxentity)                                        | Function                | Any sequence of nodes                  | URI node                      | The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).                                                                                                                                                                                                                                     |
 | [fx:literal(?a, ?b)](#fxliteral)                                         | Function                | Any node                               |                               | The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).                                                                                                                                                                                                                                                                |
 | [fx:bnode(?a)](#fxbnode)                                                 | Function                | Any node                               |                               | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
 
@@ -1462,6 +1462,56 @@ Result
 -----------------------------------------------------------------------------------
 ```
 
+### fx:entity
+
+The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).
+```
+BIND ( fx:entity ( myns:, "dummy-entity", 1) AS ?myentity)
+# is equivalent to
+BIND ( IRI( CONCAT ( STR (myns:), "dummy-entity", STR(1) ) AS ?myentity )
+```
+See also [issue 106](https://github.com/SPARQL-Anything/sparql.anything/issues/106)
+
+#### Input
+
+Any sequence of nodes
+
+#### Output
+
+URI Node
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?team ?year (fx:entity("http://example.org/", fx:URLEncoder.encode(?team, "UTF-8"), ?year) AS ?entity)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[{\"team\":\"Golden State Warriors\", \"year\":2015, \"wins\": 67}, {\"team\":\"Golden State Warriors\", \"year\":2016, \"wins\": 73}, {\"team\":\"Golden State Warriors\", \"year\":2017, \"wins\": 67}]" ;
+                  fx:media-type  "application/json" .
+        ?c        xyz:year       ?year ;
+                  xyz:team       ?team
+      }
+  }
+```
+
+Result
+
+```
+-----------------------------------------------------------------------------------------------------------------------------
+| team                    | year                                           | entity                                         |
+=============================================================================================================================
+| "Golden State Warriors" | "2015"^^<http://www.w3.org/2001/XMLSchema#int> | <http://example.org/Golden+State+Warriors2015> |
+| "Golden State Warriors" | "2016"^^<http://www.w3.org/2001/XMLSchema#int> | <http://example.org/Golden+State+Warriors2016> |
+| "Golden State Warriors" | "2017"^^<http://www.w3.org/2001/XMLSchema#int> | <http://example.org/Golden+State+Warriors2017> |
+-----------------------------------------------------------------------------------------------------------------------------
+```
+
 <!--
 ###
 
@@ -1481,16 +1531,6 @@ Result
 -->
 -->
 <!--
-
-### The function `fx:entity`
-The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).
-```
-BIND ( fx:entity ( myns:, "dummy-entity", 1) AS ?myentity)
-# is equivalent to
-BIND ( IRI( CONCAT ( STR (myns:), "dummy-entity", STR(1) ) AS ?myentity )
-```
-See also [issue 106](https://github.com/SPARQL-Anything/sparql.anything/issues/106)
-
 ### The function `fx:literal`
 The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).
 
