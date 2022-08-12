@@ -34,11 +34,11 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:WordUtils.swapCase(?string)](#fxwordutilsswapcase)                   | Function                | String                                 | String                        | `fx:WordUtils.swapCase` wraps [`org.apache.commons.text.WordUtils.swapCase`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#swapCase(java.lang.String))                                                                                                                                                                                                                                                           |
 | [fx:WordUtils.uncapitalize(?string)](#fxwordutilsuncapitalize)           | Function                | String                                 | String                        | `fx:WordUtils.uncapitalize` wraps [`org.apache.commons.text.WordUtils.uncapitalize`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#uncapitalize(java.lang.String))                                                                                                                                                                                                                                               |
 | [fx:DigestUtils.md2Hex(?string)](#fxdigestutilsmd2hex)                   | Function                | String                                 | String                        | `fx:DigestUtils.md2Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.md2Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#md2Hex-java.lang.String-)                                                                                                                                                                                                                                                   |
-| [fx:DigestUtils.md5Hex(?string)](#fxdigestutilsmd5hex)                   | Function                | String                                 |                               | `fx:DigestUtils.md5Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.md5Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#md5Hex-java.lang.String-)                                                                                                                                                                                                                                                   |
-| [fx:DigestUtils.sha1Hex(?string)](#fxdigestutilssha1hex)                 | Function                | String                                 |                               | `fx:DigestUtils.sha1Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha1Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha1Hex-java.lang.String-)                                                                                                                                                                                                                                                |
-| [fx:DigestUtils.sha256Hex(?string)](#fxDigestUtils.sha256Hex)            | Function                | String                                 |                               | `fx:DigestUtils.sha256Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha256Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha256Hex-java.lang.String-)                                                                                                                                                                                                                                          |
-| [fx:DigestUtils.sha384Hex(?string)](#fxDigestUtils.sha384Hex)            | Function                | String                                 |                               | `fx:DigestUtils.sha384Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha384Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha384Hex-java.lang.String-)                                                                                                                                                                                                                                          |
-| [fx:DigestUtils.sha512Hex(?string)](#fxDigestUtils.sha512Hex)            | Function                | String                                 |                               | `fx:DigestUtils.sha512Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha512Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha512Hex-java.lang.String-)                                                                                                                                                                                                                                          |
+| [fx:DigestUtils.md5Hex(?string)](#fxdigestutilsmd5hex)                   | Function                | String                                 | String                        | `fx:DigestUtils.md5Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.md5Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#md5Hex-java.lang.String-)                                                                                                                                                                                                                                                   |
+| [fx:DigestUtils.sha1Hex(?string)](#fxdigestutilssha1hex)                 | Function                | String                                 | String                        | `fx:DigestUtils.sha1Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha1Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha1Hex-java.lang.String-)                                                                                                                                                                                                                                                |
+| [fx:DigestUtils.sha256Hex(?string)](#fxdigestutilssha256hex)             | Function                | String                                 | String                        | `fx:DigestUtils.sha256Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha256Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha256Hex-java.lang.String-)                                                                                                                                                                                                                                          |
+| [fx:DigestUtils.sha384Hex(?string)](#fxdigestutilssha384hex)             | Function                | String                                 | String                        | `fx:DigestUtils.sha384Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha384Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha384Hex-java.lang.String-)                                                                                                                                                                                                                                          |
+| [fx:DigestUtils.sha512Hex(?string)](#fxdigestutilssha512hex)             | Function                | String                                 | String                        | `fx:DigestUtils.sha512Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha512Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha512Hex-java.lang.String-)                                                                                                                                                                                                                                          |
 | [fx:URLEncoder.encode(?string)](#fxURLEncoder.encode)                    | Function                | String                                 |                               | `fx:URLEncoder.encode` wraps [`java.net.URLEncoder.encode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLEncoder.html#encode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
 | [fx:URLEncoder.decode(?string)](#fxURLEncoder.decode)                    | Function                | String                                 |                               | `fx:URLEncoder.decode` wraps [`java.net.URLEncoder.decode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLDecoder.html#decode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
 | [fx:serial(?a ... ?n)](#fxserial)                                        | Function                | Any node                               |                               | The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.                                                                                                                                                                      |
@@ -1177,6 +1177,47 @@ Result
 ----------------------------------------------
 ```
 
+### fx:DigestUtils.sha256Hex
+
+`fx:DigestUtils.sha256Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha256Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha256Hex-java.lang.String-)
+
+#### Input
+
+String
+
+#### Output
+
+String
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  (fx:DigestUtils.sha256Hex(?string) AS ?result1)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content  "This is a test" .
+        ?s        rdf:_1      ?string
+      }
+  }
+
+```
+
+Result
+
+```
+----------------------------------------------------------------------
+| result1                                                            |
+======================================================================
+| "c7be1ed902fb8dd4d48997c6452f5d7e509fbcdbe2808b16bcf4edce4c07d14e" |
+----------------------------------------------------------------------
+```
+
 <!--
 ###
 
@@ -1195,7 +1236,6 @@ Result
 ```
 -->
 <!--
-- `fx:DigestUtils.sha256Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha256Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha256Hex-java.lang.String-)
 - `fx:DigestUtils.sha384Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha384Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha384Hex-java.lang.String-)
 - `fx:DigestUtils.sha512Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha512Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha512Hex-java.lang.String-)
 
