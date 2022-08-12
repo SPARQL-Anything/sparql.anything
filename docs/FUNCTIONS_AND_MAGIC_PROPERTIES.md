@@ -21,7 +21,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:String.endsWith(?stringA, ?stringB)](#fxString.endsWith)         | Function                | String, String                         | Boolean                       | `fx:String.endsWith` wraps [`java.lang.String.endsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                  |
 | [fx:String.indexOf(?stringA, ?stringB)](#fxString.indexOf)           | Function                | String, String                         | Integer                       | `fx:String.indexOf` wraps [`java.lang.String.indexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                    |
 | [fx:String.substring(?string)](#fxString.substring)                  | Function                | String, Integer, (Integer?)            | String                        | `fx:String.substring` wraps [`java.lang.String.substring`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                |
-| [fx:String.toLowerCase(?string)](#fxString.toLowerCase)              | Function                | String                                 |                               | `fx:String.toLowerCase` wraps [`java.lang.String.toLowerCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
+| [fx:String.toLowerCase(?string)](#fxString.toLowerCase)              | Function                | String                                 | String                        | `fx:String.toLowerCase` wraps [`java.lang.String.toLowerCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
 | [fx:String.toUpperCase(?string)](#fxString.toUpperCase)              | Function                | String                                 |                               | `fx:String.toUpperCase` wraps [`java.lang.String.toUpperCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
 | [fx:String.trim(?string)](#fxString.trim)                            | Function                | String                                 |                               | `fx:String.trim` wraps [`java.lang.String.trim`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                          |
 | [fxWordUtils.capitalize(?string)](#fxWordUtils.capitalize)           | Function                | String                                 |                               | `WordUtils.capitalize` wraps [`org.apache.commons.text.WordUtils.capitalize`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalize(java.lang.String))                                                                                                                                                                                                                                                        |
@@ -557,8 +557,47 @@ Result
 ---------------------
 ```
 
-<!--
+### fx:String.toLowerCase 
 
+`fx:String.toLowerCase` wraps [`java.lang.String.toLowerCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
+
+#### Input
+
+String
+
+#### Output
+
+String 
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  (fx:String.toLowerCase(?string) AS ?result1)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content  "THIS IS A TEST" .
+        ?s        rdf:_1      ?string
+      }
+  }
+```
+
+Result
+
+```
+--------------------
+| result1          |
+====================
+| "this is a test" |
+--------------------
+```
+
+<!--
 ### 
 
 
@@ -577,7 +616,6 @@ Result
 ```
 -->
 <!--
-- `fx:String.toLowerCase` wraps [`java.lang.String.toLowerCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 - `fx:String.toUpperCase` wraps [`java.lang.String.toUpperCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 - `fx:String.trim` wraps [`java.lang.String.trim`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
 
