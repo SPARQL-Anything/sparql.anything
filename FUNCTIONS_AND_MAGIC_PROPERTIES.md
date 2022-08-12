@@ -41,7 +41,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:DigestUtils.sha512Hex(?string)](#fxdigestutilssha512hex)             | Function                | String                                 | String                        | `fx:DigestUtils.sha512Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha512Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha512Hex-java.lang.String-)                                                                                                                                                                                                                                          |
 | [fx:URLEncoder.encode(?string)](#fxurlencoderencode)                     | Function                | String, String                         | String                        | `fx:URLEncoder.encode` wraps [`java.net.URLEncoder.encode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLEncoder.html#encode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
 | [fx:URLDecoder.decode(?string)](#fxurldecoderdecode)                     | Function                | String, String                         | String                        | `fx:URLDecoder.decode` wraps [`java.net.URLDecoder.decode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLDecoder.html#decode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
-| [fx:serial(?a ... ?n)](#fxserial)                                        | Function                | Any node                               |                               | The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.                                                                                                                                                                      |
+| [fx:serial(?a ... ?n)](#fxserial)                                        | Function                | Any sequence of nodes                  | Integer                       | The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.                                                                                                                                                                      |
 | [fx:entity(?a ... ?n)](#fxentity)                                        | Function                | Any node                               |                               | The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).                                                                                                                                                                                                                                     |
 | [fx:literal(?a, ?b)](#fxliteral)                                         | Function                | Any node                               |                               | The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).                                                                                                                                                                                                                                                                |
 | [fx:bnode(?a)](#fxbnode)                                                 | Function                | Any node                               |                               | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
@@ -1382,6 +1382,85 @@ Result
 --------------------
 ```
 
+## Working with graph nodes
+
+The system supports the following functions for working on the graph nodes.
+
+### fx:serial
+
+The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.
+
+#### Input
+
+#### Output
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?s (fx:serial(?s) AS ?serial)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[1,2,1,2,4]" ;
+                  fx:media-type  "application/json" .
+        ?c        fx:anySlot     ?s
+      }
+  }
+
+```
+
+Result
+
+```
+--------------------------------------------------------
+| s                                           | serial |
+========================================================
+| "1"^^<http://www.w3.org/2001/XMLSchema#int> | 1      |
+| "2"^^<http://www.w3.org/2001/XMLSchema#int> | 1      |
+| "1"^^<http://www.w3.org/2001/XMLSchema#int> | 2      |
+| "2"^^<http://www.w3.org/2001/XMLSchema#int> | 2      |
+| "4"^^<http://www.w3.org/2001/XMLSchema#int> | 1      |
+--------------------------------------------------------
+```
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?wins ?team (fx:serial(?wins, ?team) AS ?serial)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[{\"team\":\"Golden State Warriors\", \"year\":2015, \"wins\": 67}, {\"team\":\"Golden State Warriors\", \"year\":2016, \"wins\": 73}, {\"team\":\"Golden State Warriors\", \"year\":2017, \"wins\": 67}]" ;
+                  fx:media-type  "application/json" .
+        ?c        xyz:wins       ?wins ;
+                  xyz:team       ?team
+      }
+  }
+```
+
+Result
+
+**Note**: ?serial increments when a certain team concludes the season with a certain number of score. 
+
+```
+-----------------------------------------------------------------------------------
+| wins                                         | team                    | serial |
+===================================================================================
+| "67"^^<http://www.w3.org/2001/XMLSchema#int> | "Golden State Warriors" | 1      |
+| "73"^^<http://www.w3.org/2001/XMLSchema#int> | "Golden State Warriors" | 1      |
+| "67"^^<http://www.w3.org/2001/XMLSchema#int> | "Golden State Warriors" | 2      |
+-----------------------------------------------------------------------------------
+```
 
 <!--
 ###
@@ -1402,9 +1481,6 @@ Result
 -->
 -->
 <!--
-
-### The function `fx:serial`:
-The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.
 
 ### The function `fx:entity`
 The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).

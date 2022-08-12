@@ -830,10 +830,18 @@ public class DocumentationExampleSandbox {
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
+//		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (fx:URLDecoder.decode(?string, 'UTF-8') AS ?result1) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content 'This+is+a+test' .  ?s rdf:_1 ?string  } }");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
 
-		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (fx:URLDecoder.decode(?string, 'UTF-8') AS ?result1) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content 'This+is+a+test' .  ?s rdf:_1 ?string  } }");
+//		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?s (fx:serial(?s) AS ?serial) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,1,2,3]' ; fx:media-type 'application/json' .  ?c fx:anySlot ?s  } }");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?wins ?team (fx:serial(?wins, ?team) AS ?serial) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[{\"team\":\"Golden State Warriors\", \"year\":2015, \"wins\": 67}, {\"team\":\"Golden State Warriors\", \"year\":2016, \"wins\": 73}, {\"team\":\"Golden State Warriors\", \"year\":2017, \"wins\": 67}]' ; fx:media-type 'application/json' .  ?c xyz:wins ?wins ; xyz:team ?team  } }");
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 		System.out.println(query.toString(Syntax.defaultSyntax));
+
 	}
 
 	public static void main(String[] args) throws URISyntaxException, IOException {
