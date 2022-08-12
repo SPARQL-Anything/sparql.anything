@@ -1357,11 +1357,29 @@ String, The name of a supported character [encoding](https://docs.oracle.com/en/
 #### Example
 
 ```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  (fx:URLDecoder.decode(?string, "UTF-8") AS ?result1)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content  "This+is+a+test" .
+        ?s        rdf:_1      ?string
+      }
+  }
 ```
 
 Result
 
 ```
+--------------------
+| result1          |
+====================
+| "This is a test" |
+--------------------
 ```
 
 
