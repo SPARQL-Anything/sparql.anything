@@ -160,8 +160,8 @@ public final class FacadeX {
 				ReflectionFunctionFactory.get().makeFunction(String.class, "startsWith"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.endsWith",
 				ReflectionFunctionFactory.get().makeFunction(String.class, "endsWith"));
-		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.endsWith",
-				ReflectionFunctionFactory.get().makeFunction(String.class, "endsWith"));
+//		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.endsWith",
+//				ReflectionFunctionFactory.get().makeFunction(String.class, "endsWith"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.replace",
 				ReflectionFunctionFactory.get().makeFunction(String.class, "replace"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.strip",
