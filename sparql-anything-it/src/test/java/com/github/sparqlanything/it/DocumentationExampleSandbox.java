@@ -766,7 +766,6 @@ public class DocumentationExampleSandbox {
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
 
-
 //		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (fx:String.substring(?string, 10) AS ?result1) (fx:String.substring(?string, 5, 7) AS ?result2) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content 'this is a test' .  ?s rdf:_1 ?string  } }");
 ////		m = QueryExecutionFactory.create(query, ds).execConstruct();
 ////		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
@@ -794,11 +793,13 @@ public class DocumentationExampleSandbox {
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
-		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (fx:String.replace(?string, 'f', 'd') AS ?result1) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content 'fog' .  ?s rdf:_1 ?string  } }");
+//		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (fx:String.replace(?string, 'f', 'd') AS ?result1) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content 'fog' .  ?s rdf:_1 ?string  } }");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (fx:String.stripLeading(?string) AS ?result1) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '  this is a test  ' .  ?s rdf:_1 ?string  } }");
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 		System.out.println(query.toString(Syntax.defaultSyntax));
-
-
 
 
 	}

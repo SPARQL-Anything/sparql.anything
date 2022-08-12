@@ -25,6 +25,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:String.toUpperCase(?string)](#fxString.toUpperCase)                   | Function                | String                                 | String                        | `fx:String.toUpperCase` wraps [`java.lang.String.toUpperCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
 | [fx:String.replace(?string, ?characterA, ?characterB)](#fxString.replace) | Function                | String, Character, Character           | String                        | `fx:String.replace` wraps [`java.lang.String.replace`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#replace(java.lang.CharSequence,java.lang.CharSequence))                                                                                                                                                                                                                                                                             |
 | [fx:String.trim(?string)](#fxString.trim)                                 | Function                | String                                 | String                        | `fx:String.trim` wraps [`java.lang.String.trim`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                          |
+| [fx:String.stripLeading(?string)](fxString.stripLeading)                  | Function                | String                                 | String                        | `fx:String.stripLeading` wraps [`java.lang.String.stripLeading`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#stripLeading())                                                                                                                                                                                                                                                                                                           |
 | [fxWordUtils.capitalize(?string)](#fxWordUtils.capitalize)                | Function                | String                                 |                               | `WordUtils.capitalize` wraps [`org.apache.commons.text.WordUtils.capitalize`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalize(java.lang.String))                                                                                                                                                                                                                                                        |
 | [fxWordUtils.capitalizeFully(?string)](#fxWordUtils.capitalizeFully)      | Function                | String                                 |                               | `fx:WordUtils.capitalizeFully` wraps [`org.apache.commons.text.WordUtils.capitalizeFully`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalizeFully(java.lang.String))                                                                                                                                                                                                                                      |
 | [fx:WordUtils.initials(?string)](#fxWordUtils.initials)                   | Function                | String                                 |                               | `fx:WordUtils.initials` wraps [`org.apache.commons.text.WordUtils.initials`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#initials(java.lang.String))                                                                                                                                                                                                                                                           |
@@ -638,7 +639,6 @@ Result
 --------------------
 ```
 
-
 ### fx:String.trim
 
 `fx:String.trim` wraps [`java.lang.String.trim`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
@@ -727,7 +727,45 @@ WHERE
   }
 ```
 
+### fx:String.stripLeading
 
+`fx:String.stripLeading` wraps [`java.lang.String.stripLeading`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#stripLeading())
+
+#### Input
+
+String
+
+#### Output
+
+String
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  (fx:String.stripLeading(?string) AS ?result1)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content  "  this is a test  " .
+        ?s        rdf:_1      ?string
+      }
+  }
+```
+
+Result
+
+```
+----------------------
+| result1            |
+======================
+| "this is a test  " |
+----------------------
+```
 
 <!--
 ###
