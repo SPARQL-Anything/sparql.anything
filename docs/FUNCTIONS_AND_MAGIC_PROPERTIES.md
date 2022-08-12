@@ -877,7 +877,47 @@ SELECT  (fx:WordUtils.capitalize(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
       { fx:properties
-                  fx:content  "This is a test" .
+                  fx:content  "This is a TEST" .
+        ?s        rdf:_1      ?string
+      }
+  }
+```
+
+Result
+
+```
+--------------------
+| result1          |
+====================
+| "This Is A TEST" |
+--------------------
+```
+
+### fx:WordUtils.capitalizeFully
+
+`fx:WordUtils.capitalizeFully` wraps [`org.apache.commons.text.WordUtils.capitalizeFully`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalizeFully(java.lang.String))
+
+#### Input
+
+String
+
+#### Output
+
+String
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  (fx:WordUtils.capitalizeFully(?string) AS ?result1)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content  "This is a TEST" .
         ?s        rdf:_1      ?string
       }
   }
@@ -910,9 +950,7 @@ Result
 ```
 ```
 -->
-
 <!--
-- `fx:WordUtils.capitalizeFully` wraps [`org.apache.commons.text.WordUtils.capitalizeFully`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalizeFully(java.lang.String))
 - `fx:WordUtils.initials` wraps [`org.apache.commons.text.WordUtils.initials`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#initials(java.lang.String))
 - `fx:WordUtils.swapCase` wraps [`org.apache.commons.text.WordUtils.swapCase`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#swapCase(java.lang.String))
 - `fx:WordUtils.uncapitalize` wraps [`org.apache.commons.text.WordUtils.uncapitalize`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#uncapitalize(java.lang.String))
