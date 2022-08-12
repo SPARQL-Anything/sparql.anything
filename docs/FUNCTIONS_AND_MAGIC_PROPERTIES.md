@@ -27,6 +27,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:String.trim(?string)](#fxString.trim)                                 | Function                | String                                 | String                        | `fx:String.trim` wraps [`java.lang.String.trim`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                          |
 | [fx:String.stripLeading(?string)](fxString.stripLeading)                  | Function                | String                                 | String                        | `fx:String.stripLeading` wraps [`java.lang.String.stripLeading`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#stripLeading())                                                                                                                                                                                                                                                                                                           |
 | [fx:String.stripTrailing(?string)](#fxString.stripTrailing)               | Function                | String                                 | String                        | `fx:String.stripTrailing` wraps [`java.lang.String.stripTrailing`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html#stripTrailing())                                                                                                                                                                                                                                                                                                        |
+| [fx:String.removeTags(?string)](#fxString.removeTags)                     | Function                | String                                 | String                        | `fx:String.removeTags`  removes the XML tags from the input string                                                                                                                                                                                                                                                                                                                                                                                                            |
 | [fxWordUtils.capitalize(?string)](#fxWordUtils.capitalize)                | Function                | String                                 |                               | `WordUtils.capitalize` wraps [`org.apache.commons.text.WordUtils.capitalize`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalize(java.lang.String))                                                                                                                                                                                                                                                        |
 | [fxWordUtils.capitalizeFully(?string)](#fxWordUtils.capitalizeFully)      | Function                | String                                 |                               | `fx:WordUtils.capitalizeFully` wraps [`org.apache.commons.text.WordUtils.capitalizeFully`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#capitalizeFully(java.lang.String))                                                                                                                                                                                                                                      |
 | [fx:WordUtils.initials(?string)](#fxWordUtils.initials)                   | Function                | String                                 |                               | `fx:WordUtils.initials` wraps [`org.apache.commons.text.WordUtils.initials`](https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html#initials(java.lang.String))                                                                                                                                                                                                                                                           |
@@ -807,6 +808,48 @@ Result
 | "  this is a test" |
 ----------------------
 ```
+
+### fx:String.removeTags
+
+`fx:String.removeTags`  removes the XML tags from the input string
+
+#### Input
+
+String
+
+#### Output
+
+String
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  (fx:String.removeTags(?string) AS ?result1)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content  "<p>This is a test</p>" .
+        ?s        rdf:_1      ?string
+      }
+  }
+```
+
+Result
+
+```
+--------------------
+| result1          |
+====================
+| "This is a test" |
+--------------------
+```
+
+
 
 <!--
 ###
