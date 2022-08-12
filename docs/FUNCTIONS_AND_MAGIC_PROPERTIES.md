@@ -40,7 +40,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:DigestUtils.sha384Hex(?string)](#fxdigestutilssha384hex)             | Function                | String                                 | String                        | `fx:DigestUtils.sha384Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha384Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha384Hex-java.lang.String-)                                                                                                                                                                                                                                          |
 | [fx:DigestUtils.sha512Hex(?string)](#fxdigestutilssha512hex)             | Function                | String                                 | String                        | `fx:DigestUtils.sha512Hex` wraps [`org.apache.commons.codec.digest.DigestUtils.sha512Hex`](https://www.javadoc.io/doc/commons-codec/commons-codec/1.15/org/apache/commons/codec/digest/DigestUtils.html#sha512Hex-java.lang.String-)                                                                                                                                                                                                                                          |
 | [fx:URLEncoder.encode(?string)](#fxurlencoderencode)                     | Function                | String, String                         | String                        | `fx:URLEncoder.encode` wraps [`java.net.URLEncoder.encode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLEncoder.html#encode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
-| [fx:URLEncoder.decode(?string)](#fxurlencoderdecode)                     | Function                | String                                 |                               | `fx:URLEncoder.decode` wraps [`java.net.URLEncoder.decode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLDecoder.html#decode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
+| [fx:URLDecoder.decode(?string)](#fxurldecoderdecode)                     | Function                | String, String                         | String                        | `fx:URLDecoder.decode` wraps [`java.net.URLEncoder.decode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLDecoder.html#decode(java.lang.String,java.lang.String))                                                                                                                                                                                                                                                                                  |
 | [fx:serial(?a ... ?n)](#fxserial)                                        | Function                | Any node                               |                               | The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.                                                                                                                                                                      |
 | [fx:entity(?a ... ?n)](#fxentity)                                        | Function                | Any node                               |                               | The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).                                                                                                                                                                                                                                     |
 | [fx:literal(?a, ?b)](#fxliteral)                                         | Function                | Any node                               |                               | The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).                                                                                                                                                                                                                                                                |
@@ -1343,14 +1343,47 @@ Result
 --------------------------
 ```
 
+### fx:URLDecoder.decode
+
+`fx:URLEncoder.decode` wraps [`java.net.URLEncoder.decode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLDecoder.html#decode(java.lang.String,java.lang.String))
+
+#### Input
+
+String, The string to decode
+String, The name of a supported character [encoding](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/charset/Charset.html).
+
+#### Output
+
+#### Example
+
+```
+```
+
+Result
+
+```
+```
 
 
 <!--
+###
 
+#### Input
+
+#### Output
+
+#### Example
+
+```
+```
+
+Result
+
+```
+```
+-->
 -->
 <!--
-
-- `fx:URLEncoder.decode` wraps [`java.net.URLEncoder.decode`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URLDecoder.html#decode(java.lang.String,java.lang.String))
 
 ### The function `fx:serial`:
 The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.
