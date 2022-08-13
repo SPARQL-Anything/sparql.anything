@@ -18,26 +18,21 @@
 package com.github.sparqlanything.engine;
 
 import com.github.sparqlanything.facadeiri.FacadeIRIParser;
-import com.github.sparqlanything.metadata.MetadataTriplifier;
-import com.github.sparqlanything.model.*;
-import com.github.sparqlanything.zip.FolderTriplifier;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.jena.graph.Node;
+import com.github.sparqlanything.model.IRIArgument;
+import com.github.sparqlanything.model.Slicer;
+import com.github.sparqlanything.model.Triplifier;
+import com.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.TxnType;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.*;
+import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpPropFunc;
+import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.algebra.op.OpTable;
 import org.apache.jena.sparql.algebra.table.TableUnit;
 import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
@@ -48,44 +43,32 @@ import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.Symbol;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.VOID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class FacadeXOpExecutor extends OpExecutor {
 
-	public final static String PROPERTY_OPSERVICE_SILENT = "opservice.silent";
 	// TODO
 //	private final static Symbol audit = Symbol.create("facade-x-audit");
 	public final static Symbol strategy = Symbol.create("facade-x-strategy");
 	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
-	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
-	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
+	private final DatasetGraphCreator dgc;
 	private final TriplifierRegister triplifierRegister;
-	private final Map<String, DatasetGraph> executedFacadeXIris;
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
 		triplifierRegister = TriplifierRegister.getInstance();
-
-		if (!execCxt.getContext().isDefined(inMemoryCache)) {
-			logger.trace("Initialising in-memory cache");
-			execCxt.getContext().set(inMemoryCache, new HashMap<String, DatasetGraph>());
-		}
-
-		executedFacadeXIris = execCxt.getContext().get(inMemoryCache);
+		dgc = new DatasetGraphCreator(execCxt);
 	}
 
-	protected QueryIterator execute(OpPropFunc opPropFunc, QueryIterator input) {
-		logger.trace(opPropFunc.toString());
-		return super.execute(opPropFunc, input);
+	private boolean isFacadeXURI(String uri) {
+		return uri.startsWith(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA);
 	}
 
 	private List<Triple> getPropFuncTriples(BasicPattern e) {
@@ -102,73 +85,15 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return new OpPropFunc(NodeFactory.createURI(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot"), new PropFuncArg(t.getSubject()), new PropFuncArg(t.getObject()), OpTable.create(new TableUnit()));
 	}
 
-	private String getInMemoryCacheKey(Properties properties, Op op) {
-		return properties.toString() + op.toString();
-	}
-
-	protected QueryIterator execute(OpProcedure opProc, QueryIterator input) {
-		logger.trace("Op Procedure {}", opProc.toString());
-		return super.exec(opProc, input);
-	}
-
-	private DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
-		DatasetGraph dg = null;
-		if (t == null) {
-			return DatasetGraphFactory.create();
-		}
-		// If the operation was already executed in a previous call, reuse the same
-		// in-memory graph
-		// XXX Future implementations may use a caching system
-		if (executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op)))
-			return executedFacadeXIris.get(getInMemoryCacheKey(p, op));
-
-		logger.trace("Properties extracted: {}", p);
-		String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
-
-		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op);
-		dg = triplify(op, p, t);
-
-		logger.debug("triplification done -- commiting and ending the write txn");
-		dg.commit();
-		dg.end();
-
-		dg.begin(ReadWrite.READ);
-		logger.debug("Size default graph {}", dg.getDefaultGraph().size());
-		logger.debug("Size of the graph {}: {}", p.getProperty(IRIArgument.LOCATION.toString()), dg.getGraph(NodeFactory.createURI(p.getProperty(IRIArgument.LOCATION.toString()) + "#")).size());
-		dg.end();
-
-		if (urlLocation != null) {
-			logger.trace("Location provided {}", urlLocation);
-			URL url = Triplifier.instantiateURL(urlLocation);
-			createMetadataGraph(dg, p);
-			createAuditGraph(dg, p, url);
-		}
-		// Remember the triplified data
-		if (!executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
-			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
-			logger.debug("Graph added to in-memory cache");
-		}
-		// TODO wrap this in a txn or move it to a place where we are already in a txn
-		// logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
-
-//		else {
-//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
-//			dg = t.triplify(p);
-//			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
-//
-//		}
-
-		return dg;
-	}
-
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
 		logger.trace("SERVICE uri: {} {}", opService.getService(), opService);
 		if (opService.getService().isVariable()) return postponeService(opService, input);
 		if (opService.getService().isURI() && isFacadeXURI(opService.getService().getURI())) {
 			logger.trace("Facade-X uri: {}", opService.getService());
 			try {
-				Properties p = getProperties(opService.getService().getURI(), opService);
-				Triplifier t = getTriplifier(p);
+
+				Properties p = PropertyUtils.getProperties(opService.getService().getURI(), opService);
+				Triplifier t = PropertyUtils.getTriplifier(p, triplifierRegister);
 
 				if (t == null) {
 					logger.warn("No triplifier found");
@@ -176,99 +101,17 @@ public class FacadeXOpExecutor extends OpExecutor {
 				}
 
 				if (Triplifier.getSliceArgument(p)) {
-
 					// Execute with slicing
 					if (t instanceof Slicer) {
 						logger.trace("Execute with slicing");
-						final Slicer slicer = (Slicer) t;
-						final Iterable<Slice> it = slicer.slice(p);
-						final Iterator<Slice> iterator = it.iterator();
-						final String resourceId = Triplifier.getResourceId(p);
-						final List<Binding> elements = new ArrayList<>();
-						for (; input.hasNext(); )
-							elements.add(input.nextBinding());
-
-						return new QueryIter(execCxt) {
-							QueryIterator current = null;
-
-							@Override
-							protected boolean hasNextBinding() {
-								logger.trace("hasNextBinding? ");
-								logger.debug("current: {}", current != null ? current.hasNext() : "null");
-								while (current == null || !current.hasNext()) {
-									if (iterator.hasNext()) {
-										Slice slice = iterator.next();
-										logger.debug("Executing on slice: {}", slice.iteration());
-										// Execute and set current
-										FacadeXGraphBuilder builder;
-										Integer strategy = detectStrategy(p);
-										if (strategy == 1) {
-											logger.trace("Executing: {} [strategy={}]", p, strategy);
-											builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
-										} else {
-											logger.trace("Executing: {} [strategy={}]", p, strategy);
-											builder = new BaseFacadeXGraphBuilder(resourceId, p);
-										}
-										//FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
-										slicer.triplify(slice, p, builder);
-										DatasetGraph dg = builder.getDatasetGraph();
-										logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
-										FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-										logger.trace("Op {}", opService.getSubOp());
-										logger.trace("OpName {}", opService.getSubOp().getName());
-										/**
-										 * input needs to be reset before each execution, otherwise the executor will skip subsequent executions
-										 * since input bindings have been flushed!
-										 */
-										QueryIterator cloned;
-										cloned = QueryIterPlainWrapper.create(elements.iterator());
-										current = QC.execute(opService.getSubOp(), cloned, ec);
-										logger.debug("Set current. hasNext? {}", current.hasNext());
-										if (current.hasNext()) {
-											logger.trace("Break.");
-											break;
-										}
-									} else {
-										logger.trace("Slices finished");
-										/**
-										 * Input iterator can be closed
-										 */
-										input.cancel();
-										// Make sure the original Op is executed
-										// XXX Maybe there is a better qay of doing it?
-										ExecutionContext exc = new ExecutionContext(DatasetGraphFactory.create());
-										QC.execute(opService.getSubOp(), QueryIterNullIterator.create(exc), exc);
-										return false;
-									}
-								}
-								logger.trace("hasNextBinding? {}", current.hasNext());
-								return current.hasNext();
-							}
-
-							@Override
-							protected Binding moveToNextBinding() {
-								logger.trace("moveToNextBinding");
-								return current.nextBinding();
-							}
-
-							@Override
-							protected void closeIterator() {
-								current.close();
-							}
-
-							@Override
-							protected void requestCancel() {
-								current.cancel();
-							}
-						};
-
+						return new QueryIterSlicer(execCxt, input, t, p, opService);
 					} else {
 						logger.warn("Slicing is not supported by triplifier: {}", t.getClass().getName());
 					}
 				}
 
 				// Execute with default, bulk method
-				DatasetGraph dg = getDatasetGraph(t, p, opService.getSubOp());
+				DatasetGraph dg = dgc.getDatasetGraph(t, p, opService.getSubOp());
 				logger.trace("Execute with default method dg is in transaction? {} transaction type {}", dg.isInTransaction(), dg.transactionType());
 				if (!dg.isInTransaction()) {
 					logger.debug("begin read txn");
@@ -340,234 +183,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 		};
 	}
 
-	private int detectStrategy(Properties p) {
-		Integer strategy = null;
-		// Local value for strategy?
-		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());
-		// Global value for strategy?
-		Integer globalStrategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
-		if (localStrategy != null) {
-			if (globalStrategy != null) {
-				logger.warn("Local strategy {} overriding global strategy {}", localStrategy, globalStrategy);
-			}
-			strategy = Integer.parseInt(localStrategy);
-		} else if (globalStrategy != null) {
-			strategy = globalStrategy;
-		} else {
-			// Defaul strategy
-			strategy = 1;
-		}
-		return strategy;
-	}
-
-	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
-		DatasetGraph dg;
-
-		Integer strategy = detectStrategy(p);
-//		null;
-//		// Local value for strategy?
-//		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());
-//		// Global value for strategy?
-//		Integer globalStrategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
-//		if(localStrategy != null){
-//			if(globalStrategy!=null){
-//				logger.warn("Local strategy {} overriding global strategy {}", localStrategy, globalStrategy);
-//			}
-//			strategy = Integer.parseInt(localStrategy);
-//		} else if(globalStrategy!=null){
-//			strategy = globalStrategy;
-//		} else{
-//			// Defaul strategy
-//			strategy = 1;
-//		}
-		URL url = Triplifier.getLocation(p);
-		String resourceId = Triplifier.getResourceId(p);
-
-		logger.debug("Execution strategy: {} {}", strategy, op.toString());
-		if (t != null) {
-			try {
-
-				FacadeXGraphBuilder builder;
-				if (strategy == 1) {
-					logger.trace("Executing: {} [strategy={}]", p, strategy);
-					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
-				} else {
-					logger.trace("Executing: {} [strategy={}]", p, strategy);
-					builder = new BaseFacadeXGraphBuilder(resourceId, p);
-				}
-				t.triplify(p, builder);
-				dg = builder.getDatasetGraph();
-			} catch (Exception e) {
-				if (p.containsKey(PROPERTY_OPSERVICE_SILENT) && p.getProperty(PROPERTY_OPSERVICE_SILENT).equals("true")) {
-					// as per https://www.w3.org/TR/sparql11-federated-query/#serviceFailure
-					// if silent is specified "errors encountered while accessing a remote SPARQL
-					// endpoint should be ignored"
-					//
-					// so ignore errors by just returning an empty graph
-					logger.warn("Errors encountered but the silent keyword was specified. Returning empty graph.");
-					dg = DatasetFactory.create().asDatasetGraph();
-				} else {
-					throw new IOException(e);
-				}
-			}
-		} else {
-			// If triplifier is null, return an empty graph
-			logger.error("No triplifier available for the input format! Returning empty graph.");
-			dg = DatasetFactory.create().asDatasetGraph();
-		}
-
-		// logger.trace("Union graph size {}",dg.getUnionGraph().size());
-		// logger.trace("Default graph size {}", dg.getDefaultGraph().size());
-		return dg;
-	}
-
-	private void createMetadataGraph(DatasetGraph dg, Properties p) throws IOException {
-		if (triplifyMetadata(p)) {
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(Triplifier.getRootArgument(p), p);
-			metadataTriplifier.triplify(p, builder);
-			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI), builder.getDatasetGraph().getDefaultGraph());
-		}
-	}
-
-	private void createAuditGraph(DatasetGraph dg, Properties p, URL url) {
-		if (p.containsKey("audit") && (p.get("audit").equals("1") || p.get("audit").equals("true"))) {
-			logger.info("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
-			logger.info("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(), NodeFactory.createURI(url.toString()));
-			String SD = "http://www.w3.org/ns/sparql-service-description#";
-			Model audit = ModelFactory.createDefaultModel();
-			Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
-
-			// For each graph
-			Iterator<Node> graphs = dg.listGraphNodes();
-			while (graphs.hasNext()) {
-				Node g = graphs.next();
-				Resource auditGraph = audit.createResource(g.getURI());
-				root.addProperty(ResourceFactory.createProperty(SD + "namedGraph"), auditGraph);
-				auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD + "NamedGraph"));
-				auditGraph.addProperty(ResourceFactory.createProperty(SD + "name"), g.getURI());
-				auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
-			}
-			dg.addGraph(NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI), audit.getGraph());
-		}
-	}
-
-	private Triplifier getTriplifier(Properties p) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
-		Triplifier t;
-
-		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString()) && !p.containsKey(IRIArgument.COMMAND.toString())) {
-			logger.error("Neither location nor content provided");
-//			throw new RuntimeException("Neither location nor content provided");
-			return null;
-		}
-
-		if (p.containsKey(IRIArgument.TRIPLIFIER.toString())) {
-			logger.trace("Triplifier enforced");
-			t = (Triplifier) Class.forName(p.getProperty(IRIArgument.TRIPLIFIER.toString())).getConstructor().newInstance();
-		} else if (p.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
-			logger.trace("MimeType enforced");
-			t = (Triplifier) Class.forName(triplifierRegister.getTriplifierForMimeType(p.getProperty(IRIArgument.MEDIA_TYPE.toString()))).getConstructor().newInstance();
-		} else if (p.containsKey(IRIArgument.LOCATION.toString())) {
-			String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
-			File f = new File(p.get(IRIArgument.LOCATION.toString()).toString().replace("file://", ""));
-
-			logger.trace("Use location {}, exists on local FS? {}, is directory? {}", f.getAbsolutePath(), f.exists(), f.isDirectory());
-
-			if (f.exists() && f.isDirectory()) {
-				logger.trace("Return folder triplifier");
-				t = new FolderTriplifier();
-			} else if (IsFacadeXExtension.isFacadeXExtension(p.get(IRIArgument.LOCATION.toString()).toString())) {
-				logger.trace("Guessing triplifier using file extension ");
-				String tt = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
-				logger.trace("Guessed extension: {} :: {} ", FilenameUtils.getExtension(urlLocation), tt);
-				t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
-			} else {
-				return null;
-			}
-
-		} else {
-			logger.trace("No location provided, using the Text triplifier");
-			t = (Triplifier) Class.forName("com.github.sparqlanything.text.TextTriplifier").getConstructor().newInstance();
-		}
-		return t;
-	}
-
-	private Properties getProperties(String url, OpService opService) throws UnboundVariableException {
-
-		Properties properties;
-
-		// Parse IRI only if contains properties
-		if (!url.equals(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
-			FacadeIRIParser p = new FacadeIRIParser(url);
-			properties = p.getProperties();
-		} else {
-			properties = new Properties();
-		}
-
-		// Setting defaults
-		if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
-			logger.trace("Setting default value for namespace: {}", Triplifier.XYZ_NS);
-			properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
-		}
-		// Setting silent
-		if (opService.getSilent()) {
-			// we can only see if silent was specified at the OpService so we need to stash
-			// a boolean
-			// at this point so we can use it when we triplify further down the Op tree
-			properties.setProperty(PROPERTY_OPSERVICE_SILENT, "true");
-		}
-
-		Op next = opService.getSubOp();
-		FXBGPFinder vis = new FXBGPFinder();
-		next.visit(vis);
-		logger.trace("Has Table {}", vis.hasTable());
-
-		if (vis.getBGP() != null) {
-			try {
-				extractPropertiesFromOpGraph(properties, vis.getBGP());
-			} catch (UnboundVariableException e) {
-				if (vis.hasTable()) {
-					logger.trace(vis.getOpTable().toString());
-					logger.trace("BGP {}", vis.getBGP());
-					logger.trace("Contains variable names {}", vis.getOpTable().getTable().getVarNames().contains(e.getVariableName()));
-					if (vis.getOpTable().getTable().getVarNames().contains(e.getVariableName())) {
-						e.setOpTable(vis.getOpTable());
-					}
-				}
-
-				if (vis.getOpExtend() != null) {
-					logger.trace("OpExtend {}", vis.getOpExtend());
-					Iterator<Var> vars = vis.getOpExtend().getVarExprList().getVars().iterator();
-					while (vars.hasNext()) {
-						Var var = vars.next();
-						if (var.getName().equals(e.getVariableName())) {
-							e.setOpExtend(vis.getOpExtend());
-						}
-					}
-				}
-
-				throw e;
-			}
-			logger.trace("Number of properties {}", properties.size());
-		} else {
-			logger.trace("Couldn't find OpGraph");
-		}
-
-		return properties;
-	}
-
-	private void extractPropertiesFromOpGraph(Properties properties, OpBGP bgp) throws UnboundVariableException {
-		for (Triple t : bgp.getPattern().getList()) {
-			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
-				if (t.getObject().isURI()) {
-					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""), t.getObject().getURI());
-				} else if (t.getObject().isLiteral()) {
-					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""), t.getObject().getLiteral().getValue().toString());
-				} else if (t.getObject().isVariable()) {
-					throw new UnboundVariableException(t.getObject().getName(), bgp);
-				}
-			}
-		}
-	}
 
 	private OpBGP extractFakePattern(OpBGP bgp) {
 		BasicPattern pattern = new BasicPattern();
@@ -602,14 +217,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return new OpBGP(result);
 	}
 
-	protected QueryIterator execute(final OpPath s, QueryIterator input) {
-//		logger.trace("Execute OpPath {} {}", s.toString(), Utils.queryIteratorToString( super.execute(s, input)));
-		logger.trace("Execute OpPath {} ", s.toString());
-
-		return super.execute(s, input);
-
-	}
-
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 
 		if (this.execCxt.getClass() != FacadeXExecutionContext.class) {
@@ -625,9 +232,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			this.execCxt.getDataset().begin(TxnType.READ);
 		}
 
-		this.execCxt.getDataset().listGraphNodes().forEachRemaining(g -> {
-			logger.trace("Graph {}", g.toString());
-		});
+		this.execCxt.getDataset().listGraphNodes().forEachRemaining(g -> logger.trace("Graph {}", g.toString()));
 
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(), this.execCxt.getDataset().getDefaultGraph().size());
@@ -642,7 +247,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		Properties p = new Properties();
 		try {
 			logger.debug("Input BGP {} ", opBGP);
-			extractPropertiesFromOpGraph(p, opBGP);
+			PropertyUtils.extractPropertiesFromOpGraph(p, opBGP);
 			if (p.size() > 0) {
 				// if we have FX properties we at least need to excludeFXProperties()
 				logger.trace("BGP Properties {}", p);
@@ -650,7 +255,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				if (this.execCxt.getDataset().isEmpty()) {
 					// we only need to call getDatasetGraph() if we have an empty one
 					// otherwise we could triplify the same data multiple times
-					dg = getDatasetGraph(getTriplifier(p), p, opBGP);
+					dg = dgc.getDatasetGraph(PropertyUtils.getTriplifier(p, triplifierRegister), p, opBGP);
 				} else {
 					dg = this.execCxt.getDataset();
 				}
@@ -674,31 +279,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.error(e.getMessage());
 		}
 		logger.debug("Execute default {} {}", opBGP, excludeOpPropFunction(opBGP));
-		QueryIterator current = super.execute(excludeOpPropFunction(opBGP), input2);
-		return current;
+		return super.execute(excludeOpPropFunction(opBGP), input2);
 	}
 
-	private boolean triplifyMetadata(Properties p) {
-		boolean result = false;
-		if (p.containsKey(IRIArgument.METADATA.toString())) {
-			try {
-				result = Boolean.parseBoolean(p.getProperty(IRIArgument.METADATA.toString()));
-			} catch (Exception e) {
-				result = false;
-			}
-		}
-		return result;
-	}
-
-	private boolean isFacadeXURI(String uri) {
-		return uri.startsWith(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA);
-	}
-
-	@Override
-	protected QueryIterator execute(OpJoin opJoin, QueryIterator input) {
-		if (this.execCxt.getClass() != FacadeXExecutionContext.class) {
-			return super.execute(opJoin, input);
-		}
-		return super.execute(opJoin, input);
-	}
 }

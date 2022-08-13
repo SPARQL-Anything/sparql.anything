@@ -19,7 +19,7 @@ package com.github.sparqlanything.model;
 
 public enum IRIArgument {
 
-	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace"), ROOT("root"), BLANK_NODES("blank-nodes"), TRIPLIFIER("triplifier"), CHARSET("charset"), METADATA("metadata"), CONTENT("content"), FROM_ARCHIVE("from-archive"), TRIM_STRINGS("trim-strings"), NULL_STRING("null-string"), STRATEGY("strategy"), SLICE("slice"), COMMAND("command"), USE_RDFS_MEMBER("use-rdfs-member"), ONDISK_REUSE("ondisk.reuse"), ONDISK("ondisk");
+	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace"), ROOT("root"), BLANK_NODES("blank-nodes"), TRIPLIFIER("triplifier"), CHARSET("charset"), METADATA("metadata"), CONTENT("content"), FROM_ARCHIVE("from-archive"), TRIM_STRINGS("trim-strings"), NULL_STRING("null-string"), STRATEGY("strategy"), SLICE("slice"), COMMAND("command"), USE_RDFS_MEMBER("use-rdfs-member"), ONDISK_REUSE("ondisk.reuse"), ONDISK("ondisk"), OP_SERVICE_SILENT("opservice.silent");
 
 	private final String s;
 
