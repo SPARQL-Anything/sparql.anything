@@ -19,15 +19,15 @@ Let’s start with lists.
 Here you can see a list of strings, serialized in JSON format.
 
 ```json
-["apple", "banana", "orange"]
+  ["apple", "banana", "orange"]
 ```
 
 SPARQL Anything will first create a container for representing the collection let’s call it _:fruits and then uses RDF container membership properties to connect the container with its slots
 
 ```
-_:fruits rdf:_1 "apple"  .
-_:fruits rdf:_2 "banana" .
-_:fruits rdf:_3 "orange" .
+    _:fruits rdf:_1 "apple"  .
+    _:fruits rdf:_2 "banana" .
+    _:fruits rdf:_3 "orange" .
 ```
 
 By default, SPARQL Anything uses blank nodes for expressing containers, but it can be also configured to mint URIs.
@@ -36,14 +36,14 @@ We now see an example of how maps are triplified.
 Suppose having this map (serialised in JSON format)
 
 ```json
-{ "name": "Micheal", "surname": "Jordan" }
+  { "name": "Micheal", "surname": "Jordan" }
 ```
 
 Similarly to the previous example SPARQL Anything will create a container which identifies the collection (let’s call it _:jordan) and then associates this container with the value "Micheal" by means of the property xyz:name and the value "Jordan" by means of the property xyz:surname (as one would expect).
 
 ```
-_:jordan xyz:name "Micheal" .
-_:jordan xyz:surname "Jordan" .
+    _:jordan xyz:name "Micheal" .
+    _:jordan xyz:surname "Jordan" .
 ```
 
 Let’s analyze this example.
@@ -56,39 +56,39 @@ Suppose having an array where each element is a JSON Object storing name and sur
 
 ```json 
 [
-{
-"name": "Micheal",
-"surname": "Jordan"
-},
-{
-"name":"Scottie",
-"surname": "Pippen"
-}
+    {
+        "name": "Micheal",
+        "surname": "Jordan"
+    },
+    {
+        "name":"Scottie",
+        "surname": "Pippen"
+    }
 ]
 ```
 
 Let’s start from the inner container. We know how to triplify the first element of the array, and the second is similar to the first one.
 
 ```
-_:jordan xyz:name "Micheal" .
-_:jordan xyz:surname "Jordan" .
-
-_:pippen xyz:name "Scottie" .
-_:pippen xyz:surname "Pippen" .
+    _:jordan xyz:name "Micheal" .
+    _:jordan xyz:surname "Jordan" .
+    
+    _:pippen xyz:name "Scottie" .
+    _:pippen xyz:surname "Pippen" .
 ```
 
 Ok, great. Now let’s focus on the outer container.
 SPARQL Anything creates a blank node for the outer container. Let’s call it _:players and associates it with the member of the array (_:jordan and _:pippen) by means of the container membership properties rdf:_1 and rdf:_2
 
 ```
-_:players rdf:_1 _:jordan .
-_:players rdf:_2 _:pippen .
+    _:players rdf:_1 _:jordan .
+    _:players rdf:_2 _:pippen .
 ```
 
 SPARQL Anything also marks the outer container as root so you can distinguish it from the other containers.
 
 ```
-_:players rdf:type fx:root .
+    _:players rdf:type fx:root .
 ```
 
 In particular cases a container can also have other types, but we will see such examples later on.
@@ -106,29 +106,29 @@ Let’s look at CSV. We can see a CSV file as an ordered sequence of records whe
 Here you can see a simple example.
 
 ```
-Year,Make,Model
-1997,Ford,E350
-2000,Mercury,Cougar
+    Year,Make,Model
+    1997,Ford,E350
+    2000,Mercury,Cougar
 ```
 
 ```
 [
-fx:root ;
-rdf:_1  [
-rdf:_1 "Year" ;
-rdf:_2 "Make" ;
-rdf:_3 "Model" ;
-],
-rdf:_2  [
-rdf:_1 "1997" ;
-rdf:_2 "Ford" ;
-rdf:_3 "E350" ;
-],
-rdf:_3  [
-rdf:_1 "2000" ;
-rdf:_2 "Mercury" ;
-rdf:_3 "Cougar" ;
-]
+    rdf:type fx:root ;
+    rdf:_1  [
+        rdf:_1 "Year" ;
+        rdf:_2 "Make" ;
+        rdf:_3 "Model" ;
+    ],
+    rdf:_2  [
+        rdf:_1 "1997" ;
+        rdf:_2 "Ford" ;
+        rdf:_3 "E350" ;
+    ],
+    rdf:_3  [
+        rdf:_1 "2000" ;
+        rdf:_2 "Mercury" ;
+        rdf:_3 "Cougar" ;
+    ]
 ]
 ```
 
@@ -136,17 +136,17 @@ It is quite usual to interpret the first row of a CSV as headers for the followi
 
 ```
 [
-fx:root ;
-rdf:_1  [
-xyz:Year "1997" ;
-xyz:Make "Ford" ;
-xyz:Model "E350" ;
-],
-rdf:_2  [
-xyz:Year "2000" ;
-xyz:Make "Mercury" ;
-xyz:Model "Cougar" ;
-]
+    rdf:type fx:root ;
+    rdf:_1  [
+        xyz:Year "1997" ;
+        xyz:Make "Ford" ;
+        xyz:Model "E350" ;
+    ],
+    rdf:_2  [
+        xyz:Year "2000" ;
+        xyz:Make "Mercury" ;
+        xyz:Model "Cougar" ;
+    ]
 ]
 ```
 
@@ -165,15 +165,16 @@ Here you can see a simple example.
 
 
 ```
-[ a       fx:root , xyz:PLAYERS ;
-rdf:_1  [ a            xyz:PLAYER ;
-xyz:name     "Micheal" ;
-xyz:surname  "Jordan"
-] ;
-rdf:_2  [ a            xyz:PLAYER ;
-xyz:name     "Scottie" ;
-xyz:surname  "Pippen"
-]
+[ 
+    a       fx:root , xyz:PLAYERS ;
+    rdf:_1  [ a            xyz:PLAYER ;
+        xyz:name     "Micheal" ;
+        xyz:surname  "Jordan"
+    ] ;
+    rdf:_2  [ a            xyz:PLAYER ;
+        xyz:name     "Scottie" ;
+        xyz:surname  "Pippen"
+    ]
 ] .
 ```
 
@@ -202,13 +203,14 @@ This can be done with the following query
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+
 SELECT ?seriesName
 WHERE {
-SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
-?tvSeries xyz:name ?seriesName .
-?tvSeries xyz:stars ?star .
-?star ?li "Courteney Cox" .
-}
+    SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
+        ?tvSeries xyz:name ?seriesName .
+        ?tvSeries xyz:stars ?star .
+        ?star ?li "Courteney Cox" .
+    }
 }
 ```
 
@@ -241,13 +243,14 @@ For example, we instruct the SPARQL Anything triplifier to use a custom namespac
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX myns: <http://example.org/mynamespace/>
+
 SELECT ?seriesName
 WHERE {
-SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json,namespace=http://example.org/mynamespace/> {
-?tvSeries myns:name ?seriesName .
-?tvSeries myns:stars ?star .
-?star ?li "Courteney Cox" .
-}
+    SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json,namespace=http://example.org/mynamespace/> {
+        ?tvSeries myns:name ?seriesName .
+        ?tvSeries myns:stars ?star .
+        ?star ?li "Courteney Cox" .
+    }
 }
 ```
 
@@ -262,14 +265,15 @@ In a completely equivalent way, SPARQL Anything options can be also provided as 
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+
 SELECT ?seriesName
 WHERE {
-SERVICE <x-sparql-anything:> {
-fx:properties fx:location "https://sparql-anything.cc/example1.json"
-?tvSeries xyz:name ?seriesName .
-?tvSeries xyz:stars ?star .
-?star ?li "Courteney Cox" .
-}
+    SERVICE <x-sparql-anything:> {
+        fx:properties fx:location "https://sparql-anything.cc/example1.json"
+        ?tvSeries xyz:name ?seriesName .
+        ?tvSeries xyz:stars ?star .
+        ?star ?li "Courteney Cox" .
+    }
 }
 ```
 
@@ -345,35 +349,36 @@ PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX myns: <http://example.org/myns/>
-CONSTRUCT {
-?tvSeriesMyNs a schema:TVSeries .
-?tvSeriesMyNs schema:name ?seriesName .
-?tvSeriesMyNs schema:genre ?genreMyNs .
-?tvSeriesMyNs schema:inLanguage ?language .
-?tvSeriesMyNs schema:startDate ?premiered .
-?tvSeriesMyNs schema:creativeWorkStatus ?status .
-?tvSeriesMyNs schema:description ?summary .
-?tvSeriesMyNs schema:actor ?starMyNs .
-?starMyNs a schema:Person .
-?starMyNs schema:name ?star .
-} WHERE {
-SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
 
-    ?tvSeries xyz:name ?seriesName .
-    BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?seriesName, " ", "_", "i"))) AS ?tvSeriesMyNs)
+CONSTRUCT {
+    ?tvSeriesMyNs a schema:TVSeries .
+    ?tvSeriesMyNs schema:name ?seriesName .
+    ?tvSeriesMyNs schema:genre ?genreMyNs .
+    ?tvSeriesMyNs schema:inLanguage ?language .
+    ?tvSeriesMyNs schema:startDate ?premiered .
+    ?tvSeriesMyNs schema:creativeWorkStatus ?status .
+    ?tvSeriesMyNs schema:description ?summary .
+    ?tvSeriesMyNs schema:actor ?starMyNs .
+    ?starMyNs a schema:Person .
+    ?starMyNs schema:name ?star .
+} WHERE {
+    SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
     
-    ?tvSeries xyz:genres ?genreContainer .
-    ?genreContainer fx:anySlot ?genre . 
-    BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?genre, " ", "_", "i"))) AS ?genreMyNs)
-    
-    ?tvSeries xyz:language ?language .
-    ?tvSeries xyz:premiered ?premiered .
-    ?tvSeries xyz:status ?status .
-    ?tvSeries xyz:summary ?summary .
-    
-    ?tvSeries xyz:stars ?starContainer .
-    ?starContainer fx:anySlot ?star .
-    BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?star, " ", "_", "i"))) AS ?starMyNs)
-}
+        ?tvSeries xyz:name ?seriesName .
+        BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?seriesName, " ", "_", "i"))) AS ?tvSeriesMyNs)
+        
+        ?tvSeries xyz:genres ?genreContainer .
+        ?genreContainer fx:anySlot ?genre . 
+        BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?genre, " ", "_", "i"))) AS ?genreMyNs)
+        
+        ?tvSeries xyz:language ?language .
+        ?tvSeries xyz:premiered ?premiered .
+        ?tvSeries xyz:status ?status .
+        ?tvSeries xyz:summary ?summary .
+        
+        ?tvSeries xyz:stars ?starContainer .
+        ?starContainer fx:anySlot ?star .
+        BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?star, " ", "_", "i"))) AS ?starMyNs)
+    }
 }
 ```
