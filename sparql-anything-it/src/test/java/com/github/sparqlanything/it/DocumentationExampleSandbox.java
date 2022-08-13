@@ -6,6 +6,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.vocabulary.RDFS;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -846,8 +847,40 @@ public class DocumentationExampleSandbox {
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 //		System.out.println(query.toString(Syntax.defaultSyntax));
 
-		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (fx:literal(?string, 'it') AS ?result) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content 'uno'  . ?s rdf:_1 ?string  } }");
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (fx:literal(?string, 'it') AS ?result) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content 'uno'  . ?s rdf:_1 ?string  } }");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		query = QueryFactory.create("PREFIX ex: <http://example/> \n" +
+				"PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/>\n" +
+				"\n" +
+				"CONSTRUCT {\n" +
+				" ?bnode ex:p ?A\n" +
+				"} WHERE {\n" +
+				" SERVICE <x-sparql-anything:> {\n" +
+				"\tfx:properties fx:content \"c1,c2\\n" +
+				"b0,A\\n" +
+				"b0,B\\n" +
+				"b0,C\\n" +
+				"b0,D\\n" +
+				"b0,E\\n" +
+				"b1,A\\n" +
+				"b2,B\\n" +
+				"b3,C\\n" +
+				"b4,D\\n" +
+				"b5,E\" ; fx:media-type 'text/csv';  fx:csv.headers true .\n" +
+				" \t[] xyz:c1 ?b0 ; xyz:c2 ?A\n" +
+				" }\n" +
+				" BIND ( fx:bnode ( ?b0 ) as ?bnode ) \n" +
+				"}");
+
+		m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
+		m.setNsPrefix("rdfs", RDFS.uri);
+		m.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
+		m.write(System.out, "TTL");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 		System.out.println(query.toString(Syntax.defaultSyntax));
 
 	}

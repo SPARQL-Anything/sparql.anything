@@ -44,7 +44,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:serial(?a ... ?n)](#fxserial)                                        | Function                | Any sequence of nodes                  | Integer                       | The function `fx:serial (?a ... ?n)` generates an incremental number using the arguments as reference counters. For example, calling `fx:serial("x")` two times will generate `1` and then `2`. Instead, calling `fx:serial(?x)` multiple times will generate sequential numbers for each value of `?x`.                                                                                                                                                                      |
 | [fx:entity(?a ... ?n)](#fxentity)                                        | Function                | Any sequence of nodes                  | URI node                      | The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).                                                                                                                                                                                                                                     |
 | [fx:literal(?a, ?b)](#fxliteral)                                         | Function                | String, (URI or language code)         | Literal node                  | The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).                                                                                                                                                                                                                                                                |
-| [fx:bnode(?a)](#fxbnode)                                                 | Function                | Any node                               |                               | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
+| [fx:bnode(?a)](#fxbnode)                                                 | Function                | Any node                               | Blank node                    | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
 
 
 ## Working with sequences
@@ -1585,6 +1585,83 @@ Result
 ------------
 ```
 
+### fx:bnode
+
+The function `fx:bnode(?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case).
+
+#### Input
+
+Any node
+
+#### Output
+
+Blank node
+
+#### Example
+
+```
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  ex:   <http://example/>
+
+CONSTRUCT 
+  { 
+    ?bnode ex:p ?A .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content      "c1,c2\nb0,A\nb0,B\nb0,C\nb0,D\nb0,E\nb1,A\nb2,B\nb3,C\nb4,D\nb5,E" ;
+                  fx:media-type   "text/csv" ;
+                  fx:csv.headers  true .
+        _:b0      xyz:c1          ?b0 ;
+                  xyz:c2          ?A
+      }
+    BIND(fx:bnode(?b0) AS ?bnode)
+  }
+```
+
+**Note**: the CSV passed as content string is the following
+
+```csv
+c1,c2
+b0,A
+b0,B
+b0,C
+b0,D
+b0,E
+b1,A
+b2,B
+b3,C
+b4,D
+b5,E
+```
+
+Result
+
+```
+@prefix ex:   <http://example/> .
+@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:  <http://sparql.xyz/facade-x/data/> .
+
+[ ex:p    "D" ] .
+
+[ ex:p    "A" ] .
+
+[ ex:p    "C" ] .
+
+[ ex:p    "E" ] .
+
+[ ex:p    "C" , "E" , "D" , "A" , "B" ] .
+
+[ ex:p    "B" ] .
+```
+
+
+
+
 <!--
 ###
 
@@ -1601,9 +1678,4 @@ Result
 
 ```
 ```
--->
--->
-<!--
-### The function `fx:bnode`
-The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case).
 -->
