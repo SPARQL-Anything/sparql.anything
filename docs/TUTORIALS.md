@@ -1,6 +1,6 @@
 # Tutorials
 Here is a list of step-by-step tutorials covering several features of SPARQL Anything:
-- 
+
 - [A Gentle introduction to SPARQL Anything](A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md): this tutorial presents the Facade-X model and shows basic transformations of JSON, CSV and XML. 
 - [SPARQL Anything showcase: open data from the Tate Gallery](https://github.com/SPARQL-Anything/showcase-tate): this tutorial covers formats such as CSV and JSON and features such as the function `fx:anySlot` and the chaining of multiple `SERVICE` clauses. It is based on the SPARQL Anything [CLI](README.md#Usage).
 - [Construct a KG of artists and artworks of the IMMA museum website](https://github.com/SPARQL-Anything/showcase-imma): This showcase demonstrates the use of SPARQL Anything for constructing a Knowledge Graph from data encoded in HTML pages. Apart from examples with the HTML input format, it covers features such as parametrised queries and the use of SPARQL result set files as parameters. It is based on the SPARQL Anything [CLI](README.md#Usage).
