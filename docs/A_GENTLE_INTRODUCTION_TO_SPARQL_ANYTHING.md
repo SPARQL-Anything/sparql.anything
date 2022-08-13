@@ -180,3 +180,200 @@ xyz:surname  "Pippen"
 Here we can see another primitive used by SPARQL Anything for triplying file contents. Containers coming from XML documents can be typed by a URI which is the result of the concatenation of the prefix xyz: with the name of the tag the container corresponds to.
 
 As I was saying there are plenty of triplifiers for other file formats but we don’t have time to dive into the details of those.  You can find additional information about the online documentation.
+
+## Querying anything
+Now that is clear how files are triplifiers, we can show you how to use SPARQL Anything to query any file.
+
+### Installation
+Before going further, to use SPARQL Anything you need to download and run the tool. Before running the tool please make sure that Java 11+ is correctly installed and configured on your machine.
+Go to the release page https://github.com/SPARQL-Anything/sparql.anything/releases
+- Download `sparql-anything-server-<version>.jar`
+- And run it from your terminal. `java -jar sparql-anything-server-<version>.jar`
+This command will start the SPARQL Anything server which is basically a Fuseki server enhanced with SPARQL Anything capabilities.
+The GUI of the server can be accessed from the following link http://localhost:3000/sparql
+
+### Overloading SERVICE clause
+
+SPARQL Anything extends the SPARQL processors by overloading the SERVICE operator, as in the following example. 
+Suppose having this JSON file as input (also available at https://sparql-anything.cc/example1.json) which contains the description of two famous tv series; and you want to select all tv series starring Courtey Cox.
+This can be done with the following query
+
+```sparql
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+SELECT ?seriesName
+WHERE {
+SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
+?tvSeries xyz:name ?seriesName .
+?tvSeries xyz:stars ?star .
+?star ?li "Courteney Cox" .
+}
+}
+```
+
+Let’s focus on the service clause.
+
+```
+SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json>
+```
+
+This tells the SPARQL Anything server to triplify data available at the location https://sparql-anything.cc/example1.json (according to the triplification strategies we have seen before) and evaluate the basic graph pattern
+
+```
+?tvSeries xyz:name ?seriesName .
+?tvSeries xyz:stars ?star .
+?star ?li "Courteney Cox" .
+```
+
+over the triplified version of the JSON file.
+
+In order to instruct the query processor to delegate the execution to SPARQL Anything, you can use the following URI-schema within SERVICE clauses.
+
+```x-sparql-anything ':' ([option] ('=' [value])? ','?)+```
+
+where x-sparql-anything is the URI scheme that must be present in order to delegate the processing to the SPARQL Anything engine. ([option] ('=' [value])? ','?)+ are a list of key value pairs used for passing options to triplifiers. 
+The list of available options are reported [here](README.md#general-purpose-options)
+
+For example, we instruct the SPARQL Anything triplifier to use a custom namespace for generated data.
+
+```sparql
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX myns: <http://example.org/mynamespace/>
+SELECT ?seriesName
+WHERE {
+SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json,namespace=http://example.org/mynamespace/> {
+?tvSeries myns:name ?seriesName .
+?tvSeries myns:stars ?star .
+?star ?li "Courteney Cox" .
+}
+}
+```
+
+A minimal URI that uses only the resource locator is also possible.
+
+`x-sparql-anything ':' URL`
+
+In this case the SPARQL Anything engine applies the default configurations to triplify data.
+In a completely equivalent way, SPARQL Anything options can be also provided as basic graph pattern inside the SERVICE clause as follows
+
+```sparql
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+SELECT ?seriesName
+WHERE {
+SERVICE <x-sparql-anything:> {
+fx:properties fx:location "https://sparql-anything.cc/example1.json"
+?tvSeries xyz:name ?seriesName .
+?tvSeries xyz:stars ?star .
+?star ?li "Courteney Cox" .
+}
+}
+```
+
+Note that
+The SERVICE URI scheme must be `x-sparql-anything:`.
+Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the SERVICE clause.
+Such triples must have fx:properties as subject, fx:[OPTION-NAME] as predicate, and a literal or a variable as object.
+
+## Constructing Knowledge Graphs
+Now, I’m going to show you how to construct RDF knowledge graphs using SPARQL Anything. Suppose that you want to structure a TV Series Knowledge Graph by extracting data from the JSON we have seen before and this KG has to comply with schema.org ontology. With SPARQL Anything you can address this task in a single construct query.
+
+Let us assume that the target KG should look like the following one
+
+```
+@prefix schema: <https://schema.org/> .
+@prefix myns: <http://example.org/myns/> .
+
+myns:Friends a schema:TVSeries ;
+schema:name "Friends" ;
+schema:genre myns:Comedy, myns:Romance ;
+schema:inLanguage "English" ;
+schema:creativeWorkStatus "Ended";
+schema:startDate "1994-09-22" ;
+schema:description "Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan ;" ;
+schema:actor myns:Jennifer_Aniston , myns:Courtney_Cox, myns:Lisa_Kudrow, myns:Matt_LeBlanc, myns:Matthew_Perry, myns:David_Schwimmer .
+
+myns:Cougar_Town a schema:TVSeries ;
+schema:name "Cougar Town" ;
+schema:genre myns:Comedy, myns:Romance ;
+schema:inLanguage "English" ;
+schema:creativeWorkStatus "Ended";
+schema:startDate "2009-09-23" ;
+schema:description "Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself." ;
+schema:actor  myns:Courtney_Cox, myns:David_Arquette, myns:Bill_Lawrence, myns:Linda_Videtti_Figueiredo, myns:Blake_McCormick .
+
+myns:David_Arquette a schema:Person ;
+schema:name "David Arquette" .
+
+myns:Bill_Lawrence a schema:Person ;
+schema:name "Bill Lawrence" .
+
+myns:Linda_Videtti_Figueiredo a schema:Person ;
+schema:name "Linda Videtti Figueiredo" .
+
+myns:Blake_McCormick a schema:Person ;
+schema:name "Blake McCormick" .
+
+myns:Jennifer_Aniston a schema:Person ;
+schema:name "Jennifer Aniston" .
+
+myns:Courtney_Cox a schema:Person ;
+schema:name "Courtney Cox" .
+
+myns:Lisa_Kudrow a schema:Person ;
+schema:name "Lisa Kudrow" .
+
+myns:Matt_LeBlanc a schema:Person ;
+schema:name "Matt LeBlanc" .
+
+myns:Matthew_Perry a schema:Person ;
+schema:name "Matthew Perry" .
+
+myns:David_Schwimmer a schema:Person ;
+schema:name "David Schwimmer" .
+```
+
+This can be generated by the following query
+
+```
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX schema: <http://schema.org/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX myns: <http://example.org/myns/>
+CONSTRUCT {
+?tvSeriesMyNs a schema:TVSeries .
+?tvSeriesMyNs schema:name ?seriesName .
+?tvSeriesMyNs schema:genre ?genreMyNs .
+?tvSeriesMyNs schema:inLanguage ?language .
+?tvSeriesMyNs schema:startDate ?premiered .
+?tvSeriesMyNs schema:creativeWorkStatus ?status .
+?tvSeriesMyNs schema:description ?summary .
+?tvSeriesMyNs schema:actor ?starMyNs .
+?starMyNs a schema:Person .
+?starMyNs schema:name ?star .
+} WHERE {
+SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
+
+    ?tvSeries xyz:name ?seriesName .
+    BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?seriesName, " ", "_", "i"))) AS ?tvSeriesMyNs)
+    
+    ?tvSeries xyz:genres ?genreContainer .
+    ?genreContainer fx:anySlot ?genre . 
+    BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?genre, " ", "_", "i"))) AS ?genreMyNs)
+    
+    ?tvSeries xyz:language ?language .
+    ?tvSeries xyz:premiered ?premiered .
+    ?tvSeries xyz:status ?status .
+    ?tvSeries xyz:summary ?summary .
+    
+    ?tvSeries xyz:stars ?starContainer .
+    ?starContainer fx:anySlot ?star .
+    BIND (IRI(CONCAT("http://example.org/myns/", REPLACE(?star, " ", "_", "i"))) AS ?starMyNs)
+}
+}
+```
