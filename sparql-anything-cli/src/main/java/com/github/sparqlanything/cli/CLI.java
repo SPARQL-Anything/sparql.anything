@@ -113,7 +113,7 @@ public class CLI {
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
 		options.addOption(Option.builder(OUTPUT_APPEND).hasArg(false)
-				.desc("OPTIONAL - Should output to file be appended? WARNING: this option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ seralization and not using bnodes)").longOpt(OUTPUT_APPEND_LONG).build());
+				.desc("OPTIONAL - Should output to file be appended? WARNING: this option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using bnodes)").longOpt(OUTPUT_APPEND_LONG).build());
 
 		options.addOption(Option.builder(EXPLAIN).argName("explain").hasArg(false)
 				.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
