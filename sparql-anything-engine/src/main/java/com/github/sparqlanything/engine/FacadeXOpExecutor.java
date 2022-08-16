@@ -118,13 +118,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 					dg.begin(TxnType.READ);
 				}
 
-				FacadeXExecutionContext ec;
-				if (p.containsKey(IRIArgument.ONDISK.toString())) {
-					ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
-				} else {
-					ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-				}
-				return QC.execute(opService.getSubOp(), input, ec);
+				return QC.execute(opService.getSubOp(), input, getFacadeXExecutionContext(p, dg));
 
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
 					 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
@@ -151,6 +145,16 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 		logger.trace("Not a Variable and not a IRI: {}", opService.getService());
 		return super.execute(opService, input);
+	}
+
+	private FacadeXExecutionContext getFacadeXExecutionContext(Properties p, DatasetGraph dg) {
+		FacadeXExecutionContext ec;
+		if (p.containsKey(IRIArgument.ONDISK.toString())) {
+			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
+		} else {
+			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+		}
+		return ec;
 	}
 
 	private QueryIterator postponeService(final OpService opService, QueryIterator input) {
@@ -244,8 +248,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 			input2 = QC.execute(getOpPropFuncAnySlot(t), input2, execCxt);
 		}
 
-		Properties p = new Properties();
 		try {
+			Properties p = new Properties();
 			logger.debug("Input BGP {} ", opBGP);
 			PropertyUtils.extractPropertiesFromOpGraph(p, opBGP);
 			if (p.size() > 0) {
@@ -260,15 +264,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 					dg = this.execCxt.getDataset();
 				}
 
-
-				ExecutionContext ec;
-				if (p.containsKey(IRIArgument.ONDISK.toString())) {
-					ec = new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor());
-				} else {
-					ec = new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor());
-				}
-
-				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2, ec);
+				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2, getFacadeXExecutionContext(p, dg));
 			}
 		} catch (UnboundVariableException e) {
 			logger.trace("Unbound variables");
