@@ -112,12 +112,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 				// Execute with default, bulk method
 				DatasetGraph dg = dgc.getDatasetGraph(t, p, opService.getSubOp());
-				logger.trace("Execute with default method dg is in transaction? {} transaction type {}", dg.isInTransaction(), dg.transactionType());
-				if (!dg.isInTransaction()) {
-					logger.debug("begin read txn");
-					dg.begin(TxnType.READ);
-				}
-
+				ensureReadingTxn(dg);
 				return QC.execute(opService.getSubOp(), input, getFacadeXExecutionContext(p, dg));
 
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
@@ -223,18 +218,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 
+		// this checks that the BGP is within a FacadeX-SERVICE clause
 		if (this.execCxt.getClass() != FacadeXExecutionContext.class) {
 			return super.execute(opBGP, input);
 		}
 
-		// i think we can consider this the start of the query execution and therefore the read txn.
-		// we won't end this read txn until the next query takes execution back through BaseFacadeXBuilder
-		if (!this.execCxt.getDataset().isInTransaction()) {
-			// i think we need the test (instead of just unconditionally starting the txn) because if we postpone
-			// during a query execution, execution could pass through here again
-			logger.debug("begin read txn");
-			this.execCxt.getDataset().begin(TxnType.READ);
-		}
+		ensureReadingTxn(this.execCxt.getDataset());
 
 		this.execCxt.getDataset().listGraphNodes().forEachRemaining(g -> logger.trace("Graph {}", g.toString()));
 
@@ -276,6 +265,17 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 		logger.debug("Execute default {} {}", opBGP, excludeOpPropFunction(opBGP));
 		return super.execute(excludeOpPropFunction(opBGP), input2);
+	}
+
+	private void ensureReadingTxn(DatasetGraph dg) {
+		// i think we can consider this the start of the query execution and therefore the read txn.
+		// we won't end this read txn until the next query takes execution back through BaseFacadeXBuilder
+		if (!dg.isInTransaction()) {
+			// i think we need the test (instead of just unconditionally starting the txn) because if we postpone
+			// during a query execution, execution could pass through here again
+			logger.debug("begin read txn");
+			dg.begin(TxnType.READ);
+		}
 	}
 
 }
