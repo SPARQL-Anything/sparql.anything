@@ -90,7 +90,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (opService.getService().isURI() && isFacadeXURI(opService.getService().getURI())) {
 			logger.trace("Facade-X uri: {}", opService.getService());
 			try {
-				Properties p = PropertyUtils.extractPropertiesFromOp( opService);
+				Properties p = PropertyUtils.extractPropertiesFromOp(opService);
 				Triplifier t = PropertyUtils.getTriplifier(p, triplifierRegister);
 
 				if (t == null) {
@@ -119,7 +119,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				logger.error("An error occurred: {}", e.getMessage());
 				throw new RuntimeException(e);
 			} catch (UnboundVariableException e) {
-				return catchUnboundVariableException(opService,e.getOpBGP(), input, e);
+				return catchUnboundVariableException(opService, e.getOpBGP(), input, e);
 			}
 		}
 		logger.trace("Not a Variable and not a IRI: {}", opService.getService());
@@ -170,7 +170,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 
-
 	private OpBGP extractFakePattern(OpBGP bgp) {
 		BasicPattern pattern = new BasicPattern();
 		for (Triple t : bgp.getPattern().getList()) {
@@ -204,6 +203,15 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return new OpBGP(result);
 	}
 
+	private QueryIterator executeMagicProperties(OpBGP opBGP, QueryIterator input) {
+		QueryIterator input2 = input;
+		List<Triple> l = getPropFuncTriples(opBGP.getPattern());
+		for (Triple t : l) {
+			input2 = QC.execute(getOpPropFuncAnySlot(t), input2, execCxt);
+		}
+		return input2;
+	}
+
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 
 		// this checks that the BGP is within a FacadeX-SERVICE clause
@@ -211,24 +219,12 @@ public class FacadeXOpExecutor extends OpExecutor {
 			return super.execute(opBGP, input);
 		}
 		ensureReadingTxn(this.execCxt.getDataset());
-		this.execCxt.getDataset().listGraphNodes().forEachRemaining(g -> logger.trace("Graph {}", g.toString()));
-		logger.trace("executing  BGP {}", opBGP.toString());
-		logger.trace("Size: {} {}", this.execCxt.getDataset().size(), this.execCxt.getDataset().getDefaultGraph().size());
-
-		List<Triple> l = getPropFuncTriples(opBGP.getPattern());
-		logger.trace("Triples with OpFunc: {}", l.size());
-		QueryIterator input2 = input;
-		for (Triple t : l) {
-			input2 = QC.execute(getOpPropFuncAnySlot(t), input2, execCxt);
-		}
+		QueryIterator input2 = executeMagicProperties(opBGP, input);
 
 		try {
 			Properties p = PropertyUtils.extractPropertiesFromOp(opBGP);
-			logger.debug("Input BGP {} ", opBGP);
-
 			if (p.size() > 0) {
 				// if we have FX properties we at least need to excludeFXProperties()
-				logger.trace("BGP Properties {}", p);
 				DatasetGraph dg;
 				if (this.execCxt.getDataset().isEmpty()) {
 					// we only need to call getDatasetGraph() if we have an empty one
@@ -241,15 +237,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2, getFacadeXExecutionContext(p, dg));
 			}
 		} catch (UnboundVariableException e) {
-//			logger.trace("Unbound variables");
-//			OpBGP fakeBGP = extractFakePattern(opBGP);
-//			return postpone(excludeOpPropFunction(opBGP), QC.executeDirect(fakeBGP.getPattern(), input2, execCxt));
-			return catchUnboundVariableException(opBGP,opBGP, QC.executeDirect( extractFakePattern(opBGP).getPattern(), input2, execCxt), e);
+			return catchUnboundVariableException(opBGP, opBGP, QC.executeDirect(extractFakePattern(opBGP).getPattern(), input2, execCxt), e);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
 				 ClassNotFoundException | IOException e) {
 			logger.error(e.getMessage());
 		}
-		logger.debug("Execute default {} {}", opBGP, excludeOpPropFunction(opBGP));
 		return super.execute(excludeOpPropFunction(opBGP), input2);
 	}
 
