@@ -90,7 +90,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (opService.getService().isURI() && isFacadeXURI(opService.getService().getURI())) {
 			logger.trace("Facade-X uri: {}", opService.getService());
 			try {
-				Properties p = PropertyUtils.getProperties(opService.getService().getURI(), opService);
+				Properties p = PropertyUtils.extractPropertiesFromOp( opService);
 				Triplifier t = PropertyUtils.getTriplifier(p, triplifierRegister);
 
 				if (t == null) {
@@ -223,9 +223,9 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 
 		try {
-			Properties p = new Properties();
+			Properties p = PropertyUtils.extractPropertiesFromOp(opBGP);
 			logger.debug("Input BGP {} ", opBGP);
-			PropertyUtils.extractPropertiesFromOpGraph(p, opBGP);
+
 			if (p.size() > 0) {
 				// if we have FX properties we at least need to excludeFXProperties()
 				logger.trace("BGP Properties {}", p);
