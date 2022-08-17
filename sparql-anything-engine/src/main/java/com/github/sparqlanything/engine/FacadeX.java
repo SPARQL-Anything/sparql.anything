@@ -39,6 +39,7 @@ public final class FacadeX {
 	public final static OpExecutorFactory ExecutorFactory = FacadeXOpExecutor::new;
 	public final static TriplifierRegister Registry = TriplifierRegister.getInstance();
 	private static final Logger log = LoggerFactory.getLogger(FacadeX.class);
+	public static final String  ANY_SLOT_URI = Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot";
 
 	static {
 		try {
@@ -100,8 +101,8 @@ public final class FacadeX {
 		};
 
 		final PropertyFunctionRegistry reg = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-		log.trace("Registering {} magic property", Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot");
-		reg.put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot", p);
+		log.trace("Registering {} magic property", ANY_SLOT_URI);
+		reg.put(ANY_SLOT_URI, p);
 		PropertyFunctionRegistry.set(ARQ.getContext(), reg);
 	}
 
