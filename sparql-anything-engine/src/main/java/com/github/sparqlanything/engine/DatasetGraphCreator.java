@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,14 +30,12 @@ import java.util.Properties;
 public class DatasetGraphCreator {
 
 	private static final Logger logger = LoggerFactory.getLogger(DatasetGraphCreator.class);
-	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
-
-	private final Map<String, DatasetGraph> executedFacadeXIris;
 	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
+	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
+	private final Map<String, DatasetGraph> executedFacadeXIris;
+	private final ExecutionContext execCxt;
 
-	private ExecutionContext execCxt;
-
-	public DatasetGraphCreator(ExecutionContext execCxt){
+	public DatasetGraphCreator(ExecutionContext execCxt) {
 		this.execCxt = execCxt;
 
 		if (!execCxt.getContext().isDefined(inMemoryCache)) {
@@ -49,8 +46,8 @@ public class DatasetGraphCreator {
 	}
 
 
-	public DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
-		DatasetGraph dg = null;
+	public DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException {
+		DatasetGraph dg;
 		if (t == null) {
 			return DatasetGraphFactory.create();
 		}
@@ -144,7 +141,7 @@ public class DatasetGraphCreator {
 	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
 		DatasetGraph dg;
 
-		Integer strategy = PropertyUtils.detectStrategy(p,execCxt);
+		Integer strategy = PropertyUtils.detectStrategy(p, execCxt);
 //		null;
 //		// Local value for strategy?
 //		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());

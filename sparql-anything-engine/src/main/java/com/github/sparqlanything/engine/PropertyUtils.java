@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
 import java.util.Properties;
 
 public class PropertyUtils {
@@ -42,6 +41,7 @@ public class PropertyUtils {
 		}
 		return strategy;
 	}
+
 
 	static Triplifier getTriplifier(Properties p, TriplifierRegister triplifierRegister) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		Triplifier t;
@@ -163,11 +163,9 @@ public class PropertyUtils {
 	static Properties extractPropertiesFromOp(Op op) throws UnboundVariableException {
 		Properties properties = new Properties();
 
-		if (op instanceof OpBGP){
+		if (op instanceof OpBGP) {
 			extractPropertiesFromOpGraph(properties, (OpBGP) op);
-		}
-
-		if(op instanceof OpService){
+		} else if (op instanceof OpService) {
 			OpService opService = (OpService) op;
 			String url = opService.getService().getURI();
 			// Parse IRI only if contains properties
@@ -226,6 +224,6 @@ public class PropertyUtils {
 			}
 		}
 
-		return  properties;
+		return properties;
 	}
 }

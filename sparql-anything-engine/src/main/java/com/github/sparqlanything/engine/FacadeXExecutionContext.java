@@ -21,8 +21,17 @@ import org.apache.jena.sparql.engine.ExecutionContext;
 
 public class FacadeXExecutionContext extends ExecutionContext {
 
+	private boolean silent = false;
+
 	public FacadeXExecutionContext(ExecutionContext other) {
 		super(other);
 	}
 
+	public boolean isSilent() {
+		return silent;
+	}
+
+	public void setSilent(boolean silent) {
+		this.silent = silent;
+	}
 }

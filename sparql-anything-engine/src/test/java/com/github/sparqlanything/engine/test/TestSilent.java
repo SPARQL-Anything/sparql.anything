@@ -18,13 +18,7 @@
 package com.github.sparqlanything.engine.test;
 
 import com.github.sparqlanything.engine.FacadeX;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,7 +35,7 @@ public class TestSilent {
 	}
 
 	@Test
-	public void testSilent(){
+	public void testSilent() {
 		boolean failed = false;
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
 				"select * where {" +
@@ -51,18 +45,16 @@ public class TestSilent {
 				" ?s ?p ?o" +
 				"}" +
 				"}";
-		try{
+		try {
 			execute(q);
-		}catch(Exception e){
+		} catch (Exception e) {
 			failed = true;
-			throw e;
 		}
 		Assert.assertFalse(failed);
 	}
 
-
 	@Test
-	public void testNoSilent(){
+	public void testNoSilent() {
 		boolean failed = true;
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
 				"select * where {" +
@@ -72,16 +64,16 @@ public class TestSilent {
 				" ?s ?p ?o" +
 				"}" +
 				"}";
-		try{
+		try {
 			execute(q);
-		}catch(Exception e){
+		} catch (Exception e) {
 			failed = false;
 		}
 		Assert.assertFalse(failed);
 	}
 
 	@Test
-	public void test404NoSilent(){
+	public void test404NoSilent() {
 		boolean raisesException = false;
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
 				"select * where {" +
@@ -91,9 +83,9 @@ public class TestSilent {
 				" ?s ?p ?o" +
 				"}" +
 				"}";
-		try{
+		try {
 			execute(q);
-		}catch(Exception e){
+		} catch (Exception e) {
 			//e.printStackTrace();
 			raisesException = true;
 		}
@@ -101,7 +93,7 @@ public class TestSilent {
 	}
 
 	@Test
-	public void test404Silent(){
+	public void test404Silent() {
 		boolean raisesException = false;
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
 				"select * where {" +
@@ -111,9 +103,9 @@ public class TestSilent {
 				" ?s ?p ?o" +
 				"}" +
 				"}";
-		try{
+		try {
 			execute(q);
-		}catch(Exception e){
+		} catch (Exception e) {
 			raisesException = true;
 		}
 		Assert.assertFalse(raisesException);

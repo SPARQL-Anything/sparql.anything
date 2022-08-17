@@ -91,28 +91,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.trace("Facade-X uri: {}", opService.getService());
 			try {
 				Properties p = PropertyUtils.extractPropertiesFromOp(opService);
-				Triplifier t = PropertyUtils.getTriplifier(p, triplifierRegister);
-
-				if (t == null) {
-					logger.warn("No triplifier found");
-					return QueryIterNullIterator.create(execCxt);
-				}
-
-				if (Triplifier.getSliceArgument(p)) {
-					// Execute with slicing
-					if (t instanceof Slicer) {
-						logger.trace("Execute with slicing");
-						return new QueryIterSlicer(execCxt, input, t, p, opService);
-					} else {
-						logger.warn("Slicing is not supported by triplifier: {}", t.getClass().getName());
-					}
-				}
-
-				// Execute with default, bulk method
-				DatasetGraph dg = dgc.getDatasetGraph(t, p, opService.getSubOp());
-				ensureReadingTxn(dg);
-				return QC.execute(opService.getSubOp(), input, getFacadeXExecutionContext(p, dg));
-
+				return executeDefault(opService, input, p);
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
 					 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
 					 ClassNotFoundException | TriplifierHTTPException e) {
@@ -151,16 +130,19 @@ public class FacadeXOpExecutor extends OpExecutor {
 		} else {
 			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 		}
+		if (p.containsKey(IRIArgument.OP_SERVICE_SILENT.toString()) && p.getProperty(IRIArgument.OP_SERVICE_SILENT.toString()).equals("true")) {
+			ec.setSilent(true);
+		}
 		return ec;
 	}
 
-	private QueryIterator postpone(final Op opService, QueryIterator input) {
+	private QueryIterator postpone(final Op op, QueryIterator input) {
 //		logger.trace("is variable: {}", opService.getService());
 		// Postpone to next iteration
 		return new QueryIterRepeatApply(input, execCxt) {
 			@Override
 			protected QueryIterator nextStage(Binding binding) {
-				Op op2 = QC.substitute(opService, binding);
+				Op op2 = QC.substitute(op, binding);
 				QueryIterator thisStep = QueryIterSingleton.create(binding, this.getExecContext());
 				QueryIterator cIter = QC.execute(op2, thisStep, super.getExecContext());
 				cIter = new QueryIterDefaulting(cIter, binding, this.getExecContext());
@@ -218,31 +200,23 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (this.execCxt.getClass() != FacadeXExecutionContext.class) {
 			return super.execute(opBGP, input);
 		}
+
 		ensureReadingTxn(this.execCxt.getDataset());
 		QueryIterator input2 = executeMagicProperties(opBGP, input);
 
 		try {
 			Properties p = PropertyUtils.extractPropertiesFromOp(opBGP);
 			if (p.size() > 0) {
-				// if we have FX properties we at least need to excludeFXProperties()
-				DatasetGraph dg;
-				if (this.execCxt.getDataset().isEmpty()) {
-					// we only need to call getDatasetGraph() if we have an empty one
-					// otherwise we could triplify the same data multiple times
-					dg = dgc.getDatasetGraph(PropertyUtils.getTriplifier(p, triplifierRegister), p, opBGP);
-				} else {
-					dg = this.execCxt.getDataset();
-				}
-
-				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2, getFacadeXExecutionContext(p, dg));
+				p.setProperty(IRIArgument.OP_SERVICE_SILENT.toString(), Boolean.toString(((FacadeXExecutionContext) this.execCxt).isSilent()));
+				return executeDefault(opBGP, input2, p);
 			}
 		} catch (UnboundVariableException e) {
 			return catchUnboundVariableException(opBGP, opBGP, QC.executeDirect(extractFakePattern(opBGP).getPattern(), input2, execCxt), e);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
-				 ClassNotFoundException | IOException e) {
-			logger.error(e.getMessage());
-		}
-		return super.execute(excludeOpPropFunction(opBGP), input2);
+				 ClassNotFoundException | IOException | TriplifierHTTPException e) {
+			logger.error("An error occurred: {}", e.getMessage());
+			throw new RuntimeException(e);
+		} return super.execute(excludeOpPropFunction(opBGP), input2);
 	}
 
 	private void ensureReadingTxn(DatasetGraph dg) {
@@ -254,6 +228,45 @@ public class FacadeXOpExecutor extends OpExecutor {
 			logger.debug("begin read txn");
 			dg.begin(TxnType.READ);
 		}
+	}
+
+
+	private QueryIterator executeDefault(Op op, QueryIterator input, Properties p) throws TriplifierHTTPException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
+		Triplifier t = PropertyUtils.getTriplifier(p, triplifierRegister);
+		if (op instanceof OpBGP) {
+			OpBGP opBGP = (OpBGP) op;
+			// if we have FX properties we at least need to excludeFXProperties()
+			DatasetGraph dg;
+			if (this.execCxt.getDataset().isEmpty()) {
+				// we only need to call getDatasetGraph() if we have an empty one
+				// otherwise we could triplify the same data multiple times
+				dg = dgc.getDatasetGraph(t, p, opBGP);
+			} else {
+				dg = this.execCxt.getDataset();
+			}
+			return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input, getFacadeXExecutionContext(p, dg));
+		} else if (op instanceof OpService) {
+			if (t == null) {
+				logger.warn("No triplifier found");
+				return QueryIterNullIterator.create(execCxt);
+			}
+			OpService opService = (OpService) op;
+			if (Triplifier.getSliceArgument(p)) {
+				// Execute with slicing
+				if (t instanceof Slicer) {
+					logger.trace("Execute with slicing");
+					return new QueryIterSlicer(execCxt, input, t, p, opService);
+				} else {
+					logger.warn("Slicing is not supported by triplifier: {}", t.getClass().getName());
+				}
+			}
+
+			// Execute with default, bulk method
+			DatasetGraph dg = dgc.getDatasetGraph(t, p, opService.getSubOp());
+			ensureReadingTxn(dg);
+			return QC.execute(opService.getSubOp(), input, getFacadeXExecutionContext(p, dg));
+		}
+		throw new RuntimeException("Couldn't execute Op of class " + op.getClass().getName());
 	}
 
 }
