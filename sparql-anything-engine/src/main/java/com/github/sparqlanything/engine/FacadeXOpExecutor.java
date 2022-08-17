@@ -86,12 +86,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
-		logger.trace("SERVICE uri: {} {}", opService.getService(), opService);
-		if (opService.getService().isVariable()) return postponeService(opService, input);
+		if (opService.getService().isVariable()) return postpone(opService, input);
 		if (opService.getService().isURI() && isFacadeXURI(opService.getService().getURI())) {
 			logger.trace("Facade-X uri: {}", opService.getService());
 			try {
-
 				Properties p = PropertyUtils.getProperties(opService.getService().getURI(), opService);
 				Triplifier t = PropertyUtils.getTriplifier(p, triplifierRegister);
 
@@ -121,25 +119,29 @@ public class FacadeXOpExecutor extends OpExecutor {
 				logger.error("An error occurred: {}", e.getMessage());
 				throw new RuntimeException(e);
 			} catch (UnboundVariableException e) {
-				// Proceed with the next operation
-				OpBGP fakeBGP = extractFakePattern(e.getOpBGP());
-				if (e.getOpTable() != null) {
-					logger.trace("Executing table");
-					QueryIterator qIterT = e.getOpTable().getTable().iterator(execCxt);
-					QueryIterator qIter = Join.join(input, qIterT, execCxt);
-					return postponeService(opService, qIter);
-				} else if (e.getOpExtend() != null) {
-					logger.trace("Executing op extend");
-					QueryIterator qIter = exec(e.getOpExtend().getSubOp(), input);
-					qIter = new QueryIterAssign(qIter, e.getOpExtend().getVarExprList(), execCxt, true);
-					return postponeService(opService, qIter);
-				}
-				logger.trace("Executing fake pattern {}", fakeBGP);
-				return postponeService(opService, QC.execute(fakeBGP, input, execCxt));
+				return catchUnboundVariableException(opService,e.getOpBGP(), input, e);
 			}
 		}
 		logger.trace("Not a Variable and not a IRI: {}", opService.getService());
 		return super.execute(opService, input);
+	}
+
+	private QueryIterator catchUnboundVariableException(Op op, OpBGP opBGP, QueryIterator input, UnboundVariableException e) {
+		// Proceed with the next operation
+		OpBGP fakeBGP = extractFakePattern(opBGP);
+		if (e.getOpTable() != null) {
+			logger.trace("Executing table");
+			QueryIterator qIterT = e.getOpTable().getTable().iterator(execCxt);
+			QueryIterator qIter = Join.join(input, qIterT, execCxt);
+			return postpone(op, qIter);
+		} else if (e.getOpExtend() != null) {
+			logger.trace("Executing op extend");
+			QueryIterator qIter = exec(e.getOpExtend().getSubOp(), input);
+			qIter = new QueryIterAssign(qIter, e.getOpExtend().getVarExprList(), execCxt, true);
+			return postpone(op, qIter);
+		}
+		logger.trace("Executing fake pattern {}", fakeBGP);
+		return postpone(op, QC.execute(fakeBGP, input, execCxt));
 	}
 
 	private FacadeXExecutionContext getFacadeXExecutionContext(Properties p, DatasetGraph dg) {
@@ -152,8 +154,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return ec;
 	}
 
-	private QueryIterator postponeService(final OpService opService, QueryIterator input) {
-		logger.trace("is variable: {}", opService.getService());
+	private QueryIterator postpone(final Op opService, QueryIterator input) {
+//		logger.trace("is variable: {}", opService.getService());
 		// Postpone to next iteration
 		return new QueryIterRepeatApply(input, execCxt) {
 			@Override
@@ -167,20 +169,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 		};
 	}
 
-	private QueryIterator postponeBGP(final OpBGP opBGP, QueryIterator input) {
-		// Postpone to next iteration
-		return new QueryIterRepeatApply(input, execCxt) {
-			@Override
-			protected QueryIterator nextStage(Binding binding) {
-				logger.trace(Utils.bindingToString(binding));
-				Op op2 = QC.substitute(opBGP, binding);
-				QueryIterator thisStep = QueryIterSingleton.create(binding, this.getExecContext());
-				QueryIterator cIter = QC.execute(op2, thisStep, super.getExecContext());
-				cIter = new QueryIterDefaulting(cIter, binding, this.getExecContext());
-				return cIter;
-			}
-		};
-	}
 
 
 	private OpBGP extractFakePattern(OpBGP bgp) {
@@ -222,11 +210,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (this.execCxt.getClass() != FacadeXExecutionContext.class) {
 			return super.execute(opBGP, input);
 		}
-
 		ensureReadingTxn(this.execCxt.getDataset());
-
 		this.execCxt.getDataset().listGraphNodes().forEachRemaining(g -> logger.trace("Graph {}", g.toString()));
-
 		logger.trace("executing  BGP {}", opBGP.toString());
 		logger.trace("Size: {} {}", this.execCxt.getDataset().size(), this.execCxt.getDataset().getDefaultGraph().size());
 
@@ -256,9 +241,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 				return QC.execute(excludeOpPropFunction(excludeFXProperties(opBGP)), input2, getFacadeXExecutionContext(p, dg));
 			}
 		} catch (UnboundVariableException e) {
-			logger.trace("Unbound variables");
-			OpBGP fakeBGP = extractFakePattern(opBGP);
-			return postponeBGP(excludeOpPropFunction(opBGP), QC.executeDirect(fakeBGP.getPattern(), input2, execCxt));
+//			logger.trace("Unbound variables");
+//			OpBGP fakeBGP = extractFakePattern(opBGP);
+//			return postpone(excludeOpPropFunction(opBGP), QC.executeDirect(fakeBGP.getPattern(), input2, execCxt));
+			return catchUnboundVariableException(opBGP,opBGP, QC.executeDirect( extractFakePattern(opBGP).getPattern(), input2, execCxt), e);
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
 				 ClassNotFoundException | IOException e) {
 			logger.error(e.getMessage());
