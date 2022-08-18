@@ -125,7 +125,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 			List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
 			if (!magicPropertyTriples.isEmpty()) {
 				// execute magic properties and bgp without FacadeX magic properties
-				Utils.ensureReadingTxn(this.execCxt.getDataset());
 				return super.execute(Utils.excludeOpPropFunction(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples));
 			} else {
 				// execute BGP by excluding FX properties
