@@ -1,0 +1,25 @@
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+
+SELECT * {
+
+    SERVICE<x-sparql-anything:%s> {
+
+        # retrieve the function name
+        ?doc a xyz:Document .
+        ?doc ?slot ?h .
+        ?h a xyz:Heading ; rdf:_1 ?functionName ; xyz:level 3 .
+
+        # retrieve the query
+        BIND(fx:forward(?slot, 7) AS ?slotQuery)
+        ?doc ?slotQuery ?qContainer .
+        ?qContainer a xyz:FencedCodeBlock ; rdf:_1 ?query .
+
+        # retrieve the result
+        BIND(fx:forward(?slot, 9) AS ?slotResult)
+        ?doc ?slotResult ?resultContainer .
+        ?resultContainer a xyz:FencedCodeBlock ; rdf:_1 ?result .
+
+    }
+}
