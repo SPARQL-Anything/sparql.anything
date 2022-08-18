@@ -97,7 +97,7 @@ public class Utils {
 		};
 	}
 
-	static List<Triple> getPropFuncTriples(BasicPattern e) {
+	static List<Triple> getFacadeXMagicPropertyTriples(BasicPattern e) {
 	   List<Triple> result = new ArrayList<>();
 	   e.forEach(t -> {
 		   if (isFacadeXMagicPropertyNode(t.getPredicate())) {

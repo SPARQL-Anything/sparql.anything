@@ -122,11 +122,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 		// check that the BGP is within a FacadeX-SERVICE clause
 		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {
 			// check that the BGP contains FacadeX Magic properties
-			Utils.ensureReadingTxn(this.execCxt.getDataset());
-			List<Triple> propFuncTriples = Utils.getPropFuncTriples(opBGP.getPattern());
-			if (!propFuncTriples.isEmpty()) {
+			List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
+			if (!magicPropertyTriples.isEmpty()) {
 				// execute magic properties and bgp without FacadeX magic properties
-				return super.execute(Utils.excludeOpPropFunction(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, propFuncTriples));
+				Utils.ensureReadingTxn(this.execCxt.getDataset());
+				return super.execute(Utils.excludeOpPropFunction(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples));
 			} else {
 				// execute BGP by excluding FX properties
 				return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(this.execCxt.getDataset()));
