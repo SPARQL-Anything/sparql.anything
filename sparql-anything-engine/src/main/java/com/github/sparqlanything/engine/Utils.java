@@ -121,7 +121,7 @@ public class Utils {
 		return new OpBGP(pattern);
 	}
 
-	static OpBGP excludeOpPropFunction(OpBGP bgp) {
+	static OpBGP excludeMagicPropertyTriples(OpBGP bgp) {
 		BasicPattern result = new BasicPattern();
 		for (Triple t : bgp.getPattern().getList()) {
 			if (isFacadeXMagicPropertyNode(t.getPredicate())) continue;
