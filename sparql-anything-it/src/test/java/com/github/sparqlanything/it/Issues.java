@@ -582,5 +582,36 @@ public class Issues {
 	}
 
 
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/292
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue296() throws URISyntaxException, IOException {
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		Model m;
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue295.sparql").toURI(),
+				StandardCharsets.UTF_8);
+//		String location = getClass().getClassLoader().getResource("issues/STOPS.json").toURI().toString();
+//		queryStr = queryStr.replace("%%%LOCATION%%%", location);
+
+		query = QueryFactory.create(queryStr);
+
+		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+		System.out.println(ResultSetFormatter.asText(qExec.execSelect()));
+
+
+	}
+
+
 
 }

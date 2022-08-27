@@ -1,0 +1,12 @@
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?name ?surname ?movie
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simpleArray.json,slice=true,ondisk=/tmp>
+      { ?p  xyz:name     ?name ;
+            xyz:surname  ?surname ;
+            xyz:movie    ?movie
+      }
+  }
