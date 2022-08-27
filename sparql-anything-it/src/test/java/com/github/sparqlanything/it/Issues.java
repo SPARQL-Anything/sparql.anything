@@ -589,7 +589,7 @@ public class Issues {
 	 * @throws IOException
 	 */
 	@Test
-	public void testIssue296() throws URISyntaxException, IOException {
+	public void testIssue295() throws URISyntaxException, IOException {
 		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
