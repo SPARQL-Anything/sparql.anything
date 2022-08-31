@@ -39,23 +39,30 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 	protected static final Logger log = LoggerFactory.getLogger(BaseFacadeXGraphBuilder.class);
 
 	// when using a TDB2 this is defined 
-	protected static Dataset dataset = null; // TODO making this static is a kludge maybe
-	protected final DatasetGraph datasetGraph;
-	protected static String previousTDB2Path = "";
+	protected Dataset dataset = null; // TODO making this static is a kludge maybe
+	protected  DatasetGraph datasetGraph;
+	protected String previousTDB2Path = "";
 
 	public BaseFacadeXGraphBuilder(String resourceId, Properties properties) {
-		this(resourceId, null, properties);
+		super(resourceId, properties);
+		datasetGraph = getDatasetGraph(properties);
+		datasetGraph.begin(TxnType.WRITE);
 	}
 
+
+//	public BaseFacadeXGraphBuilder(String resourceId, Properties properties) {
+//		this(resourceId, null, properties);
+//	}
+
 	// this is where all graph (graphs that we actually put triples in) creation happens
-	public static DatasetGraph getDatasetGraph(Properties properties){
+	private DatasetGraph getDatasetGraph(Properties properties){
 		DatasetGraph dsg;
 		String TDB2Path = "" ;
 		boolean ONDISK = properties.containsKey(IRIArgument.ONDISK.toString());
 		boolean ONDISK_REUSE = properties.containsKey(IRIArgument.ONDISK_REUSE.toString()); // TODO any string counts as "true"
 
 		if(ONDISK){
-			if(BaseFacadeXGraphBuilder.previousTDB2Path != "" && ONDISK_REUSE){
+			if(previousTDB2Path != "" && ONDISK_REUSE){
 				TDB2Path = previousTDB2Path ;
 			}else{
 				try{
@@ -71,7 +78,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 						TDB2Path = Files.createTempDirectory(Paths.get("/tmp"),"").toString();
 					}
 					// store the TDB2Path for next time (in case we want to reuse it or delete it)
-					BaseFacadeXGraphBuilder.previousTDB2Path = TDB2Path;
+					previousTDB2Path = TDB2Path;
 				}catch(Exception ex){
 					log.error(ex.toString());
 				}
@@ -93,15 +100,15 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 		return dsg;
 	}
 
-	protected BaseFacadeXGraphBuilder(String resourceId, DatasetGraph ds, Properties properties) {
-		super(resourceId, properties);
-		this.datasetGraph = BaseFacadeXGraphBuilder.getDatasetGraph(properties);
-
-		// the single place to begin write txns
-		log.debug("begin write txn");
-		this.datasetGraph.begin(TxnType.WRITE);
-
-	}
+//	protected BaseFacadeXGraphBuilder(String resourceId, DatasetGraph ds, Properties properties) {
+//		super(resourceId, properties);
+//		this.datasetGraph = new BaseFacadeXGraphBuilder().getDatasetGraph(properties);
+//
+//		// the single place to begin write txns
+//		log.debug("begin write txn");
+//		this.datasetGraph.begin(TxnType.WRITE);
+//
+//	}
 
 //	@Deprecated
 //	public void add(Resource subject, Property predicate, RDFNode object) {
