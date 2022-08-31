@@ -91,8 +91,10 @@ public class DatasetGraphCreator {
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
 			URL url = Triplifier.instantiateURL(urlLocation);
+			dg.begin(ReadWrite.WRITE);
 			createMetadataGraph(dg, p);
 			createAuditGraph(dg, p, url);
+			dg.commit();
 		}
 		// Remember the triplified data
 		if (!executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
