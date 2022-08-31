@@ -40,7 +40,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 
 	// when using a TDB2 this is defined 
 	protected Dataset dataset = null; // TODO making this static is a kludge maybe
-	protected  DatasetGraph datasetGraph;
+	protected DatasetGraph datasetGraph;
 	protected String previousTDB2Path = "";
 
 	public BaseFacadeXGraphBuilder(String resourceId, Properties properties) {
@@ -55,47 +55,46 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 //	}
 
 	// this is where all graph (graphs that we actually put triples in) creation happens
-	private DatasetGraph getDatasetGraph(Properties properties){
+	private DatasetGraph getDatasetGraph(Properties properties) {
 		DatasetGraph dsg;
-		String TDB2Path = "" ;
+		String TDB2Path = "";
 		boolean ONDISK = properties.containsKey(IRIArgument.ONDISK.toString());
 		boolean ONDISK_REUSE = properties.containsKey(IRIArgument.ONDISK_REUSE.toString()); // TODO any string counts as "true"
 
-		if(ONDISK){
-			if(previousTDB2Path != "" && ONDISK_REUSE){
-				TDB2Path = previousTDB2Path ;
-			}else{
-				try{
-					if(previousTDB2Path!=""){
-						log.debug("deleting previous TDB2 at: {}",previousTDB2Path);
-						FileUtils.deleteDirectory(new File(previousTDB2Path)) ;
+		if (ONDISK) {
+			if (!previousTDB2Path.equals("") && ONDISK_REUSE) {
+				TDB2Path = previousTDB2Path;
+			} else {
+				try {
+					if (!previousTDB2Path.equals("")) {
+						log.debug("deleting previous TDB2 at: {}", previousTDB2Path);
+						FileUtils.deleteDirectory(new File(previousTDB2Path));
 					}
-					if(Files.isDirectory(Paths.get(properties.getProperty(IRIArgument.ONDISK.toString())))){
-						TDB2Path = Files.createTempDirectory(Paths.get(properties.getProperty(IRIArgument.ONDISK.toString())),"").toString();
-					}else{
-						log.debug("the specified path is not a directory: {}\nusing /tmp instead", 
-								properties.getProperty(IRIArgument.ONDISK.toString()));
-						TDB2Path = Files.createTempDirectory(Paths.get("/tmp"),"").toString();
+					if (Files.isDirectory(Paths.get(properties.getProperty(IRIArgument.ONDISK.toString())))) {
+						TDB2Path = Files.createTempDirectory(Paths.get(properties.getProperty(IRIArgument.ONDISK.toString())), "").toString();
+					} else {
+						log.debug("the specified path is not a directory: {}\nusing /tmp instead", properties.getProperty(IRIArgument.ONDISK.toString()));
+						TDB2Path = Files.createTempDirectory(Paths.get("/tmp"), "").toString();
 					}
 					// store the TDB2Path for next time (in case we want to reuse it or delete it)
 					previousTDB2Path = TDB2Path;
-				}catch(Exception ex){
+				} catch (Exception ex) {
 					log.error(ex.toString());
 				}
 			}
 			log.debug("using on disk TBD2 at: {}", TDB2Path);
 			dataset = TDB2Factory.connectDataset(TDB2Path);
 			dsg = dataset.asDatasetGraph();
-			if(dsg.isInTransaction()){
+			if (dsg.isInTransaction()) {
 				// if we are reusing the same TDB2 then this will be true so
 				// end the read txn from the previous query
 				dsg.end();
 			}
-		}else{
+		} else {
 			log.debug("using in memory DatasetGraph");
 			// i don't think we ever reuse the same in memory DatasetGraph
 			// so no need to end the previous query's read txn
-			dsg = DatasetGraphFactory.create() ;
+			dsg = DatasetGraphFactory.create();
 		}
 		return dsg;
 	}
@@ -123,7 +122,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 
-		if(p_null_string != null && object.isLiteral() && object.getLiteral().toString().equals(p_null_string)){
+		if (p_null_string != null && object.isLiteral() && object.getLiteral().toString().equals(p_null_string)) {
 			return false;
 		}
 		Triple t = new Triple(subject, predicate, object);
@@ -145,7 +144,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 
 	@Override
 	public DatasetGraph getDatasetGraph() {
-		if(dataset == null){
+		if (dataset == null) {
 			// we have an in memory DatasetGraph
 			datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
 			// we are unable to do that ^ with an on disk DatasetGraph (TDB2)
