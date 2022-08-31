@@ -19,7 +19,6 @@ package com.github.sparqlanything.model;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.query.Dataset;
 import org.apache.jena.query.TxnType;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -38,10 +37,10 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 
 	protected static final Logger log = LoggerFactory.getLogger(BaseFacadeXGraphBuilder.class);
 
-	// when using a TDB2 this is defined 
-	protected Dataset dataset = null; // TODO making this static is a kludge maybe
 	protected DatasetGraph datasetGraph;
 	protected String previousTDB2Path = "";
+
+	private boolean isTBD = false;
 
 	public BaseFacadeXGraphBuilder(String resourceId, Properties properties) {
 		super(resourceId, properties);
@@ -49,10 +48,6 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 		datasetGraph.begin(TxnType.WRITE);
 	}
 
-
-//	public BaseFacadeXGraphBuilder(String resourceId, Properties properties) {
-//		this(resourceId, null, properties);
-//	}
 
 	// this is where all graph (graphs that we actually put triples in) creation happens
 	private DatasetGraph getDatasetGraph(Properties properties) {
@@ -83,8 +78,8 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 				}
 			}
 			log.debug("using on disk TBD2 at: {}", TDB2Path);
-			dataset = TDB2Factory.connectDataset(TDB2Path);
-			dsg = dataset.asDatasetGraph();
+			isTBD = true;
+			dsg = TDB2Factory.connectDataset(TDB2Path).asDatasetGraph();
 			if (dsg.isInTransaction()) {
 				// if we are reusing the same TDB2 then this will be true so
 				// end the read txn from the previous query
@@ -144,7 +139,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 
 	@Override
 	public DatasetGraph getDatasetGraph() {
-		if (dataset == null) {
+		if (!isTBD) {
 			// we have an in memory DatasetGraph
 			datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
 			// we are unable to do that ^ with an on disk DatasetGraph (TDB2)
