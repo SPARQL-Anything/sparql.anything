@@ -101,7 +101,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 		FacadeXExecutionContext ec;
 		if (p.containsKey(IRIArgument.ONDISK.toString())) {
 			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
-			System.err.println(dg.getUnionGraph().size());
 		} else {
 			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 		}
