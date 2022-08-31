@@ -40,9 +40,9 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class Issues {
+public class IssuesTest {
 
-	private static final Logger log = LoggerFactory.getLogger(Issues.class);
+	private static final Logger log = LoggerFactory.getLogger(IssuesTest.class);
 
 	@Test
 	public void issue75() throws URISyntaxException {
