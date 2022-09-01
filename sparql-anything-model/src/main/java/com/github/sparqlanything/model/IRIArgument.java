@@ -18,17 +18,27 @@ package com.github.sparqlanything.model;
 
 public enum IRIArgument {
 
-	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace"), ROOT("root"), BLANK_NODES("blank-nodes"), TRIPLIFIER("triplifier"), CHARSET("charset"), METADATA("metadata"), CONTENT("content"), FROM_ARCHIVE("from-archive"), TRIM_STRINGS("trim-strings"), NULL_STRING("null-string"), STRATEGY("strategy"), SLICE("slice"), COMMAND("command"), USE_RDFS_MEMBER("use-rdfs-member"), ONDISK_REUSE("ondisk.reuse"), ONDISK("ondisk"), OP_SERVICE_SILENT("opservice.silent");
+	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace", "http://sparql.xyz/facade-x/data/"), ROOT("root"), BLANK_NODES("blank-nodes", "true"), TRIPLIFIER("triplifier"), CHARSET("charset", "UTF-8"), METADATA("metadata", "false"), CONTENT("content"), FROM_ARCHIVE("from-archive"), TRIM_STRINGS("trim-strings", "false"), NULL_STRING("null-string"), STRATEGY("strategy", "1"), SLICE("slice", "false"), COMMAND("command"), USE_RDFS_MEMBER("use-rdfs-member", "false"), ONDISK_REUSE("ondisk.reuse"), ONDISK("ondisk"), OP_SERVICE_SILENT("opservice.silent");
 
 	private final String s;
+	private String defaultValue;
 
 	IRIArgument(String s) {
 		this.s = s;
 	}
 
+	IRIArgument(String s, String defaultValue) {
+		this.s = s;
+		this.defaultValue = defaultValue;
+	}
+
 	@Override
 	public String toString() {
 		return s;
+	}
+
+	public String getDefaultValue(){
+		return defaultValue;
 	}
 
 }
