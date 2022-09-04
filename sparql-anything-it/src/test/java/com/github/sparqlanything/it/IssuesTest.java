@@ -610,9 +610,15 @@ public class IssuesTest {
 		query = QueryFactory.create(queryStr);
 
 		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
-		System.out.println(ResultSetFormatter.asText(qExec.execSelect()));
+		ResultSet rs = qExec.execSelect();
+		Set<String> expectedNames = Sets.newHashSet("Vincent", "Jules", "Beatrix");
+		Set<String> actualNames = new HashSet<>();
+		while(rs.hasNext()){
+			QuerySolution qs = rs.next();
+			actualNames.add(qs.get("name").asLiteral().getValue().toString());
+		}
 		FileUtils.deleteDirectory(tmpTBDFolder);
-		System.out.println("Deleting "+tmpTBDFolder.getAbsolutePath());
+		assertEquals(expectedNames,actualNames);
 	}
 
 
