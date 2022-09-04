@@ -159,7 +159,7 @@ public class DatasetGraphCreator {
 	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
 		DatasetGraph dg;
 
-		Integer strategy = PropertyUtils.detectStrategy(p, execCxt);
+		Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
 //		null;
 //		// Local value for strategy?
 //		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());

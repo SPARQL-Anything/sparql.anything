@@ -139,10 +139,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 	protected QueryIterator executeDefaultFacadeX(OpService opService, QueryIterator input) throws TriplifierHTTPException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, UnboundVariableException {
 
 		// extract properties from service URI
-		Properties p = PropertyUtils.extractPropertiesFromOp(opService);
+		Properties p = PropertyExtractor.extractPropertiesFromOp(opService);
 
 		// guess triplifier
-		Triplifier t = PropertyUtils.getTriplifier(p, triplifierRegister);
+		Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
 
 		if (t == null) {
 			logger.warn("No triplifier found");

@@ -77,7 +77,7 @@ public class QueryIterSlicer extends QueryIter {
 				logger.debug("Executing on slice: {}", slice.iteration());
 				// Execute and set current
 				FacadeXGraphBuilder builder;
-				Integer strategy = PropertyUtils.detectStrategy(p,execCxt);
+				Integer strategy = PropertyExtractor.detectStrategy(p,execCxt);
 				if (strategy == 1) {
 					logger.trace("Executing: {} [strategy={}]", p, strategy);
 					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);

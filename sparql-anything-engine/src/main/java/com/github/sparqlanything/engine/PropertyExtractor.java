@@ -34,9 +34,9 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
-public class PropertyUtils {
+class PropertyExtractor {
 
-	private static final Logger logger = LoggerFactory.getLogger(PropertyUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(PropertyExtractor.class);
 
 	static int detectStrategy(Properties p, ExecutionContext execCxt) {
 		Integer strategy = null;
@@ -181,52 +181,5 @@ public class PropertyUtils {
 		return properties;
 	}
 
-	public static boolean getBooleanProperty(Properties p, String key, boolean defaultValue) {
-		if (p.containsKey(key)) {
-			return Boolean.parseBoolean(p.getProperty(key));
-		}
-		return defaultValue;
-	}
 
-	public static boolean getBooleanProperty(Properties p, IRIArgument key, boolean defaultValue) {
-		return getBooleanProperty(p, key.toString(), defaultValue);
-	}
-
-	public static boolean getBooleanProperty(Properties p, IRIArgument key) {
-		return getBooleanProperty(p, key.toString(), Boolean.parseBoolean(key.getDefaultValue()));
-	}
-
-	public static String getStringProperty(Properties p, String key, String defaultValue) {
-		return p.getProperty(key, defaultValue);
-	}
-
-	public static String getStringProperty(Properties p, IRIArgument key, String defaultValue) {
-		return getStringProperty(p, key.toString(), defaultValue);
-	}
-
-	public static String getStringProperty(Properties p, IRIArgument key) {
-		if (key.getDefaultValue() != null) {
-			return getStringProperty(p, key, key.getDefaultValue());
-		}
-		return getStringProperty(p, key, null);
-	}
-
-
-	public static Integer getIntegerProperty(Properties p, String key, Integer defaultValue) {
-		if (p.containsKey(key)) {
-			return Integer.parseInt(p.getProperty(key));
-		}
-		return defaultValue;
-	}
-
-	public static Integer getIntegerProperty(Properties p, IRIArgument key, Integer defaultValue) {
-		return getIntegerProperty(p, key.toString(), defaultValue);
-	}
-
-	public static Integer getIntegerProperty(Properties p, IRIArgument key) {
-		if (key.getDefaultValue() != null) {
-			return getIntegerProperty(p, key, Integer.parseInt(key.getDefaultValue()));
-		}
-		return getIntegerProperty(p, key, null);
-	}
 }
