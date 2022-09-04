@@ -38,16 +38,16 @@ import java.util.Properties;
 
 public class QueryIterSlicer extends QueryIter {
 
-	private QueryIterator current = null;
+	private static final Logger logger = LoggerFactory.getLogger(QueryIterSlicer.class);
+	final List<Binding> elements;
 	private final Iterator<Slice> iterator;
-	private Properties p;
 	private final ExecutionContext execCxt;
 	private final String resourceId;
 	private final OpService opService;
-	private static final Logger logger = LoggerFactory.getLogger(QueryIterSlicer.class);
 	final private Slicer slicer;
-	final List<Binding> elements;
 	private final QueryIterator input;
+	private QueryIterator current = null;
+	private final Properties p;
 
 	public QueryIterSlicer(ExecutionContext execCxt, QueryIterator input, Triplifier t, Properties properties, OpService opService) throws TriplifierHTTPException, IOException {
 		super(execCxt);
@@ -77,7 +77,7 @@ public class QueryIterSlicer extends QueryIter {
 				logger.debug("Executing on slice: {}", slice.iteration());
 				// Execute and set current
 				FacadeXGraphBuilder builder;
-				Integer strategy = PropertyExtractor.detectStrategy(p,execCxt);
+				Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
 				if (strategy == 1) {
 					logger.trace("Executing: {} [strategy={}]", p, strategy);
 					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
@@ -88,8 +88,13 @@ public class QueryIterSlicer extends QueryIter {
 				//FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
 				slicer.triplify(slice, p, builder);
 				DatasetGraph dg = builder.getDatasetGraph();
+				dg.commit();
+				dg.end();
+
 				logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
-				FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+				Utils.ensureReadingTxn(dg);
+//				FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+				FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
 				logger.trace("Op {}", opService.getSubOp());
 				logger.trace("OpName {}", opService.getSubOp().getName());
 				/**

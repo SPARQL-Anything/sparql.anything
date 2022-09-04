@@ -18,6 +18,7 @@ package com.github.sparqlanything.it;
 
 import com.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.compress.utils.Sets;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
@@ -30,6 +31,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -598,18 +600,19 @@ public class IssuesTest {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
-		Model m;
+		File tmpTBDFolder = new File(getClass().getClassLoader().getResource(".").getPath(), "testIssue295");
 		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue295.sparql").toURI(),
 				StandardCharsets.UTF_8);
-//		String location = getClass().getClassLoader().getResource("issues/STOPS.json").toURI().toString();
-//		queryStr = queryStr.replace("%%%LOCATION%%%", location);
+		String location = getClass().getClassLoader().getResource("issues/issue295.json").toURI().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", location);
+		queryStr = queryStr.replace("%%%TDB_PATH%%%", tmpTBDFolder.getAbsolutePath());
 
 		query = QueryFactory.create(queryStr);
 
 		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
 		System.out.println(ResultSetFormatter.asText(qExec.execSelect()));
-
-
+		FileUtils.deleteDirectory(tmpTBDFolder);
+		System.out.println("Deleting "+tmpTBDFolder.getAbsolutePath());
 	}
 
 

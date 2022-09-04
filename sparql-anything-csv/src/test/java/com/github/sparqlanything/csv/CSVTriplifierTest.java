@@ -20,6 +20,7 @@ import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -133,7 +134,7 @@ public class CSVTriplifierTest {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 //		properties.setProperty("ondisk", "/tmp");
-		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "/tmp/");
+		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "testOndiskGraph1");
 		tmp.mkdirs();
 		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		URL csv1 = getClass().getClassLoader().getResource("./test3.csv");
@@ -158,6 +159,7 @@ public class CSVTriplifierTest {
 			fail("expected 21 quads but found " + count);
 		}
 		graph.end();
+		FileUtils.deleteDirectory(tmp);
 	}
 
 	@Test
@@ -165,7 +167,7 @@ public class CSVTriplifierTest {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 		//properties.setProperty("ondisk", "/tmp");
-		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "/tmp/");
+		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "testWithOnDiskGraph2");
 		tmp.mkdirs();
 		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
@@ -188,5 +190,6 @@ public class CSVTriplifierTest {
 			fail("expected 13 quads but found " + count);
 		}
 		graph.end();
+		FileUtils.deleteDirectory(tmp);
 	}
 }

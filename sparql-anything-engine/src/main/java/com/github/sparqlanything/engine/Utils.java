@@ -17,6 +17,7 @@
 package com.github.sparqlanything.engine;
 
 import com.github.sparqlanything.facadeiri.FacadeIRIParser;
+import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -45,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 public class Utils {
 
@@ -155,5 +157,16 @@ public class Utils {
 			logger.debug("begin read txn");
 			dg.begin(TxnType.READ);
 		}
+	}
+
+
+	public static  FacadeXExecutionContext getFacadeXExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
+		FacadeXExecutionContext ec;
+		if (p.containsKey(IRIArgument.ONDISK.toString())) {
+			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
+		} else {
+			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+		}
+		return ec;
 	}
 }

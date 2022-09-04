@@ -16,7 +16,6 @@
 
 package com.github.sparqlanything.engine;
 
-import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Slicer;
 import com.github.sparqlanything.model.Triplifier;
 import com.github.sparqlanything.model.TriplifierHTTPException;
@@ -97,16 +96,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return Utils.postpone(op, QC.execute(fakeBGP, input, execCxt), execCxt);
 	}
 
-	private FacadeXExecutionContext getFacadeXExecutionContext(Properties p, DatasetGraph dg) {
-		FacadeXExecutionContext ec;
-		if (p.containsKey(IRIArgument.ONDISK.toString())) {
-			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
-		} else {
-			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-		}
-		return ec;
-	}
-
 
 	private QueryIterator executeMagicProperties(QueryIterator input, List<Triple> propFuncTriples) {
 		QueryIterator input2 = input;
@@ -163,7 +152,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		DatasetGraph dg = dgc.getDatasetGraph(t, p, opService.getSubOp());
 		Utils.ensureReadingTxn(dg);
 
-		return QC.execute(opService.getSubOp(), input, getFacadeXExecutionContext(p, dg));
+		return QC.execute(opService.getSubOp(), input, Utils.getFacadeXExecutionContext(execCxt, p, dg));
 
 	}
 
