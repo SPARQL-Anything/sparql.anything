@@ -161,55 +161,35 @@ public class DocumentationExampleSandbox {
 		String queryString = "CONSTRUCT\n" + "  {\n" + "    GRAPH ?g { ?s ?p ?o }\n" + "  }\n" + "WHERE\n" + "  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book1.xlsx> { \n " + "      GRAPH ?g { ?s  ?p  ?o } }\n" + "  } ";
 		System.out.println(queryString);
 		Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
-		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
 
 		Dataset ds = DatasetFactory.createGeneral();
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
 		Dataset dd = QueryExecutionFactory.create(query, ds).execConstructDataset();
-		RDFDataMgr.write(System.out, dd, Lang.TRIG);
+//		RDFDataMgr.write(System.out, dd, Lang.TRIG);
 
 
 		// Query 2
 
-		queryString = "CONSTRUCT\n" + "  {\n" + "    GRAPH ?g { ?s ?p ?o }\n" + "  }\n" + "WHERE\n" + "  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book1.xlsx,spreadsheet.headers=true> { \n " + "      GRAPH ?g { ?s  ?p  ?o } }\n" + "  } ";
+		queryString = "CONSTRUCT \n" +
+				"  { \n" +
+				"    GRAPH ?g \n" +
+				"      { ?s ?p ?o .}\n" +
+				"  }\n" +
+				"WHERE\n" +
+				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book2.xlsx,spreadsheet.evaluate-formulas=true>\n" +
+				"      { GRAPH ?g\n" +
+				"          { ?s  ?p  ?o }\n" +
+				"      }\n" +
+				"  } ";
 
 		query = QueryFactory.create(queryString, Syntax.syntaxARQ);
 		System.out.println(query.toString(Syntax.defaultQuerySyntax));
 		dd = QueryExecutionFactory.create(query, ds).execConstructDataset();
 		RDFDataMgr.write(System.out, dd, Lang.TRIG);
 
-//		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
-//		m.setNsPrefixes(prefixes);
-//
-//		m.write(System.out, "TTL");
-
-		// Query 2
-//		queryString = "PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>\n" +
-//				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
-//				"PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-//				"\n" +
-//				"CONSTRUCT\n" +
-//				"  {\n" +
-//				"    ?s1 ?p1 ?o1 .\n" +
-//				"  }\n" +
-//				"WHERE\n" +
-//				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/example.tar>\n" +
-//				"      { fx:properties fx:archive.matches  \".*txt|.*csv\" .\n" +
-//				"        ?s        fx:anySlot            ?file1 .\n" +
-//				"        SERVICE <x-sparql-anything:> {\n" +
-//				"            fx:properties fx:location ?file1 .\n" +
-//				"            fx:properties fx:from-archive \"https://sparql-anything.cc/examples/example.tar\" .\n" +
-//				"            ?s1 ?p1 ?o1 .\n" +
-//				"        }\n" +
-//				"      }\n" +
-//				"  }";
-//		query = QueryFactory.create(queryString);
-//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
-//		m = QueryExecutionFactory.create(query, ds).execConstruct();
-//		m.setNsPrefixes(prefixes);
-//		m.write(System.out, "TTL");
 
 	}
 
@@ -929,12 +909,12 @@ public class DocumentationExampleSandbox {
 //		}
 
 //		archive();
-//		spreadsheet();
+		spreadsheet();
 //		doc();
 //		yaml();
 //		metadata();
 //		bibtex();
-		options();
+//		options();
 
 //		FileUtils.write(new File("/Users/lgu/Desktop/utf16.txt"), "UTF-16 test file", Charset.forName("UTF16"));
 	}
