@@ -34,6 +34,8 @@ public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
 		super.useDatasetGraph = true;
 	}
 
+
+
 	@Override
 	protected void properties(Properties properties) {
 
@@ -41,18 +43,29 @@ public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
 		if(name.getMethodName().equals("testNullString$1")){
 			properties.setProperty("null-string", "");
 		}
+
+		if(name.getMethodName().equals("testFormulaEvaluator")){
+			properties.setProperty(SpreadsheetTriplifier.PROPERTY_EVALUATE_FORMULAS, "true");
+		}
 	}
 
 	@Test
 	public void testNullString$1(){
-		RDFDataMgr.write(System.err, resultDatasetGraph, Lang.NQ);
+//		RDFDataMgr.write(System.err, resultDatasetGraph, Lang.NQ);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 
 	@Test
 	public void testNoNullString$1(){
-		RDFDataMgr.write(System.err, resultDatasetGraph, Lang.NQ);
+//		RDFDataMgr.write(System.err, resultDatasetGraph, Lang.NQ);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+
+	@Test
+	public void testFormulaEvaluator(){
+//		RDFDataMgr.write(System.err, resultDatasetGraph, Lang.NQ);
 		assertResultIsIsomorphicWithExpected();
 	}
 }

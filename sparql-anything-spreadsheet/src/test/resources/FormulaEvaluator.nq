@@ -1,0 +1,52 @@
+<http://www.example.org/documentSheet2_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "3.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://www.example.org/documentSheet2_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "4.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://www.example.org/documentSheet2_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "7.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://www.example.org/documentSheet1_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "A" .
+<http://www.example.org/documentSheet1_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "B" .
+<http://www.example.org/documentSheet1_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "C" .
+<http://www.example.org/documentSheet2_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "A" .
+<http://www.example.org/documentSheet2_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "B" .
+<http://www.example.org/documentSheet2_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "C" .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/documentSheet1_Row_1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/documentSheet1_Row_2> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> <http://www.example.org/documentSheet1_Row_3> .
+<http://www.example.org/documentSheet1_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "A1" .
+<http://www.example.org/documentSheet1_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "B1" .
+<http://www.example.org/documentSheet1_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "C1" .
+<http://www.example.org/documentSheet2_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "1.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://www.example.org/documentSheet2_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "2.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://www.example.org/documentSheet2_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "3.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/documentSheet2_Row_1> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/documentSheet2_Row_2> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> <http://www.example.org/documentSheet2_Row_3> .
+<http://www.example.org/documentSheet1_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "A2" .
+<http://www.example.org/documentSheet1_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "B2" .
+<http://www.example.org/documentSheet1_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "C2" .
+<http://www.example.org/documentSheet1_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "C1" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "B1" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "A1" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "C" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "B" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "A" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> <http://www.example.org/documentSheet1_Row_3> <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/documentSheet1_Row_2> <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/documentSheet1_Row_1> <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "C2" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "B2" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "A2" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet2_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "3.0"^^<http://www.w3.org/2001/XMLSchema#double> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "2.0"^^<http://www.w3.org/2001/XMLSchema#double> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "1.0"^^<http://www.w3.org/2001/XMLSchema#double> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> <http://www.example.org/documentSheet2_Row_3> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/documentSheet2_Row_2> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/documentSheet2_Row_1> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "C" <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "B" <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "A" <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "7.0"^^<http://www.w3.org/2001/XMLSchema#double> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "4.0"^^<http://www.w3.org/2001/XMLSchema#double> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "3.0"^^<http://www.w3.org/2001/XMLSchema#double> <http://www.example.org/documentSheet2> .
