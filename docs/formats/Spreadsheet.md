@@ -130,9 +130,10 @@ WHERE
 
 ### Summary
 
-|Option name|Description|Valid Values| Default Value |
-|-----------|-----------|------------|---------------|
-|spreadsheet.headers|It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.|true/false| false         |
+| Option name                   | Description                                                                                                                         | Valid Values | Default Value |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
+| spreadsheet.headers           | It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples. | true/false   | false         |
+| spreadsheet.evaluate-formulas | It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.                                                        | true/false   | false         |
 
 
 ### `spreadsheet.headers`
@@ -230,6 +231,89 @@ WHERE
                         "B2" ;
                 <http://sparql.xyz/facade-x/data/C>
                         "C2"
+              ]
+    ] .
+}
+```
+
+
+### `spreadsheet.evaluate-formulas`
+
+#### Description
+
+It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+false
+
+#### Examples
+
+##### Input
+
+### Data
+
+**Sheet1**
+
+| A   | B   | C        |
+|-----|-----|----------|
+| 1   | 2   | `=A2+B2` |
+| 3   | 4   | `=A3+B3` |
+
+
+
+Located at https://sparql-anything.cc/examples/Book2.xlsx
+
+##### Use Case 1: Construct the dataset by evaluating the formulas.
+
+###### Query
+
+```
+CONSTRUCT 
+  { 
+    GRAPH ?g 
+      { ?s ?p ?o .}
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book2.xlsx,spreadsheet.evaluate-formulas=true>
+      { GRAPH ?g
+          { ?s  ?p  ?o }
+      }
+  }
+```
+
+###### Result
+
+```turtle
+<https://sparql-anything.cc/examples/Book2.xlsx#Sheet1> {
+    [ a       <http://sparql.xyz/facade-x/ns/root> ;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "A" ;
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "B" ;
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "C"
+              ] ;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "1.0"^^<http://www.w3.org/2001/XMLSchema#double> ;
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "2.0"^^<http://www.w3.org/2001/XMLSchema#double> ;
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "3.0"^^<http://www.w3.org/2001/XMLSchema#double>
+              ] ;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "3.0"^^<http://www.w3.org/2001/XMLSchema#double> ;
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "4.0"^^<http://www.w3.org/2001/XMLSchema#double> ;
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "7.0"^^<http://www.w3.org/2001/XMLSchema#double>
               ]
     ] .
 }
