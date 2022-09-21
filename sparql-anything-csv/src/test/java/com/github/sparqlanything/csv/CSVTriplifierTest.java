@@ -37,6 +37,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -134,7 +136,7 @@ public class CSVTriplifierTest {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 //		properties.setProperty("ondisk", "/tmp");
-		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "testOndiskGraph1");
+		File tmp = Files.createTempDirectory(null).toFile();
 		tmp.mkdirs();
 		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		URL csv1 = getClass().getClassLoader().getResource("./test3.csv");
@@ -159,7 +161,7 @@ public class CSVTriplifierTest {
 			fail("expected 21 quads but found " + count);
 		}
 		graph.end();
-		FileUtils.deleteDirectory(tmp);
+		FileUtils.deleteQuietly(tmp);
 	}
 
 	@Test
@@ -167,7 +169,7 @@ public class CSVTriplifierTest {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 		//properties.setProperty("ondisk", "/tmp");
-		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "testWithOnDiskGraph2");
+		File tmp = Files.createTempDirectory(null).toFile();
 		tmp.mkdirs();
 		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
@@ -190,6 +192,6 @@ public class CSVTriplifierTest {
 			fail("expected 13 quads but found " + count);
 		}
 		graph.end();
-		FileUtils.deleteDirectory(tmp);
+		FileUtils.deleteQuietly(tmp);
 	}
 }
