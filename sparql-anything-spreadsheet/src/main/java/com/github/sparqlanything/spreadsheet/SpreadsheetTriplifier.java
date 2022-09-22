@@ -20,6 +20,8 @@ import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.PropertyUtils;
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 	public final static String PROPERTY_HEADERS = "spreadsheet.headers";
 	public final static String PROPERTY_EVALUATE_FORMULAS = "spreadsheet.evaluate-formulas";
+	public final static String PROPERTY_COMPOSITE_VALUES = "spreadsheet.composite-values";
 	private static final Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
 	private FormulaEvaluator evaluator;
 
@@ -49,7 +52,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 		}
 		String root = Triplifier.getRootArgument(properties);
 		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
-
+		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
 		AtomicBoolean headers = new AtomicBoolean();
 		try {
 			headers.set(Boolean.valueOf(properties.getProperty(PROPERTY_HEADERS, "false")));
@@ -64,12 +67,12 @@ public class SpreadsheetTriplifier implements Triplifier {
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = root + Triplifier.toSafeURIString(s.getSheetName());
 			String sheetRoot = dataSourceId;
-			populate(s, dataSourceId, sheetRoot, builder, headers.get(), evaluateFormulas);
+			populate(s, dataSourceId, sheetRoot, builder, headers.get(), evaluateFormulas, compositeValues);
 		});
 
 	}
 
-	private void populate(Sheet s, String dataSourceId, String root, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas) {
+	private void populate(Sheet s, String dataSourceId, String root, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues) {
 
 		// Add type Root
 		builder.addRoot(dataSourceId, root);
@@ -114,20 +117,29 @@ public class SpreadsheetTriplifier implements Triplifier {
 					int colid = 0;
 					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
 						Cell cell = record.getCell(cellNum);
-						Object value = extractCellValue(cell, evaluateFormulas);
-						colid++;
-						if (headers && headers_map.containsKey(colid)) {
-							builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
+						if(compositeValues){
+							String value = row + "_" + Integer.toString(cellNum);
+							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
+							colid++;
+							if (headers && headers_map.containsKey(colid)) {
+								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
+							} else {
+								builder.addValue(dataSourceId, row, colid, value);
+							}
 						} else {
-							builder.addValue(dataSourceId, row, colid, value);
+							Object value = extractCellValue(cell, evaluateFormulas);
+							colid++;
+							if (headers && headers_map.containsKey(colid)) {
+								builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
+							} else {
+								builder.addValue(dataSourceId, row, colid, value);
+							}
 						}
-
 					}
 
 				}
 			}
 		}
-
 	}
 
 	private Object extractCellValue(Cell cell, boolean evaluateFormulas) {
@@ -151,6 +163,41 @@ public class SpreadsheetTriplifier implements Triplifier {
 			case _NONE:
 		}
 		return "";
+	}
+
+
+	private void extractCompositeCellValue(String dataSourceId, String value, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder) {
+		if (cell == null) return ;
+		builder.addType(dataSourceId, value, cell.getCellType().toString());
+		switch (cell.getCellType()) {
+			case BOOLEAN:
+				builder.addValue(dataSourceId, value, 1, cell.getBooleanCellValue());
+				break;
+			case STRING:
+				builder.addValue(dataSourceId, value, 1, cell.getStringCellValue());
+				break;
+			case NUMERIC:
+				builder.addValue(dataSourceId, value, 1, cell.getNumericCellValue());
+				break;
+			case FORMULA:
+				if (evaluateFormulas) {
+					Cell evaluatedCell = evaluator.evaluateInCell(cell);
+					builder.addValue(dataSourceId, value, 1, extractCellValue(evaluatedCell, evaluateFormulas));
+				} else {
+					builder.addValue(dataSourceId, value, 1, cell.getCellFormula());
+				}
+				break;
+			case BLANK:
+			case ERROR:
+			case _NONE:
+			default:
+				break;
+		}
+		if(cell.getHyperlink() != null){
+			builder.addValue(dataSourceId, value, "address", cell.getHyperlink().getAddress());
+			builder.addValue(dataSourceId, value, "label", cell.getHyperlink().getLabel());
+		}
+		return;
 	}
 
 	@Override

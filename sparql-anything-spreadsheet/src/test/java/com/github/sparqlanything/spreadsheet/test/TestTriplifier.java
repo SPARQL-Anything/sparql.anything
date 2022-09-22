@@ -317,4 +317,25 @@ public class TestTriplifier {
 			e.printStackTrace();
 		}
 	}
+
+
+	@Test
+	public void testCellLink (){
+		SpreadsheetTriplifier st = new SpreadsheetTriplifier();
+		URL spreadsheet = st.getClass().getClassLoader().getResource("./testResources/Book2.xlsx");
+		Properties p = new Properties();
+		p.setProperty(SpreadsheetTriplifier.PROPERTY_COMPOSITE_VALUES, "true");
+		DatasetGraph dg;
+		try {
+
+			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			st.triplify(p, builder);
+			dg = builder.getDatasetGraph();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
