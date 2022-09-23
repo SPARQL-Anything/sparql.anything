@@ -194,8 +194,14 @@ public class SpreadsheetTriplifier implements Triplifier {
 				break;
 		}
 		if(cell.getHyperlink() != null){
-			builder.addValue(dataSourceId, value, "address", cell.getHyperlink().getAddress());
-			builder.addValue(dataSourceId, value, "label", cell.getHyperlink().getLabel());
+			if(cell.getHyperlink().getAddress() != null) {
+				builder.addValue(dataSourceId, value, "address", cell.getHyperlink().getAddress());
+			}
+			if(cell.getHyperlink().getLabel() != null) {
+				builder.addValue(dataSourceId, value, "label", cell.getHyperlink().getLabel());
+			}else{
+				builder.addValue(dataSourceId, value, "label", cell.getStringCellValue());
+			}
 		}
 		return;
 	}
