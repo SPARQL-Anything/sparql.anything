@@ -20,8 +20,6 @@ import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.PropertyUtils;
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +51,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 		String root = Triplifier.getRootArgument(properties);
 		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
 		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
+		String namespace = Triplifier.getNamespaceArgument(properties);
 		AtomicBoolean headers = new AtomicBoolean();
 		try {
 			headers.set(Boolean.valueOf(properties.getProperty(PROPERTY_HEADERS, "false")));
@@ -67,12 +66,12 @@ public class SpreadsheetTriplifier implements Triplifier {
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = root + Triplifier.toSafeURIString(s.getSheetName());
 			String sheetRoot = dataSourceId;
-			populate(s, dataSourceId, sheetRoot, builder, headers.get(), evaluateFormulas, compositeValues);
+			populate(s, dataSourceId, sheetRoot, builder, headers.get(), evaluateFormulas, compositeValues, namespace);
 		});
 
 	}
 
-	private void populate(Sheet s, String dataSourceId, String root, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues) {
+	private void populate(Sheet s, String dataSourceId, String root, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, String namespace) {
 
 		// Add type Root
 		builder.addRoot(dataSourceId, root);
@@ -118,8 +117,8 @@ public class SpreadsheetTriplifier implements Triplifier {
 					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
 						Cell cell = record.getCell(cellNum);
 						if(compositeValues){
-							String value = row + "_" + Integer.toString(cellNum);
-							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
+							String value = row + "_" + cellNum;
+							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder, namespace);
 							colid++;
 							if (headers && headers_map.containsKey(colid)) {
 								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
@@ -166,9 +165,9 @@ public class SpreadsheetTriplifier implements Triplifier {
 	}
 
 
-	private void extractCompositeCellValue(String dataSourceId, String value, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder) {
+	private void extractCompositeCellValue(String dataSourceId, String value, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder, String namespace) {
 		if (cell == null) return ;
-		builder.addType(dataSourceId, value, cell.getCellType().toString());
+		builder.addType(dataSourceId, value, namespace + cell.getCellType().toString());
 		switch (cell.getCellType()) {
 			case BOOLEAN:
 				builder.addValue(dataSourceId, value, 1, cell.getBooleanCellValue());
