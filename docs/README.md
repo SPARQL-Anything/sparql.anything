@@ -128,7 +128,7 @@ Prepare a file with the query above and name it, for example `query.sparql`.
 The query can be executed as follows:
 
 ```bash
-java -jar sparql-anything-0.7.0.jar -q query.sparql
+java -jar sparql-anything-<version>.jar -q query.sparql
 ```
 See the [usage section](#Usage) for details on the command line interface.
 
@@ -141,7 +141,7 @@ The command line is a file named `sparql-anything-server-<version>.jar`.
 Run the server as follows:
 
 ```bash
-$ java -jar sparql-anything-server-0.7.0.jar 
+$ java -jar sparql-anything-server-<version>.jar 
 [main] INFO com.github.sparqlanything.fuseki.Endpoint - sparql.anything endpoint
 [main] INFO com.github.sparqlanything.fuseki.Endpoint - Starting sparql.anything endpoint..
 [main] INFO com.github.sparqlanything.fuseki.Endpoint - The server will be listening on http://localhost:3000/sparql.anything

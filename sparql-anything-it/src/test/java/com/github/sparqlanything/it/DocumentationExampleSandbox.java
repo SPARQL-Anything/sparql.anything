@@ -173,13 +173,31 @@ public class DocumentationExampleSandbox {
 
 		// Query 2
 
+//		queryString = "CONSTRUCT \n" +
+//				"  { \n" +
+//				"    GRAPH ?g \n" +
+//				"      { ?s ?p ?o .}\n" +
+//				"  }\n" +
+//				"WHERE\n" +
+//				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book2.xlsx,spreadsheet.evaluate-formulas=true>\n" +
+//				"      { GRAPH ?g\n" +
+//				"          { ?s  ?p  ?o }\n" +
+//				"      }\n" +
+//				"  } ";
+//
+//		query = QueryFactory.create(queryString, Syntax.syntaxARQ);
+//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+//		dd = QueryExecutionFactory.create(query, ds).execConstructDataset();
+////		RDFDataMgr.write(System.out, dd, Lang.TRIG);
+
+
 		queryString = "CONSTRUCT \n" +
 				"  { \n" +
 				"    GRAPH ?g \n" +
 				"      { ?s ?p ?o .}\n" +
 				"  }\n" +
 				"WHERE\n" +
-				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book2.xlsx,spreadsheet.evaluate-formulas=true>\n" +
+				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book3.xlsx,spreadsheet.composite-values=true>\n" +
 				"      { GRAPH ?g\n" +
 				"          { ?s  ?p  ?o }\n" +
 				"      }\n" +
