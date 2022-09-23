@@ -203,6 +203,17 @@ public class SpreadsheetTriplifier implements Triplifier {
 			}
 		}
 
+		if (cell.getCellComment() != null){
+			Comment comment = cell.getCellComment();
+			if(comment.getAuthor()!=null){
+				builder.addValue(dataSourceId, containerId, "author", comment.getAuthor());
+			}
+			if(comment.getString()!=null){
+				RichTextString commentRichTextString = comment.getString();
+				commentRichTextString.clearFormatting();
+				builder.addValue(dataSourceId, containerId, "threadedComment", commentRichTextString.getString());
+			}
+		}
 
 
 	}
