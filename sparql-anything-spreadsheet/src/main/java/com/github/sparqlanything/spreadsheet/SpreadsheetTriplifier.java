@@ -116,7 +116,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 					int colid = 0;
 					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
 						Cell cell = record.getCell(cellNum);
-						if(compositeValues){
+						if (compositeValues) {
 							String value = row + "_" + cellNum;
 							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder, namespace);
 							colid++;
@@ -165,25 +165,25 @@ public class SpreadsheetTriplifier implements Triplifier {
 	}
 
 
-	private void extractCompositeCellValue(String dataSourceId, String value, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder, String namespace) {
-		if (cell == null) return ;
-		builder.addType(dataSourceId, value, namespace + cell.getCellType().toString());
+	private void extractCompositeCellValue(String dataSourceId, String containerId, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder, String namespace) {
+		if (cell == null) return;
+		builder.addType(dataSourceId, containerId, namespace + cell.getCellType().toString());
 		switch (cell.getCellType()) {
 			case BOOLEAN:
-				builder.addValue(dataSourceId, value, 1, cell.getBooleanCellValue());
+				builder.addValue(dataSourceId, containerId, 1, cell.getBooleanCellValue());
 				break;
 			case STRING:
-				builder.addValue(dataSourceId, value, 1, cell.getStringCellValue());
+				builder.addValue(dataSourceId, containerId, 1, cell.getStringCellValue());
 				break;
 			case NUMERIC:
-				builder.addValue(dataSourceId, value, 1, cell.getNumericCellValue());
+				builder.addValue(dataSourceId, containerId, 1, cell.getNumericCellValue());
 				break;
 			case FORMULA:
 				if (evaluateFormulas) {
 					Cell evaluatedCell = evaluator.evaluateInCell(cell);
-					builder.addValue(dataSourceId, value, 1, extractCellValue(evaluatedCell, evaluateFormulas));
+					builder.addValue(dataSourceId, containerId, 1, extractCellValue(evaluatedCell, evaluateFormulas));
 				} else {
-					builder.addValue(dataSourceId, value, 1, cell.getCellFormula());
+					builder.addValue(dataSourceId, containerId, 1, cell.getCellFormula());
 				}
 				break;
 			case BLANK:
@@ -192,17 +192,19 @@ public class SpreadsheetTriplifier implements Triplifier {
 			default:
 				break;
 		}
-		if(cell.getHyperlink() != null){
-			if(cell.getHyperlink().getAddress() != null) {
-				builder.addValue(dataSourceId, value, "address", cell.getHyperlink().getAddress());
+		if (cell.getHyperlink() != null) {
+			if (cell.getHyperlink().getAddress() != null) {
+				builder.addValue(dataSourceId, containerId, "address", cell.getHyperlink().getAddress());
 			}
-			if(cell.getHyperlink().getLabel() != null) {
-				builder.addValue(dataSourceId, value, "label", cell.getHyperlink().getLabel());
-			}else{
-				builder.addValue(dataSourceId, value, "label", cell.getStringCellValue());
+			if (cell.getHyperlink().getLabel() != null) {
+				builder.addValue(dataSourceId, containerId, "label", cell.getHyperlink().getLabel());
+			} else {
+				builder.addValue(dataSourceId, containerId, "label", cell.getStringCellValue());
 			}
 		}
-		return;
+
+
+
 	}
 
 	@Override
