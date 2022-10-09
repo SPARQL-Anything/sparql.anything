@@ -32,7 +32,7 @@ public class HTMLMicrodataRemoteTest extends AbstractTriplifierTester {
 	}
 
 	@Test
-	public void testMicrodata1() {
+	public void testMicrodata2() {
 		this.assertResultIsIsomorphicWithExpected();
 	}
 
