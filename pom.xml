@@ -108,8 +108,8 @@
 		<module>sparql-anything-archive</module>
 		<module>sparql-anything-docs</module>
 		<module>sparql-anything-bib</module>
-<!--		<module>sparql-anything-jdbc</module>
--->	</modules>
+		<module>sparql-anything-jdbc</module>
+	</modules>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
