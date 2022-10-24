@@ -83,10 +83,13 @@ public class DatasetGraphCreator {
 		dg.commit();
 		dg.end();
 
-		dg.begin(ReadWrite.READ);
-		logger.debug("Size default graph {}", dg.getDefaultGraph().size());
-		logger.debug("Size of the graph {}: {}", p.getProperty(IRIArgument.LOCATION.toString()), dg.getGraph(NodeFactory.createURI(p.getProperty(IRIArgument.LOCATION.toString()) + "#")).size());
-		dg.end();
+		// Only make additional work if needed
+		if(logger.isDebugEnabled()) {
+			dg.begin(ReadWrite.READ);
+			logger.debug("Size default graph {}", dg.getDefaultGraph().size());
+			logger.debug("Size of the graph {}: {}", p.getProperty(IRIArgument.LOCATION.toString()), dg.getGraph(NodeFactory.createURI(p.getProperty(IRIArgument.LOCATION.toString()) + "#")).size());
+			dg.end();
+		}
 
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
