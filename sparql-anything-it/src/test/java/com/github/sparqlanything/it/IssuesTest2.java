@@ -31,7 +31,10 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashSet;
@@ -40,7 +43,7 @@ import java.util.Set;
 import static org.junit.Assert.assertTrue;
 
 public class IssuesTest2 {
-
+	private static final Logger log = LoggerFactory.getLogger(IssuesTest2.class);
 	/**
 	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/280
 	 *
@@ -56,12 +59,18 @@ public class IssuesTest2 {
 //		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
 
 		String location = getClass().getClassLoader().getResource("issues/issue280.json").toURI().toString();
-
+		File TDBfile = new File("target/tdbIssue280/" );
+		if(TDBfile.exists()){
+			TDBfile.delete();
+		}
+		TDBfile.mkdirs();
+		String TDBLocation = TDBfile.getAbsolutePath().toString();
+		log.debug("TDB temp location: {}", TDBLocation);
 		Query qs = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
 						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
 						"SELECT * WHERE { " +
-						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=/tmp> { " +
+						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=" + TDBLocation + "> { " +
 						" ?s xyz:name ?o }  }");
 
 //		System.out.println(location);
@@ -82,7 +91,7 @@ public class IssuesTest2 {
 
 
 		qs = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"/tmp\" .  " +
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"" + TDBLocation + "\" .  " +
 						" ?s xyz:name ?o }  }");
 
 
