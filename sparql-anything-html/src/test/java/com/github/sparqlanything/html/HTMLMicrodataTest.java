@@ -16,7 +16,9 @@
 
 package com.github.sparqlanything.html;
 
+import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Properties;
@@ -27,13 +29,14 @@ public class HTMLMicrodataTest extends AbstractTriplifierTester {
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
 		this.setPrintWholeGraph(true);
 	}
-
+	
 	@Test
 	public void testMicrodata1() {
 		this.assertResultIsIsomorphicWithExpected();
 	}
 	
 	protected void properties(Properties properties) {
+//		properties.setProperty(IRIArgument.ROOT.toString(), "http://www.example.org/test/");
 		properties.setProperty(HTMLTriplifier.PROPERTY_METADATA, "true");
 	}
 

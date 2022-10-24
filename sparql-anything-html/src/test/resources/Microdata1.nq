@@ -27,35 +27,35 @@ _:Bnode1geuv4l7kx2 <https://schema.org/name> "Avatar" .
 <html/body/div> <http://www.w3.org/1999/xhtml#itemtype> "https://schema.org/Movie" .
 <html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/div/h1> .
 <html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body/div/span> .
-<file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> <http://www.w3.org/1999/xhtml/microdata#item> _:Bnode1geuv4l7kx2 .
-<html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/div> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body> <https://html.spec.whatwg.org/#innerHTML> "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>\n</div>" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-_:Bnode1geuv4l7kx2 <https://schema.org/name> "Avatar" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-_:Bnode1geuv4l7kx2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Movie> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/span> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Director: James Cameron (born August 16, 1954)" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/span> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#span> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/span> <https://html.spec.whatwg.org/#innerText> "Director: James Cameron (born August 16, 1954)" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/span> <https://html.spec.whatwg.org/#innerHTML> "Director: James Cameron (born August 16, 1954)" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/h1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Avatar" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/h1> <http://www.w3.org/1999/xhtml#itemprop> "name" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/h1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#h1> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/h1> <https://html.spec.whatwg.org/#innerText> "Avatar" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div/h1> <https://html.spec.whatwg.org/#innerHTML> "Avatar" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body/div/span> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/div/h1> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div> <http://www.w3.org/1999/xhtml#itemtype> "https://schema.org/Movie" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div> <http://www.w3.org/1999/xhtml#itemscope> "" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#div> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html/body/div> <https://html.spec.whatwg.org/#innerHTML> "<h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954)  Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html> <https://html.spec.whatwg.org/#innerHTML> "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>" <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
-<file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> <http://www.w3.org/1999/xhtml/microdata#item> _:Bnode1geuv4l7kx2 <file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> .
+<location> <http://www.w3.org/1999/xhtml/microdata#item> _:Bnode1geuv4l7kx2 .
+<html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/div> <location> .
+<html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> <location> .
+<html/body> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)" <location> .
+<html/body> <https://html.spec.whatwg.org/#innerHTML> "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>\n</div>" <location> .
+_:Bnode1geuv4l7kx2 <https://schema.org/name> "Avatar" <location> .
+_:Bnode1geuv4l7kx2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Movie> <location> .
+<html/body/div/span> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Director: James Cameron (born August 16, 1954)" <location> .
+<html/body/div/span> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#span> <location> .
+<html/body/div/span> <https://html.spec.whatwg.org/#innerText> "Director: James Cameron (born August 16, 1954)" <location> .
+<html/body/div/span> <https://html.spec.whatwg.org/#innerHTML> "Director: James Cameron (born August 16, 1954)" <location> .
+<html/body/div/h1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Avatar" <location> .
+<html/body/div/h1> <http://www.w3.org/1999/xhtml#itemprop> "name" <location> .
+<html/body/div/h1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#h1> <location> .
+<html/body/div/h1> <https://html.spec.whatwg.org/#innerText> "Avatar" <location> .
+<html/body/div/h1> <https://html.spec.whatwg.org/#innerHTML> "Avatar" <location> .
+<html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> <location> .
+<html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body/div/span> <location> .
+<html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/div/h1> <location> .
+<html/body/div> <http://www.w3.org/1999/xhtml#itemtype> "https://schema.org/Movie" <location> .
+<html/body/div> <http://www.w3.org/1999/xhtml#itemscope> "" <location> .
+<html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#div> <location> .
+<html/body/div> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)" <location> .
+<html/body/div> <https://html.spec.whatwg.org/#innerHTML> "<h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>" <location> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body> <location> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head> <location> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <location> .
+<html> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954)  Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)" <location> .
+<html> <https://html.spec.whatwg.org/#innerHTML> "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>" <location> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <location> .
+<location> <http://www.w3.org/1999/xhtml/microdata#item> _:Bnode1geuv4l7kx2 <location> .
 
