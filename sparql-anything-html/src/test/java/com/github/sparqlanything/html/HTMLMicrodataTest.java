@@ -29,8 +29,7 @@ public class HTMLMicrodataTest extends AbstractTriplifierTester {
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
 		this.setPrintWholeGraph(true);
 	}
-
-	@Ignore // FIXME Until we resolve #315
+	
 	@Test
 	public void testMicrodata1() {
 		this.assertResultIsIsomorphicWithExpected();
