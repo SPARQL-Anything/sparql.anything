@@ -462,6 +462,30 @@ Also a docker image can be used by following the instructions [here](BROWSER.md)
 SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 
 ## How to cite our work
+
+
+**For citing SPARQL Anything in academic papers please use:**
+
+Luigi Asprino, Enrico Daga, Aldo Gangemi, and Paul Mulholland. 2022. Knowledge Graph Construction with a façade: a unified method to access heterogeneous data sources on the Web. ACM Trans. Internet Technol. Just Accepted (2022). https://doi.org/10.1145/3555312
+
+```bibtex
+@article{10.1145/3555312,
+author = {Asprino, Luigi and Daga, Enrico and Gangemi, Aldo and Mulholland, Paul},
+title = {Knowledge Graph Construction with a Fa\c{c}ade: A Unified Method to Access Heterogeneous Data Sources on the Web},
+year = {2022},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+issn = {1533-5399},
+url = {https://doi.org/10.1145/3555312},
+doi = {10.1145/3555312},
+abstract = {Data integration is the dominant use case for RDF Knowledge Graphs. However, Web resources come in formats with weak semantics (for example CSV and JSON), or formats specific to a given application (for example BibTex, HTML, and Markdown). To solve this problem, Knowledge Graph Construction (KGC) is gaining momentum due to its focus on supporting users in transforming data into RDF. However, using existing KGC frameworks result in complex data processing pipelines, which mix structural and semantic mappings, whose development and maintenance constitute a significant bottleneck for KG engineers. Such frameworks force users to rely on different tools, sometimes based on heterogeneous languages, for inspecting sources, designing mappings, and generating triples, thus making the process unnecessarily complicated. We argue that it is possible and desirable to equip KG engineers with the ability of interacting with Web data formats by relying on their expertise in RDF and the well-established SPARQL query language&nbsp;[2]. In this article, we study a unified method for data access to heterogeneous data sources with Facade-X, a meta-model implemented in a new data integration system called SPARQL Anything. We demonstrate that our approach is theoretically sound, since it allows a single meta-model, based on RDF, to represent data from (a) any file format expressible in BNF syntax, as well as (b) any relational database. We compare our method to state-of-the-art approaches in terms of usability (cognitive complexity of the mappings) and general performance. Finally, we discuss the benefits and challenges of this novel approach by engaging with the reference user community.},
+journal = {ACM Trans. Internet Technol.},
+keywords = {RDF, SPARQL, Meta-model, Re-engineering}
+}
+```
+
+Conference paper mainly focussing on system requirements:
+
 Daga, Enrico; Asprino, Luigi; Mulholland, Paul and Gangemi, Aldo (2021). Facade-X: An Opinionated Approach to SPARQL Anything. In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume 53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
 
 DOI: https://doi.org/10.3233/ssw210035 | [PDF](http://oro.open.ac.uk/78973/1/78973.pdf)
