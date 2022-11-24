@@ -17,17 +17,17 @@
 
 package com.github.sparqlanything.jdbc;
 
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.Triple;
+public class SolutionComponent implements Interpretation {
+	public SolutionComponent(){
 
-import java.util.Collections;
-import java.util.Set;
+	}
+	static class TypeProperty extends SolutionComponent {
 
-public interface Interpretation {
-	default Set<Class<? extends Interpretation>> inconsistentWith(){
-		return Collections.emptySet();
 	}
-	default Set<Class<? extends Interpretation>> specialisationOf(){
-		return Collections.emptySet();
-	}
+	static class TypeTable extends SolutionComponent {}
+	static class ContainerRow extends SolutionComponent {}
+	static class ContainerTable extends SolutionComponent {}
+	static class SlotRow extends SolutionComponent {}
+	static class SlotColumn extends SolutionComponent {}
+	static class SlotValue extends SolutionComponent {}
 }

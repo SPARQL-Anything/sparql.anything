@@ -21,7 +21,6 @@ import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -57,34 +56,32 @@ public class TranslationTest {
 	public void nodeToTable(){
 		String table = "address";
 		Node n = NodeFactory.createURI(testNamespace + table);
-		L.debug("{}",translation.nodeToTable(n));
-		Assert.assertTrue(table.equals(translation.nodeToTable(n)));
+		L.debug("{}",translation.nodeContainerToTable(n));
+		Assert.assertTrue(table.equals(translation.nodeContainerToTable(n)));
 	}
-
 
 	@Test
 	public void nodeToTableDefault(){
 		String table = "address";
 		Node n = NodeFactory.createURI(JDBC.DEFAULT_NAMES_NAMESPACE + table);
-		L.debug("{}",translation.nodeToTable(n));
-		Assert.assertTrue(table.equals(translation.nodeToTable(n)));
+		L.debug("{}",translation.nodeContainerToTable(n));
+		Assert.assertTrue(table.equals(translation.nodeContainerToTable(n)));
 	}
 
 	@Test
 	public void nodeToColumn(){
 		String col = "postcode";
 		Node n = NodeFactory.createURI(testNamespace + col);
-		L.debug("{}",translation.nodeToColumn(n));
-		Assert.assertTrue(col.equals(translation.nodeToColumn(n)));
+		L.debug("{}",translation.nodeSlotToColumn(n));
+		Assert.assertTrue(col.equals(translation.nodeSlotToColumn(n)));
 	}
-
 
 	@Test
 	public void nodeToColumnDefault(){
 		String col = "postcode";
 		Node n = NodeFactory.createURI(Triplifier.XYZ_NS + col);
-		L.debug("{}",translation.nodeToColumn(n));
-		Assert.assertTrue(col.equals(translation.nodeToColumn(n)));
+		L.debug("{}",translation.nodeSlotToColumn(n));
+		Assert.assertTrue(col.equals(translation.nodeSlotToColumn(n)));
 	}
 
 	@Test
@@ -92,7 +89,47 @@ public class TranslationTest {
 		Integer row = 23;
 		String table = "address";
 		Node n = NodeFactory.createURI(testNamespace + table + "/" + row.toString());
-		L.debug("{}",translation.nodeToTable(n));
-		Assert.assertTrue(row.equals(translation.nodeToRowNum(n)));
+		L.debug("{}",translation.nodeContainerToRowNum(n));
+		Assert.assertTrue(row.equals(translation.nodeContainerToRowNum(n)));
+	}
+
+	@Test
+	public void rowNumToNode(){
+		Integer row = 23;
+		String table = "address";
+		Node n = NodeFactory.createURI(testNamespace + table + "/" + row.toString());
+		L.debug("{}",translation.rowNumToNodeContainer( table, row));
+		Assert.assertTrue(n.equals(translation.rowNumToNodeContainer(table, row)));
+	}
+
+	@Test
+	public void columnToNode(){
+		String col = "postcode";
+		Node n = NodeFactory.createURI(testNamespace + col);
+		L.debug("{}",translation.columnToNodeSlot(col));
+		Assert.assertTrue(n.equals(translation.columnToNodeSlot(col)));
+	}
+
+	@Test
+	public void nodeIsTable(){
+		Node table = translation.tableToNodeContainer("address");
+		Assert.assertTrue(translation.nodeContainerIsTable(table));
+		Assert.assertFalse(translation.nodeContainerIsRowNum(table));
+		Assert.assertFalse(translation.nodeSlotIsRowNum(table));
+	}
+
+	@Test
+	public void nodeIsRowNum(){
+		Node table = translation.rowNumToNodeContainer("address", 23);
+		Assert.assertTrue(translation.nodeContainerIsRowNum(table));
+		Assert.assertFalse(translation.nodeSlotIsRowNum(table));
+		Assert.assertFalse(translation.nodeContainerIsTable(table));
+	}
+	@Test
+	public void nodeIsRowSlot(){
+		Node slot = translation.rowNumToNodeSlot(23);
+		Assert.assertTrue(translation.nodeSlotIsRowNum(slot));
+		Assert.assertFalse(translation.nodeContainerIsRowNum(slot));
+		Assert.assertFalse(translation.nodeContainerIsTable(slot));
 	}
 }

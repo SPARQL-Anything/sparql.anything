@@ -17,17 +17,38 @@
 
 package com.github.sparqlanything.jdbc;
 
-import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 
-import java.util.Collections;
-import java.util.Set;
+public class QueryComponent implements Interpretation {
 
-public interface Interpretation {
-	default Set<Class<? extends Interpretation>> inconsistentWith(){
-		return Collections.emptySet();
+	public static class Table extends QueryComponent {
+		private String tableName;
+		Table(String tableName){
+			this.tableName = tableName;
+		}
+		public String getName(){
+			return tableName;
+		}
 	}
-	default Set<Class<? extends Interpretation>> specialisationOf(){
-		return Collections.emptySet();
+
+	public static class Column extends QueryComponent {
+		private String columnName;
+
+		Column(String columnName){
+			this.columnName = columnName;
+		}
+
+		public String getName(){
+			return columnName;
+		}
+	}
+
+	public static Table table(String name){
+		return new Table(name);
+	}
+
+
+	public static Column column(String column){
+		return new Column(column);
 	}
 }

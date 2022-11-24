@@ -52,6 +52,7 @@ import org.apache.jena.sparql.mgt.Explain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -574,5 +575,23 @@ public class SPARQLAnything {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);
 		}
+	}
+
+	public static String callMain(String[] args) throws Exception {
+		// Thanks to: https://stackoverflow.com/a/8708357/1035608
+		// Create a stream to hold the output
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		// IMPORTANT: Save the old System.out!
+		PrintStream old = System.out;
+		// Tell Java to use your special stream
+		System.setOut(ps);
+		// Print some output: goes to your special stream
+		main(args);
+		// Put things back
+		System.out.flush();
+		System.setOut(old);
+		// Show what happened
+		return baos.toString();
 	}
 }

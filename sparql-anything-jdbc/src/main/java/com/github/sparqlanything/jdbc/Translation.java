@@ -19,6 +19,8 @@ package com.github.sparqlanything.jdbc;
 
 import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.vocabulary.RDF;
 
 import java.util.Properties;
 
@@ -30,14 +32,14 @@ public class Translation {
 		this.ns = JDBC.getNamespace(properties);
 	}
 
-	public String nodeToTable(Node node){
+	public String nodeContainerToTable(Node node){
 		if(node.isConcrete() && node.isURI()){
 			return node.getURI().substring(ns.length());
 		}
 		return null;
 	}
 
-	public Integer nodeToRowNum(Node node){
+	public Integer nodeContainerToRowNum(Node node){
 		if(node.isConcrete() && node.isURI()){
 			String lastPart = node.getURI().substring(ns.length());
 			if(lastPart.indexOf('/') != -1){
@@ -47,18 +49,71 @@ public class Translation {
 		return null;
 	}
 
+	public Integer nodeSlotToRowNum(Node node){
+		if(node.isConcrete() && node.isURI()){
+			String lastPart = node.getURI().substring(RDF.getURI().length());
+			if(lastPart.indexOf('_') == 0){
+				return Integer.parseInt(lastPart.substring(1));
+			}
+		}
+		return null;
+	}
+
+	public Node rowNumToNodeSlot(Integer slot){
+		return RDF.li(slot).asNode();
+	}
+
 	public String tableToContainer(String tableName){
 		return this.ns + tableName;
+	}
+
+	public String tableToType(String tableName){
+		return Triplifier.getNamespaceArgument(properties) + tableName;
+	}
+
+	public Node tableToNodeType(String tableName){
+		return NodeFactory.createURI(tableToType(tableName));
+	}
+
+	public Node tableToNodeContainer(String tableName){
+		return NodeFactory.createURI(tableToContainer(tableName));
 	}
 
 	public String rowNumToContainer(String tableName, Integer rowNum){
 		return this.ns + tableName + "/" + rowNum.toString();
 	}
 
-	public String nodeToColumn(Node node){
+	public Node rowNumToNodeContainer(String tableName, Integer rowNum){
+		return NodeFactory.createURI(rowNumToContainer(tableName, rowNum));
+	}
+
+	public String nodeSlotToColumn(Node node){
 		if(node.isConcrete() && node.isURI()){
 			return node.getURI().substring(Triplifier.getNamespaceArgument(properties).length());
 		}
 		return null;
 	}
+	public String columnToSlot(String colName){
+		return Triplifier.getNamespaceArgument(properties) + colName;
+	}
+
+	public Node columnToNodeSlot(String colName){
+		return NodeFactory.createURI(Triplifier.getNamespaceArgument(properties) + colName);
+	}
+
+	public boolean nodeContainerIsTable(Node node){
+		return (node.isConcrete() && node.isURI() &&
+			node.getURI().startsWith(ns) & node.getURI().indexOf('/', ns.length()) == -1);
+	}
+	public boolean nodeContainerIsRowNum(Node node){
+		return (node.isConcrete() && node.isURI() &&
+				node.getURI().startsWith(ns) & node.getURI().indexOf('/', ns.length()) != -1);
+	}
+
+	public boolean nodeSlotIsRowNum(Node node){
+		return (node.isConcrete() && node.isURI() &&
+				node.getURI().startsWith(RDF.getURI()) &&
+						node.getURI().substring(RDF.getURI().length(), RDF.getURI().length()+1).equals("_"));
+	}
+
 }

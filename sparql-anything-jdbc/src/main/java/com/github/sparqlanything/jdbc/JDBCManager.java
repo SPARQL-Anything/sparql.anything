@@ -41,7 +41,8 @@ public class JDBCManager {
 		this.properties = properties;
 	}
 
-	private Connection getConnection() throws SQLException {
+	Connection getConnection() throws SQLException {
+		// TODO When/How to close the connection?
 		if(connection == null){
 			try {
 				Class.forName(JDBC.getDriver(properties));

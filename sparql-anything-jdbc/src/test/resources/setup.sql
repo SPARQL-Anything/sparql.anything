@@ -15,19 +15,7 @@
  *
  */
 
-package com.github.sparqlanything.jdbc;
-
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.Triple;
-
-import java.util.Collections;
-import java.util.Set;
-
-public interface Interpretation {
-	default Set<Class<? extends Interpretation>> inconsistentWith(){
-		return Collections.emptySet();
-	}
-	default Set<Class<? extends Interpretation>> specialisationOf(){
-		return Collections.emptySet();
-	}
-}
+CREATE TABLE Test (
+    ID INT PRIMARY KEY,
+    WORD VARCHAR(50)
+)
