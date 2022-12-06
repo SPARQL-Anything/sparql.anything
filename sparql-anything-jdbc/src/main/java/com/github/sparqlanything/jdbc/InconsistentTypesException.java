@@ -22,6 +22,7 @@ public class InconsistentTypesException extends InconsistentAssumptionException 
 	Class<? extends Interpretation> isType;
 
 	public InconsistentTypesException(Class<? extends Interpretation> wasType, Class<? extends Interpretation> isType) {
+		super("Inconsistent types: " + wasType + " " + isType);
 		this.wasType = wasType;
 		this.isType = isType;
 	}

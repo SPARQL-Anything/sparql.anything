@@ -108,7 +108,7 @@ public class Translation {
 	public boolean nodeSlotIsTypeProperty(Node node){
 		return RDF.type.asNode().equals(node);
 	}
-	
+
 	public Node columnToNodeSlot(String colName){
 		return NodeFactory.createURI(Triplifier.getNamespaceArgument(properties) + colName);
 	}
