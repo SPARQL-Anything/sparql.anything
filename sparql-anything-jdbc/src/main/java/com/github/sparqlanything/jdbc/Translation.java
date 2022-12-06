@@ -71,6 +71,10 @@ public class Translation {
 		return Triplifier.getNamespaceArgument(properties) + tableName;
 	}
 
+	public boolean nodeTypeIsTable(Node node){
+		return tableToType(node.getURI().substring(ns.length())).equals(node.getURI());
+	}
+
 	public Node tableToNodeType(String tableName){
 		return NodeFactory.createURI(tableToType(tableName));
 	}
@@ -93,10 +97,18 @@ public class Translation {
 		}
 		return null;
 	}
+	public boolean nodeSlotIsColumn(Node node){
+		return nodeSlotToColumn(node) != null;
+	}
+
 	public String columnToSlot(String colName){
 		return Triplifier.getNamespaceArgument(properties) + colName;
 	}
 
+	public boolean nodeSlotIsTypeProperty(Node node){
+		return RDF.type.asNode().equals(node);
+	}
+	
 	public Node columnToNodeSlot(String colName){
 		return NodeFactory.createURI(Triplifier.getNamespaceArgument(properties) + colName);
 	}

@@ -17,14 +17,20 @@
 
 package com.github.sparqlanything.jdbc;
 
-import java.util.Collections;
-import java.util.Set;
+public class InconsistentTypesException extends InconsistentAssumptionException {
+	Class<? extends Interpretation> wasType;
+	Class<? extends Interpretation> isType;
 
-public interface Interpretation {
-	default Set<Class<? extends Interpretation>> inconsistentTypes(){
-		return Collections.emptySet();
+	public InconsistentTypesException(Class<? extends Interpretation> wasType, Class<? extends Interpretation> isType) {
+		this.wasType = wasType;
+		this.isType = isType;
 	}
-	default Set<Class<? extends Interpretation>> specialisationOfTypes(){
-		return Collections.emptySet();
+
+	public Class<? extends Interpretation> getWasType(){
+		return wasType;
+	}
+
+	public Class<? extends Interpretation> getIsType(){
+		return isType;
 	}
 }

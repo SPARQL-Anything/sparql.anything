@@ -26,47 +26,108 @@ import java.util.Set;
 public class Assumption implements Interpretation {
 	static class Subject extends Assumption {
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentWith() {
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
 	static class Predicate extends Assumption {
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentWith() {
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
 			return ImmutableSet.of(Subject.class, Object.class);
 		}
 	}
 	static class Object extends Assumption {
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentWith() {
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
 	static class Container extends Assumption {
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentWith() {
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
 			return ImmutableSet.of(SlotValue.class, SlotColumn.class, SlotRow.class, TypeProperty.class, TypeTable.class);
 		}
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOf() {
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Subject.class, Object.class);
 		}
 	}
 	static class TypeProperty extends Assumption {
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentWith() {
-			return ImmutableSet.of(SlotValue.class, SlotColumn.class, SlotRow.class, TypeTable.class, ContainerRow.class, ContainerTable.class);
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+			return ImmutableSet.of(Subject.class, Object.class, SlotValue.class, SlotColumn.class, SlotRow.class, TypeTable.class, ContainerRow.class, ContainerTable.class);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOf() {
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
-	static class TypeTable extends Assumption {}
-	static class ContainerRow extends Assumption {}
-	static class ContainerTable extends Assumption {}
-	static class SlotRow extends Assumption {}
-	static class SlotColumn extends Assumption {}
-	static class SlotValue extends Assumption {}
+	static class TypeTable extends Assumption {
+		@Override
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+			return ImmutableSet.of(SlotValue.class, SlotColumn.class, SlotRow.class, ContainerRow.class, ContainerTable.class);
+		}
+
+		@Override
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+			return ImmutableSet.of(Object.class);
+		}
+	}
+	static class ContainerRow extends Assumption {
+		@Override
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+			return ImmutableSet.of(Predicate.class, SlotRow.class, SlotColumn.class, SlotValue.class, ContainerTable.class );
+		}
+
+		@Override
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+			return ImmutableSet.of(Subject.class, Object.class);
+		}
+	}
+
+	static class ContainerTable extends Assumption {
+		@Override
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+			return ImmutableSet.of(ContainerRow.class, Predicate.class, Object.class, Predicate.class, SlotRow.class, SlotColumn.class, SlotValue.class);
+		}
+
+		@Override
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+			return ImmutableSet.of(Subject.class, Container.class);
+		}
+	}
+	static class SlotRow extends Assumption {
+		@Override
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+			return ImmutableSet.of(SlotValue.class, ContainerRow.class, TypeProperty.class, Subject.class, Object.class, ContainerTable.class, SlotColumn.class);
+		}
+
+		@Override
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+			return ImmutableSet.of(Predicate.class);
+		}
+	}
+	static class SlotColumn extends Assumption {
+		@Override
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+			return ImmutableSet.of(SlotRow.class,SlotValue.class, ContainerRow.class, TypeProperty.class, Subject.class, Object.class, ContainerTable.class );
+		}
+
+		@Override
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+			return ImmutableSet.of(Predicate.class);
+		}
+	}
+	static class SlotValue extends Assumption {
+		@Override
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+			return ImmutableSet.of(SlotRow.class,SlotColumn.class, ContainerRow.class, TypeProperty.class, Subject.class, Object.class, ContainerTable.class );
+		}
+
+		@Override
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+			return ImmutableSet.of(Object.class);
+		}
+	}
 }

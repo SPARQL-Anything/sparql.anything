@@ -17,14 +17,15 @@
 
 package com.github.sparqlanything.jdbc;
 
-import java.util.Collections;
-import java.util.Set;
+import org.apache.jena.graph.Node;
 
-public interface Interpretation {
-	default Set<Class<? extends Interpretation>> inconsistentTypes(){
-		return Collections.emptySet();
+public class InconsistentEntityException extends InconsistentAssumptionException {
+	private Node node;
+	public InconsistentEntityException(Node node){
+		super("Inconsistent enttity URI: " + node.toString());
+		this.node = node;
 	}
-	default Set<Class<? extends Interpretation>> specialisationOfTypes(){
-		return Collections.emptySet();
+	public Node inconsistentNode(){
+		return node;
 	}
 }

@@ -17,14 +17,9 @@
 
 package com.github.sparqlanything.jdbc;
 
-import java.util.Collections;
-import java.util.Set;
+public class InconsistentAssumptionException extends Exception {
+	public InconsistentAssumptionException(String message){
+		super(message);
 
-public interface Interpretation {
-	default Set<Class<? extends Interpretation>> inconsistentTypes(){
-		return Collections.emptySet();
-	}
-	default Set<Class<? extends Interpretation>> specialisationOfTypes(){
-		return Collections.emptySet();
 	}
 }
