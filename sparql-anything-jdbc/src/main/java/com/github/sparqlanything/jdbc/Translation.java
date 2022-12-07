@@ -40,8 +40,8 @@ public class Translation {
 	}
 
 	public Integer nodeContainerToRowNum(Node node){
-		if(node.isConcrete() && node.isURI()){
-			String lastPart = node.getURI().substring(ns.length());
+		if(node.isConcrete() && node.isBlank()){
+			String lastPart = node.getBlankNodeLabel().substring(ns.length());
 			if(lastPart.indexOf('/') != -1){
 				return Integer.parseInt(lastPart.substring(lastPart.indexOf('/') + 1 ));
 			}
@@ -68,7 +68,7 @@ public class Translation {
 	}
 
 	public String tableToType(String tableName){
-		return Triplifier.getNamespaceArgument(properties) + tableName;
+		return JDBC.getNamespace(properties) + tableName;
 	}
 
 	public boolean nodeTypeIsTable(Node node){
@@ -83,12 +83,12 @@ public class Translation {
 		return NodeFactory.createURI(tableToContainer(tableName));
 	}
 
-	public String rowNumToContainer(String tableName, Integer rowNum){
-		return this.ns + tableName + "/" + rowNum.toString();
+	public String rowNumToContainer(String resultSetTokenId, Integer rowNum){
+		return this.ns + resultSetTokenId + "/" + rowNum.toString();
 	}
 
-	public Node rowNumToNodeContainer(String tableName, Integer rowNum){
-		return NodeFactory.createURI(rowNumToContainer(tableName, rowNum));
+	public Node rowNumToNodeContainer(String resultSetTokenId, Integer rowNum){
+		return NodeFactory.createBlankNode(rowNumToContainer(resultSetTokenId, rowNum));
 	}
 
 	public String nodeSlotToColumn(Node node){
@@ -98,6 +98,9 @@ public class Translation {
 		return null;
 	}
 	public boolean nodeSlotIsColumn(Node node){
+		if(node.isURI() && node.getURI().startsWith(RDF.getURI())){
+			return false;
+		}
 		return nodeSlotToColumn(node) != null;
 	}
 

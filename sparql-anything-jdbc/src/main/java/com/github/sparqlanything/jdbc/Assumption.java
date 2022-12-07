@@ -122,7 +122,7 @@ public class Assumption implements Interpretation {
 	static class SlotValue extends Assumption {
 		@Override
 		public Set<Class<? extends Interpretation>> inconsistentTypes() {
-			return ImmutableSet.of(SlotRow.class,SlotColumn.class, ContainerRow.class, TypeProperty.class, Subject.class, Object.class, ContainerTable.class );
+			return ImmutableSet.of(SlotRow.class,SlotColumn.class, ContainerRow.class, TypeProperty.class, Subject.class, ContainerTable.class );
 		}
 
 		@Override
@@ -130,4 +130,17 @@ public class Assumption implements Interpretation {
 			return ImmutableSet.of(Object.class);
 		}
 	}
+
+	static class FXRoot extends Assumption {
+		@Override
+		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+			return ImmutableSet.of(SlotValue.class, SlotRow.class,SlotColumn.class, ContainerRow.class, TypeProperty.class, Predicate.class, Subject.class, ContainerTable.class );
+		}
+
+		@Override
+		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+			return ImmutableSet.of(Object.class);
+		}
+	}
+
 }

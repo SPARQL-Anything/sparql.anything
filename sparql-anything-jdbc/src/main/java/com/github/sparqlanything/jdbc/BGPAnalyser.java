@@ -17,9 +17,12 @@
 
 package com.github.sparqlanything.jdbc;
 
+import com.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,12 +31,13 @@ import java.util.Map;
 import java.util.Properties;
 
 public class BGPAnalyser {
+	final static Logger L = LoggerFactory.getLogger(BGPAnalyser.class);
 	private Properties properties;
 	private String namesNamespace;
 	private OpBGP opBGP;
 	private Translation translation;
 
-	private Map<Node, Interpretation> interpretations = null;
+	private Map<Node, Interpretation> constraints = null;
 	private InconsistentAssumptionException exception;
 
 	public BGPAnalyser(Properties properties, OpBGP opBGP){
@@ -44,10 +48,10 @@ public class BGPAnalyser {
 	}
 
 	public Map<Node, Interpretation> interpretations(){
-		if(this.interpretations == null){
+		if(this.constraints == null){
 			return Collections.emptyMap();
 		}
-		return Collections.unmodifiableMap(this.interpretations);
+		return Collections.unmodifiableMap(this.constraints);
 	}
 
 	public boolean isException(){
@@ -55,161 +59,152 @@ public class BGPAnalyser {
 	}
 
 	private void interpret()  {
-		this.interpretations = new HashMap<Node,Interpretation>();
+		this.constraints = new HashMap<Node,Interpretation>();
 		List<Triple> tripleList = opBGP.getPattern().getList();
 		try {
 			// A) Gather Interpretations from the BGP, iterate until no new Interpreations are retrieved
-			boolean lookForInterpretations = true;
-			while (lookForInterpretations) {
-				lookForInterpretations = false;
+			boolean lookForConstraints = true;
+			while (lookForConstraints) {
+				lookForConstraints = false;
 				for (Triple triple : tripleList) {
-
+					L.trace("intepreting triple: {}", triple);
 					Node subject = triple.getSubject();
 					Node predicate = triple.getPredicate();
-					Node object = triple.getPredicate();
+					Node object = triple.getObject();
 
 					// If node was observed before, retrieve previous Interpretations
-					Interpretation subjectInterpretation = interpretSubject(subject, triple);
-					lookForInterpretations = updateInterpretation(subject, subjectInterpretation);
-					Interpretation predicateInterpretation = interpretPredicate(predicate, triple);
-					lookForInterpretations = lookForInterpretations || updateInterpretation(predicate, predicateInterpretation);
-					Interpretation objectInterpretation = interpretObject(object, triple);
-					lookForInterpretations = lookForInterpretations || updateInterpretation(object, objectInterpretation);
+					Interpretation subjectInterpretation = constrainSubject(subject, triple);
+					lookForConstraints = updateConstraint(subject, subjectInterpretation);
+					Interpretation predicateInterpretation = constrainPredicate(predicate, triple);
+					lookForConstraints = lookForConstraints || updateConstraint(predicate, predicateInterpretation);
+					Interpretation objectInterpretation = constrainObject(object, triple);
+					lookForConstraints = lookForConstraints || updateConstraint(object, objectInterpretation);
+					L.trace("look for constraints: {}", lookForConstraints);
 				}
 			}
 		}catch(InconsistentAssumptionException e){
 			this.exception = e;
+			L.warn("No solution for BGP", opBGP);
+			if(L.isDebugEnabled()){
+				L.error("Debug enabled. Logging InconsistentAssumptionException.");
+			}
+			L.error("No solution for BGP (reason)", opBGP);
 		}
 	}
 
 	private boolean interpretedAs(Node n, Class<? extends Interpretation> as){
-		return interpretations.get(n).getClass().equals(as);
+		if(!constraints.containsKey(n)){
+			return false;
+		}
+		return constraints.get(n).getClass().equals(as);
 	}
 
-	private Interpretation interpretSubject(Node subject, Triple triple) throws InconsistentAssumptionException {
+	private Interpretation constrainSubject(Node subject, Triple triple) throws InconsistentAssumptionException {
 
-		// If predicate is a TypeProperty
-		// or object is a TypeTable
-		// then this is a ContainerTable
-		// or predicate is a SlotRow
-		// or object is a ContainerRow
-		if(interpretedAs(triple.getPredicate(), Assumption.TypeProperty.class) ||
-			interpretedAs(triple.getObject(), Assumption.ContainerTable.class) ||
+		// ContainerTable(S) <- URI(S) | FXRoot(O) | SlotRow(P) | ContainerRow(O)
+		if(subject.isURI() || interpretedAs(triple.getObject(), Assumption.FXRoot.class) ||
 			interpretedAs(triple.getPredicate(), Assumption.SlotRow.class) ||
 			interpretedAs(triple.getObject(), Assumption.ContainerRow.class)){
 			return new Assumption.ContainerTable();
 		}
 
-		// If predicate is a SlotColumn
-		// or object is a SlotValue
-		// then this is a ContainerRow
+		// ContainerRow(S) <- SlotColumn(P) | SlotValue(O) | TypeTable(O)
 		if(interpretedAs(triple.getPredicate(), Assumption.SlotColumn.class) ||
+				interpretedAs(triple.getObject(), Assumption.TypeTable.class) ||
 				interpretedAs(triple.getObject(), Assumption.SlotValue.class) ){
 			return new Assumption.ContainerRow();
 		}
 
 		// if subject is named entity
 		if(subject.isURI()){
+			// ContainerTable(S) <- URI(S)
 			if(translation.nodeContainerIsTable(subject)){
 				return new Assumption.ContainerTable();
-			}else if(translation.nodeContainerIsRowNum(subject)){
-				return new Assumption.ContainerRow();
 			}else{
 				// Unknown entity URI
-				throw new InconsistentEntityException(subject);
+				throw new InconsistentEntityException(subject, "URI does not match table name pattern");
 			}
-		}else{
+		} else {
 			// if subject is a variable or a blank node
 			return new Assumption.Subject();
 		}
 	}
 
-	private Interpretation interpretObject(Node object, Triple triple) throws InconsistentEntityException {
-		// If predicate is a SlotColumn
-		// or subject is a ContainerRow
-		// then this is a SlotValue
-		if(interpretedAs(triple.getPredicate(), Assumption.SlotColumn.class) ||
-				interpretedAs(triple.getSubject(), Assumption.ContainerRow.class) ){
+	private Interpretation constrainObject(Node object, Triple triple) throws InconsistentEntityException {
+		// SlotValue(O) <- SlotColumn(P)
+		if(interpretedAs(triple.getPredicate(), Assumption.SlotColumn.class) ){
 			return new Assumption.SlotValue();
 		}
 
-		// If predicate is a TypeProperty
-		// then this is a TypeTable
-		if(interpretedAs(triple.getPredicate(), Assumption.TypeProperty.class)){
-			return new Assumption.TypeTable();
-		}
-
-		// If predicate is SlotRow
-		// or subject is ContainerTable
-		// then this is ContainerRow
-		if(interpretedAs(triple.getPredicate(), Assumption.SlotRow.class) ||
-				interpretedAs(triple.getSubject(), Assumption.ContainerTable.class) ){
+		// ContainerRow(O) <- SlotRow(P)
+		if(interpretedAs(triple.getPredicate(), Assumption.SlotRow.class) ){
 			return new Assumption.ContainerRow();
 		}
 
-		// if subject is named entity
+		// if object is named entity then it can only be a table type
 		if(object.isURI()){
-			if(translation.nodeContainerIsRowNum(object)){
-				return new Assumption.ContainerRow();
-			}else if(translation.nodeTypeIsTable(object)){
+			// TypeTable(O) <- URI(O)
+			if(object.getURI().equals(Triplifier.FACADE_X_TYPE_ROOT)){
+				return new Assumption.FXRoot();
+			} else if(translation.nodeTypeIsTable(object)){
 				return new Assumption.TypeTable();
-			}else{
+			} else {
 				// Unknown entity URI
 				throw new InconsistentEntityException(object);
 			}
-		}else{
-			// if subject is a variable or a blank node
+		} else if(object.isBlank() || object.isVariable()){
 			return new Assumption.Object();
+		} else if(object.isLiteral()){
+			// SlotValue(O) <- TL(O)
+			return new Assumption.SlotValue();
 		}
+		throw new InconsistentEntityException(object, "Object cannot be of this type");
 	}
 
-	private Interpretation interpretPredicate(Node predicate, Triple triple) throws InconsistentAssumptionException {
-		// If subject is ContainerRow
-		// or object is SlotValue
-		// then this is SlotColumn
-		if(interpretedAs(triple.getSubject(), Assumption.ContainerRow.class) ||
-				interpretedAs(triple.getObject(), Assumption.SlotValue.class) ){
+	private Interpretation constrainPredicate(Node predicate, Triple triple) throws InconsistentAssumptionException {
+		// SlotColumn(P) <- SlotValue(O)
+		if(interpretedAs(triple.getObject(), Assumption.SlotValue.class) ){
 			return new Assumption.SlotColumn();
 		}
-		// If object is TableType
-		// this is rdf:type
-		if(interpretedAs(triple.getObject(), Assumption.TypeTable.class) ){
+		// TypeProperty(P) <- TypeTable(O)
+		if(interpretedAs(triple.getObject(), Assumption.TypeTable.class) ||
+			interpretedAs(triple.getObject(), Assumption.FXRoot.class)){
 			return new Assumption.TypeProperty();
 		}
-		// If object is ContainerRow
-		// then this is SlotRow
+		// SlotRow(P) <- ContainerRow(O)
 		if(interpretedAs(triple.getObject(), Assumption.ContainerRow.class) ){
 			return new Assumption.SlotRow();
 		}
-		// if subject is named entity
-		if(predicate.isURI()){
+
+		if(!predicate.isVariable()){
 			if(translation.nodeSlotIsRowNum(predicate)){
+				// SlotRow(P) <- CMP(P)
 				return new Assumption.SlotRow();
 			}else if(translation.nodeSlotIsColumn(predicate)){
+				// SlotColumn(P) <- URI(fx:*)
 				return new Assumption.SlotColumn();
 			}else if(translation.nodeSlotIsTypeProperty(predicate)){
+				// TypeProperty(P) <- URI(rdf:type)
 				return new Assumption.TypeProperty();
 			}else{
 				// Unknown entity URI
 				throw new InconsistentEntityException(predicate);
 			}
-		}else{
-			// if subject is a variable or a blank node
-			return new Assumption.Object();
 		}
+		return new Assumption.Predicate();
 	}
 
-	private boolean updateInterpretation(Node node, Interpretation interpretation) throws InconsistentAssumptionException {
+	private boolean updateConstraint(Node node, Interpretation constraint) throws InconsistentAssumptionException {
 		Interpretation previous = null;
 		// Check if node was observed before
-		if(interpretations.containsKey(node)){
-			previous = interpretations.get(node);
+		if(constraints.containsKey(node)){
+			previous = constraints.get(node);
 			Class<? extends Interpretation> wasType = previous.getClass();
-			Class<? extends Interpretation> isType = interpretation.getClass();
+			Class<? extends Interpretation> isType = constraint.getClass();
 			// If previous Interpretation exist, check consistency:
 			// If new interpretation is inconsistent with old one, throw an exception
 			if(previous.inconsistentTypes().contains(isType) ||
-				interpretation.inconsistentTypes().contains(wasType)){
+				constraint.inconsistentTypes().contains(wasType)){
 				throw new InconsistentTypesException(wasType, isType);
 			}
 			// Types are consistent, now keep the most specific
@@ -221,9 +216,9 @@ public class BGPAnalyser {
 				if(previous.specialisationOfTypes().contains(isType)){
 					// keep old type
 					return false;
-				}else if(interpretation.specialisationOfTypes().contains(wasType)){
+				}else if(constraint.specialisationOfTypes().contains(wasType)){
 					// keep new type
-					interpretations.put(node, interpretation);
+					constraints.put(node, constraint);
 					return true;
 				}else{
 					// Ops, we haven't specified things properly!
@@ -231,7 +226,7 @@ public class BGPAnalyser {
 				}
 			}
 		} else {
-			interpretations.put(node, interpretation);
+			constraints.put(node, constraint);
 			return true;
 		}
 	}

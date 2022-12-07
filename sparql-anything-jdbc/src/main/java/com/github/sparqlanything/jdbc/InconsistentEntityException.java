@@ -21,8 +21,12 @@ import org.apache.jena.graph.Node;
 
 public class InconsistentEntityException extends InconsistentAssumptionException {
 	private Node node;
+	public InconsistentEntityException(Node node, String message){
+		super(message + ": " + node.toString());
+		this.node = node;
+	}
 	public InconsistentEntityException(Node node){
-		super("Inconsistent enttity URI: " + node.toString());
+		this(node, "Inconsistent enttity URI: " + node.toString());
 		this.node = node;
 	}
 	public Node inconsistentNode(){
