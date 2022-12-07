@@ -19,31 +19,38 @@ TypeTable: the range of the RDF Type property, pointing to the table name in the
 SlotRow: a container membership property linking a ContainerTable to any of its ContainerRow
 SlotColumn: an RDF property named after a table column linking a ContainerRow to the SlotValue (the typed literal from the column value)
 SlotValue: an RDF typed literal (the column value in the database table)
+Join: some roles can be joined together. E.g. ContainerRow(S) ^ ContainerRow(O). Not all assumption can be joined. Same assumptions in different triples can always be joined. Rules for inferring valid joined below.
 
 ## Interpreting basic graph patterns
 
 T <- ( S, P, O )
 S <- URI|BN
 O <- URI|BN|TL
-CMP <- URI(rdf:_*)
+CMP <- URI(rdf:\_\*)
 P <- URI
 BGP <- { T }
 
+;; Inferring the role of S
 ContainerTable(S) <- URI(S) | FXRoot(O) | SlotRow(P) | ContainerRow(O)
 ContainerRow(S) <- SlotColumn(P) | SlotValue(O) | TypeTable(O)
-
+;; Inferring role of P
 SlotColumn(P) <- SlotValue(O)
 TypeProperty(P) <- TypeTable(O) | FXRoot(O)
 SlotRow(P) <- ContainerRow(O)
 SlotRow(P) <- CMP(P)
-SlotColumn(P) <- URI(fx:*)
+SlotColumn(P) <- URI(fx:\*)
 TypeProperty(P) <- URI(rdf:type)
-
+;; Inferring the role of O
 SlotValue(O) <- SlotColumn(P)
-
 ContainerRow(O) <- SlotRow(P) 
 TypeTable(O) <- URI(O)
 SlotValue(O) <- TL(O)
+;; Making joins
+Join(n) <- Assumption(n) ^ Assumption(n) -- on different triples
+;; Inferring joins from different types
+Join(n) <- ContainerRow(n) ^ ContainerRow(n) <- Subject(n) ^ Object(n)
+Join(n) <- ContainerRow(n) ^ ContainerRow(n) <- Object(n) ^ Subject(n)
+Join(n) <- 
 
 Wrong:
 ;; TypeTable(O) <- TypeProperty(P)

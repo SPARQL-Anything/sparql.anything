@@ -17,18 +17,8 @@
 
 package com.github.sparqlanything.jdbc;
 
-import java.util.Collections;
-import java.util.Set;
-
-public interface Interpretation {
-	default Set<Class<? extends Interpretation>> inconsistentTypes(){
-		return Collections.emptySet();
+public class InconsistentJoinException extends InconsistentAssumptionException {
+	public InconsistentJoinException(Object a, Object b){
+		super("Cannot join: " + a + " and " + b);
 	}
-	default Set<Class<? extends Interpretation>> specialisationOfTypes(){
-		return Collections.emptySet();
-	}
-	default Class<? extends Interpretation> type(){
-		return getClass();
-	}
-
 }
