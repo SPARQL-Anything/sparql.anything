@@ -121,8 +121,8 @@ public class Translation {
 			node.getURI().startsWith(ns) & node.getURI().indexOf('/', ns.length()) == -1);
 	}
 	public boolean nodeContainerIsRowNum(Node node){
-		return (node.isConcrete() && node.isURI() &&
-				node.getURI().startsWith(ns) & node.getURI().indexOf('/', ns.length()) != -1);
+		return (node.isConcrete() && node.isBlank() &&
+				node.getBlankNodeLabel().startsWith(ns) & node.getBlankNodeLabel().indexOf('/', ns.length()) != -1);
 	}
 
 	public boolean nodeSlotIsRowNum(Node node){

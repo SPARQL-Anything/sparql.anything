@@ -104,7 +104,7 @@ public class BGPAnalyserTest {
 	}
 
 	private boolean isA(Node n, Class<?> cz){
-		return interpretations.get(n).getClass().equals(cz);
+		return interpretations.get(n).type().equals(cz);
 	}
 	private void add(Triple t){
 		bp.add(t);
@@ -252,6 +252,21 @@ public class BGPAnalyserTest {
 		run();
 		IsA(u("http://www.example.org/tablename"), Assumption.ContainerTable.class);
 		IsA(v("p"), Assumption.Predicate.class);
+		IsA(v("o"), Assumption.Object.class);
+	}
+
+	@Test
+	public void B_P_b__b_P_O() {
+		Node t = b();
+		Node b = b();
+		add(t, v("p1"), b);
+		add(b, v("p2"), v("o"));
+		run();
+		System.err.println(interpretations);
+		IsA(t, Assumption.ContainerTable.class);
+		IsA(b, Assumption.ContainerRow.class);
+		IsA(v("p1"), Assumption.SlotRow.class);
+		IsA(v("p2"), Assumption.Predicate.class);
 		IsA(v("o"), Assumption.Object.class);
 	}
 }
