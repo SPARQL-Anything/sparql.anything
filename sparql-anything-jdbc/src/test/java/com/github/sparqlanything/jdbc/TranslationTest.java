@@ -97,7 +97,7 @@ public class TranslationTest {
 	public void rowNumToNode(){
 		Integer row = 23;
 		String table = "address";
-		Node n = NodeFactory.createURI(testNamespace + table + "/" + row.toString());
+		Node n = NodeFactory.createBlankNode(testNamespace + table + "/" + row.toString());
 		L.debug("{}",translation.rowNumToNodeContainer( table, row));
 		Assert.assertTrue(n.equals(translation.rowNumToNodeContainer(table, row)));
 	}
