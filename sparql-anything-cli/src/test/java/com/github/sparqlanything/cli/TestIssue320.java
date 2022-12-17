@@ -23,6 +23,7 @@ import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.UnknownQueryTypeException;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.ResultSetFormatter;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -35,15 +36,12 @@ public class TestIssue320 {
 	@Test
 	public void testIssue320() throws Exception {
 		// This is to reproduce Issue #320
+		// No output form below
 		ResultSetFormatter.outputAsCSV(System.err,true);
 		ResultSetFormatter.outputAsCSV(System.err,false);
 
 		String str = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("./ask.sparql"), StandardCharsets.UTF_8);
 		String output = SPARQLAnything.callMain(new String[]{"-q", str, "-f", "text"});
-		System.out.println(output);
-//
-//		while (it.hasNext()) {
-//			QuerySolution qs = parameters.nextSolution();
-//		}
+		Assert.assertTrue(output.equals("false"));
 	}
 }

@@ -106,7 +106,8 @@ public class SPARQLAnything {
 			} else if (format.equals("CSV")) {
 				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
 			} else if (format.equals("TEXT")) {
-				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
+				pw.print(QueryExecutionFactory.create(q, kb).execAsk());
+				//ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
 			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
