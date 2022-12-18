@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>com.github.sparqlanything</groupId>
 		<artifactId>sparql-anything-parent</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.8.1</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>sparql-anything-spreadsheet</artifactId>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>com.github.sparqlanything</groupId>
             <artifactId>sparql-anything-testutils</artifactId>
-            <version>0.9.0-SNAPSHOT</version>
+            <version>0.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
