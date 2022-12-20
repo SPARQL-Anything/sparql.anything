@@ -30,3 +30,4 @@ extra_css: [styles.css]
 sticky_navigation: true
 markdown_extensions:
   - tables
+  - admonition
