@@ -23,7 +23,7 @@ nav:
       - Binary: 'formats/Binary.md'
       - Archive: 'formats/Archive.md'
       - TXT: 'formats/TXT.md'
-      - RDF: 'formats/RDF.md'
+      - RDF: 'formats/RDF_Files.md'
       - Spreadsheet: 'formats/Spreadsheet.md'
       - Word: 'formats/Word_Processing_Document.md'
 extra_css: [styles.css]
