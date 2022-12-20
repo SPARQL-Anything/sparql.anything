@@ -25,7 +25,7 @@ nav:
       - TXT: 'formats/TXT.md'
       - RDF: 'formats/RDF.md'
       - Spreadsheet: 'formats/Spreadsheet.md'
-      - Word: 'formats/Word_Processing_Documents.md'
+      - Word: 'formats/Word_Processing_Document.md'
 extra_css: [styles.css]
 sticky_navigation: true
 markdown_extensions:
