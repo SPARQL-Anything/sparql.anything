@@ -6,6 +6,9 @@ These may include text, which are expressed as RDF literals of type `xsd:string`
 Tag names are represented as RDF types: `rdf:type`.
 SPARQL Anything reuses namespaces declared within the original document to name properties and types, when available, otherwise fallbacks to the default \tt{xyz:}.
 
+!!! note
+	XML attribute values are always interpreted as literals, even if they are supposed to be QName in a referred XML schema. See also [this comment](https://github.com/SPARQL-Anything/sparql.anything/issues/322#issuecomment-1351299515).
+
 ## Extensions
 
 SPARQL Anything selects this transformer for the following file extensions:
