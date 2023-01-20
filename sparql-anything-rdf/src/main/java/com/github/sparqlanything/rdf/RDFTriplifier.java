@@ -82,7 +82,12 @@ public class RDFTriplifier implements Triplifier {
 		Lang lang = null;
 		// Version from HTTP content type response
 		if(contentType != null){
-			lang = RDFLanguages.contentTypeToLang(contentType.getValue().substring(0,contentType.getValue().indexOf(';') ));
+			// After issue https://github.com/SPARQL-Anything/sparql.anything/issues/317
+			if(contentType.getValue().indexOf(';') != -1) {
+				lang = RDFLanguages.contentTypeToLang(contentType.getValue().substring(0, contentType.getValue().indexOf(';')));
+			}else{
+				lang = RDFLanguages.contentTypeToLang(contentType.getValue());
+			}
 		}
 		// Version from expected content type (HTTP accept header)
 		if(lang == null && properties.containsKey(HTTPHelper.HTTPHEADER_PREFIX + "accept")){
