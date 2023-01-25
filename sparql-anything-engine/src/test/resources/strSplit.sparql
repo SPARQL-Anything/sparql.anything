@@ -1,0 +1,24 @@
+PREFIX apf: <http://jena.hpl.hp.com/ARQ/property#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX myns: <http://example.org/myns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+
+Select
+    ?term ?value
+WHERE {
+    SERVICE <x-sparql-anything:csv.headers=true>
+    {
+        fx:properties   fx:location "%%location%%" ;
+                        fx:media-type "text/csv" ;
+                        fx:csv.null-string          "" .
+
+        ?c  xyz:terms ?term_temp;
+            xyz:values  ?value_temp.
+
+        ?value apf:strSplit    (?value_temp ";") .
+        BIND (IRI(CONCAT("http://example.org/myns/", ?term_temp)) AS ?term)
+    }
+
+}
