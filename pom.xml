@@ -399,7 +399,7 @@
 			<dependency>
 				<groupId>com.github.jsurfer</groupId>
 				<artifactId>jsurfer-jackson</artifactId>
-				<version>1.6.3</version>
+				<version>1.6.4</version>
 			</dependency>
 
 			<!-- https://mvnrepository.com/artifact/com.ximpleware/vtd-xml -->
