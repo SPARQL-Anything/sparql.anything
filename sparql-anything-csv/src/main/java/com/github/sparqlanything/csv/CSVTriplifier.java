@@ -129,8 +129,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 		// Add type Root
 		builder.addRoot(dataSourceId, root);
-		InputStream is = Triplifier.getInputStream(properties);
-		try (is){
+
+		try (InputStream is = Triplifier.getInputStream(properties);){
 			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
 			Iterable<CSVRecord> records = format.parse(in);
 			Iterator<CSVRecord> recordIterator = records.iterator();
