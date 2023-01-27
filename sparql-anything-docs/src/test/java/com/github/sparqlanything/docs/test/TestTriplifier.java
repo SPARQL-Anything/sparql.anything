@@ -34,6 +34,8 @@ import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -43,7 +45,7 @@ import java.util.Properties;
 import static org.junit.Assert.assertTrue;
 
 public class TestTriplifier {
-
+	final static Logger logger = LoggerFactory.getLogger(TestTriplifier.class);
 	@Ignore
 	@Test
 	public void test1() {
@@ -102,7 +104,7 @@ public class TestTriplifier {
 					.isIsomorphicWith(expectedGraph));
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("",e);
 		}
 	}
 
@@ -133,7 +135,7 @@ public class TestTriplifier {
 //			assertTrue(dg.getGraph(NodeFactory.createURI(doc.toString())).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("",e);
 		}
 	}
 
@@ -226,7 +228,7 @@ public class TestTriplifier {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("",e);
 		}
 	}
 
@@ -308,7 +310,7 @@ public class TestTriplifier {
 					.isIsomorphicWith(expectedGraph));
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("",e);
 		}
 	}
 

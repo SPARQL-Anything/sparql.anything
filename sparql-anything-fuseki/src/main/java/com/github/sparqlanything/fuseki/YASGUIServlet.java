@@ -19,6 +19,8 @@ package com.github.sparqlanything.fuseki;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class YASGUIServlet extends HttpServlet {
-
+	final static Logger logger = LoggerFactory.getLogger(YASGUIServlet.class);
 	private static final long serialVersionUID = 1L;
 
 	private String fxPrefix, endpointPath;
@@ -57,7 +59,7 @@ public class YASGUIServlet extends HttpServlet {
 			temp.process(var, pw);
 //			temp.process(var, sw);
 		} catch (TemplateException | IOException e1) {
-			e1.printStackTrace();
+			logger.error("",e1);
 		}
 		pw.close();
 //		System.out.println(sw.toString());

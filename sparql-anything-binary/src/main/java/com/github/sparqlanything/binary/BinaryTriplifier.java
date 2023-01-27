@@ -99,7 +99,7 @@ public class BinaryTriplifier implements Triplifier {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("",e);
 			return null;
 		}
 

@@ -70,7 +70,7 @@ public class BibtexTriplifier implements Triplifier {
 				try {
 					builder.addType(dataSourceId, containerIdChild, new URI(namespace + entry.getType().toString()));
 				} catch (URISyntaxException e) {
-					e.printStackTrace();
+					logger.error("",e);
 				}
 				builder.addContainer(dataSourceId, root, count.incrementAndGet(), containerIdChild);
 				entry.getFields().forEach((keyField, valueField) -> {

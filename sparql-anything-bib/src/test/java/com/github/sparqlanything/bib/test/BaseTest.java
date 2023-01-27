@@ -29,6 +29,8 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -37,7 +39,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class BaseTest {
-
+	final static Logger logger = LoggerFactory.getLogger(BaseTest.class);
 	@Test
 	public void testContent() throws TriplifierHTTPException {
 
@@ -61,7 +63,7 @@ public class BaseTest {
 			assertTrue(g1.getDefaultGraph().isIsomorphicWith(expected));
 
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			logger.error("",e1);
 		}
 
 	}
@@ -86,7 +88,7 @@ public class BaseTest {
 			});
 
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			logger.error("",e1);
 		}
 
 	}
