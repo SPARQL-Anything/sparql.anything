@@ -77,7 +77,7 @@ WHERE
 ] .
 ```
 
-### Example
+### Example 1
 
 Consider the following input, also located at [https://sparql-anything.cc/example1.json](https://sparql-anything.cc/example1.json)
 
@@ -149,6 +149,65 @@ and get this result:
 | "Cougar Town" |
 | "Friends"     |
 
+### Example 2
+
+Consider a JSON file with the following content:
+
+```json
+{
+  "Part01_001MIDDE": {
+    "builder": "Peter Gerritsz",
+    "originallocation": "Utrecht, Nicolaikerk",
+    "year": "1479"
+  },
+  "Part01_002UTREJ": {
+    "builder": "Gerrit Petersz",
+    "originallocation": "",
+    "year": "1509"
+  }
+}
+```
+
+the query:
+
+```sparql
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX oont: <uri:todo/>
+construct {
+    ?organ a oont:Organ ;
+        oont:builder ?builder_string ;
+        oont:consolelocation ?location_string ;
+        oont:dateOfBirth ?year_string ;
+} WHERE {
+ SERVICE <x-sparql-anything:> {
+    fx:properties fx:location "/app/history_base.json"  .
+bind(iri(concat(str(xyz:),?_organ)) as ?organ_slot)
+?root a fx:root ;
+      ?organ_slot ?organ .
+?organ xyz:builder ?builder_string ;
+       xyz:originallocation ?location_string ;
+       xyz:year ?year_string .
+}
+}
+```
+generates the following RDF:
+```turtle
+@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
+@prefix oont: <uri:todo/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xyz:  <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type              oont:Organ ;
+  oont:builder          "Gerrit Petersz" ;
+  oont:consolelocation  "" ;
+  oont:dateOfBirth      "1509"
+] .
+```
+
 ## Options
 
 ### Summary
@@ -161,7 +220,8 @@ and get this result:
 ### `json.path`
 
 !!! note
-    The `json.path` option will pre-process the JSON before the execution of the query. 
+    The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option. 
+    It will pre-process the JSON before the execution of the query. 
     In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).
 
 #### Description
