@@ -484,7 +484,7 @@ public class SPARQLAnything {
 						kb = DatasetFactory.create(base.relativize(loadSource.toPath()).toString());
 					} catch (Exception e) {
 						logger.error("An error occurred while loading {}", loadSource);
-						logger.error(" - Problem was: ", e.getMessage());
+						logger.error(" - Problem was: {}", e.getMessage());
 						if(logger.isDebugEnabled()){
 							logger.error("",e);
 						}
