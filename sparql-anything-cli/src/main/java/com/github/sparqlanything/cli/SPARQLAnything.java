@@ -490,7 +490,11 @@ public class SPARQLAnything {
 						}
 				}
 				} else {
-					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+					if(!loadSource.exists()){
+						logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
+					}else {
+						logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+					}
 					return;
 				}
 				if(logger.isTraceEnabled()) {
