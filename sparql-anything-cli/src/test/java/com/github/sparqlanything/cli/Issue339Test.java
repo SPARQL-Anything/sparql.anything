@@ -30,12 +30,10 @@ public class Issue339Test {
 	@Test
 	public void test() throws Exception {
 		String q = getClass().getClassLoader().getResource("./JsonldTest.sparql").toString();
-		File loadSource = new File(getClass().getClassLoader().getResource("./JsonldTest.json").toURI());
-		L.info("{}", loadSource.exists());
-		String d = IOUtils.toString(getClass().getClassLoader().getResource("./JsonldTest.json").toURI());
+		String d = getClass().getClassLoader().getResource("./JsonldTest.json").toURI().toString();
 		SPARQLAnything sa = new SPARQLAnything();
 		String out = sa.callMain(new String[]{
-			"-q", q, "-l", f
+			"-q", q, "-l", d
 		});
 		L.info("{}", out);
 	}
