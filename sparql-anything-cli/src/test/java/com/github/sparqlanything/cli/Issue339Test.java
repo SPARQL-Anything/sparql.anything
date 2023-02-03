@@ -18,46 +18,17 @@
 package com.github.sparqlanything.cli;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.atlas.lib.InternalErrorException;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.LangBuilder;
-import org.apache.jena.riot.RDFParserRegistry;
-import org.apache.jena.riot.ReaderRIOT;
-import org.apache.jena.riot.ReaderRIOTFactory;
-import org.apache.jena.riot.lang.JsonLDReader;
-import org.apache.jena.riot.system.ParserProfile;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class JsonldTest {
-	public static final Logger L = LoggerFactory.getLogger(JsonldTest.class);
+public class Issue339Test {
+	public static final Logger L = LoggerFactory.getLogger(Issue339Test.class);
 
-	static class ReaderRIOTFactoryJSONLD implements ReaderRIOTFactory {
-		@Override
-		public ReaderRIOT create(Lang language, ParserProfile profile) {
-			if ( !buildJSONLang().equals(language) )
-				throw new InternalErrorException("Attempt to parse " + language + " as JSON-LD");
-			return new JsonLDReader(language, profile, profile.getErrorHandler());
-		}
-	}
-
-	static Lang buildJSONLang(){
-		Lang JSON    = LangBuilder.create("JSON", "application/ld+json")
-				.addAltNames("JSON")
-				.addFileExtensions("json")
-				.build();
-		return JSON;
-	}
-
-	// Strategy to fix issue #339
 	@Test
 	public void test() throws Exception {
-		ReaderRIOTFactory parserFactoryJsonLD    = new ReaderRIOTFactoryJSONLD();
-		RDFParserRegistry.registerLangTriples(buildJSONLang(), parserFactoryJsonLD);
 		String q = getClass().getClassLoader().getResource("./JsonldTest.sparql").toString();
 		File loadSource = new File(getClass().getClassLoader().getResource("./JsonldTest.json").toURI());
 		L.info("{}", loadSource.exists());

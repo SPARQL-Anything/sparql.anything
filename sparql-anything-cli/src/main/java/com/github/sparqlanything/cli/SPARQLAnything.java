@@ -44,6 +44,8 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFParserRegistry;
+import org.apache.jena.riot.ReaderRIOTFactory;
 import org.apache.jena.sparql.core.ResultBinding;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
@@ -78,6 +80,10 @@ public class SPARQLAnything {
 	private static Long duration = null;
 
 	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
+		// Register the JSON-LD parser factory for extension  .json
+		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
+		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
+		// Setup FX executor
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
