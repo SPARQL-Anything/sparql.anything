@@ -1,1 +1,33 @@
-{"@context": {"@base": "https://github.com/polifonia-project/scorelib-ontology", "Collection": "Collection", "Opus": "Opus", "Score": "Score"}, "@id": "all:composers:beethoven:piano-sonatas:sonata01", "@type": "Collection", "hasCollectionTitle": "Sonata 1", "hasCollectionCopyright": "Craig Sapp", "hasLicence": "CCARH", "isInCollection": "all:composers:beethoven:piano-sonatas", "hasOpus": [{"@id": "all:composers:beethoven:piano-sonatas:sonata01:sonata01-1", "@type": "Opus", "hasOpusTitle": "sonata01-1", "hasAuthor": "https://dbpedia.org/resource/Ludwig_van_Beethoven", "hasScore": {"@type": "Score", "@id": "/media/corpora/all/composers/beethoven/piano-sonatas/sonata01/sonata01-1/mei.xml", "uri": "http://neuma.huma-num.fr//media/corpora/all/composers/beethoven/piano-sonatas/sonata01/sonata01-1/mei.xml"}}, {"@id": "all:composers:beethoven:piano-sonatas:sonata01:sonata01-2", "@type": "Opus", "hasOpusTitle": "sonata01-2", "hasAuthor": "https://dbpedia.org/resource/Ludwig_van_Beethoven", "hasScore": {"@type": "Score", "@id": "/media/corpora/all/composers/beethoven/piano-sonatas/sonata01/sonata01-2/mei.xml", "uri": "http://neuma.huma-num.fr//media/corpora/all/composers/beethoven/piano-sonatas/sonata01/sonata01-2/mei.xml"}}, {"@id": "all:composers:beethoven:piano-sonatas:sonata01:sonata01-3", "@type": "Opus", "hasOpusTitle": "sonata01-3", "hasAuthor": "https://dbpedia.org/resource/Ludwig_van_Beethoven", "hasScore": {"@type": "Score", "@id": "/media/corpora/all/composers/beethoven/piano-sonatas/sonata01/sonata01-3/mei.xml", "uri": "http://neuma.huma-num.fr//media/corpora/all/composers/beethoven/piano-sonatas/sonata01/sonata01-3/mei.xml"}}, {"@id": "all:composers:beethoven:piano-sonatas:sonata01:sonata01-4", "@type": "Opus", "hasOpusTitle": "sonata01-4", "hasAuthor": "https://dbpedia.org/resource/Ludwig_van_Beethoven", "hasScore": {"@type": "Score", "@id": "/media/corpora/all/composers/beethoven/piano-sonatas/sonata01/sonata01-4/mei.xml", "uri": "http://neuma.huma-num.fr//media/corpora/all/composers/beethoven/piano-sonatas/sonata01/sonata01-4/mei.xml"}}]}
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Colorado Springs",
+    "addressRegion": "CO",
+    "postalCode": "80840",
+    "streetAddress": "100 Main Street"
+  },
+  "colleague": [
+    "http://www.example.com/JohnColleague.html",
+    "http://www.example.com/JameColleague.html"
+  ],
+  "email": "info@example.com",
+  "image": "janedoe.jpg",
+  "jobTitle": "Research Assistant",
+  "name": "Jane Doe",
+  "alumniOf": "Dartmouth",
+  "birthPlace": "Philadelphia, PA",
+  "birthDate": "1979-10-12",
+  "height": "72 inches",
+  "gender": "female",
+  "memberOf": "Republican Party",
+  "nationality": "Albanian",
+  "telephone": "(123) 456-6789",
+  "url": "http://www.example.com",
+  "sameAs" : [ "https://www.facebook.com/",
+    "https://www.linkedin.com/",
+    "http://twitter.com/",
+    "http://instagram.com/",
+    "https://plus.google.com/"]
+}
