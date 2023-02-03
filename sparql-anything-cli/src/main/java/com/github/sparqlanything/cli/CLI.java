@@ -34,6 +34,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Locale;
 
 public class CLI {
@@ -79,7 +82,14 @@ public class CLI {
 
 	private static String getQuery(String queryArgument) throws IOException {
 		String query = queryArgument;
-		File queryFile = new File(queryArgument);
+
+		// XXX Check if queryArgument is a URI first
+		File queryFile;
+		try{
+			queryFile = new File(new URL(queryArgument).toURI());
+		}catch(MalformedURLException | URISyntaxException e){
+			queryFile = new File(queryArgument);
+		}
 		if (queryFile.exists()) {
 			logger.trace("Loading query from file");
 			// LOAD query from file
