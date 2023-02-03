@@ -56,6 +56,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -447,7 +449,13 @@ public class SPARQLAnything {
 				if(logger.isTraceEnabled()) {
 					logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
 				}
-				File loadSource = new File(load);
+				// XXX Check if load is a URI first
+				File loadSource;
+				try{
+					loadSource = new File(new URL(load).toURI());
+				}catch(MalformedURLException e){
+					loadSource = new File(load);
+				}
 				if (loadSource.isDirectory()) {
 
 					logger.info("Loading files from directory: {}", loadSource);
@@ -481,7 +489,11 @@ public class SPARQLAnything {
 					logger.info("Load file: {}", loadSource);
 					Path base = Paths.get(".");
 					try{
-						kb = DatasetFactory.create(base.relativize(loadSource.toPath()).toString());
+						Path p =  loadSource.toPath();
+						if(!p.isAbsolute()){
+							p = base.relativize(loadSource.toPath());
+						}
+						kb = DatasetFactory.create(p.toString());
 					} catch (Exception e) {
 						logger.error("An error occurred while loading {}", loadSource);
 						logger.error(" - Problem was: {}", e.getMessage());
