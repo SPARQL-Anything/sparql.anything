@@ -102,10 +102,8 @@ public class HTMLTriplifierTest {
 				assertTrue(!q.getGraph().isBlank());
 			});
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+		} catch (IOException | URISyntaxException e) {
+			log.error("",e);
 		}
 	}
 }
