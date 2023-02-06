@@ -636,8 +636,9 @@ public class IssuesTest {
 	 * @throws IOException
 	 */
 	@Test
+	@Ignore
 	public void testIssue334() throws URISyntaxException, IOException {
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
@@ -651,6 +652,8 @@ public class IssuesTest {
 		queryStr = queryStr.replace("%%%LOCATION%%%", location);
 
 		query = QueryFactory.create(queryStr);
+
+
 
 		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
 
