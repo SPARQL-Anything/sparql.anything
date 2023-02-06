@@ -193,6 +193,10 @@ bind(iri(concat(str(xyz:),?_organ)) as ?organ_slot)
 }
 }
 ```
+when  invoked via the command line, as follows:
+```bash
+java -jar /app/sparql-anything-cli/target/sparql-anything-0.9.0-SNAPSHOT.jar -q 332.rq -values organ=Part01_002UTREJ
+```
 generates the following RDF:
 ```turtle
 @prefix fx:   <http://sparql.xyz/facade-x/ns/> .

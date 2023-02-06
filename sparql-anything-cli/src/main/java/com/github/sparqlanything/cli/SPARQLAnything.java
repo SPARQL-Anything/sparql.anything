@@ -24,6 +24,7 @@ import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.VariablesBinder;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
@@ -63,6 +64,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -468,7 +470,8 @@ public class SPARQLAnything {
 					// If directory, load all files
 					List<File> list = new ArrayList<File>();
 					//Path base = Paths.get(".");
-					File[] files = loadSource.listFiles();
+					//File[] files = loadSource.listFiles();
+					Collection<File> files = FileUtils.listFiles(loadSource, null, true);
 					for (File f : files) {
 						logger.info("Adding file to be loaded: {}", f);
 //						list.add(base.relativize(f.toPath()));

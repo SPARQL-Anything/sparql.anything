@@ -1,0 +1,25 @@
+{
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Monterotondo",
+        "addressRegion": "Lazio",
+        "postalCode": "00010",
+        "streetAddress": "via Veneto"
+      },
+      "email": "info@example.com",
+      "jobTitle": "Web Developer",
+      "name": "Paolo Muti",
+      "birthPlace": "Philadelphia, PA",
+      "birthDate": "1979-11-12",
+      "height": "74 inches",
+      "gender": "male",
+      "memberOf": "SS Lazio",
+      "nationality": "Romanian",
+      "telephone": "(0039) 339-1024288",
+      "url": "http://www.example.com",
+	    "sameAs" : [ "https://www.facebook.com/",
+      "https://www.linkedin.com/",
+      "http://twitter.com/"]
+    }
