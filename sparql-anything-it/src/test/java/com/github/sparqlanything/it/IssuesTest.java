@@ -629,5 +629,34 @@ public class IssuesTest {
 	}
 
 
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/292
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue334() throws URISyntaxException, IOException {
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue334.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		String location = getClass().getClassLoader().getResource("issues/issue334.tar").toURI().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", location);
+
+		query = QueryFactory.create(queryStr);
+
+		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+
+		qExec.execConstruct().write(System.out, "TTL");
+	}
+
+
 
 }
