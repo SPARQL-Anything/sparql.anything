@@ -1,36 +1,38 @@
 /*
- * Copyright (c) 2021 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.github.sparqlanything.it;
 
 import com.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.compress.utils.Sets;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.tdb.TDB;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -41,9 +43,9 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class Issues {
+public class IssuesTest {
 
-	private static final Logger log = LoggerFactory.getLogger(Issues.class);
+	private static final Logger log = LoggerFactory.getLogger(IssuesTest.class);
 
 	@Test
 	public void issue75() throws URISyntaxException {
@@ -416,16 +418,22 @@ public class Issues {
 //		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
 
 		String location = getClass().getClassLoader().getResource("issues/issue280.json").toURI().toString();
-
+		File TDBfile = new File("target/tdbIssue280/" );
+		if(TDBfile.exists()){
+			TDBfile.delete();
+		}
+		TDBfile.mkdirs();
+		String TDBLocation = TDBfile.getAbsolutePath().toString();
+		log.debug("TDB temp location: {}", TDBLocation);
 		Query qs = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
 						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
 						"SELECT * WHERE { " +
-						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=/tmp> { " +
+						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=" + TDBLocation + "> { " +
 						" ?s xyz:name ?o }  }");
 
 //		System.out.println(location);
-//		System.out.println(qs.toString(Syntax.defaultSyntax));
+		System.out.println(qs.toString(Syntax.defaultSyntax));
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
@@ -442,7 +450,7 @@ public class Issues {
 
 
 		qs = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"/tmp\" .  " +
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"" + TDBLocation + "\" .  " +
 						" ?s xyz:name ?o }  }");
 
 
@@ -580,6 +588,76 @@ public class Issues {
 
 
 
+	}
+
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/292
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	public void testIssue295() throws URISyntaxException, IOException {
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		File tmpTBDFolder = new File(getClass().getClassLoader().getResource(".").getPath(), "testIssue295");
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue295.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		String location = getClass().getClassLoader().getResource("issues/issue295.json").toURI().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", location);
+		queryStr = queryStr.replace("%%%TDB_PATH%%%", tmpTBDFolder.getAbsolutePath());
+
+		query = QueryFactory.create(queryStr);
+
+		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+		ResultSet rs = qExec.execSelect();
+		Set<String> expectedNames = Sets.newHashSet("Vincent", "Jules", "Beatrix");
+		Set<String> actualNames = new HashSet<>();
+		while(rs.hasNext()){
+			QuerySolution qs = rs.next();
+			actualNames.add(qs.get("name").asLiteral().getValue().toString());
+		}
+		FileUtils.deleteDirectory(tmpTBDFolder);
+		assertEquals(expectedNames,actualNames);
+	}
+
+
+	/**
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/292
+	 *
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	@Test
+	@Ignore
+	public void testIssue334() throws URISyntaxException, IOException {
+		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue334.sparql").toURI(),
+				StandardCharsets.UTF_8);
+		String location = getClass().getClassLoader().getResource("issues/issue334.tar").toURI().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", location);
+
+		query = QueryFactory.create(queryStr);
+
+
+
+		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+
+		qExec.execConstruct().write(System.out, "TTL");
 	}
 
 

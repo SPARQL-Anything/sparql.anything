@@ -1,18 +1,17 @@
 /*
- * Copyright (c) 2021 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.github.sparqlanything.csv;
@@ -21,6 +20,7 @@ import com.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import com.github.sparqlanything.model.FacadeXGraphBuilder;
 import com.github.sparqlanything.model.IRIArgument;
 import com.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -37,6 +37,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -134,7 +136,7 @@ public class CSVTriplifierTest {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 //		properties.setProperty("ondisk", "/tmp");
-		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "/tmp/");
+		File tmp = Files.createTempDirectory(null).toFile();
 		tmp.mkdirs();
 		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		URL csv1 = getClass().getClassLoader().getResource("./test3.csv");
@@ -159,6 +161,7 @@ public class CSVTriplifierTest {
 			fail("expected 21 quads but found " + count);
 		}
 		graph.end();
+		FileUtils.deleteQuietly(tmp);
 	}
 
 	@Test
@@ -166,7 +169,7 @@ public class CSVTriplifierTest {
 		Properties properties = new Properties();
 		properties.setProperty("namespace", "http://www.example.org#");
 		//properties.setProperty("ondisk", "/tmp");
-		File tmp = new File(getClass().getClassLoader().getResource(".").getPath(), "/tmp/");
+		File tmp = Files.createTempDirectory(null).toFile();
 		tmp.mkdirs();
 		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		URL csv1 = getClass().getClassLoader().getResource("./test1.csv");
@@ -189,5 +192,6 @@ public class CSVTriplifierTest {
 			fail("expected 13 quads but found " + count);
 		}
 		graph.end();
+		FileUtils.deleteQuietly(tmp);
 	}
 }

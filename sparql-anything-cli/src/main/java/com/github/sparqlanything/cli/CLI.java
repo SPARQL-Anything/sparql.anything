@@ -5,14 +5,13 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.github.sparqlanything.cli;
@@ -35,6 +34,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Locale;
 
 public class CLI {
@@ -83,7 +85,14 @@ public class CLI {
 
 	private static String getQuery(String queryArgument) throws IOException {
 		String query = queryArgument;
-		File queryFile = new File(queryArgument);
+
+		// XXX Check if queryArgument is a URI first
+		File queryFile;
+		try{
+			queryFile = new File(new URL(queryArgument).toURI());
+		}catch(MalformedURLException | URISyntaxException e){
+			queryFile = new File(queryArgument);
+		}
 		if (queryFile.exists()) {
 			logger.trace("Loading query from file");
 			// LOAD query from file

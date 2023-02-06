@@ -1,18 +1,17 @@
 /*
- * Copyright (c) 2021 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package com.github.sparqlanything.cli;
@@ -25,6 +24,7 @@ import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.VariablesBinder;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
@@ -46,6 +46,8 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFParserRegistry;
+import org.apache.jena.riot.ReaderRIOTFactory;
 import org.apache.jena.sparql.core.ResultBinding;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
@@ -54,14 +56,21 @@ import org.apache.jena.sparql.mgt.Explain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+
 import java.io.OutputStream;
 import java.io.FileOutputStream;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,6 +88,10 @@ public class SPARQLAnything {
 	private static Long duration = null;
 
 	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
+		// Register the JSON-LD parser factory for extension  .json
+		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
+		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
+		// Setup FX executor
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
@@ -109,7 +122,8 @@ public class SPARQLAnything {
 			} else if (format.equals("CSV")) {
 				ResultSetFormatter.outputAsCSV(os, QueryExecutionFactory.create(q, kb).execAsk());
 			} else if (format.equals("TEXT")) {
-				ResultSetFormatter.outputAsCSV(os, QueryExecutionFactory.create(q, kb).execAsk());
+				pw.print(QueryExecutionFactory.create(q, kb).execAsk());
+				//ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
 			} else {
 				throw new RuntimeException("Unsupported format: " + format);
 			}
@@ -449,14 +463,21 @@ public class SPARQLAnything {
 				if(logger.isTraceEnabled()) {
 					logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
 				}
-				File loadSource = new File(load);
+				// XXX Check if load is a URI first
+				File loadSource;
+				try{
+					loadSource = new File(new URL(load).toURI());
+				}catch(MalformedURLException e){
+					loadSource = new File(load);
+				}
 				if (loadSource.isDirectory()) {
 
 					logger.info("Loading files from directory: {}", loadSource);
 					// If directory, load all files
 					List<File> list = new ArrayList<File>();
 					//Path base = Paths.get(".");
-					File[] files = loadSource.listFiles();
+					//File[] files = loadSource.listFiles();
+					Collection<File> files = FileUtils.listFiles(loadSource, null, true);
 					for (File f : files) {
 						logger.info("Adding file to be loaded: {}", f);
 //						list.add(base.relativize(f.toPath()));
@@ -483,16 +504,21 @@ public class SPARQLAnything {
 					logger.info("Load file: {}", loadSource);
 					Path base = Paths.get(".");
 					try{
-						kb = DatasetFactory.create(base.relativize(loadSource.toPath()).toString());
+						Path p =  loadSource.toPath();
+						if(!p.isAbsolute()){
+							p = base.relativize(loadSource.toPath());
+						}
+						kb = DatasetFactory.create(p.toString());
 					} catch (Exception e) {
 						logger.error("An error occurred while loading {}", loadSource);
-						logger.error(" - Problem was: ", e.getMessage());
-						if(logger.isDebugEnabled()){
-							logger.error("",e);
-						}
+						logger.error(" - Problem was: ", e);
 				}
 				} else {
-					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+					if(!loadSource.exists()){
+						logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
+					}else {
+						logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+					}
 					return;
 				}
 				if(logger.isTraceEnabled()) {
@@ -578,5 +604,23 @@ public class SPARQLAnything {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);
 		}
+	}
+
+	public static String callMain(String[] args) throws Exception {
+		// Thanks to: https://stackoverflow.com/a/8708357/1035608
+		// Create a stream to hold the output
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		// IMPORTANT: Save the old System.out!
+		PrintStream old = System.out;
+		// Tell Java to use your special stream
+		System.setOut(ps);
+		// Print some output: goes to your special stream
+		main(args);
+		// Put things back
+		System.out.flush();
+		System.setOut(old);
+		// Show what happened
+		return baos.toString();
 	}
 }
