@@ -58,6 +58,7 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -166,10 +167,10 @@ public class SPARQLAnything {
 		}
 	}
 
-	private static PrintStream getPrintWriter(String fileName) throws FileNotFoundException {
+	private static PrintStream getPrintWriter(String fileName, boolean append) throws FileNotFoundException {
 
 		if (fileName != null) {
-			return new PrintStream(new File(fileName));
+			return new PrintStream(new FileOutputStream(fileName, append));
 		}
 
 		return System.out;
@@ -531,7 +532,7 @@ public class SPARQLAnything {
 			if (inputFile == null && values == null) {
 				logger.debug("No input file");
 				Query q = QueryFactory.create(query);
-				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName));
+				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()));
 			} else {
 
 				if (inputFile != null && values != null) {
@@ -576,7 +577,7 @@ public class SPARQLAnything {
 					}
 					try {
 						logger.trace("Executing Query: {}", q);
-						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile));
+						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()));
 					} catch (Exception e1) {
 						logger.error(
 								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
