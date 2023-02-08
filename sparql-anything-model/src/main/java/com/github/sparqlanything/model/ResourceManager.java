@@ -26,22 +26,16 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 
 public class ResourceManager {
 
-	private Logger logger = LoggerFactory.getLogger(ResourceManager.class);
-
-	private static ResourceManager instance;
-
 	public static final String tmpFolder = "tmp";
+	private final static Logger logger = LoggerFactory.getLogger(ResourceManager.class);
+	private static ResourceManager instance;
 
 	private ResourceManager() {
 		new File(tmpFolder).mkdir();
@@ -54,8 +48,7 @@ public class ResourceManager {
 		return instance;
 	}
 
-	public InputStream getInputStreamFromArchive(URL archiveLocation, String entryName, Charset charset)
-			throws ArchiveException, IOException {
+	public InputStream getInputStreamFromArchive(URL archiveLocation, String entryName, Charset charset) throws ArchiveException, IOException {
 
 		logger.trace("Archive location {} entry {}", archiveLocation.toString(), entryName);
 
@@ -69,14 +62,12 @@ public class ResourceManager {
 
 		if (!fileToRead.exists()) {
 
-			logger.trace("Extracting content from {}", archiveLocation.toString());
+			logger.trace("Extracting content from {}", archiveLocation);
 			// extract
 			File destinationDir = new File(folder);
 			new File(folder).mkdir();
 
-			ArchiveInputStream i = new ArchiveStreamFactory().createArchiveInputStream(
-					FilenameUtils.getExtension(archiveLocation.toString()), archiveLocation.openStream(),
-					charset.toString());
+			ArchiveInputStream i = new ArchiveStreamFactory().createArchiveInputStream(FilenameUtils.getExtension(archiveLocation.toString()), archiveLocation.openStream(), charset.toString());
 			ArchiveEntry entry = null;
 			while ((entry = i.getNextEntry()) != null) {
 
@@ -105,7 +96,13 @@ public class ResourceManager {
 			}
 		}
 
-		return new FileInputStream(new File(folder + "/" + entryName));
+		if (!fileToRead.exists() || fileToRead.isDirectory()){
+			logger.error(fileToRead.getAbsolutePath() + " does not exist!");
+			return new ByteArrayInputStream(new byte[]{});
+			// throw new RuntimeException(fileToRead.getAbsolutePath() + " does not exist!");
+		}
+
+		return new FileInputStream(fileToRead);
 	}
 
 }

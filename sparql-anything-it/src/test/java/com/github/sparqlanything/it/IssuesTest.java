@@ -653,11 +653,11 @@ public class IssuesTest {
 
 		query = QueryFactory.create(queryStr);
 
-
-
 		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+		assertTrue(!qExec.execConstruct().isEmpty());
 
-		qExec.execConstruct().write(System.out, "TTL");
+
+//		qExec.execConstruct().write(System.out, "TTL");
 	}
 
 

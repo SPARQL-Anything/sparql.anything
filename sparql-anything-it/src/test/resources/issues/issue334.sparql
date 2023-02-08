@@ -18,7 +18,7 @@ construct {
   service <x-sparql-anything:> {
     bind(coalesce(?__file,".*") as ?pattern)
     fx:properties fx:location "%%%LOCATION%%%" .
-    fx:properties fx:archive.matches ?pattern.
+    fx:properties fx:archive.matches ".*".
     [] fx:anySlot ?file
     service <x-sparql-anything:media-type=application/json> {
       bind(str(bsdd:) as ?bsdd)

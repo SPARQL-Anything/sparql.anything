@@ -35,9 +35,7 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.iterator.QueryIterDefaulting;
-import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
-import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
+import org.apache.jena.sparql.engine.iterator.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.slf4j.Logger;
@@ -66,6 +64,12 @@ public class Utils {
 			Binding binding = q.next();
 			sb.append(bindingToString(binding));
 		}
+		return sb.toString();
+	}
+
+	static String printDatasetGraph(DatasetGraph dg){
+		StringBuilder sb = new StringBuilder();
+		dg.find().forEachRemaining(q-> sb.append(q.toString()).append("\n"));
 		return sb.toString();
 	}
 
