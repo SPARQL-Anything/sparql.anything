@@ -188,21 +188,12 @@ For information for how to run SPARQL Anything, please see the [quickstart](READ
 ### Passing triplification options via SERVICE IRI
 
 In order to instruct the query processor to delegate the execution to SPARQL Anything, you can use the  following IRI-schema within SERVICE clauses.
-
-```
-x-sparql-anything ':' ([option] ('=' [value])? ','?)+
-```
-
 A minimal URI that uses only the resource locator is also possible.
-
-```
-x-sparql-anything ':' URL
-```
-
 In this case SPARQL Anything guesses the data source type from the file extension.
 
-!!! note 
-	Use the `file://` protocol to reference local files
+![SERVICE IRI grammar](IriGrammar.png)
+
+** Note ** Use the `file://` protocol to reference local files
 
 ### Passing triplification options via Basic Graph Pattern
 
