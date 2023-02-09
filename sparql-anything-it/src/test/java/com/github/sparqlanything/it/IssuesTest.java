@@ -637,7 +637,6 @@ public class IssuesTest {
 	 * @throws IOException
 	 */
 	@Test
-	@Ignore
 	public void testIssue334() throws URISyntaxException, IOException {
 		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
