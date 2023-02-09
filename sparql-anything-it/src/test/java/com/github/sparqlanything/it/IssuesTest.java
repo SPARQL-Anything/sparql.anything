@@ -631,7 +631,7 @@ public class IssuesTest {
 
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/292
+	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/334 https://github.com/SPARQL-Anything/sparql.anything/issues/335
 	 *
 	 * @throws URISyntaxException
 	 * @throws IOException
