@@ -30,7 +30,6 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
-import org.apache.jena.sparql.pfunction.library.TestStrSplit;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

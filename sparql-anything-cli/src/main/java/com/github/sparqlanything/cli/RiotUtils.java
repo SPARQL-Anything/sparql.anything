@@ -22,7 +22,8 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.LangBuilder;
 import org.apache.jena.riot.ReaderRIOT;
 import org.apache.jena.riot.ReaderRIOTFactory;
-import org.apache.jena.riot.lang.JsonLDReader;
+import org.apache.jena.riot.lang.LangJSONLD10;
+import org.apache.jena.riot.lang.LangJSONLD11;
 import org.apache.jena.riot.system.ParserProfile;
 
 public class RiotUtils {
@@ -31,7 +32,7 @@ public class RiotUtils {
 		public ReaderRIOT create(Lang language, ParserProfile profile) {
 			if ( !JSON.equals(language) )
 				throw new InternalErrorException("Attempt to parse " + language + " as JSON-LD");
-			return new JsonLDReader(language, profile, profile.getErrorHandler());
+			return new LangJSONLD11(language, profile, profile.getErrorHandler());
 		}
 	}
 

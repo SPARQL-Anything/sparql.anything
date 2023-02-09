@@ -17,7 +17,12 @@
 
 package com.github.sparqlanything.cli;
 
+import com.github.sparqlanything.json.JSONSlice;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.Lang;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

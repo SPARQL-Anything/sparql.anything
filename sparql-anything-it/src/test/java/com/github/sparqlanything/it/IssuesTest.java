@@ -625,6 +625,7 @@ public class IssuesTest {
 			actualNames.add(qs.get("name").asLiteral().getValue().toString());
 		}
 		FileUtils.deleteDirectory(tmpTBDFolder);
+		ds.end();
 		assertEquals(expectedNames,actualNames);
 	}
 

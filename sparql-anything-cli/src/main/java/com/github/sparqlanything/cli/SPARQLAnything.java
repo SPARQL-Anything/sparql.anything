@@ -52,6 +52,7 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.mgt.Explain;
+import org.apache.jena.sys.JenaSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +88,7 @@ public class SPARQLAnything {
 		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
 		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
 		// Setup FX executor
+		JenaSystem.init();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
@@ -380,6 +382,11 @@ public class SPARQLAnything {
 			return this.model;
 		}
 
+		@Override
+		public void close() {
+			this.model.close();
+		}
+
 		// Credits: https://stackoverflow.com/a/714256/1035608
 		public static Set<Set<Object>> cartesianProduct(Set<?>... sets) {
 			if (sets.length < 2)
@@ -487,7 +494,7 @@ public class SPARQLAnything {
 							kb.addNamedModel(f.toURI().toString(), m);
 						} catch (Exception e) {
 							logger.error("An error occurred while loading {}", f);
-							logger.error(" - Problem was: ", e.getMessage());
+							logger.error(" - Problem was: {}", e.getMessage());
 							if(logger.isDebugEnabled()){
 								logger.error("",e);
 							}
