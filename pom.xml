@@ -34,6 +34,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
+		<jena.version>4.7.0</jena.version>
 	</properties>
 
 	<licenses>
@@ -240,7 +241,7 @@
 			<dependency>
 				<groupId>org.apache.jena</groupId>
 				<artifactId>apache-jena-libs</artifactId>
-				<version>4.7.0</version>
+				<version>${jena.version}</version>
 				<type>pom</type>
 				<!-- <exclusions> -->
 				<!-- <exclusion> -->
@@ -253,7 +254,13 @@
 			<dependency>
 				<groupId>org.apache.jena</groupId>
 				<artifactId>jena-fuseki-main</artifactId>
-				<version>4.2.0</version>
+				<version>${jena.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-fuseki-server</artifactId>
+				<version>${jena.version}</version>
 			</dependency>
 
 			<!-- Commons configuration -->
