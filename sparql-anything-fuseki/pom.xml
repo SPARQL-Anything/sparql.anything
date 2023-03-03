@@ -34,6 +34,10 @@
 			<artifactId>jena-fuseki-main</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-fuseki-server</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.github.sparqlanything</groupId>
 			<artifactId>sparql-anything-engine</artifactId>
 			<version>${project.version}</version>

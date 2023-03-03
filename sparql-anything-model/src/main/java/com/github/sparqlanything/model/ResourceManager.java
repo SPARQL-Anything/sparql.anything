@@ -96,11 +96,11 @@ public class ResourceManager {
 			}
 		}
 
-		if (!fileToRead.exists() || fileToRead.isDirectory()){
-			logger.error(fileToRead.getAbsolutePath() + " does not exist!");
-			return new ByteArrayInputStream(new byte[]{});
-			// throw new RuntimeException(fileToRead.getAbsolutePath() + " does not exist!");
-		}
+//		if (fileToRead.isDirectory()){
+//			logger.error(fileToRead.getAbsolutePath() + " does not exist!");
+//			return new ByteArrayInputStream(new byte[]{});
+//			// throw new RuntimeException(fileToRead.getAbsolutePath() + " does not exist!");
+//		}
 
 		return new FileInputStream(fileToRead);
 	}

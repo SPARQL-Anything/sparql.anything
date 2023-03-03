@@ -15,18 +15,21 @@ prefix xsd:  <http://www.w3.org/2001/XMLSchema#>
 construct {
   ?s ?p ?o
 } where {
-  service <x-sparql-anything:> {
-    bind(coalesce(?__file,".*") as ?pattern)
-    fx:properties fx:location "%%%LOCATION%%%" .
-    fx:properties fx:archive.matches ".*".
-    [] fx:anySlot ?file
+
     service <x-sparql-anything:media-type=application/json> {
-      bind(str(bsdd:) as ?bsdd)
-      fx:properties fx:namespace ?bsdd.
-      fx:properties fx:location ?file.
-      fx:properties fx:from-archive "%%%LOCATION%%%".
-      fx:properties fx:use-rdfs-member true.
-      ?s ?p ?o
+
+      service <x-sparql-anything:> {
+          bind(coalesce(?__file,".*") as ?pattern)
+          fx:properties fx:location "%%%LOCATION%%%" .
+          fx:properties fx:archive.matches ".*\\..*".
+          [] fx:anySlot ?file
     }
+
+    bind(str(bsdd:) as ?bsdd)
+          fx:properties fx:namespace ?bsdd.
+          fx:properties fx:location ?file.
+          fx:properties fx:from-archive "%%%LOCATION%%%".
+          fx:properties fx:use-rdfs-member true.
+          ?s ?p ?o
   }
 }
