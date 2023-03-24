@@ -20,6 +20,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:String.startsWith(?stringA, ?stringB)](#fxstringstartswith)          | Function                | String, String                         | Boolean                       | `fx:String.startsWith` wraps [`java.lang.String.startsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                              |
 | [fx:String.endsWith(?stringA, ?stringB)](#fxstringendswith)              | Function                | String, String                         | Boolean                       | `fx:String.endsWith` wraps [`java.lang.String.endsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                  |
 | [fx:String.indexOf(?stringA, ?stringB)](#fxstringindexof)                | Function                | String, String                         | Integer                       | `fx:String.indexOf` wraps [`java.lang.String.indexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                    |
+| [fx:String.lastIndexOf(?stringA, ?stringB)](#fxstringlastindexof)        | Function                | String, String                         | Integer                       | `fx:String.lastIndexOf` wraps [`java.lang.String.lastIndexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                    |
 | [fx:String.substring(?string)](#fxstringsubstring)                       | Function                | String, Integer, (Integer?)            | String                        | `fx:String.substring` wraps [`java.lang.String.substring`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                |
 | [fx:String.toLowerCase(?string)](#fxstringtolowercase)                   | Function                | String                                 | String                        | `fx:String.toLowerCase` wraps [`java.lang.String.toLowerCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
 | [fx:String.toUpperCase(?string)](#fxstringtouppercase)                   | Function                | String                                 | String                        | `fx:String.toUpperCase` wraps [`java.lang.String.toUpperCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
@@ -519,6 +520,46 @@ Result
 =====================
 | 2       | 10      |
 ---------------------
+```
+
+### fx:String.lastIndexOf
+
+`fx:String.lastIndexOf` wraps [`java.lang.String.lastIndexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)
+
+#### Input
+
+String, String
+
+#### Output
+
+Integer
+
+#### Example
+
+```
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  (fx:String.lastIndexOf(?string, "b") AS ?result1)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content  "bob" .
+        ?s        rdf:_1      ?string
+      }
+  }
+```
+
+Result
+
+```
+-----------
+| result1 |
+===========
+| 2       |
+-----------
 ```
 
 ### fx:String.substring
