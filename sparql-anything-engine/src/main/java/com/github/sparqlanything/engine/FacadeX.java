@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Iterator;
 
 public final class FacadeX {
 
@@ -100,8 +101,14 @@ public final class FacadeX {
 		};
 
 		final PropertyFunctionRegistry reg = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-		log.trace("Registering {} magic property", ANY_SLOT_URI);
+		//log.trace("Registering {} magic property", ANY_SLOT_URI);
 		reg.put(ANY_SLOT_URI, p);
+		if(log.isTraceEnabled()){
+			Iterator<String> i = reg.keys();
+			while(i.hasNext()){
+				log.trace("Registering magic property: {}", i.next());
+			}
+		}
 		PropertyFunctionRegistry.set(ARQ.getContext(), reg);
 	}
 
@@ -139,6 +146,8 @@ public final class FacadeX {
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.stripTrailing",
 				ReflectionFunctionFactory.get().makeFunction(String.class, "stripTrailing"));
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.removeTags", RemoveTags.class);
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.lastIndexOf",
+				ReflectionFunctionFactory.get().makeFunction(String.class, "lastIndexOf"));
 
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "DigestUtils.md2Hex",
 				ReflectionFunctionFactory.get().makeFunction(DigestUtils.class, "md2Hex"));
