@@ -35,7 +35,9 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Properties;
 
 import static org.junit.Assert.*;
@@ -49,12 +51,12 @@ public class TestTriplifier {
 		Properties p = new Properties();
 		DatasetGraph dg;
 		try {
-			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Path.of(spreadsheet.toURI()).toUri().toString());
 			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 
-			String root = spreadsheet + "#";
+			String root = Path.of(spreadsheet.toURI()).toUri() + "#";
 
 			Graph gs1 = GraphFactory.createGraphMem();
 			Node s1Root = NodeFactory.createBlankNode();
@@ -115,6 +117,8 @@ public class TestTriplifier {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -175,12 +179,12 @@ public class TestTriplifier {
 		p.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS, "true");
 		DatasetGraph dg;
 		try {
-			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Path.of(spreadsheet.toURI()).toUri().toString());
 			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 
-			String root = spreadsheet + "#";
+			String root = Path.of(spreadsheet.toURI()).toUri() + "#";
 
 			Graph gs1 = GraphFactory.createGraphMem();
 			Node s1Root = NodeFactory.createBlankNode();
@@ -230,6 +234,8 @@ public class TestTriplifier {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -241,13 +247,13 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 
-			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Path.of(spreadsheet.toURI()).toUri().toString());
 
 			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 
-			String root = spreadsheet + "#";
+			String root = Path.of(spreadsheet.toURI()).toUri() + "#";
 
 			Graph gs1 = GraphFactory.createGraphMem();
 			Node s1Root = NodeFactory.createBlankNode();
@@ -306,6 +312,8 @@ public class TestTriplifier {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

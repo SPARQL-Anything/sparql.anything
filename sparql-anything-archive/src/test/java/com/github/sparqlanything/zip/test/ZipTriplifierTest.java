@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Properties;
 
 import static org.junit.Assert.assertTrue;
@@ -117,7 +118,7 @@ public class ZipTriplifierTest {
 			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
-			Node n = NodeFactory.createURI(url.toString() + "#");
+			Node n = NodeFactory.createURI(Path.of(url.toURI()).toUri() + "#");
 			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("test.csv")));
 			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), NodeFactory.createLiteral("test.json")));

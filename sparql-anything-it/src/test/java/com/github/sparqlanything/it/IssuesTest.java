@@ -635,21 +635,14 @@ public class IssuesTest {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	@Ignore
 	@Test
 	public void testIssue351() throws URISyntaxException, IOException {
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything", "Trace");
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.TriplifierRegister", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.engine.FacadeX", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.com.github.sparqlanything.facadeiri", "ERROR");
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue351.sparql")).toURI(), StandardCharsets.UTF_8);
 		String loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue351.xls")).toURI()).toUri().toString();
 		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
-//		System.out.println(queryStr);
 
 		query = QueryFactory.create(queryStr);
 
