@@ -191,7 +191,7 @@ In order to instruct the query processor to delegate the execution to SPARQL Any
 A minimal URI that uses only the resource locator is also possible.
 In this case SPARQL Anything guesses the data source type from the file extension.
 
-![SERVICE IRI grammar](IriGrammar.png)
+![SERVICE IRI grammar](Grammar.jpg)
 
 ** Note ** Use the `file://` protocol to reference local files
 
