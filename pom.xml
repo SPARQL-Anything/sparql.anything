@@ -332,7 +332,7 @@
 			<dependency>
 				<groupId>org.json</groupId>
 				<artifactId>json</artifactId>
-				<version>20200518</version>
+				<version>20230227</version>
 			</dependency>
 			<!-- dependency> <groupId>com.jsoniter</groupId> <artifactId>jsoniter</artifactId> 
 				<version>0.9.19</version> </dependency -->
