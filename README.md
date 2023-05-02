@@ -193,7 +193,7 @@ In this case SPARQL Anything guesses the data source type from the file extensio
 
 ![SERVICE IRI grammar](Grammar.jpg)
 
-** Note ** Use the `file://` protocol to reference local files
+**Note:** Use the `file://` protocol to reference local files
 
 ### Passing triplification options via Basic Graph Pattern
 
