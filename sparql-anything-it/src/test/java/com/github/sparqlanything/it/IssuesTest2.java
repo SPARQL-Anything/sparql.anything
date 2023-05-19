@@ -17,7 +17,9 @@
 
 package com.github.sparqlanything.it;
 
+import com.github.sparqlanything.cli.SPARQLAnything;
 import com.github.sparqlanything.engine.FacadeX;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
@@ -29,6 +31,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -37,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -173,6 +177,20 @@ public class IssuesTest2 {
 //		assertTrue(results.contains("Friends"));
 //		assertTrue(results.contains("Cougar Town"));
 	}
-
-
+	@Test
+	public void testIssue356() throws URISyntaxException, IOException {
+		String query = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue356.sparql").toURI(), StandardCharsets.UTF_8);
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		Assert.assertTrue(rs.hasNext());
+	}
+	@Test
+	public void testIssue356CLI() throws Exception {
+		String query = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue356.sparql").toURI(), StandardCharsets.UTF_8);
+		String output = SPARQLAnything.callMain(new String[]{
+				"-q", query
+		});
+		System.out.println(output);
+	}
 }

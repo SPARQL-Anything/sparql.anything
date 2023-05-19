@@ -50,6 +50,7 @@ public class RDFTriplifier implements Triplifier {
 
 	public static Lang getRDFLang(Properties properties, String url, Header contentType) {
 		Lang lang = null;
+
 		// Version from HTTP content type response
 		if (contentType != null) {
 			// After issue https://github.com/SPARQL-Anything/sparql.anything/issues/317
@@ -70,7 +71,14 @@ public class RDFTriplifier implements Triplifier {
 		if (lang == null) {
 			log.warn("Failed to determine RDF lang");
 		}
-
+		// XXX The CLI registers JSON with the JSON-LD parser to support cases where
+		// the served content-type is application/json but the expected content is RDF
+		// However, the JSON is not a proper LANG, therefore, we rewrite it here
+		// See #356
+		// See com.github.sparqlanything.cli.SPARQLAnything.initSPARQLAnythingEngine()
+		if(lang.getLabel().equals("JSON")){
+			lang = Lang.JSONLD;
+		}
 		log.trace("Lang {}", lang);
 		return lang;
 	}

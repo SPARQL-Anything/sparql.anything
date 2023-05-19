@@ -83,6 +83,7 @@ public class SPARQLAnything {
 	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
 	private static Long duration = null;
 
+	// TODO This should be moved to the engine module
 	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
 		// Register the JSON-LD parser factory for extension  .json
 		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
