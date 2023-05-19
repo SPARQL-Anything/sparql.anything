@@ -22,7 +22,7 @@
 
 	<groupId>com.github.sparqlanything</groupId>
 	<artifactId>sparql-anything-parent</artifactId>
-	<version>0.8.1</version>
+	<version>0.8.2</version>
 	<packaging>pom</packaging>
 
 	<name>sparql.anything</name>
@@ -63,7 +63,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/SPARQL-Anything/sparql.anything.git</connection>
 		<developerConnection>scm:git:ssh://github.com:SPARQL-Anything/sparql.anything.git</developerConnection>
-		<url>https://github.com/SPARQL-Anything/sparql.anything/tree/v0.3-DEV</url>
+		<url>https://github.com/SPARQL-Anything/sparql.anything/tree/v0.8-DEV</url>
 	</scm>
 
 	<distributionManagement>
