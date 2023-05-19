@@ -243,23 +243,11 @@
 				<artifactId>apache-jena-libs</artifactId>
 				<version>${jena.version}</version>
 				<type>pom</type>
-				<!-- <exclusions> -->
-				<!-- <exclusion> -->
-				<!-- <groupId>org.slf4j</groupId> -->
-				<!-- <artifactId>jcl-over-slf4j</artifactId> -->
-				<!-- </exclusion> -->
-				<!-- </exclusions> -->
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.jena</groupId>
 				<artifactId>jena-fuseki-main</artifactId>
-				<version>${jena.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.jena</groupId>
-				<artifactId>jena-fuseki-server</artifactId>
 				<version>${jena.version}</version>
 			</dependency>
 
