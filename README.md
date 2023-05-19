@@ -361,6 +361,8 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:bnode(?a)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxbnode)                                                 | Function                | Any node                               | Blank node                    | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
 
 ## Usage
+SPARQL Anything is available as Java Library, Command Line Interface, Web Application Server, and also Python library.
+
 ### Command Line Interface (CLI)
 
 An executable JAR can be obtained from the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
@@ -449,6 +451,10 @@ usage: java -jar sparql-anything-server-<version>.jar [-p port] [-e
 ```
 
 Also a docker image can be used by following the instructions [here](BROWSER.md).
+
+### Python Library
+
+You can use SPARQL Anything as a Python library, see the [PySPARQL-Anything project](https://pypi.org/project/pysparql-anything/).
 
 ## Licence
 
