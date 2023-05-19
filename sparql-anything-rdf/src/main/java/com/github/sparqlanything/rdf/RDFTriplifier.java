@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,15 @@ import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.protocol.HTTP;
 import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.lang.LangEngine;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.graph.GraphFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,17 +46,51 @@ import java.util.Set;
 
 public class RDFTriplifier implements Triplifier {
 
-	private static Logger logger = LoggerFactory.getLogger(RDFTriplifier.class);
+//	private static Logger logger = LoggerFactory.getLogger(RDFTriplifier.class);
+
+	public static Lang getRDFLang(Properties properties, String url, Header contentType) {
+		Lang lang = null;
+
+		// Version from HTTP content type response
+		if (contentType != null) {
+			// After issue https://github.com/SPARQL-Anything/sparql.anything/issues/317
+			if (contentType.getValue().indexOf(';') != -1) {
+				lang = RDFLanguages.contentTypeToLang(contentType.getValue().substring(0, contentType.getValue().indexOf(';')));
+			} else {
+				lang = RDFLanguages.contentTypeToLang(contentType.getValue());
+			}
+		}
+		// Version from expected content type (HTTP accept header)
+		if (lang == null && properties.containsKey(HTTPHelper.HTTPHEADER_PREFIX + "accept")) {
+			lang = RDFLanguages.contentTypeToLang(properties.getProperty(HTTPHelper.HTTPHEADER_PREFIX + "accept"));
+		}
+		if (lang == null) {
+			// Version from location file extension
+			lang = RDFLanguages.filenameToLang(url);
+		}
+		if (lang == null) {
+			log.warn("Failed to determine RDF lang");
+		}
+		// XXX The CLI registers JSON with the JSON-LD parser to support cases where
+		// the served content-type is application/json but the expected content is RDF
+		// However, the JSON is not a proper LANG, therefore, we rewrite it here
+		// See #356
+		// See com.github.sparqlanything.cli.SPARQLAnything.initSPARQLAnythingEngine()
+		if(lang.getLabel().equals("JSON")){
+			lang = Lang.JSONLD;
+		}
+		log.trace("Lang {}", lang);
+		return lang;
+	}
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 		URL url = Triplifier.getLocation(properties);
 
-		if (url == null)
-			return ;
+		if (url == null) return;
 
 		DatasetGraph dg = builder.getDatasetGraph();
-		logger.info("URL {}", url.toString());
+		log.trace("URL {}", url);
 		try {
 			InputStream is;
 			Header contentType;
@@ -60,9 +98,9 @@ public class RDFTriplifier implements Triplifier {
 				CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
 				if (!HTTPHelper.isSuccessful(response)) {
 					log.warn("Request unsuccessful: {}", response.getStatusLine().toString());
-					if(log.isTraceEnabled()){
-						log.trace("Response: {}", response.toString());
-						log.trace("Response body: {}",IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
+					if (log.isTraceEnabled()) {
+						log.trace("Response: {}", response);
+						log.trace("Response body: {}", IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
 					}
 					throw new TriplifierHTTPException(response.getStatusLine().toString());
 				}
@@ -72,37 +110,24 @@ public class RDFTriplifier implements Triplifier {
 				is = Triplifier.getInputStream(properties);
 				contentType = null;
 			}
-			RDFDataMgr.read(dg, is, getRDFLang(properties, url.toString(), contentType));
+			Lang l = getRDFLang(properties, url.toString(), contentType);
+
+			if (Sets.newHashSet(Lang.RDFXML, Lang.TTL, Lang.NT, Lang.JSONLD, Lang.JSONLD10, Lang.JSONLD11, Lang.RDFJSON).contains(l)) {
+				Graph g = dg.getDefaultGraph();
+				RDFDataMgr.read(g, is, l);
+				dg.addGraph(NodeFactory.createURI(url.toString()), g);
+			} else {
+				RDFDataMgr.read(dg, is, l);
+			}
 		} catch (TriplifierHTTPException e) {
-			logger.error("", e.getMessage());
+			log.error("{}", e.getMessage());
 			throw new IOException(e);
 		}
-	}
-	public static Lang getRDFLang(Properties properties, String url, Header contentType){
-		Lang lang = null;
-		// Version from HTTP content type response
-		if(contentType != null){
-			lang = RDFLanguages.contentTypeToLang(contentType.getValue().substring(0,contentType.getValue().indexOf(';') ));
-		}
-		// Version from expected content type (HTTP accept header)
-		if(lang == null && properties.containsKey(HTTPHelper.HTTPHEADER_PREFIX + "accept")){
-			lang = RDFLanguages.contentTypeToLang(properties.getProperty(HTTPHelper.HTTPHEADER_PREFIX + "accept"));
-		}
-		if(lang == null) {
-			// Version from location file extension
-			lang = RDFLanguages.filenameToLang(url);
-		}
-		if(lang == null){
-			log.warn("Failed to determine RDF lang");
-		}
-		return lang;
 	}
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/rdf+thrift", "application/trix+xml", "application/n-quads", "text/trig",
-				"application/owl+xml", "text/turtle", "application/rdf+xml", "application/n-triples",
-				"application/ld+json");
+		return Sets.newHashSet("application/rdf+thrift", "application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle", "application/rdf+xml", "application/n-triples", "application/ld+json");
 	}
 
 	@Override

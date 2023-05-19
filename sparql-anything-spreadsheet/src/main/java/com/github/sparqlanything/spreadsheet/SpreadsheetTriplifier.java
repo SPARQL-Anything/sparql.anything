@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,14 +49,15 @@ public class SpreadsheetTriplifier implements Triplifier {
 			return;
 		}
 		String root = Triplifier.getRootArgument(properties);
+		logger.trace("Root {}", root);
 		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
 		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
 		String namespace = Triplifier.getNamespaceArgument(properties);
 		AtomicBoolean headers = new AtomicBoolean();
 		try {
-			headers.set(Boolean.valueOf(properties.getProperty(PROPERTY_HEADERS, "false")));
+			headers.set(PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false));
 		} catch (Exception e) {
-			log.warn("Unsupported value for csv.headers: '{}', using default (false).", properties.getProperty(PROPERTY_HEADERS));
+			log.warn("Unsupported value for {}: '{}', using default ({}).",PROPERTY_HEADERS,  properties.getProperty(PROPERTY_HEADERS), false);
 			headers.set(false);
 		}
 
@@ -65,8 +66,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = root + Triplifier.toSafeURIString(s.getSheetName());
-			String sheetRoot = dataSourceId;
-			populate(s, dataSourceId, sheetRoot, builder, headers.get(), evaluateFormulas, compositeValues, namespace);
+			populate(s, dataSourceId, dataSourceId, builder, headers.get(), evaluateFormulas, compositeValues, namespace);
 		});
 
 	}

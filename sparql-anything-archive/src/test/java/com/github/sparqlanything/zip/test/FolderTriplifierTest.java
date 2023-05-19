@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Properties;
@@ -147,7 +148,7 @@ public class FolderTriplifierTest {
 			expected.add("test.txt");
 
 			Set<String> actual = new HashSet<>();
-			dg.find(null, NodeFactory.createURI(url.toString() + "#"), null, null).forEachRemaining(q -> {
+			dg.find(null, NodeFactory.createURI(Path.of(url.toURI()).toUri() + "#"), null, null).forEachRemaining(q -> {
 				if (q.getObject().isLiteral()) {
 					try {
 						actual.add(q.getObject().getLiteralLexicalForm()

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,38 +25,32 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
 public interface Triplifier {
 
-	static final String METADATA_GRAPH_IRI = "http://sparql.xyz/facade-x/data/metadata";
-	static final String AUDIT_GRAPH_IRI = "http://sparql.xyz/facade-x/data/audit";
-	static final String XYZ_NS = "http://sparql.xyz/facade-x/data/";
-	static final String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
-	static final String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
-	static final String FACADE_X_TYPE_PROPERTIES = FACADE_X_CONST_NAMESPACE_IRI + "properties";
+	String METADATA_GRAPH_IRI = "http://sparql.xyz/facade-x/data/metadata";
+	String AUDIT_GRAPH_IRI = "http://sparql.xyz/facade-x/data/audit";
+	String XYZ_NS = "http://sparql.xyz/facade-x/data/";
+	String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
+	String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
+	String FACADE_X_TYPE_PROPERTIES = FACADE_X_CONST_NAMESPACE_IRI + "properties";
 
-	static final Logger log = LoggerFactory.getLogger(Triplifier.class);
-
-	void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException;
-
-	public Set<String> getMimeTypes();
-
-	public Set<String> getExtensions();
+	Logger log = LoggerFactory.getLogger(Triplifier.class);
+	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
 	static boolean getBlankNodeArgument(Properties properties) {
 		boolean blank_nodes = true;
@@ -103,70 +97,43 @@ public interface Triplifier {
 		try {
 			charset = Charset.forName(properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8"));
 		} catch (Exception e) {
-			log.warn("Unsupported charset format: '{}', using UTF-8.",
-					properties.getProperty(IRIArgument.CHARSET.toString()));
+			log.warn("Unsupported charset format: '{}', using UTF-8.", properties.getProperty(IRIArgument.CHARSET.toString()));
 			charset = StandardCharsets.UTF_8;
 		}
 		return charset;
 	}
 
-//	@Deprecated
-//	static String getRootArgument(Properties properties, URL url) {
-//		if (url != null) {
-//			return getRootArgument(properties, url.toString());
-//		} else {
-//			return getRootArgument(properties, (String) null);
-//		}
-//	}
+	static String getNormalisedLocation(Properties properties) {
+		URL location = null;
+		try {
+			location = Triplifier.getLocation(properties);
+			if (location==null) return null;
+			if (location.getProtocol().equals("file"))
+				return Path.of(location.toURI()).toUri().toString();
+			return location.toString();
+		} catch (MalformedURLException e) {
+			log.warn("Malformed location");
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+
+		return null;
+	}
 
 	static String getRootArgument(Properties properties) {
-		URL url = null;
-		try {
-			url = Triplifier.getLocation(properties);
-		} catch (MalformedURLException e) {
-			log.error("Malformed url", e);
-		}
-//	}
-//
-//	/**
-//	 * Implementation to be moved to getRootArgument(Properties)
-//	 *
-//	 * @param properties
-//	 * @param url
-//	 * @return
-//	 */
-//	@Deprecated
-//	static String getRootArgument(Properties properties, String url) {
-		if (url != null) {
-			String root = null;
-			try {
-				root = properties.getProperty(IRIArgument.ROOT.toString());
-				if (root != null && !root.trim().equals("")) {
-					return root;
-				}
-			} catch (Exception e) {
-				log.warn("Unsupported parameter value for 'root': '{}', using default (location + '#').", root);
-			}
-			return url.toString() + "#";
-		} else if (properties.containsKey(IRIArgument.ROOT.toString())
-				&& properties.containsKey(IRIArgument.CONTENT.toString())) {
-			String root = null;
-			try {
-				root = properties.getProperty(IRIArgument.ROOT.toString());
-				if (root != null && !root.trim().equals("")) {
-					return root;
-				}
-			} catch (Exception e) {
-				log.warn("Unsupported parameter value for 'root': '{}', using default (md5hex(content) + '#').", root);
-			}
-			return XYZ_NS + DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString())) + "#";
+		String root = PropertyUtils.getStringProperty(properties, IRIArgument.ROOT, null);
+		if (root != null && !root.trim().equals("")) return root;
 
-		} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
-			return XYZ_NS + DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString())) + "#";
-		} else if (properties.containsKey(IRIArgument.COMMAND.toString())) {
-			return XYZ_NS + DigestUtils.md5Hex(properties.getProperty(IRIArgument.COMMAND.toString())) + "#";
-		}
-		throw new RuntimeException("No location nor content provided!");
+		String location = getNormalisedLocation(properties);
+		if (location != null) return location + "#";
+
+		String content = PropertyUtils.getStringProperty(properties, IRIArgument.CONTENT, null);
+		if (content != null) return XYZ_NS + DigestUtils.md5Hex(content) + "#";
+
+		String command = PropertyUtils.getStringProperty(properties, IRIArgument.COMMAND, null);
+		if (command != null) return XYZ_NS + DigestUtils.md5Hex(command) + "#";
+
+		throw new RuntimeException("No location nor content nor command provided!");
 	}
 
 	static String getNamespaceArgument(Properties properties) {
@@ -182,14 +149,14 @@ public interface Triplifier {
 		return XYZ_NS;
 	}
 
-	static UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
-	public static String toSafeURIString(String s) {
+	static String toSafeURIString(String s) {
 		// s = s.replaceAll("\\s", "_");
 		return basicEscaper.escape(s);
 	}
 
-	public static URL instantiateURL(String urlLocation) throws MalformedURLException {
+	static URL instantiateURL(String urlLocation) throws MalformedURLException {
+		log.trace("URL Location {}", urlLocation);
 		URL url;
 		try {
 			url = new URL(urlLocation);
@@ -197,6 +164,7 @@ public interface Triplifier {
 			log.trace("Malformed url interpreting as file");
 			url = new File(urlLocation).toURI().toURL();
 		}
+		log.trace("Result {}", url);
 		return url;
 	}
 
@@ -209,7 +177,7 @@ public interface Triplifier {
 
 	/**
 	 * Get all values from a property key. Supports single and multi-valued, e.g.
-	 *
+	 * <p>
 	 * - key.name = value - key.name.0 = value0 - key.name.1 = value1
 	 *
 	 * @param properties
@@ -222,24 +190,23 @@ public interface Triplifier {
 			values.add(properties.getProperty(prefix));
 		}
 		int i = 0; // Starts with 0
-		String propName = prefix + "." + Integer.toString(i);
+		String propName = prefix + "." + i;
 		if (properties.containsKey(propName)) {
 			values.add(properties.getProperty(propName));
 		}
 		i++;
 		// ... or starts with 1
-		propName = prefix + "." + Integer.toString(i);
+		propName = prefix + "." + i;
 
 		while (properties.containsKey(propName)) {
 			values.add(properties.getProperty(propName));
 			i++;
-			propName = prefix + "." + Integer.toString(i);
+			propName = prefix + "." + i;
 		}
 		return values;
 	}
 
-	private static InputStream getInputStream(Properties properties, Charset charset)
-			throws IOException, TriplifierHTTPException {
+	private static InputStream getInputStream(Properties properties, Charset charset) throws IOException, TriplifierHTTPException {
 
 		if (properties.containsKey(IRIArgument.COMMAND.toString())) {
 			String command = properties.getProperty(IRIArgument.COMMAND.toString());
@@ -283,18 +250,17 @@ public interface Triplifier {
 				return url.openStream();
 			} else
 
-			// If HTTP
-			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
-				CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
-				if (!HTTPHelper.isSuccessful(response)) {
-					log.trace("Request unsuccesful: {}", response.getStatusLine().toString());
-					log.trace("Response: {}", response.toString());
-					log.trace("Response body: {}",
-							IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
-					throw new TriplifierHTTPException(response.getStatusLine().toString());
+				// If HTTP
+				if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
+					CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
+					if (!HTTPHelper.isSuccessful(response)) {
+						log.trace("Request unsuccesful: {}", response.getStatusLine().toString());
+						log.trace("Response: {}", response);
+						log.trace("Response body: {}", IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
+						throw new TriplifierHTTPException(response.getStatusLine().toString());
+					}
+					return response.getEntity().getContent();
 				}
-				return response.getEntity().getContent();
-			}
 
 			// If other protocol, try URL and Connection
 			log.debug("Other protocol: {}", url.getProtocol());
@@ -304,19 +270,18 @@ public interface Triplifier {
 		// Handle archives differently
 		URL urlArchive = instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
 		try {
-			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive,
-					properties.getProperty(IRIArgument.LOCATION.toString()), charset);
+			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset);
 		} catch (ArchiveException e) {
 			throw new IOException(e); // TODO i think we should throw a TriplifierHTTPException instead
-										// to allow the silent keyword to be respected
+			// to allow the silent keyword to be respected
 		}
 	}
 
-	public static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
+	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
 		return getInputStream(properties, getCharsetArgument(properties));
 	}
 
-	public static String getResourceId(Properties properties) {
+	static String getResourceId(Properties properties) {
 		String resourceId = null;
 		URL url = null;
 		try {
@@ -326,20 +291,24 @@ public interface Triplifier {
 		}
 		if (url == null && properties.containsKey(IRIArgument.COMMAND.toString())) {
 			log.trace("No location, use command: {}", properties.getProperty(IRIArgument.COMMAND.toString()));
-			String id = Integer
-					.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+			String id = Integer.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").hashCode());
 			resourceId = "command:" + id;
 		} else if (url == null && properties.containsKey(IRIArgument.CONTENT.toString())) {
 			// XXX This method of passing content seems only supported by the
 			// TextTriplifier.
 			log.trace("No location, use content: {}", properties.getProperty(IRIArgument.CONTENT.toString()));
-			String id = Integer
-					.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").toString().hashCode());
+			String id = Integer.toString(properties.getProperty(IRIArgument.CONTENT.toString(), "").hashCode());
 			resourceId = "content:" + id;
 		} else if (url != null) {
 			resourceId = url.toString();
 		}
 		return resourceId;
 	}
+
+	void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException;
+
+	Set<String> getMimeTypes();
+
+	Set<String> getExtensions();
 
 }

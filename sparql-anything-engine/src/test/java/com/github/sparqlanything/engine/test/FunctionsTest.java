@@ -166,6 +166,18 @@ public class FunctionsTest {
 	}
 
 	@Test
+	public void lastIndexOf() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "SELECT ?two WHERE {"
+				+ "BIND(fx:String.lastIndexOf(\"bob\", \"b\") as ?two)" + "}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int two = result.next().get("two").asLiteral().getInt();
+		Assert.assertEquals(2, two);
+	}
+
+
+	@Test
 	public void serial_1() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "SELECT ?one ?two ?three WHERE {"

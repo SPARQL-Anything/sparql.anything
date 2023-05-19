@@ -33,6 +33,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.sparql.ARQConstants;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -40,6 +41,8 @@ import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.graph.GraphFactory;
+import org.apache.jena.sparql.service.ServiceExecutorRegistry;
+import org.apache.jena.sys.JenaSystem;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -77,6 +80,7 @@ public class TriplifierRegistryTest {
 				}
 			};
 
+			JenaSystem.init();
 			QC.setFactory(ARQ.getContext(), customExecutorFactory);
 
 			TriplifierRegister.getInstance().registerTriplifier("com.github.sparqlanything.engine.test.TestTriplifier", new String[]{"test"}, new String[]{"test-mime"});

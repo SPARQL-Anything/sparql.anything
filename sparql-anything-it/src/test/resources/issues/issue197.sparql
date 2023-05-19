@@ -1,0 +1,20 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX ex: <http://example.org/>
+SELECT ?material
+WHERE {
+  SERVICE<x-sparql-anything:> {
+    fx:properties fx:content "\"Fotomontaggio\",\"Biennale di Venezia 1978\",\"Carta, Carta da lucido, Inchiostro , Grafite, Matita colorata\"" .
+    fx:properties fx:media-type "text/csv" .
+    ?s fx:anySlot ?cell .
+
+    SERVICE<x-sparql-anything:> {
+        fx:properties fx:content ?cell .
+        fx:properties fx:media-type "text/plain" .
+        fx:properties fx:txt.split "," .
+        ?s1 fx:anySlot ?material
+    }
+
+  }
+}

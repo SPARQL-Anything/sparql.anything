@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -36,7 +38,7 @@ import java.util.Properties;
 import static org.junit.Assert.assertTrue;
 
 public class BibtexTriplifierTest {
-
+	final static Logger logger = LoggerFactory.getLogger(BibtexTriplifierTest.class);
 	@Test
 	public void test1() {
 		BibtexTriplifier jt = new BibtexTriplifier();
@@ -79,7 +81,7 @@ public class BibtexTriplifierTest {
 			assertTrue(expectedGraph.isIsomorphicWith(g1.getDefaultGraph()));
 
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			logger.error("",e1);
 		}
 	}
 

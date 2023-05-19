@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,8 +129,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 		// Add type Root
 		builder.addRoot(dataSourceId, root);
-		InputStream is = Triplifier.getInputStream(properties);
-		try (is){
+
+		try (InputStream is = Triplifier.getInputStream(properties);){
 			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
 			Iterable<CSVRecord> records = format.parse(in);
 			Iterator<CSVRecord> recordIterator = records.iterator();

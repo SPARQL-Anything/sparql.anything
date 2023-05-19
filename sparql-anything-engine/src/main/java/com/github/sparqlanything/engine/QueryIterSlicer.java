@@ -91,8 +91,8 @@ public class QueryIterSlicer extends QueryIter {
 				dg.commit();
 				dg.end();
 
-				logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
 				Utils.ensureReadingTxn(dg);
+				logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
 //				FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 				FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
 				logger.trace("Op {}", opService.getSubOp());

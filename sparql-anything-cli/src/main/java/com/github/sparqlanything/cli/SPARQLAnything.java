@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.VariablesBinder;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
@@ -44,21 +45,28 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFParserRegistry;
+import org.apache.jena.riot.ReaderRIOTFactory;
 import org.apache.jena.sparql.core.ResultBinding;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.mgt.Explain;
+import org.apache.jena.sys.JenaSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,7 +83,13 @@ public class SPARQLAnything {
 	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
 	private static Long duration = null;
 
+	// TODO This should be moved to the engine module
 	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
+		// Register the JSON-LD parser factory for extension  .json
+		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
+		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
+		// Setup FX executor
+		JenaSystem.init();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
@@ -156,10 +170,10 @@ public class SPARQLAnything {
 		}
 	}
 
-	private static PrintStream getPrintWriter(String fileName) throws FileNotFoundException {
+	private static PrintStream getPrintWriter(String fileName, boolean append) throws FileNotFoundException {
 
 		if (fileName != null) {
-			return new PrintStream(new File(fileName));
+			return new PrintStream(new FileOutputStream(fileName, append));
 		}
 
 		return System.out;
@@ -369,6 +383,11 @@ public class SPARQLAnything {
 			return this.model;
 		}
 
+		@Override
+		public void close() {
+			this.model.close();
+		}
+
 		// Credits: https://stackoverflow.com/a/714256/1035608
 		public static Set<Set<Object>> cartesianProduct(Set<?>... sets) {
 			if (sets.length < 2)
@@ -447,14 +466,21 @@ public class SPARQLAnything {
 				if(logger.isTraceEnabled()) {
 					logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
 				}
-				File loadSource = new File(load);
+				// XXX Check if load is a URI first
+				File loadSource;
+				try{
+					loadSource = new File(new URL(load).toURI());
+				}catch(MalformedURLException e){
+					loadSource = new File(load);
+				}
 				if (loadSource.isDirectory()) {
 
 					logger.info("Loading files from directory: {}", loadSource);
 					// If directory, load all files
 					List<File> list = new ArrayList<File>();
 					//Path base = Paths.get(".");
-					File[] files = loadSource.listFiles();
+					//File[] files = loadSource.listFiles();
+					Collection<File> files = FileUtils.listFiles(loadSource, null, true);
 					for (File f : files) {
 						logger.info("Adding file to be loaded: {}", f);
 //						list.add(base.relativize(f.toPath()));
@@ -469,7 +495,7 @@ public class SPARQLAnything {
 							kb.addNamedModel(f.toURI().toString(), m);
 						} catch (Exception e) {
 							logger.error("An error occurred while loading {}", f);
-							logger.error(" - Problem was: ", e.getMessage());
+							logger.error(" - Problem was: {}", e.getMessage());
 							if(logger.isDebugEnabled()){
 								logger.error("",e);
 							}
@@ -481,16 +507,21 @@ public class SPARQLAnything {
 					logger.info("Load file: {}", loadSource);
 					Path base = Paths.get(".");
 					try{
-						kb = DatasetFactory.create(base.relativize(loadSource.toPath()).toString());
+						Path p =  loadSource.toPath();
+						if(!p.isAbsolute()){
+							p = base.relativize(loadSource.toPath());
+						}
+						kb = DatasetFactory.create(p.toString());
 					} catch (Exception e) {
 						logger.error("An error occurred while loading {}", loadSource);
-						logger.error(" - Problem was: ", e.getMessage());
-						if(logger.isDebugEnabled()){
-							logger.error("",e);
-						}
+						logger.error(" - Problem was: ", e);
 				}
 				} else {
-					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+					if(!loadSource.exists()){
+						logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
+					}else {
+						logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+					}
 					return;
 				}
 				if(logger.isTraceEnabled()) {
@@ -509,7 +540,7 @@ public class SPARQLAnything {
 			if (inputFile == null && values == null) {
 				logger.debug("No input file");
 				Query q = QueryFactory.create(query);
-				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName));
+				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()));
 			} else {
 
 				if (inputFile != null && values != null) {
@@ -554,7 +585,7 @@ public class SPARQLAnything {
 					}
 					try {
 						logger.trace("Executing Query: {}", q);
-						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile));
+						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()));
 					} catch (Exception e1) {
 						logger.error(
 								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());

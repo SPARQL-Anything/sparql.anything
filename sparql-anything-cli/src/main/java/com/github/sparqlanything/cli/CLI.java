@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Locale;
 
 public class CLI {
@@ -43,6 +46,9 @@ public class CLI {
 
 	public static final String OUTPUT = "o";
 	public static final String OUTPUT_LONG = "output";
+
+	public static final String OUTPUT_APPEND = "a";
+	public static final String OUTPUT_APPEND_LONG = "append";
 
 	public static final String FORMAT = "f";
 	public static final String FORMAT_LONG = "format";
@@ -79,7 +85,14 @@ public class CLI {
 
 	private static String getQuery(String queryArgument) throws IOException {
 		String query = queryArgument;
-		File queryFile = new File(queryArgument);
+
+		// XXX Check if queryArgument is a URI first
+		File queryFile;
+		try{
+			queryFile = new File(new URL(queryArgument).toURI());
+		}catch(MalformedURLException | URISyntaxException e){
+			queryFile = new File(queryArgument);
+		}
 		if (queryFile.exists()) {
 			logger.trace("Loading query from file");
 			// LOAD query from file
@@ -107,6 +120,9 @@ public class CLI {
 
 		options.addOption(Option.builder(OUTPUT).argName("file").hasArg()
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
+
+		options.addOption(Option.builder(OUTPUT_APPEND).hasArg(false)
+				.desc("OPTIONAL - Should output to file be appended? WARNING: this option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using bnodes)").longOpt(OUTPUT_APPEND_LONG).build());
 
 		options.addOption(Option.builder(EXPLAIN).argName("explain").hasArg(false)
 				.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
@@ -162,6 +178,9 @@ public class CLI {
 		return commandLine.getOptionValue(CLI.OUTPUT);
 	}
 
+	public boolean getOutputAppend() {
+		return commandLine.hasOption(CLI.OUTPUT_APPEND);
+	}
 	public String getOutputPattern() {
 		return commandLine.getOptionValue(CLI.OUTPUTPATTERN);
 	}

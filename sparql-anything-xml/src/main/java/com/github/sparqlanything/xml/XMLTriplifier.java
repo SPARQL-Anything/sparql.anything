@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -300,6 +300,22 @@ public class XMLTriplifier implements Triplifier, Slicer {
 			}
 			log.trace("event: {}", event);
 			if (event.isStartElement()) {
+				// Handle case where TEXT element is *between* parent and child tag -- See Issue 325
+				// Collect data if available
+				if (charBuilder != null) {
+					String value = charBuilder.toString();
+					log.trace("collecting char stream: {}", value);
+					if (stack.peekLast() != null && value != null && !value.trim().equals("")) {
+						String resourceId = stack.peekLast();
+						if (!members.containsKey(resourceId)) {
+							members.put(resourceId, 0);
+						}
+						int member = members.get(resourceId) + 1;
+						builder.addValue(dataSourceId, resourceId, member, value);
+					}
+					charBuilder = null;
+				}
+
 				StartElement se = event.asStartElement();
 				String name;
 				if (se.getName().getPrefix().equals("")) {

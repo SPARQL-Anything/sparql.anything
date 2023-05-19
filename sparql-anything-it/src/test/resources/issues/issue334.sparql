@@ -1,0 +1,35 @@
+# rdfize an archive (zip) of files.
+# parameter values:
+# -v zip: zip filename or URL
+# -v file: file regexp pattern (default ~.*~)
+# sparql-anything -q ../rdfize-zip.sparql -v zip=graphql-2023-01-24.zip > raw-rdf.ttl
+# See https://sparql-anything.readthedocs.io/en/latest/Configuration/#from-archive
+
+prefix bsdd: <http://bsdd.buildingsmart.org/def#>
+prefix xyz:  <http://sparql.xyz/facade-x/data/>
+prefix fx:   <http://sparql.xyz/facade-x/ns/>
+prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+construct {
+  ?s ?p ?o
+} where {
+
+    service <x-sparql-anything:media-type=application/json> {
+
+      service <x-sparql-anything:> {
+          bind(coalesce(?__file,".*") as ?pattern)
+          fx:properties fx:location "%%%LOCATION%%%" .
+          fx:properties fx:archive.matches ".*\\..*".
+          [] fx:anySlot ?file
+    }
+
+    bind(str(bsdd:) as ?bsdd)
+          fx:properties fx:namespace ?bsdd.
+          fx:properties fx:location ?file.
+          fx:properties fx:from-archive "%%%LOCATION%%%".
+          fx:properties fx:use-rdfs-member true.
+          ?s ?p ?o
+  }
+}

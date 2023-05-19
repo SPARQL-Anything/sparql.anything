@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,7 +99,7 @@ public class BinaryTriplifier implements Triplifier {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("",e);
 			return null;
 		}
 

@@ -77,6 +77,141 @@ WHERE
 ] .
 ```
 
+### Example 1
+
+Consider the following input, also located at [https://sparql-anything.cc/example1.json](https://sparql-anything.cc/example1.json)
+
+```json
+[
+  {
+    "name":"Friends",
+    "genres":[
+      "Comedy",
+      "Romance"
+    ],
+    "language":"English",
+    "status":"Ended",
+    "premiered":"1994-09-22",
+    "summary":"Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan.",
+    "stars":[
+      "Jennifer Aniston",
+      "Courteney Cox",
+      "Lisa Kudrow",
+      "Matt LeBlanc",
+      "Matthew Perry",
+      "David Schwimmer"
+    ]
+  },
+  {
+    "name":"Cougar Town",
+    "genres":[
+      "Comedy",
+      "Romance"
+    ],
+    "language":"English",
+    "status":"Ended",
+    "premiered":"2009-09-23",
+    "summary":"Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself.",
+    "stars":[
+      "Courteney Cox",
+      "David Arquette",
+      "Bill Lawrence",
+      "Linda Videtti Figueiredo",
+      "Blake McCormick"
+    ]
+  }
+]
+```
+
+With SPARQL Anything you can select the TV series starring "Courteney Cox" with the SPARQL query:
+
+```sparql
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+
+SELECT ?seriesName
+WHERE {
+
+    SERVICE <x-sparql-anything:https://sparql-anything.cc/example1.json> {
+        ?tvSeries xyz:name ?seriesName .
+        ?tvSeries xyz:stars ?star .
+        ?star fx:anySlot "Courteney Cox" .
+    }
+
+}
+```
+
+and get this result:
+
+| seriesName    |
+|---------------|
+| "Cougar Town" |
+| "Friends"     |
+
+### Example 2
+
+Consider a JSON file with the following content:
+
+```json
+{
+  "Part01_001MIDDE": {
+    "builder": "Peter Gerritsz",
+    "originallocation": "Utrecht, Nicolaikerk",
+    "year": "1479"
+  },
+  "Part01_002UTREJ": {
+    "builder": "Gerrit Petersz",
+    "originallocation": "",
+    "year": "1509"
+  }
+}
+```
+
+the query:
+
+```sparql
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX oont: <uri:todo/>
+construct {
+    ?organ a oont:Organ ;
+        oont:builder ?builder_string ;
+        oont:consolelocation ?location_string ;
+        oont:dateOfBirth ?year_string ;
+} WHERE {
+ SERVICE <x-sparql-anything:> {
+    fx:properties fx:location "/app/history_base.json"  .
+bind(iri(concat(str(xyz:),?_organ)) as ?organ_slot)
+?root a fx:root ;
+      ?organ_slot ?organ .
+?organ xyz:builder ?builder_string ;
+       xyz:originallocation ?location_string ;
+       xyz:year ?year_string .
+}
+}
+```
+when  invoked via the command line, as follows:
+```bash
+java -jar /app/sparql-anything-cli/target/sparql-anything-0.9.0-SNAPSHOT.jar -q 332.rq -values organ=Part01_002UTREJ
+```
+generates the following RDF:
+```turtle
+@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
+@prefix oont: <uri:todo/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xyz:  <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type              oont:Organ ;
+  oont:builder          "Gerrit Petersz" ;
+  oont:consolelocation  "" ;
+  oont:dateOfBirth      "1509"
+] .
+```
+
 ## Options
 
 ### Summary
@@ -87,6 +222,11 @@ WHERE
 
 
 ### `json.path`
+
+!!! note
+    The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option. 
+    It will pre-process the JSON before the execution of the query. 
+    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).
 
 #### Description
 
@@ -148,7 +288,7 @@ Located at [https://sparql-anything.cc/example1.json](https://sparql-anything.cc
 ]
 ```
 
-##### Use Case 1: Constructing a Facade-X RDF Graph only only containers that match the Json Path ``$[?(@.name=="Friends")]``.
+##### Use Case 1: Constructing a Facade-X RDF Graph selecting only containers that match the Json Path ``$[?(@.name=="Friends")]``.
 
 ###### Query
 

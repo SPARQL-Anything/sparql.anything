@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class BibtexTriplifier implements Triplifier {
 				try {
 					builder.addType(dataSourceId, containerIdChild, new URI(namespace + entry.getType().toString()));
 				} catch (URISyntaxException e) {
-					e.printStackTrace();
+					logger.error("",e);
 				}
 				builder.addContainer(dataSourceId, root, count.incrementAndGet(), containerIdChild);
 				entry.getFields().forEach((keyField, valueField) -> {
