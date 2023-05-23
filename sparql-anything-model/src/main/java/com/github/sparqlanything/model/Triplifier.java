@@ -24,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.github.sparqlanything.model.Utils; 
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -211,29 +212,31 @@ public interface Triplifier {
 		if (properties.containsKey(IRIArgument.COMMAND.toString())) {
 			String command = properties.getProperty(IRIArgument.COMMAND.toString());
 			Runtime rt = Runtime.getRuntime();
-			// String[] commands = {command.substring(0, command.indexOf(' ') ) ,
-			// command.substring(command.indexOf(' ')) };
-			// String[] commands = command.split(" ");
-			// Credit: https://stackoverflow.com/a/18893443/1035608
-			String[] commands = command.split("(?x)   " + "\\s          " + // Split on space
-					"(?=        " + // Followed by
-					"  (?:      " + // Start a non-capture group
-					"    [^\"]* " + // 0 or more non-quote characters
-					"    \"     " + // 1 quote
-					"    [^\"]* " + // 0 or more non-quote characters
-					"    \"     " + // 1 quote
-					"  )*       " + // 0 or more repetition of non-capture group (multiple of 2 quotes will be even)
-					"  [^\"]*   " + // Finally 0 or more non-quotes
-					"  $        " + // Till the end (This is necessary, else every space will satisfy the condition)
-					")          " // End look-ahead
-			);
-			log.info("Running command: {}", commands);
+			String[] commands ;
+			if(Utils.platform !=  Utils.OS.WINDOWS){
+				// allow shell pipelines and other useful shell functionality
+				commands = new String[]{"bash","-c",command} ;
+			}
+			else { // WINDOWS
+				   // Credit: https://stackoverflow.com/a/18893443/1035608
+				commands = command.split("(?x)   " + "\\s          " + // Split on space
+						"(?=        " + // Followed by
+						"  (?:      " + // Start a non-capture group
+						"    [^\"]* " + // 0 or more non-quote characters
+						"    \"     " + // 1 quote
+						"    [^\"]* " + // 0 or more non-quote characters
+						"    \"     " + // 1 quote
+						"  )*       " + // 0 or more repetition of non-capture group (multiple of 2 quotes will be even)
+						"  [^\"]*   " + // Finally 0 or more non-quotes
+						"  $        " + // Till the end (This is necessary, else every space will satisfy the condition)
+						")          " // End look-ahead
+						);
+			}
+			log.info("Running command: {}", String.join(" ", commands));
 			Process proc = rt.exec(commands);
-//			String errors = IOUtils.toString(proc.getErrorStream());
-//			if(!errors.equals("")){
-//				log.error("STDERR: {}", errors);
-//			}
 			InputStream is = proc.getInputStream();
+			InputStream es = proc.getErrorStream();
+			log.info("Command stderr: " + IOUtils.toString(es));
 			return is;
 		}
 
@@ -273,7 +276,7 @@ public interface Triplifier {
 			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset);
 		} catch (ArchiveException e) {
 			throw new IOException(e); // TODO i think we should throw a TriplifierHTTPException instead
-			// to allow the silent keyword to be respected
+									  // to allow the silent keyword to be respected
 		}
 	}
 
