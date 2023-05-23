@@ -1,0 +1,15 @@
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  ex:   <http://example.com/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+ASK
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:command     "printf abc | tr \"[a-z]\" \"[A-Z]\"" ;
+                  fx:media-type  "text/plain" .
+        ?s        rdf:_1         ?o
+        FILTER ( ?o = "ABC" )
+      }
+  }
