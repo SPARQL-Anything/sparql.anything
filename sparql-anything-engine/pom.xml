@@ -20,86 +20,86 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>io.github.sparqlanything</groupId>
+		<groupId>io.github.sparql-anything</groupId>
 		<artifactId>sparql-anything-parent</artifactId>
 		<version>0.9.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>sparql-anything-engine</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-metadata</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-parser</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-csv</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-xml</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-docs</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-html</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-text</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-json</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-yaml</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-markdown</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-bib</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-archive</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -116,25 +116,25 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-binary</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-spreadsheet</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-rdf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.sparqlanything</groupId>
+			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-testutils</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
