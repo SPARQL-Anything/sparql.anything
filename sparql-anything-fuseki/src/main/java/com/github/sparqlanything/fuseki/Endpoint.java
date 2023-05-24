@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.sparqlanything.fuseki;
+package io.github.sparqlanything.fuseki;
 
-import com.github.sparqlanything.engine.FacadeX;
-import com.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;

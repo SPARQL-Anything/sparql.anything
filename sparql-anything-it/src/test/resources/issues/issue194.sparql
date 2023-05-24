@@ -12,7 +12,7 @@ WHERE {
 					
 		SERVICE <x-sparql-anything:> {
 			fx:properties fx:content ?yaml ; 
-			fx:triplifier "com.github.sparqlanything.yaml.YAMLTriplifier" .
+			fx:triplifier "io.github.sparqlanything.yaml.YAMLTriplifier" .
 			?s <http://sparql.xyz/facade-x/data/name> "SPARQL Anything" .
 			BIND ( ?yaml as ?content )
 		}

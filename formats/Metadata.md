@@ -13,7 +13,7 @@ In this case metadata is extracted from the data source and stored in the named 
 
 ## Default implementation
 
-- [com.github.sparqlanything.metadata.MetadataTriplifier](../sparql-anything-metadata/src/main/java/com/github/sparqlanything/metadata/MetadataTriplifier.java)
+- [io.github.sparqlanything.metadata.MetadataTriplifier](../sparql-anything-metadata/src/main/java/com/github/sparqlanything/metadata/MetadataTriplifier.java)
 
 ## Default Transformation
 

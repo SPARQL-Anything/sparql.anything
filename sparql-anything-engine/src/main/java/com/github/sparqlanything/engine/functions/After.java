@@ -16,6 +16,7 @@
 
 package com.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.engine.functions.FXFunction;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;

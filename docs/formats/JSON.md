@@ -22,7 +22,7 @@ SPARQL Anything selects this transformer for the following file extensions:
 
 ## Default implementation
 
-- [com.github.sparqlanything.json.JSONTriplifier](../sparql-anything-json/src/main/java/com/github/sparqlanything/json/JSONTriplifier.java)
+- [io.github.sparqlanything.json.JSONTriplifier](../sparql-anything-json/src/main/java/com/github/sparqlanything/json/JSONTriplifier.java)
 
 ## Media types
 

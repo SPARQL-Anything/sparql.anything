@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.sparqlanything.fuseki;
+package io.github.sparqlanything.fuseki;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.sparqlanything.parser.test;
+package io.github.sparqlanything.parser.test;
 
-import com.github.sparqlanything.facadeiri.FacadeIRIParser;
-import com.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.facadeiri.FacadeIRIParser;
+import io.github.sparqlanything.model.IRIArgument;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;

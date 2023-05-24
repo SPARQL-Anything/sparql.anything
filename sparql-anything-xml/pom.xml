@@ -20,7 +20,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.sparqlanything</groupId>
+		<groupId>io.github.sparqlanything</groupId>
 		<artifactId>sparql-anything-parent</artifactId>
 		<version>0.9.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
@@ -28,7 +28,7 @@
 	<artifactId>sparql-anything-xml</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
+			<groupId>io.github.sparqlanything</groupId>
 			<artifactId>sparql-anything-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -47,7 +47,7 @@
 
 
 		<dependency>
-			<groupId>com.github.sparqlanything</groupId>
+			<groupId>io.github.sparqlanything</groupId>
 			<artifactId>sparql-anything-testutils</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>

@@ -733,7 +733,7 @@ WHERE
   { SERVICE <x-sparql-anything:>
       { fx:properties
                   fx:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\" }" ;
-                  fx:triplifier  "com.github.sparqlanything.json.JSONTriplifier" .
+                  fx:triplifier  "io.github.sparqlanything.json.JSONTriplifier" .
         ?s        ?p             ?o
       }
   }

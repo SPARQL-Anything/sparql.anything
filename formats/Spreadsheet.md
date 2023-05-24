@@ -21,7 +21,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ## Default implementation
 
-- [com.github.sparqlanything.spreadsheet.SpreadsheetTriplifier](../sparql-anything-spreadsheet/src/main/java/com/github/sparqlanything/spreadsheet/SpreadsheetTriplifier.java)
+- [io.github.sparqlanything.spreadsheet.SpreadsheetTriplifier](../sparql-anything-spreadsheet/src/main/java/com/github/sparqlanything/spreadsheet/SpreadsheetTriplifier.java)
 
 ## Default Transformation
 

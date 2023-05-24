@@ -31,7 +31,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ## Default implementation
 
-- [com.github.sparqlanything.markdown.MARKDOWNTriplifier](../sparql-anything-markdown/src/main/java/com/github/sparqlanything/markdown/MARKDOWNTriplifier.java)
+- [io.github.sparqlanything.markdown.MARKDOWNTriplifier](../sparql-anything-markdown/src/main/java/com/github/sparqlanything/markdown/MARKDOWNTriplifier.java)
 
 ## Default Transformation
 

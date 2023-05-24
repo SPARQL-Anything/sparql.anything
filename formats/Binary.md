@@ -29,7 +29,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ## Default implementation
 
-- [com.github.sparqlanything.binary.BinaryTriplifier](../sparql-anything-binary/src/main/java/com/github/sparqlanything/binary/BinaryTriplifier.java)
+- [io.github.sparqlanything.binary.BinaryTriplifier](../sparql-anything-binary/src/main/java/com/github/sparqlanything/binary/BinaryTriplifier.java)
 
 ## Default Transformation
 

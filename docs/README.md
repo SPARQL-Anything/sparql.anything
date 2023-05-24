@@ -142,10 +142,10 @@ Run the server as follows:
 
 ```bash
 $ java -jar sparql-anything-server-<version>.jar 
-[main] INFO com.github.sparqlanything.fuseki.Endpoint - sparql.anything endpoint
-[main] INFO com.github.sparqlanything.fuseki.Endpoint - Starting sparql.anything endpoint..
-[main] INFO com.github.sparqlanything.fuseki.Endpoint - The server will be listening on http://localhost:3000/sparql.anything
-[main] INFO com.github.sparqlanything.fuseki.Endpoint - The server will be available on http://localhost:3000/sparql
+[main] INFO io.github.sparqlanything.fuseki.Endpoint - sparql.anything endpoint
+[main] INFO io.github.sparqlanything.fuseki.Endpoint - Starting sparql.anything endpoint..
+[main] INFO io.github.sparqlanything.fuseki.Endpoint - The server will be listening on http://localhost:3000/sparql.anything
+[main] INFO io.github.sparqlanything.fuseki.Endpoint - The server will be available on http://localhost:3000/sparql
 [main] INFO org.eclipse.jetty.server.Server - jetty-10.0.6; built: 2021-06-29T15:28:56.259Z; git: 37e7731b4b142a882d73974ff3bec78d621bd674; jvm 11.0.10+9
 [main] INFO org.eclipse.jetty.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@782a4fff{org.apache.jena.fuseki.Servlet,/,null,AVAILABLE}
 [main] INFO org.eclipse.jetty.server.AbstractConnector - Started ServerConnector@c7a975a{HTTP/1.1, (http/1.1)}{0.0.0.0:3000}

@@ -21,14 +21,14 @@ ENV VERSION "0.9.0-SNAPSHOT"
 CMD cd /app && mvn clean install && \
     java -cp \
     "/app/sparql-anything-fuseki/target/sparql-anything-server-${VERSION}.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
-    com.github.sparqlanything.fuseki.Endpoint
+    io.github.sparqlanything.fuseki.Endpoint
 
 # TODO don't bake the version numbers in here
 
 # more debugging (you can attach jdb with this)
 # CMD cd /app && mvn clean install -DskipTests && \
 #     java -Dorg.slf4j.simpleLogger.defaultLogLevel=info \
-#     -Dorg.slf4j.simpleLogger.log.com.github.sparqlanything=trace \
+#     -Dorg.slf4j.simpleLogger.log.io.github.sparqlanything=trace \
 #     -agentlib:jdwp=transport=dt_socket,server=y,address=9091,suspend=n \
 #     -cp "/app/sparql-anything-fuseki/target/sparql-anything-server-${VERSION}.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
-#     com.github.sparqlanything.fuseki.Endpoint
+#     io.github.sparqlanything.fuseki.Endpoint
