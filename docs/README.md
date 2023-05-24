@@ -191,9 +191,9 @@ In order to instruct the query processor to delegate the execution to SPARQL Any
 A minimal URI that uses only the resource locator is also possible.
 In this case SPARQL Anything guesses the data source type from the file extension.
 
-![SERVICE IRI grammar](IriGrammar.png)
+![SERVICE IRI grammar](Grammar.jpg)
 
-** Note ** Use the `file://` protocol to reference local files
+**Note:** Use the `file://` protocol to reference local files
 
 ### Passing triplification options via Basic Graph Pattern
 
@@ -251,7 +251,7 @@ WHERE {
 | [content](Configuration.md#content)*                | The content to be transformed.                                                                                                                                                                                                                                                                                                                | Any valid literal.                                                                                                                                                                    | \*                                                                                                                                                   |
 | [command](Configuration.md#command)*                | An external command line to be executed. The output is handled according to the option 'media-type'                                                                                                                                                                                                                                           | Any valid literal.                                                                                                                                                                    | \*                                                                                                                                                   |
 | [from-archive](Configuration.md#from-archive)       | The filename of the resource to be triplified within an archive.                                                                                                                                                                                                                                                                              | Any filename.                                                                                                                                                                         | No value                                                                                                                                             |
-| [root](Configuration.md#root)                       | The IRI of generated root resource.                                                                                                                                                                                                                                                                                                           | Any valid IRI.                                                                                                                                                                        | location + '#' (in case of location argument is set) or 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in case of content argument set) |
+| [root](Configuration.md#root)                       | The IRI of generated root resource.                                                                                                                                                                                                                                                                                                           | Any valid IRI.                                                                                                                                                                        | location + '#' (in the case of location argument  set) <br/> **or** <br/> 'http://sparql.xyz/facade-x/data/' + md5Hex(content) + '#' (in the case of content argument set) <br/>**or**<br/> 'http://sparql.xyz/facade-x/data/' + md5Hex(command) + '#'(in the case of command argument set)|
 | [media-type](Configuration.md#media-type)           | The media-type of the data source.                                                                                                                                                                                                                                                                                                            | Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type).  Supported media types are specified in the [pages dedicated to the supported formats](README.md#supported-formats) | No value (the media-type will be guessed from the the file extension)                                                                                |
 | [namespace](Configuration.md#namespace)             | The namespace prefix for the properties that will be generated.                                                                                                                                                                                                                                                                               | Any valid namespace prefix.                                                                                                                                                           | http://sparql.xyz/facade-x/data/                                                                                                                     |
 | [blank-nodes](Configuration.md#blank-nodes)         | It tells SPARQL Anything to generate blank nodes or not.                                                                                                                                                                                                                                                                                      | true/false                                                                                                                                                                            | true                                                                                                                                                 |
@@ -361,6 +361,8 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:bnode(?a)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxbnode)                                                 | Function                | Any node                               | Blank node                    | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
 
 ## Usage
+SPARQL Anything is available as Java Library, Command Line Interface, Web Application Server, and also Python library.
+
 ### Command Line Interface (CLI)
 
 An executable JAR can be obtained from the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
@@ -449,6 +451,10 @@ usage: java -jar sparql-anything-server-<version>.jar [-p port] [-e
 ```
 
 Also a docker image can be used by following the instructions [here](BROWSER.md).
+
+### Python Library
+
+You can use SPARQL Anything as a Python library, see the [PySPARQL-Anything project](https://pypi.org/project/pysparql-anything/).
 
 ## Licence
 
