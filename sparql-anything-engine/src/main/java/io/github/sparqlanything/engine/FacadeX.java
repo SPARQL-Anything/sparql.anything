@@ -16,7 +16,7 @@
 
 package io.github.sparqlanything.engine;
 
-import com.github.sparqlanything.engine.functions.After;
+import io.github.sparqlanything.engine.functions.After;
 import io.github.sparqlanything.engine.functions.*;
 import io.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
 import io.github.sparqlanything.model.Triplifier;
