@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.it;
 
+import io.github.sparqlanything.cli.SPARQLAnything;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.FileUtils;
@@ -44,9 +45,148 @@ public class IssuesTest {
 
 	private static final Logger log = LoggerFactory.getLogger(IssuesTest.class);
 
+	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/280">Issue 280</a>
+	 * <p>
+	 */
+	@Test
+	public void testIssue280() throws URISyntaxException {
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue280.json")).toURI().toString();
+		File TDBfile = new File("target/tdbIssue280/");
+		if (TDBfile.exists()) {
+			TDBfile.delete();
+		}
+		TDBfile.mkdirs();
+		String TDBLocation = TDBfile.getAbsolutePath();
+		log.debug("TDB temp location: {}", TDBLocation);
+		Query qs = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
+						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
+						"SELECT * WHERE { " +
+						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=" + TDBLocation + "> { " +
+						" ?s xyz:name ?o }  }");
+
+//		System.out.println(location);
+//		System.out.println(qs.toString(Syntax.defaultSyntax));
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
+//		System.out.println(ResultSetFormatter.asText(rs));
+		Set<String> results = new HashSet<>();
+		while (rs.hasNext()) {
+			results.add(rs.next().get("o").asLiteral().getValue().toString());
+		}
+//		System.out.println(results);
+		assertTrue(results.contains("Friends"));
+		assertTrue(results.contains("Cougar Town"));
+
+
+		qs = QueryFactory.create(
+				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"" + TDBLocation + "\" .  " +
+						" ?s xyz:name ?o }  }");
+
+
+		rs = QueryExecutionFactory.create(qs, ds).execSelect();
+		results = new HashSet<>();
+		while (rs.hasNext()) {
+			results.add(rs.next().get("o").asLiteral().getValue().toString());
+		}
+		assertTrue(results.contains("Friends"));
+		assertTrue(results.contains("Cougar Town"));
+	}
+
+
+	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/284">...</a>
+	 * <p>
+	 */
+	@Test
+	public void testIssue284_2() throws URISyntaxException {
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
+
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue284.json")).toURI().toString();
+		String locationExpected = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue284.ttl")).toURI().toString();
+
+//		Query qs = QueryFactory.create(
+//				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
+//						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
+//						"SELECT ?id WHERE { " +
+//						"SERVICE <x-sparql-anything:location=" + location + "> { " +
+//						" ?s xyz:students/fx:anySlot/xyz:ID ?id }  }");
+
+//		System.out.println(location);
+//		System.out.println(qs.toString(Syntax.defaultSyntax));
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+//		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
+//		System.out.println(ResultSetFormatter.asText(rs));
+
+
+		Query qs = QueryFactory.create("PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/>\n" +
+				"base  <http://example.com/base/> \n" +
+				"\n" +
+				"CONSTRUCT\n" +
+				"  {\n" +
+				"    ?subject0 <http://example.com/id> ?0 .\n" +
+				" }\n" +
+				"WHERE\n" +
+				"  {\n" +
+				"    SERVICE <x-sparql-anything:location=" + location + ">\n" +
+				"      {\n" +
+				"      \t?s0   xyz:students/fx:anySlot ?iterator0 . \n" +
+				"        ?iterator0  xyz:ID    ?0;\n" +
+				"        bind(fx:entity(\"http://example.com/\", ?0) as ?subject0)\n" +
+				"      }\n" +
+				"  }");
+
+//		System.out.println(qs.toString());
+
+		Model m = QueryExecutionFactory.create(qs, ds).execConstruct();
+
+		Model expected = ModelFactory.createDefaultModel();
+		RDFDataMgr.read(expected, locationExpected);
+
+		assertTrue(m.isIsomorphicWith(expected));
+
+//		Set<String> results = new HashSet<>();
+//		while (rs.hasNext()) {
+//			results.add(rs.next().get("o").asLiteral().getValue().toString());
+//		}
+////		System.out.println(results);
+//		assertTrue(results.contains("Friends"));
+//		assertTrue(results.contains("Cougar Town"));
+	}
+
+	@Test
+	public void testIssue356() throws URISyntaxException, IOException {
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
+		String query = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue356.sparql")).toURI(), StandardCharsets.UTF_8);
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		Assert.assertTrue(rs.hasNext());
+	}
+
+	@Test
+	public void testIssue356CLI() throws Exception {
+		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
+		String query = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue356.sparql")).toURI(), StandardCharsets.UTF_8);
+		String output = SPARQLAnything.callMain(new String[]{
+				"-q", query
+		});
+		System.out.println(output);
+	}
+
 	@Test
 	public void issue75() throws URISyntaxException {
-		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("test1.csv")).toURI().toString();
 		log.debug("Location {}", location);
 		Query query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      " + "SERVICE <x-sparql-anything:> { " + " fx:properties fx:csv.headers true . fx:properties fx:location \"" + location + "\" . " + " ?s rdf:_1 ?o . ?o xyz:A ?a }}");
 
@@ -54,8 +194,8 @@ public class IssuesTest {
 
 		Dataset ds = DatasetFactory.createGeneral();
 
-		System.out.println(query1.toString(Syntax.syntaxSPARQL_11));
-		System.out.println(query2.toString(Syntax.syntaxSPARQL_11));
+//		System.out.println(query1.toString(Syntax.syntaxSPARQL_11));
+//		System.out.println(query2.toString(Syntax.syntaxSPARQL_11));
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
@@ -86,7 +226,7 @@ public class IssuesTest {
 
 	@Test
 	public void testIssue83() throws URISyntaxException {
-		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("test1.csv")).toURI().toString();
 		log.debug("Location {}", location);
 
 		Query query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { " + "SERVICE <x-sparql-anything:csv.headers=true> { " + "" + " fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "." + " ?s rdf:_1 ?o . ?o xyz:A ?r  VALUES (?location) {(\"" + location + "\")} }}");
@@ -125,18 +265,18 @@ public class IssuesTest {
 	// Refers to #93
 	@Test
 	public void testIssue93() throws URISyntaxException, IOException {
-		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issue93.sparql"), StandardCharsets.UTF_8);
-		qs = qs.replace("%%location%%", getClass().getClassLoader().getResource("issue93.html").toURI().toString());
+		String qs = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issue93.sparql")), StandardCharsets.UTF_8);
+		qs = qs.replace("%%location%%", Objects.requireNonNull(getClass().getClassLoader().getResource("issue93.html")).toURI().toString());
 		Query query = QueryFactory.create(qs);
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Dataset ds = DatasetFactory.createGeneral();
-		Boolean rootInObject = QueryExecutionFactory.create(query, ds).execAsk();
+		boolean rootInObject = QueryExecutionFactory.create(query, ds).execAsk();
 		Assert.assertFalse(rootInObject);
 	}
 
 	@Test
-	public void testIssue114() throws IOException, URISyntaxException {
-		String location = getClass().getClassLoader().getResource("propertypath.json").toURI().toString();
+	public void testIssue114() throws URISyntaxException {
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("propertypath.json")).toURI().toString();
 		Query query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT DISTINCT ?slot  {      " + "SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" .   " + "?s fx:anySlot/fx:anySlot ?slot . }}");
 
 //		query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
@@ -162,15 +302,12 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/154
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/154">...</a>
 	 */
 	@Test
 	public void testIssue154() throws URISyntaxException, IOException {
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/e.sparql").toURI(), StandardCharsets.UTF_8);
-		String location = getClass().getClassLoader().getResource("issues/a00002-1036.xml").toURI().toString();
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/e.sparql")).toURI(), StandardCharsets.UTF_8);
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/a00002-1036.xml")).toURI().toString();
 		Query query = QueryFactory.create(queryStr.replace("%%LOCATION%%", location));
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
@@ -180,25 +317,20 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/154
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/154">...</a>
 	 */
 	@Test
 	public void test2Issue154() throws URISyntaxException, IOException {
-		String location = getClass().getClassLoader().getResource("issues/issue154.xml").toURI().toString();
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue154.xml")).toURI().toString();
 
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue154.sparql").toURI(), StandardCharsets.UTF_8);
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue154.sparql")).toURI(), StandardCharsets.UTF_8);
 
 		Query query = QueryFactory.create(queryStr.replace("%%LOCATION%%", location));
 
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
-		Set<Set<String>> expectedResult = new HashSet<>();
-
-		expectedResult.addAll(Sets.newHashSet(Sets.newHashSet("Randall, Cynthia", "Lover Birds"), Sets.newHashSet("Thurman, Paula", "Splish Splash"), Sets.newHashSet("Corets, Eva", "Oberon's Legacy"), Sets.newHashSet("Corets, Eva", "The Sundered Grail"), Sets.newHashSet("Ralls, Kim", "Midnight Rain"), Sets.newHashSet("Corets, Eva", "Maeve Ascendant"), Sets.newHashSet("Gambardella, Matthew", "XML Developer's Guide")));
+		Set<Set<String>> expectedResult = new HashSet<>(Sets.newHashSet(Sets.newHashSet("Randall, Cynthia", "Lover Birds"), Sets.newHashSet("Thurman, Paula", "Splish Splash"), Sets.newHashSet("Corets, Eva", "Oberon's Legacy"), Sets.newHashSet("Corets, Eva", "The Sundered Grail"), Sets.newHashSet("Ralls, Kim", "Midnight Rain"), Sets.newHashSet("Corets, Eva", "Maeve Ascendant"), Sets.newHashSet("Gambardella, Matthew", "XML Developer's Guide")));
 
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 
@@ -216,15 +348,12 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/175
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/175">...</a>
 	 */
 	@Test
 	public void testIssue175() throws URISyntaxException, IOException {
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue175.sparql").toURI(), StandardCharsets.UTF_8);
-		String queryStr2 = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue175-2.sparql").toURI(), StandardCharsets.UTF_8);
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue175.sparql")).toURI(), StandardCharsets.UTF_8);
+		String queryStr2 = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue175-2.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
@@ -234,15 +363,12 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/173
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/173">...</a>
 	 */
 	@Test
 	public void testIssue173() throws URISyntaxException, IOException {
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue173-1.sparql").toURI(), StandardCharsets.UTF_8);
-		String queryStr2 = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue173-2.sparql").toURI(), StandardCharsets.UTF_8);
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue173-1.sparql")).toURI(), StandardCharsets.UTF_8);
+		String queryStr2 = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue173-2.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 //		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
@@ -252,14 +378,11 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/194
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/194">...</a>
 	 */
 	@Test
 	public void testIssue194() throws URISyntaxException, IOException {
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue194.sparql").toURI(), StandardCharsets.UTF_8);
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue194.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
@@ -267,15 +390,12 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/255
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/255">...</a>
 	 */
 	@Test
 	public void testIssue255() throws URISyntaxException, IOException {
-		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue255.sparql").toURI(), StandardCharsets.UTF_8);
-		qs = qs.replace("%%location%%", getClass().getClassLoader().getResource("issues/issue255.json").toURI().toString());
+		String qs = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue255.sparql")).toURI(), StandardCharsets.UTF_8);
+		qs = qs.replace("%%location%%", Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue255.json")).toURI().toString());
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Model r = QueryExecutionFactory.create(qs, ds).execConstruct();
@@ -283,15 +403,12 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/260
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/260">...</a>
 	 */
 	@Test
 	public void testIssue260() throws URISyntaxException, IOException {
-		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue260.sparql").toURI(), StandardCharsets.UTF_8);
-		qs = qs.replace("%%location%%", getClass().getClassLoader().getResource("issues/issue260.csv").toURI().toString());
+		String qs = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue260.sparql")).toURI(), StandardCharsets.UTF_8);
+		qs = qs.replace("%%location%%", Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue260.csv")).toURI().toString());
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		ResultSet rs = QueryExecutionFactory.create(qs, ds).execSelect();
@@ -304,17 +421,14 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/256
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/256">...</a>
 	 */
 	@Test
 	public void testIssue256() throws URISyntaxException, IOException {
-		String qs = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue256.sparql").toURI(), StandardCharsets.UTF_8);
+		String qs = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue256.sparql")).toURI(), StandardCharsets.UTF_8);
 		Model expected = ModelFactory.createDefaultModel();
-		RDFDataMgr.read(expected, getClass().getClassLoader().getResource("issues/issue256.ttl").toURI().toString());
-		qs = qs.replace("%%location%%", getClass().getClassLoader().getResource("issues/issue256.json").toURI().toString());
+		RDFDataMgr.read(expected, Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue256.ttl")).toURI().toString());
+		qs = qs.replace("%%location%%", Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue256.json")).toURI().toString());
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Model r = QueryExecutionFactory.create(qs, ds).execConstruct();
@@ -322,14 +436,11 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/264
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/264">...</a>
 	 */
 	@Test
-	public void testIssue264() throws URISyntaxException, IOException {
-		String location = getClass().getClassLoader().getResource("issues/issue264.txt").toURI().toString();
+	public void testIssue264() throws URISyntaxException {
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue264.txt")).toURI().toString();
 		Query qs = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  SELECT * WHERE { SERVICE <x-sparql-anything:location=" + location + "> {fx:properties fx:txt.regex \"(.*)\" ; fx:txt.group 1 . ?s ?p ?o FILTER(ISLITERAL(?o))} }");
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
@@ -349,7 +460,7 @@ public class IssuesTest {
 	@Ignore
 	@Test
 	public void testIssue241() throws Exception {
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue241.sparql").toURI(), StandardCharsets.UTF_8);
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue241.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
@@ -358,20 +469,18 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/280
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/280">...</a>
+	 * <p>
 	 */
 	@Test
-	public void testIssue280() throws URISyntaxException, IOException {
+	public void testIssue280_2() throws URISyntaxException {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
 
-		String location = getClass().getClassLoader().getResource("issues/issue280.json").toURI().toString();
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue280.json")).toURI().toString();
 		File TDBfile = new File("target/tdbIssue280/");
 		if (TDBfile.exists()) {
 			TDBfile.delete();
@@ -411,21 +520,19 @@ public class IssuesTest {
 
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/284
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/284">...</a>
+	 * <p>
 	 */
 	@Test
-	public void testIssue284() throws URISyntaxException, IOException {
+	public void testIssue284() throws URISyntaxException {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
 
-		String location = getClass().getClassLoader().getResource("issues/issue284.json").toURI().toString();
-		String locationExpected = getClass().getClassLoader().getResource("issues/issue284.ttl").toURI().toString();
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue284.json")).toURI().toString();
+		String locationExpected = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue284.ttl")).toURI().toString();
 
 //		Query qs = QueryFactory.create(
 //				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
@@ -465,13 +572,11 @@ public class IssuesTest {
 
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/291
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/291">...</a>
+	 * <p>
 	 */
 	@Test
-	public void testIssue291() throws URISyntaxException, IOException {
+	public void testIssue291() {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
@@ -480,7 +585,6 @@ public class IssuesTest {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
-		Model m;
 
 		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?slot ?p (fx:backward(?p, 3) AS ?backward3) (fx:backward(?p, 1) AS ?backward1) (fx:previous(?p) AS ?previous) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p ?slot  . FILTER(?p != rdf:type)} }");
 //		m = QueryExecutionFactory.create(query, ds).execConstruct();
@@ -521,10 +625,8 @@ public class IssuesTest {
 
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/292
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/292">...</a>
+	 * <p>
 	 */
 	@Test
 	public void testIssue295() throws URISyntaxException, IOException {
@@ -536,9 +638,9 @@ public class IssuesTest {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
-		File tmpTBDFolder = new File(getClass().getClassLoader().getResource(".").getPath(), "testIssue295");
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue295.sparql").toURI(), StandardCharsets.UTF_8);
-		String location = getClass().getClassLoader().getResource("issues/issue295.json").toURI().toString();
+		File tmpTBDFolder = new File(Objects.requireNonNull(getClass().getClassLoader().getResource(".")).getPath(), "testIssue295");
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue295.sparql")).toURI(), StandardCharsets.UTF_8);
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue295.json")).toURI().toString();
 		queryStr = queryStr.replace("%%%LOCATION%%%", location);
 		queryStr = queryStr.replace("%%%TDB_PATH%%%", tmpTBDFolder.getAbsolutePath());
 
@@ -559,23 +661,17 @@ public class IssuesTest {
 
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/334 https://github.com/SPARQL-Anything/sparql.anything/issues/335
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/334">...</a> <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/335">...</a>
+	 * <p>
 	 */
 	@Test
 	public void testIssue334() throws URISyntaxException, IOException {
 		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue334.sparql").toURI(), StandardCharsets.UTF_8);
-		String location = getClass().getClassLoader().getResource("issues/issue334.tar").toURI().toString();
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue334.sparql")).toURI(), StandardCharsets.UTF_8);
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue334.tar")).toURI().toString();
 		queryStr = queryStr.replace("%%%LOCATION%%%", location);
 
 		query = QueryFactory.create(queryStr);
@@ -588,10 +684,8 @@ public class IssuesTest {
 	}
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/197
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/197">...</a>
+	 * <p>
 	 */
 	@Test
 	public void testIssue197() throws URISyntaxException, IOException {
@@ -603,7 +697,7 @@ public class IssuesTest {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
-		String queryStr = IOUtils.toString(getClass().getClassLoader().getResource("issues/issue197.sparql").toURI(), StandardCharsets.UTF_8);
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue197.sparql")).toURI(), StandardCharsets.UTF_8);
 
 		query = QueryFactory.create(queryStr);
 
@@ -629,10 +723,7 @@ public class IssuesTest {
 
 
 	/**
-	 * See https://github.com/SPARQL-Anything/sparql.anything/issues/351
-	 *
-	 * @throws URISyntaxException
-	 * @throws IOException
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/351">...</a>
 	 */
 	@Test
 	public void testIssue351() throws URISyntaxException, IOException {

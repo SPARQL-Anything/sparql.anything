@@ -5,8 +5,8 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT distinct ?s ?p ?o where {
   service <x-sparql-anything:>
   {
-    fx:properties fx:location "http://pflu.evolbio.mpg.de/web-services/content/v0.1";
-                  fx:media-type "application/ld+json" .
+    fx:properties fx:content "{\"a\":\"b\"}" ;
+                  fx:media-type "application/json" .
     ?s ?p ?o .
   }
 }
