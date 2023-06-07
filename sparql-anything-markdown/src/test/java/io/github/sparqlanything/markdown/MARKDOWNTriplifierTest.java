@@ -178,11 +178,11 @@ public class MARKDOWNTriplifierTest extends AbstractTriplifierTester {
 	public void testDocumentationExample(){
 		boolean isomorphic1 = this.result.isIsomorphicWith(this.expected);
 		boolean isomorphic2 = ModelFactory.createModelForGraph(this.result).isIsomorphicWith(ModelFactory.createModelForGraph(expected));
-		ModelFactory.createModelForGraph(this.result).write(System.err, "TTL");
+//		ModelFactory.createModelForGraph(this.result).write(System.err, "TTL");
 		//System.out.println(" ---- ");
-		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
-		logger.warn("Isomorphic (graph)? {} ", isomorphic1);
-		logger.warn("Isomorphic (model)? {} ", isomorphic2);
+//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
+		logger.debug("Isomorphic (graph)? {} ", isomorphic1);
+		logger.debug("Isomorphic (model)? {} ", isomorphic2);
 		// assertTrue(equals);
 	}
 
