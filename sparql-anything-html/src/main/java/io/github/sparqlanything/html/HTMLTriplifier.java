@@ -16,15 +16,11 @@
 
 package io.github.sparqlanything.html;
 
+import com.microsoft.playwright.*;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.HTTPHelper;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierHTTPException;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Frame;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
 import org.apache.any23.Any23;
 import org.apache.any23.extractor.ExtractionException;
 import org.apache.any23.source.DocumentSource;
@@ -55,15 +51,34 @@ import java.util.Set;
 
 public class HTMLTriplifier implements Triplifier {
 
+	public static final String PROPERTY_METADATA = "html.metadata";
 	private static final Logger log = LoggerFactory.getLogger(HTMLTriplifier.class);
 	private static final String PROPERTY_SELECTOR = "html.selector";
 	private static final String PROPERTY_BROWSER = "html.browser";
-	public static final String PROPERTY_METADATA = "html.metadata";
 	private static final String PROPERTY_BROWSER_WAIT = "html.browser.wait";
 	private static final String PROPERTY_BROWSER_SCREENSHOT = "html.browser.screenshot";
 	private static final String PROPERTY_BROWSER_TIMEOUT = "html.browser.timeout";
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
+
+	private static final String localName(Element element) {
+		String tagName = element.tagName().replace(':', '|');
+		StringBuilder selector = new StringBuilder(tagName);
+		String classes = StringUtil.join(element.classNames(), ".");
+		if (classes.length() > 0) {
+			selector.append('.').append(classes);
+		}
+
+		if (element.parent() != null && !(element.parent() instanceof Document)) {
+			selector.insert(0, " > ");
+			if (element.parent().select(selector.toString()).size() > 1) {
+				selector.append(String.format(":nth-child(%d)", element.elementSiblingIndex() + 1));
+			}
+
+			selector.insert(0, localName(element.parent()));
+		}
+		return selector.toString().replaceAll(" > ", "/").replaceAll(":nth-child\\(([0-9]+)\\)", ":$1");
+	}
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
@@ -104,7 +119,7 @@ public class HTMLTriplifier implements Triplifier {
 			log.debug("Loading URL: {}", url);
 			doc = Jsoup.parse(useBrowserToNavigate(url.toString(), properties));
 		} else {
-			try(InputStream is = Triplifier.getInputStream(properties)) {
+			try (InputStream is = Triplifier.getInputStream(properties)) {
 				doc = Jsoup.parse(is, charset.toString(), Triplifier.getResourceId(properties));
 			}
 		}
@@ -151,6 +166,26 @@ public class HTMLTriplifier implements Triplifier {
 //		return builder.getDatasetGraph();
 	}
 
+	@Override
+	public Set<String> getMimeTypes() {
+		return Sets.newHashSet("text/html");
+	}
+
+	@Override
+	public Set<String> getExtensions() {
+		return Sets.newHashSet("html");
+	}
+
+//	private Resource toResource(Model model, Element element, boolean blankNodes, String namespace) {
+//		if (blankNodes == true) {
+//			return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
+//		} else {
+//			String ln = localName(element);
+//			log.info(ln);
+//			return model.createResource(namespace + ln);
+//		}
+//	}
+
 	private void extractMetadata(URL url, Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, URISyntaxException, ExtractionException, TripleHandlerException {
 		Any23 runner = new Any23();
@@ -165,7 +200,7 @@ public class HTMLTriplifier implements Triplifier {
 	}
 
 	private void populate(FacadeXGraphBuilder builder, String dataSourceId, Element element, boolean blank_nodes,
-			String namespace) throws URISyntaxException {
+						  String namespace) throws URISyntaxException {
 
 		String tagName = element.tagName(); // tagname is the type
 //		Resource resource = toResource(model, element, blank_nodes, namespace);
@@ -208,41 +243,12 @@ public class HTMLTriplifier implements Triplifier {
 
 	}
 
-	private static final String localName(Element element) {
-		String tagName = element.tagName().replace(':', '|');
-		StringBuilder selector = new StringBuilder(tagName);
-		String classes = StringUtil.join(element.classNames(), ".");
-		if (classes.length() > 0) {
-			selector.append('.').append(classes);
-		}
-
-		if (element.parent() != null && !(element.parent() instanceof Document)) {
-			selector.insert(0, " > ");
-			if (element.parent().select(selector.toString()).size() > 1) {
-				selector.append(String.format(":nth-child(%d)", element.elementSiblingIndex() + 1));
-			}
-
-			selector.insert(0, localName(element.parent()));
-		}
-		return selector.toString().replaceAll(" > ", "/").replaceAll(":nth-child\\(([0-9]+)\\)", ":$1");
-	}
-
-//	private Resource toResource(Model model, Element element, boolean blankNodes, String namespace) {
-//		if (blankNodes == true) {
-//			return model.createResource(new AnonId(Integer.toHexString(element.hashCode())));
-//		} else {
-//			String ln = localName(element);
-//			log.info(ln);
-//			return model.createResource(namespace + ln);
-//		}
-//	}
-
 	private String toResourceId(Element element, boolean blankNodes) {
 		if (blankNodes == true) {
 			return Integer.toHexString(element.hashCode());
 		} else {
 			String ln = localName(element);
-			log.info(ln);
+			log.debug(ln);
 			return ln;
 		}
 	}
@@ -256,7 +262,7 @@ public class HTMLTriplifier implements Triplifier {
 		Map<String, String> headers = new HashMap<String, String>();
 		for (Map.Entry<String, String> entry : props.entrySet()) {
 			if (entry.getKey().matches("^" + HTTPHelper.HTTPHEADER_PREFIX + ".*")) { // TODO the dots need to be escaped
-																						// in the regex
+				// in the regex
 				headers.put(entry.getKey().replaceAll("^" + HTTPHelper.HTTPHEADER_PREFIX, ""), entry.getValue());
 			}
 		}
@@ -265,22 +271,22 @@ public class HTMLTriplifier implements Triplifier {
 		Playwright playwright = Playwright.create();
 		Browser browser;
 		switch (browserProperty) {
-		case "chromium":
-			log.info("using chromium");
-			browser = playwright.chromium().launch();
-			break;
-		case "firefox":
-			log.info("using firefox");
-			browser = playwright.firefox().launch();
-			break;
-		case "webkit":
-			log.info("using webkit");
-			browser = playwright.webkit().launch();
-			break;
-		default:
-			log.warn("\"" + browserProperty + "\"" + " is not a valid browser -- defaulting to chromium");
-			browser = playwright.chromium().launch();
-			break;
+			case "chromium":
+				log.debug("using chromium");
+				browser = playwright.chromium().launch();
+				break;
+			case "firefox":
+				log.debug("using firefox");
+				browser = playwright.firefox().launch();
+				break;
+			case "webkit":
+				log.debug("using webkit");
+				browser = playwright.webkit().launch();
+				break;
+			default:
+				log.warn("\"" + browserProperty + "\"" + " is not a valid browser -- defaulting to chromium");
+				browser = playwright.chromium().launch();
+				break;
 		}
 		BrowserContext context = browser.newContext();
 		Page page = context.newPage();
@@ -332,15 +338,5 @@ public class HTMLTriplifier implements Triplifier {
 			}
 		}
 		return allFramesContent;
-	}
-
-	@Override
-	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("text/html");
-	}
-
-	@Override
-	public Set<String> getExtensions() {
-		return Sets.newHashSet("html");
 	}
 }

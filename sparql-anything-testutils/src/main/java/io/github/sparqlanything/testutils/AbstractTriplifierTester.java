@@ -122,7 +122,7 @@ public class AbstractTriplifierTester {
 
 	@Before
 	public void run() throws URISyntaxException, TriplifierHTTPException, IOException {
-		logger.info("{} (run)", name.getMethodName());
+		logger.debug("{} (run)", name.getMethodName());
 
 		try {
 			// Template method
@@ -159,7 +159,7 @@ public class AbstractTriplifierTester {
 
 	protected void perform() throws TriplifierHTTPException, IOException, URISyntaxException {
 		logger.debug("{} (perform)", name.getMethodName());
-		logger.info("{}", properties);
+		logger.debug("{}", properties);
 		String graphName = Triplifier.getRootArgument(properties);
 		logger.debug("Graph name: {}", graphName);
 		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(graphName, properties);

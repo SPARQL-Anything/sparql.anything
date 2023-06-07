@@ -25,9 +25,8 @@ public class HTMLTriplifierTest extends AbstractTriplifierTester {
 
 	public HTMLTriplifierTest() {
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
-		this.printWholeGraph = true;
 	}
-	
+
 	@Test
 	public void testHTML1() {
 		assertResultIsIsomorphicWithExpected();

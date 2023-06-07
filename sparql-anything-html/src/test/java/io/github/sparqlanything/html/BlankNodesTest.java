@@ -25,7 +25,6 @@ public class BlankNodesTest extends AbstractTriplifierTester {
 
 	public BlankNodesTest() {
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
-		this.loadExpectedResult = false;
 	}
 
 	@Override
