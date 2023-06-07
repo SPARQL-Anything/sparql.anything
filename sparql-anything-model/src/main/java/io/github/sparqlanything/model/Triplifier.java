@@ -69,6 +69,14 @@ public interface Triplifier {
 		return slice;
 	}
 
+	static boolean noCache(Properties properties) {
+		boolean noCache = false;
+		if (properties.containsKey(IRIArgument.NO_CACHE.toString())) {
+			noCache = Boolean.parseBoolean(properties.getProperty(IRIArgument.NO_CACHE.toString()));
+		}
+		return noCache;
+	}
+
 	static boolean useRDFsMember(Properties properties) {
 		boolean use_rdfs_member = false;
 		if (properties.containsKey(IRIArgument.USE_RDFS_MEMBER.toString())) {
