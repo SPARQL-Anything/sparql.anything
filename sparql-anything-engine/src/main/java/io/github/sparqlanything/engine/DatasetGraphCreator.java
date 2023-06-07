@@ -139,8 +139,8 @@ public class DatasetGraphCreator {
 
 	private void createAuditGraph(DatasetGraph dg, Properties p, URL url) {
 		if (p.containsKey("audit") && (p.get("audit").equals("1") || p.get("audit").equals("true"))) {
-			logger.info("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
-			logger.info("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(), NodeFactory.createURI(url.toString()));
+			logger.trace("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
+			logger.trace("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(), NodeFactory.createURI(url.toString()));
 			String SD = "http://www.w3.org/ns/sparql-service-description#";
 			Model audit = ModelFactory.createDefaultModel();
 			Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
