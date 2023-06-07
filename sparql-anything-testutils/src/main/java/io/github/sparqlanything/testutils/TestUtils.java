@@ -39,7 +39,7 @@ public class TestUtils {
 
 	protected static final Logger logger = LoggerFactory.getLogger(TestUtils.class);
 
-	public static final void printDebugDiff(Graph left, Graph right){
+	public static final void printDebugDiff(Graph left, Graph right) {
 		if (logger.isDebugEnabled()) {
 			ExtendedIterator<Triple> it = left.find();
 			logger.debug(">> Test left items are also in right");
@@ -49,11 +49,7 @@ public class TestUtils {
 
 				if (!right.contains(t)) {
 					logger.debug(">> {} not found in right", t);
-					logger.debug(">> (T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
-							t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
-							(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
-									? t.getObject().getLiteralDatatypeURI()
-									: "");
+					logger.debug(">> (T) {} {} {} {}", t.getSubject().getClass().getSimpleName(), t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI() : "");
 				}
 			}
 			it = right.find();
@@ -63,17 +59,13 @@ public class TestUtils {
 				logger.trace("<< {}", t);
 				if (!left.contains(t)) {
 					logger.debug("<< {} not found in left", t);
-					logger.debug("<< (T) {} {} {} {}", t.getSubject().getClass().getSimpleName(),
-							t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
-							(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
-									? t.getObject().getLiteralDatatypeURI()
-									: "");
+					logger.debug("<< (T) {} {} {} {}", t.getSubject().getClass().getSimpleName(), t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI() : "");
 				}
 			}
 		}
 	}
 
-	public static final void printDebugDiff(DatasetGraph left, DatasetGraph right){
+	public static final void printDebugDiff(DatasetGraph left, DatasetGraph right) {
 		if (logger.isDebugEnabled()) {
 			Iterator<Quad> it = left.find();
 			while (it.hasNext()) {
@@ -82,12 +74,7 @@ public class TestUtils {
 
 				if (!right.contains(q)) {
 					logger.debug(">> {} not found in right", q);
-					logger.debug(">> (T) {} {} {} {} {}", q.getSubject().getClass().getSimpleName(),
-							q.getPredicate().getClass().getSimpleName(), q.getObject().getClass().getSimpleName(),
-							(q.getObject().isLiteral() && q.getObject().getLiteralDatatypeURI() != null)
-									? q.getObject().getLiteralDatatypeURI()
-									: "",
-							q.getGraph().getClass().getSimpleName());
+					logger.debug(">> (T) {} {} {} {} {}", q.getSubject().getClass().getSimpleName(), q.getPredicate().getClass().getSimpleName(), q.getObject().getClass().getSimpleName(), (q.getObject().isLiteral() && q.getObject().getLiteralDatatypeURI() != null) ? q.getObject().getLiteralDatatypeURI() : "", q.getGraph().getClass().getSimpleName());
 				}
 			}
 			it = right.find();
@@ -96,37 +83,31 @@ public class TestUtils {
 				logger.trace("<< {}", t);
 				if (!left.contains(t)) {
 					logger.debug("<< {} not found in left", t);
-					logger.debug("<< (T) {} {} {} {} {}", t.getSubject().getClass().getSimpleName(),
-							t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(),
-							(t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null)
-									? t.getObject().getLiteralDatatypeURI()
-									: "",
-							t.getGraph().getClass().getSimpleName());
+					logger.debug("<< (T) {} {} {} {} {}", t.getSubject().getClass().getSimpleName(), t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI() : "", t.getGraph().getClass().getSimpleName());
 				}
 			}
 		}
 	}
 
-	public static final void printWholeGraph(Graph expected, Graph obtained){
+	public static final void printWholeGraph(Graph expected, Graph obtained, boolean expectedResultsAvailable) {
 		ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
-		RDFDataMgr.write(baosExpected, expected, Lang.TTL);
+
+		if (expectedResultsAvailable) RDFDataMgr.write(baosExpected, expected, Lang.TTL);
 		ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
 		RDFDataMgr.write(baosResult, obtained, Lang.TTL);
-		logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nResult\n\n{}", baosExpected.toString(),
-				baosResult.toString());
+		logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nResult\n\n{}", baosExpected, baosResult);
 
 	}
 
-	public static final void printWholeGraph(DatasetGraph expected, DatasetGraph obtained){
+	public static final void printWholeGraph(DatasetGraph expected, DatasetGraph obtained, boolean expectedResultsAvailable) {
 		ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
-		RDFDataMgr.write(baosExpected, expected, Lang.NQ);
+		if (expectedResultsAvailable) RDFDataMgr.write(baosExpected, expected, Lang.NQ);
 		ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
 		RDFDataMgr.write(baosResult, obtained, Lang.NQ);
-		logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nObtained\n\n{}", baosExpected.toString(),
-				baosResult.toString());
+		logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nObtained\n\n{}", baosExpected, baosResult);
 	}
 
-	public static void assertIsomorphic(DatasetGraph expected, DatasetGraph got){
+	public static void assertIsomorphic(DatasetGraph expected, DatasetGraph got) {
 
 		Iterator<Node> it = expected.listGraphNodes();
 		Set<String> expectedGraphUris = new HashSet<>();
@@ -141,13 +122,12 @@ public class TestUtils {
 			resultGraphUris.add(it.next().getURI());
 		}
 
-		assertTrue((expected.getDefaultGraph()
-				.isIsomorphicWith(got.getDefaultGraph())));
+		assertTrue((expected.getDefaultGraph().isIsomorphicWith(got.getDefaultGraph())));
 		assertEquals(expectedGraphUris, resultGraphUris);
 
 		it = expected.listGraphNodes();
 		while (it.hasNext()) {
-			Node g = (Node) it.next();
+			Node g = it.next();
 			assertTrue(got.containsGraph(g));
 			assertTrue(expected.getGraph(g).isIsomorphicWith(got.getGraph(g)));
 		}
