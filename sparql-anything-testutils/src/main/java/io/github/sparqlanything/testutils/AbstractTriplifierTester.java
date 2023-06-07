@@ -146,15 +146,14 @@ public class AbstractTriplifierTester {
 		logger.debug("{} (inspect)", name.getMethodName());
 		logger.debug("Expected (left) VS Result (right)");
 		if (!useDatasetGraph) {
-			TestUtils.printDebugDiff(expected, result);
-			if (printWholeGraph) {
-				TestUtils.printWholeGraph(expected, result);
-			}
+			if (loadExpectedResult) TestUtils.printDebugDiff(expected, result);
+			if (printWholeGraph) TestUtils.printWholeGraph(expected, result, loadExpectedResult);
+
 		} else {
-			TestUtils.printDebugDiff(this.expectedDatasetGraph, this.resultDatasetGraph);
-			if (printWholeGraph) {
-				TestUtils.printWholeGraph(replaceLocation(this.expectedDatasetGraph), this.resultDatasetGraph);
-			}
+			if (loadExpectedResult) TestUtils.printDebugDiff(this.expectedDatasetGraph, this.resultDatasetGraph);
+			if (printWholeGraph)
+				TestUtils.printWholeGraph(replaceLocation(this.expectedDatasetGraph), this.resultDatasetGraph, loadExpectedResult);
+
 		}
 	}
 
