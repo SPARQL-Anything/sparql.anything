@@ -57,7 +57,8 @@ public class AbstractTriplifierTester {
 	protected boolean useDatasetGraph = false;
 	protected boolean throwsException = false;
 	protected String expectedExtension;
-	private boolean printWholeGraph = false;
+	protected boolean loadExpectedResult = true;
+	protected boolean printWholeGraph = false;
 
 	public AbstractTriplifierTester(Triplifier t, Properties p, String extension) {
 		this(t, p, extension, "ttl");
@@ -93,7 +94,7 @@ public class AbstractTriplifierTester {
 		url = getClass().getClassLoader().getResource(fileName);
 		properties.setProperty("location", url.toURI().toString());
 		properties.setProperty("blank-nodes", "false");
-		logger.debug("Input location: {}", url.toURI().toString());
+		logger.debug("Input location: {}", url.toURI());
 		properties.setProperty("root", "http://www.example.org/document");
 		//
 		// RDF file name
@@ -105,12 +106,13 @@ public class AbstractTriplifierTester {
 		} else {
 			rdfFileName = name.getMethodName().substring(4) + "." + expectedExtension;
 		}
-		if (!useDatasetGraph) {
-			expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString())
-					.getGraph();
-		} else {
-			expectedDatasetGraph = replaceLocation(RDFDataMgr
-					.loadDatasetGraph(getClass().getClassLoader().getResource(rdfFileName).toURI().toString()));
+
+		if (loadExpectedResult) {
+			if (!useDatasetGraph) {
+				expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString()).getGraph();
+			} else {
+				expectedDatasetGraph = replaceLocation(RDFDataMgr.loadDatasetGraph(getClass().getClassLoader().getResource(rdfFileName).toURI().toString()));
+			}
 		}
 
 	}
@@ -203,8 +205,7 @@ public class AbstractTriplifierTester {
 	protected DatasetGraph replaceLocation(DatasetGraph g) {
 		DatasetGraph dg = DatasetGraphFactory.create();
 		g.find().forEachRemaining(q -> {
-			dg.add(new Quad(resolveNode(q.getGraph()), new Triple(resolveNode(q.getSubject()),
-					resolveNode(q.getPredicate()), resolveNode(q.getObject()))));
+			dg.add(new Quad(resolveNode(q.getGraph()), new Triple(resolveNode(q.getSubject()), resolveNode(q.getPredicate()), resolveNode(q.getObject()))));
 		});
 		return dg;
 	}
