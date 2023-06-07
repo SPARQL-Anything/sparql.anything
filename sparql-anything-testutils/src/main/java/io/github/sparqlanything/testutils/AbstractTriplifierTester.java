@@ -16,12 +16,7 @@
 
 package io.github.sparqlanything.testutils;
 
-import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.Slice;
-import io.github.sparqlanything.model.Slicer;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -42,30 +37,31 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class AbstractTriplifierTester {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractTriplifierTester.class);
-
+	private static final String locationUriGraph = "location";
+	@Rule
+	public TestName name = new TestName();
 	protected Triplifier triplifier;
 	protected Properties properties;
 	protected URL url;
 	protected String extension = null;
-
 	protected Graph result;
 	protected Graph expected;
-
 	protected DatasetGraph expectedDatasetGraph;
 	protected DatasetGraph resultDatasetGraph;
-
 	protected Exception resultException = null;
-
-	private boolean printWholeGraph = false;
 	protected boolean useDatasetGraph = false;
 	protected boolean throwsException = false;
-
 	protected String expectedExtension;
-	private static final String locationUriGraph = "location";
+	private boolean printWholeGraph = false;
+
+	public AbstractTriplifierTester(Triplifier t, Properties p, String extension) {
+		this(t, p, extension, "ttl");
+	}
 
 	public AbstractTriplifierTester(Triplifier t, Properties p, String extension, String expectedExtension) {
 		this.triplifier = t;
@@ -77,27 +73,20 @@ public class AbstractTriplifierTester {
 		}
 	}
 
-	public AbstractTriplifierTester(Triplifier t, Properties p, String extension) {
-		this(t, p, extension, "ttl");
-	}
-
 	public void setPrintWholeGraph(boolean printWholeGraph) {
 		this.printWholeGraph = printWholeGraph;
 	}
-
-	@Rule
-	public TestName name = new TestName();
 
 	protected void prepare() throws URISyntaxException {
 		logger.debug("{} (prepare)", name.getMethodName());
 		// Root is Document
 		// Ignore content after '$', to allow multiple methods to reuse the same files
 		String fileName;
-		if(name.getMethodName().contains("$")){
+		if (name.getMethodName().contains("$")) {
 			fileName = name.getMethodName().substring(4);
 			fileName = fileName.substring(0, fileName.indexOf('$'));
 			fileName = fileName + "." + extension;
-		}else{
+		} else {
 			fileName = name.getMethodName().substring(4) + "." + extension;
 		}
 		logger.debug("Input filename: {}", fileName);
@@ -109,11 +98,11 @@ public class AbstractTriplifierTester {
 		//
 		// RDF file name
 		String rdfFileName;
-		if(name.getMethodName().contains("$")){
+		if (name.getMethodName().contains("$")) {
 			rdfFileName = name.getMethodName().substring(4);
 			rdfFileName = rdfFileName.substring(0, rdfFileName.indexOf('$'));
 			rdfFileName = rdfFileName + "." + expectedExtension;
-		}else{
+		} else {
 			rdfFileName = name.getMethodName().substring(4) + "." + expectedExtension;
 		}
 		if (!useDatasetGraph) {
@@ -142,7 +131,7 @@ public class AbstractTriplifierTester {
 			perform();
 			//
 			inspect();
-		}catch(Exception e){
+		} catch (Exception e) {
 			if (throwsException) {
 				resultException = e;
 			} else {
@@ -173,15 +162,15 @@ public class AbstractTriplifierTester {
 		String graphName = Triplifier.getRootArgument(properties);
 		logger.debug("Graph name: {}", graphName);
 		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(graphName, properties);
-		if(properties.containsKey("slice")){
+		if (properties.containsKey("slice")) {
 			final Slicer slicer = (Slicer) triplifier;
 			final Iterable<Slice> it = slicer.slice(properties);
 			final Iterator<Slice> iterator = it.iterator();
-			while(iterator.hasNext()) {
+			while (iterator.hasNext()) {
 				Slice slice = iterator.next();
 				slicer.triplify(slice, properties, b);
 			}
-		}else{
+		} else {
 			triplifier.triplify(properties, b);
 		}
 		if (!useDatasetGraph) {
@@ -199,6 +188,17 @@ public class AbstractTriplifierTester {
 			TestUtils.assertIsomorphic(this.expectedDatasetGraph, this.resultDatasetGraph);
 		}
 	}
+
+
+	protected void assertNotBlankNode() {
+		this.resultDatasetGraph.find(null, null, null, null).forEachRemaining(q -> {
+			assertFalse(q.getSubject().isBlank());
+			assertFalse(q.getPredicate().isBlank());
+			assertFalse(q.getObject().isBlank());
+			assertFalse(q.getGraph().isBlank());
+		});
+	}
+
 
 	protected DatasetGraph replaceLocation(DatasetGraph g) {
 		DatasetGraph dg = DatasetGraphFactory.create();
