@@ -651,5 +651,35 @@ public class IssuesTest {
 
 	}
 
+	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/371">...</a>
+	 */
+	@Ignore
+	@Test
+	public void testIssue371() throws URISyntaxException, IOException {
+		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.DatasetGraphCreator", "Trace");
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue371.sparql")).toURI(), StandardCharsets.UTF_8);
+		String loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue371.xls")).toURI()).toUri().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+//		System.out.println(queryStr);
+		query = QueryFactory.create(queryStr);
+
+		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
+		QueryExecution qExec2 = QueryExecutionFactory.create(query, ds);
+//		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
+
+		Model m1 = qExec1.execConstruct();
+		m1.write(System.out, "TTL");
+		Model m2 = qExec2.execConstruct();
+		m2.write(System.out, "TTL");
+		Assert.assertFalse(m1.isIsomorphicWith(m2));
+
+//		Assert.assertTrue(qExec.execSelect().hasNext());
+
+	}
+
 
 }
