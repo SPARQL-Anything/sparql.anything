@@ -20,25 +20,34 @@ import io.github.basilapi.basil.sparql.QueryParameter;
 import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.UnknownQueryTypeException;
+import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.query.QuerySolution;
+import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class TestParameterSubstitution {
+
+	private static final Logger logger = LoggerFactory.getLogger(TestParameterSubstitution.class);
+
 	@Test
 	public void test() throws IOException, UnknownQueryTypeException {
-		String str = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("./queryWithParameter.sparql"), StandardCharsets.UTF_8);
+		String str = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("./queryWithParameter.sparql")), StandardCharsets.UTF_8);
 		Specification specification = SpecificationFactory.create("", str);
 		Collection<QueryParameter> co = specification.getParameters();
-		Iterator<QueryParameter> it = co.iterator();
-		while(it.hasNext()){
-			System.out.println(it.next().getName());
+		Set<String> parameters = new HashSet<>();
+		for (QueryParameter queryParameter : co) {
+			parameters.add(queryParameter.getName());
 		}
+		Assert.assertEquals(Sets.newHashSet("fileName", "filePath"), parameters);
 //
 //		while (it.hasNext()) {
 //			QuerySolution qs = parameters.nextSolution();
