@@ -55,7 +55,7 @@
             <id>generate-cli-jar</id>
             <activation>
                 <property>
-                    <name>generate-cli-jar</name>
+                    <name>generate-server-jar</name>
                     <value>true</value>
                 </property>
             </activation>
