@@ -21,21 +21,23 @@ import org.junit.Test;
 
 import java.util.Properties;
 
-public class HTMLTriplifierTest extends AbstractTriplifierTester {
+public class BlankNodesTest extends AbstractTriplifierTester {
 
-	public HTMLTriplifierTest() {
+	public BlankNodesTest() {
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
-		this.printWholeGraph = true;
-	}
-	
-	@Test
-	public void testHTML1() {
-		assertResultIsIsomorphicWithExpected();
+		this.loadExpectedResult = false;
 	}
 
-	@Test
-	public void testHTML2() {
-		assertResultIsIsomorphicWithExpected();
+	@Override
+	protected void properties(Properties properties) {
+		properties.setProperty("blank-nodes", "false");
 	}
+
+
+	@Test
+	public void testBN() {
+		assertNotBlankNode();
+	}
+
 
 }

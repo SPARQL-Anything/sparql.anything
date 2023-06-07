@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Properties;
 
 public class HTMLMicrodataRemoteTest extends AbstractTriplifierTester {
@@ -36,10 +37,6 @@ public class HTMLMicrodataRemoteTest extends AbstractTriplifierTester {
 		this.assertResultIsIsomorphicWithExpected();
 	}
 
-	protected void properties(Properties properties) {
-		properties.setProperty(HTMLTriplifier.PROPERTY_METADATA, "true");
-	}
-
 	protected void prepare() throws URISyntaxException {
 		logger.debug("{} (prepare)", name.getMethodName());
 		// Root is Document
@@ -52,19 +49,23 @@ public class HTMLMicrodataRemoteTest extends AbstractTriplifierTester {
 		logger.debug("Input filename: {}", url.toString());
 		properties.setProperty("location", url.toURI().toString());
 		properties.setProperty("blank-nodes", "false");
-		logger.debug("Input location: {}", url.toURI().toString());
+		logger.debug("Input location: {}", url.toURI());
 		properties.setProperty("root", "http://www.example.org/document");
 		//
 		// RDF file name
 		String rdfFileName = name.getMethodName().substring(4) + "." + expectedExtension;
 		if (!useDatasetGraph) {
-			expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString())
+			expected = RDFDataMgr.loadModel(Objects.requireNonNull(getClass().getClassLoader().getResource(rdfFileName)).toURI().toString())
 					.getGraph();
 		} else {
 			expectedDatasetGraph = super.replaceLocation(RDFDataMgr
-					.loadDatasetGraph(getClass().getClassLoader().getResource(rdfFileName).toURI().toString()));
+					.loadDatasetGraph(Objects.requireNonNull(getClass().getClassLoader().getResource(rdfFileName)).toURI().toString()));
 		}
 
+	}
+
+	protected void properties(Properties properties) {
+		properties.setProperty(HTMLTriplifier.PROPERTY_METADATA, "true");
 	}
 
 }
