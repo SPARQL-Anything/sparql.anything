@@ -17,14 +17,7 @@
 package io.github.sparqlanything.it;
 
 import io.github.sparqlanything.engine.FacadeX;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,67 +28,68 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ItTripleFilteringTest {
-    private static final Logger log = LoggerFactory.getLogger(ItTripleFilteringTest.class);
+	private static final Logger log = LoggerFactory.getLogger(ItTripleFilteringTest.class);
 
-    @Test
-    public void JSON1() throws URISyntaxException {
-        // a01009-14709.json
-        Dataset kb = DatasetFactory.createGeneral();
-        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-        String location = getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json").toURI().toString();
-        Query query = QueryFactory.create(
-                "SELECT DISTINCT ?p WHERE { SERVICE <x-sparql-anything:namespace=http://www.example.org#,location="
-                        + location + "> {graph ?g {?s ?p ?o }}} order by ?p");
-        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
-        List<String> mustInclude = new ArrayList<String>(
-                Arrays.asList(new String[] { "http://www.example.org#thumbnailUrl", "http://www.example.org#title",
-                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.example.org#text",
-                        "http://www.example.org#subjects", "http://www.example.org#subjectCount" }));
-        while (rs.hasNext()) {
-            int rowId = rs.getRowNumber() + 1;
-            QuerySolution qs = rs.next();
-            log.info("{} {}", rowId, qs.get("p").toString());
-            mustInclude.remove(qs.get("p").toString());
-        }
-        Assert.assertTrue(mustInclude.isEmpty());
-    }
+	@Test
+	public void JSON1() throws URISyntaxException {
+		// a01009-14709.json
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		String location = getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json").toURI().toString();
+		Query query = QueryFactory.create(
+				"SELECT DISTINCT ?p WHERE { SERVICE <x-sparql-anything:namespace=http://www.example.org#,location="
+						+ location + "> {graph ?g {?s ?p ?o }}} order by ?p");
+		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+		List<String> mustInclude = new ArrayList<String>(
+				Arrays.asList("http://www.example.org#thumbnailUrl", "http://www.example.org#title",
+						"http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.example.org#text",
+						"http://www.example.org#subjects", "http://www.example.org#subjectCount"));
+		while (rs.hasNext()) {
+			int rowId = rs.getRowNumber() + 1;
+			QuerySolution qs = rs.next();
+			log.debug("{} {}", rowId, qs.get("p").toString());
+			mustInclude.remove(qs.get("p").toString());
+		}
+		Assert.assertTrue(mustInclude.isEmpty());
+	}
 
-    @Test
-    public void Audit_JSON2() throws URISyntaxException {
-        // a01009-14709.json
-        Dataset kb = DatasetFactory.createGeneral();
+	@Test
+	public void Audit_JSON2() throws URISyntaxException {
+		// a01009-14709.json
+		Dataset kb = DatasetFactory.createGeneral();
 
-        QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
-        String location = getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json").toURI().toString();
-        Query query = QueryFactory.create(
-                "PREFIX xyz:  <http://sparql.xyz/facade-x/data/>\n" +
-                        "PREFIX fx:   <http://sparql.xyz/facade-x/ns/>\n" +
-                        "PREFIX sd:   <http://www.w3.org/ns/sparql-service-description#>\n" +
-                        "PREFIX void: <http://rdfs.org/ns/void#>\n" +
-                        "SELECT DISTINCT ?g ?triples WHERE { " +
-                        "{" +
-                        "SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=1,location="
-                        + location + "> { graph ?g {[] ?p [] } . graph xyz:audit { ?g void:triples ?triples } } " +
-                        "} UNION {" +
-                        "SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=1,location="
-                        + location + "> { graph ?g {[] a [] } . graph xyz:audit { ?g void:triples ?triples } } " +
-                        "" +
-                        "}}");
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("tate-gallery/a01009-14709.json")).toURI().toString();
+		Query query = QueryFactory.create(
+				"PREFIX xyz:  <http://sparql.xyz/facade-x/data/>\n" +
+						"PREFIX fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+						"PREFIX sd:   <http://www.w3.org/ns/sparql-service-description#>\n" +
+						"PREFIX void: <http://rdfs.org/ns/void#>\n" +
+						"SELECT DISTINCT ?g ?triples WHERE { " +
+						"{" +
+						"SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=1,location="
+						+ location + "> { graph ?g {[] ?p [] } . graph xyz:audit { ?g void:triples ?triples } } " +
+						"} UNION {" +
+						"SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=1,location="
+						+ location + "> { graph ?g {[] a [] } . graph xyz:audit { ?g void:triples ?triples } } " +
+						"" +
+						"}}");
 
-        ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
-        // 151
-        int count = 0;
-        while (rs.hasNext()) {
-            count++;
-            int rowId = rs.getRowNumber() + 1;
-            QuerySolution qs = rs.next();
-            log.info("{} {}", rowId, qs);
-            Assert.assertTrue(qs.get("triples").asLiteral().getInt() == 1 || qs.get("triples").asLiteral().getInt() == 151);
-        }
-        Assert.assertTrue(count == 2);
-    }
+		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
+		// 151
+		int count = 0;
+		while (rs.hasNext()) {
+			count++;
+			int rowId = rs.getRowNumber() + 1;
+			QuerySolution qs = rs.next();
+			log.debug("{} {}", rowId, qs);
+			Assert.assertTrue(qs.get("triples").asLiteral().getInt() == 1 || qs.get("triples").asLiteral().getInt() == 151);
+		}
+		Assert.assertEquals(2, count);
+	}
 
 }

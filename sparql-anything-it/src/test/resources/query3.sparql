@@ -2,27 +2,28 @@ PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
-SELECT DISTINCT  ?c
-WHERE
-  { SERVICE <x-sparql-anything:>
-      {  fx:properties fx:location  ?location .
-          
-        ?s        rdf:type      xyz:frameset ;
-                  ?li           ?predicate .
-        ?predicate  rdf:type    xyz:predicate ;
-                  ?li2          ?roleset .
-        ?roleset  rdf:type      xyz:roleset ;
-                  ?li3          ?aliases ;
-                  xyz:id        ?id .
-        ?aliases  ?li4          ?alias .
-        ?alias    xyz:framenet  ?framenet ;
-                  rdf:type      xyz:alias
+SELECT DISTINCT  *
+WHERE {
+    SERVICE <x-sparql-anything:> {
+
+
         SERVICE <x-sparql-anything:> {
-        	fx:properties fx:content ?framenet .
-        	fx:properties fx:txt.split " " .  
-            ?a  ?b  ?c
-            FILTER isLiteral(?c)
-            FILTER (STRLEN(str(?c)) > 0)
-          }
-      }
-  }
+            fx:properties fx:location  "%%%LOCATION%%%" .
+            ?s        rdf:type      xyz:frameset ;
+                      ?li           ?predicate .
+            ?predicate  rdf:type    xyz:predicate ;
+                        ?li2          ?roleset .
+            ?roleset  rdf:type      xyz:roleset ;
+                        ?li3          ?aliases ;
+                        xyz:id        ?id .
+            ?aliases  ?li4          ?alias .
+            ?alias    xyz:framenet  ?framenet ;
+                    rdf:type      xyz:alias .
+            FILTER (STRLEN(STR(?framenet))>0)
+        }
+
+        fx:properties fx:content ?framenet .
+                fx:properties fx:txt.split " " .
+                ?a ?b ?c .
+    }
+}

@@ -19,14 +19,7 @@ package io.github.sparqlanything.it;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFactory;
+import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.resultset.ResultsFormat;
 import org.junit.Before;
@@ -44,6 +37,8 @@ public class AbstractExecutionTester {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractExecutionTester.class);
 
 	protected static final String FILENAME_PLACEHOLDER = "%%fileName%%";
+	@Rule
+	public TestName name = new TestName();
 	protected Dataset dataset = null;
 	protected Query query = null;
 	protected URI expectedFile = null;
@@ -58,12 +53,9 @@ public class AbstractExecutionTester {
 	protected String outputFormat = null;
 	protected String[] formats = new String[]{"TTL", "NQ", "CSV"};
 
-	@Rule
-	public TestName name = new TestName();
-
 	@Before
 	public void run() throws URISyntaxException, IOException {
-		logger.info("{} (run)", name.getMethodName());
+		logger.debug("{} (run)", name.getMethodName());
 
 		prepareDataset();
 		prepareQuery();
@@ -72,8 +64,8 @@ public class AbstractExecutionTester {
 		perform();
 	}
 
-	protected void beforeExecution() {
-		// Extension point
+	protected void prepareDataset() {
+		dataset = DatasetFactory.createGeneral();
 	}
 
 	protected void prepareQuery() throws IOException, URISyntaxException {
@@ -84,21 +76,35 @@ public class AbstractExecutionTester {
 		query = QueryFactory.create(queryStr);
 	}
 
-	protected String prepareQueryString(String queryStr){
-		// Extension point
-		if(queryStr.contains(FILENAME_PLACEHOLDER)){
-			String fileName = name.getMethodName().substring(4) + "Input";
-			String filePath = getClass().getClassLoader().getResource(".").getPath();
-			String file = filePath + "/" + fileName;
-			queryStr = queryStr.replace(FILENAME_PLACEHOLDER, file);
-			logger.debug("Input file name: {}" , file);
+	protected void prepareExpected() throws URISyntaxException {
+		String expectedFilePrefix = name.getMethodName().substring(4) + ".";
+		expectedFile = null;
+		for (String f : formats) {
+			if (getClass().getClassLoader().getResource(expectedFilePrefix + f.toLowerCase()) != null) {
+				expectedFile = getClass().getClassLoader().getResource(expectedFilePrefix + f.toLowerCase()).toURI();
+				outputFormat = f;
+				break;
+			}
 		}
-		logger.debug("queryStr: {}", queryStr);
-		return queryStr;
+		logger.debug("Output file: {}", expectedFile);
+		// Load expected result
+		if (query.isSelectType()) {
+			expected = ResultSetFactory.load(expectedFile.toString(), ResultsFormat.guessSyntax(expectedFile.toString()));
+		} else if (query.isConstructType()) {
+			if (outputFormat.equals("NQ")) {
+				expectedDataset = QueryExecutionFactory.create(query, dataset).execConstructDataset();
+			} else {
+				expectedGraph = QueryExecutionFactory.create(query, dataset).execConstruct().getGraph();
+			}
+		} else if (query.isAskType()) {
+			expected = ResultSetFactory.load(expectedFile.toString(), ResultsFormat.guessSyntax(expectedFile.toString()));
+			String bv = expected.getResultVars().get(0);
+			expectedBoolean = expected.rewindable().next().getLiteral(bv).getBoolean();
+		}
 	}
 
-	protected void prepareDataset(){
-		dataset = DatasetFactory.createGeneral();
+	protected void beforeExecution() {
+		// Extension point
 	}
 
 	protected void perform() throws URISyntaxException, IOException {
@@ -108,9 +114,9 @@ public class AbstractExecutionTester {
 		if (query.isSelectType()) {
 			result = QueryExecutionFactory.create(query, dataset).execSelect();
 		} else if (query.isConstructType()) {
-			if(outputFormat.equals("NQ")) {
+			if (outputFormat.equals("NQ")) {
 				resultDataset = QueryExecutionFactory.create(query, dataset).execConstructDataset();
-			}else{
+			} else {
 				resultGraph = QueryExecutionFactory.create(query, dataset).execConstruct().getGraph();
 			}
 		} else if (query.isAskType()) {
@@ -118,30 +124,16 @@ public class AbstractExecutionTester {
 		}
 	}
 
-	protected void prepareExpected() throws URISyntaxException {
-		String expectedFilePrefix = name.getMethodName().substring(4) + ".";
-		expectedFile = null;
-		for(String f: formats) {
-			if (getClass().getClassLoader().getResource(expectedFilePrefix + f.toLowerCase()) != null) {
-				expectedFile = getClass().getClassLoader().getResource(expectedFilePrefix + f.toLowerCase()).toURI();
-				outputFormat = f;
-				break;
-			}
+	protected String prepareQueryString(String queryStr) {
+		// Extension point
+		if (queryStr.contains(FILENAME_PLACEHOLDER)) {
+			String fileName = name.getMethodName().substring(4) + "Input";
+			String filePath = getClass().getClassLoader().getResource(".").getPath();
+			String file = filePath + "/" + fileName;
+			queryStr = queryStr.replace(FILENAME_PLACEHOLDER, file);
+			logger.debug("Input file name: {}", file);
 		}
-		logger.info("Output file: {}", expectedFile);
-		// Load expected result
-		if (query.isSelectType()) {
-			expected = ResultSetFactory.load(expectedFile.toString(), ResultsFormat.guessSyntax(expectedFile.toString()));
-		} else if (query.isConstructType()) {
-			if(outputFormat.equals("NQ")){
-				expectedDataset = 	QueryExecutionFactory.create(query, dataset).execConstructDataset();
-			}else {
-				expectedGraph = QueryExecutionFactory.create(query, dataset).execConstruct().getGraph();
-			}
-		} else if (query.isAskType()) {
-			expected = ResultSetFactory.load(expectedFile.toString(), ResultsFormat.guessSyntax(expectedFile.toString()));
-			String bv = expected.getResultVars().get(0);
-			expectedBoolean = expected.rewindable().next().getLiteral(bv).getBoolean();
-		}
+		logger.debug("queryStr: {}", queryStr);
+		return queryStr;
 	}
 }

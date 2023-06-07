@@ -53,7 +53,30 @@ public class FacadeXOpExecutor extends OpExecutor {
 		dgc = new DatasetGraphCreator(execCxt);
 	}
 
+	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
+		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
+		// check that the BGP is within a FacadeX-SERVICE clause
+		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {
+			// check that the BGP contains FacadeX Magic properties
+			logger.trace("FacadeX Execution context");
+			List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
+			if (!magicPropertyTriples.isEmpty()) {
+				logger.trace("BGP has magic properties");
+				return super.execute(Utils.excludeMagicPropertyTriples(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples));
+			} else {
+				// execute BGP by excluding FX properties
+				logger.trace("Execute BGP by excluding FX properties");
+				//return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(this.execCxt.getDataset()));
+				return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(execCxt));
+			}
+		}
+		logger.trace("Execute with default Jena execution");
+		// go with the default Jena execution
+		return super.execute(opBGP, input);
+	}
+
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
+		logger.trace("Execute opService {}", opService.toString());
 		// check if service iri is a variable, in case postpone the execution
 		if (opService.getService().isVariable()) return Utils.postpone(opService, input, execCxt);
 
@@ -77,56 +100,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 		// go with the default Jena execution
 		return super.execute(opService, input);
 	}
-
-	private QueryIterator catchUnboundVariableException(Op op, OpBGP opBGP, QueryIterator input, UnboundVariableException e) {
-		// Proceed with the next operation
-		OpBGP fakeBGP = Utils.extractFakePattern(opBGP);
-		if (e.getOpTable() != null) {
-			logger.trace("Executing table");
-			QueryIterator qIterT = e.getOpTable().getTable().iterator(execCxt);
-			QueryIterator qIter = Join.join(input, qIterT, execCxt);
-			return Utils.postpone(op, qIter, execCxt);
-		} else if (e.getOpExtend() != null) {
-			logger.trace("Executing op extend");
-			QueryIterator qIter = exec(e.getOpExtend().getSubOp(), input);
-			qIter = new QueryIterAssign(qIter, e.getOpExtend().getVarExprList(), execCxt, true);
-			return Utils.postpone(op, qIter, execCxt);
-		}
-		logger.trace("Executing fake pattern {}", fakeBGP);
-		return Utils.postpone(op, QC.execute(fakeBGP, input, execCxt), execCxt);
-	}
-
-
-	private QueryIterator executeMagicProperties(QueryIterator input, List<Triple> propFuncTriples) {
-		QueryIterator input2 = input;
-		for (Triple t : propFuncTriples) {
-			input2 = QC.execute(Utils.getOpPropFuncAnySlot(t), input2, execCxt);
-		}
-		return input2;
-	}
-
-	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
-		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
-		// check that the BGP is within a FacadeX-SERVICE clause
-		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {
-			// check that the BGP contains FacadeX Magic properties
-			logger.trace("FacadeX Execution context");
-			List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
-			if (!magicPropertyTriples.isEmpty()) {
-				logger.trace("BGP has magic properties");
-				return super.execute(Utils.excludeMagicPropertyTriples(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples));
-			} else {
-				// execute BGP by excluding FX properties
-				logger.trace("Execute BGP by excluding FX properties");
-				//return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(this.execCxt.getDataset()));
-				return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(execCxt));
-			}
-		}
-		logger.trace("Execute with default Jena execution");
-		// go with the default Jena execution
-		return super.execute(opBGP, input);
-	}
-
 
 	protected QueryIterator executeDefaultFacadeX(OpService opService, QueryIterator input) throws TriplifierHTTPException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, UnboundVariableException {
 
@@ -157,6 +130,32 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		return QC.execute(opService.getSubOp(), input, Utils.getFacadeXExecutionContext(execCxt, p, dg));
 
+	}
+
+	private QueryIterator catchUnboundVariableException(Op op, OpBGP opBGP, QueryIterator input, UnboundVariableException e) {
+		// Proceed with the next operation
+		OpBGP fakeBGP = Utils.extractFakePattern(opBGP);
+		if (e.getOpTable() != null) {
+			logger.trace("Executing table");
+			QueryIterator qIterT = e.getOpTable().getTable().iterator(execCxt);
+			QueryIterator qIter = Join.join(input, qIterT, execCxt);
+			return Utils.postpone(op, qIter, execCxt);
+		} else if (e.getOpExtend() != null) {
+			logger.trace("Executing op extend");
+			QueryIterator qIter = exec(e.getOpExtend().getSubOp(), input);
+			qIter = new QueryIterAssign(qIter, e.getOpExtend().getVarExprList(), execCxt, true);
+			return Utils.postpone(op, qIter, execCxt);
+		}
+		logger.trace("Executing fake pattern {}", fakeBGP);
+		return Utils.postpone(op, QC.execute(fakeBGP, input, execCxt), execCxt);
+	}
+
+	private QueryIterator executeMagicProperties(QueryIterator input, List<Triple> propFuncTriples) {
+		QueryIterator input2 = input;
+		for (Triple t : propFuncTriples) {
+			input2 = QC.execute(Utils.getOpPropFuncAnySlot(t), input2, execCxt);
+		}
+		return input2;
 	}
 
 }

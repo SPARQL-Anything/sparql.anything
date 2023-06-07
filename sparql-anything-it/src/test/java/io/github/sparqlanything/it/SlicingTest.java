@@ -23,44 +23,40 @@ import org.junit.Test;
 public class SlicingTest extends AbstractExecutionTester {
 
 	@Test
-	public void testSliceSelect (){
+	public void testSliceSelect() {
 		Assert.assertTrue(result.getResultVars().contains("X"));
 
-		QuerySolution ex;
 		QuerySolution qs;
 		qs = result.next();
 //		ex = expected.next();
 		System.out.println(qs);
-		Assert.assertTrue(qs.getLiteral("X").getString().equals("a1"));
-		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b1"));
-		Assert.assertTrue(qs.getLiteral("Z").getString().equals("c1"));
+		Assert.assertEquals("a1", qs.getLiteral("X").getString());
+		Assert.assertEquals("b1", qs.getLiteral("Y").getString());
+		Assert.assertEquals("c1", qs.getLiteral("Z").getString());
 
 		qs = result.next();
-		System.out.println(qs);
-		Assert.assertTrue(qs.getLiteral("X").getString().equals("a2"));
-		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b2"));
-		Assert.assertTrue(qs.getLiteral("Z").getString().equals("c2"));
+		Assert.assertEquals("a2", qs.getLiteral("X").getString());
+		Assert.assertEquals("b2", qs.getLiteral("Y").getString());
+		Assert.assertEquals("c2", qs.getLiteral("Z").getString());
 
 	}
 
 	@Test
-	public void testSliceSelect2 (){
+	public void testSliceSelect2() {
 		Assert.assertTrue(result.getResultVars().contains("X"));
 
-		QuerySolution ex;
 		QuerySolution qs;
 		qs = result.next();
 //		ex = expected.next();
-		System.out.println(qs);
-		Assert.assertTrue(qs.getLiteral("X").getString().equals("a1"));
-		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b1"));
-		Assert.assertTrue(qs.getLiteral("Z").getString().equals("c1"));
+		Assert.assertEquals("a1", qs.getLiteral("X").getString());
+		Assert.assertEquals("b1", qs.getLiteral("Y").getString());
+		Assert.assertEquals("c1", qs.getLiteral("Z").getString());
 
 		qs = result.next();
 		System.out.println(qs);
-		Assert.assertTrue(qs.getLiteral("X").getString().equals("a2"));
-		Assert.assertTrue(qs.getLiteral("Y").getString().equals("b2"));
-		Assert.assertTrue(qs.getLiteral("Z").getString().equals("c2"));
+		Assert.assertEquals("a2", qs.getLiteral("X").getString());
+		Assert.assertEquals("b2", qs.getLiteral("Y").getString());
+		Assert.assertEquals("c2", qs.getLiteral("Z").getString());
 
 	}
 }

@@ -54,9 +54,11 @@ public class IssuesTest {
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue280.json")).toURI().toString();
 		File TDBfile = new File("target/tdbIssue280/");
 		if (TDBfile.exists()) {
-			TDBfile.delete();
+			boolean isTDBFileDeleted = TDBfile.delete();
+			log.trace("Has TDB folder been deleted? {}", isTDBFileDeleted);
 		}
-		TDBfile.mkdirs();
+		boolean tdbFolderCreated = TDBfile.mkdirs();
+		log.trace("Has TDB folder been deleted? {}", tdbFolderCreated);
 		String TDBLocation = TDBfile.getAbsolutePath();
 		log.debug("TDB temp location: {}", TDBLocation);
 		Query qs = QueryFactory.create(
@@ -176,12 +178,12 @@ public class IssuesTest {
 
 	@Test
 	public void testIssue356CLI() throws Exception {
-		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 		String query = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue356.sparql")).toURI(), StandardCharsets.UTF_8);
 		String output = SPARQLAnything.callMain(new String[]{
 				"-q", query
 		});
-		System.out.println(output);
+		Assert.assertTrue(output.contains("http://www.w3.org/1999/02/22-rdf-syntax-ns#type,http://sparql.xyz/facade-x/ns/root"));
 	}
 
 	@Test
@@ -261,7 +263,7 @@ public class IssuesTest {
 
 	}
 
-	// Root container cannot be object
+	// Root container cannot be an object
 	// Refers to #93
 	@Test
 	public void testIssue93() throws URISyntaxException, IOException {
@@ -313,7 +315,7 @@ public class IssuesTest {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		// XXX This process never ends!
 		Model rs = QueryExecutionFactory.create(query, ds).execConstruct();
-		rs.write(System.err, "TTL");
+		Assert.assertTrue(rs.size() > 0);
 	}
 
 	/**
@@ -332,7 +334,7 @@ public class IssuesTest {
 
 		Set<Set<String>> expectedResult = new HashSet<>(Sets.newHashSet(Sets.newHashSet("Randall, Cynthia", "Lover Birds"), Sets.newHashSet("Thurman, Paula", "Splish Splash"), Sets.newHashSet("Corets, Eva", "Oberon's Legacy"), Sets.newHashSet("Corets, Eva", "The Sundered Grail"), Sets.newHashSet("Ralls, Kim", "Midnight Rain"), Sets.newHashSet("Corets, Eva", "Maeve Ascendant"), Sets.newHashSet("Gambardella, Matthew", "XML Developer's Guide")));
 
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
 
 		Set<Set<String>> actualResult = new HashSet<>();
 		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
@@ -385,7 +387,7 @@ public class IssuesTest {
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue194.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
 		assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
 	}
 
@@ -483,15 +485,17 @@ public class IssuesTest {
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue280.json")).toURI().toString();
 		File TDBfile = new File("target/tdbIssue280/");
 		if (TDBfile.exists()) {
-			TDBfile.delete();
+			boolean isTDBFileDeleted = TDBfile.delete();
+			log.trace("Has TDB Folder been deleted? {}", isTDBFileDeleted);
 		}
-		TDBfile.mkdirs();
+		boolean hasTDBFolderCreated = TDBfile.mkdirs();
+		log.trace("Has TDB Folder been created? {}", hasTDBFolderCreated);
 		String TDBLocation = TDBfile.getAbsolutePath();
 		log.debug("TDB temp location: {}", TDBLocation);
 		Query qs = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "SELECT * WHERE { " + "SERVICE <x-sparql-anything:location=" + location + ",ondisk=" + TDBLocation + "> { " + " ?s xyz:name ?o }  }");
 
 //		System.out.println(location);
-		System.out.println(qs.toString(Syntax.defaultSyntax));
+//		System.out.println(qs.toString(Syntax.defaultSyntax));
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
@@ -630,7 +634,7 @@ public class IssuesTest {
 	 */
 	@Test
 	public void testIssue295() throws URISyntaxException, IOException {
-		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
@@ -666,7 +670,7 @@ public class IssuesTest {
 	 */
 	@Test
 	public void testIssue334() throws URISyntaxException, IOException {
-		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
@@ -689,7 +693,7 @@ public class IssuesTest {
 	 */
 	@Test
 	public void testIssue197() throws URISyntaxException, IOException {
-		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
@@ -709,7 +713,7 @@ public class IssuesTest {
 		Set<String> results = new HashSet<>();
 		while (rs.hasNext()) {
 			QuerySolution qs = rs.next();
-			System.out.println(qs);
+//			System.out.println(qs);
 			if (qs.contains("material") && qs.get("material").isLiteral()) {
 				results.add(qs.get("material").asLiteral().getValue().toString());
 
@@ -748,7 +752,7 @@ public class IssuesTest {
 	@Ignore
 	@Test
 	public void testIssue371() throws URISyntaxException, IOException {
-		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.DatasetGraphCreator", "Trace");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.DatasetGraphCreator", "Trace");
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;

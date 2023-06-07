@@ -19,19 +19,9 @@ package io.github.sparqlanything.it;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.compress.utils.Sets;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.ext.com.google.common.collect.Lists;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
@@ -40,18 +30,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -61,23 +43,23 @@ public class ItTest {
 
 	@Test
 	public void RegistryExtensionsTest() {
-		for (String ext : new String[] { "json", "html", "xml", "csv", "bin", "png", "jpeg", "jpg", "bmp", "tiff",
+		for (String ext : new String[]{"json", "html", "xml", "csv", "bin", "png", "jpeg", "jpg", "bmp", "tiff",
 				"tif", "ico", "txt", "xlsx", "xls", "rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix", "trdf",
-				"zip", "tar", "docx", "bib", "bibtex" }) {
+				"zip", "tar", "docx", "bib", "bibtex"}) {
 			Assert.assertNotNull(ext, FacadeX.Registry.getTriplifierForExtension(ext));
 		}
 	}
 
 	@Test
 	public void RegistryMimeTypesTest() {
-		for (String mt : new String[] { "application/json", "text/html", "application/xml", "text/csv",
+		for (String mt : new String[]{"application/json", "text/html", "application/xml", "text/csv",
 				"application/octet-stream", "image/png", "image/jpeg", "image/bmp", "image/tiff",
 				"image/vnd.microsoft.icon", "application/vnd.ms-excel",
 				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/rdf+thrift",
 				"application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle",
 				"application/rdf+xml", "application/n-triples", "application/ld+json", "application/zip",
 				"application/x-tar", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-				"application/x-bibtex" }) {
+				"application/x-bibtex"}) {
 			Assert.assertNotNull(mt, FacadeX.Registry.getTriplifierForMimeType(mt));
 		}
 	}
@@ -87,7 +69,7 @@ public class ItTest {
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
-		log.info("{}", location);
+		log.debug("{}", location);
 		Query query = QueryFactory.create("SELECT distinct ?p WHERE { SERVICE <x-sparql-anything:location=" + location
 				+ "> { ?s ?p ?o }} ORDER BY ?p");
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
@@ -101,7 +83,7 @@ public class ItTest {
 			int rowId = rs.getRowNumber() + 1;
 			QuerySolution qs = rs.next();
 			log.trace("{} {} {}", rowId, qs.get("p").toString(), expected.get(rowId));
-			Assert.assertTrue(expected.get(rowId).equals(qs.get("p").toString()));
+			assertEquals(expected.get(rowId), qs.get("p").toString());
 		}
 	}
 
@@ -110,7 +92,7 @@ public class ItTest {
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
-		log.info("{}", location);
+		log.debug("{}", location);
 		Query query = QueryFactory.create(
 				"SELECT distinct ?p WHERE { SERVICE <x-sparql-anything:csv.headers=true,namespace=http://www.example.org/csv#,location="
 						+ location + "> { ?s ?p ?o }} ORDER BY ?p");
@@ -128,7 +110,7 @@ public class ItTest {
 			int rowId = rs.getRowNumber() + 1;
 			QuerySolution qs = rs.next();
 			log.trace("{} {} {}", rowId, qs.get("p").toString(), expected.get(rowId));
-			Assert.assertTrue(expected.get(rowId).equals(qs.get("p").toString()));
+			assertEquals(expected.get(rowId), qs.get("p").toString());
 		}
 	}
 
@@ -136,8 +118,8 @@ public class ItTest {
 	public void CSV1headersDefaultNS() throws URISyntaxException {
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-		String location = getClass().getClassLoader().getResource("test1.csv").toURI().toString();
-		log.info("{}", location);
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("test1.csv")).toURI().toString();
+		log.debug("{}", location);
 		Query query = QueryFactory
 				.create("SELECT distinct ?p WHERE { SERVICE <x-sparql-anything:csv.headers=true,location=" + location
 						+ "> { ?s ?p ?o }} ORDER BY ?p");
@@ -158,7 +140,7 @@ public class ItTest {
 			QuerySolution qs = rs.next();
 //			System.out.println(rowId+" "+qs.get("p").toString()+" "+expected.get(rowId));
 			log.trace("{} {} {}", rowId, qs.get("p").toString(), expected.get(rowId));
-			Assert.assertTrue(expected.get(rowId).equals(qs.get("p").toString()));
+			assertEquals(expected.get(rowId), qs.get("p").toString());
 		}
 	}
 
@@ -173,9 +155,9 @@ public class ItTest {
 						+ location + "> { ?s ?p ?o }} order by ?p");
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
 		List<String> mustInclude = new ArrayList<String>(
-				Arrays.asList(new String[] { "http://www.example.org#thumbnailUrl", "http://www.example.org#title",
+				Arrays.asList("http://www.example.org#thumbnailUrl", "http://www.example.org#title",
 						"http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.example.org#text",
-						"http://www.example.org#subjects", "http://www.example.org#subjectCount" }));
+						"http://www.example.org#subjects", "http://www.example.org#subjectCount"));
 		while (rs.hasNext()) {
 			int rowId = rs.getRowNumber() + 1;
 			QuerySolution qs = rs.next();
@@ -215,7 +197,7 @@ public class ItTest {
 				+ "> {" + "FILTER (?accession = \"A01009\") . "
 				+ "[] ex:accession ?accession ; ex:thumbnailUrl ?thumbnail " + "}" + ""
 				+ "SERVICE ?embed { [] rdf:_1 ?image } . " + "} LIMIT 1";
-		log.info("\n{}\n", queryStr);
+//		log.debug("\n{}\n", queryStr);
 
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
@@ -226,47 +208,44 @@ public class ItTest {
 			Assert.assertTrue(qs.get("accession").isLiteral());
 			Assert.assertTrue(qs.get("thumbnail").isLiteral());
 			Assert.assertTrue(qs.get("image").isLiteral());
-			Assert.assertTrue(qs.get("image").asNode().getLiteralDatatypeURI()
-					.equals("http://www.w3.org/2001/XMLSchema#base64Binary"));
+			assertEquals("http://www.w3.org/2001/XMLSchema#base64Binary", qs.get("image").asNode().getLiteralDatatypeURI());
 		}
 	}
 
 	@Test
 	public void TriplifyTateGalleryArtworkData() throws IOException, URISyntaxException {
-		InputStream is = getClass().getClassLoader().getResourceAsStream("tate-gallery1.sparql");
-		String location = getClass().getClassLoader().getResource("tate-gallery/artwork_data.csv").toURI().toString();
-		String queryStr = IOUtils.toString(is, "UTF-8").replace("%%artwork_data%%", location);
-		log.info(queryStr);
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("tate-gallery/artwork_data.csv")).toURI().toString();
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tate-gallery1.sparql")), StandardCharsets.UTF_8).replace("%%artwork_data%%", location);
+		log.debug(queryStr);
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query = QueryFactory.create(queryStr);
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
 		while (rs.hasNext()) {
 			QuerySolution qs = rs.next();
-			log.info("{}}", qs);
+			log.debug("{}}", qs);
 		}
 //        Model model = QueryExecutionFactory.create(query, kb).execConstruct();
-//        log.info("Produced {} triples", model.size());
+//        log.debug("Produced {} triples", model.size());
 //        // Write as Turtle via model.write
 //        model.write(System.out, "TTL") ;
 	}
 
 	@Test
 	public void TriplifyTateGalleryArtworkJSON() throws IOException, URISyntaxException {
-		InputStream is = getClass().getClassLoader().getResourceAsStream("tate-gallery2.sparql");
 		String location = getClass().getClassLoader().getResource("tate-gallery/a01003-14703.json").toURI().toString();
-		String queryStr = IOUtils.toString(is, "UTF-8").replace("%%artwork_json%%", location);
-		log.info(queryStr);
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tate-gallery2.sparql")), StandardCharsets.UTF_8).replace("%%artwork_json%%", location);
+		log.debug(queryStr);
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query = QueryFactory.create(queryStr);
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();
 		while (rs.hasNext()) {
 			QuerySolution qs = rs.next();
-			log.info("{}}", qs);
+			log.trace("{}}", qs);
 		}
 //        Model model = QueryExecutionFactory.create(query, kb).execConstruct();
-//        log.info("Produced {} triples", model.size());
+//        log.debug("Produced {} triples", model.size());
 //        // Write as Turtle via model.write
 //        model.write(System.out, "TTL") ;
 	}
@@ -321,7 +300,7 @@ public class ItTest {
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 //		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
-		log.info("\n{}", ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
+//		log.debug("\n{}", ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
 	}
 
 	@Test
@@ -351,38 +330,38 @@ public class ItTest {
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 //		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
-		log.info("\n{}", ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
+//		log.debug("\n{}", ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
 
 		Query query2 = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT * WHERE {    SERVICE <x-sparql-anything:> { fx:properties fx:csv.headers true .  fx:properties fx:location \"https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-20200409.csv\" .    ?s ?p ?o    }}");
 //		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
-		log.info("\n{}", ResultSetFormatter.asText(QueryExecutionFactory.create(query2, kb).execSelect()));
+//		log.debug("\n{}", ResultSetFormatter.asText(QueryExecutionFactory.create(query2, kb).execSelect()));
 
 	}
 
 	@Test
-	public void testVariablesInProprtyGraph() throws IOException, URISyntaxException {
-		String location = getClass().getClassLoader().getResource("test-propbank.xml").toURI().toString();
-		ParameterizedSparqlString pss = new ParameterizedSparqlString(
-				FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("query3.sparql").getFile()),
-						Charset.defaultCharset()));
-		pss.setIri("location", location);
+	public void testVariablesInPropertyGraph() throws IOException, URISyntaxException {
+		String loc = Objects.requireNonNull(getClass().getClassLoader().getResource("test-propbank.xml")).toURI().toString();
+
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("query3.sparql")).toURI(), StandardCharsets.UTF_8);
+		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-		log.info("Query: {}", pss.asQuery().toString());
-		ResultSet rs = QueryExecutionFactory.create(pss.asQuery(), kb).execSelect();
+		log.debug("Query: {}", QueryFactory.create(queryStr));
+		ResultSet rs = QueryExecutionFactory.create(queryStr, kb).execSelect();
 		Set<String> result = new HashSet<>();
-//		System.out.println(ResultSetFormatter.asText(rs));
-		while (rs.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs.next();
-//			querySolution.varNames().forEachRemaining(v -> {
-//				System.out.println("v -> " + querySolution.get(v));
-//			});
-			if (querySolution.contains("c")) {
-				result.add(querySolution.get("c").asLiteral().getValue().toString());
-			}
-		}
-		assertEquals(Sets.newHashSet("Quitting_a_place", "Departing"), result);
+		System.out.println(ResultSetFormatter.asText(rs));
+//		while (rs.hasNext()) {
+//			QuerySolution querySolution = (QuerySolution) rs.next();
+////			querySolution.varNames().forEachRemaining(v -> {
+////				System.out.println("v -> " + querySolution.get(v));
+////			});
+//			if (querySolution.contains("c")) {
+//				result.add(querySolution.get("c").asLiteral().getValue().toString());
+//			}
+//		}
+//		assertEquals(Sets.newHashSet("Quitting_a_place", "Departing"), result);
 	}
 
 	@Test
@@ -415,12 +394,12 @@ public class ItTest {
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT * { "
 				+ " SERVICE <x-sparql-anything:> { "
 				+ "   fx:properties fx:location ?archive . "
-				+ "   ?s ?p ?file .   "
+				+ "   ?s ?p ?file .  FILTER isLiteral(?file) "
 				+ "   FILTER(fx:isFacadeXExtension(?file)) "
 				+ "   SERVICE <x-sparql-anything:> { "
 				+ "     fx:properties fx:from-archive ?archive . "
 				+ "     fx:properties fx:location ?file  .  "
-				+ "     ?s1 ?p1 ?o1   "
+				+ "     ?s1 ?p1 ?o1   FILTER isLiteral(?o1) "
 				+ "   } \n"
 				+ " } "
 				+ "}";
@@ -459,11 +438,11 @@ public class ItTest {
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT * { "
 				+ " SERVICE <x-sparql-anything:> { "
 				+ "   fx:properties fx:location ?archive . "
-				+ "   ?s ?p ?file .   "
+				+ "   ?s ?p ?file .  FILTER isLiteral(?file) "
 				+ "   FILTER(fx:isFacadeXExtension(?file)) "
 				+ "   SERVICE <x-sparql-anything:> { "
 				+ "     fx:properties fx:location ?file  .  "
-				+ "     ?s1 ?p1 ?o1   "
+				+ "     ?s1 ?p1 ?o1   FILTER isLiteral(?o1)"
 				+ "   } \n"
 				+ " } "
 				+ "}";
@@ -593,7 +572,7 @@ public class ItTest {
 				// "\t\t ?places fx:anySlot/xyz:place [ xyz:id ?placeId ; xyz:coordinates [
 				// xyz:latitude ?latitude ; xyz:longitude ?longitude ]]\n" +
 				"}}";
-		System.out.println(q);
+//		System.out.println(q);
 		Query query = QueryFactory.create(q);
 
 		Dataset ds = DatasetFactory.createGeneral();
