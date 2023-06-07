@@ -18,7 +18,7 @@ ENV LC_ALL en_US.UTF-8
 ENV VERSION "0.9.0-SNAPSHOT"
 
 # normal
-CMD cd /app && mvn clean install && \
+CMD cd /app && mvn clean install -Dgenerate-server-jar=true && \
     java -cp \
     "/app/sparql-anything-fuseki/target/sparql-anything-server-${VERSION}.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
     io.github.sparqlanything.fuseki.Endpoint
