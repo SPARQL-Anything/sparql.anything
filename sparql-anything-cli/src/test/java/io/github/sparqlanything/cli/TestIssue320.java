@@ -17,11 +17,11 @@
 package io.github.sparqlanything.cli;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.query.ResultSetFormatter;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class TestIssue320 {
 
@@ -29,11 +29,11 @@ public class TestIssue320 {
 	public void testIssue320() throws Exception {
 		// This is to reproduce Issue #320
 		// No output form below
-		ResultSetFormatter.outputAsCSV(System.err,true);
-		ResultSetFormatter.outputAsCSV(System.err,false);
+//		ResultSetFormatter.outputAsCSV(System.err,true);
+//		ResultSetFormatter.outputAsCSV(System.err,false);
 
-		String str = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("./ask.sparql"), StandardCharsets.UTF_8);
+		String str = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("./ask.sparql")), StandardCharsets.UTF_8);
 		String output = SPARQLAnything.callMain(new String[]{"-q", str, "-f", "text"});
-		Assert.assertTrue(output.equals("false"));
+		Assert.assertEquals("false", output);
 	}
 }

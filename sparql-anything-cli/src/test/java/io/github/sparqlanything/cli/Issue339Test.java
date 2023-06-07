@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Issue339Test {
-	public static final Logger L = LoggerFactory.getLogger(Issue339Test.class);
+	public static final Logger logger = LoggerFactory.getLogger(Issue339Test.class);
 
 	@Test
 	public void test() throws Exception {
@@ -29,8 +29,8 @@ public class Issue339Test {
 		String d = getClass().getClassLoader().getResource("./JsonldTest.json").toURI().toString();
 		SPARQLAnything sa = new SPARQLAnything();
 		String out = sa.callMain(new String[]{
-			"-q", q, "-l", d
+				"-q", q, "-l", d
 		});
-		L.info("{}", out);
+		logger.debug("{}", out);
 	}
 }
