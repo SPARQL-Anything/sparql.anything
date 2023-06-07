@@ -6,30 +6,40 @@
 [![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v0.6-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
 
 # SPARQL Anything
+
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
 Main features:
 
-- Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#Configuration)) and build knowledge graphs with `CONSTRUCT` queries
-- [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar, Markdown, YAML, Bibtex, DOCx (see [pages dedicated to single formats](#supported-formats))
+- Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#Configuration)) and
+  build knowledge graphs with `CONSTRUCT` queries
+- [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar,
+  Markdown, YAML, Bibtex, DOCx (see [pages dedicated to single formats](#supported-formats))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
-- Generates RDF, RDF-Star, and tabular data (thanks to SPARQL) 
-- Full fledged [HTTP client](Configuration.md#http-options) to query Web APIs (headers, authentication, all methods supported)
+- Generates RDF, RDF-Star, and tabular data (thanks to SPARQL)
+- Full fledged [HTTP client](Configuration.md#http-options) to query Web APIs (headers, authentication, all methods
+  supported)
 - [Functions library](#functions-and-magic-properties) for RDF sequences, strings, hashes, easy entity building, ...
 - Combine multiple SERVICE clauses into complex data integration queries (thanks to SPARQL)
 - Query templates (using [BASIL variables](#query-templates-and-variable-bindings))
 - Save and reuse SPARQL `Results Sets` as input for [parametric queries](#query-templates-and-variable-bindings)
-- Slice large CSV files with an iterator-like execution style (soon [JSON](https://github.com/SPARQL-Anything/sparql.anything/issues/202) and [XML](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
+- Slice large CSV files with an iterator-like execution style (
+  soon [JSON](https://github.com/SPARQL-Anything/sparql.anything/issues/202)
+  and [XML](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
 - Supports an [on-disk option](#Configuration) (with Apache Jena TDB2)
 
 ## Quickstart
+
 SPARQL Anything uses a single generic abstraction for all data source formats called Facade-X.
+
 ### Facade-X
+
 Facade-X is a simplistic meta-model used by SPARQL Anything transformers to generate RDF data from diverse data sources.
 Intuitively, Facade-X uses a subset of RDF as a general approach to represent the source content *as-it-is* but in RDF.
 The model combines two types of elements: containers and literals.
-Facade-X always has  a single root container.
-Container members are a combination of key-value pairs, where keys are either RDF properties or container membership properties.
+Facade-X always has a single root container.
+Container members are a combination of key-value pairs, where keys are either RDF properties or container membership
+properties.
 Instead, values can be either RDF literals or other containers.
 This is a generic example of a Facade-X data object (more examples below):
 
@@ -48,23 +58,25 @@ This is a generic example of a Facade-X data object (more examples below):
 ```
 
 ### Querying anything
-SPARQL Anything extends the Apache Jena ARQ processors by *overloading* the SERVICE operator, as in the following example:
+
+SPARQL Anything extends the Apache Jena ARQ processors by *overloading* the SERVICE operator, as in the following
+example:
 
 Suppose having this JSON file as input (also available at ``https://sparql-anything.cc/example1.json``)
 
 ```json
 [
   {
-    "name":"Friends",
-    "genres":[
+    "name": "Friends",
+    "genres": [
       "Comedy",
       "Romance"
     ],
-    "language":"English",
-    "status":"Ended",
-    "premiered":"1994-09-22",
-    "summary":"Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan.",
-    "stars":[
+    "language": "English",
+    "status": "Ended",
+    "premiered": "1994-09-22",
+    "summary": "Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan.",
+    "stars": [
       "Jennifer Aniston",
       "Courteney Cox",
       "Lisa Kudrow",
@@ -74,16 +86,16 @@ Suppose having this JSON file as input (also available at ``https://sparql-anyth
     ]
   },
   {
-    "name":"Cougar Town",
-    "genres":[
+    "name": "Cougar Town",
+    "genres": [
       "Comedy",
       "Romance"
     ],
-    "language":"English",
-    "status":"Ended",
-    "premiered":"2009-09-23",
-    "summary":"Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself.",
-    "stars":[
+    "language": "English",
+    "status": "Ended",
+    "premiered": "2009-09-23",
+    "summary": "Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself.",
+    "stars": [
       "Courteney Cox",
       "David Arquette",
       "Bill Lawrence",
@@ -121,21 +133,26 @@ and get this result without caring of transforming JSON to RDF.
 | "Friends"     |
 
 ### Using the Command Line Interface
+
 SPARQL Anything requires `Java >= 11` to be installed in your operating system.
-Download the latest version of the SPARQL Anything command line from the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
-The command line is a file named `sparql-anything-<version>.jar`. 
+Download the latest version of the SPARQL Anything command line from
+the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
+The command line is a file named `sparql-anything-<version>.jar`.
 Prepare a file with the query above and name it, for example `query.sparql`.
 The query can be executed as follows:
 
 ```bash
 java -jar sparql-anything-<version>.jar -q query.sparql
 ```
+
 See the [usage section](#Usage) for details on the command line interface.
 
 ### Using the server
+
 SPARQL Anything is also released as a server, embedded into an instance of the Apache Jena Fuseki server.
 The server requires `Java >= 11` to be installed in your operating system.
-Download the latest version of the SPARQL Anything server from the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
+Download the latest version of the SPARQL Anything server from
+the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
 The command line is a file named `sparql-anything-server-<version>.jar`.
 
 Run the server as follows:
@@ -153,10 +170,12 @@ $ java -jar sparql-anything-server-<version>.jar
 [main] INFO org.apache.jena.fuseki.Server - Start Fuseki (http=3000)
 
 ```
+
 Access the SPARQL UI at the address `http://localhost:3000/sparql`, where you can copy the query above and execute it.
 See the [usage section](#Usage) for details on the SPARQL Anything Fuseki server.
 
 ## Supported Formats
+
 Currently, SPARQL Anything supports the following list of formats but the possibilities are limitless!
 The data is interpreted as in the following examples (using default settings).
 
@@ -176,18 +195,22 @@ A detailed description of the interpretation can be found in the following pages
 - [Bibtex](formats/Bibtex.md)
 - [YAML](formats/YAML.md)
 
-... and, of course, the triples generated from the these formats can be integrated with the content of any [RDF Static file](formats/RDF_Files.md)
+... and, of course, the triples generated from the these formats can be integrated with the content of
+any [RDF Static file](formats/RDF_Files.md)
 
 ## Configuration
 
 SPARQL Anything behaves as a standard SPARQL query engine.
-For example, the SPARQL Anything server will act as a virtual endpoint that can be queried exactly as a remote SPARQL endpoint.
+For example, the SPARQL Anything server will act as a virtual endpoint that can be queried exactly as a remote SPARQL
+endpoint.
 In addition, SPARQL Anything provides a rich Command Line Interface (CLI).
-For information for how to run SPARQL Anything, please see the [quickstart](README.md#Quickstart) and [usage](README.md#usage) sections of the documentation.
+For information for how to run SPARQL Anything, please see the [quickstart](README.md#Quickstart)
+and [usage](README.md#usage) sections of the documentation.
 
 ### Passing triplification options via SERVICE IRI
 
-In order to instruct the query processor to delegate the execution to SPARQL Anything, you can use the  following IRI-schema within SERVICE clauses.
+In order to instruct the query processor to delegate the execution to SPARQL Anything, you can use the following
+IRI-schema within SERVICE clauses.
 A minimal URI that uses only the resource locator is also possible.
 In this case SPARQL Anything guesses the data source type from the file extension.
 
@@ -220,8 +243,10 @@ WHERE {
 Note that
 
 1. The SERVICE IRI scheme must be ``x-sparql-anything:``.
-2. Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the SERVICE clause.
-3. Such triples must have ``fx:properties`` as subject, ``fx:[OPTION-NAME]`` as predicate, and a literal or a variable as object.
+2. Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the
+   SERVICE clause.
+3. Such triples must have ``fx:properties`` as subject, ``fx:[OPTION-NAME]`` as predicate, and a literal or a variable
+   as object.
 
 You can also mix the two modalities as follows.
 
@@ -274,27 +299,34 @@ WHERE {
 ## Query templates and variable bindings (CLI only)
 
 The SPARQL Anything CLI supports parametrised queries.
-SPARQL Anything uses the [BASIL convention for variable names in queries](https://github.com/basilapi/basil/wiki/SPARQL-variable-name-convention-for-WEB-API-parameters-mapping).
+SPARQL Anything uses
+the [BASIL convention for variable names in queries](https://github.com/basilapi/basil/wiki/SPARQL-variable-name-convention-for-WEB-API-parameters-mapping)
+.
 
 The syntax is based on the underscore character: '_', and can be easily learned by examples:
 
-- `?_name` The variable specifies the API mandatory parameter _name_. The value is incorporated in the query as plain literal.
+- `?_name` The variable specifies the API mandatory parameter _name_. The value is incorporated in the query as plain
+  literal.
 - `?__name` The parameter _name_ is optional.
 - `?_name_iri` The variable is substituted with the parameter value as a IRI.
 - `?_name_en` The parameter value is considered as literal with the language 'en' (e.g., en,it,es, etc.).
-- `?_name_integer` The parameter value is considered as literal and the XSD datatype 'integer' is added during substitution.
-- `?_name_prefix_datatype` The parameter value is considered as literal and the datatype 'prefix:datatype' is added during substitution. The prefix must be specified according to the SPARQL syntax.
+- `?_name_integer` The parameter value is considered as literal and the XSD datatype 'integer' is added during
+  substitution.
+- `?_name_prefix_datatype` The parameter value is considered as literal and the datatype 'prefix:datatype' is added
+  during substitution. The prefix must be specified according to the SPARQL syntax.
 
 Variable bindings can be passed in two ways via the CLI argument `-v|--values`:
 
-- Inline arguments, e.g.: `-v paramName=value1 -v paramName=value2 -v paramName2=other` 
+- Inline arguments, e.g.: `-v paramName=value1 -v paramName=value2 -v paramName2=other`
 - Passing an SPARQL Result Set file, e.g.: `-v selectResult.xml`
 
-In the first case, the engine computes the cardinal product of all the variables bindings included and execute the query for each one of the resulting set of bindings.
+In the first case, the engine computes the cardinal product of all the variables bindings included and execute the query
+for each one of the resulting set of bindings.
 
 In the second case, the query is executed for each set of bindings in the result set.
 
 The following is an example of how parameter can be used in a query:
+
 ```sparql
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -310,16 +342,20 @@ WHERE {
 
 }
 ```
+
 The value of `?_starName` can be passed via the CLI as follows:
+
 ```bash
 java -jar sparql-anything-<version>.jar -q query.sparql -v starName="Courteney Cox"
 ```
 
 ## Functions and magic properties
 
-SPARQL Anything provides a number of magical functions and properties to facilitate the users in querying the sources and constructing knowledge graphs.
+SPARQL Anything provides a number of magical functions and properties to facilitate the users in querying the sources
+and constructing knowledge graphs.
 
-**NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
+**NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on
+the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
 
 | Name                                                                                                      | Function/Magic Property | Input                                  | Output                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 |-----------------------------------------------------------------------------------------------------------|-------------------------|----------------------------------------|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -361,6 +397,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:bnode(?a)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxbnode)                                                 | Function                | Any node                               | Blank node                    | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
 
 ## Usage
+
 SPARQL Anything is available as Java Library, Command Line Interface, Web Application Server, and also Python library.
 
 ### Command Line Interface (CLI)
@@ -429,14 +466,17 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output
                                        repeated for each set of bindings
                                        in the input result set.
 ```
+
 Logging can be configured adding the following option (SLF4J):
+
 ```
 -Dorg.slf4j.simpleLogger.defaultLogLevel=trace
 ```
 
 ### Fuseki
 
-An executable JAR of a SPARQL-Anything-powered Fuseki endpoint can be obtained from the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
+An executable JAR of a SPARQL-Anything-powered Fuseki endpoint can be obtained from
+the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
 
 The jar can be executed as follows:
 
@@ -454,7 +494,16 @@ Also a docker image can be used by following the instructions [here](BROWSER.md)
 
 ### Python Library
 
-You can use SPARQL Anything as a Python library, see the [PySPARQL-Anything project](https://pypi.org/project/pysparql-anything/).
+You can use SPARQL Anything as a Python library, see
+the [PySPARQL-Anything project](https://pypi.org/project/pysparql-anything/).
+
+### Compiling
+
+You can generate executable files of the command line interface and server with maven
+
+```
+mvn clean install -Dgenerate-cli-jar=true -Dgenerate-server-jar=true
+```
 
 ## Licence
 
@@ -462,10 +511,11 @@ SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 
 ## How to cite our work
 
-
 **For citing SPARQL Anything in academic papers please use:**
 
-Luigi Asprino, Enrico Daga, Aldo Gangemi, and Paul Mulholland. 2022. Knowledge Graph Construction with a façade: a unified method to access heterogeneous data sources on the Web. ACM Trans. Internet Technol. Just Accepted (2022). https://doi.org/10.1145/3555312 [Preprint](https://sparql.xyz/FacadeX_TOIT.pdf)
+Luigi Asprino, Enrico Daga, Aldo Gangemi, and Paul Mulholland. 2022. Knowledge Graph Construction with a façade: a
+unified method to access heterogeneous data sources on the Web. ACM Trans. Internet Technol. Just Accepted (2022)
+. https://doi.org/10.1145/3555312 [Preprint](https://sparql.xyz/FacadeX_TOIT.pdf)
 
 ```bibtex
 @article{10.1145/3555312,
@@ -485,9 +535,12 @@ keywords = {RDF, SPARQL, Meta-model, Re-engineering}
 
 Conference paper mainly focussing on system requirements:
 
-Daga, Enrico; Asprino, Luigi; Mulholland, Paul and Gangemi, Aldo (2021). Facade-X: An Opinionated Approach to SPARQL Anything. In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume 53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
+Daga, Enrico; Asprino, Luigi; Mulholland, Paul and Gangemi, Aldo (2021). Facade-X: An Opinionated Approach to SPARQL
+Anything. In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume
+53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
 
 DOI: https://doi.org/10.3233/ssw210035 | [PDF](http://oro.open.ac.uk/78973/1/78973.pdf)
+
 ```bibtex
 @incollection{oro78973,
           volume = {53},
