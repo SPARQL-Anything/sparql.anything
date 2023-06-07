@@ -16,23 +16,29 @@
 
 package io.github.sparqlanything.csv;
 
+import io.github.sparqlanything.model.TriplifierHTTPException;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Properties;
 
-public class CSVTriplifierTest extends AbstractTriplifierTester {
+public class TSVTest extends AbstractTriplifierTester {
 
-	public CSVTriplifierTest() {
-		super(new CSVTriplifier(), new Properties(), "csv", "nq");
+	public TSVTest() {
+		super(new CSVTriplifier(), new Properties(), "tsv", "nq");
 	}
+
+	public void properties(Properties properties) {
+		properties.setProperty("csv.delimiter", "\t");
+		properties.setProperty("csv.headers", "true");
+	}
+
 
 	@Test
-	public void test1() {
+	public void testTsv() throws IOException, TriplifierHTTPException {
 		this.assertResultIsIsomorphicWithExpected();
 		this.assertNotBlankNode();
-
 	}
-
 
 }
