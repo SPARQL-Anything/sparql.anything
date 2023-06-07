@@ -18,7 +18,7 @@ package io.github.sparqlanything.model;
 
 public enum IRIArgument {
 
-	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace", "http://sparql.xyz/facade-x/data/"), ROOT("root"), BLANK_NODES("blank-nodes", "true"), TRIPLIFIER("triplifier"), CHARSET("charset", "UTF-8"), METADATA("metadata", "false"), CONTENT("content"), FROM_ARCHIVE("from-archive"), TRIM_STRINGS("trim-strings", "false"), NULL_STRING("null-string"), STRATEGY("strategy", "1"), SLICE("slice", "false"), COMMAND("command"), USE_RDFS_MEMBER("use-rdfs-member", "false"), ONDISK_REUSE("ondisk.reuse", "true"), ONDISK("ondisk"), OP_SERVICE_SILENT("opservice.silent");
+	LOCATION("location"), MEDIA_TYPE("media-type"), NAMESPACE("namespace", "http://sparql.xyz/facade-x/data/"), ROOT("root"), BLANK_NODES("blank-nodes", "true"),NO_CACHE("no-cache", "false"), TRIPLIFIER("triplifier"), CHARSET("charset", "UTF-8"), METADATA("metadata", "false"), CONTENT("content"), FROM_ARCHIVE("from-archive"), TRIM_STRINGS("trim-strings", "false"), NULL_STRING("null-string"), STRATEGY("strategy", "1"), SLICE("slice", "false"), COMMAND("command"), USE_RDFS_MEMBER("use-rdfs-member", "false"), ONDISK_REUSE("ondisk.reuse", "true"), ONDISK("ondisk"), OP_SERVICE_SILENT("opservice.silent");
 
 	private final String s;
 	private String defaultValue;
