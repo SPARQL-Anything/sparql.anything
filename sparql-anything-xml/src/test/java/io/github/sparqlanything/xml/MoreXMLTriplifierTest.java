@@ -53,35 +53,35 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 
 	@Test
 	public void testSimple$1(){
-		L.info("Test XML (one go)");
+		L.debug("Test XML (one go)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testBooks$1(){
-		L.info("Test XML books (one go)");
+		L.debug("Test XML books (one go)");
 //		RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testBooks_1$1(){
-		L.info("Test XML books (XPath //book, one go)");
+		L.debug("Test XML books (XPath //book, one go)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testBooks_2$1(){
-		L.info("Test XML books (XPath //book, one go) -- different input but same output as _1");
+		L.debug("Test XML books (XPath //book, one go) -- different input but same output as _1");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceBooks$1(){
-		L.info("Test XML books (XPath //book, with slicing)");
+		L.debug("Test XML books (XPath //book, with slicing)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
