@@ -70,7 +70,7 @@ public class XMLTriplifierTest {
 		Iterator<Quad> iter = graph.find(null, null, null, null);
 		while (iter.hasNext()) {
 			Quad q = iter.next();
-			log.info("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
+			log.debug("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
 			Assert.assertFalse(q.getSubject().isBlank());
 			Assert.assertFalse(q.getObject().isBlank());
 		}
