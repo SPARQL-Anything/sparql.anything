@@ -17,22 +17,18 @@
 package io.github.sparqlanything.it;
 
 import io.github.sparqlanything.engine.FacadeX;
-import com.github.sparqlanything.model.Utils; 
+import io.github.sparqlanything.model.Utils;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.main.QC;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.junit.Assert;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -45,25 +41,25 @@ public class CommandTest {
 
 	@Test
 	public void testShellPipeline() throws IOException {
-		if(Utils.platform == Utils.OS.MAC || Utils.platform == Utils.OS.LINUX || Utils.platform == Utils.OS.SOLARIS) {
+		if (Utils.platform == Utils.OS.MAC || Utils.platform == Utils.OS.LINUX || Utils.platform == Utils.OS.SOLARIS) {
 			QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 			Query query = QueryFactory.create(IOUtils.toString(getClass().getClassLoader().getResourceAsStream("commands/shell_pipeline.sparql"), StandardCharsets.UTF_8));
 			Assert.assertTrue(QueryExecutionFactory.create(query, DatasetGraphFactory.create()).execAsk());
-		}else{
+		} else {
 			log.warn("Skipping test (platform not supported) {}", name.getMethodName());
 		}
 	}
 
 	@Test
 	public void testEcho() throws IOException {
-		if(Utils.platform == Utils.OS.MAC) {
+		if (Utils.platform == Utils.OS.MAC) {
 			QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 			Query query = QueryFactory.create(IOUtils.toString(getClass().getClassLoader().getResourceAsStream("commands/echo.sparql"), StandardCharsets.UTF_8));
 			ResultSet rs1 = QueryExecutionFactory.create(query, DatasetGraphFactory.create()).execSelect();
 			while (rs1.hasNext()) {
 				System.err.println(rs1.next());
 			}
-		}else{
+		} else {
 			log.warn("Skipping test (platform not supported) {}", name.getMethodName());
 		}
 	}
@@ -71,14 +67,14 @@ public class CommandTest {
 	@Ignore
 	@Test
 	public void testGit() throws IOException {
-		if(Utils.platform == Utils.OS.MAC) {
+		if (Utils.platform == Utils.OS.MAC) {
 			QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 			Query query = QueryFactory.create(IOUtils.toString(getClass().getClassLoader().getResourceAsStream("commands/logs.sparql"), StandardCharsets.UTF_8));
 			ResultSet rs1 = QueryExecutionFactory.create(query, DatasetGraphFactory.create()).execSelect();
 			while (rs1.hasNext()) {
 				System.err.println(rs1.next());
 			}
-		}else{
+		} else {
 			log.warn("Skipping test (platform not supported) {}", name.getMethodName());
 		}
 	}

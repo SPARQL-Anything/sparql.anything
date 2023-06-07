@@ -24,7 +24,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.github.sparqlanything.model.Utils; 
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -101,34 +100,6 @@ public interface Triplifier {
 		return null_string;
 	}
 
-	static Charset getCharsetArgument(Properties properties) {
-		Charset charset = null;
-		try {
-			charset = Charset.forName(properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8"));
-		} catch (Exception e) {
-			log.warn("Unsupported charset format: '{}', using UTF-8.", properties.getProperty(IRIArgument.CHARSET.toString()));
-			charset = StandardCharsets.UTF_8;
-		}
-		return charset;
-	}
-
-	static String getNormalisedLocation(Properties properties) {
-		URL location = null;
-		try {
-			location = Triplifier.getLocation(properties);
-			if (location==null) return null;
-			if (location.getProtocol().equals("file"))
-				return Path.of(location.toURI()).toUri().toString();
-			return location.toString();
-		} catch (MalformedURLException e) {
-			log.warn("Malformed location");
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
-		}
-
-		return null;
-	}
-
 	static String getRootArgument(Properties properties) {
 		String root = PropertyUtils.getStringProperty(properties, IRIArgument.ROOT, null);
 		if (root != null && !root.trim().equals("")) return root;
@@ -145,23 +116,28 @@ public interface Triplifier {
 		throw new RuntimeException("No location nor content nor command provided!");
 	}
 
-	static String getNamespaceArgument(Properties properties) {
-		String namespace = null;
+	static String getNormalisedLocation(Properties properties) {
+		URL location = null;
 		try {
-			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
-			if (namespace != null && !namespace.trim().equals("")) {
-				return namespace;
-			}
-		} catch (Exception e) {
-			log.warn("Unsupported parameter value for 'namespace': '{}', using default ({}}).", namespace, XYZ_NS);
+			location = Triplifier.getLocation(properties);
+			if (location == null) return null;
+			if (location.getProtocol().equals("file"))
+				return Path.of(location.toURI()).toUri().toString();
+			return location.toString();
+		} catch (MalformedURLException e) {
+			log.warn("Malformed location");
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
 		}
-		return XYZ_NS;
+
+		return null;
 	}
 
-
-	static String toSafeURIString(String s) {
-		// s = s.replaceAll("\\s", "_");
-		return basicEscaper.escape(s);
+	static URL getLocation(Properties properties) throws MalformedURLException {
+		if (properties.containsKey(IRIArgument.LOCATION.toString())) {
+			return instantiateURL(properties.getProperty(IRIArgument.LOCATION.toString()));
+		}
+		return null;
 	}
 
 	static URL instantiateURL(String urlLocation) throws MalformedURLException {
@@ -177,11 +153,22 @@ public interface Triplifier {
 		return url;
 	}
 
-	static URL getLocation(Properties properties) throws MalformedURLException {
-		if (properties.containsKey(IRIArgument.LOCATION.toString())) {
-			return instantiateURL(properties.getProperty(IRIArgument.LOCATION.toString()));
+	static String getNamespaceArgument(Properties properties) {
+		String namespace = null;
+		try {
+			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
+			if (namespace != null && !namespace.trim().equals("")) {
+				return namespace;
+			}
+		} catch (Exception e) {
+			log.warn("Unsupported parameter value for 'namespace': '{}', using default ({}}).", namespace, XYZ_NS);
 		}
-		return null;
+		return XYZ_NS;
+	}
+
+	static String toSafeURIString(String s) {
+		// s = s.replaceAll("\\s", "_");
+		return basicEscaper.escape(s);
 	}
 
 	/**
@@ -215,18 +202,21 @@ public interface Triplifier {
 		return values;
 	}
 
+	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
+		return getInputStream(properties, getCharsetArgument(properties));
+	}
+
 	private static InputStream getInputStream(Properties properties, Charset charset) throws IOException, TriplifierHTTPException {
 
 		if (properties.containsKey(IRIArgument.COMMAND.toString())) {
 			String command = properties.getProperty(IRIArgument.COMMAND.toString());
 			Runtime rt = Runtime.getRuntime();
-			String[] commands ;
-			if(Utils.platform !=  Utils.OS.WINDOWS){
+			String[] commands;
+			if (Utils.platform != Utils.OS.WINDOWS) {
 				// allow shell pipelines and other useful shell functionality
-				commands = new String[]{"bash","-c",command} ;
-			}
-			else { // WINDOWS
-				   // Credit: https://stackoverflow.com/a/18893443/1035608
+				commands = new String[]{"bash", "-c", command};
+			} else { // WINDOWS
+				// Credit: https://stackoverflow.com/a/18893443/1035608
 				commands = command.split("(?x)   " + "\\s          " + // Split on space
 						"(?=        " + // Followed by
 						"  (?:      " + // Start a non-capture group
@@ -238,7 +228,7 @@ public interface Triplifier {
 						"  [^\"]*   " + // Finally 0 or more non-quotes
 						"  $        " + // Till the end (This is necessary, else every space will satisfy the condition)
 						")          " // End look-ahead
-						);
+				);
 			}
 			log.info("Running command: {}", String.join(" ", commands));
 			Process proc = rt.exec(commands);
@@ -284,12 +274,19 @@ public interface Triplifier {
 			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset);
 		} catch (ArchiveException e) {
 			throw new IOException(e); // TODO i think we should throw a TriplifierHTTPException instead
-									  // to allow the silent keyword to be respected
+			// to allow the silent keyword to be respected
 		}
 	}
 
-	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
-		return getInputStream(properties, getCharsetArgument(properties));
+	static Charset getCharsetArgument(Properties properties) {
+		Charset charset = null;
+		try {
+			charset = Charset.forName(properties.getProperty(IRIArgument.CHARSET.toString(), "UTF-8"));
+		} catch (Exception e) {
+			log.warn("Unsupported charset format: '{}', using UTF-8.", properties.getProperty(IRIArgument.CHARSET.toString()));
+			charset = StandardCharsets.UTF_8;
+		}
+		return charset;
 	}
 
 	static String getResourceId(Properties properties) {

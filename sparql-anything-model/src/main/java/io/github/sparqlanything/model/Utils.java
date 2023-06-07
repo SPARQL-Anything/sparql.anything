@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.github.sparqlanything.model;
+package io.github.sparqlanything.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Utils{
+public class Utils {
 
 	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
-
-	public enum OS {
-		WINDOWS, LINUX, MAC, SOLARIS
-	};
 	public static OS platform;
+
+	;
+
 	static {
 		String operSys = System.getProperty("os.name").toLowerCase();
 		if (operSys.contains("win")) {
@@ -41,6 +40,10 @@ public class Utils{
 		}
 		// logger.info("os.name is: " + operSys);
 		// logger.info("OS is: " + platform);
+	}
+
+	public enum OS {
+		WINDOWS, LINUX, MAC, SOLARIS
 	}
 
 }
