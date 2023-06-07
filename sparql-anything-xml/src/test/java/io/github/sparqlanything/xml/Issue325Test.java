@@ -36,7 +36,7 @@ import java.util.Properties;
 
 public class Issue325Test {
 
-	final static Logger L = LoggerFactory.getLogger(Issue325Test.class);
+	final static Logger logger = LoggerFactory.getLogger(Issue325Test.class);
 
 	@Test
 	public void test() throws TriplifierHTTPException, IOException {
@@ -47,7 +47,7 @@ public class Issue325Test {
 		XMLTriplifier triplifier = new XMLTriplifier();
 		triplifier.triplify(properties, builder);
 		DatasetGraph graph = builder.getDatasetGraph();
-		L.info("{}", graph);
+		logger.debug("{}", graph);
 
 		Iterator<Quad> iter = graph.find(null, null, RDF.li(1).asNode(),
 				NodeFactory.createLiteral("THIS_TEXT_IS_INSIDE_SUBJECT"));

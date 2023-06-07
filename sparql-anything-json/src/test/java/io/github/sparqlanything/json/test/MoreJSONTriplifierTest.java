@@ -28,7 +28,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
-	static private Logger L = LoggerFactory.getLogger(MoreJSONTriplifierTest.class);
+
+	static private Logger logger = LoggerFactory.getLogger(MoreJSONTriplifierTest.class);
 	public MoreJSONTriplifierTest() {
 		super(new JSONTriplifier(), new Properties(), "json");
 	}
@@ -114,92 +115,92 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 
 	@Test
 	public void testSliceArray$1(){
-		L.info("Test simple array (one go)");
+		logger.debug("Test simple array (one go)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray$2(){
-		L.info("Test simple array (slicing)");
+		logger.debug("Test simple array (slicing)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray$3(){
-		L.info("Test simple array (slicing + JsonPath)");
+		logger.debug("Test simple array (slicing + JsonPath)");
 		// RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray$4(){
-		L.info("Test simple array (one go + JsonPath)");
+		logger.debug("Test simple array (one go + JsonPath)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray_2$1(){
-		L.info("Test array of objects (one go)");
+		logger.debug("Test array of objects (one go)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray_2$2(){
-		L.info("Test array of objects (slicing)");
+		logger.debug("Test array of objects (slicing)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray_2$3(){
-		L.info("Test array of objects (slicing + JsonPath)");
+		logger.debug("Test array of objects (slicing + JsonPath)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testSliceArray_2$4(){
-		L.info("Test array of objects (one go + JsonPath)");
+		logger.debug("Test array of objects (one go + JsonPath)");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testValueTypes_1$1(){
-		L.info("Test json value types (one go)");
+		logger.debug("Test json value types (one go)");
 		// RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testValueTypes_1$2(){
-		L.info("Test json value types (slicing)");
+		logger.debug("Test json value types (slicing)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testValueTypes_1$3(){
-		L.info("Test json value types (slicing + JsonPath)");
+		logger.debug("Test json value types (slicing + JsonPath)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testValueTypes_1$4(){
-		L.info("Test json value types (one go + JsonPath)");
+		logger.debug("Test json value types (one go + JsonPath)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testObject$1(){
-		L.info("Test simple Json object (one go)");
+		logger.debug("Test simple Json object (one go)");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testObject$2(){
-		L.info("Test simple Json object (slicing) --> Should throw an exception");
+		logger.debug("Test simple Json object (slicing) --> Should throw an exception");
 		//RDFDataMgr.write(System.err, result, Lang.N3);
 		Assert.assertTrue(resultException.getMessage().equals("Not a JSON array"));
 	}
@@ -213,7 +214,7 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 
 	@Test
 	public void testSliceObject$3(){
-		L.info("Test simple Json object (slicing + JsonPath)");
+		logger.debug("Test simple Json object (slicing + JsonPath)");
 //		RDFDataMgr.write(System.err, result, Lang.N3);
 		assertResultIsIsomorphicWithExpected();
 //		Assert.assertTrue(resultException.getMessage().equals("Not a JSON array"));
@@ -221,8 +222,7 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 
 	@Test
 	public void testMultiJsonPath$1(){
-		L.info("Test multiple json paths (one go + JsonPath)");
-		System.out.println(result.size());
+		logger.debug("Test multiple json paths (one go + JsonPath)");
 		RDFDataMgr.write(System.err, result, Lang.N3);
 		// XXX output graph is not deterministic as the order of the solutions can change ...
 		Assert.assertTrue(result.size() == 13);
