@@ -25,7 +25,6 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
@@ -44,6 +43,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ZipTriplifierTest {
 	private static final Logger L = LoggerFactory.getLogger(ZipTriplifierTest.class);
+
 	@Test
 	public void test1() throws MalformedURLException {
 		ZipTriplifier tt = new ZipTriplifier();
@@ -68,11 +68,10 @@ public class ZipTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			L.error("",e);
+			L.error("", e);
 		}
 	}
 
-	
 
 	@Test
 	public void testMatches() throws MalformedURLException {
@@ -99,7 +98,7 @@ public class ZipTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			L.error("",e);
+			L.error("", e);
 		}
 	}
 
@@ -115,7 +114,7 @@ public class ZipTriplifierTest {
 			tt.triplify(p, builder);
 			DatasetGraph dg = builder.getDatasetGraph();
 
-			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
+//			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createURI(Path.of(url.toURI()).toUri() + "#");
@@ -128,7 +127,7 @@ public class ZipTriplifierTest {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 
 		} catch (IOException | URISyntaxException e) {
-			L.error("",e);
+			L.error("", e);
 		}
 	}
 
