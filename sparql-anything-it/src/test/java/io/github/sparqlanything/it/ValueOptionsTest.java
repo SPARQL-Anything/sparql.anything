@@ -18,6 +18,10 @@ package io.github.sparqlanything.it;
 
 import java.util.Properties;
 
+import io.github.sparqlanything.model.IRIArgument;
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
 
 import io.github.sparqlanything.csv.CSVTriplifier;
@@ -49,50 +53,47 @@ public class ValueOptionsTest extends AbstractTriplifierTester {
 		} else if (name.getMethodName().equals("testMemberFalse")) {
 			properties.setProperty("use-rdfs-member", "false");
 			properties.setProperty("blank-nodes", "true");
+		} else if(name.getMethodName().equals("testReifySlotStatements")){
+			properties.setProperty("use-rdfs-member", "true");
+			properties.setProperty("blank-nodes", "false");
+			properties.setProperty(IRIArgument.REIFY_SLOT_STATEMENTS.toString(), "true");
 		}
 	}
 
 	@Test
 	public void testTrimStringsTrue() {
-//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
-//		ModelFactory.createModelForGraph(result).write(System.err, "TTL");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testTrimStringsFalse() {
-//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
-//		ModelFactory.createModelForGraph(result).write(System.err, "TTL");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testNullStringsTrue() {
-//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
-//		ModelFactory.createModelForGraph(result).write(System.err, "TTL");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testNullStringsFalse() {
-//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
-//		ModelFactory.createModelForGraph(result).write(System.err, "TTL");
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testMemberTrue() {
-//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
-//		ModelFactory.createModelForGraph(result).write(System.err, "TTL");
-
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
 	public void testMemberFalse() {
-//		ModelFactory.createModelForGraph(expected).write(System.err, "TTL");
-//		ModelFactory.createModelForGraph(result).write(System.err, "TTL");
+		assertResultIsIsomorphicWithExpected();
+	}
 
+	@Test
+	public void testReifySlotStatements() {
 		assertResultIsIsomorphicWithExpected();
 	}
 }
+
+

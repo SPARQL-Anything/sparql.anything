@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.model;
 
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.vocabulary.RDF;
@@ -34,6 +35,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	protected final boolean p_trim_strings;
 	protected final String p_null_string;
 	protected final boolean p_use_rdfs_member;
+	protected final boolean p_reify_slot_statements;
 
 	public BaseFacadeXBuilder(String resourceId, Properties properties) {
 		this.properties = properties;
@@ -44,63 +46,62 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		this.p_trim_strings = Triplifier.getTrimStringsArgument(properties);
 		this.p_null_string = Triplifier.getNullStringArgument(properties);
 		this.p_use_rdfs_member = Triplifier.useRDFsMember(properties);
+		this.p_reify_slot_statements = PropertyUtils.getBooleanProperty(properties, IRIArgument.REIFY_SLOT_STATEMENTS);
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey),
-				container2node(childContainerId));
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey), container2node(childContainerId));
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, URI customKey, String childContainerId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId),
-				NodeFactory.createURI(customKey.toString()), container2node(childContainerId));
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), NodeFactory.createURI(customKey.toString()), container2node(childContainerId));
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId) {
-		if (p_use_rdfs_member) {
-			return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDFS.member.asNode(),
-					container2node(childContainerId));
-		} else {
-			return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
-					container2node(childContainerId));
-		}
+		return addSlotStatement(dataSourceId, containerId, slotKey, childContainerId, true);
 	}
 
 	public boolean addType(String dataSourceId, String containerId, String typeId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(),
-				NodeFactory.createURI(typeId));
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(), NodeFactory.createURI(typeId));
 	}
 
 	public boolean addType(String dataSourceId, String containerId, URI type) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(),
-				NodeFactory.createURI(type.toString()));
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.type.asNode(), NodeFactory.createURI(type.toString()));
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey),
-				value2node(value));
-	}
-
-	public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value) {
-
-		if (p_use_rdfs_member) {
-			return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDFS.member.asNode(),
-					value2node(value));
-		} else {
-			return add(NodeFactory.createURI(dataSourceId), container2node(containerId), RDF.li(slotKey).asNode(),
-					value2node(value));
-		}
-
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), key2predicate(slotKey), value2node(value));
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, URI customKey, Object value) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(containerId),
-				NodeFactory.createURI(customKey.toString()), value2node(value));
+		return add(NodeFactory.createURI(dataSourceId), container2node(containerId), NodeFactory.createURI(customKey.toString()), value2node(value));
+	}
+
+	public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value) {
+		return addSlotStatement(dataSourceId, containerId, slotKey, value, false);
 	}
 
 	public boolean addRoot(String dataSourceId, String rootId) {
-		return add(NodeFactory.createURI(dataSourceId), container2node(rootId), RDF.type.asNode(),
-				NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
+		return add(NodeFactory.createURI(dataSourceId), container2node(rootId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
+	}
+
+	private boolean addSlotStatement(String dataSourceId, String containerId, Integer slotKey, Object object, boolean isObjectContainer) {
+		Node g = NodeFactory.createURI(dataSourceId);
+		Node s = container2node(containerId);
+		Node p = p_use_rdfs_member ? RDFS.member.asNode() : RDF.li(slotKey).asNode();
+		Node o = isObjectContainer ? container2node(object.toString()) : value2node(object);
+		if (p_reify_slot_statements) {
+			add(g, NodeFactory.createTripleNode(s, p, o), NodeFactory.createURI(Triplifier.FACADE_X_SLOT_KEY), NodeFactory.createLiteral(slotKey.toString(), XSDDatatype.XSDinteger));
+		}
+		return add(g, s, p, o);
+	}
+
+	public Node value2node(Object value) {
+		// trims_strings == true and if object is string, trim it
+		if (p_trim_strings && value instanceof String) {
+			value = ((String) value).trim();
+		}
+		return FacadeXNodeBuilder.super.value2node(value);
 	}
 
 	public Node container2node(String container) {
@@ -115,13 +116,5 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 
 	public Node key2predicate(String key) {
 		return key2predicate(this.p_namespace, key);
-	}
-
-	public Node value2node(Object value) {
-		// trims_strings == true and if object is string, trim it
-		if (p_trim_strings && value instanceof String) {
-			value = ((String) value).trim();
-		}
-		return FacadeXNodeBuilder.super.value2node(value);
 	}
 }
