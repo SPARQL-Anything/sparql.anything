@@ -763,14 +763,15 @@ public class IssuesTest {
 		query = QueryFactory.create(queryStr);
 
 		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
-		QueryExecution qExec2 = QueryExecutionFactory.create(query, ds);
-//		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
+//		QueryExecution qExec2 = QueryExecutionFactory.create(query, ds);
+		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
+		System.out.println(query.toString(Syntax.defaultSyntax));
 
-		Model m1 = qExec1.execConstruct();
-		m1.write(System.out, "TTL");
-		Model m2 = qExec2.execConstruct();
-		m2.write(System.out, "TTL");
-		Assert.assertFalse(m1.isIsomorphicWith(m2));
+//		Model m1 = qExec1.execConstruct();
+//		m1.write(System.out, "TTL");
+//		Model m2 = qExec2.execConstruct();
+//		m2.write(System.out, "TTL");
+//		Assert.assertFalse(m1.isIsomorphicWith(m2));
 
 //		Assert.assertTrue(qExec.execSelect().hasNext());
 

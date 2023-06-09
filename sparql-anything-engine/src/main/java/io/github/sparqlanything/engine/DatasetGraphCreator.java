@@ -67,10 +67,13 @@ public class DatasetGraphCreator {
 		if (t == null) {
 			return DatasetGraphFactory.create();
 		}
+
+		boolean use_cache = !PropertyUtils.getBooleanProperty(p, IRIArgument.NO_CACHE);
+		logger.trace("Use cache {}",use_cache);
 		// If the operation was already executed in a previous call, reuse the same
 		// in-memory graph
 		// XXX Future implementations may use a caching system
-		if (executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op)))
+		if (use_cache && executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op)))
 			return executedFacadeXIris.get(getInMemoryCacheKey(p, op));
 
 		logger.trace("Properties extracted: {}", p);
@@ -100,7 +103,7 @@ public class DatasetGraphCreator {
 			dg.commit();
 		}
 		// Remember the triplified data
-		if (!executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
+		if (use_cache && !executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
 			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 			logger.debug("Graph added to in-memory cache");
 		}
