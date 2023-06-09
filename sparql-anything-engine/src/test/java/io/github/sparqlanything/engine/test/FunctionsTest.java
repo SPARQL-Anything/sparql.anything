@@ -19,14 +19,7 @@ package io.github.sparqlanything.engine.test;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Test;
@@ -123,11 +116,16 @@ public class FunctionsTest {
 
 	@Test
 	public void isContainerMembershipProperty() {
-		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nSELECT ?result WHERE { BIND ( fx:isContainerMembershipProperty ( rdf:_4 ) as ?result )" + "}";
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?resultTrue ?resultFalse WHERE { BIND ( fx:isContainerMembershipProperty ( rdf:_42 ) as ?resultTrue )  BIND ( fx:isContainerMembershipProperty ( 42 ) as ?resultFalse )}";
+		System.out.println(QueryFactory.create(q).toString(Syntax.syntaxSPARQL_11));
+		System.out.println(ResultSetFormatter.asText(execute(q)));
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
-		boolean r = result.next().get("result").asLiteral().getBoolean();
-		Assert.assertTrue(r);
+		QuerySolution qs = result.next();
+		boolean rt = qs.get("resultTrue").asLiteral().getBoolean();
+		boolean rf = qs.get("resultFalse").asLiteral().getBoolean();
+		Assert.assertTrue(rt);
+		Assert.assertFalse(rf);
 	}
 
 	@Test
