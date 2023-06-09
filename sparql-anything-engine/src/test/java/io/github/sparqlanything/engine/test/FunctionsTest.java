@@ -122,6 +122,15 @@ public class FunctionsTest {
 	}
 
 	@Test
+	public void isContainerMembershipProperty() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nSELECT ?result WHERE { BIND ( fx:isContainerMembershipProperty ( rdf:_4 ) as ?result )" + "}";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		boolean r = result.next().get("result").asLiteral().getBoolean();
+		Assert.assertTrue(r);
+	}
+
+	@Test
 	public void substring1() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "SELECT ?ob WHERE {"

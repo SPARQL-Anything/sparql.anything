@@ -126,6 +126,7 @@ public final class FacadeX {
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "backward", Backward.class);
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "forward", Forward.class);
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "cardinal", Cardinal.class);
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "isContainerMembershipProperty", IsContainerMembershipProperty.class);
 
 		log.trace("Enabling String functions");
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "String.trim",
