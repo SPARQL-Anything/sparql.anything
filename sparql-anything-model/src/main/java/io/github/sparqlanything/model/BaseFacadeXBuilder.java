@@ -46,7 +46,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		this.p_trim_strings = Triplifier.getTrimStringsArgument(properties);
 		this.p_null_string = Triplifier.getNullStringArgument(properties);
 		this.p_use_rdfs_member = Triplifier.useRDFsMember(properties);
-		this.p_reify_slot_statements = PropertyUtils.getBooleanProperty(properties, IRIArgument.ANNOTATE_TRIPLE_WITH_SLOT_KEY);
+		this.p_reify_slot_statements = PropertyUtils.getBooleanProperty(properties, IRIArgument.ANNOTATE_TRIPLES_WITH_SLOT_KEYS);
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId) {

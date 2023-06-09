@@ -53,7 +53,7 @@ public class ValueOptionsTest extends AbstractTriplifierTester {
 		} else if(name.getMethodName().equals("testReifySlotStatements")){
 			properties.setProperty("use-rdfs-member", "true");
 			properties.setProperty("blank-nodes", "false");
-			properties.setProperty(IRIArgument.ANNOTATE_TRIPLE_WITH_SLOT_KEY.toString(), "true");
+			properties.setProperty(IRIArgument.ANNOTATE_TRIPLES_WITH_SLOT_KEYS.toString(), "true");
 		}
 	}
 
