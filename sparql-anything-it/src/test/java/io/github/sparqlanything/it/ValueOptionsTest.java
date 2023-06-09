@@ -19,9 +19,6 @@ package io.github.sparqlanything.it;
 import java.util.Properties;
 
 import io.github.sparqlanything.model.IRIArgument;
-import org.apache.jena.datatypes.RDFDatatype;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
 
 import io.github.sparqlanything.csv.CSVTriplifier;
@@ -56,7 +53,7 @@ public class ValueOptionsTest extends AbstractTriplifierTester {
 		} else if(name.getMethodName().equals("testReifySlotStatements")){
 			properties.setProperty("use-rdfs-member", "true");
 			properties.setProperty("blank-nodes", "false");
-			properties.setProperty(IRIArgument.REIFY_SLOT_STATEMENTS.toString(), "true");
+			properties.setProperty(IRIArgument.ANNOTATE_TRIPLE_WITH_SLOT_KEY.toString(), "true");
 		}
 	}
 
