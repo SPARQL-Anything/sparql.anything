@@ -11,6 +11,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 |--------------------------------------------------------------------------|-------------------------|----------------------------------------|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [fx:anySlot](#fxanyslot)                                                 | Magic Property          | -                                      | -                             | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).                                                                                                                                                                                                                                                                                                                                                                              | 
 | [fx:cardinal(?a)](#fxcardinal)                                           | Function                | Container membership property          | Integer                       | `fx:cardinal(?a)` returns the corresponding cardinal integer from `?a` (`rdf:_24` -> `24`)                                                                                                                                                                                                                                                                                                                                                                                    |
+| [fx:isContainerMembershipProperty(?p)](#fxiscontainermembershipproperty) | Function                | Container membership property          | Boolean                       | `fx:isContainerMembershipProperty(?p)` returns true if the node passed as parameter is a container membership property (`rdf:_24` -> `true`)                                                                                                                                                                                                                                                                                                                                  |
 | [fx:before(?a, ?b)](#fxbefore)                                           | Function                | Container membership properties        | Boolean                       | `fx:before(?a, ?b)` returns `true` if `?a` and `?b` are container membership properties and `?a` is lower than `?b`, `false` otherwise                                                                                                                                                                                                                                                                                                                                        |
 | [fx:after(?a, ?b)](#fxafter)                                             | Function                | Container membership property          | Boolean                       | `fx:after(?a, ?b)`  returns `true` if `?a` and `?b` are container membership properties and `?a` is higher than `?b`, `false` otherwise                                                                                                                                                                                                                                                                                                                                       |
 | [fx:previous(?a)](#fxprevious)                                           | Function                | Container membership property          | Container membership property | `fx:previous(?a)` returns the container membership property that preceeds `?a` (`rdf:_2` -> `rdf:_1`)                                                                                                                                                                                                                                                                                                                                                                         |
@@ -20,7 +21,7 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:String.startsWith(?stringA, ?stringB)](#fxstringstartswith)          | Function                | String, String                         | Boolean                       | `fx:String.startsWith` wraps [`java.lang.String.startsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                              |
 | [fx:String.endsWith(?stringA, ?stringB)](#fxstringendswith)              | Function                | String, String                         | Boolean                       | `fx:String.endsWith` wraps [`java.lang.String.endsWith`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                  |
 | [fx:String.indexOf(?stringA, ?stringB)](#fxstringindexof)                | Function                | String, String                         | Integer                       | `fx:String.indexOf` wraps [`java.lang.String.indexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                    |
-| [fx:String.lastIndexOf(?stringA, ?stringB)](#fxstringlastindexof)        | Function                | String, String                         | Integer                       | `fx:String.lastIndexOf` wraps [`java.lang.String.lastIndexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                    |
+| [fx:String.lastIndexOf(?stringA, ?stringB)](#fxstringlastindexof)        | Function                | String, String                         | Integer                       | `fx:String.lastIndexOf` wraps [`java.lang.String.lastIndexOf`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
 | [fx:String.substring(?string)](#fxstringsubstring)                       | Function                | String, Integer, (Integer?)            | String                        | `fx:String.substring` wraps [`java.lang.String.substring`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                                |
 | [fx:String.toLowerCase(?string)](#fxstringtolowercase)                   | Function                | String                                 | String                        | `fx:String.toLowerCase` wraps [`java.lang.String.toLowerCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
 | [fx:String.toUpperCase(?string)](#fxstringtouppercase)                   | Function                | String                                 | String                        | `fx:String.toUpperCase` wraps [`java.lang.String.toUpperCase`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html)                                                                                                                                                                                                                                                                                                                            |
@@ -135,6 +136,43 @@ Result
 | "3"^^<http://www.w3.org/2001/XMLSchema#int> | 3        |
 ----------------------------------------------------------
 ```
+
+
+### fx:isContainerMembershipProperty
+
+`fx:isContainerMembershipProperty(?p)` returns true if the node passed as parameter is a container membership property (`rdf:_24` -> `true`)
+
+#### Input
+
+Container membership property
+
+#### Output
+
+Boolean
+
+#### Example
+
+```
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+SELECT  ?resultTrue ?resultFalse
+WHERE
+  { BIND(fx:isContainerMembershipProperty(rdf:_42) AS ?resultTrue)
+    BIND(fx:isContainerMembershipProperty(42) AS ?resultFalse)
+  }
+```
+
+Result
+
+```
+----------------------------
+| resultTrue | resultFalse |
+============================
+| true       | false       |
+----------------------------
+```
+
 ### fx:before 
 
 `fx:before(?a, ?b)` returns `true` if `?a` and `?b` are container membership properties and `?a` is lower than `?b`, `false` otherwise
