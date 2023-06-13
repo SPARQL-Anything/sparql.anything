@@ -52,7 +52,7 @@ public class BinaryTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			bt.triplify(p, builder);
 			DatasetGraph dg = builder.getDatasetGraph();
 			Graph expectedGraph = GraphFactory.createGraphMem();

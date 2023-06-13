@@ -54,7 +54,7 @@ public class NullStringTest {
 		BasicPattern bp = new BasicPattern();
 		bp.add(Triple.create(NodeFactory.createVariable("s"), NodeFactory.createVariable("p"),
 				NodeFactory.createVariable("o")));
-		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(csv1.toString(), properties);
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 		triplifier.triplify(properties, b);
 		DatasetGraph graph = b.getDatasetGraph();
 		// with csv.null-string set to nullString we should not see any quads with nullString in the object position

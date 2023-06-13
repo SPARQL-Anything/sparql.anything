@@ -45,7 +45,7 @@ public class YAMLTest {
 		Triplifier t = new YAMLTriplifier();
 		Properties properties = new Properties();
 		properties.setProperty("location", url.toURI().toString());
-		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(url.toString(), properties);
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 		t.triplify(properties, b);
 		DatasetGraph ds = b.getDatasetGraph();
 		ExtendedIterator<Triple> triples = ds.getDefaultGraph().find();

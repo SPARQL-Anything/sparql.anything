@@ -43,7 +43,7 @@ public class Issue325Test {
 		Properties properties = new Properties();
 		URL xml1 = getClass().getClassLoader().getResource("./Issue325.xml");
 		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
-		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(xml1.toString(), properties);
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(properties);
 		XMLTriplifier triplifier = new XMLTriplifier();
 		triplifier.triplify(properties, builder);
 		DatasetGraph graph = builder.getDatasetGraph();

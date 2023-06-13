@@ -122,7 +122,7 @@ public class DatasetGraphCreator {
 
 	private void createMetadataGraph(DatasetGraph dg, Properties p) throws IOException {
 		if (triplifyMetadata(p)) {
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(Triplifier.getRootArgument(p), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			metadataTriplifier.triplify(p, builder);
 			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI), builder.getDatasetGraph().getDefaultGraph());
 		}
@@ -195,7 +195,7 @@ public class DatasetGraphCreator {
 					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
 				} else {
 					logger.trace("Executing: {} [strategy={}]", p, strategy);
-					builder = new BaseFacadeXGraphBuilder(resourceId, p);
+					builder = new BaseFacadeXGraphBuilder(p);
 				}
 				t.triplify(p, builder);
 				dg = builder.getDatasetGraph();

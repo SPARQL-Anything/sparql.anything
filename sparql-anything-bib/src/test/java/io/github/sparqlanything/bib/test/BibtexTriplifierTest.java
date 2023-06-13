@@ -48,7 +48,7 @@ public class BibtexTriplifierTest {
 			p1.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./test1.bib").toString());
 //			DatasetGraph g1 = jt.triplify(p1, new BaseFacadeXGraphBuilder("test", p1));
-			FacadeXGraphBuilder b =  new BaseFacadeXGraphBuilder("test", p1);
+			FacadeXGraphBuilder b =  new BaseFacadeXGraphBuilder(p1);
 			jt.triplify(p1, b);
 			DatasetGraph g1 = b.getDatasetGraph();
 

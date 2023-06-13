@@ -47,7 +47,7 @@ public class XMLTriplifierTest {
 
 		URL xml1 = getClass().getClassLoader().getResource("./test1.xml");
 		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
-		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(xml1.toString(), properties);
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(properties);
 		triplifier.triplify(properties, builder);
 		DatasetGraph graph = builder.getDatasetGraph();
 		Iterator<Quad> iter = graph.find(null, null, RDF.type.asNode(),
@@ -63,7 +63,7 @@ public class XMLTriplifierTest {
 		URL xml1 = getClass().getClassLoader().getResource("./test1.xml");
 		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
 		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
-		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(xml1.toString(), properties);
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(properties);
 		triplifier.triplify(properties, builder);
 		DatasetGraph graph = builder.getDatasetGraph();
 //        ModelFactory.createModelForGraph(graph.getDefaultGraph()).write(System.out,"TTL");

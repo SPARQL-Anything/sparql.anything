@@ -33,7 +33,7 @@ public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder 
 	private Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXGraphBuilder.class);
 	
 	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
-		super(resourceId,  properties);
+		super(properties);
 		this.op = op;
 		analyser = new OpComponentsAnalyser();
 		op.visit(analyser);

@@ -52,7 +52,7 @@ public class OnDiskTest {
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("./test3.csv")).toString();
 		properties.setProperty(IRIArgument.LOCATION.toString(), location);
 
-		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(location, properties);
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 		triplifier.triplify(properties, b);
 		DatasetGraph graph = b.getDatasetGraph();
 
@@ -79,7 +79,7 @@ public class OnDiskTest {
 		properties.setProperty("ondisk", tmp.getAbsolutePath());
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("1.csv")).toString();
 		properties.setProperty(IRIArgument.LOCATION.toString(), location);
-		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(location, properties);
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 		triplifier.triplify(properties, b);
 		DatasetGraph graph = b.getDatasetGraph();
 		// end the write txn because triplifiers don't do that, FacadeXOpExecutor does

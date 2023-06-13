@@ -83,7 +83,7 @@ public class QueryIterSlicer extends QueryIter {
 					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
 				} else {
 					logger.trace("Executing: {} [strategy={}]", p, strategy);
-					builder = new BaseFacadeXGraphBuilder(resourceId, p);
+					builder = new BaseFacadeXGraphBuilder(p);
 				}
 				//FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
 				slicer.triplify(slice, p, builder);

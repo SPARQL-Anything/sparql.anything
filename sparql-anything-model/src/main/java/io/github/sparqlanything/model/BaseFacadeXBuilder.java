@@ -27,8 +27,6 @@ import java.util.Properties;
 
 public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQuadHandler, FacadeXComponentHandler {
 	protected final Properties properties;
-	protected final Node mainGraphName;
-	//
 	protected final boolean p_blank_nodes;
 	protected final String p_namespace;
 	protected final String p_root;
@@ -37,9 +35,8 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	protected final boolean p_use_rdfs_member;
 	protected final boolean p_reify_slot_statements;
 
-	public BaseFacadeXBuilder(String resourceId, Properties properties) {
+	public BaseFacadeXBuilder(Properties properties) {
 		this.properties = properties;
-		this.mainGraphName = NodeFactory.createURI(resourceId);
 		this.p_blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
 		this.p_namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		this.p_root = Triplifier.getRootArgument(properties);

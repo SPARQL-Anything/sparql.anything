@@ -162,7 +162,7 @@ public class AbstractTriplifierTester {
 		logger.debug("{}", properties);
 		String graphName = Triplifier.getRootArgument(properties);
 		logger.debug("Graph name: {}", graphName);
-		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(graphName, properties);
+		FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 		if (properties.containsKey("slice")) {
 			final Slicer slicer = (Slicer) triplifier;
 			final Iterable<Slice> it = slicer.slice(properties);
