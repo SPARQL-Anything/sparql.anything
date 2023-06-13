@@ -54,15 +54,6 @@ public interface Triplifier {
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
 
-
-	static String getNullStringArgument(Properties properties) {
-		String null_string = null;
-		if (properties.containsKey(IRIArgument.NULL_STRING.toString())) {
-			null_string = properties.getProperty(IRIArgument.NULL_STRING.toString());
-		}
-		return null_string;
-	}
-
 	static String getRootArgument(Properties properties) {
 		String root = PropertyUtils.getStringProperty(properties, IRIArgument.ROOT, null);
 		if (root != null && !root.trim().equals("")) return root;
