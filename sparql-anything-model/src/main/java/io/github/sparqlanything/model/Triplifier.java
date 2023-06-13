@@ -71,7 +71,7 @@ public interface Triplifier {
 	}
 
 	static String getNormalisedLocation(Properties properties) {
-		URL location = null;
+		URL location;
 		try {
 			location = Triplifier.getLocation(properties);
 			if (location == null) return null;
