@@ -53,21 +53,8 @@ public interface Triplifier {
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
-	static boolean getSliceArgument(Properties properties) {
-		boolean slice = false;
-		if (properties.containsKey(IRIArgument.SLICE.toString())) {
-			slice = Boolean.parseBoolean(properties.getProperty(IRIArgument.SLICE.toString()));
-		}
-		return slice;
-	}
 
-	static boolean useRDFsMember(Properties properties) {
-		boolean use_rdfs_member = false;
-		if (properties.containsKey(IRIArgument.USE_RDFS_MEMBER.toString())) {
-			use_rdfs_member = Boolean.parseBoolean(properties.getProperty(IRIArgument.USE_RDFS_MEMBER.toString()));
-		}
-		return use_rdfs_member;
-	}
+
 
 	static boolean getTrimStringsArgument(Properties properties) {
 		boolean trim_strings = false;
