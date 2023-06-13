@@ -89,7 +89,7 @@ public class HTMLTriplifier implements Triplifier {
 		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
-		String namespace = Triplifier.getNamespaceArgument(properties);
+		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 
 		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
 

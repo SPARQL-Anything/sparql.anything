@@ -16,11 +16,7 @@
 
 package io.github.sparqlanything.xml;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.Slice;
-import io.github.sparqlanything.model.Slicer;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.ParseException;
@@ -242,7 +238,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	public void transformSAX(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		String namespace = Triplifier.getNamespaceArgument(properties);
+		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String dataSourceId = Triplifier.getRootArgument(properties);
 		String root = Triplifier.getRootArgument(properties);
 

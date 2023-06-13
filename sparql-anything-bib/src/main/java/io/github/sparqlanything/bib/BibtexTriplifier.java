@@ -16,10 +16,7 @@
 
 package io.github.sparqlanything.bib;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXParser;
@@ -54,7 +51,7 @@ public class BibtexTriplifier implements Triplifier {
 
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
-		String namespace = Triplifier.getNamespaceArgument(properties);
+		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 
 		builder.addRoot(dataSourceId, root);
 

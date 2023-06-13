@@ -107,10 +107,6 @@ public interface Triplifier {
 		return url;
 	}
 
-	static String getNamespaceArgument(Properties properties) {
-		return PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
-	}
-
 	static String toSafeURIString(String s) {
 		// s = s.replaceAll("\\s", "_");
 		return basicEscaper.escape(s);

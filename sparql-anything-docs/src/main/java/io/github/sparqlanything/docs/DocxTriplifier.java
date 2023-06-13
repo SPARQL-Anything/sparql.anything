@@ -17,6 +17,8 @@
 package io.github.sparqlanything.docs;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -54,7 +56,7 @@ public class DocxTriplifier implements Triplifier {
 
 		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = root;
-		String namespace = Triplifier.getNamespaceArgument(properties);
+		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		boolean mergeParagraphs = Boolean.parseBoolean(properties.getProperty(MERGE_PARAGRAPHS, "false"));
 		boolean headers = Boolean.parseBoolean(properties.getProperty(TABLE_HEADERS, "false"));
 

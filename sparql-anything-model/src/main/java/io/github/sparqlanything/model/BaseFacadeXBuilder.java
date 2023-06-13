@@ -41,7 +41,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		this.properties = properties;
 		this.mainGraphName = NodeFactory.createURI(resourceId);
 		this.p_blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
-		this.p_namespace = Triplifier.getNamespaceArgument(properties);
+		this.p_namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		this.p_root = Triplifier.getRootArgument(properties);
 		this.p_trim_strings = PropertyUtils.getBooleanProperty(properties, IRIArgument.TRIM_STRINGS);
 		this.p_null_string = PropertyUtils.getStringProperty(properties, IRIArgument.NULL_STRING);
