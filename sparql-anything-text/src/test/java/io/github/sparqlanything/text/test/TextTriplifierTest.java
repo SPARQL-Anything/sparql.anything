@@ -50,7 +50,7 @@ public class TextTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, b);
 			DatasetGraph dg = b.getDatasetGraph();
 
@@ -75,7 +75,7 @@ public class TextTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.REGEX, "\\w+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, b);
 			DatasetGraph dg = b.getDatasetGraph();
 
@@ -110,7 +110,7 @@ public class TextTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.SPLIT, "\\s+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, b);
 			DatasetGraph dg = b.getDatasetGraph();
 			Graph expectedGraph = GraphFactory.createGraphMem();

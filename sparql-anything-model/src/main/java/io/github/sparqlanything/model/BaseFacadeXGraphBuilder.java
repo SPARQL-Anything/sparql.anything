@@ -39,8 +39,8 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 
 	protected DatasetGraph datasetGraph;
 
-	public BaseFacadeXGraphBuilder(String resourceId, Properties properties) {
-		super(resourceId, properties);
+	public BaseFacadeXGraphBuilder(Properties properties) {
+		super(properties);
 		initialiseDatasetGraph(properties);
 		datasetGraph.begin(TxnType.WRITE);
 	}

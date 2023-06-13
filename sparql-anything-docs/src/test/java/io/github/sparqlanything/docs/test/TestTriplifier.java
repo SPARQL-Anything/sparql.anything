@@ -55,7 +55,7 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
-			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
 			dg = b.getDatasetGraph();
 //			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
@@ -76,7 +76,7 @@ public class TestTriplifier {
 
 			p.setProperty(DocxTriplifier.MERGE_PARAGRAPHS, "true");
 
-			b = new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			b = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
 			dg = b.getDatasetGraph();
 //			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
@@ -119,7 +119,7 @@ public class TestTriplifier {
 			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
 			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 
-			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
 			dg = b.getDatasetGraph();
 			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
@@ -150,7 +150,7 @@ public class TestTriplifier {
 
 			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
 
-			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
 			dg = b.getDatasetGraph();
 
@@ -242,7 +242,7 @@ public class TestTriplifier {
 		try {
 			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
 			p.setProperty(DocxTriplifier.TABLE_HEADERS.toString(), "true");
-			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(Triplifier.getLocation(p).toString(), p);
+			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
 			dg = b.getDatasetGraph();
 

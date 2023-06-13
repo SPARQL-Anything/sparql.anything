@@ -53,53 +53,6 @@ public interface Triplifier {
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
-	static boolean getBlankNodeArgument(Properties properties) {
-		boolean blank_nodes = true;
-		if (properties.containsKey(IRIArgument.BLANK_NODES.toString())) {
-			blank_nodes = Boolean.parseBoolean(properties.getProperty(IRIArgument.BLANK_NODES.toString()));
-		}
-		return blank_nodes;
-	}
-
-	static boolean getSliceArgument(Properties properties) {
-		boolean slice = false;
-		if (properties.containsKey(IRIArgument.SLICE.toString())) {
-			slice = Boolean.parseBoolean(properties.getProperty(IRIArgument.SLICE.toString()));
-		}
-		return slice;
-	}
-
-	static boolean noCache(Properties properties) {
-		boolean noCache = false;
-		if (properties.containsKey(IRIArgument.NO_CACHE.toString())) {
-			noCache = Boolean.parseBoolean(properties.getProperty(IRIArgument.NO_CACHE.toString()));
-		}
-		return noCache;
-	}
-
-	static boolean useRDFsMember(Properties properties) {
-		boolean use_rdfs_member = false;
-		if (properties.containsKey(IRIArgument.USE_RDFS_MEMBER.toString())) {
-			use_rdfs_member = Boolean.parseBoolean(properties.getProperty(IRIArgument.USE_RDFS_MEMBER.toString()));
-		}
-		return use_rdfs_member;
-	}
-
-	static boolean getTrimStringsArgument(Properties properties) {
-		boolean trim_strings = false;
-		if (properties.containsKey(IRIArgument.TRIM_STRINGS.toString())) {
-			trim_strings = Boolean.parseBoolean(properties.getProperty(IRIArgument.TRIM_STRINGS.toString()));
-		}
-		return trim_strings;
-	}
-
-	static String getNullStringArgument(Properties properties) {
-		String null_string = null;
-		if (properties.containsKey(IRIArgument.NULL_STRING.toString())) {
-			null_string = properties.getProperty(IRIArgument.NULL_STRING.toString());
-		}
-		return null_string;
-	}
 
 	static String getRootArgument(Properties properties) {
 		String root = PropertyUtils.getStringProperty(properties, IRIArgument.ROOT, null);
@@ -118,7 +71,7 @@ public interface Triplifier {
 	}
 
 	static String getNormalisedLocation(Properties properties) {
-		URL location = null;
+		URL location;
 		try {
 			location = Triplifier.getLocation(properties);
 			if (location == null) return null;
@@ -152,19 +105,6 @@ public interface Triplifier {
 		}
 		log.trace("Result {}", url);
 		return url;
-	}
-
-	static String getNamespaceArgument(Properties properties) {
-		String namespace = null;
-		try {
-			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
-			if (namespace != null && !namespace.trim().equals("")) {
-				return namespace;
-			}
-		} catch (Exception e) {
-			log.warn("Unsupported parameter value for 'namespace': '{}', using default ({}}).", namespace, XYZ_NS);
-		}
-		return XYZ_NS;
 	}
 
 	static String toSafeURIString(String s) {

@@ -55,13 +55,13 @@ public class JSONTriplifierTest {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./emptyobject.json").toString());
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", p1);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p1);
 			jt.triplify(p1, b);
 			DatasetGraph g1 = b.getDatasetGraph();
 			Properties p2 = new Properties();
 			p2.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./emptyarray.json").toString());
-			FacadeXGraphBuilder b2 = new BaseFacadeXGraphBuilder("test", p2);
+			FacadeXGraphBuilder b2 = new BaseFacadeXGraphBuilder(p2);
 			jt.triplify(p2, b2);
 			DatasetGraph g2 = b2.getDatasetGraph();
 			assertEquals(1L, g1.getDefaultGraph().size());
@@ -83,7 +83,7 @@ public class JSONTriplifierTest {
 
 		boolean nullPointerException = false;
 		try {
-			jt.triplify(null, new BaseFacadeXGraphBuilder("test", null));
+			jt.triplify(null, new BaseFacadeXGraphBuilder(null));
 		} catch (NullPointerException e) {
 			nullPointerException = true;
 		} catch (IOException e) {
@@ -116,7 +116,7 @@ public class JSONTriplifierTest {
 				try {
 					properties.setProperty(IRIArgument.LOCATION.toString(),
 							getClass().getClassLoader().getResource("./testprimitive.json").toString());
-					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 					jt.triplify(properties, b);
 					g1 = b.getDatasetGraph();
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
@@ -146,7 +146,7 @@ public class JSONTriplifierTest {
 				try {
 					properties.setProperty(IRIArgument.LOCATION.toString(),
 							getClass().getClassLoader().getResource("./testprimitive.json").toString());
-					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 					jt.triplify(properties, b);
 					g1 = b.getDatasetGraph();
 					assertTrue(mn.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
@@ -177,7 +177,7 @@ public class JSONTriplifierTest {
 		try {
 			properties.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./testnumbers.json").toString());
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
 
@@ -206,7 +206,7 @@ public class JSONTriplifierTest {
 			properties.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./whitespaceKeys.json").toString());
 
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
 
@@ -242,7 +242,7 @@ public class JSONTriplifierTest {
 			properties.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./testprimitive.json").toString());
 
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
 			//			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
@@ -274,7 +274,7 @@ public class JSONTriplifierTest {
 		try {
 			properties.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./testprimitive.json").toString());
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
 
@@ -309,7 +309,7 @@ public class JSONTriplifierTest {
 			properties.setProperty(IRIArgument.LOCATION.toString(),
 					getClass().getClassLoader().getResource("./testprimitive.json").toString());
 
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
 
@@ -347,7 +347,7 @@ public class JSONTriplifierTest {
 				try {
 					properties.setProperty(IRIArgument.LOCATION.toString(),
 							getClass().getClassLoader().getResource("./testarray.json").toString());
-					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 					jt.triplify(properties, b);
 					g1 = b.getDatasetGraph();
 
@@ -385,7 +385,7 @@ public class JSONTriplifierTest {
 				try {
 					properties.setProperty(IRIArgument.LOCATION.toString(),
 							getClass().getClassLoader().getResource("./testarray.json").toString());
-					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", properties);
+					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 					jt.triplify(properties, b);
 					g1 = b.getDatasetGraph();
 					Iterator<Triple> ii = g1.getDefaultGraph().find();
@@ -435,7 +435,7 @@ public class JSONTriplifierTest {
 		try {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), getClass().getClassLoader().getResource(f).toString());
-			jt.triplify(p, new BaseFacadeXGraphBuilder("test", p));
+			jt.triplify(p, new BaseFacadeXGraphBuilder(p));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -451,7 +451,7 @@ public class JSONTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), getClass().getClassLoader().getResource(f).toString());
 			//DatasetGraph ds = jt.triplify(p, new BaseFacadeXGraphBuilder("test", p));
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", p);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			jt.triplify(p, b);
 			DatasetGraph ds = b.getDatasetGraph();
 

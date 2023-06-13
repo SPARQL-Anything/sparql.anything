@@ -50,7 +50,7 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 			p.setProperty(IRIArgument.LOCATION.toString(), Path.of(spreadsheet.toURI()).toUri().toString());
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 
@@ -130,7 +130,7 @@ public class TestTriplifier {
 		try {
 
 			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 			dg.find(null, null, null, null).forEachRemaining(q -> {
@@ -155,7 +155,7 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 
@@ -178,7 +178,7 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 			p.setProperty(IRIArgument.LOCATION.toString(), Path.of(spreadsheet.toURI()).toUri().toString());
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 
@@ -247,7 +247,7 @@ public class TestTriplifier {
 
 			p.setProperty(IRIArgument.LOCATION.toString(), Path.of(spreadsheet.toURI()).toUri().toString());
 
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 
@@ -327,7 +327,7 @@ public class TestTriplifier {
 
 			p.setProperty(IRIArgument.LOCATION.toString(), spreadsheet.toString());
 
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(spreadsheet.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, builder);
 			dg = builder.getDatasetGraph();
 

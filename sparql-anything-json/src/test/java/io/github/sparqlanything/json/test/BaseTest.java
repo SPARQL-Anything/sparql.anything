@@ -58,7 +58,7 @@ public class BaseTest {
 		try {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.CONTENT.toString(), "{\"a\":\"b\"}");
-			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder("test", p1);
+			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p1);
 			jt.triplify(p1, b);
 			DatasetGraph g1 = b.getDatasetGraph();
 //			RDFDataMgr.write(System.out, g1, RDFFormat.TRIG);

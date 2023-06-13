@@ -51,7 +51,7 @@ public class ZipTriplifierTest {
 			URL url = getClass().getClassLoader().getResource("test.zip").toURI().toURL();
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder( p);
 			tt.triplify(p, builder);
 			DatasetGraph dg = builder.getDatasetGraph();
 
@@ -81,7 +81,7 @@ public class ZipTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 			p.setProperty(ZipTriplifier.MATCHES.toString(), ".*\\.(csv|json)");
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder( p);
 			tt.triplify(p, builder);
 			DatasetGraph dg = builder.getDatasetGraph();
 
@@ -110,7 +110,7 @@ public class ZipTriplifierTest {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(url.toString(), p);
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, builder);
 			DatasetGraph dg = builder.getDatasetGraph();
 

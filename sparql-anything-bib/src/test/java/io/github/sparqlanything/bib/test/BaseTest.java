@@ -48,7 +48,7 @@ public class BaseTest {
 		try {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.CONTENT.toString(), "@article{Knuth1984, title={Literate Programming}}");
-			FacadeXGraphBuilder b =  new BaseFacadeXGraphBuilder("test", p1);
+			FacadeXGraphBuilder b =  new BaseFacadeXGraphBuilder( p1);
 			jt.triplify(p1, b);
 			DatasetGraph g1 = b.getDatasetGraph();
 //			RDFDataMgr.write(System.out, g1, RDFFormat.TRIG);
@@ -77,7 +77,7 @@ public class BaseTest {
 			Properties p1 = new Properties();
 			p1.setProperty(IRIArgument.CONTENT.toString(), "@article{Knuth1984, title={Literate Programming}}");
 			p1.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
-			FacadeXGraphBuilder b =  new BaseFacadeXGraphBuilder("test", p1);
+			FacadeXGraphBuilder b =  new BaseFacadeXGraphBuilder( p1);
 			jt.triplify(p1, b);
 			DatasetGraph g1 = b.getDatasetGraph();
 			g1.find().forEachRemaining(q->{

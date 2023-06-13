@@ -27,8 +27,6 @@ import java.util.Properties;
 
 public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQuadHandler, FacadeXComponentHandler {
 	protected final Properties properties;
-	protected final Node mainGraphName;
-	//
 	protected final boolean p_blank_nodes;
 	protected final String p_namespace;
 	protected final String p_root;
@@ -37,15 +35,14 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	protected final boolean p_use_rdfs_member;
 	protected final boolean p_reify_slot_statements;
 
-	public BaseFacadeXBuilder(String resourceId, Properties properties) {
+	public BaseFacadeXBuilder(Properties properties) {
 		this.properties = properties;
-		this.mainGraphName = NodeFactory.createURI(resourceId);
-		this.p_blank_nodes = Triplifier.getBlankNodeArgument(properties);
-		this.p_namespace = Triplifier.getNamespaceArgument(properties);
+		this.p_blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
+		this.p_namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		this.p_root = Triplifier.getRootArgument(properties);
-		this.p_trim_strings = Triplifier.getTrimStringsArgument(properties);
-		this.p_null_string = Triplifier.getNullStringArgument(properties);
-		this.p_use_rdfs_member = Triplifier.useRDFsMember(properties);
+		this.p_trim_strings = PropertyUtils.getBooleanProperty(properties, IRIArgument.TRIM_STRINGS);
+		this.p_null_string = PropertyUtils.getStringProperty(properties, IRIArgument.NULL_STRING);
+		this.p_use_rdfs_member = PropertyUtils.getBooleanProperty(properties, IRIArgument.USE_RDFS_MEMBER);
 		this.p_reify_slot_statements = PropertyUtils.getBooleanProperty(properties, IRIArgument.ANNOTATE_TRIPLES_WITH_SLOT_KEYS);
 	}
 
@@ -107,9 +104,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	public Node container2node(String container) {
 		if (p_blank_nodes) {
 			return container2BlankNode(container);
-			// return NodeFactory.createBlankNode(container);
 		} else {
-//			return NodeFactory.createURI(container);
 			return container2URI(container);
 		}
 	}
