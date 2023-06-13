@@ -14,7 +14,7 @@ SPARQL Anything selects this transformer for the following file extensions:
 
 ## Default implementation
 
-- [com.github.sparqlanything.csv.CSVTriplifier](../sparql-anything-csv/src/main/java/com/github/sparqlanything/csv/CSVTriplifier.java)
+- [io.github.sparqlanything.csv.CSVTriplifier](../sparql-anything-csv/src/main/java/com/github/sparqlanything/csv/CSVTriplifier.java)
 
 ## Media types
 
@@ -57,32 +57,31 @@ WHERE
 ### Facade-X RDF:
 
 ```turtle
-@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-[ a fx:root ;
-  rdf:_1  [ rdf:_1  "laura@example.com" ;
-            rdf:_2  "2070" ;
-            rdf:_3  "Laura" ;
-            rdf:_4  "Grey"
-          ] ;
-  rdf:_2  [ rdf:_1  "craig@example.com" ;
-            rdf:_2  "4081" ;
-            rdf:_3  "Craig" ;
-            rdf:_4  "Johnson"
-          ] ;
-  rdf:_3  [ rdf:_1  "mary@example.com" ;
-            rdf:_2  "9346" ;
-            rdf:_3  "Mary" ;
-            rdf:_4  "Jenkins"
-          ] ;
-  rdf:_4  [ rdf:_1  "jamie@example.com" ;
-            rdf:_2  "5079" ;
-            rdf:_3  "Jamie" ;
-            rdf:_4  "Smith"
-          ]
+[ rdf:type  fx:root ;
+  rdf:_1    [ rdf:_1  "email" ;
+              rdf:_2  "name" ;
+              rdf:_3  "surname"
+            ] ;
+  rdf:_2    [ rdf:_1  "laura@example.com" ;
+              rdf:_2  "Laura" ;
+              rdf:_3  "Grey"
+            ] ;
+  rdf:_3    [ rdf:_1  "craig@example.com" ;
+              rdf:_2  "Craig" ;
+              rdf:_3  "Johnson"
+            ] ;
+  rdf:_4    [ rdf:_1  "mary@example.com" ;
+              rdf:_2  "Mary" ;
+              rdf:_3  "Jenkins"
+            ] ;
+  rdf:_5    [ rdf:_1  "jamie@example.com" ;
+              rdf:_2  "Jamie" ;
+              rdf:_3  "Smith"
+            ]
 ] .
-
 ```
 
 ## Options

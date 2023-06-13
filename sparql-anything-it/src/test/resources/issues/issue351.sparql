@@ -1,0 +1,11 @@
+
+SELECT ?g ?s ?p ?o
+WHERE {
+   SERVICE <x-sparql-anything:location=%%%LOCATION%%%>
+   {
+      # GRAPH <%%%LOCATION%%%#Sheet1> {
+      GRAPH ?g {
+      ?s ?p ?o .
+      }
+   }
+}

@@ -20,7 +20,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ## Default implementation
 
-- [com.github.sparqlanything.docs.DocxTriplifier](../sparql-anything-docs/src/main/java/com/github/sparqlanything/docs/DocxTriplifier.java)
+- [io.github.sparqlanything.docs.DocxTriplifier](../sparql-anything-docs/src/main/java/com/github/sparqlanything/docs/DocxTriplifier.java)
 
 ## Default Transformation
 

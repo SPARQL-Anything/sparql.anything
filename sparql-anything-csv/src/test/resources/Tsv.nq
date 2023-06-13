@@ -1,0 +1,16 @@
+
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document#row1> .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Year> "1997" .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Make> "Ford" .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Model> "E350" .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Description> "ac, abs, moon" .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Price> "3000.00" .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Price> "3000.00" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Description> "ac, abs, moon" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Model> "E350" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Make> "Ford" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://sparql.xyz/facade-x/data/Year> "1997" <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document#row1> <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/document> .
+

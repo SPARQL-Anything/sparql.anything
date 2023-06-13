@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Monterotondo",
+    "addressRegion": "Lazio",
+    "postalCode": "00010",
+    "streetAddress": "via Veneto"
+  },
+  "email": "info2@example.com",
+  "jobTitle": "Web Master",
+  "name": "Lucia Malatesta",
+  "birthPlace": "London, UK",
+  "birthDate": "1985-01-22",
+  "height": "70 inches",
+  "gender": "female",
+  "memberOf": "SS Roma",
+  "nationality": "Ungarian",
+  "telephone": "(0039) 338-1224248",
+  "url": "http://www.example.com/lucia00123",
+  "sameAs" : [ "https://www.facebook.com/lucia00123",
+    "https://www.linkedin.com/lucia00123",
+    "http://twitter.com/lucia00123"]
+}

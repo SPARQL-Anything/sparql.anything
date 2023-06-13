@@ -20,7 +20,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ## Default implementation
 
-- [com.github.sparqlanything.bib.BibtexTriplifier](../sparql-anything-bib/src/main/java/com/github/sparqlanything/bib/BibtexTriplifier.java)
+- [io.github.sparqlanything.bib.BibtexTriplifier](../sparql-anything-bib/src/main/java/com/github/sparqlanything/bib/BibtexTriplifier.java)
 
 ## Default Transformation
 

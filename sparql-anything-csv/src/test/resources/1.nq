@@ -1,0 +1,27 @@
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "1997" .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "Ford" .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "E350" .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4> "ac, abs, moon" .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5> "3000.00" .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document#row1> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/document#row2> .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Year" .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "Make" .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "Model" .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4> "Description" .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5> "Price" .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5> "3000.00" <http://www.example.org/document> .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4> "ac, abs, moon" <http://www.example.org/document> .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "E350" <http://www.example.org/document> .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "Ford" <http://www.example.org/document> .
+<http://www.example.org/document#row2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "1997" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5> "Price" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4> "Description" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> "Model" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> "Make" <http://www.example.org/document> .
+<http://www.example.org/document#row1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Year" <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/document#row2> <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document#row1> <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/document> .
+

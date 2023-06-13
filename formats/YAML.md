@@ -21,7 +21,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ## Default implementation
 
-- [com.github.sparqlanything.yaml.YAMLTriplifier](../sparql-anything-yaml/src/main/java/com/github/sparqlanything/yaml/YAMLTriplifier.java)
+- [io.github.sparqlanything.yaml.YAMLTriplifier](../sparql-anything-yaml/src/main/java/com/github/sparqlanything/yaml/YAMLTriplifier.java)
 
 ## Default Transformation
 

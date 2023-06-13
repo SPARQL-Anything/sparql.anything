@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+  ~ Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,43 +15,34 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.github.sparqlanything</groupId>
-		<artifactId>sparql-anything-parent</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
-	</parent>
-	<artifactId>sparql-anything-model</artifactId>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.sparql-anything</groupId>
+        <artifactId>sparql-anything-parent</artifactId>
+        <version>0.9.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>sparql-anything-model</artifactId>
 
-	<dependencies><!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>apache-jena-libs</artifactId>
-			<type>pom</type>
-		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>commons-httpclient</groupId>-->
-<!--			<artifactId>commons-httpclient</artifactId>-->
-<!--		</dependency>-->
-
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>apache-jena-libs</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

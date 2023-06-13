@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+# Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-git add README.md .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/com/github/sparqlanything/it/DocumentationExampleSandbox.java
+git add README.md .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
 git add formats/*
 cp -f README.md docs/
 cp -f BROWSER.md docs/

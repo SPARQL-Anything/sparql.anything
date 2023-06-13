@@ -16,7 +16,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ## Default implementation
 
-- [com.github.sparqlanything.text.TextTriplifier](../sparql-anything-text/src/main/java/com/github/sparqlanything/text/TextTriplifier.java)
+- [io.github.sparqlanything.text.TextTriplifier](../sparql-anything-text/src/main/java/com/github/sparqlanything/text/TextTriplifier.java)
 
 ## Default Transformation
 
