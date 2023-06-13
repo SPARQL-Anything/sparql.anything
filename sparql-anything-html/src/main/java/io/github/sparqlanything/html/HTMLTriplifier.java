@@ -17,10 +17,7 @@
 package io.github.sparqlanything.html;
 
 import com.microsoft.playwright.*;
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.HTTPHelper;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.any23.Any23;
 import org.apache.any23.extractor.ExtractionException;
 import org.apache.any23.source.DocumentSource;
@@ -91,7 +88,7 @@ public class HTMLTriplifier implements Triplifier {
 
 		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
-		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
+		boolean blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
 		String namespace = Triplifier.getNamespaceArgument(properties);
 
 		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
