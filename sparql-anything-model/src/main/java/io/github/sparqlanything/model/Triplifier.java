@@ -53,9 +53,7 @@ public interface Triplifier {
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
-
-
-
+	
 	static boolean getTrimStringsArgument(Properties properties) {
 		boolean trim_strings = false;
 		if (properties.containsKey(IRIArgument.TRIM_STRINGS.toString())) {
