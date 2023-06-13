@@ -155,16 +155,7 @@ public interface Triplifier {
 	}
 
 	static String getNamespaceArgument(Properties properties) {
-		String namespace = null;
-		try {
-			namespace = properties.getProperty(IRIArgument.NAMESPACE.toString());
-			if (namespace != null && !namespace.trim().equals("")) {
-				return namespace;
-			}
-		} catch (Exception e) {
-			log.warn("Unsupported parameter value for 'namespace': '{}', using default ({}}).", namespace, XYZ_NS);
-		}
-		return XYZ_NS;
+		return PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 	}
 
 	static String toSafeURIString(String s) {
