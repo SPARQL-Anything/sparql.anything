@@ -16,9 +16,7 @@
 
 package io.github.sparqlanything.engine;
 
-import io.github.sparqlanything.model.Slicer;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
@@ -115,7 +113,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		}
 
 		// check execution with slicing
-		if (Triplifier.getSliceArgument(p)) {
+		if (PropertyUtils.getBooleanProperty(p, IRIArgument.SLICE)) {
 			if (t instanceof Slicer) {
 				logger.trace("Execute with slicing");
 				return new QueryIterSlicer(execCxt, input, t, p, opService);
