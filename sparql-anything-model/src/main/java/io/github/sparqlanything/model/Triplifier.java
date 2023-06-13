@@ -53,14 +53,7 @@ public interface Triplifier {
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
-	
-	static boolean getTrimStringsArgument(Properties properties) {
-		boolean trim_strings = false;
-		if (properties.containsKey(IRIArgument.TRIM_STRINGS.toString())) {
-			trim_strings = Boolean.parseBoolean(properties.getProperty(IRIArgument.TRIM_STRINGS.toString()));
-		}
-		return trim_strings;
-	}
+
 
 	static String getNullStringArgument(Properties properties) {
 		String null_string = null;
