@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,20 @@
  *
  */
 
-package com.github.sparqlanything.jdbc;
+package io.github.sparqlanything.jdbc;
 
-import org.apache.jena.graph.Triple;
+import java.util.Collections;
+import java.util.Set;
 
-public interface TripleInterpretation {
+public interface Interpretation {
+	default Set<Class<? extends Interpretation>> inconsistentTypes(){
+		return Collections.emptySet();
+	}
+	default Set<Class<? extends Interpretation>> specialisationOfTypes(){
+		return Collections.emptySet();
+	}
+	default Class<? extends Interpretation> type(){
+		return getClass();
+	}
 
-	void setTriple(Triple triple);
-
-	Triple getTriple();
 }

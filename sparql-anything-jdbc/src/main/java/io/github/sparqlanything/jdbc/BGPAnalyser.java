@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  *
  */
 
-package com.github.sparqlanything.jdbc;
+package io.github.sparqlanything.jdbc;
 
-import com.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
@@ -26,11 +26,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 public class BGPAnalyser {
 	final static Logger L = LoggerFactory.getLogger(BGPAnalyser.class);

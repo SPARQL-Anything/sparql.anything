@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,11 @@
  *
  */
 
-package com.github.sparqlanything.jdbc;import com.github.sparqlanything.jdbc.JDBC;
-import com.github.sparqlanything.jdbc.JDBCManager;
-import com.github.sparqlanything.model.IRIArgument;
+package io.github.sparqlanything.jdbc;
+
+import io.github.sparqlanything.model.IRIArgument;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;

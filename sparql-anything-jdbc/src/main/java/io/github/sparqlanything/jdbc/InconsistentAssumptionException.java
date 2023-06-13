@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,11 @@
  *
  */
 
-package com.github.sparqlanything.jdbc;
+package io.github.sparqlanything.jdbc;
 
-import org.apache.jena.graph.Node;
+public class InconsistentAssumptionException extends Exception {
+	public InconsistentAssumptionException(String message){
+		super(message);
 
-public class InconsistentEntityException extends InconsistentAssumptionException {
-	private Node node;
-	public InconsistentEntityException(Node node, String message){
-		super(message + ": " + node.toString());
-		this.node = node;
-	}
-	public InconsistentEntityException(Node node){
-		this(node, "Inconsistent enttity URI: " + node.toString());
-		this.node = node;
-	}
-	public Node inconsistentNode(){
-		return node;
 	}
 }

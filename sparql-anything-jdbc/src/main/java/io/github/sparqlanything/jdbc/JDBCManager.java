@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,8 @@
  *
  */
 
-package com.github.sparqlanything.jdbc;
+package io.github.sparqlanything.jdbc;
 
-import org.apache.jena.atlas.lib.tuple.Tuple3;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;

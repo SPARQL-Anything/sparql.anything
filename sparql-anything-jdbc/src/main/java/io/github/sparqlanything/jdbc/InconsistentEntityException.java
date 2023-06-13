@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,21 @@
  *
  */
 
-package com.github.sparqlanything.jdbc;
+package io.github.sparqlanything.jdbc;
 
-import java.util.Collections;
-import java.util.Set;
+import org.apache.jena.graph.Node;
 
-public interface Interpretation {
-	default Set<Class<? extends Interpretation>> inconsistentTypes(){
-		return Collections.emptySet();
+public class InconsistentEntityException extends InconsistentAssumptionException {
+	private Node node;
+	public InconsistentEntityException(Node node, String message){
+		super(message + ": " + node.toString());
+		this.node = node;
 	}
-	default Set<Class<? extends Interpretation>> specialisationOfTypes(){
-		return Collections.emptySet();
+	public InconsistentEntityException(Node node){
+		this(node, "Inconsistent enttity URI: " + node.toString());
+		this.node = node;
 	}
-	default Class<? extends Interpretation> type(){
-		return getClass();
+	public Node inconsistentNode(){
+		return node;
 	}
-
 }
