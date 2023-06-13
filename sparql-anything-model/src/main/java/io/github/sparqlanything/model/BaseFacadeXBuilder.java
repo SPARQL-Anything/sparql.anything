@@ -104,9 +104,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	public Node container2node(String container) {
 		if (p_blank_nodes) {
 			return container2BlankNode(container);
-			// return NodeFactory.createBlankNode(container);
 		} else {
-//			return NodeFactory.createURI(container);
 			return container2URI(container);
 		}
 	}
