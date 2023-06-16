@@ -71,9 +71,6 @@ public class BGPAnalyserTest {
 		BGPAnalyser analyser = new BGPAnalyser(properties, op);
 		boolean canResolve = analyser.isException();
 		interpretations = analyser.interpretations();
-		for(Map.Entry<Node,Interpretation> entry :interpretations.entrySet()){
-			L.info(" >>> {}",entry);
-		}
 	}
 
 	private Triple t(Node s, Node p, Node o){
@@ -133,6 +130,7 @@ public class BGPAnalyserTest {
 		IsA(v("x"), Assumption.Subject.class);
 		IsA(v("p"), Assumption.Predicate.class);
 		IsA(v("f"), Assumption.Object.class);
+		show();
 	}
 
 	@Test
@@ -142,6 +140,7 @@ public class BGPAnalyserTest {
 		IsA(v("x"), Assumption.Subject.class);
 		IsA(RDF.type.asNode(), Assumption.TypeProperty.class);
 		IsA(v("f"), Assumption.Object.class);
+		show();
 	}
 
 	@Test
@@ -154,6 +153,7 @@ public class BGPAnalyserTest {
 		IsA(v("container"), Assumption.ContainerRow.class);
 		IsA(RDF.type.asNode(), Assumption.TypeProperty.class);
 		IsA(xyz("table"), Assumption.TypeTable.class);
+		show();
 	}
 
 	@Test
@@ -164,6 +164,7 @@ public class BGPAnalyserTest {
 		IsA(v("table"), Assumption.ContainerTable.class);
 		IsA(RDF.type.asNode(), Assumption.TypeProperty.class);
 		IsA(u(Triplifier.FACADE_X_TYPE_ROOT), Assumption.FXRoot.class);
+		show();
 	}
 
 	@Test
@@ -174,6 +175,7 @@ public class BGPAnalyserTest {
 		run();
 		IsA(n, Assumption.ContainerTable.class);
 		IsA(n2, Assumption.ContainerRow.class);
+		show();
 	}
 
 	@Test
@@ -185,6 +187,7 @@ public class BGPAnalyserTest {
 		IsA(n, Assumption.ContainerRow.class);
 		IsA(v("p"), Assumption.SlotColumn.class);
 		IsA(l("12"), Assumption.SlotValue.class);
+		show();
 	}
 
 	@Test
@@ -194,6 +197,7 @@ public class BGPAnalyserTest {
 		IsA(v("x"), Assumption.ContainerRow.class);
 		IsA(v("p"), Assumption.SlotColumn.class);
 		IsA(l(12), Assumption.SlotValue.class);
+		show();
 	}
 
 	@Test
@@ -206,6 +210,7 @@ public class BGPAnalyserTest {
 		IsA(v("p2"), Assumption.SlotColumn.class);
 		IsA(l(12), Assumption.SlotValue.class);
 		IsA(l("a string"), Assumption.SlotValue.class);
+		show();
 	}
 
 	@Test
@@ -218,6 +223,7 @@ public class BGPAnalyserTest {
 		IsA(v("p1"), Assumption.SlotColumn.class);
 		IsA(v("p2"), Assumption.SlotColumn.class);
 		IsA(l(12), Assumption.SlotValue.class);
+		show();
 	}
 
 	@Test
@@ -230,6 +236,7 @@ public class BGPAnalyserTest {
 		IsA(v("p1"), Assumption.Predicate.class);
 		IsA(v("p2"), Assumption.Predicate.class);
 		IsA(v("x"), Assumption.Object.class);
+		show();
 	}
 
 	@Test
@@ -242,6 +249,7 @@ public class BGPAnalyserTest {
 		IsA(xyz("address"), Assumption.SlotColumn.class);
 		IsA(v("p2"), Assumption.SlotColumn.class);
 		IsA(v("x"), Assumption.SlotValue.class);
+		show();
 	}
 
 	@Test
@@ -253,6 +261,7 @@ public class BGPAnalyserTest {
 		IsA(u("http://www.example.org/tablename"), Assumption.ContainerTable.class);
 		IsA(v("p"), Assumption.Predicate.class);
 		IsA(v("o"), Assumption.Object.class);
+		show();
 	}
 
 	@Test
@@ -262,11 +271,32 @@ public class BGPAnalyserTest {
 		add(t, v("p1"), b);
 		add(b, v("p2"), v("o"));
 		run();
-		System.err.println(interpretations);
+//		System.err.println(interpretations);
 		IsA(t, Assumption.ContainerTable.class);
 		IsA(b, Assumption.ContainerRow.class);
 		IsA(v("p1"), Assumption.SlotRow.class);
 		IsA(v("p2"), Assumption.Predicate.class);
 		IsA(v("o"), Assumption.Object.class);
+		show();
+	}
+
+	public void show(){
+//		L.info("{}",bp());
+		StringBuilder b = new StringBuilder();
+		b.append("\n\n");
+		b.append(bp());
+
+		for(Map.Entry<Node,Interpretation> entry: interpretations.entrySet()){
+			b.append("\n --- ");
+			b.append(entry.getKey());
+			if(entry.getKey().isConcrete()) {
+				b.append(" is a ");
+			}else{
+				b.append(" must be ");
+			}
+			b.append(entry.getValue().type().getSimpleName());
+		}
+		b.append("\n\n");
+		L.info("{}",b.toString());
 	}
 }
