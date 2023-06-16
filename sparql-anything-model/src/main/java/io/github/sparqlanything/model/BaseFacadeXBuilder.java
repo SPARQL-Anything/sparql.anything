@@ -109,7 +109,8 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		}
 	}
 
-	public Node key2predicate(String key) {
-		return key2predicate(this.p_namespace, key);
+	public String getNamespace() {
+		return p_namespace;
 	}
+
 }

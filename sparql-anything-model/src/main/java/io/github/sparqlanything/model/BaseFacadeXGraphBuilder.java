@@ -18,6 +18,7 @@ package io.github.sparqlanything.model;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.TxnType;
 import org.apache.jena.rdf.model.Model;
@@ -69,7 +70,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 			}
 		} else {
 			log.debug("Using in memory DatasetGraph");
-			// i don't think we ever reuse the same in memory DatasetGraph
+			// I don't think we ever reuse the same in memory DatasetGraph
 			// so no need to end the previous query's read txn
 			datasetGraph = DatasetGraphFactory.create();
 		}
@@ -81,7 +82,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 		if (p_null_string != null && object.isLiteral() && object.getLiteral().toString().equals(p_null_string)) {
 			return false;
 		}
-		Triple t = new Triple(subject, predicate, object);
+		Triple t = Triple.create(subject, predicate, object);
 		if (datasetGraph.getGraph(graph).contains(t)) {
 			return false;
 		}
@@ -90,9 +91,9 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 	}
 
 	/**
-	 * This includes triples from the default graph / union of all graphs.
+	 * This method returns triples from the union of all graphs.
 	 *
-	 * @return
+	 * @return the union of all graphs as model
 	 */
 	public Model getModel() {
 		return ModelFactory.createModelForGraph(getDatasetGraph().getUnionGraph());
@@ -102,12 +103,14 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 	public DatasetGraph getDatasetGraph() {
 		if (!DatabaseMgr.isTDB2(datasetGraph)) {
 			// we have an in memory DatasetGraph
-			datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
+			datasetGraph.addGraph(NodeFactory.createURI("urn:x-arq:DefaultGraph"), datasetGraph.getUnionGraph());
+//			datasetGraph.setDefaultGraph(datasetGraph.getUnionGraph());
 			// we are unable to do that ^ with an on disk DatasetGraph (TDB2)
 			// so that means you need to do `graph ?g {?s ?p ?o}` instead of simply
 			// `{?s ?p ?o}` in a query when you use a TDB2
 		}
 		return datasetGraph;
 	}
+
 
 }

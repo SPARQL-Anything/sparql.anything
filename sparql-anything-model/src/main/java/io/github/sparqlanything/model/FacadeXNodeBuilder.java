@@ -30,8 +30,8 @@ public interface FacadeXNodeBuilder {
 		return NodeFactory.createBlankNode(container);
 	}
 
-	default Node key2predicate(String namespace, String key) {
-		return NodeFactory.createURI(namespace + Triplifier.toSafeURIString(key));
+	default Node key2predicate(String key) {
+		return NodeFactory.createURI(getNamespace().concat(Triplifier.toSafeURIString(key)));
 	}
 
 	default Node value2node(Object value) {
@@ -41,4 +41,6 @@ public interface FacadeXNodeBuilder {
 			return ResourceFactory.createTypedLiteral(value).asNode();
 		}
 	}
+
+	String getNamespace();
 }

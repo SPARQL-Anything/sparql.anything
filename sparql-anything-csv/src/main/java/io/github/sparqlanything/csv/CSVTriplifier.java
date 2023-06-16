@@ -164,10 +164,6 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		return Sets.newHashSet("csv", "tsv", "tab");
 	}
 
-	public List<String> getDataSourceIds(Properties properties){
-		String s = Triplifier.getRootArgument(properties);
-		return Arrays.asList(s);
-	}
 
 	private void processRow(int rown, String dataSourceId, String rootId, CSVRecord record, LinkedHashMap<Integer, String> headers_map , FacadeXGraphBuilder builder){
 		String rowContainerId = StringUtils.join(rootId , "#row" , rown);
