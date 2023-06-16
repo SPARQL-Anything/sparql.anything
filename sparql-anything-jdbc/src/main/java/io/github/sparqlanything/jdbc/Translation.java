@@ -17,6 +17,8 @@
 
 package io.github.sparqlanything.jdbc;
 
+import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -93,7 +95,8 @@ public class Translation {
 
 	public String nodeSlotToColumn(Node node){
 		if(node.isConcrete() && node.isURI()){
-			return node.getURI().substring(Triplifier.getNamespaceArgument(properties).length());
+			return node.getURI().substring(PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE)
+.length());
 		}
 		return null;
 	}
@@ -105,7 +108,7 @@ public class Translation {
 	}
 
 	public String columnToSlot(String colName){
-		return Triplifier.getNamespaceArgument(properties) + colName;
+		return PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE) + colName;
 	}
 
 	public boolean nodeSlotIsTypeProperty(Node node){
@@ -113,7 +116,7 @@ public class Translation {
 	}
 
 	public Node columnToNodeSlot(String colName){
-		return NodeFactory.createURI(Triplifier.getNamespaceArgument(properties) + colName);
+		return NodeFactory.createURI(PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE) + colName);
 	}
 
 	public boolean nodeContainerIsTable(Node node){
