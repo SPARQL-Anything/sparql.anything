@@ -95,8 +95,6 @@ public class TestUtils {
 		ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
 		expected.getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
 		obtained.getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
-
-
 		if (expectedResultsAvailable) RDFDataMgr.write(baosExpected, expected, Lang.TTL);
 		ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
 		RDFDataMgr.write(baosResult, obtained, Lang.TTL);

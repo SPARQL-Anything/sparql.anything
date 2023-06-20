@@ -181,10 +181,6 @@ public class JSONTriplifierTest {
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
 
-//			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
-//			m.write(System.out, "TTL");
-//			System.out.println("\n\n\n");
-//			RDFDataMgr.write(System.out, g1, RDFFormat.TRIG);
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -210,8 +206,6 @@ public class JSONTriplifierTest {
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
 
-			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
-			m.write(System.out,"TTL");
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -245,7 +239,6 @@ public class JSONTriplifierTest {
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
-			//			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -277,8 +270,6 @@ public class JSONTriplifierTest {
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
-
-//			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 
 			assertTrue(mn.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
@@ -312,8 +303,6 @@ public class JSONTriplifierTest {
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
-
-//			ModelFactory.createModelForGraph(g1.getDefaultGraph()).write(System.out, "TTL");
 
 			assertTrue(mn.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
@@ -351,7 +340,6 @@ public class JSONTriplifierTest {
 					jt.triplify(properties, b);
 					g1 = b.getDatasetGraph();
 
-//					RDFDataMgr.write(System.out, g1, RDFFormat.TRIG);
 					assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
 					e.printStackTrace();

@@ -58,7 +58,7 @@ public class MetadataWriter extends TripleWriterHandler {
 
 	@Override
 	public void writeTriple(Resource s, IRI p, Value o, Resource g) throws TripleHandlerException {
-		log.debug("Write metadata triple on graph: {}", g);
+		log.debug("Write metadata triple on graph: {}:: {}, {}, {}", g, s.toString(), p.toString(), o.toString());
 		facadeXGraphBuilder.add(facadeXGraphBuilder.dataSourceId2node(""), resolveValue(s), NodeFactory.createURI(p.stringValue()), resolveValue(o));
 	}
 

@@ -26,7 +26,6 @@ public class HTMLMicrodataTest extends AbstractTriplifierTester {
 	public HTMLMicrodataTest() {
 
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
-		this.setPrintWholeGraph(true);
 	}
 
 	@Test

@@ -1,0 +1,90 @@
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+<http://www.example.org/document/html/body/div.annotation.expander/div>
+        rdf:type          xhtml:div ;
+        rdf:_1            <http://www.example.org/document/html/body/div.annotation.expander/div/a> ;
+        rdf:_2            ", " ;
+        rdf:_3            <http://www.example.org/document/html/body/div.annotation.expander/div/em> ;
+        rdf:_4            ", 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 " ;
+        rdf:_5            <http://www.example.org/document/html/body/div.annotation.expander/div/p> ;
+        whatwg:innerHTML  "<a href=\"/artists/paula-rego\">Paula Rego</a>, <em>The Baker’s Wife</em>, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 \n<p style=\"display: none\">For copyright information, please contact the IMMA Collections team: <a href=\"/cdn-cgi/l/email-protection#254c4b434a654c4848440b4c40\"><span class=\"__cf_email__\" data-cfemail=\"741d1a121b341d1919155a1d11\">[email&nbsp;protected]</span></a>.</p>" ;
+        whatwg:innerText  "Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Paula Rego The Baker’s Wife For copyright information, please contact the IMMA Collections team: [email protected]. [email protected] [email protected]" .
+
+<http://www.example.org/document/html/body/div.annotation.expander/div/p/a>
+        rdf:type          xhtml:a ;
+        rdf:_1            <http://www.example.org/document/html/body/div.annotation.expander/div/p/a/span.__cf_email__> ;
+        xhtml:href        "/cdn-cgi/l/email-protection#254c4b434a654c4848440b4c40" ;
+        whatwg:innerHTML  "<span class=\"__cf_email__\" data-cfemail=\"741d1a121b341d1919155a1d11\">[email&nbsp;protected]</span>" ;
+        whatwg:innerText  "[email protected] [email protected]" .
+
+eg:document  rdf:type     xhtml:html , fx:root ;
+        rdf:_1            <http://www.example.org/document/html/head> ;
+        rdf:_2            <http://www.example.org/document/html/body> ;
+        whatwg:innerHTML  "<head></head>\n<body>\n <div class=\"annotation expander\"><span class=\"title\"> Image Caption </span>\n  <div><a href=\"/artists/paula-rego\">Paula Rego</a>, <em>The Baker’s Wife</em>, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 \n   <p style=\"display: none\">For copyright information, please contact the IMMA Collections team: <a href=\"/cdn-cgi/l/email-protection#254c4b434a654c4848440b4c40\"><span class=\"__cf_email__\" data-cfemail=\"741d1a121b341d1919155a1d11\">[email&nbsp;protected]</span></a>.</p>\n  </div>\n </div>\n</body>" ;
+        whatwg:innerText  "Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected].  Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Paula Rego The Baker’s Wife For copyright information, please contact the IMMA Collections team: [email protected]. [email protected] [email protected]" .
+
+<http://www.example.org/document/html/body/div.annotation.expander/span.title>
+        rdf:type          xhtml:span ;
+        rdf:_1            " Image Caption " ;
+        xhtml:class       "title" ;
+        whatwg:innerHTML  "Image Caption" ;
+        whatwg:innerText  "Image Caption" .
+
+<http://www.example.org/document/html/body/div.annotation.expander>
+        rdf:type          xhtml:div ;
+        rdf:_1            <http://www.example.org/document/html/body/div.annotation.expander/span.title> ;
+        rdf:_2            <http://www.example.org/document/html/body/div.annotation.expander/div> ;
+        xhtml:class       "annotation expander" ;
+        whatwg:innerHTML  "<span class=\"title\"> Image Caption </span>\n<div><a href=\"/artists/paula-rego\">Paula Rego</a>, <em>The Baker’s Wife</em>, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 \n <p style=\"display: none\">For copyright information, please contact the IMMA Collections team: <a href=\"/cdn-cgi/l/email-protection#254c4b434a654c4848440b4c40\"><span class=\"__cf_email__\" data-cfemail=\"741d1a121b341d1919155a1d11\">[email&nbsp;protected]</span></a>.</p>\n</div>" ;
+        whatwg:innerText  "Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Paula Rego The Baker’s Wife For copyright information, please contact the IMMA Collections team: [email protected]. [email protected] [email protected]" .
+
+<http://www.example.org/document/html/body/div.annotation.expander/div/em>
+        rdf:type          xhtml:em ;
+        rdf:_1            "The Baker’s Wife" ;
+        whatwg:innerHTML  "The Baker’s Wife" ;
+        whatwg:innerText  "The Baker’s Wife" .
+
+<http://www.example.org/document/html/body/div.annotation.expander/div/a>
+        rdf:type          xhtml:a ;
+        rdf:_1            "Paula Rego" ;
+        xhtml:href        "/artists/paula-rego" ;
+        whatwg:innerHTML  "Paula Rego" ;
+        whatwg:innerText  "Paula Rego" .
+
+<http://www.example.org/document/html/body/div.annotation.expander/div/p/a/span.__cf_email__>
+        rdf:type            xhtml:span ;
+        rdf:_1              "[email&nbsp;protected]" ;
+        xhtml:class         "__cf_email__" ;
+        xhtml:data-cfemail  "741d1a121b341d1919155a1d11" ;
+        whatwg:innerHTML    "[email&nbsp;protected]" ;
+        whatwg:innerText    "[email protected]" .
+
+<http://www.example.org/document/html/body/div.annotation.expander/div/p>
+        rdf:type          xhtml:p ;
+        rdf:_1            "For copyright information, please contact the IMMA Collections team: " ;
+        rdf:_2            <http://www.example.org/document/html/body/div.annotation.expander/div/p/a> ;
+        rdf:_3            "." ;
+        xhtml:style       "display: none" ;
+        whatwg:innerHTML  "For copyright information, please contact the IMMA Collections team: <a href=\"/cdn-cgi/l/email-protection#254c4b434a654c4848440b4c40\"><span class=\"__cf_email__\" data-cfemail=\"741d1a121b341d1919155a1d11\">[email&nbsp;protected]</span></a>." ;
+        whatwg:innerText  "For copyright information, please contact the IMMA Collections team: [email protected]. [email protected] [email protected]" .
+
+<http://www.example.org/document/html/head>
+        rdf:type  xhtml:head .
+
+<http://www.example.org/document/html/body>
+        rdf:type          xhtml:body ;
+        rdf:_1            <http://www.example.org/document/html/body/div.annotation.expander> ;
+        whatwg:innerHTML  "<div class=\"annotation expander\"><span class=\"title\"> Image Caption </span>\n <div><a href=\"/artists/paula-rego\">Paula Rego</a>, <em>The Baker’s Wife</em>, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 \n  <p style=\"display: none\">For copyright information, please contact the IMMA Collections team: <a href=\"/cdn-cgi/l/email-protection#254c4b434a654c4848440b4c40\"><span class=\"__cf_email__\" data-cfemail=\"741d1a121b341d1919155a1d11\">[email&nbsp;protected]</span></a>.</p>\n </div>\n</div>" ;
+        whatwg:innerText  "Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Image Caption Paula Rego, The Baker’s Wife, 1989, Etching and aquatint on hand-made paper, 33.5 x 26.3 cm, Collection Irish Museum of Modern Art, Purchase, 1997 For copyright information, please contact the IMMA Collections team: [email protected]. Paula Rego The Baker’s Wife For copyright information, please contact the IMMA Collections team: [email protected]. [email protected] [email protected]" .

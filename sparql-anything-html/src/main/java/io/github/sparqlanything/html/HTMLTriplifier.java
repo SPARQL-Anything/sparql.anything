@@ -41,10 +41,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class HTMLTriplifier implements Triplifier {
 
@@ -57,6 +54,8 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String PROPERTY_BROWSER_TIMEOUT = "html.browser.timeout";
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
+
+	private String root;
 
 	private static String localName(Element element) {
 		String tagName = element.tagName().replace(':', '|');
@@ -80,7 +79,7 @@ public class HTMLTriplifier implements Triplifier {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		String root = Triplifier.getRootArgument(properties);
+		this.root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
@@ -91,7 +90,7 @@ public class HTMLTriplifier implements Triplifier {
 			log.trace("Extracting metadata (needs HTTP location)");
 			try {
 				URL url = Triplifier.getLocation(properties);
-				extractMetadata(url, properties, builder);
+				extractMetadata(Objects.requireNonNull(url), builder);
 			} catch (IOException | URISyntaxException | ExtractionException | TripleHandlerException e) {
 				e.printStackTrace();
 			}
@@ -106,7 +105,7 @@ public class HTMLTriplifier implements Triplifier {
 		if (properties.containsKey(PROPERTY_BROWSER)) {
 			log.debug("Browser used (needs an HTTP location): {}", url);
 			log.debug("Loading URL: {}", url);
-			doc = Jsoup.parse(useBrowserToNavigate(url.toString(), properties));
+			doc = Jsoup.parse(useBrowserToNavigate(Objects.requireNonNull(url).toString(), properties));
 		} else {
 			try (InputStream is = Triplifier.getInputStream(properties)) {
 				doc = Jsoup.parse(is, charset.toString(), Triplifier.getResourceId(properties));
@@ -125,16 +124,18 @@ public class HTMLTriplifier implements Triplifier {
 		int counter = 0;
 		for (Element element : elements) {
 			counter++;
+			String resourceId = toResourceId(element, blank_nodes);
 			if (elements.size() > 1) {
 				// link to root container
 				builder.addContainer(dataSourceId, rootResourceId, counter, toResourceId(element, blank_nodes));
 			} else {
 				// Is root container
 				rootResourceId = root;
+				resourceId = root;
 				builder.addRoot(dataSourceId, rootResourceId);
 			}
 			try {
-				populate(builder, dataSourceId, element, blank_nodes);
+				populate(builder, dataSourceId, element, blank_nodes, resourceId);
 			} catch (URISyntaxException e) {
 				throw new IOException(e);
 			}
@@ -152,22 +153,19 @@ public class HTMLTriplifier implements Triplifier {
 		return Sets.newHashSet("html");
 	}
 
-	private void extractMetadata(URL url, Properties properties, FacadeXGraphBuilder builder) throws IOException, URISyntaxException, ExtractionException, TripleHandlerException {
+	private void extractMetadata(URL url, FacadeXGraphBuilder builder) throws IOException, URISyntaxException, ExtractionException, TripleHandlerException {
 		Any23 runner = new Any23();
 		runner.setHTTPUserAgent("test-user-agent");
 		DocumentSource source = runner.createDocumentSource(url.toString());
-		TripleHandler handler = new MetadataWriter(builder);
-		try {
+		try (TripleHandler handler = new MetadataWriter(builder)) {
 			runner.extract(source, handler);
-		} finally {
-			handler.close();
 		}
 	}
 
-	private void populate(FacadeXGraphBuilder builder, String dataSourceId, Element element, boolean blank_nodes) throws URISyntaxException {
+	private void populate(FacadeXGraphBuilder builder, String dataSourceId, Element element, boolean blank_nodes, String resourceId) throws URISyntaxException {
 
 		String tagName = element.tagName(); // tagname is the type
-		String resourceId = toResourceId(element, blank_nodes);
+//		String resourceId = toResourceId(element, blank_nodes);
 		String innerHtml = element.html();
 		if (!innerHtml.trim().equals("")) {
 			builder.addValue(dataSourceId, resourceId, new URI(DOM_NS + "innerHTML"), innerHtml);
@@ -191,7 +189,7 @@ public class HTMLTriplifier implements Triplifier {
 			counter++;
 			if (child instanceof Element) {
 				builder.addContainer(dataSourceId, resourceId, counter, toResourceId((Element) child, blank_nodes));
-				populate(builder, dataSourceId, (Element) child, blank_nodes);
+				populate(builder, dataSourceId, (Element) child, blank_nodes, toResourceId((Element) child, blank_nodes));
 			} else {
 				builder.addValue(dataSourceId, resourceId, counter, child.outerHtml());
 			}
@@ -205,7 +203,7 @@ public class HTMLTriplifier implements Triplifier {
 		} else {
 			String ln = localName(element);
 			log.debug(ln);
-			return ln;
+			return this.root.concat("/").concat(ln);
 		}
 	}
 
@@ -215,7 +213,7 @@ public class HTMLTriplifier implements Triplifier {
 
 		// first pull out http headers that we need to pass to the browser
 		Map<String, String> props = new HashMap<String, String>((Map) properties);
-		Map<String, String> headers = new HashMap<String, String>();
+		Map<String, String> headers = new HashMap<>();
 		for (Map.Entry<String, String> entry : props.entrySet()) {
 			if (entry.getKey().matches("^" + HTTPHelper.HTTPHEADER_PREFIX + ".*")) { // TODO the dots need to be escaped
 				// in the regex
@@ -249,7 +247,7 @@ public class HTMLTriplifier implements Triplifier {
 		page.setExtraHTTPHeaders(headers);
 		Page.NavigateOptions options = new Page.NavigateOptions();
 		if (properties.containsKey(PROPERTY_BROWSER_TIMEOUT)) {
-			Integer timeoutMilliseconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_TIMEOUT));
+			int timeoutMilliseconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_TIMEOUT));
 			log.debug("headless browser navigating to url with timeout of {} milliseconds", timeoutMilliseconds);
 			options.setTimeout(timeoutMilliseconds);
 			page.navigate(url, options);
@@ -258,7 +256,7 @@ public class HTMLTriplifier implements Triplifier {
 		}
 		try {
 			if (properties.containsKey(PROPERTY_BROWSER_WAIT)) {
-				Integer waitSeconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_WAIT));
+				int waitSeconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_WAIT));
 				log.debug("headless browser navigated to url and now will wait for {} seconds...", waitSeconds);
 				// sleep before we try to pull the HTML content out the the browser
 				java.util.concurrent.TimeUnit.SECONDS.sleep(waitSeconds);
@@ -267,7 +265,7 @@ public class HTMLTriplifier implements Triplifier {
 				page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(new URI(properties.getProperty(PROPERTY_BROWSER_SCREENSHOT)))));
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			System.out.println(ex.getMessage());
 		}
 		String htmlFromBrowser = page.content() + getFrames(page.mainFrame());
 		// ^ TODO it would be better to put the iframes in the right place rather than
