@@ -55,7 +55,7 @@ public class YAMLTriplifier implements Triplifier {
 
 		try {
 			// Only 1 data source expected
-			String dataSourceId = Triplifier.getRootArgument(properties);
+			String dataSourceId = "";
 //			if (properties.containsKey(IRIArgument.ROOT.toString())) {
 //				logger.trace("Setting Data source Id using Root argument");
 //				dataSourceId = properties.getProperty(IRIArgument.ROOT.toString());

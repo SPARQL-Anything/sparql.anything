@@ -55,7 +55,7 @@ public class DocxTriplifier implements Triplifier {
 			return;
 
 		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		boolean mergeParagraphs = Boolean.parseBoolean(properties.getProperty(MERGE_PARAGRAPHS, "false"));
 		boolean headers = Boolean.parseBoolean(properties.getProperty(TABLE_HEADERS, "false"));

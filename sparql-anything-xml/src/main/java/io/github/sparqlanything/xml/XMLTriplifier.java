@@ -128,7 +128,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		String dataSourceId = Triplifier.getRootArgument(properties);
+		String dataSourceId = "";
 		String root = Triplifier.getRootArgument(properties);
 
 		builder.addRoot(dataSourceId, root);
@@ -239,7 +239,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	public void transformSAX(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
-		String dataSourceId = Triplifier.getRootArgument(properties);
+		String dataSourceId = "";
 		String root = Triplifier.getRootArgument(properties);
 
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
@@ -412,7 +412,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
-		final String dataSourceId = Triplifier.getRootArgument(properties);
+		final String dataSourceId = "";
 		final String root = Triplifier.getRootArgument(properties);
 		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
 

@@ -21,26 +21,26 @@
 <html/head/title> <https://html.spec.whatwg.org/#innerText> "Hello world!" .
 <html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#title> .
 <html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world!" .
-<html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/p.paragraph> <location> .
-<html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> <location> .
-<html/body> <https://html.spec.whatwg.org/#innerText> "Hello world Hello world" <location> .
-<html/body> <https://html.spec.whatwg.org/#innerHTML> "<p class=\"paragraph\">Hello world</p>" <location> .
-<html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head/title> <location> .
-<html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> <location> .
-<html/head> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world!" <location> .
-<html/head> <https://html.spec.whatwg.org/#innerHTML> "<title>Hello world!</title>" <location> .
-<html/body/p.paragraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world" <location> .
-<html/body/p.paragraph> <http://www.w3.org/1999/xhtml#class> "paragraph" <location> .
-<html/body/p.paragraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#p> <location> .
-<html/body/p.paragraph> <https://html.spec.whatwg.org/#innerText> "Hello world" <location> .
-<html/body/p.paragraph> <https://html.spec.whatwg.org/#innerHTML> "Hello world" <location> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body> <location> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head> <location> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <location> .
-<html> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world Hello world! Hello world! Hello world Hello world" <location> .
-<html> <https://html.spec.whatwg.org/#innerHTML> "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <p class=\"paragraph\">Hello world</p>\n</body>" <location> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <location> .
-<html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world!" <location> .
-<html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#title> <location> .
-<html/head/title> <https://html.spec.whatwg.org/#innerText> "Hello world!" <location> .
-<html/head/title> <https://html.spec.whatwg.org/#innerHTML> "Hello world!" <location> .
+<html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/p.paragraph> <http://www.example.org/document> .
+<html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> <http://www.example.org/document> .
+<html/body> <https://html.spec.whatwg.org/#innerText> "Hello world Hello world" <http://www.example.org/document> .
+<html/body> <https://html.spec.whatwg.org/#innerHTML> "<p class=\"paragraph\">Hello world</p>" <http://www.example.org/document> .
+<html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head/title> <http://www.example.org/document> .
+<html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> <http://www.example.org/document> .
+<html/head> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world!" <http://www.example.org/document> .
+<html/head> <https://html.spec.whatwg.org/#innerHTML> "<title>Hello world!</title>" <http://www.example.org/document> .
+<html/body/p.paragraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world" <http://www.example.org/document> .
+<html/body/p.paragraph> <http://www.w3.org/1999/xhtml#class> "paragraph" <http://www.example.org/document> .
+<html/body/p.paragraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#p> <http://www.example.org/document> .
+<html/body/p.paragraph> <https://html.spec.whatwg.org/#innerText> "Hello world" <http://www.example.org/document> .
+<html/body/p.paragraph> <https://html.spec.whatwg.org/#innerHTML> "Hello world" <http://www.example.org/document> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body> <http://www.example.org/document> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head> <http://www.example.org/document> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <http://www.example.org/document> .
+<html> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world Hello world! Hello world! Hello world Hello world" <http://www.example.org/document> .
+<html> <https://html.spec.whatwg.org/#innerHTML> "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <p class=\"paragraph\">Hello world</p>\n</body>" <http://www.example.org/document> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/document> .
+<html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world!" <http://www.example.org/document> .
+<html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#title> <http://www.example.org/document> .
+<html/head/title> <https://html.spec.whatwg.org/#innerText> "Hello world!" <http://www.example.org/document> .
+<html/head/title> <https://html.spec.whatwg.org/#innerHTML> "Hello world!" <http://www.example.org/document> .

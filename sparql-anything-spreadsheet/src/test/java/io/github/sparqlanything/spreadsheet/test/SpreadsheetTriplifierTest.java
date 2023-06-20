@@ -16,20 +16,17 @@
 
 package io.github.sparqlanything.spreadsheet.test;
 
+import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.spreadsheet.SpreadsheetTriplifier;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
 public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
-	static private Logger L = LoggerFactory.getLogger(SpreadsheetTriplifierTest.class);
 
 	public SpreadsheetTriplifierTest() {
 		super(new SpreadsheetTriplifier(), new Properties(), "xls", "nq");
-		super.useDatasetGraph = true;
 	}
 
 
@@ -39,7 +36,7 @@ public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
 
 		// SliceArray
 		if(name.getMethodName().equals("testNullString$1")){
-			properties.setProperty("null-string", "");
+			properties.setProperty(IRIArgument.NULL_STRING.toString(), "");
 		}
 
 		if(name.getMethodName().equals("testFormulaEvaluator")){

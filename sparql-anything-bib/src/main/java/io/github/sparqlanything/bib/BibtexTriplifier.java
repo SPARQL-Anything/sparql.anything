@@ -45,7 +45,7 @@ public class BibtexTriplifier implements Triplifier {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
 		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 
 		builder.addRoot(dataSourceId, root);

@@ -68,8 +68,8 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		try (InputStream us = Triplifier.getInputStream(properties)) {
 			JsonParser parser = factory.createParser(us);
 			// Only 1 data source expected
-			String dataSourceId = Triplifier.getRootArgument(properties);
-			transformJSON(parser, dataSourceId, Triplifier.getRootArgument(properties), builder);
+//			String dataSourceId = Triplifier.getRootArgument(properties);
+			transformJSON(parser, "", Triplifier.getRootArgument(properties), builder);
 		}
 	}
 
@@ -315,13 +315,13 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			Iterator<ValueBox<Collection<Object>>> matchesIterator = matches.iterator();
 			// Only 1 data source expected
 			String rootId = Triplifier.getRootArgument(properties);
-			String dataSourceId = rootId;
-			builder.addRoot(dataSourceId, rootId);
+//			String dataSourceId = rootId;
+			builder.addRoot("", rootId);
 			int c = 0;
 			while (matchesIterator.hasNext()) {
 				Iterator<Object> it = matchesIterator.next().get().iterator();
 				while (it.hasNext()) {
-					transformArrayItem(c, it.next(), dataSourceId, rootId, builder);
+					transformArrayItem(c, it.next(), "", rootId, builder);
 					c++;
 				}
 			}
@@ -353,7 +353,6 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 		// Only 1 data source expected
 		String rootId = Triplifier.getRootArgument(properties);
-		String dataSourceId = rootId;
 		return new Iterable<Slice>() {
 			JsonToken next = null;
 
@@ -394,7 +393,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 						log.trace("next slice: {}", sln);
 						JsonToken tk = next;
 						next = null;
-						return JSONSlice.makeSlice(tk, parser, sln, rootId, dataSourceId);
+						return JSONSlice.makeSlice(tk, parser, sln, rootId, "");
 					}
 				};
 			}
@@ -418,7 +417,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			Iterator<ValueBox<Collection<Object>>> matchesIterator = matches.iterator();
 			// Only 1 data source expected
 			String rootId = Triplifier.getRootArgument(properties);
-			String dataSourceId = rootId;
+//			String dataSourceId = rootId;
 			return new Iterable<Slice>() {
 				@Override
 				public Iterator<Slice> iterator() {
@@ -471,7 +470,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 							log.trace("next slice: {}", sln);
 							Object obj = next;
 							next = null;
-							return JSONPathSlice.makeSlice(obj, sln, rootId, dataSourceId);
+							return JSONPathSlice.makeSlice(obj, sln, rootId, "");
 						}
 					};
 				}

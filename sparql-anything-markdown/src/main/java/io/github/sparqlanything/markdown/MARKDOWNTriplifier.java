@@ -116,8 +116,8 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 
 		try {
 			// Only 1 data source expected
-			String dataSourceId = Triplifier.getRootArgument(properties);
-			rootId = dataSourceId;
+			String dataSourceId = "";
+			rootId =  Triplifier.getRootArgument(properties);
 			logger.trace("ds {} root {}", dataSourceId, rootId);
 			before(properties, builder, dataSourceId, rootId);
 			document.accept(this);

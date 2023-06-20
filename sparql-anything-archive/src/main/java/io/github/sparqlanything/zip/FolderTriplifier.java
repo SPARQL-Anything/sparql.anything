@@ -45,7 +45,7 @@ public class FolderTriplifier implements Triplifier {
 			return;
 		}
 		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
 		logger.trace("Matches {}", matches);

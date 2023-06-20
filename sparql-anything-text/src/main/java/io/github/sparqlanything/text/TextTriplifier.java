@@ -55,7 +55,7 @@ public class TextTriplifier implements Triplifier {
 //			dataSourceId = root;
 //		}
 		root = Triplifier.getRootArgument(properties);
-		dataSourceId = root; //
+		dataSourceId = ""; //
 		value = IOUtils.toString(Triplifier.getInputStream(properties), Triplifier.getCharsetArgument(properties));
 
 //		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);

@@ -122,7 +122,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 
-		String dataSourceId = Triplifier.getRootArgument(properties); // there is always 1 data source id
+		String dataSourceId = ""; // there is always 1 data source id
 
 		// Add type Root
 		builder.addRoot(dataSourceId, root);
@@ -202,7 +202,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		Charset charset = Triplifier.getCharsetArgument(properties);
 
 //		boolean headers = hasHeaders(properties);
-		String dataSourceId = Triplifier.getRootArgument(properties); // there is always 1 data source id
+		String dataSourceId = ""; // there is always 1 data source id
 //		String containerRowPrefix = root + "#row";
 
 		// XXX How do we close the inputstream?

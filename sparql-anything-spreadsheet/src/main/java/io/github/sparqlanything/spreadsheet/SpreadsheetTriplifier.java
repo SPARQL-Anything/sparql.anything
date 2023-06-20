@@ -66,8 +66,8 @@ public class SpreadsheetTriplifier implements Triplifier {
 		this.evaluator = wb.getCreationHelper().createFormulaEvaluator();
 
 		wb.sheetIterator().forEachRemaining(s -> {
-			String dataSourceId = root + Triplifier.toSafeURIString(s.getSheetName());
-			populate(s, dataSourceId, dataSourceId, builder, headers.get(), evaluateFormulas, compositeValues, namespace);
+			String dataSourceId = Triplifier.toSafeURIString(s.getSheetName());
+			populate(s, dataSourceId, root.concat(dataSourceId), builder, headers.get(), evaluateFormulas, compositeValues, namespace);
 		});
 
 	}

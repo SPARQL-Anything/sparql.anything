@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 public class MetadataWriter extends TripleWriterHandler {
 	private static final Logger log = LoggerFactory.getLogger(MetadataWriter.class);
-	private FacadeXGraphBuilder facadeXGraphBuilder;
+	private final FacadeXGraphBuilder facadeXGraphBuilder;
 	private String runningExtractor = null;
 
 	public MetadataWriter(FacadeXGraphBuilder facadeXGraphBuilder) {
@@ -58,9 +58,8 @@ public class MetadataWriter extends TripleWriterHandler {
 
 	@Override
 	public void writeTriple(Resource s, IRI p, Value o, Resource g) throws TripleHandlerException {
-		log.debug("Graph: {} ({})", g, runningExtractor, g);
-		facadeXGraphBuilder.add(resolveValue(g), resolveValue(s), NodeFactory.createURI(p.stringValue()),
-				resolveValue(o));
+		log.debug("Write metadata triple on graph: {}", g);
+		facadeXGraphBuilder.add(facadeXGraphBuilder.dataSourceId2node(""), resolveValue(s), NodeFactory.createURI(p.stringValue()), resolveValue(o));
 	}
 
 	public Node resolveValue(Value r) {

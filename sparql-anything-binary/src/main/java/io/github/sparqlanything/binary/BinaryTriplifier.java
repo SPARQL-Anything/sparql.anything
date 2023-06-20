@@ -64,7 +64,7 @@ public class BinaryTriplifier implements Triplifier {
 		}
 
 		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 //		Charset charset = getCharsetArgument(properties);
 //		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
 //		String namespace = url.toString() + "#";

@@ -32,6 +32,7 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	static private Logger logger = LoggerFactory.getLogger(MoreJSONTriplifierTest.class);
 	public MoreJSONTriplifierTest() {
 		super(new JSONTriplifier(), new Properties(), "json");
+		this.printWholeGraph = true;
 	}
 	@Override
 	protected void properties(Properties properties) {

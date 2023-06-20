@@ -45,7 +45,7 @@ public class ZipTriplifier implements Triplifier {
 			return;
 		}
 		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		String matches = properties.getProperty(MATCHES, ".*");
 
