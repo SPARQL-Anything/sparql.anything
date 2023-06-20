@@ -16,11 +16,13 @@
 
 package io.github.sparqlanything.testutils;
 
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.shared.PrefixMapping;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.util.iterator.ExtendedIterator;
@@ -91,6 +93,9 @@ public class TestUtils {
 
 	public static final void printWholeGraph(Graph expected, Graph obtained, boolean expectedResultsAvailable) {
 		ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
+		expected.getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+		obtained.getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+
 
 		if (expectedResultsAvailable) RDFDataMgr.write(baosExpected, expected, Lang.TTL);
 		ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
