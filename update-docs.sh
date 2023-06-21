@@ -16,9 +16,10 @@
 # limitations under the License.
 #
 
-git add README.md .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
+git add README.md Facade-X.md .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
 git add formats/*
 cp -f README.md docs/
+cp -f Facade-X.md docs/
 cp -f BROWSER.md docs/
 cp -f Configuration.md docs/
 cp -f FUNCTIONS_AND_MAGIC_PROPERTIES.md docs/
