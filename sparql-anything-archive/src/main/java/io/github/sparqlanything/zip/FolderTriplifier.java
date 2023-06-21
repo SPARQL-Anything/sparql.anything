@@ -44,13 +44,12 @@ public class FolderTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = "";
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
 		logger.trace("Matches {}", matches);
 
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		try {
 			Path path = Paths.get(url.toURI());
@@ -58,7 +57,7 @@ public class FolderTriplifier implements Triplifier {
 			Files.walk(path).forEach(p -> {
 				logger.trace("{} matches? {}", p.toString(), path.toString().matches(matches));
 				if (p.toString().matches(matches)) {
-					builder.addValue(dataSourceId, root, i.getAndIncrement(), p.toUri().toString());
+					builder.addValue(dataSourceId, builder.getRoot(dataSourceId), i.getAndIncrement(), p.toUri().toString());
 				}
 			});
 

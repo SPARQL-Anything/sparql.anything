@@ -52,13 +52,6 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	private static Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 	public static final String PROPERTY_JSONPATH = "json.path";
-//	private String[] getDataSources(URL url) {
-//		return new String[] { url.toString() };
-//	}
-//
-//	private String getRootId(URL url, String dataSourceId, Properties properties) {
-//		return Triplifier.getRootArgument(properties);
-//	}
 
 	private void transform(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
@@ -69,14 +62,14 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			JsonParser parser = factory.createParser(us);
 			// Only 1 data source expected
 //			String dataSourceId = Triplifier.getRootArgument(properties);
-			transformJSON(parser, "", Triplifier.getRootArgument(properties), builder);
+			transformJSON(parser, "", builder.getRoot(""), builder);
 		}
 	}
 
 	private void transformJSON(JsonParser parser, String dataSourceId, String rootId, FacadeXGraphBuilder builder)
 			throws IOException {
 
-		builder.addRoot(dataSourceId, rootId);
+		builder.addRoot(dataSourceId);
 		logger.trace("Transforming json (dataSourceId {} rootId {})", dataSourceId, rootId);
 		JsonToken token = parser.nextToken();
 		if (token == JsonToken.START_OBJECT) {
@@ -316,7 +309,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			// Only 1 data source expected
 			String rootId = Triplifier.getRootArgument(properties);
 //			String dataSourceId = rootId;
-			builder.addRoot("", rootId);
+			builder.addRoot("");
 			int c = 0;
 			while (matchesIterator.hasNext()) {
 				Iterator<Object> it = matchesIterator.next().get().iterator();
@@ -393,7 +386,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 						log.trace("next slice: {}", sln);
 						JsonToken tk = next;
 						next = null;
-						return JSONSlice.makeSlice(tk, parser, sln, rootId, "");
+						return JSONSlice.makeSlice(tk, parser, sln, "");
 					}
 				};
 			}
@@ -470,7 +463,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 							log.trace("next slice: {}", sln);
 							Object obj = next;
 							next = null;
-							return JSONPathSlice.makeSlice(obj, sln, rootId, "");
+							return JSONPathSlice.makeSlice(obj, sln,  "");
 						}
 					};
 				}
@@ -498,17 +491,17 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
-		builder.addRoot(slice.getDatasourceId(), slice.getRootId());
+		builder.addRoot(slice.getDatasourceId());
 		try {
 			if (slice instanceof JSONSlice) {
 				JSONSlice jslice = (JSONSlice) slice;
 				// Method is 0-indexed
 				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(),
-						jslice.getRootId(), builder);
+						builder.getRoot(jslice.getDatasourceId()), builder);
 			} else if (slice instanceof JSONPathSlice) {
 				JSONPathSlice jslice = (JSONPathSlice) slice;
 				// Method is 0-indexed
-				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getDatasourceId(), jslice.getRootId(),
+				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getDatasourceId(), builder.getRoot(jslice.getDatasourceId()),
 						builder);
 			}
 		} catch (IOException e) {

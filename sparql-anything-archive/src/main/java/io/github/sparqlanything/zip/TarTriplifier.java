@@ -44,14 +44,13 @@ public class TarTriplifier implements Triplifier {
 			return;
 		}
 		Charset charset = Triplifier.getCharsetArgument(properties);
-		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = "";
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
 		logger.trace("Matches {}", matches);
 
 //		Graph g = GraphFactory.createDefaultGraph();
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		try {
 			TarArchiveInputStream debInputStream = (TarArchiveInputStream) new ArchiveStreamFactory()
@@ -61,7 +60,7 @@ public class TarTriplifier implements Triplifier {
 			while ((entry = (TarArchiveEntry) debInputStream.getNextEntry()) != null) {
 
 				if (entry.getName().matches(matches)) {
-					builder.addValue(dataSourceId, root, i, entry.getName());
+					builder.addValue(dataSourceId, builder.getRoot(dataSourceId), i, entry.getName());
 					i++;
 				}
 

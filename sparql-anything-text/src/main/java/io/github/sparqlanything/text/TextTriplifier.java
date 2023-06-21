@@ -33,40 +33,22 @@ import io.github.sparqlanything.model.TriplifierHTTPException;
 
 public class TextTriplifier implements Triplifier {
 
-	private static Logger logger = LoggerFactory.getLogger(TextTriplifier.class);
-
 	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
+	private static final Logger logger = LoggerFactory.getLogger(TextTriplifier.class);
 
 	@Override
-	public void triplify(Properties properties, FacadeXGraphBuilder builder)
-			throws IOException, TriplifierHTTPException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		String value;
-		String root;
-		String dataSourceId;
-		//URL url = Triplifier.getLocation(properties);
-//		if (url == null) {
-//			value = properties.getProperty(IRIArgument.CONTENT.toString(), "");
-//			root = Triplifier.getRootArgument(properties);
-//			dataSourceId = root; //
-//		} else {
-//			value = readFromURL(url, properties);
-//			root = Triplifier.getRootArgument(properties);
-//			dataSourceId = root;
-//		}
-		root = Triplifier.getRootArgument(properties);
-		dataSourceId = ""; //
+		String dataSourceId = "";
+		String root = builder.getRoot(dataSourceId);
 		value = IOUtils.toString(Triplifier.getInputStream(properties), Triplifier.getCharsetArgument(properties));
-
-//		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
-
-		String rootResourceId = root;
 
 		if (logger.isTraceEnabled()) {
 			logger.trace("Content:\n{}\n", value);
 		}
 
-		builder.addRoot(dataSourceId, rootResourceId);
+		builder.addRoot(dataSourceId);
 
 		Pattern pattern = null;
 		if (properties.containsKey(REGEX)) {
@@ -104,11 +86,11 @@ public class TextTriplifier implements Triplifier {
 			int count = 1;
 			while (m.find()) {
 				if (group >= 1) {
-					logger.trace("Adding value from group {}: slot {} - {}",group ,count, m.group(group));
-					builder.addValue(dataSourceId, rootResourceId, count, m.group(group));
+					logger.trace("Adding value from group {}: slot {} - {}", group, count, m.group(group));
+					builder.addValue(dataSourceId, root, count, m.group(group));
 				} else {
 					logger.trace("Adding value {} {}", count, m.group());
-					builder.addValue(dataSourceId, rootResourceId, count, m.group());
+					builder.addValue(dataSourceId, root, count, m.group());
 				}
 				count++;
 			}
@@ -120,11 +102,11 @@ public class TextTriplifier implements Triplifier {
 				logger.trace("Splitting regex: {}", properties.getProperty(SPLIT));
 				String[] split = value.split(properties.getProperty(SPLIT));
 				for (int i = 0; i < split.length; i++) {
-					builder.addValue(dataSourceId, rootResourceId, i + 1, split[i]);
+					builder.addValue(dataSourceId, root, i + 1, split[i]);
 				}
 
 			} else {
-				builder.addValue(dataSourceId, rootResourceId, 1, value);
+				builder.addValue(dataSourceId, root, 1, value);
 			}
 
 		}

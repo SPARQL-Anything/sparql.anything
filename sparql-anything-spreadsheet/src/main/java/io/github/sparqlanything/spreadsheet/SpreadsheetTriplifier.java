@@ -49,8 +49,6 @@ public class SpreadsheetTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		String root = Triplifier.getRootArgument(properties);
-		logger.trace("Root {}", root);
 		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
 		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
@@ -67,7 +65,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = Triplifier.toSafeURIString(s.getSheetName());
-			populate(s, dataSourceId, root.concat(dataSourceId), builder, headers.get(), evaluateFormulas, compositeValues, namespace);
+			populate(s, dataSourceId, builder.getRoot(dataSourceId), builder, headers.get(), evaluateFormulas, compositeValues, namespace);
 		});
 
 	}
@@ -75,7 +73,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 	private void populate(Sheet s, String dataSourceId, String root, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, String namespace) {
 
 		// Add type Root
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		int rown = 0; // this counts the LI index not the spreadsheet rows
 		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();

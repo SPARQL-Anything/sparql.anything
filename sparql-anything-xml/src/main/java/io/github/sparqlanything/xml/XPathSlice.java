@@ -42,16 +42,11 @@ public class XPathSlice implements Slice<Pair<VTDNav,Integer>> {
 		return dataSourceId;
 	}
 
-	@Override
-	public String getRootId() {
-		return rootId;
-	}
 
-	public static final XPathSlice make(VTDNav nav, int index, int iteration, String rootId, String dataSourceId){
+	public static final XPathSlice make(VTDNav nav, int index, int iteration, String dataSourceId){
 		XPathSlice slice = new XPathSlice();
 		slice.iteration = iteration;
 		slice.slice = Pair.of(nav, index);
-		slice.rootId = rootId;
 		slice.dataSourceId = dataSourceId;
 		return slice;
 	}

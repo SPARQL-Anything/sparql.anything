@@ -27,6 +27,7 @@ public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
 
 	public SpreadsheetTriplifierTest() {
 		super(new SpreadsheetTriplifier(), new Properties(), "xls", "nq");
+		this.printWholeGraph = true;
 	}
 
 

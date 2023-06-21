@@ -119,13 +119,12 @@ public class CSVTriplifier implements Triplifier, Slicer {
 //			return;
 
 		CSVFormat format = buildFormat(properties);
-		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 
 		String dataSourceId = ""; // there is always 1 data source id
 
 		// Add type Root
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		try (InputStream is = Triplifier.getInputStream(properties);){
 			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
@@ -145,7 +144,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					log.debug("current row num: {}", rown);
 				}
 				CSVRecord record = recordIterator.next();
-				processRow(rown, dataSourceId, root, record, headers_map, builder);
+				processRow(rown, dataSourceId, builder.getRoot(dataSourceId), record, headers_map, builder);
 			}
 			log.debug("{} records", rown);
 		} catch (IllegalArgumentException e) {
@@ -230,7 +229,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					public Slice next() {
 						rown++;
 						log.trace("next slice: {}", rown);
-						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, root, headers_map);
+						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId,  headers_map);
 					}
 				};
 			}
@@ -240,7 +239,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
 		CSVSlice csvo = (CSVSlice) slice;
-		builder.addRoot(csvo.getDatasourceId(), csvo.getRootId());
-		processRow(csvo.iteration(), csvo.getDatasourceId(), csvo.getRootId(), csvo.get(), csvo.getHeaders(), builder);
+		builder.addRoot(csvo.getDatasourceId());
+		processRow(csvo.iteration(), csvo.getDatasourceId(), builder.getRoot(csvo.getDatasourceId()), csvo.get(), csvo.getHeaders(), builder);
 	}
 }

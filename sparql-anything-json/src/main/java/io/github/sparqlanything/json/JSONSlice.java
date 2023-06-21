@@ -28,8 +28,6 @@ public class JSONSlice implements Slice<JsonToken> {
 	private JsonParser parser;
 	private int iteration;
 	private String dataSourceId;
-	private String rootId;
-
 	private JSONSlice(){}
 
 	@Override
@@ -51,18 +49,12 @@ public class JSONSlice implements Slice<JsonToken> {
 		return dataSourceId;
 	}
 
-	@Override
-	public String getRootId() {
-		return rootId;
-	}
-
-	public static JSONSlice makeSlice(JsonToken token, JsonParser parser, int iteration, String rootId, String dataSourceId){
+	public static JSONSlice makeSlice(JsonToken token, JsonParser parser, int iteration, String dataSourceId){
 		JSONSlice r = new JSONSlice();
 		r.token = token;
 		r.parser = parser;
 		r.iteration = iteration;
 		r.dataSourceId = dataSourceId;
-		r.rootId = rootId;
 		return r;
 	}
 }

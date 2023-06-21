@@ -185,7 +185,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 //		this.lastSlot.put(parentId, slot);
 		this.containers.put(node, containerId);
 		this.lastSlot.put(containerId, 0);
-		this.builder.addRoot(dataSourceId, rootId);
+		this.builder.addRoot(dataSourceId);
 		this.visitChildren(node);
 	}
 

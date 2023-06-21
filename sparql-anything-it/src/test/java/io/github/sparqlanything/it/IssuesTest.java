@@ -747,6 +747,23 @@ public class IssuesTest {
 	}
 
 	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/386">...</a>
+	 */
+	@Test
+	public void testIssue386() throws URISyntaxException, IOException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue386.sparql")).toURI(), StandardCharsets.UTF_8);
+		query = QueryFactory.create(queryStr);
+		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+		ResultSet rs = qExec.execSelect();
+		assertTrue(rs.hasNext());
+		assertEquals("http://example.org/document",rs.next().get("root").asResource().getURI());
+		assertFalse(rs.hasNext());
+	}
+
+	/**
 	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/371">...</a>
 	 */
 	@Ignore

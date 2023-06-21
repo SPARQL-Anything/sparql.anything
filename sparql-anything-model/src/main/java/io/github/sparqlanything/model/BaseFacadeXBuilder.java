@@ -78,8 +78,8 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		return addSlotStatement(dataSourceId, containerId, slotKey, value, false);
 	}
 
-	public boolean addRoot(String dataSourceId, String rootId) {
-		return add(dataSourceId2node(dataSourceId), container2node(rootId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
+	public boolean addRoot(String dataSourceId) {
+		return add(dataSourceId2node(dataSourceId), container2node(getRoot(dataSourceId)), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
 	}
 
 	private boolean addSlotStatement(String dataSourceId, String containerId, Integer slotKey, Object object, boolean isObjectContainer) {
@@ -113,8 +113,8 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		return p_namespace;
 	}
 
-	public String getRoot() {
-		return p_root;
+	public String getRoot(String dataSourceId) {
+		return p_root.concat(dataSourceId);
 	}
 
 }

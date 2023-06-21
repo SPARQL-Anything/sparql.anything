@@ -1,0 +1,13 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+SELECT ?root {
+
+    SERVICE<x-sparql-anything:> {
+        fx:properties fx:content "<root><child>child1</child><child>child2</child></root>" ;
+            fx:media-type "application/xml" ;
+            fx:blank-nodes false ;
+            fx:root "http://example.org/document" .
+
+        ?root a fx:root .
+
+    }
+}

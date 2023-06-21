@@ -44,19 +44,18 @@ public class ZipTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = "";
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		String matches = properties.getProperty(MATCHES, ".*");
 
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		ZipInputStream zis = new ZipInputStream(url.openStream(), charset);
 		ZipEntry ze;
 		int i = 1;
 		while ((ze = zis.getNextEntry()) != null) {
 			if (ze.getName().matches(matches)) {
-				builder.addValue(dataSourceId, root, i, NodeFactory.createLiteral(ze.getName()));
+				builder.addValue(dataSourceId, builder.getRoot(dataSourceId), i, NodeFactory.createLiteral(ze.getName()));
 				i++;
 			}
 		}

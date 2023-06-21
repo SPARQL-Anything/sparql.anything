@@ -74,7 +74,7 @@ public class YAMLTriplifier implements Triplifier {
 	}
 
 	private void transformYAML(Iterable<Object> iter, String dataSourceId, String rootId, FacadeXGraphBuilder builder) {
-		builder.addRoot(dataSourceId,rootId);
+		builder.addRoot(dataSourceId);
 		Iterator<Object> iterator = iter.iterator();
 		while(iterator.hasNext()){
 			Object value = iterator.next();

@@ -54,19 +54,18 @@ public class DocxTriplifier implements Triplifier {
 		if (url == null)
 			return;
 
-		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = "";
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		boolean mergeParagraphs = Boolean.parseBoolean(properties.getProperty(MERGE_PARAGRAPHS, "false"));
 		boolean headers = Boolean.parseBoolean(properties.getProperty(TABLE_HEADERS, "false"));
 
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		InputStream is = url.openStream();
 		try (XWPFDocument document = new XWPFDocument(is)) {
 			List<XWPFParagraph> paragraphs = document.getParagraphs();
 
-			builder.addType(dataSourceId, root, namespace + "Document");
+			builder.addType(dataSourceId, builder.getRoot(dataSourceId), namespace + "Document");
 
 			int count = 1;
 			if (!mergeParagraphs) {
@@ -83,7 +82,7 @@ public class DocxTriplifier implements Triplifier {
 					}
 					
 
-					builder.addContainer(dataSourceId, root, count, paragraphURI);
+					builder.addContainer(dataSourceId, builder.getRoot(dataSourceId), count, paragraphURI);
 					builder.addValue(dataSourceId, paragraphURI, 1, para.getText());
 
 					count++;
@@ -95,7 +94,7 @@ public class DocxTriplifier implements Triplifier {
 					sb.append(para.getText());
 					sb.append("\n");
 				}
-				builder.addValue(dataSourceId, root, count,
+				builder.addValue(dataSourceId, builder.getRoot(dataSourceId), count,
 						NodeFactory.createLiteral(sb.toString(), XSDDatatype.XSDstring));
 				count++;
 			}
@@ -105,7 +104,7 @@ public class DocxTriplifier implements Triplifier {
 				XWPFTable xwpfTable = (XWPFTable) it.next();
 
 				String tableId = namespace + "Table_" + count;
-				builder.addContainer(dataSourceId, root, count, tableId);
+				builder.addContainer(dataSourceId, builder.getRoot(dataSourceId), count, tableId);
 
 				LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
 				int rown = 0;

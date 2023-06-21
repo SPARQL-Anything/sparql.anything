@@ -63,7 +63,6 @@ public class BinaryTriplifier implements Triplifier {
 			logger.warn("Using default encoding (Base64)");
 		}
 
-		String root = Triplifier.getRootArgument(properties);
 		String dataSourceId = "";
 //		Charset charset = getCharsetArgument(properties);
 //		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
@@ -81,9 +80,9 @@ public class BinaryTriplifier implements Triplifier {
 			break;
 		}
 		// Add root
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 		// Add content
-		builder.addValue(dataSourceId, root, 1, NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary));
+		builder.addValue(dataSourceId, builder.getRoot(dataSourceId), 1, NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary));
 	}
 
 	private byte[] downloadUrl(URL toDownload) {

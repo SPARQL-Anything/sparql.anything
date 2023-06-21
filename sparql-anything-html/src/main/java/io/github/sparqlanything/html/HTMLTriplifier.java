@@ -55,7 +55,6 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
-	private String root;
 
 	private static String localName(Element element) {
 		String tagName = element.tagName().replace(':', '|');
@@ -79,11 +78,12 @@ public class HTMLTriplifier implements Triplifier {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		this.root = Triplifier.getRootArgument(properties);
+//		this.root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
+		String dataSourceId = "";
 
 		log.trace(properties.toString());
 		if (properties.containsKey(PROPERTY_METADATA) && Boolean.parseBoolean(properties.getProperty(PROPERTY_METADATA))) {
@@ -96,7 +96,7 @@ public class HTMLTriplifier implements Triplifier {
 			}
 		}
 
-		log.trace("namespace {}\n root {}\ncharset {}\nselector {}", namespace, root, charset, selector);
+		log.trace("namespace {}\n root {}\ncharset {}\nselector {}", namespace, builder.getRoot(dataSourceId), charset, selector);
 
 		Document doc;
 		// If location is a http or https, raise exception if status is not 200
@@ -114,25 +114,25 @@ public class HTMLTriplifier implements Triplifier {
 
 		Elements elements = doc.select(selector);
 		String rootResourceId = null;
-		String dataSourceId = "";
+
 		if (elements.size() > 1) {
 			// Create a root container
-			rootResourceId = root;
-			builder.addRoot(dataSourceId, rootResourceId);
+			rootResourceId = builder.getRoot(dataSourceId);
+			builder.addRoot(dataSourceId);
 		}
 
 		int counter = 0;
 		for (Element element : elements) {
 			counter++;
-			String resourceId = toResourceId(element, blank_nodes);
+			String resourceId = toResourceId(element, blank_nodes, builder, dataSourceId);
 			if (elements.size() > 1) {
 				// link to root container
-				builder.addContainer(dataSourceId, rootResourceId, counter, toResourceId(element, blank_nodes));
+				builder.addContainer(dataSourceId, rootResourceId, counter, toResourceId(element, blank_nodes, builder, dataSourceId));
 			} else {
 				// Is root container
-				rootResourceId = root;
-				resourceId = root;
-				builder.addRoot(dataSourceId, rootResourceId);
+				rootResourceId = builder.getRoot(dataSourceId);
+				resourceId = builder.getRoot(dataSourceId);
+				builder.addRoot(dataSourceId);
 			}
 			try {
 				populate(builder, dataSourceId, element, blank_nodes, resourceId);
@@ -188,8 +188,8 @@ public class HTMLTriplifier implements Triplifier {
 			if (child.outerHtml().trim().equals("")) continue;
 			counter++;
 			if (child instanceof Element) {
-				builder.addContainer(dataSourceId, resourceId, counter, toResourceId((Element) child, blank_nodes));
-				populate(builder, dataSourceId, (Element) child, blank_nodes, toResourceId((Element) child, blank_nodes));
+				builder.addContainer(dataSourceId, resourceId, counter, toResourceId((Element) child, blank_nodes, builder, dataSourceId));
+				populate(builder, dataSourceId, (Element) child, blank_nodes, toResourceId((Element) child, blank_nodes, builder, dataSourceId));
 			} else {
 				builder.addValue(dataSourceId, resourceId, counter, child.outerHtml());
 			}
@@ -197,13 +197,13 @@ public class HTMLTriplifier implements Triplifier {
 
 	}
 
-	private String toResourceId(Element element, boolean blankNodes) {
+	private String toResourceId(Element element, boolean blankNodes, FacadeXGraphBuilder builder, String dataSourceId) {
 		if (blankNodes) {
 			return Integer.toHexString(element.hashCode());
 		} else {
 			String ln = localName(element);
 			log.debug(ln);
-			return this.root.concat("/").concat(ln);
+			return builder.getRoot(dataSourceId).concat("/").concat(ln);
 		}
 	}
 

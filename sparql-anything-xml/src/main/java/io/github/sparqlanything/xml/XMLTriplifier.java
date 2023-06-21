@@ -53,112 +53,41 @@ import java.util.Set;
 
 public class XMLTriplifier implements Triplifier, Slicer {
 
-	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
-
 	public static final String PROPERTY_XPATH = "xml.path";
-
-	private VTDNav buildVTDNav(Properties properties) throws TriplifierHTTPException, IOException, ParseException {
-		VTDGen vg = new VTDGen();
-		byte[] bytes = IOUtils.toByteArray(Triplifier.getInputStream(properties));
-		vg.setDoc(bytes);
-		// TODO Support namespaces
-		vg.parse(false);
-		VTDNav vn = vg.getNav();
-		return vn;
-	}
-
-	private Iterator<Pair<VTDNav,Integer>> evaluateXPaths(VTDNav vn, List<String> xpaths){
-		return new Iterator<Pair<VTDNav, Integer>>() {
-			int count = 0;
-			Iterator<String> xit = xpaths.iterator();
-			Pair<VTDNav, Integer> next = null;
-			AutoPilot ap = new AutoPilot(vn);
-			String xpath = null;
-			@Override
-			public boolean hasNext() {
-				try {
-					if (next != null) {
-						return true;
-					}
-					// If XPath is already loaded, move to the next result
-					int result = -1;
-					if( xpath != null ){
-						result = ap.evalXPath();
-						if(result == -1){
-							// No more results with this XPath
-							xpath = null;
-						}
-					}
-					// Look for next xpath with results
-					while (xpath == null && xit.hasNext()) {
-						// If XPath is available, load it and move to the next result
-						xpath = xit.next();
-						log.debug("Evaluating XPath: {}", xpath);
-						ap.selectXPath(xpath);
-						result = ap.evalXPath();
-						if(result == -1){
-							xpath = null;
-						}else{
-							// Stop here for now
-							break;
-						}
-					}
-
-					if(result == -1){
-						// No more results
-						return false;
-					}else{
-						// Prepare next result
-						next = Pair.of(vn, result);
-						return true;
-					}
-				}catch(XPathParseException|XPathEvalException|NavException e){
-					throw new RuntimeException(e);
-				}
-			}
-
-			@Override
-			public Pair<VTDNav, Integer> next() {
-				Pair<VTDNav, Integer> toReturn = next;
-				next = null;
-				return toReturn;
-			}
-		};
-	}
+	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		String dataSourceId = "";
-		String root = Triplifier.getRootArgument(properties);
+		String root = builder.getRoot("");
 
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 		try {
 			VTDNav vn = buildVTDNav(properties);
-			Iterator<String> xit = xpaths.iterator();
-			Iterator<Pair<VTDNav,Integer>> it = evaluateXPaths(vn,xpaths);
+			Iterator<Pair<VTDNav, Integer>> it = evaluateXPaths(vn, xpaths);
 			int count = 1;
-			while(it.hasNext()) {
-				Pair<VTDNav,Integer> next = it.next();
-				transformFromXPath(next.getKey(), next.getValue(), count, root, dataSourceId, properties, builder);
+			while (it.hasNext()) {
+				Pair<VTDNav, Integer> next = it.next();
+				transformFromXPath(next.getKey(), next.getValue(), count, root, dataSourceId, builder);
 				count++;
 			}
 			log.debug("XPath: {} matches", count);
 
-		} catch (NavException | ParseException e){
+		} catch (NavException | ParseException e) {
 			log.error("Error while evaluating XPath expression");
 			throw new IOException(e);
 		}
 	}
 
-	public int transformFromXPath(VTDNav vn, int result, int child, String parentId, String dataSourceId, Properties properties, FacadeXGraphBuilder builder) throws NavException {
+	public int transformFromXPath(VTDNav vn, int result, int child, String parentId, String dataSourceId, FacadeXGraphBuilder builder) throws NavException {
 		log.trace(" -- index: {} type: {}", result, vn.getTokenType(result));
 		switch (vn.getTokenType(result)) {
 			case VTDNav.TOKEN_STARTING_TAG:
-				String tag = null;
+				String tag;
 				tag = vn.toString(result);
 
 				log.trace(" -- tag: {} ", tag);
-				String childId = String.join("", parentId , "/" , Integer.toString(child), ":", tag);
+				String childId = String.join("", parentId, "/", Integer.toString(child), ":", tag);
 				builder.addContainer(dataSourceId, parentId, child, childId);
 
 				// Attributes
@@ -168,10 +97,10 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				if (attrCount > 0) {
 					for (int i = result + 1; i <= result + attrCount; i += 2) {
 						// Not sure why but sometime attrCount is not reliable
-						if(vn.getTokenType(i) != VTDNav.TOKEN_ATTR_NAME){
+						if (vn.getTokenType(i) != VTDNav.TOKEN_ATTR_NAME) {
 							break;
 						}
-						String key =  vn.toString(i);
+						String key = vn.toString(i);
 						String value = vn.toString(i + 1);
 						log.trace(" -- attr: {} = {}", key, value);
 						builder.addValue(dataSourceId, childId, key, value);
@@ -190,17 +119,17 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				int tokenDepth = vn.getTokenDepth(result);
 				int index = result + increment;
 				int childc = 1;
-				while(true){
+				while (true) {
 					index++;
-					int type =  vn.getTokenType(index);
+					int type = vn.getTokenType(index);
 					String s = vn.toString(index);
 					int d = vn.getTokenDepth(index);
 					// If type is element and depth is not greater than tokenDepth, break!
-					if((type == VTDNav.TOKEN_STARTING_TAG && d <=tokenDepth) || (type == VTDNav.TOKEN_STARTING_TAG && s.equals(""))){
+					if ((type == VTDNav.TOKEN_STARTING_TAG && d <= tokenDepth) || (type == VTDNav.TOKEN_STARTING_TAG && s.equals(""))) {
 						break;
 					}
-					log.trace( " ...  index: {} depth: {} type: {} string: {}", index, d, type, s);
-					index = transformFromXPath(vn, index, childc, childId, dataSourceId, properties, builder);
+					log.trace(" ...  index: {} depth: {} type: {} string: {}", index, d, type, s);
+					index = transformFromXPath(vn, index, childc, childId, dataSourceId, builder);
 					childc++;
 				}
 				return index - 1;
@@ -209,7 +138,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				String name = vn.toString(result);
 				String value = vn.toString(result + 1);
 				log.trace("Attribute {} = {}", name, value);
-				String attrChildId = String.join("", parentId , "/" , Integer.toString(child), ":", name);
+				String attrChildId = String.join("", parentId, "/", Integer.toString(child), ":", name);
 				builder.addContainer(dataSourceId, parentId, child, attrChildId);
 				builder.addValue(dataSourceId, attrChildId, name, value);
 				return result + 1;
@@ -228,7 +157,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				log.trace("Attribute (dec): {} = {}", vn.toString(result), vn.toString(result + 1));
 				return result + 1;
 			case VTDNav.TOKEN_DEC_ATTR_VAL:
-				log.trace("Attribute value (dec) ", vn.toString(result));
+				log.trace("Attribute value (dec) {}", vn.toString(result));
 				break;
 			default:
 				log.warn("Ignored event: {} {}", vn.getTokenType(result), vn.toString(result));
@@ -240,7 +169,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String dataSourceId = "";
-		String root = Triplifier.getRootArgument(properties);
+		String root = builder.getRoot(dataSourceId);
 
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		// TODO allow users to configure XML parser via properties
@@ -250,8 +179,8 @@ public class XMLTriplifier implements Triplifier, Slicer {
 		XMLEvent event = null;
 		XMLEventReader eventReader;
 		//
-		Deque<String> stack = new ArrayDeque<String>();
-		Map<String, Integer> members = new HashMap<String, Integer>();
+		Deque<String> stack = new ArrayDeque<>();
+		Map<String, Integer> members = new HashMap<>();
 		String path = "";
 		StringBuilder charBuilder = null;
 		//
@@ -273,7 +202,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				if (charBuilder != null) {
 					String value = charBuilder.toString();
 					log.trace("collecting char stream: {}", value);
-					if (stack.peekLast() != null && value != null && !value.trim().equals("")) {
+					if (stack.peekLast() != null && !value.trim().equals("")) {
 						String resourceId = stack.peekLast();
 						if (!members.containsKey(resourceId)) {
 							members.put(resourceId, 0);
@@ -299,7 +228,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				if (charBuilder != null) {
 					String value = charBuilder.toString();
 					log.trace("collecting char stream: {}", value);
-					if (stack.peekLast() != null && value != null && !value.trim().equals("")) {
+					if (stack.peekLast() != null && !value.trim().equals("")) {
 						String resourceId = stack.peekLast();
 						if (!members.containsKey(resourceId)) {
 							members.put(resourceId, 0);
@@ -336,7 +265,8 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				// If this is the root
 				if (isRoot) {
 					// Add type root
-					builder.addRoot(dataSourceId, resourceId);
+					builder.addRoot(dataSourceId);
+					resourceId = root;
 					isRoot = false;
 				}
 				try {
@@ -355,7 +285,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				// Attributes
 				Iterator<Attribute> attributes = se.getAttributes();
 				while (attributes.hasNext()) {
-					Attribute attribute = (Attribute) attributes.next();
+					Attribute attribute = attributes.next();
 					log.trace("attribute: {}", attribute);
 					try {
 						builder.addValue(dataSourceId, resourceId, new URI(toIRI(attribute.getName(), namespace)), attribute.getValue());
@@ -377,16 +307,26 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	private String toIRI(QName qname, String namespace) {
 		String ns;
-		if(qname.getNamespaceURI().equals("")){
+		if (qname.getNamespaceURI().equals("")) {
 			ns = namespace;
-		}else{
-			if(qname.getNamespaceURI().endsWith("/") || qname.getNamespaceURI().endsWith("#") ){
+		} else {
+			if (qname.getNamespaceURI().endsWith("/") || qname.getNamespaceURI().endsWith("#")) {
 				ns = qname.getNamespaceURI();
-			}else{
+			} else {
 				ns = qname.getNamespaceURI() + '#';
 			}
 		}
 		return ns + qname.getLocalPart();
+	}
+
+	@Override
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
+		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
+		if (!xpaths.isEmpty()) {
+			transformWithXPath(xpaths, properties, builder);
+		} else {
+			transformSAX(properties, builder);
+		}
 	}
 
 	@Override
@@ -399,67 +339,116 @@ public class XMLTriplifier implements Triplifier, Slicer {
 		return Sets.newHashSet("xml");
 	}
 
-
-	@Override
-	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
-		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
-		if(!xpaths.isEmpty()){
-			transformWithXPath(xpaths, properties, builder);
-		}else{
-			transformSAX(properties, builder);
-		}
-	}
-
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		final String dataSourceId = "";
-		final String root = Triplifier.getRootArgument(properties);
+//		final String root = Triplifier.getRootArgument(properties);
 		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
 
 		try {
 			VTDNav vn = buildVTDNav(properties);
-			Iterator<String> xit = xpaths.iterator();
 			final Iterator<Pair<VTDNav, Integer>> it = evaluateXPaths(vn, xpaths);
-			return new Iterable<Slice>() {
+			return () -> new Iterator<>() {
+				int theCount = 1;
+
 				@Override
-				public Iterator<Slice> iterator() {
+				public boolean hasNext() {
+					return it.hasNext();
+				}
 
-					return new Iterator<Slice>() {
-						int theCount = 1;
-
-						@Override
-						public boolean hasNext() {
-							return it.hasNext();
-						}
-
-						@Override
-						public Slice next() {
-							Pair<VTDNav, Integer> pair = it.next();
-							int c = theCount;
-							theCount++;
-							return XPathSlice.make(pair.getKey(), pair.getValue(), c, root, dataSourceId);
-						}
-					};
+				@Override
+				public Slice next() {
+					Pair<VTDNav, Integer> pair = it.next();
+					int c = theCount;
+					theCount++;
+					return XPathSlice.make(pair.getKey(), pair.getValue(), c, dataSourceId);
 				}
 			};
-		}catch (Exception e){
+		} catch (Exception e) {
 			throw new RuntimeException((e));
 		}
 	}
 
+	private VTDNav buildVTDNav(Properties properties) throws TriplifierHTTPException, IOException, ParseException {
+		VTDGen vg = new VTDGen();
+		byte[] bytes = IOUtils.toByteArray(Triplifier.getInputStream(properties));
+		vg.setDoc(bytes);
+		// TODO Support namespaces
+		vg.parse(false);
+		return vg.getNav();
+	}
+
+	private Iterator<Pair<VTDNav, Integer>> evaluateXPaths(VTDNav vn, List<String> xpaths) {
+		return new Iterator<>() {
+			final Iterator<String> xit = xpaths.iterator();
+			final AutoPilot ap = new AutoPilot(vn);
+			Pair<VTDNav, Integer> next = null;
+			String xpath = null;
+
+			@Override
+			public boolean hasNext() {
+				try {
+					if (next != null) {
+						return true;
+					}
+					// If XPath is already loaded, move to the next result
+					int result = -1;
+					if (xpath != null) {
+						result = ap.evalXPath();
+						if (result == -1) {
+							// No more results with this XPath
+							xpath = null;
+						}
+					}
+					// Look for next xpath with results
+					while (xpath == null && xit.hasNext()) {
+						// If XPath is available, load it and move to the next result
+						xpath = xit.next();
+						log.debug("Evaluating XPath: {}", xpath);
+						ap.selectXPath(xpath);
+						result = ap.evalXPath();
+						if (result == -1) {
+							xpath = null;
+						} else {
+							// Stop here for now
+							break;
+						}
+					}
+
+					if (result == -1) {
+						// No more results
+						return false;
+					} else {
+						// Prepare next result
+						next = Pair.of(vn, result);
+						return true;
+					}
+				} catch (XPathParseException | XPathEvalException | NavException e) {
+					throw new RuntimeException(e);
+				}
+			}
+
+			@Override
+			public Pair<VTDNav, Integer> next() {
+				Pair<VTDNav, Integer> toReturn = next;
+				next = null;
+				return toReturn;
+			}
+		};
+	}
+
 	@Override
 	public void triplify(Slice slice, Properties properties, FacadeXGraphBuilder builder) {
-		builder.addRoot(slice.getDatasourceId(), slice.getRootId());
-		if(slice instanceof XPathSlice) {
+		builder.addRoot(slice.getDatasourceId());
+		if (slice instanceof XPathSlice) {
 			XPathSlice xs = (XPathSlice) slice;
 			try {
-				transformFromXPath(xs.get().getKey(), xs.get().getValue(), xs.iteration(), slice.getRootId(), slice.getDatasourceId(),
-				properties,  builder);
+				transformFromXPath(xs.get().getKey(), xs.get().getValue(), xs.iteration(), builder.getRoot(slice.getDatasourceId()), slice.getDatasourceId(), builder);
 			} catch (NavException e) {
 				throw new RuntimeException(e);
 			}
-		}else {
-			throw new RuntimeException("Not the expected slice (" + XPathSlice.class.toString() + ")");
+		} else {
+			throw new RuntimeException("Not the expected slice (" + XPathSlice.class + ")");
 		}
 	}
 }
