@@ -155,7 +155,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		String containerId = String.join("/", parentId , node.getClass().getSimpleName().toLowerCase() , Integer.toString(counter));
 		this.typeCounter.put(node.getClass(), counter);
 		this.builder.addContainer(dataSourceId, parentId, slot, containerId);
-		this.builder.addType(dataSourceId, containerId, XYZ_NS + node.getClass().getSimpleName());
+		this.builder.addType(dataSourceId, containerId,  node.getClass().getSimpleName());
 		this.lastSlot.put(parentId, slot);
 		this.containers.put(node, containerId);
 		this.lastSlot.put(containerId, 0);

@@ -163,7 +163,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 	private void extractCompositeCellValue(String dataSourceId, String containerId, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder, String namespace) {
 		if (cell == null) return;
-		builder.addType(dataSourceId, containerId, namespace + cell.getCellType().toString());
+		builder.addType(dataSourceId, containerId, cell.getCellType().toString());
 		switch (cell.getCellType()) {
 			case BOOLEAN:
 				builder.addValue(dataSourceId, containerId, 1, cell.getBooleanCellValue());

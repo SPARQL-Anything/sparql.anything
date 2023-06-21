@@ -59,7 +59,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addType(String dataSourceId, String containerId, String typeId) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), RDF.type.asNode(), NodeFactory.createURI(typeId));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), RDF.type.asNode(), key2predicate(typeId));
 	}
 
 	public boolean addType(String dataSourceId, String containerId, URI type) {

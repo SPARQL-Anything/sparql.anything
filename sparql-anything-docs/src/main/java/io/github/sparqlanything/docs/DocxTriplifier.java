@@ -62,7 +62,7 @@ public class DocxTriplifier implements Triplifier {
 		try (XWPFDocument document = new XWPFDocument(is)) {
 			List<XWPFParagraph> paragraphs = document.getParagraphs();
 
-			builder.addType(dataSourceId, SPARQLAnythingConstants.ROOT_ID, namespace + "Document");
+			builder.addType(dataSourceId, SPARQLAnythingConstants.ROOT_ID,  "Document");
 
 			int count = 1;
 			if (!mergeParagraphs) {
@@ -72,10 +72,10 @@ public class DocxTriplifier implements Triplifier {
 					if (para.getStyle() != null) {
 						paragraphId = "/".concat(Triplifier.toSafeURIString(para.getStyle())).concat("/").concat(String.valueOf(count)) ;
 						builder.addType(dataSourceId, paragraphId,
-								namespace + Triplifier.toSafeURIString(para.getStyle()));
+								 Triplifier.toSafeURIString(para.getStyle()));
 					} else {
 						paragraphId ="/paragraph/".concat(String.valueOf(count));
-						builder.addType(dataSourceId, paragraphId, namespace + "Paragraph");
+						builder.addType(dataSourceId, paragraphId,  "Paragraph");
 					}
 					
 
