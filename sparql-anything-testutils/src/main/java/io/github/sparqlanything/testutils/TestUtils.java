@@ -61,25 +61,24 @@ public class TestUtils {
 		}
 	}
 
-	public static void printDebugDiff(DatasetGraph left, DatasetGraph right) {
+	public static void printDebugDiff(DatasetGraph expected, DatasetGraph result) {
 		if (logger.isDebugEnabled()) {
-			Iterator<Quad> it = left.find();
+
+			logger.debug(">> Test expected items are also in result");
+			Iterator<Quad> it = expected.find();
 			while (it.hasNext()) {
 				Quad q = it.next();
-				logger.trace(">> {}", q);
-
-				if (!right.contains(q)) {
-					logger.debug(">> {} not found in right", q);
-					logger.debug(">> (T) {} {} {} {} {}", q.getSubject().getClass().getSimpleName(), q.getPredicate().getClass().getSimpleName(), q.getObject().getClass().getSimpleName(), (q.getObject().isLiteral() && q.getObject().getLiteralDatatypeURI() != null) ? q.getObject().getLiteralDatatypeURI() : "", q.getGraph().getClass().getSimpleName());
+				if (!result.contains(q)) {
+					logger.debug(">> {} not found in expected", q);
 				}
 			}
-			it = right.find();
+
+			logger.debug(">> Test result items are also in expected");
+			it = result.find();
 			while (it.hasNext()) {
 				Quad t = it.next();
-				logger.trace("<< {}", t);
-				if (!left.contains(t)) {
-					logger.debug("<< {} not found in left", t);
-					logger.debug("<< (T) {} {} {} {} {}", t.getSubject().getClass().getSimpleName(), t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI() : "", t.getGraph().getClass().getSimpleName());
+				if (!expected.contains(t)) {
+					logger.debug("<< {} not found in result", t);
 				}
 			}
 		}
