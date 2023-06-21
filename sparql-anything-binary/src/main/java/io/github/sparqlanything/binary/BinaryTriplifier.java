@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -82,7 +83,7 @@ public class BinaryTriplifier implements Triplifier {
 		// Add root
 		builder.addRoot(dataSourceId);
 		// Add content
-		builder.addValue(dataSourceId, builder.getRoot(dataSourceId), 1, NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary));
+		builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, 1, NodeFactory.createLiteralByValue(value, XSDDatatype.XSDbase64Binary));
 	}
 
 	private byte[] downloadUrl(URL toDownload) {

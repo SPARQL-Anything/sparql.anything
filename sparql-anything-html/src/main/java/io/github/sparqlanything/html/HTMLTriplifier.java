@@ -78,7 +78,6 @@ public class HTMLTriplifier implements Triplifier {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-//		this.root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
@@ -96,7 +95,7 @@ public class HTMLTriplifier implements Triplifier {
 			}
 		}
 
-		log.trace("namespace {}\n root {}\ncharset {}\nselector {}", namespace, builder.getRoot(dataSourceId), charset, selector);
+		log.trace("namespace {}\n root {}\ncharset {}\nselector {}", namespace, SPARQLAnythingConstants.ROOT_ID, charset, selector);
 
 		Document doc;
 		// If location is a http or https, raise exception if status is not 200
@@ -117,7 +116,7 @@ public class HTMLTriplifier implements Triplifier {
 
 		if (elements.size() > 1) {
 			// Create a root container
-			rootResourceId = builder.getRoot(dataSourceId);
+			rootResourceId = SPARQLAnythingConstants.ROOT_ID;
 			builder.addRoot(dataSourceId);
 		}
 
@@ -130,8 +129,8 @@ public class HTMLTriplifier implements Triplifier {
 				builder.addContainer(dataSourceId, rootResourceId, counter, toResourceId(element, blank_nodes, builder, dataSourceId));
 			} else {
 				// Is root container
-				rootResourceId = builder.getRoot(dataSourceId);
-				resourceId = builder.getRoot(dataSourceId);
+				rootResourceId = SPARQLAnythingConstants.ROOT_ID;
+				resourceId = SPARQLAnythingConstants.ROOT_ID;
 				builder.addRoot(dataSourceId);
 			}
 			try {
@@ -203,7 +202,7 @@ public class HTMLTriplifier implements Triplifier {
 		} else {
 			String ln = localName(element);
 			log.debug(ln);
-			return builder.getRoot(dataSourceId).concat("/").concat(ln);
+			return "/".concat(ln);
 		}
 	}
 

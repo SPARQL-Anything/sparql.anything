@@ -16,10 +16,7 @@
 
 package io.github.sparqlanything.docs;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.PropertyUtils;
-import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
@@ -65,25 +62,25 @@ public class DocxTriplifier implements Triplifier {
 		try (XWPFDocument document = new XWPFDocument(is)) {
 			List<XWPFParagraph> paragraphs = document.getParagraphs();
 
-			builder.addType(dataSourceId, builder.getRoot(dataSourceId), namespace + "Document");
+			builder.addType(dataSourceId, SPARQLAnythingConstants.ROOT_ID, namespace + "Document");
 
 			int count = 1;
 			if (!mergeParagraphs) {
 				for (XWPFParagraph para : paragraphs) {
 					logger.trace("Paragraph {} {}", count, para.getText());
-					String paragraphURI;
+					String paragraphId;
 					if (para.getStyle() != null) {
-						paragraphURI = namespace + Triplifier.toSafeURIString(para.getStyle()) + "/" + count;
-						builder.addType(dataSourceId, paragraphURI,
+						paragraphId = "/".concat(Triplifier.toSafeURIString(para.getStyle())).concat("/").concat(String.valueOf(count)) ;
+						builder.addType(dataSourceId, paragraphId,
 								namespace + Triplifier.toSafeURIString(para.getStyle()));
 					} else {
-						paragraphURI = namespace + "paragraph/" + count;
-						builder.addType(dataSourceId, paragraphURI, namespace + "Paragraph");
+						paragraphId ="/paragraph/".concat(String.valueOf(count));
+						builder.addType(dataSourceId, paragraphId, namespace + "Paragraph");
 					}
 					
 
-					builder.addContainer(dataSourceId, builder.getRoot(dataSourceId), count, paragraphURI);
-					builder.addValue(dataSourceId, paragraphURI, 1, para.getText());
+					builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count, paragraphId);
+					builder.addValue(dataSourceId, paragraphId, 1, para.getText());
 
 					count++;
 				}
@@ -94,57 +91,54 @@ public class DocxTriplifier implements Triplifier {
 					sb.append(para.getText());
 					sb.append("\n");
 				}
-				builder.addValue(dataSourceId, builder.getRoot(dataSourceId), count,
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count,
 						NodeFactory.createLiteral(sb.toString(), XSDDatatype.XSDstring));
 				count++;
 			}
 
-			Iterator<XWPFTable> it = document.getTables().iterator();
-			while (it.hasNext()) {
-				XWPFTable xwpfTable = (XWPFTable) it.next();
+			for (XWPFTable xwpfTable : document.getTables()) {
+				String tableId = "Table_".concat(String.valueOf(count)) ;
+				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count, tableId);
 
-				String tableId = namespace + "Table_" + count;
-				builder.addContainer(dataSourceId, builder.getRoot(dataSourceId), count, tableId);
-
-				LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
-				int rown = 0;
-				Iterator<XWPFTableRow> itrows = xwpfTable.getRows().iterator();
-				while (itrows.hasNext()) {
+				LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<>();
+				int rowNumber = 0;
+				Iterator<XWPFTableRow> rowIterator = xwpfTable.getRows().iterator();
+				while (rowIterator.hasNext()) {
 					// Header
-					if (headers && rown == 0) {
-						XWPFTableRow xwpfTableRow = (XWPFTableRow) itrows.next();
+					if (headers && rowNumber == 0) {
+						XWPFTableRow xwpfTableRow = rowIterator.next();
 						Iterator<XWPFTableCell> cellIterator = xwpfTableRow.getTableCells().iterator();
-						int colid = 0;
+						int columnId = 0;
 						while (cellIterator.hasNext()) {
-							colid++;
-							XWPFTableCell xwpfTableCell = (XWPFTableCell) cellIterator.next();
-							String colstring = xwpfTableCell.getText();
-							String colname = colstring.strip();
+							columnId++;
+							XWPFTableCell xwpfTableCell = cellIterator.next();
+							String columnString = xwpfTableCell.getText();
+							String columnName = columnString.strip();
 							int c = 0;
-							while (headers_map.containsValue(colname)) {
+							while (headers_map.containsValue(columnName)) {
 								c++;
-								colname += "_" + String.valueOf(c);
+								columnName += "_".concat(String.valueOf(c)) ;
 							}
-							headers_map.put(colid, colname);
+							headers_map.put(columnId, columnName);
 						}
 					}
 
 					// Data
-					if (itrows.hasNext()) {
-						XWPFTableRow xwpfTableRow = (XWPFTableRow) itrows.next();
-						rown++;
-						String rowId = namespace + "Table_" + count + "_Row_" + rown;
-						builder.addContainer(dataSourceId, tableId, rown, rowId);
+					if (rowIterator.hasNext()) {
+						XWPFTableRow xwpfTableRow = rowIterator.next();
+						rowNumber++;
+						String rowId = namespace + "Table_" + count + "_Row_" + rowNumber;
+						builder.addContainer(dataSourceId, tableId, rowNumber, rowId);
 						Iterator<XWPFTableCell> cellIterator = xwpfTableRow.getTableCells().iterator();
-						int colid = 0;
+						int columnId = 0;
 						while (cellIterator.hasNext()) {
-							colid++;
-							XWPFTableCell xwpfTableCell = (XWPFTableCell) cellIterator.next();
+							columnId++;
+							XWPFTableCell xwpfTableCell = cellIterator.next();
 							String value = xwpfTableCell.getText();
-							if (headers && headers_map.containsKey(colid)) {
-								builder.addValue(dataSourceId, rowId, headers_map.get(colid), value);
+							if (headers && headers_map.containsKey(columnId)) {
+								builder.addValue(dataSourceId, rowId, headers_map.get(columnId), value);
 							} else {
-								builder.addValue(dataSourceId, rowId, colid, value);
+								builder.addValue(dataSourceId, rowId, columnId, value);
 							}
 						}
 					}

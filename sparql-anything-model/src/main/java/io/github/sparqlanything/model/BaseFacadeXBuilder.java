@@ -47,11 +47,11 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId), key2predicate(slotKey), container2node(childContainerId));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), key2predicate(slotKey), container2node(childContainerId, dataSourceId));
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, URI customKey, String childContainerId) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId), NodeFactory.createURI(customKey.toString()), container2node(childContainerId));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), NodeFactory.createURI(customKey.toString()), container2node(childContainerId, dataSourceId));
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, Integer slotKey, String childContainerId) {
@@ -59,19 +59,19 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addType(String dataSourceId, String containerId, String typeId) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId), RDF.type.asNode(), NodeFactory.createURI(typeId));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), RDF.type.asNode(), NodeFactory.createURI(typeId));
 	}
 
 	public boolean addType(String dataSourceId, String containerId, URI type) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId), RDF.type.asNode(), NodeFactory.createURI(type.toString()));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), RDF.type.asNode(), NodeFactory.createURI(type.toString()));
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId), key2predicate(slotKey), value2node(value));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId,dataSourceId), key2predicate(slotKey), value2node(value));
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, URI customKey, Object value) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId), NodeFactory.createURI(customKey.toString()), value2node(value));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), NodeFactory.createURI(customKey.toString()), value2node(value));
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value) {
@@ -79,14 +79,14 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addRoot(String dataSourceId) {
-		return add(dataSourceId2node(dataSourceId), container2node(getRoot(dataSourceId)), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
+		return add(dataSourceId2node(dataSourceId), container2node("", dataSourceId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
 	}
 
 	private boolean addSlotStatement(String dataSourceId, String containerId, Integer slotKey, Object object, boolean isObjectContainer) {
 		Node g = dataSourceId2node(dataSourceId);
-		Node s = container2node(containerId);
+		Node s = container2node(containerId, dataSourceId);
 		Node p = p_use_rdfs_member ? RDFS.member.asNode() : RDF.li(slotKey).asNode();
-		Node o = isObjectContainer ? container2node(object.toString()) : value2node(object);
+		Node o = isObjectContainer ? container2node(object.toString(), dataSourceId) : value2node(object);
 		if (p_reify_slot_statements) {
 			add(g, NodeFactory.createTripleNode(s, p, o), NodeFactory.createURI(Triplifier.FACADE_X_SLOT_KEY), NodeFactory.createLiteral(slotKey.toString(), XSDDatatype.XSDinteger));
 		}
@@ -101,11 +101,11 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		return FacadeXNodeBuilder.super.value2node(value);
 	}
 
-	public Node container2node(String container) {
+	public Node container2node(String containerId, String dataSourceId) {
 		if (p_blank_nodes) {
-			return container2BlankNode(container);
+			return container2BlankNode(containerId);
 		} else {
-			return container2URI(container);
+			return container2URI(containerId, dataSourceId);
 		}
 	}
 
@@ -113,7 +113,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		return p_namespace;
 	}
 
-	public String getRoot(String dataSourceId) {
+	public String getRootURI(String dataSourceId) {
 		return p_root.concat(dataSourceId);
 	}
 

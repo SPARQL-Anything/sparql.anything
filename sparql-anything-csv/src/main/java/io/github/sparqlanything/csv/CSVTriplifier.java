@@ -16,11 +16,7 @@
 
 package io.github.sparqlanything.csv;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.Slice;
-import io.github.sparqlanything.model.Slicer;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -34,10 +30,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -144,7 +138,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					log.debug("current row num: {}", rown);
 				}
 				CSVRecord record = recordIterator.next();
-				processRow(rown, dataSourceId, builder.getRoot(dataSourceId), record, headers_map, builder);
+				processRow(rown, dataSourceId, SPARQLAnythingConstants.ROOT_ID, record, headers_map, builder);
 			}
 			log.debug("{} records", rown);
 		} catch (IllegalArgumentException e) {
@@ -240,6 +234,6 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
 		CSVSlice csvo = (CSVSlice) slice;
 		builder.addRoot(csvo.getDatasourceId());
-		processRow(csvo.iteration(), csvo.getDatasourceId(), builder.getRoot(csvo.getDatasourceId()), csvo.get(), csvo.getHeaders(), builder);
+		processRow(csvo.iteration(), csvo.getDatasourceId(), builder.getRootURI(csvo.getDatasourceId()), csvo.get(), csvo.getHeaders(), builder);
 	}
 }

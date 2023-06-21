@@ -56,16 +56,14 @@ public class BibtexTriplifier implements Triplifier {
 			BibTeXDatabase bibDB = bibtexParser.parse(reader);
 			AtomicInteger count = new AtomicInteger();
 			bibDB.getEntries().forEach((key, entry) -> {
-				String containerIdChild = builder.getRoot(dataSourceId).concat(key.toString());
+				String containerIdChild = SPARQLAnythingConstants.ROOT_ID.concat(key.toString());
 				try {
 					builder.addType(dataSourceId, containerIdChild, new URI(namespace + entry.getType().toString()));
 				} catch (URISyntaxException e) {
 					logger.error("",e);
 				}
-				builder.addContainer(dataSourceId, builder.getRoot(dataSourceId), count.incrementAndGet(), containerIdChild);
-				entry.getFields().forEach((keyField, valueField) -> {
-					builder.addValue(dataSourceId, containerIdChild, keyField.toString(), valueField.toUserString());
-				});
+				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count.incrementAndGet(), containerIdChild);
+				entry.getFields().forEach((keyField, valueField) -> builder.addValue(dataSourceId, containerIdChild, keyField.toString(), valueField.toUserString()));
 			});
 
 		} catch (IOException|TriplifierHTTPException|TokenMgrException|ParseException e) {

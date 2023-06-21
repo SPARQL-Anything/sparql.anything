@@ -23,13 +23,13 @@ import org.apache.jena.rdf.model.ResourceFactory;
 public interface FacadeXNodeBuilder {
 
 	default Node dataSourceId2node(String dataSourceId) {
-		return NodeFactory.createURI(getRoot(dataSourceId));
+		return NodeFactory.createURI(getRootURI(dataSourceId));
 	}
 
-	String getRoot(String dataSourceId);
+	String getRootURI(String dataSourceId);
 
-	default Node container2URI(String container) {
-		return NodeFactory.createURI(container);
+	default Node container2URI(String containerId, String dataSourceId) {
+		return NodeFactory.createURI(getRootURI(dataSourceId).concat(containerId));
 	}
 
 	default Node container2BlankNode(String container) {

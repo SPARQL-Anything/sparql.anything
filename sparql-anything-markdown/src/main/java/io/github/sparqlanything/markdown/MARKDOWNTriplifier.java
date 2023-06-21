@@ -17,6 +17,7 @@
 package io.github.sparqlanything.markdown;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierHTTPException;
 import com.google.common.collect.Sets;
@@ -116,8 +117,8 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 
 		try {
 			// Only 1 data source expected
-			String dataSourceId = "";
-			rootId =  Triplifier.getRootArgument(properties);
+			String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
+			rootId =  SPARQLAnythingConstants.ROOT_ID;
 			logger.trace("ds {} root {}", dataSourceId, rootId);
 			before(properties, builder, dataSourceId, rootId);
 			document.accept(this);

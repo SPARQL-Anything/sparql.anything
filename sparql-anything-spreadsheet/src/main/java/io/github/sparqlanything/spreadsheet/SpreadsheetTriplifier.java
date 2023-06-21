@@ -16,10 +16,7 @@
 
 package io.github.sparqlanything.spreadsheet;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.PropertyUtils;
-import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
@@ -65,18 +62,18 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = Triplifier.toSafeURIString(s.getSheetName());
-			populate(s, dataSourceId, builder.getRoot(dataSourceId), builder, headers.get(), evaluateFormulas, compositeValues, namespace);
+			populate(s, dataSourceId, builder, headers.get(), evaluateFormulas, compositeValues, namespace);
 		});
 
 	}
 
-	private void populate(Sheet s, String dataSourceId, String root, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, String namespace) {
+	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, String namespace) {
 
 		// Add type Root
 		builder.addRoot(dataSourceId);
 
 		int rown = 0; // this counts the LI index not the spreadsheet rows
-		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
+		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<>();
 
 		for (int rowNum = s.getFirstRowNum(); rowNum <= s.getLastRowNum(); rowNum++) {
 			// Header
@@ -106,8 +103,8 @@ public class SpreadsheetTriplifier implements Triplifier {
 			} else {
 				// Rows
 				rown++;
-				String row = root + "_Row_" + rown;
-				builder.addContainer(dataSourceId, root, rown, row);
+				String row =  "_Row_".concat(String.valueOf(rown));
+				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, rown, row);
 				Row record = s.getRow(rowNum);
 				logger.trace("Reading Row {} from sheet {}", rowNum, s.getSheetName());
 
@@ -116,7 +113,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
 						Cell cell = record.getCell(cellNum);
 						if (compositeValues) {
-							String value = row + "_" + cellNum;
+							String value = row.concat("_").concat(String.valueOf(cellNum));
 							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder, namespace);
 							colid++;
 							if (headers && headers_map.containsKey(colid)) {

@@ -1,37 +1,37 @@
 <http://www.example.org/document>
         a       <http://sparql.xyz/facade-x/data/Document> , <http://sparql.xyz/facade-x/ns/root> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                <http://sparql.xyz/facade-x/data/Heading1/1> ;
+                <http://www.example.org/document/Heading1/1> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                <http://sparql.xyz/facade-x/data/paragraph/2> ;
+                <http://www.example.org/document/paragraph/2> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                <http://sparql.xyz/facade-x/data/paragraph/3> ;
+                <http://www.example.org/document/paragraph/3> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
-                <http://sparql.xyz/facade-x/data/Heading2/4> ;
+                <http://www.example.org/document/Heading2/4> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5>
-                <http://sparql.xyz/facade-x/data/paragraph/5> .
+                <http://www.example.org/document/paragraph/5> .
 
-<http://sparql.xyz/facade-x/data/Heading2/4>
+<http://www.example.org/document/Heading2/4>
         a       <http://sparql.xyz/facade-x/data/Heading2> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Title 2" .
 
-<http://sparql.xyz/facade-x/data/Heading1/1>
+<http://www.example.org/document/Heading1/1>
         a       <http://sparql.xyz/facade-x/data/Heading1> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Title 1" .
 
-<http://sparql.xyz/facade-x/data/paragraph/2>
+<http://www.example.org/document/paragraph/2>
         a       <http://sparql.xyz/facade-x/data/Paragraph> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Paragraph1" .
 
-<http://sparql.xyz/facade-x/data/paragraph/5>
+<http://www.example.org/document/paragraph/5>
         a       <http://sparql.xyz/facade-x/data/Paragraph> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Paragraph3" .
 
-<http://sparql.xyz/facade-x/data/paragraph/3>
+<http://www.example.org/document/paragraph/3>
         a       <http://sparql.xyz/facade-x/data/Paragraph> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Paragraph2" .

@@ -59,7 +59,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		String dataSourceId = "";
-		String root = builder.getRoot("");
+		String rootId = SPARQLAnythingConstants.ROOT_ID;
 
 		builder.addRoot(dataSourceId);
 		try {
@@ -68,7 +68,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 			int count = 1;
 			while (it.hasNext()) {
 				Pair<VTDNav, Integer> next = it.next();
-				transformFromXPath(next.getKey(), next.getValue(), count, root, dataSourceId, builder);
+				transformFromXPath(next.getKey(), next.getValue(), count, rootId, dataSourceId, builder);
 				count++;
 			}
 			log.debug("XPath: {} matches", count);
@@ -169,7 +169,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String dataSourceId = "";
-		String root = builder.getRoot(dataSourceId);
+		String root = SPARQLAnythingConstants.ROOT_ID;
 
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		// TODO allow users to configure XML parser via properties
@@ -341,8 +341,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
-		final String dataSourceId = "";
-//		final String root = Triplifier.getRootArgument(properties);
+		final String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
 
 		try {
@@ -443,7 +442,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 		if (slice instanceof XPathSlice) {
 			XPathSlice xs = (XPathSlice) slice;
 			try {
-				transformFromXPath(xs.get().getKey(), xs.get().getValue(), xs.iteration(), builder.getRoot(slice.getDatasourceId()), slice.getDatasourceId(), builder);
+				transformFromXPath(xs.get().getKey(), xs.get().getValue(), xs.iteration(), SPARQLAnythingConstants.ROOT_ID, slice.getDatasourceId(), builder);
 			} catch (NavException e) {
 				throw new RuntimeException(e);
 			}

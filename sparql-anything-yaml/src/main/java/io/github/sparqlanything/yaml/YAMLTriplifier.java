@@ -17,33 +17,21 @@
 package io.github.sparqlanything.yaml;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 public class YAMLTriplifier implements Triplifier {
-
-	private static final Logger logger = LoggerFactory.getLogger(YAMLTriplifier.class);
-
-//	private String[] getDataSources(URL url) {
-//		return new String[] { url.toString() };
-//	}
-//
-//	private String getRootId(String dataSourceId, Properties properties) {
-//		return Triplifier.getRootArgument(properties);
-//	}
 
 	protected void transform(Properties properties, FacadeXGraphBuilder builder)
 		throws IOException, TriplifierHTTPException {
@@ -55,44 +43,32 @@ public class YAMLTriplifier implements Triplifier {
 
 		try {
 			// Only 1 data source expected
-			String dataSourceId = "";
-//			if (properties.containsKey(IRIArgument.ROOT.toString())) {
-//				logger.trace("Setting Data source Id using Root argument");
-//				dataSourceId = properties.getProperty(IRIArgument.ROOT.toString());
-//			} else if (properties.containsKey(IRIArgument.CONTENT.toString())) {
-//				logger.trace("Setting Data source Id using Content argument");
-//				dataSourceId = Triplifier.XYZ_NS
-//						+ DigestUtils.md5Hex(properties.getProperty(IRIArgument.CONTENT.toString()));
-//			} else {
-//				dataSourceId = getDataSources(url)[0];
-//			}
+			String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 			Iterable<Object> iter = load.loadAllFromInputStream(is);
-			transformYAML(iter, dataSourceId, Triplifier.getRootArgument(properties), builder);
+			transformYAML(iter, dataSourceId, builder);
 		} finally {
 			is.close();
 		}
 	}
 
-	private void transformYAML(Iterable<Object> iter, String dataSourceId, String rootId, FacadeXGraphBuilder builder) {
+	private void transformYAML(Iterable<Object> iter, String dataSourceId, FacadeXGraphBuilder builder) {
 		builder.addRoot(dataSourceId);
-		Iterator<Object> iterator = iter.iterator();
-		while(iterator.hasNext()){
-			Object value = iterator.next();
-			if(value instanceof String){
-				builder.addValue(dataSourceId, rootId, (Integer) 1, value);
-			} else if(value instanceof Integer){
-				builder.addValue(dataSourceId, rootId, (Integer) 1, value);
-			} else if(value instanceof Boolean){
-				builder.addValue(dataSourceId, rootId, (Integer) 1, value);
-			} else if(value instanceof Double){
-				builder.addValue(dataSourceId, rootId, (Integer) 1, value);
-			} else if(value instanceof Map){
+		for (Object value : iter) {
+			if (value instanceof String) {
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, (Integer) 1, value);
+			} else if (value instanceof Integer) {
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, (Integer) 1, value);
+			} else if (value instanceof Boolean) {
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, (Integer) 1, value);
+			} else if (value instanceof Double) {
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, (Integer) 1, value);
+			} else if (value instanceof Map) {
 				// Directly link to the map
-				transformMap((Map)value, dataSourceId, rootId, builder);
-			} else if(value instanceof List){
+				transformMap((Map) value, dataSourceId, SPARQLAnythingConstants.ROOT_ID, builder);
+			} else if (value instanceof List) {
 				List list = (List) value;
-				for(int x=0; x<list.size(); x++){
-					transformIntKeyValue(x+1, list.get(x), dataSourceId, rootId, builder);
+				for (int x = 0; x < list.size(); x++) {
+					transformIntKeyValue(x + 1, list.get(x), dataSourceId, SPARQLAnythingConstants.ROOT_ID, builder);
 				}
 			} else {
 				throw new UnsupportedOperationException("Unknown structure: " + value.getClass());
@@ -175,14 +151,7 @@ public class YAMLTriplifier implements Triplifier {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder)
 			throws IOException, TriplifierHTTPException {
-//		URL url = Triplifier.getLocation(properties);
-
 		transform(properties, builder);
-
-//		if (logger.isDebugEnabled()) {
-//			logger.debug("Number of triples: {} ", builder.getMainGraph().size());
-//		}
-//		return builder.getDatasetGraph();
 	}
 
 	@Override
