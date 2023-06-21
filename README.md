@@ -57,6 +57,8 @@ This is a generic example of a Facade-X data object (more examples below):
 ] .
 ```
 
+More details on the Facade-X metamodel can be found [here](Facade-X.md).
+
 ### Querying anything
 
 SPARQL Anything extends the Apache Jena ARQ processors by *overloading* the SERVICE operator, as in the following
