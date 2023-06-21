@@ -197,9 +197,7 @@ public class AbstractTriplifierTester {
 
 	protected DatasetGraph replaceLocation(DatasetGraph g) {
 		DatasetGraph dg = DatasetGraphFactory.create();
-		g.find().forEachRemaining(q ->
-			dg.add(new Quad(resolveNode(q.getGraph()), Triple.create(resolveNode(q.getSubject()), resolveNode(q.getPredicate()), resolveNode(q.getObject()))))
-		);
+		g.find().forEachRemaining(q -> dg.add(new Quad(resolveNode(q.getGraph()), Triple.create(resolveNode(q.getSubject()), resolveNode(q.getPredicate()), resolveNode(q.getObject())))));
 		return dg;
 	}
 
