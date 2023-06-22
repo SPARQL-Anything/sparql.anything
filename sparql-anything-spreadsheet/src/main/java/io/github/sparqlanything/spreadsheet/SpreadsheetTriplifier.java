@@ -48,7 +48,6 @@ public class SpreadsheetTriplifier implements Triplifier {
 		}
 		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
 		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
-		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		AtomicBoolean headers = new AtomicBoolean();
 		try {
 			headers.set(PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false));
@@ -62,12 +61,12 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = Triplifier.toSafeURIString(s.getSheetName());
-			populate(s, dataSourceId, builder, headers.get(), evaluateFormulas, compositeValues, namespace);
+			populate(s, dataSourceId, builder, headers.get(), evaluateFormulas, compositeValues);
 		});
 
 	}
 
-	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, String namespace) {
+	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues) {
 
 		// Add type Root
 		builder.addRoot(dataSourceId);
@@ -114,7 +113,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 						Cell cell = record.getCell(cellNum);
 						if (compositeValues) {
 							String value = row.concat("_").concat(String.valueOf(cellNum));
-							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder, namespace);
+							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
 							colid++;
 							if (headers && headers_map.containsKey(colid)) {
 								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
@@ -161,7 +160,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 	}
 
 
-	private void extractCompositeCellValue(String dataSourceId, String containerId, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder, String namespace) {
+	private void extractCompositeCellValue(String dataSourceId, String containerId, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder) {
 		if (cell == null) return;
 		builder.addType(dataSourceId, containerId, cell.getCellType().toString());
 		switch (cell.getCellType()) {
