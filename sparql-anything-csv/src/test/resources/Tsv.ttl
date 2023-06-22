@@ -1,0 +1,25 @@
+
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+
+<http://www.example.org/document#row1>
+        xyz:Description  "ac, abs, moon" ;
+        xyz:Make         "Ford" ;
+        xyz:Model        "E350" ;
+        xyz:Price        "3000.00" ;
+        xyz:Year         "1997" .
+
+eg:document  rdf:type  fx:root ;
+        rdf:_1    <http://www.example.org/document#row1> .
