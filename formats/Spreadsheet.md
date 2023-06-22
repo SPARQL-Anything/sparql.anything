@@ -130,12 +130,12 @@ WHERE
 
 ### Summary
 
-| Option name                                | Description                                                                                                                                                                                                                                         | Valid Values | Default Value |
-|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
-| spreadsheet.headers                        | It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.                                                                                                                 | true/false   | false         |
-| spreadsheet.evaluate-formulas              | It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.                                                                                                                                                                        | true/false   | false         |
-| spreadsheet.composite-values               | It tells the spreadsheet triplifier to extract from the cells hyperlinks and comments. If enabled, the cells will be triplified as containers instead of literals (see #308)                                                                        | true/false   | false         |
-| spreadsheet.ignore-columns-with-no-headers | It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected). | true/false   | false         |
+| Option name                                | Description                                                                                                                                                                                                                                                      | Valid Values | Default Value |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
+| spreadsheet.headers                        | It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.                                                                                                                              | true/false   | false         |
+| spreadsheet.evaluate-formulas              | It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.                                                                                                                                                                                     | true/false   | false         |
+| spreadsheet.composite-values               | It tells the spreadsheet triplifier to extract from the cells hyperlinks and comments. If enabled, the cells will be triplified as containers instead of literals (see #308)                                                                                     | true/false   | false         |
+| spreadsheet.ignore-columns-with-no-headers | It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180  | true/false   | false         |
 
 
 ### `spreadsheet.headers`
@@ -531,7 +531,7 @@ WHERE
 
 #### Description
 
-It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected).
+It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180
 
 #### Valid Values
 
