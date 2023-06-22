@@ -15,7 +15,7 @@ Containers may have a type.
 
 The following figure illustrates the resulting Facade-X as an entity-relation diagram.
 
-![Facade-X Entity-Relationship Diagram](facade-x-ER.png)
+![Facade-X Entity-Relationship Diagram](/facade-x-ER.png)
 
 Given a resource, the transformers generate an RDF Dataset (i.e. a collection of named graphs) representing the transformation of the resource according to the Facade-X model.
 In particular, each named graph: 1. is the transformation of a data source of the input resource; and, 2. complies with the Facade-X model.
