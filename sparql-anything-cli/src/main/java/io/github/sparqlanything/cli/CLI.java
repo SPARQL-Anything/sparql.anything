@@ -16,14 +16,7 @@
 
 package io.github.sparqlanything.cli;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.MissingOptionException;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 import org.apache.jena.query.Query;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.util.FileUtils;
@@ -62,8 +55,8 @@ public class CLI {
 	public static final String STRATEGY = "s";
 	public static final String STRATEGY_LONG = "strategy";
 
-	public static final String OUTPUTPATTERN = "p";
-	public static final String OUTPUTPATTERN_LONG = "output-pattern";
+	public static final String OUTPUT_PATTERN = "p";
+	public static final String OUTPUT_PATTERN_LONG = "output-pattern";
 
 	public static final String VALUES = "v";
 	public static final String VALUES_LONG = "values";
@@ -78,7 +71,7 @@ public class CLI {
 		init();
 	}
 
-	public void parse(String[] args) throws MissingOptionException, ParseException {
+	public void parse(String[] args) throws ParseException {
 		CommandLineParser cmdLineParser = new DefaultParser();
 		this.commandLine = cmdLineParser.parse(options, args);
 	}
@@ -122,7 +115,7 @@ public class CLI {
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
 		options.addOption(Option.builder(OUTPUT_APPEND).hasArg(false)
-				.desc("OPTIONAL - Should output to file be appended? WARNING: this option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using bnodes)").longOpt(OUTPUT_APPEND_LONG).build());
+				.desc("OPTIONAL - Should output to file be appended? WARNING: this option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using blank nodes)").longOpt(OUTPUT_APPEND_LONG).build());
 
 		options.addOption(Option.builder(EXPLAIN).argName("explain").hasArg(false)
 				.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
@@ -139,9 +132,9 @@ public class CLI {
 						"OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.")
 				.longOpt(STRATEGY_LONG).build());
 
-		options.addOption(Option.builder(OUTPUTPATTERN).argName("outputPattern").hasArg().desc(
-						"OPTIONAL - Output filename pattern, e.g. 'myfile-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
-				.longOpt(OUTPUTPATTERN_LONG).build());
+		options.addOption(Option.builder(OUTPUT_PATTERN).argName("outputPattern").hasArg().desc(
+						"OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
+				.longOpt(OUTPUT_PATTERN_LONG).build());
 
 		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true).desc(
 						"OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The argument can be used in two ways. (1) Providing a single SPARQL ResultSet file. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed. (2) Named variable bindings: the argument value must follow the syntax: var_name=var_value. The argument can be passed multiple times and the query repeated for each set of values.")
@@ -182,7 +175,7 @@ public class CLI {
 		return commandLine.hasOption(CLI.OUTPUT_APPEND);
 	}
 	public String getOutputPattern() {
-		return commandLine.getOptionValue(CLI.OUTPUTPATTERN);
+		return commandLine.getOptionValue(CLI.OUTPUT_PATTERN);
 	}
 
 	public String[] getValues() {
@@ -191,26 +184,27 @@ public class CLI {
 
 	public static String guessLang(String name) {
 		String suffix = FileUtils.getFilenameExt(name).toLowerCase(Locale.ROOT);
-		if (suffix.equals("n3")) {
-			return Lang.N3.getName();
-		} else if (suffix.equals("nq")) {
-			return Lang.NQ.getName();
-		} else if (suffix.equals("json")) {
-			return "JSON";
-		} else if (suffix.equals("csv")) {
-			return "CSV";
-		} else if (suffix.equals("txt")) {
-			return "TEXT";
-		} else if (suffix.equals("xml")) {
-			return "xml";
-		} else if (suffix.equals("nt")) {
-			return Lang.NTRIPLES.getName();
-		} else if (suffix.equals("ttl")) {
-			return Lang.TTL.getName();
-		} else if (suffix.equals("rdf")) {
-			return Lang.RDFXML.getName();
-		} else {
-			return suffix.equals("owl") ? Lang.RDFXML.getName() : null;
+		switch (suffix) {
+			case "n3":
+				return Lang.N3.getName();
+			case "nq":
+				return Lang.NQ.getName();
+			case "json":
+				return "JSON";
+			case "csv":
+				return "CSV";
+			case "txt":
+				return "TEXT";
+			case "xml":
+				return "xml";
+			case "nt":
+				return Lang.NTRIPLES.getName();
+			case "ttl":
+				return Lang.TTL.getName();
+			case "rdf":
+				return Lang.RDFXML.getName();
+			default:
+				return suffix.equals("owl") ? Lang.RDFXML.getName() : null;
 		}
 	}
 	public String getFormat(Query q) {
