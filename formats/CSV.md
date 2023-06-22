@@ -88,13 +88,14 @@ WHERE
 
 ### Summary
 
-|Option name|Description|Valid Values|Default Value|
-|-|-|-|-|
-|csv.format|The format of the input CSV file.|Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache's commons CSV library|Default|
-|csv.headers|It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.|true/false|false|
-|csv.delimiter|The column delimiter, usually `,`,`;`,`\t`, ...|any single char|`,`|
-|csv.quote-char|The quoting character|any single char|`"`|
-|csv.null-string|It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.|any string|not set|
+| Option name                        | Description                                                                                                                                                                                                                         | Valid Values                                                                                                                                                | Default Value |
+|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| csv.format                         | The format of the input CSV file.                                                                                                                                                                                                   | Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache's commons CSV library | Default       |
+| csv.headers                        | It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.                                                                                                                 | true/false                                                                                                                                                  | false         |
+| csv.delimiter                      | The column delimiter, usually `,`,`;`,`\t`, ...                                                                                                                                                                                     | any single char                                                                                                                                             | `,`           |
+| csv.quote-char                     | The quoting character                                                                                                                                                                                                               | any single char                                                                                                                                             | `"`           |
+| csv.null-string                    | It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.                                                                                                       | any string                                                                                                                                                  | not set       |
+| csv.ignore-columns-with-no-headers | It tells the CSV triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). | true/false                                                                                                                                                  | false         |
 
 ---
 
@@ -465,6 +466,62 @@ WHERE
 | "Mary" | "Jenkins" |
 ----------------------
 ```
+
+### `csv.ignore-columns-with-no-header`
+
+#### Description
+
+It tells the csv triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected).
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+false
+
+#### Examples
+
+##### Input
+
+#### Data
+
+```
+,state 
+fred,CO
+sally,FL
+```
+
+located at  http://example.org/spreadsheet.csv
+
+##### Use Case 1
+
+###### Query
+
+```
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT DISTINCT ?fred ?sally
+WHERE {
+   SERVICE <x-sparql-anything:location=http://example.org/spreadsheet.csv>
+   {
+
+      fx:properties fx:csv.headers true .
+      fx:properties fx:csv.ignore-columns-with-no-header true .
+
+          ?root a fx:root ;
+            rdf:_1 [rdf:_1 ?fred] ;
+            rdf:_2 [rdf:_1 ?sally] .
+   }
+}
+
+```
+
+###### Result
+
+| fred | sally |
+|------|-------|
 
 <!--
 ### `option`

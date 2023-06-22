@@ -39,10 +39,10 @@ public enum IRIArgument {
 	ANNOTATE_TRIPLES_WITH_SLOT_KEYS("annotate-triples-with-slot-keys", "false");
 
 	private final String s;
-	private String defaultValue;
+	private final String defaultValue;
 
 	IRIArgument(String s) {
-		this.s = s;
+		this(s, null);
 	}
 
 	IRIArgument(String s, String defaultValue) {

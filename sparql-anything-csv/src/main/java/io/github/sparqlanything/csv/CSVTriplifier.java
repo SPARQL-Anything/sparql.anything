@@ -42,6 +42,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	public final static String PROPERTY_QUOTE_CHAR = "csv.quote-char";
 	public final static String PROPERTY_NULL_STRING = "csv.null-string";
 
+	public final static String IGNORE_COLUMNS_WITH_NO_HEADERS = "csv.ignore-columns-with-no-header";
+
 	public static CSVFormat buildFormat(Properties properties) throws IOException {
 		CSVFormat format;
 		try {
@@ -111,15 +113,10 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-//		URL url = Triplifier.getLocation(properties);
-//		log.debug("Location: {}", url);
-//		if (url == null)
-//			return;
-
 		CSVFormat format = buildFormat(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
-
-		String dataSourceId = ""; // there is always 1 data source id
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID; // there is always 1 data source id
+		boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
 
 		// Add type Root
 		builder.addRoot(dataSourceId);
@@ -142,7 +139,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					log.debug("current row num: {}", rown);
 				}
 				CSVRecord record = recordIterator.next();
-				processRow(rown, dataSourceId, SPARQLAnythingConstants.ROOT_ID, record, headers_map, builder);
+				processRow(rown, dataSourceId, SPARQLAnythingConstants.ROOT_ID, record, headers_map, builder, ignoreColumnsWithNoHeaders);
 			}
 			log.debug("{} records", rown);
 		} catch (IllegalArgumentException e) {
@@ -162,7 +159,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	}
 
 
-	private void processRow(int rown, String dataSourceId, String rootId, CSVRecord record, LinkedHashMap<Integer, String> headers_map , FacadeXGraphBuilder builder){
+	private void processRow(int rown, String dataSourceId, String rootId, CSVRecord record, LinkedHashMap<Integer, String> headers_map , FacadeXGraphBuilder builder, boolean ignoreColumnsWithNoHeaders){
 		String rowContainerId = StringUtils.join(rootId , "#row" , rown);
 		builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
 		Iterator<String> cells = record.iterator();
@@ -179,7 +176,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					builder.addValue(dataSourceId, rowContainerId, colname, value);
 				}
 			} else {
-				if(value != null){
+				if(value != null && !ignoreColumnsWithNoHeaders){
 					builder.addValue(dataSourceId, rowContainerId, cellid, value);
 				}
 			}
@@ -229,7 +226,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
 		CSVSlice csvo = (CSVSlice) slice;
+		boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(p, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
 		builder.addRoot(csvo.getDatasourceId());
-		processRow(csvo.iteration(), csvo.getDatasourceId(), builder.getRootURI(csvo.getDatasourceId()), csvo.get(), csvo.getHeaders(), builder);
+		processRow(csvo.iteration(), csvo.getDatasourceId(), builder.getRootURI(csvo.getDatasourceId()), csvo.get(), csvo.getHeaders(), builder, ignoreColumnsWithNoHeaders);
 	}
 }

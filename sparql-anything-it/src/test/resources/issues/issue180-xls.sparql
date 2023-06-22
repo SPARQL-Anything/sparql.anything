@@ -1,0 +1,17 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT DISTINCT ?fred ?sally
+WHERE {
+   SERVICE <x-sparql-anything:location=%%%LOCATION%%%>
+   {
+
+      fx:properties fx:spreadsheet.headers true .
+      fx:properties fx:spreadsheet.ignore-columns-with-no-header true .
+
+      GRAPH <%%%LOCATION%%%#Sheet1> {
+          ?root a fx:root ;
+            rdf:_1 [rdf:_1 ?fred] ;
+            rdf:_2 [rdf:_1 ?sally] .
+      }
+   }
+}
