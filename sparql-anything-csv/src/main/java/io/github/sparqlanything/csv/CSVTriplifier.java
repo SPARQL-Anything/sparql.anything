@@ -36,15 +36,59 @@ import java.util.Properties;
 import java.util.Set;
 
 public class CSVTriplifier implements Triplifier, Slicer {
-	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
-
 	public final static IRIArgument PROPERTY_HEADERS = new IRIArgument("csv.headers", "false");
+	public final static IRIArgument PROPERTY_HEADER_ROW = new IRIArgument("csv.headers-row", "1");
 	public final static String PROPERTY_FORMAT = "csv.format";
 	public final static String PROPERTY_DELIMITER = "csv.delimiter";
 	public final static String PROPERTY_QUOTE_CHAR = "csv.quote-char";
 	public final static String PROPERTY_NULL_STRING = "csv.null-string";
-
 	public final static String IGNORE_COLUMNS_WITH_NO_HEADERS = "csv.ignore-columns-with-no-header";
+	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
+
+	@Override
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
+
+		CSVFormat format = buildFormat(properties);
+		Charset charset = Triplifier.getCharsetArgument(properties);
+		int headersRowNumber= PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID; // there is always 1 data source id
+		boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
+
+		// Add type Root
+		builder.addRoot(dataSourceId);
+
+		try (InputStream is = Triplifier.getInputStream(properties)) {
+			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
+			Iterable<CSVRecord> records = format.parse(in);
+			Iterator<CSVRecord> recordIterator = records.iterator();
+			LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties, format, charset);
+
+			log.debug("Iterating records");
+			int rown = 0;
+			log.trace(" > record {}", rown);
+			// Data
+			while (recordIterator.hasNext()) {
+				log.trace(" > is data {}", rown);
+				// Rows
+				rown++;
+				if ((rown % 10000) == 0) {
+					log.debug("current row num: {}", rown);
+				}
+				CSVRecord record = recordIterator.next();
+				if(rown == headersRowNumber && !headers_map.isEmpty()){
+					// skip headers row
+					rown--;
+					headersRowNumber = -1; // this avoids that the condition is verified in the next iterations
+					continue;
+				}
+				processRow(rown, dataSourceId, SPARQLAnythingConstants.ROOT_ID, record, headers_map, builder, ignoreColumnsWithNoHeaders);
+			}
+			log.debug("{} records", rown);
+		} catch (IllegalArgumentException e) {
+			log.error("{} :: {}", e.getMessage(), Triplifier.getResourceId(properties));
+			throw new IOException(e);
+		}
+	}
 
 	public static CSVFormat buildFormat(Properties properties) throws IOException {
 		CSVFormat format;
@@ -54,32 +98,42 @@ public class CSVTriplifier implements Triplifier, Slicer {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
-		if(properties.containsKey(PROPERTY_NULL_STRING)){
-			format = format.withNullString(properties.getProperty(PROPERTY_NULL_STRING)) ;
+		if (properties.containsKey(PROPERTY_NULL_STRING)) {
+			format = format.withNullString(properties.getProperty(PROPERTY_NULL_STRING));
 		}
-		if(properties.containsKey(PROPERTY_QUOTE_CHAR)){
+		if (properties.containsKey(PROPERTY_QUOTE_CHAR)) {
 			log.debug("Setting quote char to '{}'", properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0));
-			format = format.withQuote(properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0)) ;
+			format = format.withQuote(properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0));
 		}
-		if(properties.containsKey(PROPERTY_DELIMITER)){
+		if (properties.containsKey(PROPERTY_DELIMITER)) {
 			log.debug("Setting delimiter to {}", properties.getProperty(PROPERTY_DELIMITER));
-			if(properties.getProperty(PROPERTY_DELIMITER).length() != 1){
-				throw new IOException("Bad value for property " + PROPERTY_DELIMITER + ": string length must be 1, " + Integer.toString(properties.getProperty(PROPERTY_DELIMITER).length()) + " given");
+			if (properties.getProperty(PROPERTY_DELIMITER).length() != 1) {
+				throw new IOException("Bad value for property " + PROPERTY_DELIMITER + ": string length must be 1, " + properties.getProperty(PROPERTY_DELIMITER).length() + " given");
 			}
-			format = format.withDelimiter(properties.getProperty(PROPERTY_DELIMITER).charAt(0)) ;
+			format = format.withDelimiter(properties.getProperty(PROPERTY_DELIMITER).charAt(0));
 		}
 		return format;
 	}
 
-	public static boolean hasHeaders(Properties properties){
-		return PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS);
-	}
+	public LinkedHashMap<Integer, String> makeHeadersMap(Iterator<CSVRecord> recordIterator, Properties properties, CSVFormat format, Charset charset) throws TriplifierHTTPException, IOException {
+		int headersRow = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
+		Iterator<CSVRecord> iterator = recordIterator;
+		if (headersRow > 0) {
+			Reader in = new InputStreamReader(new BOMInputStream(Triplifier.getInputStream(properties)), charset);
+			Iterable<CSVRecord> records = format.parse(in);
+			iterator = records.iterator();
+		}
+		int rowNumber = 1;
 
-	public LinkedHashMap<Integer, String> makeHeadersMap(Iterator<CSVRecord> recordIterator , Properties properties){
 		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
-		if (hasHeaders(properties) && recordIterator.hasNext()) {
+		if (hasHeaders(properties) && iterator.hasNext()) {
+			while(rowNumber!=headersRow && iterator.hasNext()){
+				rowNumber ++;
+				iterator.next();
+			}
+			CSVRecord record = iterator.next();
+
 			log.trace(" > is headers");
-			CSVRecord record = recordIterator.next();
 
 			Iterator<String> columns = record.iterator();
 			int colid = 0;
@@ -88,7 +142,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 				String colstring = columns.next();
 				String colname = colstring.strip();
 
-				if(colname.length()==0){
+				if (colname.length() == 0) {
 					continue;
 				}
 
@@ -103,42 +157,32 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		}
 		return headers_map;
 	}
-	@Override
-	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		CSVFormat format = buildFormat(properties);
-		Charset charset = Triplifier.getCharsetArgument(properties);
-		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID; // there is always 1 data source id
-		boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
-
-		// Add type Root
-		builder.addRoot(dataSourceId);
-
-		try (InputStream is = Triplifier.getInputStream(properties);){
-			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
-			Iterable<CSVRecord> records = format.parse(in);
-			Iterator<CSVRecord> recordIterator = records.iterator();
-			LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties);
-
-			log.debug("Iterating records");
-			int rown = 0;
-			log.trace(" > record {}", rown);
-			// Data
-			while (recordIterator.hasNext()) {
-				log.trace(" > is data {}", rown);
-				// Rows
-				rown++;
-				if((rown % 10000)==0){
-					log.debug("current row num: {}", rown);
+	private void processRow(int rown, String dataSourceId, String rootId, CSVRecord record, LinkedHashMap<Integer, String> headers_map, FacadeXGraphBuilder builder, boolean ignoreColumnsWithNoHeaders) {
+		String rowContainerId = StringUtils.join(rootId, "#row", rown);
+		builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
+		Iterator<String> cells = record.iterator();
+		int cellid = 0;
+		while (cells.hasNext()) {
+			String value = cells.next();
+			log.trace(" > > row {} cell {} is <{}>", rown, cellid, value);
+			cellid++;
+			if (headers_map.containsKey(cellid)) {
+				String colname = headers_map.get(cellid);
+				log.trace("> > > colname >{}< (URL Encoded) >{}<", headers_map.get(cellid), colname);
+				if (value != null) {
+					builder.addValue(dataSourceId, rowContainerId, colname, value);
 				}
-				CSVRecord record = recordIterator.next();
-				processRow(rown, dataSourceId, SPARQLAnythingConstants.ROOT_ID, record, headers_map, builder, ignoreColumnsWithNoHeaders);
+			} else {
+				if (value != null && !ignoreColumnsWithNoHeaders) {
+					builder.addValue(dataSourceId, rowContainerId, cellid, value);
+				}
 			}
-			log.debug("{} records", rown);
-		} catch (IllegalArgumentException e) {
-			log.error("{} :: {}", e.getMessage(), Triplifier.getResourceId(properties));
-			throw new IOException(e);
 		}
+	}
+
+	public static boolean hasHeaders(Properties properties) {
+		return PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS);
 	}
 
 	@Override
@@ -149,31 +193,6 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public Set<String> getExtensions() {
 		return Sets.newHashSet("csv", "tsv", "tab");
-	}
-
-
-	private void processRow(int rown, String dataSourceId, String rootId, CSVRecord record, LinkedHashMap<Integer, String> headers_map , FacadeXGraphBuilder builder, boolean ignoreColumnsWithNoHeaders){
-		String rowContainerId = StringUtils.join(rootId , "#row" , rown);
-		builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
-		Iterator<String> cells = record.iterator();
-		int cellid = 0;
-		while (cells.hasNext()) {
-			String value = cells.next();
-			log.trace(" > > row {} cell {} is <{}>", rown, cellid, value);
-			cellid++;
-			if (headers_map.containsKey(cellid)) {
-//				String colname = URLEncodedUtils.formatSegments(headers_map.get(cellid)).substring(1);
-				String colname = headers_map.get(cellid);
-				log.trace("> > > colname >{}< (URL Encoded) >{}<",headers_map.get(cellid),colname);
-				if(value != null){
-					builder.addValue(dataSourceId, rowContainerId, colname, value);
-				}
-			} else {
-				if(value != null && !ignoreColumnsWithNoHeaders){
-					builder.addValue(dataSourceId, rowContainerId, cellid, value);
-				}
-			}
-		}
 	}
 
 	@Override
@@ -191,7 +210,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 		Iterable<CSVRecord> records = format.parse(in);
 		final Iterator<CSVRecord> recordIterator = records.iterator();
-		final LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties);
+		final LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties, format, charset);
 
 		return new Iterable<Slice>() {
 			@Override
@@ -209,7 +228,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					public Slice next() {
 						rown++;
 						log.trace("next slice: {}", rown);
-						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId,  headers_map);
+						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, headers_map);
 					}
 				};
 			}

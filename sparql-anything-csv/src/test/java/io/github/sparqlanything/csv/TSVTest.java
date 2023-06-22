@@ -26,7 +26,8 @@ import java.util.Properties;
 public class TSVTest extends AbstractTriplifierTester {
 
 	public TSVTest() {
-		super(new CSVTriplifier(), new Properties(), "tsv", "nq");
+		super(new CSVTriplifier(), new Properties(), "tsv");
+		this.printWholeGraph = true;
 	}
 
 	public void properties(Properties properties) {
@@ -36,7 +37,7 @@ public class TSVTest extends AbstractTriplifierTester {
 
 
 	@Test
-	public void testTsv() throws IOException, TriplifierHTTPException {
+	public void testTsv() {
 		this.assertResultIsIsomorphicWithExpected();
 		this.assertNotBlankNode();
 	}
