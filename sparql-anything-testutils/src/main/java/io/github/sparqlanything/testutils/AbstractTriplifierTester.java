@@ -186,12 +186,22 @@ public class AbstractTriplifierTester {
 
 
 	protected void assertNotBlankNode() {
-		this.resultDatasetGraph.find(null, null, null, null).forEachRemaining(q -> {
-			assertFalse(q.getSubject().isBlank());
-			assertFalse(q.getPredicate().isBlank());
-			assertFalse(q.getObject().isBlank());
-			assertFalse(q.getGraph().isBlank());
-		});
+		if (!useDatasetGraph) {
+			this.result.find().forEachRemaining(t -> {
+				assertFalse("not blank" + t, t.getSubject().isBlank());
+				assertFalse("not blank" + t, t.getPredicate().isBlank());
+				assertFalse("not blank" + t, t.getObject().isBlank());
+			});
+		} else {
+			this.resultDatasetGraph.find(null, null, null, null).forEachRemaining(q -> {
+				assertFalse("not blank" + q, q.getSubject().isBlank());
+				assertFalse("not blank" + q, q.getPredicate().isBlank());
+				assertFalse("not blank" + q, q.getObject().isBlank());
+				assertFalse("not blank" + q, q.getGraph().isBlank());
+			});
+
+		}
+
 	}
 
 
