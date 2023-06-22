@@ -21,7 +21,6 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.LangBuilder;
 import org.apache.jena.riot.ReaderRIOT;
 import org.apache.jena.riot.ReaderRIOTFactory;
-import org.apache.jena.riot.lang.LangJSONLD10;
 import org.apache.jena.riot.lang.LangJSONLD11;
 import org.apache.jena.riot.system.ParserProfile;
 

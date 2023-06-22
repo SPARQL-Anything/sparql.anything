@@ -18,7 +18,6 @@ package io.github.sparqlanything.cli;
 
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
-import io.github.sparqlanything.engine.TriplifierRegisterException;
 import io.github.basilapi.basil.sparql.QueryParameter;
 import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
@@ -65,15 +64,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
@@ -84,7 +75,7 @@ public class SPARQLAnything {
 	private static Long duration = null;
 
 	// TODO This should be moved to the engine module
-	private static void initSPARQLAnythingEngine() throws TriplifierRegisterException {
+	private static void initSPARQLAnythingEngine() {
 		// Register the JSON-LD parser factory for extension  .json
 		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
 		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
@@ -98,71 +89,79 @@ public class SPARQLAnything {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Before executeQuery: {}", System.currentTimeMillis() - duration);
 		}
-		String format = outputFormat;
-		Query q = query;
-		if (q.isSelectType()) {
-			if (format.equals("JSON")) {
-				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execSelect());
-			} else if (format.equals("XML")) {
-				ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(q, kb).execSelect());
-			} else if (format.equals("CSV")) {
-				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execSelect());
-			} else if (format.equals("TEXT")) {
-				pw.println(ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect()));
-			} else {
-				throw new RuntimeException("Unsupported format: " + format);
+		if (query.isSelectType()) {
+			switch (outputFormat) {
+				case "JSON":
+					ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(query, kb).execSelect());
+					break;
+				case "XML":
+					ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(query, kb).execSelect());
+					break;
+				case "CSV":
+					ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(query, kb).execSelect());
+					break;
+				case "TEXT":
+					pw.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
+					break;
+				default:
+					throw new RuntimeException("Unsupported format: " + outputFormat);
 			}
-		} else if (q.isAskType()) {
-			if (format.equals("JSON")) {
-				ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(q, kb).execAsk());
-			} else if (format.equals("XML")) {
-				ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(q, kb).execAsk());
-			} else if (format.equals("CSV")) {
-				ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
-			} else if (format.equals("TEXT")) {
-				pw.print(QueryExecutionFactory.create(q, kb).execAsk());
-				//ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
-			} else {
-				throw new RuntimeException("Unsupported format: " + format);
+		} else if (query.isAskType()) {
+			switch (outputFormat) {
+				case "JSON":
+					ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(query, kb).execAsk());
+					break;
+				case "XML":
+					ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(query, kb).execAsk());
+					break;
+				case "CSV":
+					ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(query, kb).execAsk());
+					break;
+				case "TEXT":
+					pw.print(QueryExecutionFactory.create(query, kb).execAsk());
+					//ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
+					break;
+				default:
+					throw new RuntimeException("Unsupported format: " + outputFormat);
 			}
 //			pw.println(QueryExecutionFactory.create(q, kb).execAsk());
-		} else if (q.isDescribeType() || q.isConstructType()) {
+		} else if (query.isDescribeType() || query.isConstructType()) {
 			Model m;
 			Dataset d = null;
-			if (q.isConstructType()) {
-				d = QueryExecutionFactory.create(q, kb).execConstructDataset();
+			if (query.isConstructType()) {
+				d = QueryExecutionFactory.create(query, kb).execConstructDataset();
 				// .execConstructDataset (instead of .execConstruct) so we can construct quads too
 				// as described here: https://jena.apache.org/documentation/query/construct-quad.html
 				m = d.getDefaultModel();
 			} else {
-				m = QueryExecutionFactory.create(q, kb).execDescribe();
+				m = QueryExecutionFactory.create(query, kb).execDescribe();
 				// d = new DatasetImpl(m);
 			}
-			if (format.equals("JSON") || format.equals(Lang.JSONLD.getName()) ) {
+			if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName()) ) {
 				// JSON-LD format.equals(Lang.JSONLD11.getName())
 				RDFDataMgr.write(pw, m, Lang.JSONLD);
-			} else if ( format.equals(Lang.JSONLD11.getName()) ) {
+			} else if ( outputFormat.equals(Lang.JSONLD11.getName()) ) {
 				RDFDataMgr.write(pw, m, Lang.JSONLD11);
-			} else if (format.equals("XML")) {
+			} else if (outputFormat.equals("XML")) {
 				// RDF/XML
 				RDFDataMgr.write(pw, m, Lang.RDFXML);
-			} else if (format.equals("TTL") || format.equals(Lang.TURTLE.getName())) {
+			} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
 				// TURTLE
 				RDFDataMgr.write(pw, m, Lang.TTL);
-			} else if (format.equals("NT") || format.equals(Lang.NTRIPLES.getName())) {
+			} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
 				// N-Triples
 				RDFDataMgr.write(pw, m, Lang.NT);
-			} else if (format.equals("NQ") || format.equals(Lang.NQUADS.getName())) {
+			} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
 				// NQ
-				RDFDataMgr.write(pw, d, Lang.NQ);
-			} else if (format.equals(Lang.TRIG.getName())) {
+				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
+			} else if (outputFormat.equals(Lang.TRIG.getName())) {
 				// TRIG
-				RDFDataMgr.write(pw, d, Lang.TRIG);
-			} else if (format.equals(Lang.TRIX.getName())) {
+				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
+			} else if (outputFormat.equals(Lang.TRIX.getName())) {
 				// TRIG
-				RDFDataMgr.write(pw, d, Lang.TRIX);
+				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
 			} else {
-				throw new RuntimeException("Unsupported format: " + format);
+				throw new RuntimeException("Unsupported format: " + outputFormat);
 			}
 		}
 		if(logger.isTraceEnabled()) {
@@ -182,7 +181,7 @@ public class SPARQLAnything {
 	public static Query bindParameters(Specification specification, QuerySolution qs) throws Exception {
 		VariablesBinder binder = new VariablesBinder(specification);
 
-		List<String> missing = new ArrayList<String>();
+		List<String> missing = new ArrayList<>();
 		for (QueryParameter qp : specification.getParameters()) {
 			logger.trace("Looking into parameter {} ({})", qp.getName(), qp.isOptional());
 			logger.trace("Checking against qs {}", qs);
@@ -204,7 +203,7 @@ public class SPARQLAnything {
 				ms.append("\t");
 			}
 			ms.append("\n");
-			logger.error("Available query parameters not sufficient: {}", qs.toString());
+			logger.error("Available query parameters not sufficient: {}", qs);
 			throw new Exception(ms.toString());
 		}
 		Query q = binder.toQuery();
@@ -252,25 +251,25 @@ public class SPARQLAnything {
 
 		@Override
 		public void reset() {
-			this.variables = new ArrayList<String>();
-			this.bindings = new HashSet<Binding>();
+			this.variables = new ArrayList<>();
+			this.bindings = new HashSet<>();
 			this.model = ModelFactory.createDefaultModel();
 			row = 0;
 			// Populate
-			Map<String, Set<Pair>> var_val_map = new HashMap<String, Set<Pair>>();
+			HashMap<String, Set<Pair>> var_val_map = new HashMap<>();
 			for (String value : values) {
 				String var = value.substring(0, value.indexOf('='));
 				String val = value.substring(value.indexOf('=') + 1);
 				if (!var_val_map.containsKey(var)) {
-					var_val_map.put(var, new HashSet<Pair>());
+					var_val_map.put(var, new HashSet<>());
 				}
 				logger.debug("Value: {} -> {}", var, val);
 				// If integer check if value represents range
 				if (val.matches("^[0-9]+\\.\\.\\.[0-9]+$")) {
 					logger.trace("Range");
 					String[] vv = val.split("\\.\\.\\.");
-					int from = Integer.valueOf(vv[0]);
-					int to = Integer.valueOf(vv[1]);
+					int from = Integer.parseInt(vv[0]);
+					int to = Integer.parseInt(vv[1]);
 					logger.trace("Value: {} -> range({},{})", var, from, to);
 					for (int x = from; x <= to; x++) {
 						var_val_map.get(var).add(Pair.of(var, Integer.toString(x)));
@@ -284,16 +283,16 @@ public class SPARQLAnything {
 			if (var_val_map.values().size() > 1) {
 				sets = cartesianProduct(var_val_map.values().toArray(new HashSet[var_val_map.values().size()]));
 			} else {
-				sets = new HashSet<Set<Object>>();
+				sets = new HashSet<>();
 
 				for (Pair p : var_val_map.entrySet().iterator().next().getValue()) {
-					Set<Object> singleton = new HashSet<Object>();
+					Set<Object> singleton = new HashSet<>();
 					singleton.add(p);
 					sets.add(singleton);
 				}
 			}
 			for (Set<Object> s : sets) {
-				final Map<Var, Node> bins = new HashMap<Var, Node>();
+				final Map<Var, Node> bins = new HashMap<>();
 				for (Object j : s) {
 					Pair p = (Pair) j;
 					String var = (String) p.getLeft();
@@ -330,9 +329,7 @@ public class SPARQLAnything {
 					@Override
 					public void forEach(BiConsumer<Var, Node> action) {
 						// TODO Auto-generated method stub
-						Iterator<Var> vIter = bins.keySet().iterator();
-						while (vIter.hasNext()) {
-							Var v = vIter.next();
+						for (Var v : bins.keySet()) {
 							Node n = bins.get(v);
 							action.accept(v, n);
 						}
@@ -398,9 +395,9 @@ public class SPARQLAnything {
 		}
 
 		private static Set<Set<Object>> _cartesianProduct(int index, Set<?>... sets) {
-			Set<Set<Object>> ret = new HashSet<Set<Object>>();
+			Set<Set<Object>> ret = new HashSet<>();
 			if (index == sets.length) {
-				ret.add(new HashSet<Object>());
+				ret.add(new HashSet<>());
 			} else {
 				for (Object obj : sets[index]) {
 					for (Set<Object> set : _cartesianProduct(index + 1, sets)) {
@@ -477,7 +474,7 @@ public class SPARQLAnything {
 
 					logger.info("Loading files from directory: {}", loadSource);
 					// If directory, load all files
-					List<File> list = new ArrayList<File>();
+					List<File> list = new ArrayList<>();
 					//Path base = Paths.get(".");
 					//File[] files = loadSource.listFiles();
 					Collection<File> files = FileUtils.listFiles(loadSource, null, true);
@@ -597,11 +594,8 @@ public class SPARQLAnything {
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
-		} catch(org.apache.commons.cli.MissingOptionException e1){
+		} catch(ParseException e1){
 			logger.error("{}",e1.getMessage());
-			cli.printHelp();
-		} catch (ParseException e) {
-			logger.error("{}",e.getMessage());
 			cli.printHelp();
 		}
 		if(logger.isTraceEnabled()) {
