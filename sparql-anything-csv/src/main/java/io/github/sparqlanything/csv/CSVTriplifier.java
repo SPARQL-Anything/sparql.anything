@@ -182,7 +182,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		CSVFormat format = buildFormat(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 
-		String dataSourceId = ""; // there is always 1 data source id
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID; // there is always 1 data source id
 
 		// XXX How do we close the inputstream?
 		final InputStream is = Triplifier.getInputStream(properties);
