@@ -5,8 +5,8 @@ Intuitively, Facade-X uses a subset of RDF as a general approach to represent th
 The model combines two types of elements: [containers](https://www.w3.org/TR/rdf11-schema/#ch_containervocab) and [literals](https://www.w3.org/TR/rdf11-schema/#ch_literal).
 While literals are used to represent primitive data types (i.e. strings, integers etc.), containers represent an information unit of a data source.
 This could be an array or an object in JSON format, a Row in CSV, or an element in XML.
-Therefore, the interpretation of what is a container is on a format base.
-Please refer to the [supported format description](README.md#supported-formats) to more details on what is a container.
+Therefore, the interpretation of what a container is on a format base.
+Please refer to the [supported format description](README.md#supported-formats) for more details on what is a container.
 Facade-X always has a single root container.
 Container members are a combination of key-value pairs, where keys are either RDF properties or container membership
 properties.
@@ -15,7 +15,7 @@ Containers may have a type.
 
 The following figure illustrates the resulting Facade-X as an entity-relation diagram.
 
-![Facade-X ER Diagram](facade-x-ER.png)
+![Facade-X Entity-Relationship Diagram](facade-x-ER.png)
 
 Given a resource, the transformers generate an RDF Dataset (i.e. a collection of named graphs) representing the transformation of the resource according to the Facade-X model.
 In particular, each named graph: 1. is the transformation of a data source of the input resource; and, 2. complies with the Facade-X model.
@@ -23,7 +23,7 @@ The default graph of the resulting RDF Dataset is the union of all the named gra
 
 ## IRI conventions
 
-As general meta-model for representing diverse data sources in RDF, Facade-X does not prescribe any IRI convention.
+As a general meta-model for representing diverse data sources in RDF, Facade-X does not prescribe any IRI convention.
 However, SPARQL Anything implements convenient conventions for homogenising IRIs generated. 
 
 ### Default configuration
