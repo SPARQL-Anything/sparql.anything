@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -34,6 +33,8 @@ public class SpreadsheetTriplifier implements Triplifier {
 	public final static String PROPERTY_HEADERS = "spreadsheet.headers";
 	public final static String PROPERTY_EVALUATE_FORMULAS = "spreadsheet.evaluate-formulas";
 	public final static String PROPERTY_COMPOSITE_VALUES = "spreadsheet.composite-values";
+
+	public final static String IGNORE_COLUMNS_WITH_NO_HEADERS = "spreadsheet.ignore-columns-with-no-header";
 	private static final Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
 	private FormulaEvaluator evaluator;
 
@@ -49,13 +50,14 @@ public class SpreadsheetTriplifier implements Triplifier {
 		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
 		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
 		final boolean headers = PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false);
+		final boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
 
 		Workbook wb = WorkbookFactory.create(url.openStream());
 		this.evaluator = wb.getCreationHelper().createFormulaEvaluator();
 
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = Triplifier.toSafeURIString(s.getSheetName());
-			populate(s, dataSourceId, builder, headers, evaluateFormulas, compositeValues);
+			populate(s, dataSourceId, builder, headers, evaluateFormulas, compositeValues, ignoreColumnsWithNoHeaders);
 		});
 
 	}
@@ -70,7 +72,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 		return Sets.newHashSet("xls", "xlsx");
 	}
 
-	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues) {
+	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, boolean ignoreColumnsWithNoHeaders) {
 
 		// Add type Root
 		builder.addRoot(dataSourceId);
@@ -121,14 +123,14 @@ public class SpreadsheetTriplifier implements Triplifier {
 							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
 							if (headers && headers_map.containsKey(columnId)) {
 								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
-							} else {
+							} else if(!ignoreColumnsWithNoHeaders) {
 								builder.addValue(dataSourceId, row, columnId, value);
 							}
 						} else {
 							Object value = extractCellValue(cell, evaluateFormulas);
 							if (headers && headers_map.containsKey(columnId)) {
 								builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
-							} else {
+							} else if(!ignoreColumnsWithNoHeaders) {
 								builder.addValue(dataSourceId, row, columnId, value);
 							}
 						}

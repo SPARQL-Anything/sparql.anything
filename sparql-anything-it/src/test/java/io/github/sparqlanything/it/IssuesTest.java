@@ -785,6 +785,37 @@ public class IssuesTest {
 	}
 
 	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/180">...</a>
+	 */
+	@Test
+	public void testIssue180() throws URISyntaxException, IOException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue180-xls.sparql")).toURI(), StandardCharsets.UTF_8);
+		String loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue180.xls")).toURI()).toUri().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+
+		query = QueryFactory.create(queryStr);
+
+		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+		ResultSet rs = qExec.execSelect();
+
+		assertFalse(rs.hasNext());
+
+		queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue180-csv.sparql")).toURI(), StandardCharsets.UTF_8);
+		loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue180.csv")).toURI()).toUri().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+
+		query = QueryFactory.create(queryStr);
+		qExec = QueryExecutionFactory.create(query, ds);
+		rs = qExec.execSelect();
+
+		assertFalse(rs.hasNext());
+	}
+
+	/**
 	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/386">...</a>
 	 */
 	@Test

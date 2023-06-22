@@ -130,11 +130,12 @@ WHERE
 
 ### Summary
 
-| Option name                   | Description                                                                                                                                                                  | Valid Values | Default Value |
-|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
-| spreadsheet.headers           | It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.                                          | true/false   | false         |
-| spreadsheet.evaluate-formulas | It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.                                                                                                 | true/false   | false         |
-| spreadsheet.composite-values  | It tells the spreadsheet triplifier to extract from the cells hyperlinks and comments. If enabled, the cells will be triplified as containers instead of literals (see #308) | true/false   | false         |
+| Option name                                | Description                                                                                                                                                                                                                                                      | Valid Values | Default Value |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
+| spreadsheet.headers                        | It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.                                                                                                                              | true/false   | false         |
+| spreadsheet.evaluate-formulas              | It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.                                                                                                                                                                                     | true/false   | false         |
+| spreadsheet.composite-values               | It tells the spreadsheet triplifier to extract from the cells hyperlinks and comments. If enabled, the cells will be triplified as containers instead of literals (see #308)                                                                                     | true/false   | false         |
+| spreadsheet.ignore-columns-with-no-headers | It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180  | true/false   | false         |
 
 
 ### `spreadsheet.headers`
@@ -524,6 +525,66 @@ WHERE
 
 
 ```
+
+
+### `spreadsheet.ignore-columns-with-no-header`
+
+#### Description
+
+It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+false
+
+#### Examples
+
+##### Input
+
+#### Data
+
+|       | state |
+|-------|-------|
+| fred  | CO    |
+| sally | FL    |
+
+located at  http://example.org/spreadsheet.xls
+
+##### Use Case 1
+
+###### Query
+
+```
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT DISTINCT ?fred ?sally
+WHERE {
+   SERVICE <x-sparql-anything:location=http://example.org/spreadsheet.xls>
+   {
+
+      fx:properties fx:spreadsheet.headers true .
+      fx:properties fx:spreadsheet.ignore-columns-with-no-header true .
+
+      GRAPH <http://example.org/spreadsheet.xls#Sheet1> {
+          ?root a fx:root ;
+            rdf:_1 [rdf:_1 ?fred] ;
+            rdf:_2 [rdf:_1 ?sally] .
+      }
+   }
+}
+
+```
+
+###### Result
+
+| fred | sally |
+|------|-------|
+
+
 
 <!--
 # 
