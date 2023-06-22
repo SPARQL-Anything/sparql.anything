@@ -39,8 +39,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
 	public final static String PROPERTY_DELIMITER = "csv.delimiter";
-	public final static String PROPERTY_QUOTECHAR = "csv.quote-char";
-	public final static String PROPERTY_NULLSTRING = "csv.null-string";
+	public final static String PROPERTY_QUOTE_CHAR = "csv.quote-char";
+	public final static String PROPERTY_NULL_STRING = "csv.null-string";
 
 	public static CSVFormat buildFormat(Properties properties) throws IOException {
 		CSVFormat format;
@@ -50,12 +50,12 @@ public class CSVTriplifier implements Triplifier, Slicer {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
-		if(properties.containsKey(PROPERTY_NULLSTRING)){
-			format = format.withNullString(properties.getProperty(PROPERTY_NULLSTRING)) ;
+		if(properties.containsKey(PROPERTY_NULL_STRING)){
+			format = format.withNullString(properties.getProperty(PROPERTY_NULL_STRING)) ;
 		}
-		if(properties.containsKey(PROPERTY_QUOTECHAR)){
-			log.debug("Setting quote char to '{}'", properties.getProperty(PROPERTY_QUOTECHAR).charAt(0));
-			format = format.withQuote(properties.getProperty(PROPERTY_QUOTECHAR).charAt(0)) ;
+		if(properties.containsKey(PROPERTY_QUOTE_CHAR)){
+			log.debug("Setting quote char to '{}'", properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0));
+			format = format.withQuote(properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0)) ;
 		}
 		if(properties.containsKey(PROPERTY_DELIMITER)){
 			log.debug("Setting delimiter to {}", properties.getProperty(PROPERTY_DELIMITER));
@@ -93,10 +93,14 @@ public class CSVTriplifier implements Triplifier, Slicer {
 				String colstring = columns.next();
 				String colname = colstring.strip();
 
+				if(colname.length()==0){
+					continue;
+				}
+
 				int c = 0;
 				while (headers_map.containsValue(colname)) {
 					c++;
-					colname += "_" + String.valueOf(c);
+					colname += "_".concat(String.valueOf(c));
 				}
 				log.trace("adding colname >{}<", colname);
 				headers_map.put(colid, colname);
@@ -185,18 +189,10 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 
-//		URL url = Triplifier.getLocation(properties);
-//		log.debug("Location: {}", url);
-//		if (url == null)
-//			return Collections.emptySet();
-
 		CSVFormat format = buildFormat(properties);
-		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 
-//		boolean headers = hasHeaders(properties);
 		String dataSourceId = ""; // there is always 1 data source id
-//		String containerRowPrefix = root + "#row";
 
 		// XXX How do we close the inputstream?
 		final InputStream is = Triplifier.getInputStream(properties);

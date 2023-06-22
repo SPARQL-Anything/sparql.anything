@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -59,6 +60,16 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 	}
 
+	@Override
+	public Set<String> getMimeTypes() {
+		return Sets.newHashSet("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+	}
+
+	@Override
+	public Set<String> getExtensions() {
+		return Sets.newHashSet("xls", "xlsx");
+	}
+
 	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues) {
 
 		// Add type Root
@@ -72,7 +83,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 			if (headers && rowNum == 0) {
 				Row row = s.getRow(rowNum);
 				int columnId = 0;
-				for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+				for (int cellNum = 0; cellNum < row.getLastCellNum(); cellNum++) {
 					columnId++;
 					Cell cell = row.getCell(cellNum);
 					Object value = extractCellValue(cell, evaluateFormulas);
@@ -80,7 +91,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 
 					String columnName = columnString.strip();
 					if ("".equals(columnName)) {
-						columnName = Integer.toString(columnId);
+						continue;
 					}
 					int c = 0;
 					while (headers_map.containsValue(columnName)) {
@@ -88,14 +99,14 @@ public class SpreadsheetTriplifier implements Triplifier {
 						columnName += "_" + c;
 					}
 
-					log.trace("adding column name >{}<", columnName);
+					log.trace("adding column name >{}< (column id {})", columnName, columnId);
 					headers_map.put(columnId, columnName);
 				}
 
 			} else {
 				// Rows
 				rowNumber++;
-				String row =  "_Row_".concat(String.valueOf(rowNumber));
+				String row = "_Row_".concat(String.valueOf(rowNumber));
 				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, rowNumber, row);
 				Row record = s.getRow(rowNum);
 				logger.trace("Reading Row {} from sheet {}", rowNum, s.getSheetName());
@@ -104,10 +115,10 @@ public class SpreadsheetTriplifier implements Triplifier {
 					int columnId = 0;
 					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
 						Cell cell = record.getCell(cellNum);
+						columnId++;
 						if (compositeValues) {
 							String value = row.concat("_").concat(String.valueOf(cellNum));
 							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
-							columnId++;
 							if (headers && headers_map.containsKey(columnId)) {
 								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
 							} else {
@@ -115,7 +126,6 @@ public class SpreadsheetTriplifier implements Triplifier {
 							}
 						} else {
 							Object value = extractCellValue(cell, evaluateFormulas);
-							columnId++;
 							if (headers && headers_map.containsKey(columnId)) {
 								builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
 							} else {
@@ -151,7 +161,6 @@ public class SpreadsheetTriplifier implements Triplifier {
 		}
 		return "";
 	}
-
 
 	private void extractCompositeCellValue(String dataSourceId, String containerId, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder) {
 		if (cell == null) return;
@@ -191,12 +200,12 @@ public class SpreadsheetTriplifier implements Triplifier {
 			}
 		}
 
-		if (cell.getCellComment() != null){
+		if (cell.getCellComment() != null) {
 			Comment comment = cell.getCellComment();
-			if(comment.getAuthor()!=null){
+			if (comment.getAuthor() != null) {
 				builder.addValue(dataSourceId, containerId, "author", comment.getAuthor());
 			}
-			if(comment.getString()!=null){
+			if (comment.getString() != null) {
 				RichTextString commentRichTextString = comment.getString();
 				commentRichTextString.clearFormatting();
 				builder.addValue(dataSourceId, containerId, "threadedComment", commentRichTextString.getString());
@@ -204,16 +213,6 @@ public class SpreadsheetTriplifier implements Triplifier {
 		}
 
 
-	}
-
-	@Override
-	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-	}
-
-	@Override
-	public Set<String> getExtensions() {
-		return Sets.newHashSet("xls", "xlsx");
 	}
 
 }
