@@ -27,7 +27,6 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SpreadsheetTriplifier implements Triplifier {
 
@@ -48,20 +47,14 @@ public class SpreadsheetTriplifier implements Triplifier {
 		}
 		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
 		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
-		AtomicBoolean headers = new AtomicBoolean();
-		try {
-			headers.set(PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false));
-		} catch (Exception e) {
-			log.warn("Unsupported value for {}: '{}', using default ({}).",PROPERTY_HEADERS,  properties.getProperty(PROPERTY_HEADERS), false);
-			headers.set(false);
-		}
+		final boolean headers = PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false);
 
 		Workbook wb = WorkbookFactory.create(url.openStream());
 		this.evaluator = wb.getCreationHelper().createFormulaEvaluator();
 
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = Triplifier.toSafeURIString(s.getSheetName());
-			populate(s, dataSourceId, builder, headers.get(), evaluateFormulas, compositeValues);
+			populate(s, dataSourceId, builder, headers, evaluateFormulas, compositeValues);
 		});
 
 	}
@@ -71,62 +64,62 @@ public class SpreadsheetTriplifier implements Triplifier {
 		// Add type Root
 		builder.addRoot(dataSourceId);
 
-		int rown = 0; // this counts the LI index not the spreadsheet rows
+		int rowNumber = 0; // this counts the LI index not the spreadsheet rows
 		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<>();
 
 		for (int rowNum = s.getFirstRowNum(); rowNum <= s.getLastRowNum(); rowNum++) {
 			// Header
 			if (headers && rowNum == 0) {
 				Row row = s.getRow(rowNum);
-				int colid = 0;
+				int columnId = 0;
 				for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
-					colid++;
+					columnId++;
 					Cell cell = row.getCell(cellNum);
 					Object value = extractCellValue(cell, evaluateFormulas);
-					String colstring = value.toString();
+					String columnString = value.toString();
 
-					String colname = colstring.strip();
-					if ("".equals(colname)) {
-						colname = Integer.toString(colid);
+					String columnName = columnString.strip();
+					if ("".equals(columnName)) {
+						columnName = Integer.toString(columnId);
 					}
 					int c = 0;
-					while (headers_map.containsValue(colname)) {
+					while (headers_map.containsValue(columnName)) {
 						c++;
-						colname += "_" + c;
+						columnName += "_" + c;
 					}
 
-					log.trace("adding colname >{}<", colname);
-					headers_map.put(colid, colname);
+					log.trace("adding column name >{}<", columnName);
+					headers_map.put(columnId, columnName);
 				}
 
 			} else {
 				// Rows
-				rown++;
-				String row =  "_Row_".concat(String.valueOf(rown));
-				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, rown, row);
+				rowNumber++;
+				String row =  "_Row_".concat(String.valueOf(rowNumber));
+				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, rowNumber, row);
 				Row record = s.getRow(rowNum);
 				logger.trace("Reading Row {} from sheet {}", rowNum, s.getSheetName());
 
 				if (record != null) {
-					int colid = 0;
+					int columnId = 0;
 					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
 						Cell cell = record.getCell(cellNum);
 						if (compositeValues) {
 							String value = row.concat("_").concat(String.valueOf(cellNum));
 							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
-							colid++;
-							if (headers && headers_map.containsKey(colid)) {
-								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
+							columnId++;
+							if (headers && headers_map.containsKey(columnId)) {
+								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
 							} else {
-								builder.addValue(dataSourceId, row, colid, value);
+								builder.addValue(dataSourceId, row, columnId, value);
 							}
 						} else {
 							Object value = extractCellValue(cell, evaluateFormulas);
-							colid++;
-							if (headers && headers_map.containsKey(colid)) {
-								builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
+							columnId++;
+							if (headers && headers_map.containsKey(columnId)) {
+								builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
 							} else {
-								builder.addValue(dataSourceId, row, colid, value);
+								builder.addValue(dataSourceId, row, columnId, value);
 							}
 						}
 					}
@@ -148,7 +141,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 			case FORMULA:
 				if (evaluateFormulas) {
 					Cell evaluatedCell = evaluator.evaluateInCell(cell);
-					return extractCellValue(evaluatedCell, evaluateFormulas);
+					return extractCellValue(evaluatedCell, true);
 				} else {
 					return cell.getCellFormula();
 				}
@@ -176,7 +169,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 			case FORMULA:
 				if (evaluateFormulas) {
 					Cell evaluatedCell = evaluator.evaluateInCell(cell);
-					builder.addValue(dataSourceId, containerId, 1, extractCellValue(evaluatedCell, evaluateFormulas));
+					builder.addValue(dataSourceId, containerId, 1, extractCellValue(evaluatedCell, true));
 				} else {
 					builder.addValue(dataSourceId, containerId, 1, cell.getCellFormula());
 				}
