@@ -18,6 +18,7 @@
 package io.github.sparqlanything.jdbc;
 
 import io.github.sparqlanything.model.Triplifier;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
@@ -26,9 +27,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public class BGPAnalyser {
 	final static Logger L = LoggerFactory.getLogger(BGPAnalyser.class);
@@ -44,10 +47,10 @@ public class BGPAnalyser {
 		this.properties = properties;
 		this.opBGP = opBGP;
 		this.translation = new Translation(properties);
-		interpret();
+		setupConstraints();
 	}
 
-	public Map<Node, Interpretation> interpretations(){
+	public Map<Node, Interpretation> constraints(){
 		if(this.constraints == null){
 			return Collections.emptyMap();
 		}
@@ -58,7 +61,7 @@ public class BGPAnalyser {
 		return this.exception != null;
 	}
 
-	private void interpret()  {
+	private void setupConstraints()  {
 		this.constraints = new HashMap<Node,Assumption>();
 		List<Triple> tripleList = opBGP.getPattern().getList();
 		try {
@@ -95,7 +98,7 @@ public class BGPAnalyser {
 		}
 	}
 
-	private boolean interpretedAs(Node n, Class<? extends Interpretation> as){
+	private boolean hasConstraint(Node n, Class<? extends Interpretation> as){
 		if(!constraints.containsKey(n)){
 			return false;
 		}
@@ -105,16 +108,16 @@ public class BGPAnalyser {
 	private Assumption constrainSubject(Node subject, Triple triple) throws InconsistentAssumptionException {
 
 		// ContainerTable(S) <- URI(S) | FXRoot(O) | SlotRow(P) | ContainerRow(O)
-		if(subject.isURI() || interpretedAs(triple.getObject(), Assumption.FXRoot.class) ||
-			interpretedAs(triple.getPredicate(), Assumption.SlotRow.class) ||
-			interpretedAs(triple.getObject(), Assumption.ContainerRow.class)){
+		if(subject.isURI() || hasConstraint(triple.getObject(), Assumption.FXRoot.class) ||
+			hasConstraint(triple.getPredicate(), Assumption.SlotRow.class) ||
+			hasConstraint(triple.getObject(), Assumption.ContainerRow.class)){
 			return new Assumption.ContainerTable(subject, triple);
 		}
 
 		// ContainerRow(S) <- SlotColumn(P) | SlotValue(O) | TypeTable(O)
-		if(interpretedAs(triple.getPredicate(), Assumption.SlotColumn.class) ||
-				interpretedAs(triple.getObject(), Assumption.TypeTable.class) ||
-				interpretedAs(triple.getObject(), Assumption.SlotValue.class) ){
+		if(hasConstraint(triple.getPredicate(), Assumption.SlotColumn.class) ||
+				hasConstraint(triple.getObject(), Assumption.TypeTable.class) ||
+				hasConstraint(triple.getObject(), Assumption.SlotValue.class) ){
 			return new Assumption.ContainerRow(subject, triple);
 		}
 
@@ -135,12 +138,12 @@ public class BGPAnalyser {
 
 	private Assumption constrainObject(Node object, Triple triple) throws InconsistentEntityException {
 		// SlotValue(O) <- SlotColumn(P)
-		if(interpretedAs(triple.getPredicate(), Assumption.SlotColumn.class) ){
+		if(hasConstraint(triple.getPredicate(), Assumption.SlotColumn.class) ){
 			return new Assumption.SlotValue(object, triple);
 		}
 
 		// ContainerRow(O) <- SlotRow(P)
-		if(interpretedAs(triple.getPredicate(), Assumption.SlotRow.class) ){
+		if(hasConstraint(triple.getPredicate(), Assumption.SlotRow.class) ){
 			return new Assumption.ContainerRow(object, triple);
 		}
 
@@ -166,16 +169,16 @@ public class BGPAnalyser {
 
 	private Assumption constrainPredicate(Node predicate, Triple triple) throws InconsistentAssumptionException {
 		// SlotColumn(P) <- SlotValue(O)
-		if(interpretedAs(triple.getObject(), Assumption.SlotValue.class) ){
+		if(hasConstraint(triple.getObject(), Assumption.SlotValue.class) ){
 			return new Assumption.SlotColumn(predicate, triple);
 		}
 		// TypeProperty(P) <- TypeTable(O)
-		if(interpretedAs(triple.getObject(), Assumption.TypeTable.class) ||
-			interpretedAs(triple.getObject(), Assumption.FXRoot.class)){
+		if(hasConstraint(triple.getObject(), Assumption.TypeTable.class) ||
+			hasConstraint(triple.getObject(), Assumption.FXRoot.class)){
 			return new Assumption.TypeProperty(triple);
 		}
 		// SlotRow(P) <- ContainerRow(O)
-		if(interpretedAs(triple.getObject(), Assumption.ContainerRow.class) ){
+		if(hasConstraint(triple.getObject(), Assumption.ContainerRow.class) ){
 			return new Assumption.SlotRow(predicate, triple);
 		}
 
@@ -250,7 +253,7 @@ public class BGPAnalyser {
 						return true;
 
 					}
-					// Is our model incomplete?
+					// XXX Is our model incomplete?
 					throw new InconsistentTypesException(wasType, isType);
 				}
 			}
@@ -259,4 +262,33 @@ public class BGPAnalyser {
 			return true;
 		}
 	}
+
+	public static final Set<Pair<Node,Interpretation>> expand(Map<Node,Interpretation> interpretations){
+		Set<Pair<Node,Interpretation>> expansion = new HashSet<>();
+		for(Map.Entry<Node,Interpretation> entry:interpretations.entrySet()){
+			Set<Triple> tripleSet = ((Assumption) entry.getValue()).triples();
+			Triple[] triples =  tripleSet.toArray(new Triple[tripleSet.size()]);
+			if(entry.getValue() instanceof Assumption.Subject){
+				//Subject -> ContainerTable | ContainerRow
+				expansion.add(Pair.of(entry.getKey(), new Assumption.ContainerTable(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new Assumption.ContainerRow(entry.getKey(),triples)));
+			}else if(entry.getValue() instanceof Assumption.Predicate){
+				//Predicate -> SlotRow | SlotColumn | TypeProperty
+				expansion.add(Pair.of(entry.getKey(), new Assumption.SlotRow(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new Assumption.SlotColumn(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new Assumption.TypeProperty(triples)));
+			}else if(entry.getValue() instanceof Assumption.Object){
+				//Object -> ContainerRow | SlotValue | FXRoot | TypeTable
+				expansion.add(Pair.of(entry.getKey(), new Assumption.ContainerRow(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new Assumption.SlotValue(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new Assumption.FXRoot(triples)));
+				expansion.add(Pair.of(entry.getKey(), new Assumption.TypeTable(entry.getKey(),triples)));
+			}
+		}
+		return expansion;
+	}
+
+//	public Set<State> search(Map<Node, Interpretation> constraints){
+//
+//	}
 }

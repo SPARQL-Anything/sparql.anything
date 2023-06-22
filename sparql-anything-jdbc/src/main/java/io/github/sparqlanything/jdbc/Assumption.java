@@ -66,6 +66,7 @@ public class Assumption implements Interpretation {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
+
 	static class Predicate extends Assumption {
 		protected Predicate(Node n, Triple... t) {
 			super(n, t);

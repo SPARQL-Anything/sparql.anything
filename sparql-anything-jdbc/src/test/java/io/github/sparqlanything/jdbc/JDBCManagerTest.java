@@ -18,15 +18,20 @@
 package io.github.sparqlanything.jdbc;
 
 import io.github.sparqlanything.model.IRIArgument;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,13 +46,27 @@ public class JDBCManagerTest {
 	String username = "jdbc-test-h2";
 	String password = "this-is-just-a-test";
 
+	@Rule
+	public TestName testName = new TestName();
+
+	@BeforeClass
+	public static void beforeClass() throws IOException {
+		String dbLocation = JDBCManagerTest.class.getClassLoader().getResource("./").getPath() + "jdbc-test-h2/";
+		L.info("{}", dbLocation);
+		File dbLoc = new File(dbLocation);
+		if(dbLoc.exists()){
+			FileUtils.deleteDirectory(dbLoc);
+			L.info("Cleaning db: exists? {}", dbLoc.exists());
+		}
+	}
+
 	@Before
 	public void before() {
-
 		// Define database location
 		String dbLocation = getClass().getClassLoader().getResource("./").getPath() + "jdbc-test-h2/data";
 		File dbLoc = new File(dbLocation);
 		dbLoc.mkdirs();
+		dbLoc.deleteOnExit();
 		String jdbcUrl = "jdbc:h2:" + dbLocation ;
 
 		// Prepare properties
@@ -63,6 +82,7 @@ public class JDBCManagerTest {
 
 	@Test
 	public void C1_connection() throws SQLException {
+		L.info("{}", testName.getMethodName());
 		Connection connection = manager.getConnection();
 		L.info("Database name: {}", connection.getMetaData().getDatabaseProductName());
 		L.info("Database URL: {}", connection.getMetaData().getURL());
@@ -72,17 +92,21 @@ public class JDBCManagerTest {
 
 	@Test
 	public void C2_setup() throws SQLException {
+		L.info("{}", testName.getMethodName());
 		String testCSV = getClass().getClassLoader().getResource("./test.csv").getPath();
 		Connection connection = manager.getConnection();
 		Statement statement = connection.createStatement();
+		L.info("Statement created");
 		boolean outcome = statement.execute("CREATE TABLE TEST (ID INT PRIMARY KEY, WORD VARCHAR(255))\n" +
 						"    AS SELECT * FROM CSVREAD('" + testCSV + "')");
+		L.info("Statement executed");
 		Assert.assertFalse(outcome);
 		connection.close();
 	}
 
 	@Test
 	public void C3_verify() throws SQLException {
+		L.info("{}", testName.getMethodName());
 		Connection connection = manager.getConnection();
 		Statement statement = connection.createStatement();
 		ResultSet rs = statement.executeQuery("SELECT * FROM TEST;");
@@ -92,6 +116,7 @@ public class JDBCManagerTest {
 
 	@Test
 	public void M1_listTables() throws SQLException {
+		L.info("{}", testName.getMethodName());
 		L.info("Tables: {}", manager.listTables());
 		L.info("Columns of table TEST: {}", manager.listColumns("TEST"));
 		Assert.assertTrue(manager.listTables().contains("TEST"));

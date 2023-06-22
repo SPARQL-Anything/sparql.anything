@@ -19,6 +19,7 @@ package io.github.sparqlanything.jdbc;
 
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -35,8 +36,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public class BGPAnalyserTest {
 	final protected static Logger L = LoggerFactory.getLogger(BGPAnalyserTest.class);
@@ -70,7 +73,7 @@ public class BGPAnalyserTest {
 		properties();
 		BGPAnalyser analyser = new BGPAnalyser(properties, op);
 		boolean canResolve = analyser.isException();
-		interpretations = analyser.interpretations();
+		interpretations = analyser.constraints();
 	}
 
 	private Triple t(Node s, Node p, Node o){
@@ -239,6 +242,18 @@ public class BGPAnalyserTest {
 		show();
 	}
 
+	public void S_P_V__S_P_V_same_P_V(){
+		add(v("s1"), v("p1"), v("x"));
+		add(v("s2"), v("p1"), v("x"));
+		run();
+		IsA(v("s1"), Assumption.Subject.class);
+		IsA(v("s2"), Assumption.Subject.class);
+		IsA(v("p1"), Assumption.Predicate.class);
+		IsA(v("p2"), Assumption.Predicate.class);
+		IsA(v("x"), Assumption.Object.class);
+		show();
+	}
+
 	@Test
 	public void S_u_v__S_P_v(){
 		add(v("s1"), xyz("address"), v("x"));
@@ -298,5 +313,40 @@ public class BGPAnalyserTest {
 		}
 		b.append("\n\n");
 		L.info("{}",b.toString());
+	}
+
+	@Test
+	public void testRootState_1(){
+		Node t = b();
+		Node b = b();
+		add(t, v("p1"), b);
+		add(b, v("p2"), v("o"));
+		run();
+		State s = new State(interpretations);
+		Assert.assertTrue(s.isInitialState());
+		State s2 = new State(interpretations);
+		Assert.assertTrue(s.equals(s2));
+	}
+
+	@Test
+	public void testNextState_1(){
+		Node t = b();
+		Node b = b();
+		add(t, v("p1"), b);
+		add(b, v("p2"), v("o"));
+		run();
+		State s = new State(interpretations);
+		Assert.assertTrue(s.isInitialState());
+		Set<State> nexts = new HashSet<>();
+		for(Pair<Node,Interpretation> ii:BGPAnalyser.expand(interpretations)){
+			// Generate a new next state for each possible interpretation
+			State next = new State(s, ii.getLeft(), ii.getRight());
+			nexts.add(next);
+		}
+		for(State n : nexts){
+			Assert.assertFalse(n.isInitialState());
+			Assert.assertTrue(n.previous().equals(s));
+			Assert.assertTrue(s.next().contains(n));
+		}
 	}
 }
