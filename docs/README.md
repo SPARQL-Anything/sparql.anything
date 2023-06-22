@@ -11,21 +11,22 @@ SPARQL Anything is a system for Semantic Web re-engineering that allows users to
 
 Main features:
 
+- Provides a homogenous view over heterogeneous  data sources, thanks to the Facade-X meta-model (see [Facade-X specification](Facade-X.md) )
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#Configuration)) and
   build knowledge graphs with `CONSTRUCT` queries
 - [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar,
   Markdown, YAML, Bibtex, DOCx (see [pages dedicated to single formats](#supported-formats))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
 - Generates RDF, RDF-Star, and tabular data (thanks to SPARQL)
-- Full fledged [HTTP client](Configuration.md#http-options) to query Web APIs (headers, authentication, all methods
+- Full-fledged [HTTP client](Configuration.md#http-options) to query Web APIs (headers, authentication, all methods
   supported)
 - [Functions library](#functions-and-magic-properties) for RDF sequences, strings, hashes, easy entity building, ...
 - Combine multiple SERVICE clauses into complex data integration queries (thanks to SPARQL)
 - Query templates (using [BASIL variables](#query-templates-and-variable-bindings))
 - Save and reuse SPARQL `Results Sets` as input for [parametric queries](#query-templates-and-variable-bindings)
-- Slice large CSV files with an iterator-like execution style (
-  soon [JSON](https://github.com/SPARQL-Anything/sparql.anything/issues/202)
-  and [XML](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
+- Slice large CSV, JSON and XML files with an iterator-like execution style (
+  see [#202](https://github.com/SPARQL-Anything/sparql.anything/issues/202)
+  and [#203](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
 - Supports an [on-disk option](#Configuration) (with Apache Jena TDB2)
 
 ## Quickstart
