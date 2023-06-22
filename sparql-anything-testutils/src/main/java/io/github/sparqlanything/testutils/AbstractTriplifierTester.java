@@ -206,7 +206,7 @@ public class AbstractTriplifierTester {
 			try {
 				return NodeFactory.createURI(url.toURI().toString());
 			} catch (URISyntaxException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 		return n;

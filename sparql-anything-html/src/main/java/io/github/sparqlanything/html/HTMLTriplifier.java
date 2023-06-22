@@ -91,7 +91,7 @@ public class HTMLTriplifier implements Triplifier {
 				URL url = Triplifier.getLocation(properties);
 				extractMetadata(Objects.requireNonNull(url), builder);
 			} catch (IOException | URISyntaxException | ExtractionException | TripleHandlerException e) {
-				e.printStackTrace();
+				log.error(e.getMessage());
 			}
 		}
 

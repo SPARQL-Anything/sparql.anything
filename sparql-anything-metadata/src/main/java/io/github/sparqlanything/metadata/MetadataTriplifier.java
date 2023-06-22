@@ -55,7 +55,7 @@ public class MetadataTriplifier implements Triplifier {
 		try {
 			readMetadata(f, dataSourceId, root, builder);
 		} catch (ImageProcessingException | IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
 		f.delete();
