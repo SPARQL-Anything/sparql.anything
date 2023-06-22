@@ -42,11 +42,11 @@ public class IRIArgument {
 	private final String s;
 	private final String defaultValue;
 
-	IRIArgument(String s) {
+	public IRIArgument(String s) {
 		this(s, null);
 	}
 
-	IRIArgument(String s, String defaultValue) {
+	public IRIArgument(String s, String defaultValue) {
 		this.s = s;
 		this.defaultValue = defaultValue;
 	}
