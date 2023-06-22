@@ -17,6 +17,7 @@
 package io.github.sparqlanything.markdown;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierHTTPException;
 import com.google.common.collect.Sets;
@@ -116,8 +117,8 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 
 		try {
 			// Only 1 data source expected
-			String dataSourceId = Triplifier.getRootArgument(properties);
-			rootId = dataSourceId;
+			String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
+			rootId =  SPARQLAnythingConstants.ROOT_ID;
 			logger.trace("ds {} root {}", dataSourceId, rootId);
 			before(properties, builder, dataSourceId, rootId);
 			document.accept(this);
@@ -154,7 +155,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		String containerId = String.join("/", parentId , node.getClass().getSimpleName().toLowerCase() , Integer.toString(counter));
 		this.typeCounter.put(node.getClass(), counter);
 		this.builder.addContainer(dataSourceId, parentId, slot, containerId);
-		this.builder.addType(dataSourceId, containerId, XYZ_NS + node.getClass().getSimpleName());
+		this.builder.addType(dataSourceId, containerId,  node.getClass().getSimpleName());
 		this.lastSlot.put(parentId, slot);
 		this.containers.put(node, containerId);
 		this.lastSlot.put(containerId, 0);
@@ -185,7 +186,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 //		this.lastSlot.put(parentId, slot);
 		this.containers.put(node, containerId);
 		this.lastSlot.put(containerId, 0);
-		this.builder.addRoot(dataSourceId, rootId);
+		this.builder.addRoot(dataSourceId);
 		this.visitChildren(node);
 	}
 

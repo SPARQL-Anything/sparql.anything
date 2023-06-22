@@ -26,7 +26,7 @@
 <http://www.example.org/document/books/1:book/2:title> a xyz:title ;
         rdf:_1 "XML Developer's Guide" .
 
-<http://www.example.org/document/books> a xyz:books , <http://sparql.xyz/facade-x/ns/root> ;
+<http://www.example.org/document> a xyz:books , <http://sparql.xyz/facade-x/ns/root> ;
         rdf:_1 <http://www.example.org/document/books/1:book> ;
         rdf:_2 <http://www.example.org/document/books/2:book> ;
         rdf:_3 <http://www.example.org/document/books/3:book> .

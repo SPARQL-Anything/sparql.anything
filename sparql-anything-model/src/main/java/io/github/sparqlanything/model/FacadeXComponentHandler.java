@@ -104,11 +104,10 @@ public interface FacadeXComponentHandler {
 	boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value);
 
 	/**
-	 * Add the root container to the FacadeX model.
-	 * @param dataSourceId the data source of the container
-	 * @param rootId the identifier of the root container
+	 * Add the root container to the FacadeX model for the data source whose identifier is passed as argument.
+	 * @param dataSourceId the identifier of the data source for which the root must be added
 	 * @return true if the root is added to the model, false otherwise
 	 */
-	boolean addRoot(String dataSourceId, String rootId);
+	boolean addRoot(String dataSourceId);
 
 }

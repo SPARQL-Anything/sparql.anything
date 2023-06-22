@@ -25,7 +25,6 @@ public class JSONPathSlice implements Slice<Object> {
 	private Object object;
 	private int iteration;
 	private String dataSourceId;
-	private String rootId;
 
 	private JSONPathSlice(){}
 
@@ -44,17 +43,12 @@ public class JSONPathSlice implements Slice<Object> {
 		return dataSourceId;
 	}
 
-	@Override
-	public String getRootId() {
-		return rootId;
-	}
 
-	public static JSONPathSlice makeSlice(Object object, int iteration, String rootId, String dataSourceId){
+	public static JSONPathSlice makeSlice(Object object, int iteration, String dataSourceId){
 		JSONPathSlice r = new JSONPathSlice();
 		r.object = object;
 		r.iteration = iteration;
 		r.dataSourceId = dataSourceId;
-		r.rootId = rootId;
 		return r;
 	}
 }

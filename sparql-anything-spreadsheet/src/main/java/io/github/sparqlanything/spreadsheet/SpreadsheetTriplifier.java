@@ -16,10 +16,7 @@
 
 package io.github.sparqlanything.spreadsheet;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.PropertyUtils;
-import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
@@ -27,10 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SpreadsheetTriplifier implements Triplifier {
 
@@ -49,90 +46,90 @@ public class SpreadsheetTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		String root = Triplifier.getRootArgument(properties);
-		logger.trace("Root {}", root);
 		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
 		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
-		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
-		AtomicBoolean headers = new AtomicBoolean();
-		try {
-			headers.set(PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false));
-		} catch (Exception e) {
-			log.warn("Unsupported value for {}: '{}', using default ({}).",PROPERTY_HEADERS,  properties.getProperty(PROPERTY_HEADERS), false);
-			headers.set(false);
-		}
+		final boolean headers = PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false);
 
 		Workbook wb = WorkbookFactory.create(url.openStream());
 		this.evaluator = wb.getCreationHelper().createFormulaEvaluator();
 
 		wb.sheetIterator().forEachRemaining(s -> {
-			String dataSourceId = root + Triplifier.toSafeURIString(s.getSheetName());
-			populate(s, dataSourceId, dataSourceId, builder, headers.get(), evaluateFormulas, compositeValues, namespace);
+			String dataSourceId = Triplifier.toSafeURIString(s.getSheetName());
+			populate(s, dataSourceId, builder, headers, evaluateFormulas, compositeValues);
 		});
 
 	}
 
-	private void populate(Sheet s, String dataSourceId, String root, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, String namespace) {
+	@Override
+	public Set<String> getMimeTypes() {
+		return Sets.newHashSet("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+	}
+
+	@Override
+	public Set<String> getExtensions() {
+		return Sets.newHashSet("xls", "xlsx");
+	}
+
+	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues) {
 
 		// Add type Root
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
-		int rown = 0; // this counts the LI index not the spreadsheet rows
-		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
+		int rowNumber = 0; // this counts the LI index not the spreadsheet rows
+		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<>();
 
 		for (int rowNum = s.getFirstRowNum(); rowNum <= s.getLastRowNum(); rowNum++) {
 			// Header
 			if (headers && rowNum == 0) {
 				Row row = s.getRow(rowNum);
-				int colid = 0;
-				for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
-					colid++;
+				int columnId = 0;
+				for (int cellNum = 0; cellNum < row.getLastCellNum(); cellNum++) {
+					columnId++;
 					Cell cell = row.getCell(cellNum);
 					Object value = extractCellValue(cell, evaluateFormulas);
-					String colstring = value.toString();
+					String columnString = value.toString();
 
-					String colname = colstring.strip();
-					if ("".equals(colname)) {
-						colname = Integer.toString(colid);
+					String columnName = columnString.strip();
+					if ("".equals(columnName)) {
+						continue;
 					}
 					int c = 0;
-					while (headers_map.containsValue(colname)) {
+					while (headers_map.containsValue(columnName)) {
 						c++;
-						colname += "_" + c;
+						columnName += "_" + c;
 					}
 
-					log.trace("adding colname >{}<", colname);
-					headers_map.put(colid, colname);
+					log.trace("adding column name >{}< (column id {})", columnName, columnId);
+					headers_map.put(columnId, columnName);
 				}
 
 			} else {
 				// Rows
-				rown++;
-				String row = root + "_Row_" + rown;
-				builder.addContainer(dataSourceId, root, rown, row);
+				rowNumber++;
+				String row = "_Row_".concat(String.valueOf(rowNumber));
+				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, rowNumber, row);
 				Row record = s.getRow(rowNum);
 				logger.trace("Reading Row {} from sheet {}", rowNum, s.getSheetName());
 
 				if (record != null) {
-					int colid = 0;
+					int columnId = 0;
 					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
 						Cell cell = record.getCell(cellNum);
+						columnId++;
 						if (compositeValues) {
-							String value = row + "_" + cellNum;
-							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder, namespace);
-							colid++;
-							if (headers && headers_map.containsKey(colid)) {
-								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
+							String value = row.concat("_").concat(String.valueOf(cellNum));
+							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
+							if (headers && headers_map.containsKey(columnId)) {
+								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
 							} else {
-								builder.addValue(dataSourceId, row, colid, value);
+								builder.addValue(dataSourceId, row, columnId, value);
 							}
 						} else {
 							Object value = extractCellValue(cell, evaluateFormulas);
-							colid++;
-							if (headers && headers_map.containsKey(colid)) {
-								builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(colid)), value);
+							if (headers && headers_map.containsKey(columnId)) {
+								builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
 							} else {
-								builder.addValue(dataSourceId, row, colid, value);
+								builder.addValue(dataSourceId, row, columnId, value);
 							}
 						}
 					}
@@ -154,7 +151,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 			case FORMULA:
 				if (evaluateFormulas) {
 					Cell evaluatedCell = evaluator.evaluateInCell(cell);
-					return extractCellValue(evaluatedCell, evaluateFormulas);
+					return extractCellValue(evaluatedCell, true);
 				} else {
 					return cell.getCellFormula();
 				}
@@ -165,10 +162,9 @@ public class SpreadsheetTriplifier implements Triplifier {
 		return "";
 	}
 
-
-	private void extractCompositeCellValue(String dataSourceId, String containerId, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder, String namespace) {
+	private void extractCompositeCellValue(String dataSourceId, String containerId, Cell cell, boolean evaluateFormulas, FacadeXGraphBuilder builder) {
 		if (cell == null) return;
-		builder.addType(dataSourceId, containerId, namespace + cell.getCellType().toString());
+		builder.addType(dataSourceId, containerId, cell.getCellType().toString());
 		switch (cell.getCellType()) {
 			case BOOLEAN:
 				builder.addValue(dataSourceId, containerId, 1, cell.getBooleanCellValue());
@@ -182,7 +178,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 			case FORMULA:
 				if (evaluateFormulas) {
 					Cell evaluatedCell = evaluator.evaluateInCell(cell);
-					builder.addValue(dataSourceId, containerId, 1, extractCellValue(evaluatedCell, evaluateFormulas));
+					builder.addValue(dataSourceId, containerId, 1, extractCellValue(evaluatedCell, true));
 				} else {
 					builder.addValue(dataSourceId, containerId, 1, cell.getCellFormula());
 				}
@@ -204,12 +200,12 @@ public class SpreadsheetTriplifier implements Triplifier {
 			}
 		}
 
-		if (cell.getCellComment() != null){
+		if (cell.getCellComment() != null) {
 			Comment comment = cell.getCellComment();
-			if(comment.getAuthor()!=null){
+			if (comment.getAuthor() != null) {
 				builder.addValue(dataSourceId, containerId, "author", comment.getAuthor());
 			}
-			if(comment.getString()!=null){
+			if (comment.getString() != null) {
 				RichTextString commentRichTextString = comment.getString();
 				commentRichTextString.clearFormatting();
 				builder.addValue(dataSourceId, containerId, "threadedComment", commentRichTextString.getString());
@@ -217,16 +213,6 @@ public class SpreadsheetTriplifier implements Triplifier {
 		}
 
 
-	}
-
-	@Override
-	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-	}
-
-	@Override
-	public Set<String> getExtensions() {
-		return Sets.newHashSet("xls", "xlsx");
 	}
 
 }

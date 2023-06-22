@@ -44,11 +44,10 @@ public class BibtexTriplifier implements Triplifier {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
 
-		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		try (InputStream is = Triplifier.getInputStream(properties)){
 
@@ -57,16 +56,14 @@ public class BibtexTriplifier implements Triplifier {
 			BibTeXDatabase bibDB = bibtexParser.parse(reader);
 			AtomicInteger count = new AtomicInteger();
 			bibDB.getEntries().forEach((key, entry) -> {
-				String containerIdChild = root + key;
+				String containerIdChild = SPARQLAnythingConstants.ROOT_ID.concat(key.toString());
 				try {
 					builder.addType(dataSourceId, containerIdChild, new URI(namespace + entry.getType().toString()));
 				} catch (URISyntaxException e) {
 					logger.error("",e);
 				}
-				builder.addContainer(dataSourceId, root, count.incrementAndGet(), containerIdChild);
-				entry.getFields().forEach((keyField, valueField) -> {
-					builder.addValue(dataSourceId, containerIdChild, keyField.toString(), valueField.toUserString());
-				});
+				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count.incrementAndGet(), containerIdChild);
+				entry.getFields().forEach((keyField, valueField) -> builder.addValue(dataSourceId, containerIdChild, keyField.toString(), valueField.toUserString()));
 			});
 
 		} catch (IOException|TriplifierHTTPException|TokenMgrException|ParseException e) {

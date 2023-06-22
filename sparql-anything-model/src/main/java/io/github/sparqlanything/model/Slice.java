@@ -20,5 +20,4 @@ public interface Slice<T> {
 	T get();
 	int iteration();
 	String getDatasourceId();
-	String getRootId();
 }

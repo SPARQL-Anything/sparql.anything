@@ -17,6 +17,7 @@
 package io.github.sparqlanything.zip;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
@@ -44,14 +45,13 @@ public class TarTriplifier implements Triplifier {
 			return;
 		}
 		Charset charset = Triplifier.getCharsetArgument(properties);
-		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
 		logger.trace("Matches {}", matches);
 
 //		Graph g = GraphFactory.createDefaultGraph();
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		try {
 			TarArchiveInputStream debInputStream = (TarArchiveInputStream) new ArchiveStreamFactory()
@@ -61,7 +61,7 @@ public class TarTriplifier implements Triplifier {
 			while ((entry = (TarArchiveEntry) debInputStream.getNextEntry()) != null) {
 
 				if (entry.getName().matches(matches)) {
-					builder.addValue(dataSourceId, root, i, entry.getName());
+					builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, i, entry.getName());
 					i++;
 				}
 

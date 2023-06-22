@@ -17,6 +17,7 @@
 package io.github.sparqlanything.zip;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.slf4j.Logger;
@@ -44,13 +45,12 @@ public class FolderTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
 
 		logger.trace("Matches {}", matches);
 
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		try {
 			Path path = Paths.get(url.toURI());
@@ -58,7 +58,7 @@ public class FolderTriplifier implements Triplifier {
 			Files.walk(path).forEach(p -> {
 				logger.trace("{} matches? {}", p.toString(), path.toString().matches(matches));
 				if (p.toString().matches(matches)) {
-					builder.addValue(dataSourceId, root, i.getAndIncrement(), p.toUri().toString());
+					builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, i.getAndIncrement(), p.toUri().toString());
 				}
 			});
 

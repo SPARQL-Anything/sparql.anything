@@ -17,6 +17,7 @@
 package io.github.sparqlanything.zip;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
@@ -44,19 +45,18 @@ public class ZipTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		String root = Triplifier.getRootArgument(properties);
-		String dataSourceId = root;
+		String dataSourceId = "";
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		String matches = properties.getProperty(MATCHES, ".*");
 
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		ZipInputStream zis = new ZipInputStream(url.openStream(), charset);
 		ZipEntry ze;
 		int i = 1;
 		while ((ze = zis.getNextEntry()) != null) {
 			if (ze.getName().matches(matches)) {
-				builder.addValue(dataSourceId, root, i, NodeFactory.createLiteral(ze.getName()));
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, i, NodeFactory.createLiteral(ze.getName()));
 				i++;
 			}
 		}

@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Iterator;
+import java.util.Objects;
 import java.util.Properties;
 
 import static org.junit.Assert.assertFalse;
@@ -48,7 +48,7 @@ public class AbstractTriplifierTester {
 	protected Triplifier triplifier;
 	protected Properties properties;
 	protected URL url;
-	protected String extension = null;
+	protected String extension;
 	protected Graph result;
 	protected Graph expected;
 	protected DatasetGraph expectedDatasetGraph;
@@ -74,10 +74,6 @@ public class AbstractTriplifierTester {
 		}
 	}
 
-	public void setPrintWholeGraph(boolean printWholeGraph) {
-		this.printWholeGraph = printWholeGraph;
-	}
-
 	protected void prepare() throws URISyntaxException {
 		logger.debug("{} (prepare)", name.getMethodName());
 		// Root is Document
@@ -92,7 +88,7 @@ public class AbstractTriplifierTester {
 		}
 		logger.debug("Input filename: {}", fileName);
 		url = getClass().getClassLoader().getResource(fileName);
-		properties.setProperty("location", url.toURI().toString());
+		properties.setProperty("location", Objects.requireNonNull(url).toURI().toString());
 		properties.setProperty("blank-nodes", "false");
 		logger.debug("Input location: {}", url.toURI());
 		properties.setProperty("root", "http://www.example.org/document");
@@ -109,9 +105,9 @@ public class AbstractTriplifierTester {
 
 		if (loadExpectedResult) {
 			if (!useDatasetGraph) {
-				expected = RDFDataMgr.loadModel(getClass().getClassLoader().getResource(rdfFileName).toURI().toString()).getGraph();
+				expected = RDFDataMgr.loadModel(Objects.requireNonNull(getClass().getClassLoader().getResource(rdfFileName)).toURI().toString()).getGraph();
 			} else {
-				expectedDatasetGraph = replaceLocation(RDFDataMgr.loadDatasetGraph(getClass().getClassLoader().getResource(rdfFileName).toURI().toString()));
+				expectedDatasetGraph = replaceLocation(RDFDataMgr.loadDatasetGraph(Objects.requireNonNull(getClass().getClassLoader().getResource(rdfFileName)).toURI().toString()));
 			}
 		}
 
@@ -157,7 +153,7 @@ public class AbstractTriplifierTester {
 		}
 	}
 
-	protected void perform() throws TriplifierHTTPException, IOException, URISyntaxException {
+	protected void perform() throws TriplifierHTTPException, IOException {
 		logger.debug("{} (perform)", name.getMethodName());
 		logger.debug("{}", properties);
 		String graphName = Triplifier.getRootArgument(properties);
@@ -166,9 +162,7 @@ public class AbstractTriplifierTester {
 		if (properties.containsKey("slice")) {
 			final Slicer slicer = (Slicer) triplifier;
 			final Iterable<Slice> it = slicer.slice(properties);
-			final Iterator<Slice> iterator = it.iterator();
-			while (iterator.hasNext()) {
-				Slice slice = iterator.next();
+			for (Slice slice : it) {
 				slicer.triplify(slice, properties, b);
 			}
 		} else {
@@ -203,9 +197,7 @@ public class AbstractTriplifierTester {
 
 	protected DatasetGraph replaceLocation(DatasetGraph g) {
 		DatasetGraph dg = DatasetGraphFactory.create();
-		g.find().forEachRemaining(q -> {
-			dg.add(new Quad(resolveNode(q.getGraph()), new Triple(resolveNode(q.getSubject()), resolveNode(q.getPredicate()), resolveNode(q.getObject()))));
-		});
+		g.find().forEachRemaining(q -> dg.add(new Quad(resolveNode(q.getGraph()), Triple.create(resolveNode(q.getSubject()), resolveNode(q.getPredicate()), resolveNode(q.getObject())))));
 		return dg;
 	}
 
@@ -214,7 +206,7 @@ public class AbstractTriplifierTester {
 			try {
 				return NodeFactory.createURI(url.toURI().toString());
 			} catch (URISyntaxException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 		return n;

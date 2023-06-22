@@ -16,11 +16,7 @@
 
 package io.github.sparqlanything.csv;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.Slice;
-import io.github.sparqlanything.model.Slicer;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -34,10 +30,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -45,8 +39,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
 	public final static String PROPERTY_DELIMITER = "csv.delimiter";
-	public final static String PROPERTY_QUOTECHAR = "csv.quote-char";
-	public final static String PROPERTY_NULLSTRING = "csv.null-string";
+	public final static String PROPERTY_QUOTE_CHAR = "csv.quote-char";
+	public final static String PROPERTY_NULL_STRING = "csv.null-string";
 
 	public static CSVFormat buildFormat(Properties properties) throws IOException {
 		CSVFormat format;
@@ -56,12 +50,12 @@ public class CSVTriplifier implements Triplifier, Slicer {
 			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
 			format = CSVFormat.DEFAULT;
 		}
-		if(properties.containsKey(PROPERTY_NULLSTRING)){
-			format = format.withNullString(properties.getProperty(PROPERTY_NULLSTRING)) ;
+		if(properties.containsKey(PROPERTY_NULL_STRING)){
+			format = format.withNullString(properties.getProperty(PROPERTY_NULL_STRING)) ;
 		}
-		if(properties.containsKey(PROPERTY_QUOTECHAR)){
-			log.debug("Setting quote char to '{}'", properties.getProperty(PROPERTY_QUOTECHAR).charAt(0));
-			format = format.withQuote(properties.getProperty(PROPERTY_QUOTECHAR).charAt(0)) ;
+		if(properties.containsKey(PROPERTY_QUOTE_CHAR)){
+			log.debug("Setting quote char to '{}'", properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0));
+			format = format.withQuote(properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0)) ;
 		}
 		if(properties.containsKey(PROPERTY_DELIMITER)){
 			log.debug("Setting delimiter to {}", properties.getProperty(PROPERTY_DELIMITER));
@@ -99,10 +93,14 @@ public class CSVTriplifier implements Triplifier, Slicer {
 				String colstring = columns.next();
 				String colname = colstring.strip();
 
+				if(colname.length()==0){
+					continue;
+				}
+
 				int c = 0;
 				while (headers_map.containsValue(colname)) {
 					c++;
-					colname += "_" + String.valueOf(c);
+					colname += "_".concat(String.valueOf(c));
 				}
 				log.trace("adding colname >{}<", colname);
 				headers_map.put(colid, colname);
@@ -119,13 +117,12 @@ public class CSVTriplifier implements Triplifier, Slicer {
 //			return;
 
 		CSVFormat format = buildFormat(properties);
-		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 
-		String dataSourceId = Triplifier.getRootArgument(properties); // there is always 1 data source id
+		String dataSourceId = ""; // there is always 1 data source id
 
 		// Add type Root
-		builder.addRoot(dataSourceId, root);
+		builder.addRoot(dataSourceId);
 
 		try (InputStream is = Triplifier.getInputStream(properties);){
 			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
@@ -145,7 +142,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					log.debug("current row num: {}", rown);
 				}
 				CSVRecord record = recordIterator.next();
-				processRow(rown, dataSourceId, root, record, headers_map, builder);
+				processRow(rown, dataSourceId, SPARQLAnythingConstants.ROOT_ID, record, headers_map, builder);
 			}
 			log.debug("{} records", rown);
 		} catch (IllegalArgumentException e) {
@@ -192,18 +189,10 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 
-//		URL url = Triplifier.getLocation(properties);
-//		log.debug("Location: {}", url);
-//		if (url == null)
-//			return Collections.emptySet();
-
 		CSVFormat format = buildFormat(properties);
-		String root = Triplifier.getRootArgument(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
 
-//		boolean headers = hasHeaders(properties);
-		String dataSourceId = Triplifier.getRootArgument(properties); // there is always 1 data source id
-//		String containerRowPrefix = root + "#row";
+		String dataSourceId = ""; // there is always 1 data source id
 
 		// XXX How do we close the inputstream?
 		final InputStream is = Triplifier.getInputStream(properties);
@@ -230,7 +219,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					public Slice next() {
 						rown++;
 						log.trace("next slice: {}", rown);
-						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, root, headers_map);
+						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId,  headers_map);
 					}
 				};
 			}
@@ -240,7 +229,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
 		CSVSlice csvo = (CSVSlice) slice;
-		builder.addRoot(csvo.getDatasourceId(), csvo.getRootId());
-		processRow(csvo.iteration(), csvo.getDatasourceId(), csvo.getRootId(), csvo.get(), csvo.getHeaders(), builder);
+		builder.addRoot(csvo.getDatasourceId());
+		processRow(csvo.iteration(), csvo.getDatasourceId(), builder.getRootURI(csvo.getDatasourceId()), csvo.get(), csvo.getHeaders(), builder);
 	}
 }

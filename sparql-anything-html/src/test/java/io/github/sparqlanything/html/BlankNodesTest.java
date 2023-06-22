@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.html;
 
+import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class BlankNodesTest extends AbstractTriplifierTester {
 
 	@Override
 	protected void properties(Properties properties) {
-		properties.setProperty("blank-nodes", "false");
+		properties.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 	}
 
 

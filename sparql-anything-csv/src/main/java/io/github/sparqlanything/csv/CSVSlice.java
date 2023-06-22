@@ -25,13 +25,11 @@ public class CSVSlice implements Slice<CSVRecord> {
 	private CSVRecord record;
 	private int iteration;
 	private String dataSourceId;
-	private String rootId;
 	LinkedHashMap<Integer, String> headers;
 
-	public static CSVSlice makeSlice(CSVRecord record, int iteration, String dataSourceId, String rootId, LinkedHashMap<Integer, String> headers){
+	public static CSVSlice makeSlice(CSVRecord record, int iteration, String dataSourceId, LinkedHashMap<Integer, String> headers){
 		CSVSlice r = new CSVSlice();
 		r.dataSourceId = dataSourceId;
-		r.rootId = rootId;
 		r.iteration = iteration;
 		r.record = record;
 		r.headers = headers;
@@ -53,10 +51,6 @@ public class CSVSlice implements Slice<CSVRecord> {
 		return dataSourceId;
 	}
 
-	@Override
-	public String getRootId() {
-		return rootId;
-	}
 
 	public LinkedHashMap<Integer, String> getHeaders(){
 		return this.headers;

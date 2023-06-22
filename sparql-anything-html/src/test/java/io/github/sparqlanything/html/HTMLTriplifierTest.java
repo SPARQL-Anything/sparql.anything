@@ -24,7 +24,7 @@ import java.util.Properties;
 public class HTMLTriplifierTest extends AbstractTriplifierTester {
 
 	public HTMLTriplifierTest() {
-		super(new HTMLTriplifier(), new Properties(), "html", "nq");
+		super(new HTMLTriplifier(), new Properties(), "html");
 	}
 
 	@Test

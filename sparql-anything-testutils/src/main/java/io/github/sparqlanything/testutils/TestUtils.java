@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.testutils;
 
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -39,59 +40,54 @@ public class TestUtils {
 
 	protected static final Logger logger = LoggerFactory.getLogger(TestUtils.class);
 
-	public static final void printDebugDiff(Graph left, Graph right) {
+	public static void printDebugDiff(Graph expected, Graph result) {
 		if (logger.isDebugEnabled()) {
-			ExtendedIterator<Triple> it = left.find();
-			logger.debug(">> Test left items are also in right");
+			ExtendedIterator<Triple> it = expected.find();
+			logger.debug(">> Test expected items are also in result");
 			while (it.hasNext()) {
 				Triple t = it.next();
-				logger.trace(">> {}", t);
-
-				if (!right.contains(t)) {
-					logger.debug(">> {} not found in right", t);
-					logger.debug(">> (T) {} {} {} {}", t.getSubject().getClass().getSimpleName(), t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI() : "");
+				if (!result.contains(t)) {
+					logger.debug(">> {} not found in result", t);
 				}
 			}
-			it = right.find();
-			logger.debug(">> Test right items are also in left");
+			it = result.find();
+			logger.debug(">> Test result items are also in expected");
 			while (it.hasNext()) {
 				Triple t = it.next();
-				logger.trace("<< {}", t);
-				if (!left.contains(t)) {
-					logger.debug("<< {} not found in left", t);
-					logger.debug("<< (T) {} {} {} {}", t.getSubject().getClass().getSimpleName(), t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI() : "");
+				if (!expected.contains(t)) {
+					logger.debug("<< {} not found in expected", t);
 				}
 			}
 		}
 	}
 
-	public static final void printDebugDiff(DatasetGraph left, DatasetGraph right) {
+	public static void printDebugDiff(DatasetGraph expected, DatasetGraph result) {
 		if (logger.isDebugEnabled()) {
-			Iterator<Quad> it = left.find();
+
+			logger.debug(">> Test expected items are also in result");
+			Iterator<Quad> it = expected.find();
 			while (it.hasNext()) {
 				Quad q = it.next();
-				logger.trace(">> {}", q);
-
-				if (!right.contains(q)) {
-					logger.debug(">> {} not found in right", q);
-					logger.debug(">> (T) {} {} {} {} {}", q.getSubject().getClass().getSimpleName(), q.getPredicate().getClass().getSimpleName(), q.getObject().getClass().getSimpleName(), (q.getObject().isLiteral() && q.getObject().getLiteralDatatypeURI() != null) ? q.getObject().getLiteralDatatypeURI() : "", q.getGraph().getClass().getSimpleName());
+				if (!result.contains(q)) {
+					logger.debug(">> {} not found in expected", q);
 				}
 			}
-			it = right.find();
+
+			logger.debug(">> Test result items are also in expected");
+			it = result.find();
 			while (it.hasNext()) {
 				Quad t = it.next();
-				logger.trace("<< {}", t);
-				if (!left.contains(t)) {
-					logger.debug("<< {} not found in left", t);
-					logger.debug("<< (T) {} {} {} {} {}", t.getSubject().getClass().getSimpleName(), t.getPredicate().getClass().getSimpleName(), t.getObject().getClass().getSimpleName(), (t.getObject().isLiteral() && t.getObject().getLiteralDatatypeURI() != null) ? t.getObject().getLiteralDatatypeURI() : "", t.getGraph().getClass().getSimpleName());
+				if (!expected.contains(t)) {
+					logger.debug("<< {} not found in result", t);
 				}
 			}
 		}
 	}
 
-	public static final void printWholeGraph(Graph expected, Graph obtained, boolean expectedResultsAvailable) {
+	public static  void printWholeGraph(Graph expected, Graph obtained, boolean expectedResultsAvailable) {
 		ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
-
+		expected.getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+		obtained.getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
 		if (expectedResultsAvailable) RDFDataMgr.write(baosExpected, expected, Lang.TTL);
 		ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
 		RDFDataMgr.write(baosResult, obtained, Lang.TTL);
@@ -99,7 +95,7 @@ public class TestUtils {
 
 	}
 
-	public static final void printWholeGraph(DatasetGraph expected, DatasetGraph obtained, boolean expectedResultsAvailable) {
+	public static  void printWholeGraph(DatasetGraph expected, DatasetGraph obtained, boolean expectedResultsAvailable) {
 		ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
 		if (expectedResultsAvailable) RDFDataMgr.write(baosExpected, expected, Lang.NQ);
 		ByteArrayOutputStream baosResult = new ByteArrayOutputStream();

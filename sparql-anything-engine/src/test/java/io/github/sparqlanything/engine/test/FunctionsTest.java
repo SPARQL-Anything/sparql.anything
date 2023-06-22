@@ -33,8 +33,7 @@ public class FunctionsTest {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Dataset kb = DatasetFactory.createGeneral();
 		Query q = QueryFactory.create(queryString);
-		ResultSet result = QueryExecutionFactory.create(q, kb).execSelect();
-		return result;
+		return QueryExecutionFactory.create(q, kb).execSelect();
 	}
 
 	@Test
@@ -117,8 +116,6 @@ public class FunctionsTest {
 	@Test
 	public void isContainerMembershipProperty() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?resultTrue ?resultFalse WHERE { BIND ( fx:isContainerMembershipProperty ( rdf:_42 ) as ?resultTrue )  BIND ( fx:isContainerMembershipProperty ( 42 ) as ?resultFalse )}";
-		System.out.println(QueryFactory.create(q).toString(Syntax.syntaxSPARQL_11));
-		System.out.println(ResultSetFormatter.asText(execute(q)));
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
 		QuerySolution qs = result.next();

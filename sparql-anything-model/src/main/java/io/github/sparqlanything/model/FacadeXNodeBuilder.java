@@ -22,8 +22,14 @@ import org.apache.jena.rdf.model.ResourceFactory;
 
 public interface FacadeXNodeBuilder {
 
-	default Node container2URI(String container) {
-		return NodeFactory.createURI(container);
+	default Node dataSourceId2node(String dataSourceId) {
+		return NodeFactory.createURI(getRootURI(dataSourceId));
+	}
+
+	String getRootURI(String dataSourceId);
+
+	default Node container2URI(String containerId, String dataSourceId) {
+		return NodeFactory.createURI(getRootURI(dataSourceId).concat(containerId));
 	}
 
 	default Node container2BlankNode(String container) {
@@ -34,6 +40,8 @@ public interface FacadeXNodeBuilder {
 		return NodeFactory.createURI(getNamespace().concat(Triplifier.toSafeURIString(key)));
 	}
 
+	String getNamespace();
+
 	default Node value2node(Object value) {
 		if (value instanceof Node) {
 			return (Node) value;
@@ -41,6 +49,4 @@ public interface FacadeXNodeBuilder {
 			return ResourceFactory.createTypedLiteral(value).asNode();
 		}
 	}
-
-	String getNamespace();
 }

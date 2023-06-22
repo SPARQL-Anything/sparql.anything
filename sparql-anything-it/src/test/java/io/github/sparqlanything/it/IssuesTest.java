@@ -747,6 +747,61 @@ public class IssuesTest {
 	}
 
 	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/352">...</a>
+	 */
+	@Test
+	public void testIssue352() throws URISyntaxException, IOException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue352-xls.sparql")).toURI(), StandardCharsets.UTF_8);
+		String loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue352.xls")).toURI()).toUri().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+
+		query = QueryFactory.create(queryStr);
+
+		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+		ResultSet rs = qExec.execSelect();
+
+		assertTrue(rs.hasNext());
+		QuerySolution qs = rs.next();
+		Assert.assertEquals("fred", qs.getLiteral("fred").getString());
+		Assert.assertEquals("sally", qs.getLiteral("sally").getString());
+
+
+		queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue352-csv.sparql")).toURI(), StandardCharsets.UTF_8);
+		loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue352.csv")).toURI()).toUri().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+
+		query = QueryFactory.create(queryStr);
+		qExec = QueryExecutionFactory.create(query, ds);
+ 		rs = qExec.execSelect();
+
+		assertTrue(rs.hasNext());
+		qs = rs.next();
+		Assert.assertEquals("fred", qs.getLiteral("fred").getString());
+		Assert.assertEquals("sally", qs.getLiteral("sally").getString());
+	}
+
+	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/386">...</a>
+	 */
+	@Test
+	public void testIssue386() throws URISyntaxException, IOException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue386.sparql")).toURI(), StandardCharsets.UTF_8);
+		query = QueryFactory.create(queryStr);
+		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
+		ResultSet rs = qExec.execSelect();
+		assertTrue(rs.hasNext());
+		assertEquals("http://example.org/document",rs.next().get("root").asResource().getURI());
+		assertFalse(rs.hasNext());
+	}
+
+	/**
 	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/371">...</a>
 	 */
 	@Ignore
