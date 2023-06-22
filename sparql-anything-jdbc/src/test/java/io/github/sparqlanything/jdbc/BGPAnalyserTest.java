@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
@@ -43,7 +44,11 @@ import java.util.Set;
 
 public class BGPAnalyserTest {
 	final protected static Logger L = LoggerFactory.getLogger(BGPAnalyserTest.class);
-	protected Map<Node,Interpretation> interpretations = null;
+	protected BGPConstraints constraints = null;
+
+	protected BGPAnalyser analyser = null;
+	protected BGPInterpretation initialInterpretation = null;
+	protected Set<BGPInterpretation> interpretations = null;
 	protected Properties properties = null;
 	private BasicPattern bp = null;
 
@@ -56,8 +61,8 @@ public class BGPAnalyserTest {
 		properties = new Properties();
 	}
 
-	protected Map<Node,Interpretation> interpretations(){
-		return Collections.unmodifiableMap(interpretations);
+	protected Map<Node, NodeInterpretation> interpretations(){
+		return Collections.unmodifiableMap(constraints.interpretations());
 	}
 
 	protected BasicPattern bp(){
@@ -68,12 +73,17 @@ public class BGPAnalyserTest {
 		//
 	}
 
-	protected void run(){
+	protected void analyseConstraints(){
 		OpBGP op = new OpBGP(bp);
 		properties();
-		BGPAnalyser analyser = new BGPAnalyser(properties, op);
-		boolean canResolve = analyser.isException();
-		interpretations = analyser.constraints();
+		analyser = new BGPAnalyser(properties, op);
+		boolean canResolve = analyser.getConstraints().isException();
+		constraints = analyser.getConstraints();
+	}
+
+	protected void generateInterpretations(){
+		initialInterpretation = new BGPInterpretation(constraints);
+		interpretations = analyser.getInterpretations();//traverse(initialInterpretation);
 	}
 
 	private Triple t(Node s, Node p, Node o){
@@ -100,11 +110,11 @@ public class BGPAnalyserTest {
 	}
 
 	private boolean has(Node n){
-		return interpretations.containsKey(n);
+		return interpretations().containsKey(n);
 	}
 
 	private boolean isA(Node n, Class<?> cz){
-		return interpretations.get(n).type().equals(cz);
+		return  interpretations().get(n).type().equals(cz);
 	}
 	private void add(Triple t){
 		bp.add(t);
@@ -129,20 +139,20 @@ public class BGPAnalyserTest {
 	@Test
 	public void var_var_var(){
 		add(v("x"), v("p"), v("f"));
-		run();
-		IsA(v("x"), Assumption.Subject.class);
-		IsA(v("p"), Assumption.Predicate.class);
-		IsA(v("f"), Assumption.Object.class);
+		analyseConstraints();
+		IsA(v("x"), NodeInterpretation.Subject.class);
+		IsA(v("p"), NodeInterpretation.Predicate.class);
+		IsA(v("f"), NodeInterpretation.Object.class);
 		show();
 	}
 
 	@Test
 	public void var_rdftype_var(){
 		add(v("x"), RDF.type.asNode(), v("f"));
-		run();
-		IsA(v("x"), Assumption.Subject.class);
-		IsA(RDF.type.asNode(), Assumption.TypeProperty.class);
-		IsA(v("f"), Assumption.Object.class);
+		analyseConstraints();
+		IsA(v("x"), NodeInterpretation.Subject.class);
+		IsA(RDF.type.asNode(), NodeInterpretation.TypeProperty.class);
+		IsA(v("f"), NodeInterpretation.Object.class);
 		show();
 	}
 
@@ -150,12 +160,12 @@ public class BGPAnalyserTest {
 	public void var_rdftype_table(){
 		// ?table a []
 		add(t(v("container"), RDF.type.asNode(), xyz("table")));
-		run();
+		analyseConstraints();
 		Has(v("container"));
 		Has(xyz("table"));
-		IsA(v("container"), Assumption.ContainerRow.class);
-		IsA(RDF.type.asNode(), Assumption.TypeProperty.class);
-		IsA(xyz("table"), Assumption.TypeTable.class);
+		IsA(v("container"), NodeInterpretation.ContainerRow.class);
+		IsA(RDF.type.asNode(), NodeInterpretation.TypeProperty.class);
+		IsA(xyz("table"), NodeInterpretation.TypeTable.class);
 		show();
 	}
 
@@ -163,10 +173,10 @@ public class BGPAnalyserTest {
 	public void var_rdftype_root(){
 		// ?table a []
 		add(v("table"), RDF.type.asNode(), u(Triplifier.FACADE_X_TYPE_ROOT));
-		run();
-		IsA(v("table"), Assumption.ContainerTable.class);
-		IsA(RDF.type.asNode(), Assumption.TypeProperty.class);
-		IsA(u(Triplifier.FACADE_X_TYPE_ROOT), Assumption.FXRoot.class);
+		analyseConstraints();
+		IsA(v("table"), NodeInterpretation.ContainerTable.class);
+		IsA(RDF.type.asNode(), NodeInterpretation.TypeProperty.class);
+		IsA(u(Triplifier.FACADE_X_TYPE_ROOT), NodeInterpretation.FXRoot.class);
 		show();
 	}
 
@@ -175,9 +185,9 @@ public class BGPAnalyserTest {
 		Node n = b();
 		Node n2 = b();
 		add(n, RDF.li(1).asNode(), n2);
-		run();
-		IsA(n, Assumption.ContainerTable.class);
-		IsA(n2, Assumption.ContainerRow.class);
+		analyseConstraints();
+		IsA(n, NodeInterpretation.ContainerTable.class);
+		IsA(n2, NodeInterpretation.ContainerRow.class);
 		show();
 	}
 
@@ -185,21 +195,21 @@ public class BGPAnalyserTest {
 	public void b_var_l(){
 		Node n = b();
 		add(n, v("p"), l("12"));
-		run();
+		analyseConstraints();
 		has(n);
-		IsA(n, Assumption.ContainerRow.class);
-		IsA(v("p"), Assumption.SlotColumn.class);
-		IsA(l("12"), Assumption.SlotValue.class);
+		IsA(n, NodeInterpretation.ContainerRow.class);
+		IsA(v("p"), NodeInterpretation.SlotColumn.class);
+		IsA(l("12"), NodeInterpretation.SlotValue.class);
 		show();
 	}
 
 	@Test
 	public void var_var_l(){
 		add(v("x"), v("p"), l(12));
-		run();
-		IsA(v("x"), Assumption.ContainerRow.class);
-		IsA(v("p"), Assumption.SlotColumn.class);
-		IsA(l(12), Assumption.SlotValue.class);
+		analyseConstraints();
+		IsA(v("x"), NodeInterpretation.ContainerRow.class);
+		IsA(v("p"), NodeInterpretation.SlotColumn.class);
+		IsA(l(12), NodeInterpretation.SlotValue.class);
 		show();
 	}
 
@@ -207,12 +217,12 @@ public class BGPAnalyserTest {
 	public void s_P_L__s_P_L(){
 		add(v("s"), v("p1"), l(12));
 		add(v("s"), v("p2"), l("a string"));
-		run();
-		IsA(v("s"), Assumption.ContainerRow.class);
-		IsA(v("p1"), Assumption.SlotColumn.class);
-		IsA(v("p2"), Assumption.SlotColumn.class);
-		IsA(l(12), Assumption.SlotValue.class);
-		IsA(l("a string"), Assumption.SlotValue.class);
+		analyseConstraints();
+		IsA(v("s"), NodeInterpretation.ContainerRow.class);
+		IsA(v("p1"), NodeInterpretation.SlotColumn.class);
+		IsA(v("p2"), NodeInterpretation.SlotColumn.class);
+		IsA(l(12), NodeInterpretation.SlotValue.class);
+		IsA(l("a string"), NodeInterpretation.SlotValue.class);
 		show();
 	}
 
@@ -220,12 +230,12 @@ public class BGPAnalyserTest {
 	public void S_P_l__S_P_l(){
 		add(v("s1"), v("p1"), l(12));
 		add(v("s2"), v("p2"), l(12));
-		run();
-		IsA(v("s1"), Assumption.ContainerRow.class);
-		IsA(v("s2"), Assumption.ContainerRow.class);
-		IsA(v("p1"), Assumption.SlotColumn.class);
-		IsA(v("p2"), Assumption.SlotColumn.class);
-		IsA(l(12), Assumption.SlotValue.class);
+		analyseConstraints();
+		IsA(v("s1"), NodeInterpretation.ContainerRow.class);
+		IsA(v("s2"), NodeInterpretation.ContainerRow.class);
+		IsA(v("p1"), NodeInterpretation.SlotColumn.class);
+		IsA(v("p2"), NodeInterpretation.SlotColumn.class);
+		IsA(l(12), NodeInterpretation.SlotValue.class);
 		show();
 	}
 
@@ -233,24 +243,24 @@ public class BGPAnalyserTest {
 	public void S_P_v__S_P_v(){
 		add(v("s1"), v("p1"), v("x"));
 		add(v("s2"), v("p2"), v("x"));
-		run();
-		IsA(v("s1"), Assumption.Subject.class);
-		IsA(v("s2"), Assumption.Subject.class);
-		IsA(v("p1"), Assumption.Predicate.class);
-		IsA(v("p2"), Assumption.Predicate.class);
-		IsA(v("x"), Assumption.Object.class);
+		analyseConstraints();
+		IsA(v("s1"), NodeInterpretation.Subject.class);
+		IsA(v("s2"), NodeInterpretation.Subject.class);
+		IsA(v("p1"), NodeInterpretation.Predicate.class);
+		IsA(v("p2"), NodeInterpretation.Predicate.class);
+		IsA(v("x"), NodeInterpretation.Object.class);
 		show();
 	}
 
 	public void S_P_V__S_P_V_same_P_V(){
 		add(v("s1"), v("p1"), v("x"));
 		add(v("s2"), v("p1"), v("x"));
-		run();
-		IsA(v("s1"), Assumption.Subject.class);
-		IsA(v("s2"), Assumption.Subject.class);
-		IsA(v("p1"), Assumption.Predicate.class);
-		IsA(v("p2"), Assumption.Predicate.class);
-		IsA(v("x"), Assumption.Object.class);
+		analyseConstraints();
+		IsA(v("s1"), NodeInterpretation.Subject.class);
+		IsA(v("s2"), NodeInterpretation.Subject.class);
+		IsA(v("p1"), NodeInterpretation.Predicate.class);
+		IsA(v("p2"), NodeInterpretation.Predicate.class);
+		IsA(v("x"), NodeInterpretation.Object.class);
 		show();
 	}
 
@@ -258,12 +268,12 @@ public class BGPAnalyserTest {
 	public void S_u_v__S_P_v(){
 		add(v("s1"), xyz("address"), v("x"));
 		add(v("s2"), v("p2"), v("x"));
-		run();
-		IsA(v("s1"), Assumption.ContainerRow.class);
-		IsA(v("s2"), Assumption.ContainerRow.class);
-		IsA(xyz("address"), Assumption.SlotColumn.class);
-		IsA(v("p2"), Assumption.SlotColumn.class);
-		IsA(v("x"), Assumption.SlotValue.class);
+		analyseConstraints();
+		IsA(v("s1"), NodeInterpretation.ContainerRow.class);
+		IsA(v("s2"), NodeInterpretation.ContainerRow.class);
+		IsA(xyz("address"), NodeInterpretation.SlotColumn.class);
+		IsA(v("p2"), NodeInterpretation.SlotColumn.class);
+		IsA(v("x"), NodeInterpretation.SlotValue.class);
 		show();
 	}
 
@@ -272,10 +282,10 @@ public class BGPAnalyserTest {
 		properties.setProperty(JDBC.PROPERTY_NAMESPACE, "http://www.example.org/");
 		properties.setProperty(IRIArgument.NAMESPACE.toString(), "http://www.example.org/data/");
 		add(u("http://www.example.org/tablename"), v("p"), v("o"));
-		run();
-		IsA(u("http://www.example.org/tablename"), Assumption.ContainerTable.class);
-		IsA(v("p"), Assumption.Predicate.class);
-		IsA(v("o"), Assumption.Object.class);
+		analyseConstraints();
+		IsA(u("http://www.example.org/tablename"), NodeInterpretation.ContainerTable.class);
+		IsA(v("p"), NodeInterpretation.Predicate.class);
+		IsA(v("o"), NodeInterpretation.Object.class);
 		show();
 	}
 
@@ -285,13 +295,13 @@ public class BGPAnalyserTest {
 		Node b = b();
 		add(t, v("p1"), b);
 		add(b, v("p2"), v("o"));
-		run();
+		analyseConstraints();
 //		System.err.println(interpretations);
-		IsA(t, Assumption.ContainerTable.class);
-		IsA(b, Assumption.ContainerRow.class);
-		IsA(v("p1"), Assumption.SlotRow.class);
-		IsA(v("p2"), Assumption.Predicate.class);
-		IsA(v("o"), Assumption.Object.class);
+		IsA(t, NodeInterpretation.ContainerTable.class);
+		IsA(b, NodeInterpretation.ContainerRow.class);
+		IsA(v("p1"), NodeInterpretation.SlotRow.class);
+		IsA(v("p2"), NodeInterpretation.Predicate.class);
+		IsA(v("o"), NodeInterpretation.Object.class);
 		show();
 	}
 
@@ -301,7 +311,7 @@ public class BGPAnalyserTest {
 		b.append("\n\n");
 		b.append(bp());
 
-		for(Map.Entry<Node,Interpretation> entry: interpretations.entrySet()){
+		for(Map.Entry<Node, NodeInterpretation> entry:  interpretations().entrySet()){
 			b.append("\n --- ");
 			b.append(entry.getKey());
 			if(entry.getKey().isConcrete()) {
@@ -321,10 +331,10 @@ public class BGPAnalyserTest {
 		Node b = b();
 		add(t, v("p1"), b);
 		add(b, v("p2"), v("o"));
-		run();
-		State s = new State(interpretations);
+		analyseConstraints();
+		BGPInterpretation s = new BGPInterpretation(constraints);
 		Assert.assertTrue(s.isInitialState());
-		State s2 = new State(interpretations);
+		BGPInterpretation s2 = new BGPInterpretation(constraints);
 		Assert.assertTrue(s.equals(s2));
 	}
 
@@ -334,19 +344,69 @@ public class BGPAnalyserTest {
 		Node b = b();
 		add(t, v("p1"), b);
 		add(b, v("p2"), v("o"));
-		run();
-		State s = new State(interpretations);
-		Assert.assertTrue(s.isInitialState());
-		Set<State> nexts = new HashSet<>();
-		for(Pair<Node,Interpretation> ii:BGPAnalyser.expand(interpretations)){
-			// Generate a new next state for each possible interpretation
-			State next = new State(s, ii.getLeft(), ii.getRight());
-			nexts.add(next);
+		analyseConstraints();
+		generateInterpretations();
+		Assert.assertTrue(initialInterpretation.isInitialState());
+		Set<BGPInterpretation> nexts = new HashSet<>();
+		for (Pair<Node, NodeInterpretation> ii : BGPAnalyser.expand(initialInterpretation.signature())) {
+
+			Map<Node,NodeInterpretation> possible = new HashMap<>();
+			possible.putAll(initialInterpretation.signature());
+			possible.put(ii.getLeft(),ii.getRight());
+			try{
+				BGPConstraints constrained = new BGPConstraints(analyser.getTranslation(), analyser.getOp(), possible);
+				BGPInterpretation next = new BGPInterpretation(initialInterpretation, constrained.interpretations());
+				nexts.add(next);
+			}catch(Exception e){
+				// Ignore this combination because it is invalid
+			}
 		}
-		for(State n : nexts){
+		for(BGPInterpretation n : nexts){
 			Assert.assertFalse(n.isInitialState());
-			Assert.assertTrue(n.previous().equals(s));
-			Assert.assertTrue(s.next().contains(n));
+			Assert.assertTrue(n.previous().equals(initialInterpretation));
+			Assert.assertTrue(initialInterpretation.next().contains(n));
+		}
+	}
+
+	@Test
+	public void testIsFinalState(){
+		Node t = b();
+		Node b = b();
+		add(t, v("p1"), b);
+		add(b, v("p2"), v("o"));
+		analyseConstraints();
+		generateInterpretations();
+		Assert.assertTrue(initialInterpretation.isInitialState());
+		Assert.assertFalse(initialInterpretation.isFinalState());
+	}
+
+	@Test
+	public void testTraverseState(){
+		Node t = b();
+		Node b = b();
+		add(t, v("p1"), b);
+		add(b, v("p2"), v("o"));
+		analyseConstraints();
+		generateInterpretations();
+		//
+		for(BGPInterpretation st: interpretations){
+			L.info("[{}] ==> {}", st.isFinalState(), BGPInterpretation.toString(st));
+			Assert.assertTrue(st.isFinalState());
+		}
+	}
+
+	@Test
+	public void testInterpretations(){
+		Node s = b();
+		Node o = b();
+		add(s, v("property1"), o);
+		//add(b, v("p2"), v("o"));
+		analyseConstraints();
+		generateInterpretations();
+		//
+		for(BGPInterpretation st: interpretations){
+			L.info("[{}] ==> {}", st.isFinalState(), BGPInterpretation.toString(st));
+			Assert.assertTrue(st.isFinalState());
 		}
 	}
 }

@@ -33,11 +33,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Assumption implements Interpretation {
+public class NodeInterpretation {
 	private Set<Triple> triples;
 	private Node node;
 
-	protected Assumption(Node n, Triple... t){
+	protected NodeInterpretation(Node n, Triple... t){
 		this.node = n;
 		this.triples = new HashSet<Triple>();
 		if(t.length == 0){
@@ -48,6 +48,16 @@ public class Assumption implements Interpretation {
 		}
 	}
 
+	public Set<Class<? extends NodeInterpretation>> inconsistentTypes(){
+		return Collections.emptySet();
+	}
+	public Set<Class<? extends NodeInterpretation>> specialisationOfTypes(){
+		return Collections.emptySet();
+	}
+	public Class<? extends NodeInterpretation> type(){
+		return getClass();
+	}
+
 	public Set<Triple> triples(){
 		return Collections.unmodifiableSet(triples);
 	}
@@ -56,71 +66,71 @@ public class Assumption implements Interpretation {
 		return node;
 	}
 
-	static class Subject extends Assumption {
+	static class Subject extends NodeInterpretation {
 		protected Subject(Node n, Triple... t) {
 			super(n, t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
 
-	static class Predicate extends Assumption {
+	static class Predicate extends NodeInterpretation {
 		protected Predicate(Node n, Triple... t) {
 			super(n, t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(Subject.class, Object.class);
 		}
 	}
-	static class Object extends Assumption {
+	static class Object extends NodeInterpretation {
 		protected Object(Node n, Triple... t) {
 			super(n, t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
 
-	static class TypeProperty extends Assumption {
+	static class TypeProperty extends NodeInterpretation {
 		protected TypeProperty(Triple... t) {
 			super(RDF.type.asNode(), t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(Subject.class, Object.class, SlotValue.class, SlotColumn.class, SlotRow.class, TypeTable.class, ContainerRow.class, ContainerTable.class);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
 
-	static class TypeTable extends Assumption {
+	static class TypeTable extends NodeInterpretation {
 		protected TypeTable(Node n, Triple... t) {
 			super(n, t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(SlotValue.class, SlotColumn.class, SlotRow.class, ContainerRow.class, ContainerTable.class);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Object.class);
 		}
 	}
 
-	static class ContainerRow extends Assumption {
+	static class ContainerRow extends NodeInterpretation {
 		protected ContainerRow(Node n, Triple... t) {
 			super(n, t);
 		}
@@ -129,134 +139,134 @@ public class Assumption implements Interpretation {
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(Predicate.class, SlotRow.class, SlotColumn.class, SlotValue.class, ContainerTable.class );
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Subject.class, Object.class);
 		}
 	}
 
-	static class ContainerTable extends Assumption {
+	static class ContainerTable extends NodeInterpretation {
 		protected ContainerTable(Node n, Triple... t) {
 			super(n, t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(ContainerRow.class, Predicate.class, Object.class, Predicate.class, SlotRow.class, SlotColumn.class, SlotValue.class);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Subject.class);
 		}
 	}
 
-	static class SlotRow extends Assumption {
+	static class SlotRow extends NodeInterpretation {
 		protected SlotRow(Node n, Triple... t) {
 			super(n, t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(SlotValue.class, ContainerRow.class, TypeProperty.class, Subject.class, Object.class, ContainerTable.class, SlotColumn.class);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Predicate.class);
 		}
 
 	}
 
-	static class SlotColumn extends Assumption {
+	static class SlotColumn extends NodeInterpretation {
 		protected SlotColumn(Node n, Triple... t) {
 			super(n, t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(SlotRow.class,SlotValue.class, ContainerRow.class, TypeProperty.class, Subject.class, Object.class, ContainerTable.class );
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
-	static class SlotValue extends Assumption {
+	static class SlotValue extends NodeInterpretation {
 		protected SlotValue(Node n, Triple... t) {
 			super(n, t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(SlotRow.class,SlotColumn.class, ContainerRow.class, TypeProperty.class, Subject.class, ContainerTable.class );
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Object.class);
 		}
 	}
 
-	static class FXRoot extends Assumption {
+	static class FXRoot extends NodeInterpretation {
 		protected FXRoot(Triple... t) {
 			super(NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT), t);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
 			return ImmutableSet.of(SlotValue.class, SlotRow.class,SlotColumn.class, ContainerRow.class, TypeProperty.class, Predicate.class, Subject.class, ContainerTable.class );
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
 			return ImmutableSet.of(Object.class);
 		}
 	}
 
-	static class Join extends Assumption {
+	static class Join extends NodeInterpretation {
 
-		Set<? extends Assumption> joined;
-		Class<? extends Interpretation> type;
-		protected Join(Node node, Class<? extends Interpretation> type, Triple[] triples, Assumption a1, Assumption a2) {
+		Set<? extends NodeInterpretation> joined;
+		Class<? extends NodeInterpretation> type;
+		protected Join(Node node, Class<? extends NodeInterpretation> type, Triple[] triples, NodeInterpretation a1, NodeInterpretation a2) {
 			super(node, triples);
 			joined = new HashSet<>(List.of(a1, a2));
 			this.type = type;
 		}
 
-		public Assumption[] assumptions(){
-			return joined.toArray(new Assumption[joined.size()]);
+		public NodeInterpretation[] assumptions(){
+			return joined.toArray(new NodeInterpretation[joined.size()]);
 		}
 
-		public Class<? extends Interpretation> type(){
+		public Class<? extends NodeInterpretation> type(){
 			return type;
 		}
 		@Override
-		public Set<Class<? extends Interpretation>> inconsistentTypes() {
-			Set<Class<? extends Interpretation>> types = new HashSet<>();
-			for(Assumption j : joined)
+		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+			Set<Class<? extends NodeInterpretation>> types = new HashSet<>();
+			for(NodeInterpretation j : joined)
 				types.addAll(j.inconsistentTypes());
 			return ImmutableSet.copyOf(types);
 		}
 
 		@Override
-		public Set<Class<? extends Interpretation>> specialisationOfTypes() {
-			Set<Class<? extends Interpretation>> s = new HashSet<>();
-			for(Assumption a:joined)
+		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+			Set<Class<? extends NodeInterpretation>> s = new HashSet<>();
+			for(NodeInterpretation a:joined)
 				s.addAll(a.specialisationOfTypes());
 			return Collections.unmodifiableSet(s);
 		}
 
-		public boolean includes(Interpretation i){
+		public boolean includes(NodeInterpretation i){
 			if(joined.contains(i)){
 				return true;
 			}
-			for(Assumption j:joined){
+			for(NodeInterpretation j:joined){
 				if(j instanceof Join){
 					return ((Join)j).includes(i);
 				}
@@ -265,21 +275,21 @@ public class Assumption implements Interpretation {
 		}
 	}
 
-	public static Join makeJoin(Assumption assumption1, Assumption assumption2) throws InconsistentJoinException {
+	public static Join makeJoin(NodeInterpretation assumption1, NodeInterpretation assumption2) throws InconsistentJoinException {
 
 		// Nodes must be the same
 		Node node = assumption1.node();
 		if(!assumption2.node().equals(node)){
 			throw new InconsistentJoinException(assumption1, assumption2);
 		}
-		Class<? extends Interpretation> cls = null;
+		Class<? extends NodeInterpretation> cls = null;
 		// Check type and node and collect triples
 		if(assumption1.type().equals(assumption2.type())){
 			cls = assumption1.type();
 		}else {
 			// Override type
 			// Set the appropriate type
-			Map<Set<?>,Class<? extends Assumption>> m = new HashMap<>();
+			Map<Set<?>,Class<? extends NodeInterpretation>> m = new HashMap<>();
 			// Subject , Object = ContainerRow
 			// ContainerRow , Object = ContainerRow
 			// ContainerRow , Subject = ContainerRow
@@ -317,7 +327,7 @@ public class Assumption implements Interpretation {
 	@Override
 	public boolean equals(java.lang.Object obj) {
 		if(this.getClass().equals(obj.getClass())){
-			Assumption ass = (Assumption) obj;
+			NodeInterpretation ass = (NodeInterpretation) obj;
 			if(ass.triples().equals(this.triples()) && ass.node().equals(this.node())){
 				return true;
 			}
@@ -333,7 +343,7 @@ public class Assumption implements Interpretation {
 		}
 		return hashCode;
 	}
-	public Assumption[] assumptions(){
-		return new Assumption[]{this};
+	public NodeInterpretation[] assumptions(){
+		return new NodeInterpretation[]{this};
 	}
 }

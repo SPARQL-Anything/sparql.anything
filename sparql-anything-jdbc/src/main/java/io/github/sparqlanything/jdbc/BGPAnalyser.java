@@ -19,6 +19,7 @@ package io.github.sparqlanything.jdbc;
 
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jena.atlas.lib.CollectionUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
@@ -35,260 +36,92 @@ import java.util.Set;
 
 public class BGPAnalyser {
 	final static Logger L = LoggerFactory.getLogger(BGPAnalyser.class);
+
 	private Properties properties;
 	private String namesNamespace;
 	private OpBGP opBGP;
 	private Translation translation;
 
-	private Map<Node, Assumption> constraints = null;
+	private BGPConstraints constraints = null;
+	private Set<BGPInterpretation> interpretations = null;
 	private InconsistentAssumptionException exception;
 
 	public BGPAnalyser(Properties properties, OpBGP opBGP){
 		this.properties = properties;
 		this.opBGP = opBGP;
 		this.translation = new Translation(properties);
-		setupConstraints();
+		this.constraints = new BGPConstraints(translation, opBGP);
+		this.interpretations = traverse(this.constraints);
 	}
 
-	public Map<Node, Interpretation> constraints(){
-		if(this.constraints == null){
-			return Collections.emptyMap();
-		}
-		return Collections.unmodifiableMap(this.constraints);
+	public Translation getTranslation(){
+		return translation;
+	}
+	public OpBGP getOp(){
+		return opBGP;
 	}
 
-	public boolean isException(){
-		return this.exception != null;
+	public BGPConstraints getConstraints(){
+		return constraints;
 	}
 
-	private void setupConstraints()  {
-		this.constraints = new HashMap<Node,Assumption>();
-		List<Triple> tripleList = opBGP.getPattern().getList();
-		try {
-			// A) Gather Interpretations from the BGP, iterate until no new Interpreations are retrieved
-			boolean lookForConstraints = true;
-			while (lookForConstraints) {
-				lookForConstraints = false;
-				for (Triple triple : tripleList) {
-					L.trace("interpreting triple: {}", triple);
-					Node subject = triple.getSubject();
-					Node predicate = triple.getPredicate();
-					Node object = triple.getObject();
-
-					// If node was observed before, retrieve previous Interpretations
-					Assumption subjectInterpretation = constrainSubject(subject, triple);
-					lookForConstraints = updateConstraint(subject, subjectInterpretation);
-					L.trace("look for constraints after s: {} {}->{}", lookForConstraints,subject, subjectInterpretation);
-					Assumption predicateInterpretation = constrainPredicate(predicate, triple);
-					lookForConstraints = updateConstraint(predicate, predicateInterpretation) || lookForConstraints;
-					L.trace("look for constraints after p: {} {}->{}", lookForConstraints,predicate, predicateInterpretation);
-					Assumption objectInterpretation = constrainObject(object, triple);
-					lookForConstraints = updateConstraint(object, objectInterpretation) || lookForConstraints;
-					L.trace("look for constraints after o: {} {}->{}", lookForConstraints, object, objectInterpretation);
-					//System.out.println();
-				}
-			}
-		}catch(InconsistentAssumptionException e){
-			this.exception = e;
-			L.warn("No solution for BGP", opBGP);
-			if(L.isDebugEnabled()){
-				L.error("Debug enabled. Logging InconsistentAssumptionException.");
-			}
-			L.error("No solution for BGP (reason):", e);
-		}
+	public Set<BGPInterpretation> getInterpretations(){
+		return interpretations;
 	}
 
-	private boolean hasConstraint(Node n, Class<? extends Interpretation> as){
-		if(!constraints.containsKey(n)){
-			return false;
-		}
-		return constraints.get(n).type().equals(as);
-	}
-
-	private Assumption constrainSubject(Node subject, Triple triple) throws InconsistentAssumptionException {
-
-		// ContainerTable(S) <- URI(S) | FXRoot(O) | SlotRow(P) | ContainerRow(O)
-		if(subject.isURI() || hasConstraint(triple.getObject(), Assumption.FXRoot.class) ||
-			hasConstraint(triple.getPredicate(), Assumption.SlotRow.class) ||
-			hasConstraint(triple.getObject(), Assumption.ContainerRow.class)){
-			return new Assumption.ContainerTable(subject, triple);
-		}
-
-		// ContainerRow(S) <- SlotColumn(P) | SlotValue(O) | TypeTable(O)
-		if(hasConstraint(triple.getPredicate(), Assumption.SlotColumn.class) ||
-				hasConstraint(triple.getObject(), Assumption.TypeTable.class) ||
-				hasConstraint(triple.getObject(), Assumption.SlotValue.class) ){
-			return new Assumption.ContainerRow(subject, triple);
-		}
-
-		// if subject is named entity
-		if(subject.isURI()){
-			// ContainerTable(S) <- URI(S)
-			if(translation.nodeContainerIsTable(subject)){
-				return new Assumption.ContainerTable(subject, triple);
-			}else{
-				// Unknown entity URI
-				throw new InconsistentEntityException(subject, "URI does not match table name pattern");
-			}
-		} else {
-			// if subject is a variable or a blank node
-			return new Assumption.Subject(subject,triple);
-		}
-	}
-
-	private Assumption constrainObject(Node object, Triple triple) throws InconsistentEntityException {
-		// SlotValue(O) <- SlotColumn(P)
-		if(hasConstraint(triple.getPredicate(), Assumption.SlotColumn.class) ){
-			return new Assumption.SlotValue(object, triple);
-		}
-
-		// ContainerRow(O) <- SlotRow(P)
-		if(hasConstraint(triple.getPredicate(), Assumption.SlotRow.class) ){
-			return new Assumption.ContainerRow(object, triple);
-		}
-
-		// if object is named entity then it can only be a table type
-		if(object.isURI()){
-			// TypeTable(O) <- URI(O)
-			if(object.getURI().equals(Triplifier.FACADE_X_TYPE_ROOT)){
-				return new Assumption.FXRoot(triple);
-			} else if(translation.nodeTypeIsTable(object)){
-				return new Assumption.TypeTable(object, triple);
-			} else {
-				// Unknown entity URI
-				throw new InconsistentEntityException(object);
-			}
-		} else if(object.isBlank() || object.isVariable()){
-			return new Assumption.Object(object, triple);
-		} else if(object.isLiteral()){
-			// SlotValue(O) <- TL(O)
-			return new Assumption.SlotValue(object, triple);
-		}
-		throw new InconsistentEntityException(object, "Object cannot be of this type");
-	}
-
-	private Assumption constrainPredicate(Node predicate, Triple triple) throws InconsistentAssumptionException {
-		// SlotColumn(P) <- SlotValue(O)
-		if(hasConstraint(triple.getObject(), Assumption.SlotValue.class) ){
-			return new Assumption.SlotColumn(predicate, triple);
-		}
-		// TypeProperty(P) <- TypeTable(O)
-		if(hasConstraint(triple.getObject(), Assumption.TypeTable.class) ||
-			hasConstraint(triple.getObject(), Assumption.FXRoot.class)){
-			return new Assumption.TypeProperty(triple);
-		}
-		// SlotRow(P) <- ContainerRow(O)
-		if(hasConstraint(triple.getObject(), Assumption.ContainerRow.class) ){
-			return new Assumption.SlotRow(predicate, triple);
-		}
-
-		if(!predicate.isVariable()){
-			if(translation.nodeSlotIsRowNum(predicate)){
-				// SlotRow(P) <- CMP(P)
-				return new Assumption.SlotRow(predicate, triple);
-			}else if(translation.nodeSlotIsColumn(predicate)){
-				// SlotColumn(P) <- URI(fx:*)
-				return new Assumption.SlotColumn(predicate, triple);
-			}else if(translation.nodeSlotIsTypeProperty(predicate)){
-				// TypeProperty(P) <- URI(rdf:type)
-				return new Assumption.TypeProperty(triple);
-			}else{
-				// Unknown entity URI
-				throw new InconsistentEntityException(predicate);
-			}
-		}
-		return new Assumption.Predicate(predicate, triple);
-	}
-
-	private boolean updateConstraint(Node node, Assumption constraint) throws InconsistentAssumptionException {
-		Assumption previous = null;
-		// Check if node was observed before
-		if(constraints.containsKey(node)){
-			previous = constraints.get(node);
-			// Nothing new
-			if(previous.type().equals(constraint.type())){
-				return false;
-			}
-			Class<? extends Interpretation> wasType = previous.type();
-			Class<? extends Interpretation> isType = constraint.type();
-			// If previous Interpretation exist, check consistency:
-			// If new interpretation is inconsistent with old one, throw an exception
-			if(previous.inconsistentTypes().contains(constraint.type()) ||
-				constraint.inconsistentTypes().contains(previous.type())){
-//				//
-//				Set<?> s1 = previous.inconsistentTypes();
-//				Set<?> s2 = constraint.inconsistentTypes();
-//				boolean x = previous.inconsistentTypes().contains(constraint.type());
-//				boolean y = constraint.inconsistentTypes().contains(previous.type());
-				throw new InconsistentTypesException(wasType, isType);
-			}
-			// Check the types
-			if(isType.equals(wasType)){
-				// 1) they are the same ->
-				// the triples must be different, then it is a Join
-				Assumption.Join joined = Assumption.makeJoin(previous, constraint);
-				constraints.put(node, joined);
-				return true;
-			} else {
-				// Types are not the same, check if they are specialisations of one another
-				// 2) either or specialises the other (e.g. Subject > Container > ContainerTable), keep the more specialised and remove the more general
-				if(previous.specialisationOfTypes().contains(isType)){
-					// keep old type
-					return false;
-				} else if(constraint.specialisationOfTypes().contains(wasType)){
-					// keep new type
-					constraints.put(node, constraint);
-					return true;
-				} else {
-					// OK -- they are not specialisations of one another
-					// Are they joinable?
-					// Subject, Object are joinable as ContainerRow
-					if(previous.node().isVariable() || previous.node().isBlank()){
-						// If any of the two assumptions are Joins, avoid re-joining...
-						if(previous instanceof Assumption.Join && ((Assumption.Join)previous).includes(constraint)){
-							return false;
-						}
-						Assumption.Join joined = Assumption.makeJoin(previous, constraint);
-						constraints.put(node, joined);
-						return true;
-
-					}
-					// XXX Is our model incomplete?
-					throw new InconsistentTypesException(wasType, isType);
-				}
-			}
-		} else {
-			constraints.put(node, constraint);
-			return true;
-		}
-	}
-
-	public static final Set<Pair<Node,Interpretation>> expand(Map<Node,Interpretation> interpretations){
-		Set<Pair<Node,Interpretation>> expansion = new HashSet<>();
-		for(Map.Entry<Node,Interpretation> entry:interpretations.entrySet()){
-			Set<Triple> tripleSet = ((Assumption) entry.getValue()).triples();
+	public static final Set<Pair<Node, NodeInterpretation>> expand(Map<Node, NodeInterpretation> interpretations){
+		Set<Pair<Node, NodeInterpretation>> expansion = new HashSet<>();
+		for(Map.Entry<Node, NodeInterpretation> entry:interpretations.entrySet()){
+			Set<Triple> tripleSet = ((NodeInterpretation) entry.getValue()).triples();
 			Triple[] triples =  tripleSet.toArray(new Triple[tripleSet.size()]);
-			if(entry.getValue() instanceof Assumption.Subject){
+			if(entry.getValue() instanceof NodeInterpretation.Subject){
 				//Subject -> ContainerTable | ContainerRow
-				expansion.add(Pair.of(entry.getKey(), new Assumption.ContainerTable(entry.getKey(),triples)));
-				expansion.add(Pair.of(entry.getKey(), new Assumption.ContainerRow(entry.getKey(),triples)));
-			}else if(entry.getValue() instanceof Assumption.Predicate){
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.ContainerTable(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.ContainerRow(entry.getKey(),triples)));
+			}else if(entry.getValue() instanceof NodeInterpretation.Predicate){
 				//Predicate -> SlotRow | SlotColumn | TypeProperty
-				expansion.add(Pair.of(entry.getKey(), new Assumption.SlotRow(entry.getKey(),triples)));
-				expansion.add(Pair.of(entry.getKey(), new Assumption.SlotColumn(entry.getKey(),triples)));
-				expansion.add(Pair.of(entry.getKey(), new Assumption.TypeProperty(triples)));
-			}else if(entry.getValue() instanceof Assumption.Object){
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.SlotRow(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.SlotColumn(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.TypeProperty(triples)));
+			}else if(entry.getValue() instanceof NodeInterpretation.Object){
 				//Object -> ContainerRow | SlotValue | FXRoot | TypeTable
-				expansion.add(Pair.of(entry.getKey(), new Assumption.ContainerRow(entry.getKey(),triples)));
-				expansion.add(Pair.of(entry.getKey(), new Assumption.SlotValue(entry.getKey(),triples)));
-				expansion.add(Pair.of(entry.getKey(), new Assumption.FXRoot(triples)));
-				expansion.add(Pair.of(entry.getKey(), new Assumption.TypeTable(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.ContainerRow(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.SlotValue(entry.getKey(),triples)));
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.FXRoot(triples)));
+				expansion.add(Pair.of(entry.getKey(), new NodeInterpretation.TypeTable(entry.getKey(),triples)));
 			}
 		}
 		return expansion;
 	}
 
-//	public Set<State> search(Map<Node, Interpretation> constraints){
-//
-//	}
+	public Set<BGPInterpretation> traverse(BGPConstraints constraints) {
+		BGPInterpretation start = new BGPInterpretation(constraints);
+		return traverse(start);
+	}
+
+	public Set<BGPInterpretation> traverse(BGPInterpretation interpretation){
+		Set<BGPInterpretation> nexts = new HashSet<>();
+		// Generate a new next state for each possible interpretation
+		for (Pair<Node, NodeInterpretation> ii : BGPAnalyser.expand(interpretation.signature())) {
+			// Validate new interpretation before adding it to the set
+			Map<Node,NodeInterpretation> possible = new HashMap<>();
+			possible.putAll(interpretation.signature());
+			possible.put(ii.getLeft(),ii.getRight());
+			BGPConstraints constrained = new BGPConstraints(translation, opBGP, possible);
+			if(!constrained.isException()) {
+				BGPInterpretation next = new BGPInterpretation(interpretation, constrained.interpretations());
+				nexts.add(next);
+			}
+		}
+		Set<BGPInterpretation> ends = new HashSet<>();
+		// Recursively traverse all states
+		for (BGPInterpretation n : nexts) {
+			if(n.isFinalState()){
+				ends.add(n);
+			}
+			ends.addAll(traverse(n));
+		}
+		// return next states
+		return ends;
+	}
 }

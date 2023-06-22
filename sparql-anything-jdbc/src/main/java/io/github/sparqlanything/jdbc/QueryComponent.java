@@ -17,7 +17,7 @@
 
 package io.github.sparqlanything.jdbc;
 
-public class QueryComponent implements Interpretation {
+public class QueryComponent {
 
 	public static class Table extends QueryComponent {
 		private String tableName;

@@ -18,20 +18,20 @@
 package io.github.sparqlanything.jdbc;
 
 public class InconsistentTypesException extends InconsistentAssumptionException {
-	Class<? extends Interpretation> wasType;
-	Class<? extends Interpretation> isType;
+	Class<? extends NodeInterpretation> wasType;
+	Class<? extends NodeInterpretation> isType;
 
-	public InconsistentTypesException(Class<? extends Interpretation> wasType, Class<? extends Interpretation> isType) {
+	public InconsistentTypesException(Class<? extends NodeInterpretation> wasType, Class<? extends NodeInterpretation> isType) {
 		super("Inconsistent types: " + wasType + " " + isType);
 		this.wasType = wasType;
 		this.isType = isType;
 	}
 
-	public Class<? extends Interpretation> getWasType(){
+	public Class<? extends NodeInterpretation> getWasType(){
 		return wasType;
 	}
 
-	public Class<? extends Interpretation> getIsType(){
+	public Class<? extends NodeInterpretation> getIsType(){
 		return isType;
 	}
 }
