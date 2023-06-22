@@ -37,7 +37,9 @@ import java.util.Set;
 
 public class CSVTriplifier implements Triplifier, Slicer {
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
-	public final static String PROPERTY_FORMAT = "csv.format", PROPERTY_HEADERS = "csv.headers";
+
+	public final static IRIArgument PROPERTY_HEADERS = new IRIArgument("csv.headers", "false");
+	public final static String PROPERTY_FORMAT = "csv.format";
 	public final static String PROPERTY_DELIMITER = "csv.delimiter";
 	public final static String PROPERTY_QUOTE_CHAR = "csv.quote-char";
 	public final static String PROPERTY_NULL_STRING = "csv.null-string";
@@ -70,16 +72,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	}
 
 	public static boolean hasHeaders(Properties properties){
-		boolean headers;
-		try {
-			headers = Boolean.valueOf(properties.getProperty(PROPERTY_HEADERS, "false"));
-		} catch (Exception e) {
-			log.warn("Unsupported value for csv.headers: '{}', using default (false).",
-					properties.getProperty(PROPERTY_HEADERS));
-			headers = false;
-		}
-		log.debug("Use headers: {}", headers);
-		return headers;
+		return PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS);
 	}
 
 	public LinkedHashMap<Integer, String> makeHeadersMap(Iterator<CSVRecord> recordIterator , Properties properties){
