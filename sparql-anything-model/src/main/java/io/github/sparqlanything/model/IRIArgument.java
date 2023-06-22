@@ -16,27 +16,28 @@
 
 package io.github.sparqlanything.model;
 
-public enum IRIArgument {
-
-	LOCATION("location"),
-	MEDIA_TYPE("media-type"),
-	NAMESPACE("namespace", Triplifier.XYZ_NS),
-	ROOT("root"),
-	BLANK_NODES("blank-nodes", "true"),
-	NO_CACHE("no-cache", "false"),
-	TRIPLIFIER("triplifier"), CHARSET("charset", "UTF-8"),
-	METADATA("metadata", "false"),
-	CONTENT("content"),
-	FROM_ARCHIVE("from-archive"),
-	TRIM_STRINGS("trim-strings", "false"),
-	NULL_STRING("null-string"),
-	STRATEGY("strategy", "1"),
-	SLICE("slice", "false"),
-	COMMAND("command"),
-	USE_RDFS_MEMBER("use-rdfs-member", "false"),
-	ONDISK_REUSE("ondisk.reuse", "true"),
-	ONDISK("ondisk"), OP_SERVICE_SILENT("opservice.silent"),
-	ANNOTATE_TRIPLES_WITH_SLOT_KEYS("annotate-triples-with-slot-keys", "false");
+public class IRIArgument {
+	public static final IRIArgument LOCATION = new IRIArgument("location");
+	public static final IRIArgument MEDIA_TYPE = new IRIArgument("media-type");
+	public static final IRIArgument NAMESPACE = new IRIArgument("namespace", Triplifier.XYZ_NS);
+	public static final IRIArgument ROOT = new IRIArgument("root");
+	public static final IRIArgument BLANK_NODES = new IRIArgument("blank-nodes", "true");
+	public static final IRIArgument NO_CACHE = new IRIArgument("no-cache", "false");
+	public static final IRIArgument TRIPLIFIER = new IRIArgument("triplifier");
+	public static final IRIArgument CHARSET = new IRIArgument("charset", "UTF-8");
+	public static final IRIArgument METADATA = new IRIArgument("metadata", "false");
+	public static final IRIArgument CONTENT = new IRIArgument("content");
+	public static final IRIArgument FROM_ARCHIVE = new IRIArgument("from-archive");
+	public static final IRIArgument TRIM_STRINGS = new IRIArgument("trim-strings", "false");
+	public static final IRIArgument NULL_STRING = new IRIArgument("null-string");
+	public static final IRIArgument STRATEGY = new IRIArgument("strategy", "1");
+	public static final IRIArgument SLICE = new IRIArgument("slice", "false");
+	public static final IRIArgument COMMAND = new IRIArgument("command");
+	public static final IRIArgument USE_RDFS_MEMBER = new IRIArgument("use-rdfs-member", "false");
+	public static final IRIArgument ONDISK_REUSE = new IRIArgument("ondisk.reuse", "true");
+	public static final IRIArgument ONDISK = new IRIArgument("ondisk");
+	public static final IRIArgument OP_SERVICE_SILENT = new IRIArgument("opservice.silent");
+	public static final IRIArgument ANNOTATE_TRIPLES_WITH_SLOT_KEYS = new IRIArgument("annotate-triples-with-slot-keys", "false");
 
 	private final String s;
 	private final String defaultValue;
@@ -55,7 +56,7 @@ public enum IRIArgument {
 		return s;
 	}
 
-	public String getDefaultValue(){
+	public String getDefaultValue() {
 		return defaultValue;
 	}
 
