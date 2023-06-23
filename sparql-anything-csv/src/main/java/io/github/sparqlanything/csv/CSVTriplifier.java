@@ -200,7 +200,6 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 		CSVFormat format = buildFormat(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
-
 		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID; // there is always 1 data source id
 
 		// XXX How do we close the inputstream?
@@ -218,6 +217,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 				log.debug("Iterating slices");
 				return new Iterator<Slice>() {
 					int rown = 0;
+					int headersRowNumber = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
 
 					@Override
 					public boolean hasNext() {
@@ -227,6 +227,12 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					@Override
 					public Slice next() {
 						rown++;
+						if(rown == headersRowNumber && !headers_map.isEmpty()){
+							// skip headers row
+							rown--;
+							headersRowNumber = -1; // this avoids that the condition is verified in the next iterations
+							recordIterator.next();
+						}
 						log.trace("next slice: {}", rown);
 						return CSVSlice.makeSlice(recordIterator.next(), rown, dataSourceId, headers_map);
 					}
