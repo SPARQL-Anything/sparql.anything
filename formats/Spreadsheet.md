@@ -130,12 +130,13 @@ WHERE
 
 ### Summary
 
-| Option name                                | Description                                                                                                                                                                                                                                                      | Valid Values | Default Value |
-|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
-| spreadsheet.headers                        | It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.                                                                                                                              | true/false   | false         |
-| spreadsheet.evaluate-formulas              | It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.                                                                                                                                                                                     | true/false   | false         |
-| spreadsheet.composite-values               | It tells the spreadsheet triplifier to extract from the cells hyperlinks and comments. If enabled, the cells will be triplified as containers instead of literals (see #308)                                                                                     | true/false   | false         |
-| spreadsheet.ignore-columns-with-no-headers | It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180  | true/false   | false         |
+| Option name                                | Description                                                                                                                                                                                                                                                     | Valid Values | Default Value |
+|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
+| spreadsheet.headers                        | It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.                                                                                                                             | true/false   | false         |
+| spreadsheet.evaluate-formulas              | It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.                                                                                                                                                                                    | true/false   | false         |
+| spreadsheet.composite-values               | It tells the spreadsheet triplifier to extract from the cells hyperlinks and comments. If enabled, the cells will be triplified as containers instead of literals (see #308)                                                                                    | true/false   | false         |
+| spreadsheet.ignore-columns-with-no-headers | It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180 | true/false   | false         |
+| spreadsheet.headers-row                    | It specifies the number of the row to use for extracting column headers. -- see #179                                                                                                                                                                            | any integer  | 1             |
 
 
 ### `spreadsheet.headers`
@@ -583,6 +584,110 @@ WHERE {
 
 | fred | sally |
 |------|-------|
+
+
+### `spreadsheet.headers-row`
+
+#### Description
+
+It specifies the number of the row to use for extracting column headers. -- see #179
+
+#### Valid Values
+
+any integer
+
+#### Default Value
+
+1
+
+#### Examples
+
+##### Input
+
+### Data
+
+**Sheet1**
+
+| A  | B  | C  |
+|----|----|----|
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+
+**Sheet2**
+
+| A1  | B1  | C1  |
+|-----|-----|-----|
+| A11 | B11 | C11 |
+| A12 | B12 | C12 |
+
+Located at https://sparql-anything.cc/examples/Book1.xlsx
+
+##### Use Case 1: Construct the dataset by using the headers of the columns to mint the property URIs.
+
+###### Query
+
+```
+CONSTRUCT 
+  { 
+    GRAPH ?g 
+      { ?s ?p ?o .}
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book1.xlsx,spreadsheet.headers=true,spreadsheet.headers-row=2>
+      { GRAPH ?g
+          { ?s  ?p  ?o }
+      }
+  }
+```
+
+###### Result
+
+```turtle
+<https://sparql-anything.cc/examples/Book1.xlsx#Sheet2> {
+    _:b0    a       <http://sparql.xyz/facade-x/ns/root> ;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                    _:b1 ;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                    _:b2 .
+    
+    _:b2    <http://sparql.xyz/facade-x/data/A11>
+                    "A12" ;
+            <http://sparql.xyz/facade-x/data/B11>
+                    "B12" ;
+            <http://sparql.xyz/facade-x/data/C11>
+                    "C12" .
+    
+    _:b1    <http://sparql.xyz/facade-x/data/A11>
+                    "A1" ;
+            <http://sparql.xyz/facade-x/data/B11>
+                    "B1" ;
+            <http://sparql.xyz/facade-x/data/C11>
+                    "C1" .
+}
+
+<https://sparql-anything.cc/examples/Book1.xlsx#Sheet1> {
+    _:b0    a       <http://sparql.xyz/facade-x/ns/root> ;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                    _:b1 ;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                    _:b2 .
+    
+    _:b2    <http://sparql.xyz/facade-x/data/A1>
+                    "A2" ;
+            <http://sparql.xyz/facade-x/data/B1>
+                    "B2" ;
+            <http://sparql.xyz/facade-x/data/C1>
+                    "C2" .
+    
+    _:b1    <http://sparql.xyz/facade-x/data/A1>
+                    "A" ;
+            <http://sparql.xyz/facade-x/data/B1>
+                    "B" ;
+            <http://sparql.xyz/facade-x/data/C1>
+                    "C" .
+}
+
+```
 
 
 
