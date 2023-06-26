@@ -24,16 +24,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class SpreadsheetTriplifier implements Triplifier {
 
 	public final static String PROPERTY_HEADERS = "spreadsheet.headers";
 	public final static String PROPERTY_EVALUATE_FORMULAS = "spreadsheet.evaluate-formulas";
 	public final static String PROPERTY_COMPOSITE_VALUES = "spreadsheet.composite-values";
-
+	public final static IRIArgument PROPERTY_HEADER_ROW = new IRIArgument("spreadsheet.headers-row", "1");
 	public final static String IGNORE_COLUMNS_WITH_NO_HEADERS = "spreadsheet.ignore-columns-with-no-header";
 	private static final Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
 	private FormulaEvaluator evaluator;
@@ -51,13 +49,14 @@ public class SpreadsheetTriplifier implements Triplifier {
 		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
 		final boolean headers = PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false);
 		final boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
+		final int headersRow = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
 
 		Workbook wb = WorkbookFactory.create(url.openStream());
 		this.evaluator = wb.getCreationHelper().createFormulaEvaluator();
 
 		wb.sheetIterator().forEachRemaining(s -> {
 			String dataSourceId = Triplifier.toSafeURIString(s.getSheetName());
-			populate(s, dataSourceId, builder, headers, evaluateFormulas, compositeValues, ignoreColumnsWithNoHeaders);
+			populate(s, dataSourceId, builder, headers, evaluateFormulas, compositeValues, ignoreColumnsWithNoHeaders, headersRow);
 		});
 
 	}
@@ -72,72 +71,80 @@ public class SpreadsheetTriplifier implements Triplifier {
 		return Sets.newHashSet("xls", "xlsx");
 	}
 
-	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, boolean ignoreColumnsWithNoHeaders) {
+	private Map<Integer, String> makeHeaders(Sheet s, boolean headers, int headersRow, boolean evaluateFormulas) {
+		Map<Integer, String> headers_map = new HashMap<>();
+		if (headers) {
+			Row row = s.getRow(headersRow - 1);
+			int columnId = 0;
+			for (int cellNum = 0; cellNum < row.getLastCellNum(); cellNum++) {
+				columnId++;
+				Cell cell = row.getCell(cellNum);
+				Object value = extractCellValue(cell, evaluateFormulas);
+				String columnString = value.toString();
+
+				String columnName = columnString.strip();
+				if ("".equals(columnName)) {
+					continue;
+				}
+				int c = 0;
+				while (headers_map.containsValue(columnName)) {
+					c++;
+					columnName += "_" + c;
+				}
+
+				log.trace("adding column name >{}< (column id {})", columnName, columnId);
+				headers_map.put(columnId, columnName);
+			}
+
+		}
+		return headers_map;
+	}
+
+	private void populate(Sheet s, String dataSourceId, FacadeXGraphBuilder builder, boolean headers, boolean evaluateFormulas, boolean compositeValues, boolean ignoreColumnsWithNoHeaders, int headersRow) {
 
 		// Add type Root
 		builder.addRoot(dataSourceId);
 
 		int rowNumber = 0; // this counts the LI index not the spreadsheet rows
-		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<>();
+		Map<Integer, String> headers_map = makeHeaders(s, headers, headersRow, evaluateFormulas);
 
 		for (int rowNum = s.getFirstRowNum(); rowNum <= s.getLastRowNum(); rowNum++) {
-			// Header
-			if (headers && rowNum == 0) {
-				Row row = s.getRow(rowNum);
+
+			// skip headers row
+			if (headers && rowNum == headersRow - 1) continue;
+
+			// Rows
+			rowNumber++;
+			String row = "_Row_".concat(String.valueOf(rowNumber));
+			builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, rowNumber, row);
+			Row record = s.getRow(rowNum);
+			logger.trace("Reading Row {} from sheet {}", rowNum, s.getSheetName());
+
+			if (record != null) {
 				int columnId = 0;
-				for (int cellNum = 0; cellNum < row.getLastCellNum(); cellNum++) {
+				for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
+					Cell cell = record.getCell(cellNum);
 					columnId++;
-					Cell cell = row.getCell(cellNum);
-					Object value = extractCellValue(cell, evaluateFormulas);
-					String columnString = value.toString();
-
-					String columnName = columnString.strip();
-					if ("".equals(columnName)) {
-						continue;
-					}
-					int c = 0;
-					while (headers_map.containsValue(columnName)) {
-						c++;
-						columnName += "_" + c;
-					}
-
-					log.trace("adding column name >{}< (column id {})", columnName, columnId);
-					headers_map.put(columnId, columnName);
-				}
-
-			} else {
-				// Rows
-				rowNumber++;
-				String row = "_Row_".concat(String.valueOf(rowNumber));
-				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, rowNumber, row);
-				Row record = s.getRow(rowNum);
-				logger.trace("Reading Row {} from sheet {}", rowNum, s.getSheetName());
-
-				if (record != null) {
-					int columnId = 0;
-					for (int cellNum = record.getFirstCellNum(); cellNum < record.getLastCellNum(); cellNum++) {
-						Cell cell = record.getCell(cellNum);
-						columnId++;
-						if (compositeValues) {
-							String value = row.concat("_").concat(String.valueOf(cellNum));
-							extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
-							if (headers && headers_map.containsKey(columnId)) {
-								builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
-							} else if(!ignoreColumnsWithNoHeaders) {
-								builder.addValue(dataSourceId, row, columnId, value);
-							}
-						} else {
-							Object value = extractCellValue(cell, evaluateFormulas);
-							if (headers && headers_map.containsKey(columnId)) {
-								builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
-							} else if(!ignoreColumnsWithNoHeaders) {
-								builder.addValue(dataSourceId, row, columnId, value);
-							}
+					if (compositeValues) {
+						String value = row.concat("_").concat(String.valueOf(cellNum));
+						extractCompositeCellValue(dataSourceId, value, cell, evaluateFormulas, builder);
+						if (headers && headers_map.containsKey(columnId)) {
+							builder.addContainer(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
+						} else if (!ignoreColumnsWithNoHeaders) {
+							builder.addValue(dataSourceId, row, columnId, value);
+						}
+					} else {
+						Object value = extractCellValue(cell, evaluateFormulas);
+						if (headers && headers_map.containsKey(columnId)) {
+							builder.addValue(dataSourceId, row, Triplifier.toSafeURIString(headers_map.get(columnId)), value);
+						} else if (!ignoreColumnsWithNoHeaders) {
+							builder.addValue(dataSourceId, row, columnId, value);
 						}
 					}
-
 				}
+
 			}
+
 		}
 	}
 

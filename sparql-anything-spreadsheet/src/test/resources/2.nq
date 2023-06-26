@@ -1,0 +1,36 @@
+<http://www.example.org/documentSheet1_Row_1> <http://sparql.xyz/facade-x/data/A> "A1" .
+<http://www.example.org/documentSheet1_Row_1> <http://sparql.xyz/facade-x/data/B> "B1" .
+<http://www.example.org/documentSheet1_Row_1> <http://sparql.xyz/facade-x/data/C> "C1" .
+<http://www.example.org/documentSheet2_Row_1> <http://sparql.xyz/facade-x/data/A1> "A11" .
+<http://www.example.org/documentSheet2_Row_1> <http://sparql.xyz/facade-x/data/B1> "B11" .
+<http://www.example.org/documentSheet2_Row_1> <http://sparql.xyz/facade-x/data/C1> "C11" .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/documentSheet1_Row_1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/documentSheet1_Row_2> .
+<http://www.example.org/documentSheet1_Row_2> <http://sparql.xyz/facade-x/data/A> "A2" .
+<http://www.example.org/documentSheet1_Row_2> <http://sparql.xyz/facade-x/data/B> "B2" .
+<http://www.example.org/documentSheet1_Row_2> <http://sparql.xyz/facade-x/data/C> "C2" .
+<http://www.example.org/documentSheet2_Row_2> <http://sparql.xyz/facade-x/data/A1> "A12" .
+<http://www.example.org/documentSheet2_Row_2> <http://sparql.xyz/facade-x/data/B1> "B12" .
+<http://www.example.org/documentSheet2_Row_2> <http://sparql.xyz/facade-x/data/C1> "C12" .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/documentSheet2_Row_1> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/documentSheet2_Row_2> .
+<http://www.example.org/documentSheet1_Row_2> <http://sparql.xyz/facade-x/data/C> "C2" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_2> <http://sparql.xyz/facade-x/data/B> "B2" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_2> <http://sparql.xyz/facade-x/data/A> "A2" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_1> <http://sparql.xyz/facade-x/data/C> "C1" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_1> <http://sparql.xyz/facade-x/data/B> "B1" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1_Row_1> <http://sparql.xyz/facade-x/data/A> "A1" <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/documentSheet1_Row_2> <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/documentSheet1_Row_1> <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/documentSheet1> .
+<http://www.example.org/documentSheet2_Row_2> <http://sparql.xyz/facade-x/data/C1> "C12" <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_2> <http://sparql.xyz/facade-x/data/B1> "B12" <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_2> <http://sparql.xyz/facade-x/data/A1> "A12" <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/documentSheet2_Row_2> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/documentSheet2_Row_1> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_1> <http://sparql.xyz/facade-x/data/C1> "C11" <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_1> <http://sparql.xyz/facade-x/data/B1> "B11" <http://www.example.org/documentSheet2> .
+<http://www.example.org/documentSheet2_Row_1> <http://sparql.xyz/facade-x/data/A1> "A11" <http://www.example.org/documentSheet2> .

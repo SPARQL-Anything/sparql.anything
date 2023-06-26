@@ -69,7 +69,7 @@ public class AbstractTriplifierTester {
 		this.properties = p;
 		this.extension = extension;
 		this.expectedExtension = expectedExtension;
-		if (expectedExtension.equals("nq")) {
+		if (expectedExtension.equals("nq")||expectedExtension.equals("trig")) {
 			useDatasetGraph = true;
 		}
 	}
