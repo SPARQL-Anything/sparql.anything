@@ -21,7 +21,10 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.shacl.ShaclValidator;
+import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
@@ -203,6 +206,25 @@ public class AbstractTriplifierTester {
 		}
 
 	}
+
+	protected void assertConformanceToFxShapes(){
+		Graph shapesGraph = RDFDataMgr.loadGraph(Objects.requireNonNull(getClass().getClassLoader().getResource("Facade-X-shapes.ttl")).toString());
+		if (!useDatasetGraph) {
+			ValidationReport report = ShaclValidator.get().validate(shapesGraph, this.result);
+			assertTrue(report.conforms());
+		} else {
+			this.resultDatasetGraph.listGraphNodes().forEachRemaining(graphNode->{
+				logger.trace("Validating graph {}", graphNode.getURI());
+				ValidationReport report = ShaclValidator.get().validate(shapesGraph, this.resultDatasetGraph.getGraph(graphNode));
+				assertTrue(report.conforms());
+			});
+			logger.trace("Validating default graph");
+			ValidationReport report = ShaclValidator.get().validate(shapesGraph, this.resultDatasetGraph.getDefaultGraph());
+			assertTrue(report.conforms());
+		}
+
+	}
+
 
 
 	protected DatasetGraph replaceLocation(DatasetGraph g) {
