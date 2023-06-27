@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package io.github.sparqlanything.engine;
+package io.github.sparqlanything.engine.functions;
 
-import io.github.sparqlanything.engine.functions.FXFunction;
-import org.apache.jena.sparql.expr.ExprEvalException;
+import io.github.sparqlanything.engine.FacadeX;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
-import org.apache.jena.sparql.util.FmtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class IsContainerMembershipProperty extends FunctionBase1 implements FXFunction {
+public class IsFacadeXExtension extends FunctionBase1 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(IsFacadeXExtension.class);
+
+	public static boolean isFacadeXExtension(String v) {
+		logger.trace("isFacadeXExtension({})",v);
+		return FilenameUtils.isExtension(v, FacadeX.Registry.getRegisteredExtensions());
+	}
 
 	@Override
-	public NodeValue exec(NodeValue nodeValue) {
-		if(isContainerMembershipProperty(nodeValue)){
-			return NodeValue.TRUE;
-		}
-		return NodeValue.FALSE;
+	public NodeValue exec(NodeValue v) {
+		return NodeValue.makeBoolean(isFacadeXExtension(v.asNode().getLiteralValue().toString()));
 	}
+
 }
