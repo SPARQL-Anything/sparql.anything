@@ -48,6 +48,50 @@ public class FunctionsTest {
 	}
 
 	@Test
+	public void levenshteinDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LevenshteinDistance(\"abc\", \"cbe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int dist = result.next().get("result").asLiteral().getInt();
+		Assert.assertEquals(2, dist);
+	}
+
+	@Test
+	public void cosineDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:CosineDistance(\"abc\", \"cbe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		double dist = result.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(1.0, dist, 0.01);
+	}
+
+	@Test
+	public void jaccardDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:JaccardDistance(\"abc\", \"cbe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		double dist = result.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(0.4, dist, 0.01);
+	}
+
+	@Test
+	public void jaroWinklerDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:JaroWinklerDistance(\"abc\", \"cbe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		double dist = result.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(0.24, dist, 0.01);
+	}
+	@Test
+	public void longestCommonSubsequenceDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LongestCommonSubsequenceDistance(\"abc\", \"abe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int dist = result.next().get("result").asLiteral().getInt();
+		Assert.assertEquals(2, dist);
+	}
+
+	@Test
 	public void previous() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "SELECT ?three WHERE {"
