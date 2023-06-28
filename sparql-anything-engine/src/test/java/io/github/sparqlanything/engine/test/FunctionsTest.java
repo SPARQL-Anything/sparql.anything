@@ -57,6 +57,15 @@ public class FunctionsTest {
 	}
 
 	@Test
+	public void levenshteinDistanceURI() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LevenshteinDistance(<abc>, <cbe>) AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int dist = result.next().get("result").asLiteral().getInt();
+		Assert.assertEquals(2, dist);
+	}
+
+	@Test
 	public void cosineDistance() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:CosineDistance(\"abc\", \"cbe\") AS ?result) } ";
 		ResultSet result = execute(q);
@@ -85,6 +94,14 @@ public class FunctionsTest {
 	@Test
 	public void longestCommonSubsequenceDistance() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LongestCommonSubsequenceDistance(\"abc\", \"abe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int dist = result.next().get("result").asLiteral().getInt();
+		Assert.assertEquals(2, dist);
+	}
+	@Test
+	public void hammingDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:HammingDistance(\"abc\", \"abe\") AS ?result) } ";
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
 		int dist = result.next().get("result").asLiteral().getInt();

@@ -197,6 +197,7 @@ public final class FacadeX {
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaccardDistance",new StringDistanceFunctionFactory<>(new JaccardDistance()) );
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaroWinklerDistance",new StringDistanceFunctionFactory<>(new JaroWinklerDistance()) );
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LongestCommonSubsequenceDistance",new StringDistanceFunctionFactory<>(new LongestCommonSubsequenceDistance()) );
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "HammingDistance",new StringDistanceFunctionFactory<>(new HammingDistance()) );
 
 		log.trace("Enabling function `serial`");
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "serial", Serial.class);
