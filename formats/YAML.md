@@ -44,7 +44,7 @@ nested-array:
       - nested:key: "Value with spaces"
 ```
 
-Located at https://sparql-anything.cc/examples/example.tar
+Located at https://sparql-anything.cc/examples/example.yaml
 
 ### Query
 
