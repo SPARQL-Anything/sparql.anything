@@ -19,20 +19,29 @@ package io.github.sparqlanything.engine.test;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
+import org.apache.jena.ext.com.google.common.collect.Lists;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class FunctionsTest {
 
+	private final static Logger log = LoggerFactory.getLogger(FunctionsTest.class);
+
 	public ResultSet execute(String queryString) {
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Dataset kb = DatasetFactory.createGeneral();
+		log.trace("Query string\n{}\n", queryString);
 		Query q = QueryFactory.create(queryString);
+		log.trace("\nQuery parsed \n{}\n", q.toString(Syntax.syntaxSPARQL_11));
 		return QueryExecutionFactory.create(q, kb).execSelect();
 	}
 
@@ -367,11 +376,24 @@ public class FunctionsTest {
 	}
 
 	public void testStringFunction(String functionURI, String expectedResult, String testString) {
-		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" + "SELECT ?result WHERE {" + "BIND(" + functionURI
-				+ "(\"" + testString + "\") as ?result)" + "}";
+		testStringFunction(functionURI, expectedResult, testString, null);
+	}
+
+	public void testStringFunction(String functionURI, String expectedResult, String testString, List<String> arguments) {
+		String argString = "";
+		if(arguments!=null){
+			arguments.replaceAll(s->{
+				if(s.matches("-?\\d+")){
+					return s;
+				}
+				return "\"".concat(s).concat("\"");
+			});
+			argString = ",".concat(String.join(",", arguments));
+		}
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" + "SELECT ?result WHERE {\n\tBIND(" + functionURI
+				+ "(\"" + testString + "\""+argString+") as ?result)" + "\n}";
 		ResultSet result = execute(q);
 		assertEquals(expectedResult, result.next().get("result").asLiteral().getValue().toString());
-
 	}
 
 	@Test
@@ -391,6 +413,22 @@ public class FunctionsTest {
 		testStringFunction("fx:WordUtils.initials", WordUtils.initials("test"), "test");
 		testStringFunction("fx:WordUtils.swapCase", WordUtils.swapCase("swapCase"), "swapCase");
 		testStringFunction("fx:WordUtils.uncapitalize", WordUtils.uncapitalize("TEST"), "TEST");
+	}
+
+	@Test
+	public void testStringFunctions(){
+		testStringFunction("fx:String.trim", " test ".trim(), "test");
+		testStringFunction("fx:String.substring", "test".substring(1), "test", Lists.newArrayList("1"));
+		testStringFunction("fx:String.substring", "test".substring(1,2), "test", Lists.newArrayList("1", "2"));
+		testStringFunction("fx:String.indexOf", String.valueOf("test".indexOf("e")), "test", Lists.newArrayList("e"));
+		testStringFunction("fx:String.startsWith", String.valueOf("test".startsWith("te")), "test", Lists.newArrayList("te"));
+		testStringFunction("fx:String.endsWith", String.valueOf("test".endsWith("st")), "test", Lists.newArrayList("st"));
+		testStringFunction("fx:String.replace", "test".replace("te", "fe"), "test", Lists.newArrayList("te", "fe"));
+		testStringFunction("fx:String.replace", "test".replace("t", "f"), "test", Lists.newArrayList("t", "f"));
+		testStringFunction("fx:String.strip", "  test  \t".strip(), "  test  \t");
+		testStringFunction("fx:String.stripLeading", "  test  \t".stripLeading(), "  test  \t");
+		testStringFunction("fx:String.stripTrailing", "  test  \t".stripTrailing(), "  test  \t");
+		testStringFunction("fx:String.lastIndexOf", String.valueOf("test".lastIndexOf("t")), "test", Lists.newArrayList("t"));
 	}
 
 	public void execTestEntityFunction(String expectedResult, String... str) {
