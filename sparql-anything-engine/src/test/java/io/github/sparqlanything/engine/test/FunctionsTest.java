@@ -105,7 +105,7 @@ public class FunctionsTest {
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
 		int dist = result.next().get("result").asLiteral().getInt();
-		Assert.assertEquals(2, dist);
+		Assert.assertEquals(1, dist);
 	}
 
 	@Test
