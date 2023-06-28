@@ -255,9 +255,9 @@ public class FunctionsTest {
 		int one = s.get("one").asLiteral().getInt();
 		int two = s.get("two").asLiteral().getInt();
 		int three = s.get("three").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
-		Assert.assertTrue(two == 2);
-		Assert.assertTrue(three == 3);
+		assertEquals(1, one);
+		assertEquals(2, two);
+		Assert.assertEquals(three, 3);
 	}
 
 	@Test
@@ -273,9 +273,9 @@ public class FunctionsTest {
 		int one = s.get("one").asLiteral().getInt();
 		int two = s.get("two").asLiteral().getInt();
 		int three = s.get("three").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
-		Assert.assertTrue(two == 1);
-		Assert.assertTrue(three == 1);
+		assertEquals(1, one);
+		assertEquals(1, two);
+		assertEquals(1, three);
 	}
 
 	@Test
@@ -291,9 +291,9 @@ public class FunctionsTest {
 		int one = s.get("one").asLiteral().getInt();
 		int two = s.get("two").asLiteral().getInt();
 		int three = s.get("three").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
-		Assert.assertTrue(two == 2);
-		Assert.assertTrue(three == 3);
+		assertEquals(1, one);
+		assertEquals(2, two);
+		assertEquals(3, three);
 	}
 
 	@Test
@@ -308,10 +308,10 @@ public class FunctionsTest {
 		// Two rows, both ?one == 1
 		QuerySolution s = result.next();
 		int one = s.get("one").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
+		assertEquals(1, one);
 		s = result.next();
 		one = s.get("one").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
+		assertEquals(1, one);
 	}
 
 	@Test
@@ -327,16 +327,16 @@ public class FunctionsTest {
 		// 4 rows, ?c = 1, 2, 3, 4
 		QuerySolution s = result.next();
 		int c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 1);
+		assertEquals(1, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 2);
+		assertEquals(2, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 3);
+		assertEquals(3, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 4);
+		assertEquals(4, c);
 
 	}
 
@@ -353,16 +353,16 @@ public class FunctionsTest {
 		// 4 rows, ?c = 1, 2, 1, 3
 		QuerySolution s = result.next();
 		int c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 1);
+		assertEquals(1, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 2);
+		assertEquals(2, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 1);
+		assertEquals(1, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 3);
+		assertEquals(3, c);
 
 	}
 
