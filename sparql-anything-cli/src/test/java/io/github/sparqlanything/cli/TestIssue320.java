@@ -34,6 +34,7 @@ public class TestIssue320 {
 
 		String str = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("./ask.sparql")), StandardCharsets.UTF_8);
 		String output = SPARQLAnything.callMain(new String[]{"-q", str, "-f", "text"});
+
 		Assert.assertEquals("false", output);
 	}
 }

@@ -53,6 +53,18 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
+
+		if(hasFXSymbols(this.execCxt) && !this.execCxt.getContext().isDefined(FacadeXExecutionContext.hasServiceClause)){
+			try {
+				return executeDefaultFacadeX(opBGP,input);
+			} catch (TriplifierHTTPException | IOException | InstantiationException | IllegalAccessException |
+					 InvocationTargetException | NoSuchMethodException | ClassNotFoundException |
+					 UnboundVariableException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+
 		// check that the BGP is within a FacadeX-SERVICE clause
 		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {
 			// check that the BGP contains FacadeX Magic properties
@@ -71,6 +83,15 @@ public class FacadeXOpExecutor extends OpExecutor {
 		logger.trace("Execute with default Jena execution");
 		// go with the default Jena execution
 		return super.execute(opBGP, input);
+	}
+
+	private boolean hasFXSymbols(ExecutionContext execCxt) {
+		for(Symbol s : execCxt.getContext().keys()){
+			if(s.getClass() == FXSymbol.class){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
@@ -132,6 +153,32 @@ public class FacadeXOpExecutor extends OpExecutor {
 		Utils.ensureReadingTxn(dg);
 
 		return QC.execute(opService.getSubOp(), input, Utils.getFacadeXExecutionContext(execCxt, p, dg));
+
+	}
+
+
+	protected QueryIterator executeDefaultFacadeX(OpBGP opBGP, QueryIterator input) throws TriplifierHTTPException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, UnboundVariableException {
+
+		// extract properties from service URI
+		Properties p = new Properties();
+
+		// first extract from execution context
+		PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
+
+		// guess triplifier
+		Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
+
+		if (t == null) {
+			logger.warn("No triplifier found");
+			return QueryIterNullIterator.create(execCxt);
+		}
+
+
+		// Execute with default, bulk method
+		DatasetGraph dg = dgc.getDatasetGraph(t, p, opBGP);
+		Utils.ensureReadingTxn(dg);
+
+		return QC.execute(opBGP, input, Utils.getFacadeXExecutionContext(execCxt, p, dg));
 
 	}
 
