@@ -23,7 +23,6 @@ public class OptionsViaCommandLineTest {
 	public void testWithoutService() throws Exception {
 		String q = "SELECT ?v {  ?root a <http://sparql.xyz/facade-x/ns/root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } ";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc"});
-		System.out.println(out);
 		Assert.assertTrue(out.contains("abc"));
 	}
 }
