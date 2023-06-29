@@ -16,18 +16,15 @@
 
 package io.github.sparqlanything.csv;
 
-import io.github.sparqlanything.model.TriplifierHTTPException;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Properties;
 
 public class TSVTest extends AbstractTriplifierTester {
 
 	public TSVTest() {
 		super(new CSVTriplifier(), new Properties(), "tsv");
-		this.printWholeGraph = true;
 	}
 
 	public void properties(Properties properties) {

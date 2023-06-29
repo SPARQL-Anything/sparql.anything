@@ -17,13 +17,16 @@
 package io.github.sparqlanything.engine;
 
 import org.apache.jena.sparql.engine.ExecutionContext;
+import org.apache.jena.sparql.util.Symbol;
 
 public class FacadeXExecutionContext extends ExecutionContext {
 
 	private boolean silent = false;
+	public static final Symbol hasServiceClause = Symbol.create("has-service");
 
 	public FacadeXExecutionContext(ExecutionContext other) {
 		super(other);
+		other.getContext().set(hasServiceClause, true);
 	}
 
 	public boolean isSilent() {

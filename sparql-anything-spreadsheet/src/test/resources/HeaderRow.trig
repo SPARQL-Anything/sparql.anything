@@ -1,0 +1,60 @@
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+eg:documentSheet1_Row_2
+        xyz:Header21  "A11" ;
+        xyz:Header22  "B11" .
+
+eg:documentSheet1_Row_1
+        xyz:Header21  "Header11" ;
+        xyz:Header22  "Header21" .
+
+eg:documentSheet1_Row_4
+                xyz:Header21  "A13" ;
+                xyz:Header22  "B13" .
+
+eg:documentSheet1  rdf:type  fx:root ;
+        rdf:_1    eg:documentSheet1_Row_1 ;
+        rdf:_2    eg:documentSheet1_Row_2 ;
+        rdf:_3    eg:documentSheet1_Row_3 ;
+        rdf:_4    eg:documentSheet1_Row_4 .
+
+eg:documentSheet1_Row_3
+        xyz:Header21  "A12" ;
+        xyz:Header22  "B12" .
+
+eg:documentSheet1 {
+    eg:documentSheet1_Row_2
+            xyz:Header21  "A11" ;
+            xyz:Header22  "B11" .
+
+    eg:documentSheet1_Row_1
+            xyz:Header21  "Header11" ;
+            xyz:Header22  "Header21" .
+
+    eg:documentSheet1
+            rdf:type  fx:root ;
+            rdf:_1    eg:documentSheet1_Row_1 ;
+            rdf:_2    eg:documentSheet1_Row_2 ;
+            rdf:_3    eg:documentSheet1_Row_3 ;
+            rdf:_4    eg:documentSheet1_Row_4 .
+
+    eg:documentSheet1_Row_3
+            xyz:Header21  "A12" ;
+            xyz:Header22  "B12" .
+
+    eg:documentSheet1_Row_4
+                xyz:Header21  "A13" ;
+                xyz:Header22  "B13" .
+}

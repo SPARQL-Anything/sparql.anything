@@ -19,20 +19,29 @@ package io.github.sparqlanything.engine.test;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
+import org.apache.jena.ext.com.google.common.collect.Lists;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class FunctionsTest {
 
+	private final static Logger log = LoggerFactory.getLogger(FunctionsTest.class);
+
 	public ResultSet execute(String queryString) {
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Dataset kb = DatasetFactory.createGeneral();
+		log.trace("Query string\n{}\n", queryString);
 		Query q = QueryFactory.create(queryString);
+		log.trace("\nQuery parsed \n{}\n", q.toString(Syntax.syntaxSPARQL_11));
 		return QueryExecutionFactory.create(q, kb).execSelect();
 	}
 
@@ -45,6 +54,67 @@ public class FunctionsTest {
 		Assert.assertTrue(result.hasNext());
 		String threeUri = result.next().get("three").asResource().getURI();
 		Assert.assertEquals("http://www.w3.org/1999/02/22-rdf-syntax-ns#_3", threeUri);
+	}
+
+	@Test
+	public void levenshteinDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LevenshteinDistance(\"abc\", \"cbe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int dist = result.next().get("result").asLiteral().getInt();
+		Assert.assertEquals(2, dist);
+	}
+
+	@Test
+	public void levenshteinDistanceURI() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LevenshteinDistance(<abc>, <cbe>) AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int dist = result.next().get("result").asLiteral().getInt();
+		Assert.assertEquals(2, dist);
+	}
+
+	@Test
+	public void cosineDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:CosineDistance(\"abc\", \"cbe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		double dist = result.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(1.0, dist, 0.01);
+	}
+
+	@Test
+	public void jaccardDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:JaccardDistance(\"abc\", \"cbe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		double dist = result.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(0.4, dist, 0.01);
+	}
+
+	@Test
+	public void jaroWinklerDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:JaroWinklerDistance(\"abc\", \"cbe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		double dist = result.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(0.24, dist, 0.01);
+	}
+	@Test
+	public void longestCommonSubsequenceDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LongestCommonSubsequenceDistance(\"abc\", \"abe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int dist = result.next().get("result").asLiteral().getInt();
+		Assert.assertEquals(2, dist);
+	}
+	@Test
+	public void hammingDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:HammingDistance(\"abc\", \"abe\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		int dist = result.next().get("result").asLiteral().getInt();
+		Assert.assertEquals(1, dist);
 	}
 
 	@Test
@@ -194,9 +264,9 @@ public class FunctionsTest {
 		int one = s.get("one").asLiteral().getInt();
 		int two = s.get("two").asLiteral().getInt();
 		int three = s.get("three").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
-		Assert.assertTrue(two == 2);
-		Assert.assertTrue(three == 3);
+		assertEquals(1, one);
+		assertEquals(2, two);
+		Assert.assertEquals(three, 3);
 	}
 
 	@Test
@@ -212,9 +282,9 @@ public class FunctionsTest {
 		int one = s.get("one").asLiteral().getInt();
 		int two = s.get("two").asLiteral().getInt();
 		int three = s.get("three").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
-		Assert.assertTrue(two == 1);
-		Assert.assertTrue(three == 1);
+		assertEquals(1, one);
+		assertEquals(1, two);
+		assertEquals(1, three);
 	}
 
 	@Test
@@ -230,9 +300,9 @@ public class FunctionsTest {
 		int one = s.get("one").asLiteral().getInt();
 		int two = s.get("two").asLiteral().getInt();
 		int three = s.get("three").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
-		Assert.assertTrue(two == 2);
-		Assert.assertTrue(three == 3);
+		assertEquals(1, one);
+		assertEquals(2, two);
+		assertEquals(3, three);
 	}
 
 	@Test
@@ -247,10 +317,10 @@ public class FunctionsTest {
 		// Two rows, both ?one == 1
 		QuerySolution s = result.next();
 		int one = s.get("one").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
+		assertEquals(1, one);
 		s = result.next();
 		one = s.get("one").asLiteral().getInt();
-		Assert.assertTrue(one == 1);
+		assertEquals(1, one);
 	}
 
 	@Test
@@ -266,16 +336,16 @@ public class FunctionsTest {
 		// 4 rows, ?c = 1, 2, 3, 4
 		QuerySolution s = result.next();
 		int c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 1);
+		assertEquals(1, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 2);
+		assertEquals(2, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 3);
+		assertEquals(3, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 4);
+		assertEquals(4, c);
 
 	}
 
@@ -292,25 +362,38 @@ public class FunctionsTest {
 		// 4 rows, ?c = 1, 2, 1, 3
 		QuerySolution s = result.next();
 		int c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 1);
+		assertEquals(1, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 2);
+		assertEquals(2, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 1);
+		assertEquals(1, c);
 		s = result.next();
 		c = s.get("c").asLiteral().getInt();
-		Assert.assertTrue(c == 3);
+		assertEquals(3, c);
 
 	}
 
 	public void testStringFunction(String functionURI, String expectedResult, String testString) {
-		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" + "SELECT ?result WHERE {" + "BIND(" + functionURI
-				+ "(\"" + testString + "\") as ?result)" + "}";
+		testStringFunction(functionURI, expectedResult, testString, null);
+	}
+
+	public void testStringFunction(String functionURI, String expectedResult, String testString, List<String> arguments) {
+		String argString = "";
+		if(arguments!=null){
+			arguments.replaceAll(s->{
+				if(s.matches("-?\\d+")){
+					return s;
+				}
+				return "\"".concat(s).concat("\"");
+			});
+			argString = ",".concat(String.join(",", arguments));
+		}
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" + "SELECT ?result WHERE {\n\tBIND(" + functionURI
+				+ "(\"" + testString + "\""+argString+") as ?result)" + "\n}";
 		ResultSet result = execute(q);
 		assertEquals(expectedResult, result.next().get("result").asLiteral().getValue().toString());
-
 	}
 
 	@Test
@@ -330,6 +413,22 @@ public class FunctionsTest {
 		testStringFunction("fx:WordUtils.initials", WordUtils.initials("test"), "test");
 		testStringFunction("fx:WordUtils.swapCase", WordUtils.swapCase("swapCase"), "swapCase");
 		testStringFunction("fx:WordUtils.uncapitalize", WordUtils.uncapitalize("TEST"), "TEST");
+	}
+
+	@Test
+	public void testStringFunctions(){
+		testStringFunction("fx:String.trim", " test ".trim(), "test");
+		testStringFunction("fx:String.substring", "test".substring(1), "test", Lists.newArrayList("1"));
+		testStringFunction("fx:String.substring", "test".substring(1,2), "test", Lists.newArrayList("1", "2"));
+		testStringFunction("fx:String.indexOf", String.valueOf("test".indexOf("e")), "test", Lists.newArrayList("e"));
+		testStringFunction("fx:String.startsWith", String.valueOf("test".startsWith("te")), "test", Lists.newArrayList("te"));
+		testStringFunction("fx:String.endsWith", String.valueOf("test".endsWith("st")), "test", Lists.newArrayList("st"));
+		testStringFunction("fx:String.replace", "test".replace("te", "fe"), "test", Lists.newArrayList("te", "fe"));
+		testStringFunction("fx:String.replace", "test".replace("t", "f"), "test", Lists.newArrayList("t", "f"));
+		testStringFunction("fx:String.strip", "  test  \t".strip(), "  test  \t");
+		testStringFunction("fx:String.stripLeading", "  test  \t".stripLeading(), "  test  \t");
+		testStringFunction("fx:String.stripTrailing", "  test  \t".stripTrailing(), "  test  \t");
+		testStringFunction("fx:String.lastIndexOf", String.valueOf("test".lastIndexOf("t")), "test", Lists.newArrayList("t"));
 	}
 
 	public void execTestEntityFunction(String expectedResult, String... str) {

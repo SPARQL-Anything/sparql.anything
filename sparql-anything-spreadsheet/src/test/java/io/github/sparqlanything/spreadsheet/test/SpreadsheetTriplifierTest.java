@@ -29,8 +29,6 @@ public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
 		super(new SpreadsheetTriplifier(), new Properties(), "xls", "nq");
 	}
 
-
-
 	@Override
 	protected void properties(Properties properties) {
 
@@ -42,25 +40,40 @@ public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
 		if(name.getMethodName().equals("testFormulaEvaluator")){
 			properties.setProperty(SpreadsheetTriplifier.PROPERTY_EVALUATE_FORMULAS, "true");
 		}
+
+		if(name.getMethodName().equals("test2")){
+			properties.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS, "true");
+		}
+
 	}
 
 	@Test
 	public void testNullString$1(){
-//		RDFDataMgr.write(System.err, resultDatasetGraph, Lang.NQ);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 
 	@Test
 	public void testNoNullString$1(){
-//		RDFDataMgr.write(System.err, resultDatasetGraph, Lang.NQ);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void test1(){
+		assertResultIsIsomorphicWithExpected();
+		assertNotBlankNode();
+	}
+
+	@Test
+	public void test2(){
 		assertResultIsIsomorphicWithExpected();
 	}
 
 
 	@Test
 	public void testFormulaEvaluator(){
-//		RDFDataMgr.write(System.err, resultDatasetGraph, Lang.NQ);
 		assertResultIsIsomorphicWithExpected();
 	}
+
+
 }

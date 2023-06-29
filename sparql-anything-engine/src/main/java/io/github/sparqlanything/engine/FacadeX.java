@@ -16,13 +16,13 @@
 
 package io.github.sparqlanything.engine;
 
-import io.github.sparqlanything.engine.functions.After;
 import io.github.sparqlanything.engine.functions.*;
 import io.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.rdf.RDFTriplifier;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
+import org.apache.commons.text.similarity.*;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.function.FunctionRegistry;
@@ -191,6 +191,13 @@ public final class FacadeX {
 		} catch (NoSuchMethodException e) {
 			log.error("", e);
 		}
+
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LevenshteinDistance",new StringDistanceFunctionFactory<>(new LevenshteinDistance()) );
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "CosineDistance",new StringDistanceFunctionFactory<>(new CosineDistance()) );
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaccardDistance",new StringDistanceFunctionFactory<>(new JaccardDistance()) );
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaroWinklerDistance",new StringDistanceFunctionFactory<>(new JaroWinklerDistance()) );
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LongestCommonSubsequenceDistance",new StringDistanceFunctionFactory<>(new LongestCommonSubsequenceDistance()) );
+		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "HammingDistance",new StringDistanceFunctionFactory<>(new HammingDistance()) );
 
 		log.trace("Enabling function `serial`");
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "serial", Serial.class);

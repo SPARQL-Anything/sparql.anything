@@ -1,6 +1,5 @@
 package io.github.sparqlanything.csv;
 
-import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.junit.Test;
 
@@ -10,7 +9,6 @@ public class HeadersRowTest extends AbstractTriplifierTester {
 
 	public HeadersRowTest() {
 		super(new CSVTriplifier(), new Properties(), "csv");
-		this.printWholeGraph = true;
 	}
 
 	public void properties(Properties properties) {

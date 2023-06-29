@@ -19,7 +19,6 @@ package io.github.sparqlanything.engine.functions.reflection;
 import org.apache.jena.query.QueryBuildException;
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.function.Function;
 import org.apache.jena.sparql.function.FunctionBase;
 import org.apache.jena.sparql.function.FunctionFactory;
 import org.slf4j.Logger;
@@ -28,25 +27,22 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ReflectionFunctionFactory {
 	public final static Logger logger = LoggerFactory.getLogger(ReflectionFunctionFactory.class);
 
-	private Map<Class<?>, NodeValueConverter<?,?>> converters;
-	private Map<Class<? extends NodeValue>, Set<NodeValueConverter<?,?>>> nodeValueConverters;
+	private final Map<Class<?>, NodeValueConverter<?,?>> converters;
+	private final Map<Class<? extends NodeValue>, Set<NodeValueConverter<?,?>>> nodeValueConverters;
 
 	public ReflectionFunctionFactory(){
-		converters = new HashMap<Class<?>, NodeValueConverter<?,?>>();
-		nodeValueConverters = new HashMap<Class<? extends NodeValue>, Set<NodeValueConverter<?,?>>>();
+		converters = new HashMap<>();
+		nodeValueConverters = new HashMap<>();
 		register(new Converters.CharConverter());
 		converters.put(char.class, new Converters.CharConverter());
 		register(new Converters.StringConverter());
+		converters.put(CharSequence.class, new Converters.StringConverter());
+		converters.put(String.class, new Converters.StringConverter());
 		register(new Converters.LongConverter());
 		converters.put(long.class, new Converters.LongConverter());
 		register(new Converters.DoubleConverter());
@@ -62,7 +58,7 @@ public class ReflectionFunctionFactory {
 	public final void register(NodeValueConverter converter){
 		converters.put(converter.getType(), converter);
 		if(!nodeValueConverters.containsKey(converter.getNodeValueType())){
-			nodeValueConverters.put(converter.getNodeValueType(), new HashSet<NodeValueConverter<?,?>>());
+			nodeValueConverters.put(converter.getNodeValueType(), new HashSet<>());
 		}
 		nodeValueConverters.get(converter.getNodeValueType()).add(converter);
 	}
@@ -77,37 +73,32 @@ public class ReflectionFunctionFactory {
 	public FunctionFactory makeFunction(Method... methods){
 		String methodName = methods[0].getName();
 		final ReflectionFunction function = new ReflectionFunction(methodName,methods);
-		return new FunctionFactory() {
-			@Override
-			public Function create(String s) {
-				return function;
-			}
-		};
+		return s -> function;
 	}
 
 	public FunctionFactory makeFunction(Class<?> type, String methodName){
 		Method[] methods = type.getMethods();
-		List<Method> list = new ArrayList();
+		List<Method> list = new ArrayList<>();
 		for(Method m: methods){
 			if(m.getName().equals(methodName)){
 				list.add(m);
 			}
 		}
-		return  makeFunction((Method[]) list.toArray(new Method[list.size()]));
+		return  makeFunction(list.toArray(new Method[list.size()]));
 	}
 
 	public class ReflectionFunction extends FunctionBase {
 
-		private Map<Integer,List<Method>> methods;
-		private String name;
+		private final Map<Integer,List<Method>> methods;
+		private final String name;
 
 		public ReflectionFunction(String name, Method... methodList) {
-			this.methods = new HashMap<Integer,List<Method>>();
+			this.methods = new HashMap<>();
 			this.name = name;
 			for(Method method : methodList){
 				int len = method.getParameterTypes().length;
 				if(!methods.containsKey(len)){
-					methods.put(len, new ArrayList<Method>());
+					methods.put(len, new ArrayList<>());
 				}
 				methods.get(len).add(method);
 			}
@@ -128,9 +119,8 @@ public class ReflectionFunctionFactory {
 		}
 
 		private Method findMethod(List<NodeValue> args){
-			Set<Integer> methodsArgs = new HashSet<Integer>();
+			Set<Integer> methodsArgs = new HashSet<>();
 			// If static, check methods with
-			int argsList = args.size();
 
 			for(Map.Entry<Integer,List<Method>> ms : methods.entrySet()) {
 				for(Method m : ms.getValue()) {
@@ -141,8 +131,7 @@ public class ReflectionFunctionFactory {
 						}
 					} else {
 						methodsArgs.add(m.getParameterCount() + 1);
-						List<NodeValue> args2 = new ArrayList<NodeValue>();
-						args2.addAll(args);
+						List<NodeValue> args2 = new ArrayList<>(args);
 						args2.remove(0);
 						if (compatible(args2, m) ){
 							// Stop checking
@@ -169,7 +158,7 @@ public class ReflectionFunctionFactory {
 
 		public NodeValue exec(List<NodeValue> args) {
 			Method method = findMethod(args);
-			Object o = null;
+			Object o;
 			try {
 				NodeValueConverter<?,?> returnTypeConverter = getConverter(method.getReturnType());
 				if ( !Modifier.isStatic(method.getModifiers() ) ){
@@ -188,7 +177,7 @@ public class ReflectionFunctionFactory {
 	}
 
 	private static ReflectionFunctionFactory instance = null;
-	public static final ReflectionFunctionFactory get(){
+	public static ReflectionFunctionFactory get(){
 		if(instance == null){
 			instance = new ReflectionFunctionFactory();
 		}

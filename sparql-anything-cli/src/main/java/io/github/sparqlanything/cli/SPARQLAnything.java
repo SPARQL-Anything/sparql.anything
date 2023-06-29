@@ -16,29 +16,20 @@
 
 package io.github.sparqlanything.cli;
 
-import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.engine.FacadeXOpExecutor;
 import io.github.basilapi.basil.sparql.QueryParameter;
 import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.VariablesBinder;
+import io.github.sparqlanything.engine.FXSymbol;
+import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.engine.FacadeXOpExecutor;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFactory;
-import org.apache.jena.query.ResultSetFormatter;
-import org.apache.jena.query.ResultSetRewindable;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
@@ -55,11 +46,7 @@ import org.apache.jena.sys.JenaSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -84,7 +71,13 @@ public class SPARQLAnything {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
-	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw)
+	private static QueryExecution createQueryExecution(Query query, Dataset kb,  String[] configurations){
+		QueryExecution qExec = QueryExecutionFactory.create(query,kb);
+		setConfigurationsToContext(configurations, qExec);
+		return qExec;
+	}
+
+	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw, String[] configurations)
 			throws FileNotFoundException {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Before executeQuery: {}", System.currentTimeMillis() - duration);
@@ -92,16 +85,16 @@ public class SPARQLAnything {
 		if (query.isSelectType()) {
 			switch (outputFormat) {
 				case "JSON":
-					ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(query, kb).execSelect());
+					ResultSetFormatter.outputAsJSON(pw, createQueryExecution(query, kb, configurations).execSelect());
 					break;
 				case "XML":
-					ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(query, kb).execSelect());
+					ResultSetFormatter.outputAsXML(pw, createQueryExecution(query, kb, configurations).execSelect());
 					break;
 				case "CSV":
-					ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(query, kb).execSelect());
+					ResultSetFormatter.outputAsCSV(pw, createQueryExecution(query, kb, configurations).execSelect());
 					break;
 				case "TEXT":
-					pw.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, kb).execSelect()));
+					pw.println(ResultSetFormatter.asText(createQueryExecution(query, kb, configurations).execSelect()));
 					break;
 				default:
 					throw new RuntimeException("Unsupported format: " + outputFormat);
@@ -109,16 +102,16 @@ public class SPARQLAnything {
 		} else if (query.isAskType()) {
 			switch (outputFormat) {
 				case "JSON":
-					ResultSetFormatter.outputAsJSON(pw, QueryExecutionFactory.create(query, kb).execAsk());
+					ResultSetFormatter.outputAsJSON(pw, createQueryExecution(query, kb, configurations).execAsk());
 					break;
 				case "XML":
-					ResultSetFormatter.outputAsXML(pw, QueryExecutionFactory.create(query, kb).execAsk());
+					ResultSetFormatter.outputAsXML(pw, createQueryExecution(query, kb, configurations).execAsk());
 					break;
 				case "CSV":
-					ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(query, kb).execAsk());
+					ResultSetFormatter.outputAsCSV(pw, createQueryExecution(query, kb, configurations).execAsk());
 					break;
 				case "TEXT":
-					pw.print(QueryExecutionFactory.create(query, kb).execAsk());
+					pw.print(createQueryExecution(query, kb, configurations).execAsk());
 					//ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
 					break;
 				default:
@@ -129,12 +122,12 @@ public class SPARQLAnything {
 			Model m;
 			Dataset d = null;
 			if (query.isConstructType()) {
-				d = QueryExecutionFactory.create(query, kb).execConstructDataset();
+				d = createQueryExecution(query, kb, configurations).execConstructDataset();
 				// .execConstructDataset (instead of .execConstruct) so we can construct quads too
 				// as described here: https://jena.apache.org/documentation/query/construct-quad.html
 				m = d.getDefaultModel();
 			} else {
-				m = QueryExecutionFactory.create(query, kb).execDescribe();
+				m = createQueryExecution(query, kb, configurations).execDescribe();
 				// d = new DatasetImpl(m);
 			}
 			if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName()) ) {
@@ -237,7 +230,7 @@ public class SPARQLAnything {
 	}
 
 	private static class ArgValuesAsResultSet implements ResultSetRewindable {
-		private String[] values;
+		private final String[] values;
 		private List<String> variables;
 		private Set<Binding> bindings;
 		private Iterator<Binding> iterator;
@@ -421,6 +414,15 @@ public class SPARQLAnything {
 		}
 	}
 
+	private static void setConfigurationsToContext(String[] configurations, QueryExecution qExec) {
+		if (configurations != null) {
+			for (String configuration : configurations) {
+				String[] configurationSplit = configuration.split("=");
+				qExec.getContext().set(FXSymbol.create(configurationSplit[0]), configurationSplit[1]);
+			}
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
 
 		if(logger.isTraceEnabled()){
@@ -531,13 +533,14 @@ public class SPARQLAnything {
 			String outputFileName = cli.getOutputFile();
 			String outputPattern = cli.getOutputPattern();
 			String[] values = cli.getValues();
+			String[] configurations = cli.getConfigurations();
 			if (outputPattern != null && outputFileName != null) {
 				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
 			}
 			if (inputFile == null && values == null) {
 				logger.debug("No input file");
 				Query q = QueryFactory.create(query);
-				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()));
+				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()), configurations);
 			} else {
 
 				if (inputFile != null && values != null) {
@@ -582,7 +585,7 @@ public class SPARQLAnything {
 					}
 					try {
 						logger.trace("Executing Query: {}", q);
-						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()));
+						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()), configurations);
 					} catch (Exception e1) {
 						logger.error(
 								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());

@@ -84,7 +84,7 @@ public class TestUtils {
 		}
 	}
 
-	public static  void printWholeGraph(Graph expected, Graph obtained, boolean expectedResultsAvailable) {
+	public static void printWholeGraph(Graph expected, Graph obtained, boolean expectedResultsAvailable) {
 		ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
 		expected.getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
 		obtained.getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
@@ -95,11 +95,13 @@ public class TestUtils {
 
 	}
 
-	public static  void printWholeGraph(DatasetGraph expected, DatasetGraph obtained, boolean expectedResultsAvailable) {
+	public static void printWholeGraph(DatasetGraph expected, DatasetGraph obtained, boolean expectedResultsAvailable) {
+		expected.getDefaultGraph().getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+		obtained.getDefaultGraph().getPrefixMapping().setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
 		ByteArrayOutputStream baosExpected = new ByteArrayOutputStream();
-		if (expectedResultsAvailable) RDFDataMgr.write(baosExpected, expected, Lang.NQ);
+		if (expectedResultsAvailable) RDFDataMgr.write(baosExpected, expected, Lang.TRIG);
 		ByteArrayOutputStream baosResult = new ByteArrayOutputStream();
-		RDFDataMgr.write(baosResult, obtained, Lang.NQ);
+		RDFDataMgr.write(baosResult, obtained, Lang.TRIG);
 		logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nObtained\n\n{}", baosExpected, baosResult);
 	}
 

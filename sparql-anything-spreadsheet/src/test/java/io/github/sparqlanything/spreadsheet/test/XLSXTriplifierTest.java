@@ -14,21 +14,26 @@
  * limitations under the License.
  */
 
-package io.github.sparqlanything.engine;
+package io.github.sparqlanything.spreadsheet.test;
 
-import io.github.sparqlanything.engine.functions.FXFunction;
-import org.apache.jena.sparql.expr.ExprEvalException;
-import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.function.FunctionBase1;
-import org.apache.jena.sparql.util.FmtUtils;
+import io.github.sparqlanything.spreadsheet.SpreadsheetTriplifier;
+import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.junit.Test;
 
-public class IsContainerMembershipProperty extends FunctionBase1 implements FXFunction {
+import java.util.Properties;
+
+public class XLSXTriplifierTest extends AbstractTriplifierTester {
+
+	public XLSXTriplifierTest() {
+		super(new SpreadsheetTriplifier(), new Properties(), "xlsx", "nq");
+	}
 
 	@Override
-	public NodeValue exec(NodeValue nodeValue) {
-		if(isContainerMembershipProperty(nodeValue)){
-			return NodeValue.TRUE;
-		}
-		return NodeValue.FALSE;
+	protected void properties(Properties properties) {}
+
+	@Test
+	public void testBook1(){
+		assertResultIsIsomorphicWithExpected();
 	}
+
 }

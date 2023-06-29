@@ -96,6 +96,7 @@ WHERE
 | csv.quote-char                     | The quoting character                                                                                                                                                                                                                           | any single char                                                                                                                                             | `"`           |
 | csv.null-string                    | It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.                                                                                                                   | any string                                                                                                                                                  | not set       |
 | csv.ignore-columns-with-no-headers | It tells the CSV triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180 | true/false                                                                                                                                                  | false         |
+| csv.headers-row                    | It specifies the number of the row to use for extracting column headers. **Note** this option affects the performance as it requires to pass through input twice. -- see #179                                                                   | any integer                                                                                                                                                 | 1             |
 
 ---
 
@@ -522,6 +523,70 @@ WHERE {
 
 | fred | sally |
 |------|-------|
+
+
+
+### `csv.headers-row`
+
+
+#### Description
+
+It specifies the number of the row to use for extracting column headers. **Note** this option affects the performance as it requires to pass through input twice. -- see #179
+
+#### Valid Values
+
+any integer
+
+#### Default Value
+
+1
+
+#### Examples
+
+##### Input
+
+```
+
+5.1	3.5	1.4	0.2	I. setosa
+4.9	3.0	1.4	0.2	I. setosa
+Sepal_length	Sepal_width	Petal_length	Petal_width	Species
+4.7	3.2	1.3	0.2	I. setosa
+4.6	3.1	1.5	0.2	I. setosa
+5.0	3.6	1.4	0.2	I. setosa
+
+```
+
+
+
+##### Use Case 1: Compute the average petal length of the species having sepal length greater than 4.9
+
+###### Query
+
+```
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  (AVG(xsd:float(?petalLength)) AS ?avgPetalLength)
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true,csv.format=TDF,csv.headers-row=3>
+      { ?s  xyz:Sepal_length  ?length ;
+            xyz:Petal_length  ?petalLength
+        FILTER ( xsd:float(?length) > 4.9 )
+      }
+  }
+
+```
+
+###### Result
+
+```
+---------------------------------------------------
+| avgPetalLength                                  |
+===================================================
+| "1.4"^^<http://www.w3.org/2001/XMLSchema#float> |
+---------------------------------------------------
+```
+
 
 <!--
 ### `option`

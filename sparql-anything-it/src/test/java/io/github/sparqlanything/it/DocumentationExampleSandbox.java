@@ -158,17 +158,17 @@ public class DocumentationExampleSandbox {
 	}
 
 	public static void spreadsheet() {
-		String queryString = "CONSTRUCT\n" + "  {\n" + "    GRAPH ?g { ?s ?p ?o }\n" + "  }\n" + "WHERE\n" + "  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book1.xlsx> { \n " + "      GRAPH ?g { ?s  ?p  ?o } }\n" + "  } ";
+		String queryString = "CONSTRUCT\n" + "  {\n" + "    GRAPH ?g { ?s ?p ?o }\n" + "  }\n" + "WHERE\n" + "  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book1.xlsx,spreadsheet.headers=true,spreadsheet.headers-row=2> { \n " + "      GRAPH ?g { ?s  ?p  ?o } }\n" + "  } ";
 		System.out.println(queryString);
 		Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
-//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
 
 		Dataset ds = DatasetFactory.createGeneral();
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
 		Dataset dd = QueryExecutionFactory.create(query, ds).execConstructDataset();
-//		RDFDataMgr.write(System.out, dd, Lang.TRIG);
+
+		RDFDataMgr.write(System.out, dd, Lang.TRIG);
 
 
 		// Query 2
@@ -191,22 +191,22 @@ public class DocumentationExampleSandbox {
 ////		RDFDataMgr.write(System.out, dd, Lang.TRIG);
 
 
-		queryString = "CONSTRUCT \n" +
-				"  { \n" +
-				"    GRAPH ?g \n" +
-				"      { ?s ?p ?o .}\n" +
-				"  }\n" +
-				"WHERE\n" +
-				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book3.xlsx,spreadsheet.composite-values=true>\n" +
-				"      { GRAPH ?g\n" +
-				"          { ?s  ?p  ?o }\n" +
-				"      }\n" +
-				"  } ";
-
-		query = QueryFactory.create(queryString, Syntax.syntaxARQ);
-		System.out.println(query.toString(Syntax.defaultQuerySyntax));
-		dd = QueryExecutionFactory.create(query, ds).execConstructDataset();
-		RDFDataMgr.write(System.out, dd, Lang.TRIG);
+//		queryString = "CONSTRUCT \n" +
+//				"  { \n" +
+//				"    GRAPH ?g \n" +
+//				"      { ?s ?p ?o .}\n" +
+//				"  }\n" +
+//				"WHERE\n" +
+//				"  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book3.xlsx,spreadsheet.composite-values=true>\n" +
+//				"      { GRAPH ?g\n" +
+//				"          { ?s  ?p  ?o }\n" +
+//				"      }\n" +
+//				"  } ";
+//
+//		query = QueryFactory.create(queryString, Syntax.syntaxARQ);
+//		System.out.println(query.toString(Syntax.defaultQuerySyntax));
+//		dd = QueryExecutionFactory.create(query, ds).execConstructDataset();
+//		RDFDataMgr.write(System.out, dd, Lang.TRIG);
 
 
 	}
@@ -931,12 +931,12 @@ public class DocumentationExampleSandbox {
 //		}
 
 //		archive();
-//		spreadsheet();
+		spreadsheet();
 //		doc();
 //		yaml();
 //		metadata();
 //		bibtex();
-		options();
+//		options();
 
 //		FileUtils.write(new File("/Users/lgu/Desktop/utf16.txt"), "UTF-16 test file", Charset.forName("UTF16"));
 	}
