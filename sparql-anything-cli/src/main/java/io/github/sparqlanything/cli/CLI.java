@@ -37,6 +37,9 @@ public class CLI {
 	public static final String QUERY = "q";
 	public static final String QUERY_LONG = "query";
 
+	public static final String CONFIGURATION = "c";
+	public static final String CONFIGURATION_LONG = "configuration";
+
 	public static final String OUTPUT = "o";
 	public static final String OUTPUT_LONG = "output";
 
@@ -139,6 +142,11 @@ public class CLI {
 		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true).desc(
 						"OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The argument can be used in two ways. (1) Providing a single SPARQL ResultSet file. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed. (2) Named variable bindings: the argument value must follow the syntax: var_name=var_value. The argument can be passed multiple times and the query repeated for each set of values.")
 				.longOpt(VALUES_LONG).build());
+
+		options.addOption(Option.builder(CONFIGURATION).argName("configurations").hasArg(true).optionalArg(true).desc(
+						"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set).")
+				.longOpt(CONFIGURATION_LONG).build());
+
 		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
 						"[Deprecated] OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
 				.longOpt(INPUT_LONG).build());
@@ -180,6 +188,10 @@ public class CLI {
 
 	public String[] getValues() {
 		return commandLine.getOptionValues(CLI.VALUES);
+	}
+
+	public String[] getConfigurations() {
+		return commandLine.getOptionValues(CLI.CONFIGURATION);
 	}
 
 	public static String guessLang(String name) {

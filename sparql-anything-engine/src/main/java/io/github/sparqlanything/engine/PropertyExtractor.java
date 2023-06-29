@@ -115,9 +115,7 @@ class PropertyExtractor {
 	}
 
 
-	static Properties extractPropertiesFromOp(Op op) throws UnboundVariableException {
-		Properties properties = new Properties();
-
+	static void extractPropertiesFromOp(Op op, Properties properties) throws UnboundVariableException {
 		if (op instanceof OpBGP) {
 			extractPropertiesFromBGP(properties, (OpBGP) op);
 		} else if (op instanceof OpService) {
@@ -126,9 +124,7 @@ class PropertyExtractor {
 			// Parse IRI only if contains properties
 			if (!url.equals(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
 				FacadeIRIParser p = new FacadeIRIParser(url);
-				properties = p.getProperties();
-			} else {
-				properties = new Properties();
+				properties.putAll(p.getProperties());
 			}
 
 			// Setting defaults
@@ -173,14 +169,20 @@ class PropertyExtractor {
 
 					throw e;
 				}
-				logger.trace("Number of properties {}", properties.size());
+				logger.trace("Number of properties {}: {}", properties.size(), properties.toString());
 			} else {
 				logger.trace("Couldn't find OpGraph");
 			}
 		}
 
-		return properties;
 	}
 
 
+	public static void extractPropertiesFromExecutionContext(ExecutionContext execCxt, Properties p) {
+		execCxt.getContext().keys().forEach(symbol ->{
+			if(symbol instanceof FXSymbol){
+				p.setProperty(symbol.getSymbol(), execCxt.getContext().get(symbol));
+			}
+		});
+	}
 }

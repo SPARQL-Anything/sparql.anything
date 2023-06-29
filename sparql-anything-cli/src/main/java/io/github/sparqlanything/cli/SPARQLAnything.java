@@ -16,29 +16,20 @@
 
 package io.github.sparqlanything.cli;
 
-import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.engine.FacadeXOpExecutor;
 import io.github.basilapi.basil.sparql.QueryParameter;
 import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.VariablesBinder;
+import io.github.sparqlanything.engine.FXSymbol;
+import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.engine.FacadeXOpExecutor;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFactory;
-import org.apache.jena.query.ResultSetFormatter;
-import org.apache.jena.query.ResultSetRewindable;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
@@ -55,11 +46,7 @@ import org.apache.jena.sys.JenaSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -237,7 +224,7 @@ public class SPARQLAnything {
 	}
 
 	private static class ArgValuesAsResultSet implements ResultSetRewindable {
-		private String[] values;
+		private final String[] values;
 		private List<String> variables;
 		private Set<Binding> bindings;
 		private Iterator<Binding> iterator;
@@ -421,6 +408,15 @@ public class SPARQLAnything {
 		}
 	}
 
+	private static void setConfigurationsToContext(String[] configurations) {
+		if (configurations != null) {
+			for (String configuration : configurations) {
+				String[] configurationSplit = configuration.split("=");
+				ARQ.getContext().set(FXSymbol.create(configurationSplit[0]), configurationSplit[1]);
+			}
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
 
 		if(logger.isTraceEnabled()){
@@ -531,6 +527,8 @@ public class SPARQLAnything {
 			String outputFileName = cli.getOutputFile();
 			String outputPattern = cli.getOutputPattern();
 			String[] values = cli.getValues();
+			String[] configurations = cli.getConfigurations();
+			setConfigurationsToContext(configurations);
 			if (outputPattern != null && outputFileName != null) {
 				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
 			}

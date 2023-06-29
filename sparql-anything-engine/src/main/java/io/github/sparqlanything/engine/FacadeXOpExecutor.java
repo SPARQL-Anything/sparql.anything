@@ -89,7 +89,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 				logger.error("An error occurred: {}", e.getMessage());
 				throw new RuntimeException(e);
 			} catch (UnboundVariableException e) {
-
 				// manage the case of properties are passed via BGP and there are variables in it
 				return catchUnboundVariableException(opService, e.getOpBGP(), input, e);
 			}
@@ -102,7 +101,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 	protected QueryIterator executeDefaultFacadeX(OpService opService, QueryIterator input) throws TriplifierHTTPException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, UnboundVariableException {
 
 		// extract properties from service URI
-		Properties p = PropertyExtractor.extractPropertiesFromOp(opService);
+		Properties p = new Properties();
+
+		PropertyExtractor.extractPropertiesFromOp(opService, p);
+		PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
 
 		// guess triplifier
 		Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
