@@ -144,7 +144,7 @@ public class CLI {
 				.longOpt(VALUES_LONG).build());
 
 		options.addOption(Option.builder(CONFIGURATION).argName("option=value").hasArg(true).optionalArg(true).desc(
-						"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set).")
+						"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set). Options passed in this way can be overwritten in the SERVICE IRI or in the Basic Graph Pattern.")
 				.longOpt(CONFIGURATION_LONG).build());
 
 		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(

@@ -482,7 +482,9 @@ usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
                                        define them in the SERVICE IRI).
                                        The argument can be passed multiple
                                        times (one for each option to be
-                                       set).
+                                       set). Options passed in this way
+                                       can be overwritten in the SERVICE
+                                       IRI or in the Basic Graph Pattern.
  -i,--input <input>                    [Deprecated] OPTIONAL - The path to
                                        a SPARQL result set file to be used
                                        as input. When present, the query

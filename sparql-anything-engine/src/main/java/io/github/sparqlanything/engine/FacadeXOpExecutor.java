@@ -103,8 +103,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 		// extract properties from service URI
 		Properties p = new Properties();
 
-		PropertyExtractor.extractPropertiesFromOp(opService, p);
+		// first extract from execution context
 		PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
+
+		//then, from opservice (so that can be overwritten)
+		PropertyExtractor.extractPropertiesFromOp(opService, p);
 
 		// guess triplifier
 		Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
