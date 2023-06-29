@@ -419,14 +419,21 @@ An executable JAR can be obtained from the [Releases](https://github.com/spice-h
 The jar can be executed as follows:
 
 ```
-usage: java -jar sparql.anything-<version>  -q query [-f <output
-            format>] [-v <filepath | name=value> ... ]  [-l path] [-o
+usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
+            <filepath | name=value> ... ] [-c option=value]  [-l path] [-o
             filepath]
  -q,--query <query>                    The path to the file storing the
                                        query to execute or the query
                                        itself.
  -o,--output <file>                    OPTIONAL - The path to the output
                                        file. [Default: STDOUT]
+ -a,--append                           OPTIONAL - Should output to file be
+                                       appended? WARNING: this option does
+                                       not ensure that the whole file is
+                                       valid -- that is up to the user to
+                                       set up the conditions (such as
+                                       using NQ serialization and not
+                                       using blank nodes)
  -e,--explain                          OPTIONAL - Explain query execution
  -l,--load <load>                      OPTIONAL - The path to one RDF file
                                        or a folder including a set of
@@ -445,7 +452,7 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output
                                        is not implemented yet for the
                                        given resource type.
  -p,--output-pattern <outputPattern>   OPTIONAL - Output filename pattern,
-                                       e.g. 'myfile-?friendName.json'.
+                                       e.g. 'my-file-?friendName.json'.
                                        Variables should start with '?' and
                                        refer to bindings from the input
                                        file. This option can only be used
@@ -469,6 +476,15 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output
                                        can be passed multiple times and
                                        the query repeated for each set of
                                        values.
+ -c,--configuration <option=value>     OPTIONAL - Configuration to be
+                                       passed to the SPARQL Anything
+                                       engine (this is equivalent to
+                                       define them in the SERVICE IRI).
+                                       The argument can be passed multiple
+                                       times (one for each option to be
+                                       set). Options passed in this way
+                                       can be overwritten in the SERVICE
+                                       IRI or in the Basic Graph Pattern.
  -i,--input <input>                    [Deprecated] OPTIONAL - The path to
                                        a SPARQL result set file to be used
                                        as input. When present, the query
