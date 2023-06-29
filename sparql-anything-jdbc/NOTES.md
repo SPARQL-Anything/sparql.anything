@@ -30,6 +30,8 @@ CMP <- URI(rdf:\_\*)
 P <- URI
 BGP <- { T }
 
+
+### Generate constraints
 ;; Inferring the role of S
 ContainerTable(S) <- URI(S) | FXRoot(O) | SlotRow(P) | ContainerRow(O)
 ContainerRow(S) <- SlotColumn(P) | SlotValue(O) | TypeTable(O)
@@ -46,18 +48,44 @@ ContainerRow(O) <- SlotRow(P)
 TypeTable(O) <- URI(O)
 SlotValue(O) <- TL(O)
 ;; Making joins
-Join(n) <- Assumption(n) ^ Assumption(n) -- on different triples
-;; Inferring joins from different types
+Join(n) <- Assumption(n) ^ Assumption(n) -- on different triples but same Assumption type
+;; Inferring joins from different assumption types
 Join(n) <- ContainerRow(n) ^ ContainerRow(n) <- Subject(n) ^ Object(n)
 Join(n) <- ContainerRow(n) ^ ContainerRow(n) <- Object(n) ^ Subject(n)
-Join(n) <- 
+;; there are not other cases where joins with different types make sense (proof!)
+
 
 Wrong:
 ;; TypeTable(O) <- TypeProperty(P)
 ;; ContainerRow(O) <- BN(O) // Not true, in SPARQL matches also values
 
-Joins
+### Specialising in
+Subject -> ContainerTable | ContainerRow
+Predicate -> SlotRow | SlotColumn | TypeProperty
+Object -> ContainerRow | SlotValue | FXRoot | TypeTable
 
+### Guards
+ContainerTable(S) -> !SlotColumn(P) & !SlotValue(O)
+
+
+## Search the space of interpretations
+
+State = Assumption[] ^ Hypothesis[] (the set of constraints)
+expand = generate next Stete by adding hypothesis (trying to specialise them as much as possible)
+Guard = checks for inconsistencies and avoids following inconsistent paths
+Visited = keeps the record of visited States (both valid and invalid)
+Proceed until all BGPInterpretations are visited (brute force)
+
+next (x) 
+  Uses SpecialiseHypothesis to return a new State, 
+     which keeps track of the previous State
+  Uses Guard to validate the new State
+  returns False if invalid, otherwise the new State
+
+follow(Stete y)
+  while ( State s <- next(y) )
+    if visited(s) continue
+    else follow(s) 
 
 ## Preliminary notes
 
