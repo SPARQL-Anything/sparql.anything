@@ -35,7 +35,9 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.iterator.*;
+import org.apache.jena.sparql.engine.iterator.QueryIterDefaulting;
+import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
+import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.slf4j.Logger;
@@ -165,12 +167,14 @@ public class Utils {
 
 
 	public static  FacadeXExecutionContext getFacadeXExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
-		FacadeXExecutionContext ec;
+		return new FacadeXExecutionContext(getNewExecutionContext(execCxt, p, dg));
+	}
+
+	public static  ExecutionContext getNewExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
 		if (p.containsKey(IRIArgument.ONDISK.toString())) {
-			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor()));
+			return new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor());
 		} else {
-			ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+			return new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 		}
-		return ec;
 	}
 }

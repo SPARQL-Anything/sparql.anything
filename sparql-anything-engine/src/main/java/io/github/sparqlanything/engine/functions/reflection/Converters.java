@@ -54,6 +54,10 @@ public class Converters {
 		public NodeValueString asNodeValue(Character object) {
 			return (NodeValueString) NodeValue.makeNodeString(object.toString());
 		}
+
+		public boolean compatibleWith(NodeValue nodeValue){
+			return nodeValue.getClass().equals(getNodeValueType()) && nodeValue.getString().length() == 1;
+		}
 	}
 
 	public static class StringConverter implements NodeValueConverter<String,NodeValueString> {
