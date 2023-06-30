@@ -20,6 +20,7 @@ import io.github.sparqlanything.model.*;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpPropFunc;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -51,13 +52,42 @@ public class FacadeXOpExecutor extends OpExecutor {
 		dgc = new DatasetGraphCreator(execCxt);
 	}
 
+	protected QueryIterator execute(final OpPropFunc opPropFunc, QueryIterator input){
+		logger.trace("OpProp  {}", opPropFunc);
+//		if(hasFXSymbols(this.execCxt) && !this.execCxt.getContext().isDefined(FacadeXExecutionContext.hasServiceClause)){
+//			return Utils.postpone(opPropFunc, input, execCxt);
+//		}
+		return super.execute(opPropFunc, input);
+	}
+
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
 
 		if(hasFXSymbols(this.execCxt) && !this.execCxt.getContext().isDefined(FacadeXExecutionContext.hasServiceClause)){
 			try {
-				return executeDefaultFacadeX(opBGP,input);
-			} catch (TriplifierHTTPException | IOException | InstantiationException | IllegalAccessException |
+				// extract properties from service URI
+				Properties p = new Properties();
+
+				// first extract from execution context
+				PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
+				PropertyExtractor.extractPropertiesFromOp(opBGP, p);
+
+				Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
+
+				// Execute with default, bulk method
+				DatasetGraph dg = dgc.getDatasetGraph(t, p, opBGP);
+				Utils.ensureReadingTxn(dg);
+
+				ExecutionContext newExecContext = Utils.getNewExecutionContext(execCxt, p, dg);
+
+				List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
+				if (!magicPropertyTriples.isEmpty()) {
+					return super.execute(Utils.excludeMagicPropertyTriples(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples, newExecContext));
+				} else {
+					return QC.execute(Utils.excludeFXProperties(opBGP), input, newExecContext);
+				}
+
+			} catch ( IOException | InstantiationException | IllegalAccessException |
 					 InvocationTargetException | NoSuchMethodException | ClassNotFoundException |
 					 UnboundVariableException e) {
 				throw new RuntimeException(e);
@@ -72,7 +102,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
 			if (!magicPropertyTriples.isEmpty()) {
 				logger.trace("BGP has magic properties");
-				return super.execute(Utils.excludeMagicPropertyTriples(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples));
+				return super.execute(Utils.excludeMagicPropertyTriples(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples, this.execCxt));
 			} else {
 				// execute BGP by excluding FX properties
 				logger.trace("Execute BGP by excluding FX properties");
@@ -157,30 +187,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 
-	protected QueryIterator executeDefaultFacadeX(OpBGP opBGP, QueryIterator input) throws TriplifierHTTPException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, UnboundVariableException {
 
-		// extract properties from service URI
-		Properties p = new Properties();
-
-		// first extract from execution context
-		PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
-
-		// guess triplifier
-		Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
-
-		if (t == null) {
-			logger.warn("No triplifier found");
-			return QueryIterNullIterator.create(execCxt);
-		}
-
-
-		// Execute with default, bulk method
-		DatasetGraph dg = dgc.getDatasetGraph(t, p, opBGP);
-		Utils.ensureReadingTxn(dg);
-
-		return QC.execute(opBGP, input, Utils.getFacadeXExecutionContext(execCxt, p, dg));
-
-	}
 
 	private QueryIterator catchUnboundVariableException(Op op, OpBGP opBGP, QueryIterator input, UnboundVariableException e) {
 		// Proceed with the next operation
@@ -200,7 +207,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return Utils.postpone(op, QC.execute(fakeBGP, input, execCxt), execCxt);
 	}
 
-	private QueryIterator executeMagicProperties(QueryIterator input, List<Triple> propFuncTriples) {
+	private QueryIterator executeMagicProperties(QueryIterator input, List<Triple> propFuncTriples, ExecutionContext execCxt) {
 		QueryIterator input2 = input;
 		for (Triple t : propFuncTriples) {
 			input2 = QC.execute(Utils.getOpPropFuncAnySlot(t), input2, execCxt);
