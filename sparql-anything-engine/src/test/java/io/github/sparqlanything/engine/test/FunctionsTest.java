@@ -416,6 +416,10 @@ public class FunctionsTest {
 	}
 
 	@Test
+	public void testStringReplace(){
+		testStringFunction("fx:String.replace", "test".replace("te", "fe"), "test", Lists.newArrayList("te", "fe"));
+	}
+	@Test
 	public void testStringFunctions(){
 		testStringFunction("fx:String.trim", " test ".trim(), "test");
 		testStringFunction("fx:String.substring", "test".substring(1), "test", Lists.newArrayList("1"));
@@ -423,8 +427,8 @@ public class FunctionsTest {
 		testStringFunction("fx:String.indexOf", String.valueOf("test".indexOf("e")), "test", Lists.newArrayList("e"));
 		testStringFunction("fx:String.startsWith", String.valueOf("test".startsWith("te")), "test", Lists.newArrayList("te"));
 		testStringFunction("fx:String.endsWith", String.valueOf("test".endsWith("st")), "test", Lists.newArrayList("st"));
-		testStringFunction("fx:String.replace", "test".replace("te", "fe"), "test", Lists.newArrayList("te", "fe"));
 		testStringFunction("fx:String.replace", "test".replace("t", "f"), "test", Lists.newArrayList("t", "f"));
+		testStringFunction("fx:String.replace", "test".replace("te", "fe"), "test", Lists.newArrayList("te", "fe"));
 		testStringFunction("fx:String.strip", "  test  \t".strip(), "  test  \t");
 		testStringFunction("fx:String.stripLeading", "  test  \t".stripLeading(), "  test  \t");
 		testStringFunction("fx:String.stripTrailing", "  test  \t".stripTrailing(), "  test  \t");
