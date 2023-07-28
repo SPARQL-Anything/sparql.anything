@@ -1,8 +1,9 @@
 ## FX
 
 ```turtle
-:table1 a fx:table1 ;
+:table1 a fx:root ;
   rdf:_1 [
+    a fx:table1
     fx:col1 "colvalue" ;
     fx:col2 "12"^^xsd:int ;
     fx:col3 "12/12/2022"^^xsd:date
