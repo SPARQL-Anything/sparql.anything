@@ -518,7 +518,13 @@ usage: java -jar sparql-anything-server-<version>.jar [-p port] [-e
                     3000 ).
 ```
 
-Also a docker image can be used by following the instructions [here](BROWSER.md).
+Docker can also be used to deploy the SPARQL-Anything powerd Fuseki endpoint using the following commands, after cloning this repository:
+1) ``docker build -t sparql-anything .``
+2) ``docker run -v ./data/:/data -p 3000:3000 --rm -it sparql-anything``
+
+In the example above, a volume /data will be created within the container that is linked with the data/ folder in the current working directory. You can place any files (csv, json, xml, ...) there for the fuseki server to access.
+
+Please pay attention that you might need to set the right environmental variables for proxy access if applicable. 
 
 ### Python Library
 
