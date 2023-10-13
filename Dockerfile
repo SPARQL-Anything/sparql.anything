@@ -1,0 +1,34 @@
+# FROM ubuntu:focal
+# if you don't need the headless browser this is sufficient
+
+FROM mcr.microsoft.com/playwright/java:focal
+#    needed for the headless browser
+
+LABEL description="SPARQL Anything"
+
+RUN apt-get update && apt-get install -y maven wget
+# Set the locale https://stackoverflow.com/questions/28405902/how-to-set-the-locale-inside-a-debian-ubuntu-docker-container
+RUN apt-get install locales
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+ENV VERSION "0.8.2"
+
+# normal
+RUN mkdir /app
+RUN wget -P /app https://github.com/SPARQL-Anything/sparql.anything/releases/download/v0.8.2/sparql-anything-server-${VERSION}.jar
+
+CMD java -jar /app/sparql-anything-server-${VERSION}.jar
+
+# TODO don't bake the version numbers in here
+
+# more debugging (you can attach jdb with this)
+# CMD cd /app && mvn clean install -DskipTests && \
+#     java -Dorg.slf4j.simpleLogger.defaultLogLevel=info \
+#     -Dorg.slf4j.simpleLogger.log.io.github.sparqlanything=trace \
+#     -agentlib:jdwp=transport=dt_socket,server=y,address=9091,suspend=n \
+#     -cp "/app/sparql-anything-fuseki/target/sparql-anything-server-${VERSION}.jar:$(for i in /app/*jar ; do printf '%s:' $i ; done)" \
+#     io.github.sparqlanything.fuseki.Endpoint
