@@ -17,6 +17,7 @@
 package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.model.*;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
@@ -43,13 +44,13 @@ public class QueryIterSlicer extends QueryIter {
 	private final Iterator<Slice> iterator;
 	private final ExecutionContext execCxt;
 	private final String resourceId;
-	private final OpService opService;
+	private final Op op;
 	final private Slicer slicer;
 	private final QueryIterator input;
 	private QueryIterator current = null;
 	private final Properties p;
 
-	public QueryIterSlicer(ExecutionContext execCxt, QueryIterator input, Triplifier t, Properties properties, OpService opService) throws TriplifierHTTPException, IOException {
+	public QueryIterSlicer(ExecutionContext execCxt, QueryIterator input, Triplifier t, Properties properties, Op op) throws TriplifierHTTPException, IOException {
 		super(execCxt);
 		slicer = (Slicer) t;
 		this.p = properties;
@@ -64,7 +65,11 @@ public class QueryIterSlicer extends QueryIter {
 		this.iterator = it.iterator();
 		this.execCxt = execCxt;
 		this.resourceId = Triplifier.getResourceId(p);
-		this.opService = opService;
+		if(op instanceof OpService){
+			this.op = ((OpService)op).getSubOp();
+		}else{
+			this.op = op;
+		}
 	}
 
 	@Override
@@ -80,7 +85,7 @@ public class QueryIterSlicer extends QueryIter {
 				Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
 				if (strategy == 1) {
 					logger.trace("Executing: {} [strategy={}]", p, strategy);
-					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
+					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
 				} else {
 					logger.trace("Executing: {} [strategy={}]", p, strategy);
 					builder = new BaseFacadeXGraphBuilder(p);
@@ -95,15 +100,15 @@ public class QueryIterSlicer extends QueryIter {
 				logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
 //				FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 				FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
-				logger.trace("Op {}", opService.getSubOp());
-				logger.trace("OpName {}", opService.getSubOp().getName());
+				logger.trace("Op {}", op);
+				logger.trace("OpName {}", op.getName());
 				/**
 				 * input needs to be reset before each execution, otherwise the executor will skip subsequent executions
 				 * since input bindings have been flushed!
 				 */
 				QueryIterator cloned;
 				cloned = QueryIterPlainWrapper.create(elements.iterator());
-				current = QC.execute(opService.getSubOp(), cloned, ec);
+				current = QC.execute(op, cloned, ec);
 				logger.debug("Set current. hasNext? {}", current.hasNext());
 				if (current.hasNext()) {
 					logger.trace("Break.");
@@ -118,7 +123,7 @@ public class QueryIterSlicer extends QueryIter {
 				// Make sure the original Op is executed
 				// XXX Maybe there is a better qay of doing it?
 				ExecutionContext exc = new ExecutionContext(DatasetGraphFactory.create());
-				QC.execute(opService.getSubOp(), QueryIterNullIterator.create(exc), exc);
+				QC.execute(op, QueryIterNullIterator.create(exc), exc);
 				return false;
 			}
 		}

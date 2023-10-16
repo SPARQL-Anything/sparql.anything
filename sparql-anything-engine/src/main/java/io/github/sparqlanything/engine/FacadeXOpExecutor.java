@@ -16,17 +16,15 @@
 
 package io.github.sparqlanything.engine;
 
-import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.algebra.op.OpPropFunc;
 import org.apache.jena.sparql.algebra.op.OpService;
-import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
-import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.apache.jena.sparql.engine.join.Join;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
@@ -37,26 +35,24 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Properties;
 
 public class FacadeXOpExecutor extends OpExecutor {
 
 	public final static Symbol strategy = Symbol.create("facade-x-strategy");
 	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
-	private final DatasetGraphCreator dgc;
-	private final TriplifierRegister triplifierRegister;
+	private final FXWorkerOpService fxWorkerService;
+	private final FXWorkerOpBGP fxWorkerOpBGP;
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
-		triplifierRegister = TriplifierRegister.getInstance();
-		dgc = new DatasetGraphCreator(execCxt);
+		TriplifierRegister triplifierRegister = TriplifierRegister.getInstance();
+		DatasetGraphCreator dgc = new DatasetGraphCreator(execCxt);
+		fxWorkerService = new FXWorkerOpService(triplifierRegister, dgc);
+		fxWorkerOpBGP = new FXWorkerOpBGP(triplifierRegister, dgc);
 	}
 
 	protected QueryIterator execute(final OpPropFunc opPropFunc, QueryIterator input){
 		logger.trace("OpProp  {}", opPropFunc);
-//		if(hasFXSymbols(this.execCxt) && !this.execCxt.getContext().isDefined(FacadeXExecutionContext.hasServiceClause)){
-//			return Utils.postpone(opPropFunc, input, execCxt);
-//		}
 		return super.execute(opPropFunc, input);
 	}
 
@@ -65,31 +61,33 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 		if(hasFXSymbols(this.execCxt) && !this.execCxt.getContext().isDefined(FacadeXExecutionContext.hasServiceClause)){
 			try {
-				// extract properties from service URI
-				Properties p = new Properties();
+//				// extract properties from service URI
+//				Properties p = new Properties();
+//
+//				// first extract from execution context
+//				PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
+//				PropertyExtractor.extractPropertiesFromOp(opBGP, p);
+//
+//				Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
+//
+//				// Execute with default, bulk method
+//				DatasetGraph dg = dgc.getDatasetGraph(t, p, opBGP);
+//				Utils.ensureReadingTxn(dg);
+//
+//				ExecutionContext newExecContext = Utils.getNewExecutionContext(execCxt, p, dg);
+//
+//				List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
+//				if (!magicPropertyTriples.isEmpty()) {
+//					return super.execute(Utils.excludeMagicPropertyTriples(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples, newExecContext));
+//				} else {
+//					return QC.execute(Utils.excludeFXProperties(opBGP), input, newExecContext);
+//				}
 
-				// first extract from execution context
-				PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
-				PropertyExtractor.extractPropertiesFromOp(opBGP, p);
+				return fxWorkerOpBGP.execute(opBGP, input, this.execCxt);
 
-				Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
-
-				// Execute with default, bulk method
-				DatasetGraph dg = dgc.getDatasetGraph(t, p, opBGP);
-				Utils.ensureReadingTxn(dg);
-
-				ExecutionContext newExecContext = Utils.getNewExecutionContext(execCxt, p, dg);
-
-				List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
-				if (!magicPropertyTriples.isEmpty()) {
-					return super.execute(Utils.excludeMagicPropertyTriples(Utils.excludeFXProperties(opBGP)), executeMagicProperties(input, magicPropertyTriples, newExecContext));
-				} else {
-					return QC.execute(Utils.excludeFXProperties(opBGP), input, newExecContext);
-				}
-
-			} catch ( IOException | InstantiationException | IllegalAccessException |
-					 InvocationTargetException | NoSuchMethodException | ClassNotFoundException |
-					 UnboundVariableException e) {
+			} catch (IOException | InstantiationException | IllegalAccessException | InvocationTargetException |
+					 NoSuchMethodException | ClassNotFoundException | UnboundVariableException |
+					 TriplifierHTTPException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -133,7 +131,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (opService.getService().isURI() && Utils.isFacadeXURI(opService.getService().getURI())) {
 			try {
 				// go with the FacadeX default execution
-				return executeDefaultFacadeX(opService, input);
+//				return executeDefaultFacadeX(opService, input);
+				return fxWorkerService.execute(opService, input, execCxt);
 			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
 					 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
 					 ClassNotFoundException | TriplifierHTTPException e) {
@@ -149,42 +148,42 @@ public class FacadeXOpExecutor extends OpExecutor {
 		return super.execute(opService, input);
 	}
 
-	protected QueryIterator executeDefaultFacadeX(OpService opService, QueryIterator input) throws TriplifierHTTPException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, UnboundVariableException {
-
-		// extract properties from service URI
-		Properties p = new Properties();
-
-		// first extract from execution context
-		PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
-
-		//then, from opservice (so that can be overwritten)
-		PropertyExtractor.extractPropertiesFromOp(opService, p);
-
-		// guess triplifier
-		Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
-
-		if (t == null) {
-			logger.warn("No triplifier found");
-			return QueryIterNullIterator.create(execCxt);
-		}
-
-		// check execution with slicing
-		if (PropertyUtils.getBooleanProperty(p, IRIArgument.SLICE)) {
-			if (t instanceof Slicer) {
-				logger.trace("Execute with slicing");
-				return new QueryIterSlicer(execCxt, input, t, p, opService);
-			} else {
-				logger.warn("Slicing is not supported by triplifier: {}", t.getClass().getName());
-			}
-		}
-
-		// Execute with default, bulk method
-		DatasetGraph dg = dgc.getDatasetGraph(t, p, opService.getSubOp());
-		Utils.ensureReadingTxn(dg);
-
-		return QC.execute(opService.getSubOp(), input, Utils.getFacadeXExecutionContext(execCxt, p, dg));
-
-	}
+//	protected QueryIterator executeDefaultFacadeX(OpService opService, QueryIterator input) throws TriplifierHTTPException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, UnboundVariableException {
+//
+//		// extract properties from service URI
+//		Properties p = new Properties();
+//
+//		// first extract from execution context
+//		PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
+//
+//		//then, from opservice (so that can be overwritten)
+//		PropertyExtractor.extractPropertiesFromOp(opService, p);
+//
+//		// guess triplifier
+//		Triplifier t = PropertyExtractor.getTriplifier(p, triplifierRegister);
+//
+//		if (t == null) {
+//			logger.warn("No triplifier found");
+//			return QueryIterNullIterator.create(execCxt);
+//		}
+//
+//		// check execution with slicing
+//		if (PropertyUtils.getBooleanProperty(p, IRIArgument.SLICE)) {
+//			if (t instanceof Slicer) {
+//				logger.trace("Execute with slicing");
+//				return new QueryIterSlicer(execCxt, input, t, p, opService);
+//			} else {
+//				logger.warn("Slicing is not supported by triplifier: {}", t.getClass().getName());
+//			}
+//		}
+//
+//		// Execute with default, bulk method
+//		DatasetGraph dg = dgc.getDatasetGraph(t, p, opService.getSubOp());
+//		Utils.ensureReadingTxn(dg);
+//
+//		return QC.execute(opService.getSubOp(), input, Utils.getFacadeXExecutionContext(execCxt, p, dg));
+//
+//	}
 
 
 
