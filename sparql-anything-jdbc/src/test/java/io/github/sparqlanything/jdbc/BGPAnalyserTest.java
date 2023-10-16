@@ -326,7 +326,7 @@ public class BGPAnalyserTest {
 			}
 		}
 		b.append("\n\n");
-		L.info("{}",b.toString());
+		L.error("{}",b.toString());
 	}
 	public void show(Map<Node, NodeInterpretation> map){
 //		L.info("{}",bp());
@@ -345,7 +345,7 @@ public class BGPAnalyserTest {
 			b.append(entry.getValue().type().getSimpleName());
 		}
 		b.append("\n\n");
-		L.info("{}",b.toString());
+		L.error("{}",b.toString());
 	}
 
 	@Test
@@ -430,6 +430,22 @@ public class BGPAnalyserTest {
 		//
 		for(BGPInterpretation st: interpretations){
 			L.info("[{}] ==> {}", st.isFinalState(), BGPInterpretation.toString(st));
+			Assert.assertTrue(st.isFinalState());
+		}
+		showInterpretations();
+	}
+
+
+	@Test
+	public void testSPO(){
+
+		add(v("s"), v("p"), v("o"));
+		//add(b, v("p2"), v("o"));
+		analyseConstraints();
+		generateInterpretations();
+		//
+		for(BGPInterpretation st: interpretations){
+			L.error("[{}] ==> {}", st.isFinalState(), BGPInterpretation.toString(st));
 			Assert.assertTrue(st.isFinalState());
 		}
 		showInterpretations();

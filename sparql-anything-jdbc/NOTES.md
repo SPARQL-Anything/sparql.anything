@@ -10,8 +10,7 @@
   ]
 ```
 
-## Definitions
-
+### FX Relational Profile
 Container: a FX container
 ContainerTable: URI of the entity representing the table (the root FX container)
 ContainerRow: a blank node representing any row in the table
@@ -21,6 +20,10 @@ SlotRow: a container membership property linking a ContainerTable to any of its 
 SlotColumn: an RDF property named after a table column linking a ContainerRow to the SlotValue (the typed literal from the column value)
 SlotValue: an RDF typed literal (the column value in the database table)
 Join: some roles can be joined together. E.g. ContainerRow(S) ^ ContainerRow(O). Not all assumption can be joined. Same assumptions in different triples can always be joined. Rules for inferring valid joined below.
+
+### Theorems for FX
+
+### Theorems for FX Relational Profile
 
 ## Interpreting basic graph patterns
 
@@ -88,7 +91,7 @@ follow(Stete y)
     if visited(s) continue
     else follow(s) 
 
-## Preliminary notes
+# Other notes
 
 ?s ?p ?o
 
