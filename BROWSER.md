@@ -13,6 +13,9 @@ Follow these steps (in a bash shell) to build and run the docker container:
 2) ``docker build -f Dockerfile.development -t sparql-anything-development .``
 3) ``docker run -v sparql-anything_playwright:/ms-playwright -v sparql-anything_m2:/root/.m2 -p 3000:3000 --rm -it -v `pwd`:/app sparql-anything-development``
 
+If you are behind a proxy (for example in an enterprise environment), you'll need to add an environment variables to the docker run command:
+3) ``docker run -v sparql-anything_playwright:/ms-playwright -v sparql-anything_m2:/root/.m2 -p 3000:3000 --rm -it -v `pwd`:/app -e MAVEN_OPTS="-Dhttp.proxyHost=my.proxy -Dhttp.proxyPort=80 -Dhttps.proxyHost=my.proxy -Dhttps.proxyPort=80" sparql-anything-development``
+
 Once you see Fuseki listening on port 3000 you can run this query (in a bash shell) to see if SPARQL Anything is working:
 
 ```sparql
