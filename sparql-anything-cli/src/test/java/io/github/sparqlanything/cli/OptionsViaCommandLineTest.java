@@ -32,7 +32,7 @@ public class OptionsViaCommandLineTest {
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v {  ?root a fx:root ;   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v  . fx:properties fx:content \"cde\" } ";
 //		System.out.println(Algebra.compile(QueryFactory.create(q)));
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc"});
-		System.out.println(out);
+//		System.out.println(out);
 		Assert.assertTrue(out.contains("cde"));
 	}
 
