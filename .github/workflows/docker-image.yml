@@ -30,6 +30,6 @@ jobs:
           context: .  
           file: ./Dockerfile
           push: true
-          build-args: GITHUB_REF=${{ github.ref.name }}
+          build-args: GITHUB_REF=${{ github.ref_name }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
