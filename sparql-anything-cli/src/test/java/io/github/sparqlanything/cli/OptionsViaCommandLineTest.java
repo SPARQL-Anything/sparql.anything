@@ -1,7 +1,6 @@
 package io.github.sparqlanything.cli;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class OptionsViaCommandLineTest {
@@ -37,11 +36,10 @@ public class OptionsViaCommandLineTest {
 	}
 
 	@Test
-	@Ignore
 	public void testWithMagicProperties() throws Exception {
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v {  ?root a fx:root ;   fx:anySlot ?v  . } ";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc"});
-		System.out.println(out);
-		Assert.assertTrue(out.contains("cde"));
+//		System.out.println(out);
+		Assert.assertTrue(out.contains("abc"));
 	}
 }
