@@ -22,7 +22,7 @@
 
 	<groupId>io.github.sparql-anything</groupId>
 	<artifactId>sparql-anything-parent</artifactId>
-	<version>0.9.0-SNAPSHOT</version>
+	<version>${revision}</version>
 	<packaging>pom</packaging>
 
 	<name>sparql.anything</name>
@@ -35,6 +35,7 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 		<jena.version>4.7.0</jena.version>
+		<revision>0.9.0-SNAPSHOT</revision>
 	</properties>
 
 	<licenses>
