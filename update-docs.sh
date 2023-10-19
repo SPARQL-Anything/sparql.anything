@@ -20,7 +20,7 @@ git add README.md Facade-X.md facade-x-ER.jpg .readthedocs.yaml mkdocs.yaml Conf
 git add formats/*
 cp -f README.md docs/
 cp -f Facade-X.md docs/
-cp -f facade-x-ER.jpg docs/
+cp -f facade-x-ER.png docs/
 cp -f BROWSER.md docs/
 cp -f Configuration.md docs/
 cp -f FUNCTIONS_AND_MAGIC_PROPERTIES.md docs/

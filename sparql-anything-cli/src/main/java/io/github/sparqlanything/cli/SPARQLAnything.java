@@ -429,7 +429,7 @@ public class SPARQLAnything {
 			logger.trace("[time] Process starts: {}", System.currentTimeMillis() - duration);
 		}
 
-		logger.info("SPARQL anything");
+		logger.debug("SPARQL anything");
 
 		CLI cli = new CLI();
 		if(args.length == 0){
