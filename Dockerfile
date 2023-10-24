@@ -55,3 +55,7 @@ VOLUME /data
 EXPOSE 3000
 
 CMD java -jar /app/sparql-anything-server.jar
+
+#### Copy to host layer
+FROM scratch AS export-stage
+COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GITHUB_REF.jar /

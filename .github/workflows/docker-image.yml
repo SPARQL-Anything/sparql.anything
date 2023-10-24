@@ -34,3 +34,11 @@ jobs:
           build-args: GITHUB_REF=${{ github.ref_name }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=local,dest={pwd}
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: jar files
+          path: |
+            sparql-anything-*.jar
