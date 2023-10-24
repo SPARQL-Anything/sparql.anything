@@ -46,7 +46,9 @@ ENV LC_ALL en_US.UTF-8
 ENV HOME "/app"
 
 WORKDIR $HOME
+RUN mkdir $HOME/artifacts
 COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GITHUB_REF.jar $HOME/sparql-anything-server.jar
+COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GITHUB_REF.jar $HOME/artifacts/
 
 RUN chown -R 10001:0 $HOME && chmod -R og+rwx $HOME
 USER 10001
