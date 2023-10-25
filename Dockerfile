@@ -30,7 +30,7 @@ ADD sparql-anything-yaml/pom.xml $HOME/sparql-anything-yaml/
 
 RUN mvn verify clean --fail-never
 ADD . $HOME
-RUN mvn clean install -DskipTests -Dgenerate-server-jar=true -Drevision=$GITHUB_REF
+RUN mvn clean install -DskipTests -Dgenerate-server-jar=true -Dgenerate-cli-jar=true -Drevision=$GITHUB_REF
 
 #### runtime layer
 FROM mcr.microsoft.com/playwright/java:focal
@@ -49,6 +49,7 @@ WORKDIR $HOME
 RUN mkdir $HOME/artifacts
 COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GITHUB_REF.jar $HOME/sparql-anything-server.jar
 COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GITHUB_REF.jar $HOME/artifacts/
+COPY --from=build $HOME/sparql-anything-cli/target/sparql-anything-$GITHUB_REF.jar $HOME/artifacts/
 
 RUN chown -R 10001:0 $HOME && chmod -R og+rwx $HOME
 USER 10001
