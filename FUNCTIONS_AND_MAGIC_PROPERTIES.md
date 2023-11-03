@@ -52,7 +52,8 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:JaccardDistance(?n1, ?n2)](#fxjaccarddistance)                                   | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
 | [fx:JaroWinklerDistance(?n1, ?n2)](#fxjarowinklerdistance)                           | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                          |
 | [fx:LongestCommonSubsequenceDistance(?n1, ?n2)](#fxlongestcommonsubsequencedistance) | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Longest Common Subsequence Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                               |
-| [fx:HammingDistance(?n1, ?n2)](#fxhammingdistance)                                   | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:HammDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                      |
+| [fx:HammingDistance(?n1, ?n2)](#fxhammingdistance)                                   | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
+| [fx:QGramDistance(?n1, ?n2)](#fxqgramdistance)                                       | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).                                                                                                                                                                                                                                                                                                                                                                       |
 
 
 ## Working with sequences
@@ -1832,7 +1833,7 @@ Result
 
 | result |
 |--------|
-| 0.4    |
+| 0.5    |
 
 
 
@@ -1854,15 +1855,15 @@ Double
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
-    BIND (fx:HammingDistance("abc", "cbe") AS ?result) 
+    BIND (fx:JaroWinklerDistance("abc", "cbe") AS ?result) 
 } 
 ```
 
 Result
 
-| result |
-|--------|
-| 0.24   |
+| result              |
+|---------------------|
+| 0.44444444444444453 |
 
 
 
@@ -1925,6 +1926,37 @@ Result
 | result |
 |--------|
 | 1      |
+
+
+### fx:QGramDistance
+
+The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).
+
+#### Input
+
+
+Any pair of IRIs or Literals
+
+
+#### Output
+
+Double
+
+#### Example
+
+```
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:QGramDistance("abcd", "abce") AS ?result) 
+} 
+```
+
+Result
+
+| result |
+|--------|
+| 2.0    |
 
 <!--
 ###
