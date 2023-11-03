@@ -149,6 +149,12 @@
 			<scope>test</scope>
 		</dependency>
 
+
+		<dependency>
+			<groupId>info.debatty</groupId>
+			<artifactId>java-string-similarity</artifactId>
+		</dependency>
+
 	</dependencies>
 
 </project>

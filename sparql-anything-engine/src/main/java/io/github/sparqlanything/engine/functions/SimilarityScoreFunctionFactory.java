@@ -16,18 +16,17 @@
 
 package io.github.sparqlanything.engine.functions;
 
-import info.debatty.java.stringsimilarity.interfaces.StringDistance;
+import org.apache.commons.text.similarity.SimilarityScore;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.Function;
 import org.apache.jena.sparql.function.FunctionBase2;
 import org.apache.jena.sparql.function.FunctionFactory;
 
-public class StringDistanceFunctionFactory implements FunctionFactory {
+public class SimilarityScoreFunctionFactory<T> implements FunctionFactory {
 
-	private final StringDistance similarityScore;
+	private final SimilarityScore<T> similarityScore;
 
-
-	public StringDistanceFunctionFactory(StringDistance similarityScore){
+	public SimilarityScoreFunctionFactory(SimilarityScore<T> similarityScore){
 		super();
 		this.similarityScore = similarityScore;
 	}
@@ -38,7 +37,13 @@ public class StringDistanceFunctionFactory implements FunctionFactory {
 		return new FunctionBase2() {
 			@Override
 			public NodeValue exec(NodeValue nodeValue, NodeValue nodeValue1) {
-				return  NodeValue.makeDouble(similarityScore.distance(FunctionsUtils.nodeValueAsString(nodeValue),FunctionsUtils.nodeValueAsString(nodeValue1)));
+				T result = similarityScore.apply(FunctionsUtils.nodeValueAsString(nodeValue),FunctionsUtils.nodeValueAsString(nodeValue1));
+				if(result instanceof Integer){
+					return  NodeValue.makeInteger((Integer)result);
+				} else if(result instanceof Double){
+					return  NodeValue.makeDouble((Double)result);
+				}
+				return  NodeValue.nvNaN;
 			}
 		};
 	}

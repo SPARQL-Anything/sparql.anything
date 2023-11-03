@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.it;
 
+import info.debatty.java.stringsimilarity.QGram;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -34,6 +35,13 @@ import org.junit.Test;
 import java.util.regex.Pattern;
 
 public class SandboxTest {
+
+	@Ignore
+	@Test
+	public void m(){
+		QGram d = new QGram();
+		System.out.println(d.distance("ABCD", "ABCE"));
+	}
 
     @Ignore
     @Test

@@ -66,6 +66,15 @@ public class FunctionsTest {
 	}
 
 	@Test
+	public void qgramDistance() {
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:QGramDistance(\"ABCD\", \"ABCE\") AS ?result) } ";
+		ResultSet result = execute(q);
+		Assert.assertTrue(result.hasNext());
+		double dist = result.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(2.0, dist, 0.0);
+	}
+
+	@Test
 	public void levenshteinDistanceURI() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LevenshteinDistance(<abc>, <cbe>) AS ?result) } ";
 		ResultSet result = execute(q);
@@ -89,7 +98,7 @@ public class FunctionsTest {
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
 		double dist = result.next().get("result").asLiteral().getDouble();
-		Assert.assertEquals(0.4, dist, 0.01);
+		Assert.assertEquals(0.5, dist, 0.0);
 	}
 
 	@Test
@@ -98,7 +107,7 @@ public class FunctionsTest {
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
 		double dist = result.next().get("result").asLiteral().getDouble();
-		Assert.assertEquals(0.24, dist, 0.01);
+		Assert.assertEquals(0.44, dist, 0.01);
 	}
 	@Test
 	public void longestCommonSubsequenceDistance() {
