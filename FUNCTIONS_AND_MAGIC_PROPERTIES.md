@@ -47,13 +47,13 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:entity(?a ... ?n)](#fxentity)                                                    | Function                | Any sequence of nodes                  | URI node                      | The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).                                                                                                                                                                                                                                     |
 | [fx:literal(?a, ?b)](#fxliteral)                                                     | Function                | String, (URI or language code)         | Literal node                  | The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).                                                                                                                                                                                                                                                                |
 | [fx:bnode(?a)](#fxbnode)                                                             | Function                | Any node                               | Blank node                    | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
-| [fx:LevenshteinDistance(?n1, ?n2)](#fxlevenshteindistance)                           | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                           |
-| [fx:CosineDistance(?n1, ?n2)](#fxcosinedistance)                                     | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                     |
-| [fx:JaccardDistance(?n1, ?n2)](#fxjaccarddistance)                                   | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
-| [fx:JaroWinklerDistance(?n1, ?n2)](#fxjarowinklerdistance)                           | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                          |
-| [fx:LongestCommonSubsequenceDistance(?n1, ?n2)](#fxlongestcommonsubsequencedistance) | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Longest Common Subsequence Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                               |
-| [fx:HammingDistance(?n1, ?n2)](#fxhammingdistance)                                   | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
-| [fx:QGramDistance(?n1, ?n2)](#fxqgramdistance)                                       | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).                                                                                                                                                                                                                                                                                                                                                                       |
+| [fx:LevenshteinDistance(?n1, ?n2)](#fxlevenshteindistance)                           | Function                | String, String           | Integer                       | The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                           |
+| [fx:CosineDistance(?n1, ?n2)](#fxcosinedistance)                                     | Function                | String, String           | Double                        | The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                     |
+| [fx:JaccardDistance(?n1, ?n2)](#fxjaccarddistance)                                   | Function                | String, String           | Double                        | The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
+| [fx:JaroWinklerDistance(?n1, ?n2)](#fxjarowinklerdistance)                           | Function                | String, String           | Double                        | The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                          |
+| [fx:LongestCommonSubsequenceDistance(?n1, ?n2)](#fxlongestcommonsubsequencedistance) | Function                | String, String           | Integer                       | The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Longest Common Subsequence Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                               |
+| [fx:HammingDistance(?n1, ?n2)](#fxhammingdistance)                                   | Function                | String, String           | Integer                       | The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
+| [fx:QGramDistance(?n1, ?n2)](#fxqgramdistance)                                       | Function                | String, String           | Double                        | The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).                                                                                                                                                                                                                                                                                                                                                                       |
 
 
 ## Working with sequences
@@ -1753,7 +1753,7 @@ The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Dista
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1783,7 +1783,7 @@ The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance betwee
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1813,7 +1813,7 @@ The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance betw
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1843,7 +1843,7 @@ The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Dist
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1873,7 +1873,7 @@ The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Long
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1905,7 +1905,7 @@ The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance betw
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1935,7 +1935,7 @@ The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between 
 #### Input
 
 
-Any pair of IRIs or Literals
+String, String
 
 
 #### Output
