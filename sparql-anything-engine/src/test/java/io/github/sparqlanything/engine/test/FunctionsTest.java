@@ -76,7 +76,7 @@ public class FunctionsTest {
 
 	@Test
 	public void levenshteinDistanceURI() {
-		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LevenshteinDistance(<abc>, <cbe>) AS ?result) } ";
+		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:LevenshteinDistance(str(<abc>), str(<cbe>)) AS ?result) } ";
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
 		int dist = result.next().get("result").asLiteral().getInt();

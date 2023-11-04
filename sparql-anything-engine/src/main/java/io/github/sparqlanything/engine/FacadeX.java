@@ -149,13 +149,18 @@ public final class FacadeX {
 			log.error("", e);
 		}
 
-		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LevenshteinDistance", new SimilarityScoreFunctionFactory<>(new LevenshteinDistance()));
-		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "CosineDistance", new SimilarityScoreFunctionFactory<>(new CosineDistance()));
-		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaccardDistance", new SimilarityScoreFunctionFactory<>(new JaccardDistance()));
-		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaroWinklerDistance", new SimilarityScoreFunctionFactory<>(new JaroWinklerDistance()));
-		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LongestCommonSubsequenceDistance", new SimilarityScoreFunctionFactory<>(new LongestCommonSubsequenceDistance()));
-		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "HammingDistance", new SimilarityScoreFunctionFactory<>(new HammingDistance()));
-		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "QGramDistance", new StringDistanceFunctionFactory(new QGram()));
+
+		try {
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LevenshteinDistance", ReflectionFunctionFactory.get().makeFunction(true, LevenshteinDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "CosineDistance", ReflectionFunctionFactory.get().makeFunction(true, CosineDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaccardDistance", ReflectionFunctionFactory.get().makeFunction(true, JaccardDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaroWinklerDistance", ReflectionFunctionFactory.get().makeFunction(true, JaroWinklerDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LongestCommonSubsequenceDistance", ReflectionFunctionFactory.get().makeFunction(true, LongestCommonSubsequenceDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "HammingDistance", ReflectionFunctionFactory.get().makeFunction(true, HammingDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "QGramDistance", ReflectionFunctionFactory.get().makeFunction(true, QGram.class.getMethod("distance", String.class, String.class)));
+		} catch (NoSuchMethodException e) {
+			log.error("", e);
+		}
 
 		log.trace("Enabling function `serial`");
 		FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "serial", Serial.class);
