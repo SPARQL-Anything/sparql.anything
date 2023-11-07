@@ -529,7 +529,7 @@ public class SPARQLAnything {
 			} else {
 				kb = DatasetFactory.createGeneral();
 			}
-			String inputFile = cli.getInputFile();
+//			String inputFile = cli.getInputFile();
 			String outputFileName = cli.getOutputFile();
 			String outputPattern = cli.getOutputPattern();
 			String[] values = cli.getValues();
@@ -537,29 +537,29 @@ public class SPARQLAnything {
 			if (outputPattern != null && outputFileName != null) {
 				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
 			}
-			if (inputFile == null && values == null) {
+			if (values == null) {
 				logger.debug("No input file");
 				Query q = QueryFactory.create(query);
 				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()), configurations);
 			} else {
 
-				if (inputFile != null && values != null) {
-					throw new ParseException("Arguments 'input' and 'values' cannot be used together.");
-				}
+//				if (inputFile != null && values != null) {
+//					throw new ParseException("Arguments 'input' and 'values' cannot be used together.");
+//				}
 				ResultSet parameters = null;
-				if (inputFile != null) {
-					// XXX Deprecated by Issue #277
-					logger.warn("[Deprecated] Input file given [please use --values instead]");
-					// Load the file
-					parameters = ResultSetFactory.load(inputFile);
-				} else {
+//				if (inputFile != null) {
+//					// XXX Deprecated by Issue #277
+//					logger.warn("[Deprecated] Input file given [please use --values instead]");
+//					// Load the file
+//					parameters = ResultSetFactory.load(inputFile);
+//				} else {
 					if(values.length == 1 && new File(values[0]).exists()){
 						logger.debug("Input file name given");
 						parameters = ResultSetFactory.load(values[0]);
 					}else {
 						parameters = new ArgValuesAsResultSet(values);
 					}
-				}
+//				}
 				// Specifications
 				Specification specification = SpecificationFactory.create("", query);
 				// Iterate over parameters
