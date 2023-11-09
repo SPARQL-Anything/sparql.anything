@@ -93,7 +93,7 @@ public class FolderTriplifierTest {
 
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			p.setProperty(ZipTriplifier.MATCHES.toString(), "[^j]*");
+			p.setProperty(ZipTriplifier.MATCHES.toString(), ".*(?<!\\.json)");
 			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, builder);
 			DatasetGraph dg = builder.getDatasetGraph();
