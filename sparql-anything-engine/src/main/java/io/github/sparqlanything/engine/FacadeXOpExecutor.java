@@ -22,6 +22,7 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.algebra.op.OpPropFunc;
 import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.algebra.optimize.TransformPropertyFunction;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
@@ -72,6 +73,8 @@ public class FacadeXOpExecutor extends OpExecutor {
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
 
+
+
 		if(hasFXSymbols(this.execCxt) && !this.execCxt.getContext().isDefined(FacadeXExecutionContext.hasServiceClause)){
 			try {
 				return fxWorkerOpBGP.execute(opBGP, input, this.execCxt);
@@ -97,7 +100,14 @@ public class FacadeXOpExecutor extends OpExecutor {
 				return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(execCxt));
 			}
 		}
+
+		Op opTransformed =  TransformPropertyFunction.transform(opBGP, this.execCxt.getContext());
+		if(!opTransformed.equals(opBGP)){
+			return super.executeOp(opTransformed, input);
+		}
 		logger.trace("Execute with default Jena execution");
+
+
 		// go with the default Jena execution
 		return super.execute(opBGP, input);
 	}

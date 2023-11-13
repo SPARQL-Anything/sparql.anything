@@ -885,5 +885,45 @@ public class IssuesTest {
 
 	}
 
+	@Test
+	public void testIssue330() throws URISyntaxException, IOException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue330.sparql")).toURI(), StandardCharsets.UTF_8);
+		query = QueryFactory.create(queryStr);
+
+//		System.out.println(Algebra.compile(query));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
+//		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
+		Set<String> result = new HashSet<>();
+		ResultSet rs = qExec1.execSelect();
+		while (rs.hasNext()){
+			result.add(rs.next().get("a").asLiteral().toString());
+		}
+		assertEquals(Sets.newHashSet("abc", "cde"), result);
+
+//		Graph g = GraphFactory.createGraphMem();
+//		g.add(NodeFactory.createBlankNode(), RDF.li(1).asNode(), NodeFactory.createLiteral("abc;cde"));
+//		Query qq = QueryFactory.create("PREFIX apf: <http://jena.apache.org/ARQ/property#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?a { ?s rdf:_1 ?o . ?a apf:strSplit(?o \";\") }");
+//		System.out.println(qq.toString(Syntax.syntaxSPARQL_11));
+//		Op op = Algebra.compile(qq);
+//		System.out.println(op);
+//		OpBGP bgp = (OpBGP) Algebra.parse("(bgp\n" +
+//				"    (triple ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?o)\n" +
+//				"    (triple ?a <http://jena.apache.org/ARQ/property#strSplit> ??0)\n" +
+//				"    (triple ??0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> ?o)\n" +
+//				"    (triple ??0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> ??1)\n" +
+//				"    (triple ??1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \";\")\n" +
+//				"    (triple ??1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil>)\n" +
+//				"  )");
+//		System.out.println(TransformPropertyFunction.transform(bgp, ARQ.getContext()));
+//		QueryIterator qi = Algebra.exec(op, g);
+//		System.out.println(Utils.queryIteratorToString(qi));
+
+	}
+
 
 }
