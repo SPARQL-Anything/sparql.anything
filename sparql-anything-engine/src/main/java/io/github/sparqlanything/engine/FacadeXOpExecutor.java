@@ -56,8 +56,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	protected QueryIterator execute(final OpPropFunc opPropFunc, QueryIterator input){
 		logger.trace("OpProp  {}", opPropFunc);
-		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {
-
+		if(!Utils.isFacadeXMagicPropertyNode(opPropFunc.getProperty())||this.execCxt.getClass() == FacadeXExecutionContext.class){
 			return super.execute(opPropFunc, input);
 		}else {
 			try {
@@ -82,7 +81,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				throw new RuntimeException(e);
 			}
 		}
-		
+
 		// check that the BGP is within a FacadeX-SERVICE clause
 		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {
 			// check that the BGP contains FacadeX Magic properties

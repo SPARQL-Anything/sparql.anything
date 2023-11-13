@@ -860,6 +860,28 @@ public class IssuesTest {
 //		Assert.assertFalse(m1.isIsomorphicWith(m2));
 
 //		Assert.assertTrue(qExec.execSelect().hasNext());
+	}
+
+
+	@Test
+	public void testIssue421() throws URISyntaxException, IOException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue421.sparql")).toURI(), StandardCharsets.UTF_8);
+		query = QueryFactory.create(queryStr);
+
+//		System.out.println(Algebra.compile(query));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
+//		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
+		Set<String> result = new HashSet<>();
+		ResultSet rs = qExec1.execSelect();
+		while (rs.hasNext()){
+			result.add(rs.next().get("a").asLiteral().toString());
+		}
+		assertEquals(Sets.newHashSet("abc", "cde"), result);
 
 	}
 
