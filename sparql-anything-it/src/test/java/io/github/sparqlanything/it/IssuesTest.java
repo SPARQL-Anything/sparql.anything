@@ -25,8 +25,11 @@ import org.apache.jena.dboe.base.file.Location;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.system.Txn;
+import org.apache.jena.tdb2.TDB2Factory;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -623,6 +626,22 @@ public class IssuesTest {
 		assertEquals(Sets.newHashSet("http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.w3.org/1999/02/22-rdf-syntax-ns#_2"), previous);
 
 
+	}
+
+	@Test
+	@Ignore
+	public void playWithTDBLoc() throws IOException {
+		String testFolder = "tmp/testTDB";
+		Dataset d1 = TDB2Factory.connectDataset(testFolder);
+		Txn.executeWrite(d1, ()->{
+			RDFDataMgr.read(d1, "https://www.w3.org/1999/02/22-rdf-syntax-ns#");
+		});
+
+		Txn.executeRead(d1, ()->{
+			RDFDataMgr.write(System.out, d1, Lang.TRIG);
+		});
+		d1.close();
+		FileUtils.deleteDirectory(new File(testFolder));
 	}
 
 
