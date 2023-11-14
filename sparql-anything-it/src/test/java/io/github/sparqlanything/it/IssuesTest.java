@@ -21,6 +21,7 @@ import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.jena.dboe.base.file.Location;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -52,14 +53,14 @@ public class IssuesTest {
 	@Test
 	public void testIssue280() throws URISyntaxException {
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue280.json")).toURI().toString();
-		File TDBfile = new File("target/tdbIssue280/");
+		String TDBLocation = "target/tdbIssue280/";
+		File TDBfile = new File(TDBLocation);
 		if (TDBfile.exists()) {
 			boolean isTDBFileDeleted = TDBfile.delete();
 			log.trace("Has TDB folder been deleted? {}", isTDBFileDeleted);
 		}
 		boolean tdbFolderCreated = TDBfile.mkdirs();
 		log.trace("Has TDB folder been deleted? {}", tdbFolderCreated);
-		String TDBLocation = TDBfile.getAbsolutePath();
 		log.debug("TDB temp location: {}", TDBLocation);
 		Query qs = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
@@ -476,23 +477,20 @@ public class IssuesTest {
 	 */
 	@Test
 	public void testIssue280_2() throws URISyntaxException {
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
-
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue280.json")).toURI().toString();
-		File TDBfile = new File("target/tdbIssue280/");
+		String TDBLocation = "target/dbIssue280/";
+		File TDBfile = new File(TDBLocation);
 		if (TDBfile.exists()) {
 			boolean isTDBFileDeleted = TDBfile.delete();
 			log.trace("Has TDB Folder been deleted? {}", isTDBFileDeleted);
 		}
 		boolean hasTDBFolderCreated = TDBfile.mkdirs();
-		log.trace("Has TDB Folder been created? {}", hasTDBFolderCreated);
-		String TDBLocation = TDBfile.getAbsolutePath();
-		log.debug("TDB temp location: {}", TDBLocation);
-		Query qs = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "SELECT * WHERE { " + "SERVICE <x-sparql-anything:location=" + location + ",ondisk=" + TDBLocation + "> { " + " ?s xyz:name ?o }  }");
+		//log.trace("Has TDB Folder been created? {}, {}", hasTDBFolderCreated, TDBfile.exists());
+
+		String queryString = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \""+location+"\" ; fx:ondisk \""+TDBLocation+"\" .  ?s xyz:name ?o }  }";
+		//log.debug("TDB temp location: {}", TDBLocation);
+		//log.debug("Query string\n{}", queryString);
+		Query qs = QueryFactory.create(queryString);
 
 //		System.out.println(location);
 //		System.out.println(qs.toString(Syntax.defaultSyntax));
@@ -629,7 +627,7 @@ public class IssuesTest {
 
 
 	/**
-	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/292">...</a>
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/295">...</a>
 	 * <p>
 	 */
 	@Test
@@ -642,11 +640,15 @@ public class IssuesTest {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
-		File tmpTBDFolder = new File(Objects.requireNonNull(getClass().getClassLoader().getResource(".")).getPath(), "testIssue295");
+		String TDBLocation = "tmp/testIssue295";
+		File tmpTBDFolder = new File(TDBLocation);
+		if(tmpTBDFolder.exists()){
+			FileUtils.deleteDirectory(tmpTBDFolder);
+		}
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue295.sparql")).toURI(), StandardCharsets.UTF_8);
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue295.json")).toURI().toString();
 		queryStr = queryStr.replace("%%%LOCATION%%%", location);
-		queryStr = queryStr.replace("%%%TDB_PATH%%%", tmpTBDFolder.getAbsolutePath());
+		queryStr = queryStr.replace("%%%TDB_PATH%%%", TDBLocation);
 
 		query = QueryFactory.create(queryStr);
 
@@ -658,9 +660,9 @@ public class IssuesTest {
 			QuerySolution qs = rs.next();
 			actualNames.add(qs.get("name").asLiteral().getValue().toString());
 		}
-		FileUtils.deleteDirectory(tmpTBDFolder);
 		ds.end();
 		assertEquals(expectedNames, actualNames);
+		FileUtils.deleteDirectory(tmpTBDFolder);
 	}
 
 
