@@ -25,6 +25,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
+import org.apache.jena.system.Txn;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb2.DatabaseMgr;
 import org.apache.jena.tdb2.TDB2Factory;
@@ -61,7 +62,9 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 					FileUtils.deleteDirectory(ondiskFile);
 				} catch (IOException e) {
 					if (TDBFactory.inUseLocation(ondiskPath)) {
-						TDB2Factory.connectDataset(ondiskPath).asDatasetGraph().clear();
+						DatasetGraph dg = TDB2Factory.connectDataset(ondiskPath).asDatasetGraph();
+						dg.end();
+						Txn.executeWrite(dg, dg::clear);
 						log.warn("Clearing TBD instead of deleting the TDB folder.");
 					} else {
 						throw new RuntimeException(e);

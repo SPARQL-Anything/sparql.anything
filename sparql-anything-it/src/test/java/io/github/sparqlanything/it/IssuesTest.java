@@ -628,22 +628,6 @@ public class IssuesTest {
 
 	}
 
-	@Test
-	@Ignore
-	public void playWithTDBLoc() throws IOException {
-		String testFolder = "tmp/testTDB";
-		Dataset d1 = TDB2Factory.connectDataset(testFolder);
-		Txn.executeWrite(d1, ()->{
-			RDFDataMgr.read(d1, "https://www.w3.org/1999/02/22-rdf-syntax-ns#");
-		});
-
-		Txn.executeRead(d1, ()->{
-			RDFDataMgr.write(System.out, d1, Lang.TRIG);
-		});
-		d1.close();
-		FileUtils.deleteDirectory(new File(testFolder));
-	}
-
 
 	/**
 	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/295">...</a>
@@ -681,7 +665,11 @@ public class IssuesTest {
 		}
 		ds.end();
 		assertEquals(expectedNames, actualNames);
-		FileUtils.deleteDirectory(tmpTBDFolder);
+		try {
+			FileUtils.deleteDirectory(tmpTBDFolder);
+		}catch(IOException e){
+			log.warn("Unable to delete {}, delete it once the program terminates.",tmpTBDFolder.getAbsolutePath());
+		}
 	}
 
 
