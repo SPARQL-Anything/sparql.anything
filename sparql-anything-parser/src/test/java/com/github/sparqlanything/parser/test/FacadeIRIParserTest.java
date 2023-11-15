@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.Properties;
 
 public class FacadeIRIParserTest {
@@ -108,11 +109,11 @@ public class FacadeIRIParserTest {
 
 	@Test
 	public void specialCharsArgsFromFile() throws IOException {
-		String uri = IOUtils
-				.toString(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("./exampleIRI.txt")));
+		String uri = IOUtils.toString(new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("./exampleIRI.txt"))));
+		String expected = IOUtils.toString(new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("./expected.txt"))));
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
-		Assert.assertEquals(p.get("same"), "汉字");
+		Assert.assertEquals("https://myfile.json?fo,o=bar&tab=goal#hack", p.get("location"));
+		Assert.assertEquals(expected, p.get("same" ));
 	}
 
 	@Test
