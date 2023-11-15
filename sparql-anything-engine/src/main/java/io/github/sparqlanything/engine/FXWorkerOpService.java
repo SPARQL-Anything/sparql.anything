@@ -3,6 +3,7 @@ package io.github.sparqlanything.engine;
 import io.github.sparqlanything.facadeiri.FacadeIRIParser;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
+import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -25,7 +26,7 @@ public class FXWorkerOpService extends FXWorker<OpService> {
 
 	@Override
 	public QueryIterator execute(OpService op, QueryIterator input, ExecutionContext executionContext, DatasetGraph dg, Properties p) {
-		return QC.execute(op.getSubOp(), input, Utils.getFacadeXExecutionContext(executionContext, p, dg));
+		return QC.execute(Algebra.optimize(op.getSubOp()), input, Utils.getFacadeXExecutionContext(executionContext, p, dg));
 	}
 
 	@Override
