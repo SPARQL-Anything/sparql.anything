@@ -21,15 +21,13 @@ import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.dboe.base.file.Location;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.sparql.algebra.Algebra;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.system.Txn;
-import org.apache.jena.tdb2.TDB2Factory;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -469,9 +467,21 @@ public class IssuesTest {
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue241.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query q = QueryFactory.create(queryStr);
+		Op op = Algebra.compile(q);
+		System.out.println(op);
+//		System.out.println(Algebra.optimize(op));
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
-		// assertTrue(QueryExecutionFactory.create(queryStr,
-		// ds).execSelect().hasNext());
+//		 assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
+
+//		Dataset ds2 = DatasetFactory.createGeneral();
+//		ds2.executeWrite(()->{
+//			RDFDataMgr.read(ds2, "https://www.w3.org/1999/02/22-rdf-syntax-ns#");
+//		});
+//		Query q2 = QueryFactory.create("SELECT * { SERVICE <https://data.europa.eu/sparql> { SERVICE<http://dbpedia.org/sparql>{?s ?p ?o BIND(BNODE() AS ?bob )} ?ss ?pp ?oo } } LIMIT 10");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(q2, ds2).execSelect()));
+
+//		QueryExecutionHTTPBuilder.service("http://dbpedia.org/sparql").query("SELECT * {?s ?p ?o}")
 	}
 
 	/**
