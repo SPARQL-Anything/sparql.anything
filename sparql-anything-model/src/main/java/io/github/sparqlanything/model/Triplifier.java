@@ -147,7 +147,7 @@ public interface Triplifier {
 		return getInputStream(properties, getCharsetArgument(properties));
 	}
 
-	private static InputStream getInputStream(Properties properties, Charset charset) throws IOException, TriplifierHTTPException {
+	static InputStream getInputStream(Properties properties, Charset charset) throws IOException, TriplifierHTTPException {
 
 		if (properties.containsKey(IRIArgument.COMMAND.toString())) {
 			String command = properties.getProperty(IRIArgument.COMMAND.toString());
