@@ -117,9 +117,9 @@ public interface Triplifier {
 	 * <p>
 	 * - key.name = value - key.name.0 = value0 - key.name.1 = value1
 	 *
-	 * @param properties
-	 * @param prefix
-	 * @return
+	 * @param properties the properties
+	 * @param prefix the prefix
+	 * @return the list of values starting with prefix
 	 */
 	static List<String> getPropertyValues(Properties properties, String prefix) {
 		List<String> values = new ArrayList<String>();
