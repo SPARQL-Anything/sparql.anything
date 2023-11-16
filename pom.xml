@@ -16,8 +16,8 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.github.sparql-anything</groupId>
@@ -50,8 +50,8 @@
 		<developer>
 			<name>Luigi Asprino</name>
 			<email>luigi.asprino@unibo.it</email>
-			<organization>FICLIT</organization>
-			<organizationUrl>https://ficlit.unibo.it/it</organizationUrl>
+			<organization>University of Bologna</organization>
+			<organizationUrl>https://www.unibo.it/it</organizationUrl>
 		</developer>
 		<developer>
 			<name>Enrico Daga</name>
@@ -64,13 +64,13 @@
 	<scm>
 		<connection>scm:git:git://github.com/SPARQL-Anything/sparql.anything.git</connection>
 		<developerConnection>scm:git:ssh://github.com:SPARQL-Anything/sparql.anything.git</developerConnection>
-		<url>https://github.com/SPARQL-Anything/sparql.anything/tree/v0.8-DEV</url>
+		<url>https://github.com/SPARQL-Anything/sparql.anything/tree/v0.9-DEV</url>
 	</scm>
 
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -110,12 +110,64 @@
 		<module>sparql-anything-archive</module>
 		<module>sparql-anything-docs</module>
 		<module>sparql-anything-bib</module>
-<!--		<module>sparql-anything-jdbc</module>
--->	</modules>
+		<!--		<module>sparql-anything-jdbc</module>
+        -->
+	</modules>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -149,117 +201,34 @@
 					</archive>
 				</configuration>
 			</plugin>
-<plugin>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>flatten-maven-plugin</artifactId>
-      <version>1.1.0</version>
-      <configuration>
-        <updatePomFile>true</updatePomFile>
-        <flattenMode>resolveCiFriendliesOnly</flattenMode>
-      </configuration>
-      <executions>
-        <execution>
-          <id>flatten</id>
-          <phase>process-resources</phase>
-          <goals>
-            <goal>flatten</goal>
-          </goals>
-        </execution>
-        <execution>
-          <id>flatten.clean</id>
-          <phase>clean</phase>
-          <goals>
-            <goal>clean</goal>
-          </goals>
-        </execution>
-      </executions>
-    </plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<configuration>
+					<updatePomFile>true</updatePomFile>
+					<flattenMode>resolveCiFriendliesOnly</flattenMode>
+				</configuration>
+				<executions>
+					<execution>
+						<id>flatten</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>flatten</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>flatten.clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 		</plugins>
 	</build>
-
-	<profiles>
-
-
-		<profile>
-			<id>release-sign-artifacts</id>
-			<activation>
-				<property>
-					<name>performRelease</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.8.0</version>
-						<configuration>
-							<release>11</release>
-						</configuration>
-					</plugin>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<version>2.2.1</version>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.9.1</version>
-						<!-- https://bugs.openjdk.java.net/browse/JDK-8212233 -->
-						<configuration>
-							<source>8</source>
-						</configuration>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.5</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.7</version>
-						<extensions>true</extensions>
-						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 	<dependencyManagement>
 		<dependencies>
@@ -313,7 +282,7 @@
 			<dependency>
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
-<!--				<version>1.14.2</version>-->
+				<!--				<version>1.14.2</version>-->
 				<version>1.15.3</version>
 			</dependency>
 
@@ -349,8 +318,8 @@
 				<artifactId>json</artifactId>
 				<version>20231013</version>
 			</dependency>
-			<!-- dependency> <groupId>com.jsoniter</groupId> <artifactId>jsoniter</artifactId> 
-				<version>0.9.19</version> </dependency -->
+			<!-- dependency> <groupId>com.jsoniter</groupId> <artifactId>jsoniter</artifactId>
+                <version>0.9.19</version> </dependency -->
 			<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
