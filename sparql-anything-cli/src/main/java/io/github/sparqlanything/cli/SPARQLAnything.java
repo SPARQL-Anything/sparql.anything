@@ -499,7 +499,7 @@ public class SPARQLAnything {
 						if(!p.isAbsolute()){
 							p = base.relativize(loadSource.toPath());
 						}
-						kb = DatasetFactory.create(p.toString());
+						kb = DatasetFactory.create(p.toFile().toURI().toString());
 					} catch (Exception e) {
 						logger.error("An error occurred while loading {}", loadSource);
 						logger.error(" - Problem was: ", e);

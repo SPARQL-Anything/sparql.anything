@@ -90,6 +90,24 @@ public class FunctionsTest {
 		Assert.assertTrue(result.hasNext());
 		double dist = result.next().get("result").asLiteral().getDouble();
 		Assert.assertEquals(1.0, dist, 0.01);
+
+//		System.out.println(new CosineDistance().apply("Hong Kong", "Hong Kong"));
+//		System.out.println(new Cosine().distance("Hong Kong", "Hong Kong"));
+
+		ResultSet result2 = execute("PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:CosineDistance(\"Hong Kong\", \"Hong Kong\") AS ?result) } ");
+		Assert.assertTrue(result2.hasNext());
+		double dist2 = result2.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(0.0, dist2, 0.0);
+
+		ResultSet result3 = execute("PREFIX fx:  <http://sparql.xyz/facade-x/ns/> SELECT ?result WHERE { BIND (fx:CosineDistance(\"Dominican Republic\", \"Dominican Republic\") AS ?result) } ");
+		Assert.assertTrue(result3.hasNext());
+		double dist3 = result3.next().get("result").asLiteral().getDouble();
+		Assert.assertEquals(0.0, dist3, 0.0);
+
+
+
+
+
 	}
 
 	@Test

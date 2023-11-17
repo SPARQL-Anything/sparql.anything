@@ -60,7 +60,7 @@ public class Utils {
 		return node.isURI() && node.getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES);
 	}
 
-	static String queryIteratorToString(QueryIterator q) {
+	public static String queryIteratorToString(QueryIterator q) {
 		StringBuilder sb = new StringBuilder();
 		while (q.hasNext()) {
 			Binding binding = q.next();
@@ -69,13 +69,13 @@ public class Utils {
 		return sb.toString();
 	}
 
-	static String printDatasetGraph(DatasetGraph dg){
+	public static String printDatasetGraph(DatasetGraph dg){
 		StringBuilder sb = new StringBuilder();
 		dg.find().forEachRemaining(q-> sb.append(q.toString()).append("\n"));
 		return sb.toString();
 	}
 
-	static String bindingToString(Binding binding) {
+	public static String bindingToString(Binding binding) {
 		StringBuilder sb = new StringBuilder();
 		Iterator<Var> vars = binding.vars();
 		while (vars.hasNext()) {

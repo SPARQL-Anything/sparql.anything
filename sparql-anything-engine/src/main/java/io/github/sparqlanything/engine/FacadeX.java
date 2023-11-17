@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.engine;
 
+import info.debatty.java.stringsimilarity.Cosine;
 import info.debatty.java.stringsimilarity.QGram;
 import io.github.sparqlanything.engine.functions.*;
 import io.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
@@ -152,12 +153,13 @@ public final class FacadeX {
 
 		try {
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LevenshteinDistance", ReflectionFunctionFactory.get().makeFunction(true, LevenshteinDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
-			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "CosineDistance", ReflectionFunctionFactory.get().makeFunction(true, CosineDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
+//			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "CosineDistance", ReflectionFunctionFactory.get().makeFunction(true, CosineDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaccardDistance", ReflectionFunctionFactory.get().makeFunction(true, JaccardDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "JaroWinklerDistance", ReflectionFunctionFactory.get().makeFunction(true, JaroWinklerDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "LongestCommonSubsequenceDistance", ReflectionFunctionFactory.get().makeFunction(true, LongestCommonSubsequenceDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "HammingDistance", ReflectionFunctionFactory.get().makeFunction(true, HammingDistance.class.getMethod("apply", CharSequence.class, CharSequence.class)));
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "QGramDistance", ReflectionFunctionFactory.get().makeFunction(true, QGram.class.getMethod("distance", String.class, String.class)));
+			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "CosineDistance", ReflectionFunctionFactory.get().makeFunction(true, Cosine.class.getMethod("distance", String.class, String.class)));
 		} catch (NoSuchMethodException e) {
 			log.error("", e);
 		}

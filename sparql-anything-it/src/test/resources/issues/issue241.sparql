@@ -10,7 +10,8 @@ WHERE
           { fx:properties
                       fx:command     "echo 4,5,6" ;
                       fx:media-type  "text/csv" .
-            ?s        ?p             ?num .
+            ?s       a fx:root ; rdf:_1/fx:anySlot            ?num .
+            # ?s  ?p ?num # breaks!
             # BIND(bnode() AS ?bob)           # breaks
             # BIND(struuid() AS ?bob)         # breaks
             # BIND(concat("a","b") AS ?bob)   # works

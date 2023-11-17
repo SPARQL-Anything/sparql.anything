@@ -28,8 +28,8 @@ public class TriplifierTest {
 	@Test
 	public void instantiateURLTest() {
 		Properties p = new Properties();
-		p.setProperty(IRIArgument.LOCATION.toString(), "file:///a/b.c");
-		Assert.assertEquals("file:///a/b.c#", Triplifier.getRootArgument(p));
+		p.setProperty(IRIArgument.LOCATION.toString(), "http://a/b.c");
+		Assert.assertEquals("http://a/b.c#", Triplifier.getRootArgument(p));
 	}
 
 }

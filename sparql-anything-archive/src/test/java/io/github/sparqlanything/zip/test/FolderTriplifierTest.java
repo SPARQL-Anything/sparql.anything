@@ -92,18 +92,17 @@ public class FolderTriplifierTest {
 			URL url = getClass().getClassLoader().getResource("test").toURI().toURL();
 
 			Properties p = new Properties();
+			p.setProperty(ZipTriplifier.MATCHES.toString(), ".*(?<!\\.json)");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
-			p.setProperty(ZipTriplifier.MATCHES.toString(), "[^j]*");
 			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, builder);
 			DatasetGraph dg = builder.getDatasetGraph();
-//			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
 			Set<String> expected = new HashSet<>();
 
 			expected.add("");
 			expected.add("test.csv");
-//			expected.add("test.json");
+
 			expected.add("test.xml");
 			expected.add("test.txt");
 
