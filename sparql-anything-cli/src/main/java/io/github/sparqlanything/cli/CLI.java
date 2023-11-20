@@ -16,7 +16,13 @@
 
 package io.github.sparqlanything.cli;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.jena.query.Query;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.util.FileUtils;
