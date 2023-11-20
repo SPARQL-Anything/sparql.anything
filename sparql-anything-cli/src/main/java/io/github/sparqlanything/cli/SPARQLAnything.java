@@ -577,7 +577,7 @@ public class SPARQLAnything {
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
 		} catch(ParseException e1){
-			logger.error("{}",e1.getMessage());
+			logger.error("SPARQL syntax error (or query file does not exists): {}",e1.getMessage());
 			cli.printHelp();
 		}
 		if(logger.isTraceEnabled()) {
