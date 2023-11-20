@@ -93,7 +93,7 @@ WHERE
 
 | Option name               | Description                                                                                                                 | Valid Values | Default Value |
 |---------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
-| yaml.allow-duplicate-keys | Yaml 1.2 forbids duplicate keys, raising an error (default behaviour). When true, duplicate keys are tolerated (last wins). | true,false   | false         |
+| yaml.allow-duplicate-keys | Tolerate duplicate keys (last wins). | true,false   | false         |
 
 ---
 
@@ -101,15 +101,16 @@ WHERE
 
 #### Description
 
-A CSS selector that restricts the HTML tags to consider for the triplification.
+Yaml 1.2 forbids duplicate keys, raising an error (default behaviour). When true, duplicate keys are tolerated (last wins). 
 
 #### Valid Values
 
-Any valid CSS selector.
+true
+false
 
 #### Default Value
 
-No value
+false
 
 <!--
 # 
