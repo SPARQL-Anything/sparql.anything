@@ -14,7 +14,7 @@ Main features:
 - Provides a homogenous view over heterogeneous  data sources, thanks to the Facade-X meta-model (see [Facade-X specification](Facade-X.md) )
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#Configuration)) and
   build knowledge graphs with `CONSTRUCT` queries
-- [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar,
+- [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, SVG, Binary, EXIF, File System, Zip/Tar,
   Markdown, YAML, Bibtex, DOCx (see [pages dedicated to single formats](#supported-formats))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
 - Generates RDF, RDF-Star, and tabular data (thanks to SPARQL)
