@@ -17,6 +17,8 @@
 package io.github.sparqlanything.yaml;
 
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
 
 import java.util.Properties;
@@ -31,6 +33,9 @@ public class YAMLTriplifierTest extends AbstractTriplifierTester {
 	protected void properties(Properties properties) {
 		if(name.getMethodName().equals("testFoo")){
 			properties.setProperty("blank-nodes", "true");
+		}else if(name.getMethodName().equals("testDuplicateKeys")){
+			properties.setProperty("blank-nodes", "true");
+			properties.setProperty("yaml.allow-duplicate-keys", "true");
 		}
 	}
 
@@ -41,6 +46,11 @@ public class YAMLTriplifierTest extends AbstractTriplifierTester {
 
 	@Test
 	public void testFoo(){
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testDuplicateKeys(){
 		assertResultIsIsomorphicWithExpected();
 	}
 }

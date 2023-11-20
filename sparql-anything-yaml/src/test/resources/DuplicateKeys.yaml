@@ -1,0 +1,6 @@
+foo: bar
+stuff: ignored
+pleh: help
+stuff:
+  foo: bar
+  bar: foo
