@@ -87,7 +87,29 @@ WHERE
 ] .
 ```
 
+## Options
 
+### Summary
+
+| Option name               | Description                                                                                                                 | Valid Values | Default Value |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
+| yaml.allow-duplicate-keys | Yaml 1.2 forbids duplicate keys, raising an error (default behaviour). When true, duplicate keys are tolerated (last wins). | true,false   | false         |
+
+---
+
+### `yaml.allow-duplicate-keys`
+
+#### Description
+
+A CSS selector that restricts the HTML tags to consider for the triplification.
+
+#### Valid Values
+
+Any valid CSS selector.
+
+#### Default Value
+
+No value
 
 <!--
 # 
