@@ -503,7 +503,7 @@ public class SPARQLAnything {
 					} catch (Exception e) {
 						logger.error("An error occurred while loading {}", loadSource);
 						logger.error(" - Problem was: ", e);
-				}
+					}
 				} else {
 					if(!loadSource.exists()){
 						logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
@@ -576,9 +576,8 @@ public class SPARQLAnything {
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
-		} catch(ParseException e1){
+		} catch(QueryParseException | ParseException e1){
 			logger.error("SPARQL syntax error (or query file does not exists): {}",e1.getMessage());
-			cli.printHelp();
 		}
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);
