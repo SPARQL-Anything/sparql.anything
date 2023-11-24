@@ -21,7 +21,7 @@ jobs:
         run: |
             echo -e "${{ github.ref_name }}"
             # https://gist.github.com/sualeh/ae78dc16123899d7942bc38baba5203c
-            cat < (echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import 
+            echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}" | gpg --batch --import 
             gpg --list-secret-keys --keyid-format LONG
             # mvn --batch-mode deploy  -Drevision=${{ github.ref_name }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
             mvn --batch-mode deploy  -Drevision=test-deploy -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
