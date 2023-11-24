@@ -1,7 +1,9 @@
 name: Publish package to the Maven Central Repository
 on:
-  release:
-    types: [created]
+  push:
+    branches: [ v0.9-DEV ]
+#  release:
+#    types: [created]
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -19,7 +21,8 @@ jobs:
         run: |
             echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}" | gpg --batch --import 
             gpg --list-secret-keys --keyid-format LONG
-            mvn --batch-mode deploy  -Drevision=${{ github.ref_name }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
+            # mvn --batch-mode deploy  -Drevision=${{ github.ref_name }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
+            mvn --batch-mode deploy  -Drevision=test-deploy -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
