@@ -16,7 +16,10 @@
 
 package io.github.sparqlanything.slides;
 
-import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.slf4j.Logger;
@@ -27,6 +30,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PptxTriplifier implements Triplifier {
 
@@ -35,10 +39,13 @@ public class PptxTriplifier implements Triplifier {
 
 	private static final Logger logger = LoggerFactory.getLogger(PptxTriplifier.class);
 
-	private static void addOptionalValue(FacadeXGraphBuilder builder, String dataSourceId, String containerId, String slotKey, String type, Object value){
+	private static void addOptionalValue(FacadeXGraphBuilder builder, String dataSourceId, String containerId, AtomicInteger slotKey, String type, Object value){
 		if(value!=null){
-			String newContainer = containerId  ;
-			builder.addValue(dataSourceId, containerId, slotKey, value);
+			String newContainer = containerId + "/" + type;
+			builder.addContainer(dataSourceId, containerId, slotKey.getAndIncrement(), newContainer );
+			builder.addType(dataSourceId, newContainer, type);
+			builder.addValue(dataSourceId, newContainer, 1, value);
+
 		}
 	}
 
@@ -48,7 +55,6 @@ public class PptxTriplifier implements Triplifier {
 		if (url == null)
 			return;
 		String dataSourceId = "";
-		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 
 		builder.addRoot(dataSourceId);
 
@@ -61,14 +67,16 @@ public class PptxTriplifier implements Triplifier {
 
 			for(XSLFSlide slide : slides.getSlides()){
 				String slideId = dataSourceId + "_slide_" + slideNumber;
-				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, 1, slideId);
+				builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, slideId, slideId);
 				slideNumber ++;
 
+				AtomicInteger slideSlotNumber = new AtomicInteger(1);
+
 				builder.addType(dataSourceId, slideId, "Slide");
-				addOptionalValue(builder, dataSourceId, slideId, "title", "Title", slide.getTitle() );
-				addOptionalValue(builder, dataSourceId, slideId, "name","SlideName", slide.getSlideName() );
-				addOptionalValue(builder, dataSourceId, slideId, "number", "SlideNumber", slide.getSlideNumber() );
-//				addOptionalValue(builder, dataSourceId, slideId, "number", slide.get );
+				addOptionalValue(builder, dataSourceId, slideId, slideSlotNumber, "Title", slide.getTitle() );
+				addOptionalValue(builder, dataSourceId, slideId, slideSlotNumber,"SlideName", slide.getSlideName() );
+				addOptionalValue(builder, dataSourceId, slideId, slideSlotNumber, "SlideNumber", slide.getSlideNumber() );
+//				addOptionalValue(builder, dataSourceId, slideId, slideSlotNumber, "SlideNumber", slide.get );
 
 
 			}
