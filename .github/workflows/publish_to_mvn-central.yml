@@ -29,7 +29,8 @@ jobs:
             # https://gist.github.com/sualeh/ae78dc16123899d7942bc38baba5203c
             echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}" | gpg --batch --import 
             gpg --list-secret-keys --keyid-format LONG
-            mvn --batch-mode clean deploy  -Drevision=${{ github.ref_name }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
+            # mvn --batch-mode deploy  -Drevision=${{ github.ref_name }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
+            mvn --batch-mode clean deploy  -Drevision=0.9.0-SNAPSHOT -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
