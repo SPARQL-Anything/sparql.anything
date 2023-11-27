@@ -37,7 +37,7 @@ public class PptxTriplifier implements Triplifier {
 
 	private static void addOptionalValue(FacadeXGraphBuilder builder, String dataSourceId, String containerId, String slotKey, String type, Object value){
 		if(value!=null){
-			String newContainer = containerId + "/" +
+			String newContainer = containerId  ;
 			builder.addValue(dataSourceId, containerId, slotKey, value);
 		}
 	}
@@ -65,10 +65,10 @@ public class PptxTriplifier implements Triplifier {
 				slideNumber ++;
 
 				builder.addType(dataSourceId, slideId, "Slide");
-				addOptionalValue(builder, dataSourceId, slideId, "title", slide.getTitle() );
-				addOptionalValue(builder, dataSourceId, slideId, "name", slide.getSlideName() );
-				addOptionalValue(builder, dataSourceId, slideId, "number", slide.getSlideNumber() );
-				addOptionalValue(builder, dataSourceId, slideId, "number", slide.get );
+				addOptionalValue(builder, dataSourceId, slideId, "title", "Title", slide.getTitle() );
+				addOptionalValue(builder, dataSourceId, slideId, "name","SlideName", slide.getSlideName() );
+				addOptionalValue(builder, dataSourceId, slideId, "number", "SlideNumber", slide.getSlideNumber() );
+//				addOptionalValue(builder, dataSourceId, slideId, "number", slide.get );
 
 
 			}
