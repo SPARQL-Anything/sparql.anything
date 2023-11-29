@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.transform.Result;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -45,7 +46,7 @@ public class ItTest {
 	public void RegistryExtensionsTest() {
 		for (String ext : new String[]{"json", "html", "xml", "csv", "bin", "png", "jpeg", "jpg", "bmp", "tiff",
 				"tif", "ico", "txt", "xlsx", "xls", "rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix", "trdf",
-				"zip", "tar", "docx", "bib", "bibtex"}) {
+				"zip", "tar", "docx", "bib", "bibtex", "pptx"}) {
 			Assert.assertNotNull(ext, FacadeX.Registry.getTriplifierForExtension(ext));
 		}
 	}
@@ -59,7 +60,7 @@ public class ItTest {
 				"application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle",
 				"application/rdf+xml", "application/n-triples", "application/ld+json", "application/zip",
 				"application/x-tar", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-				"application/x-bibtex"}) {
+				"application/x-bibtex", "application/vnd.openxmlformats-officedocument.presentationml.presentation"}) {
 			Assert.assertNotNull(mt, FacadeX.Registry.getTriplifierForMimeType(mt));
 		}
 	}
@@ -387,6 +388,28 @@ public class ItTest {
 	}
 
 	@Test
+	public void testPptx() throws  URISyntaxException {
+		String pptx = Objects.requireNonNull(getClass().getClassLoader().getResource("Presentation1.pptx")).toURI().toString();
+
+		String q = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT * {SERVICE <x-sparql-anything:> {  fx:properties fx:location ?location .  ?title a xyz:CENTERED_TITLE ; rdf:_1 ?o} }";
+
+		ParameterizedSparqlString pss = new ParameterizedSparqlString(q);
+		pss.setIri("location", pptx);
+		Dataset kb = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		ResultSet rs = QueryExecutionFactory.create(pss.asQuery(), kb).execSelect();
+
+		String res = null;
+
+		if (rs.hasNext()) {
+			res = rs.next().get("o").asLiteral().getValue().toString();
+		}
+		assertEquals("This is a test presentation", res);
+
+	}
+
+	@Test
 	public void testXIP() throws IOException, URISyntaxException {
 		String archive = getClass().getClassLoader().getResource("test.tar").toURI().toString();
 
@@ -518,6 +541,8 @@ public class ItTest {
 		assertEquals("Literate Programming", title);
 
 	}
+
+
 
 	@Test
 	public void testAnySlotMagicPropertyPropertyPath() throws IOException, URISyntaxException {

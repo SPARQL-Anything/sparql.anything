@@ -107,6 +107,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.github.sparql-anything</groupId>
+			<artifactId>sparql-anything-slides</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
 		<dependency>
 			<groupId>commons-cli</groupId>

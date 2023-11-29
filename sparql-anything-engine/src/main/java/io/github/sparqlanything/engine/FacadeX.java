@@ -67,6 +67,7 @@ public final class FacadeX {
 			Registry.registerTriplifier("io.github.sparqlanything.spreadsheet.SpreadsheetTriplifier", new String[]{"xls", "xlsx"}, new String[]{"application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
 			Registry.registerTriplifier(RDFTriplifier.class.getCanonicalName(), new String[]{"rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix", "trdf"}, new String[]{"application/rdf+thrift", "application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle", "application/rdf+xml", "application/n-triples", "application/ld+json"});
 			Registry.registerTriplifier("io.github.sparqlanything.binary.BinaryTriplifier", new String[]{"png", "jpeg", "jpg", "bmp", "tiff", "tif", "ico"}, new String[]{"image/png", "image/jpeg", "image/bmp", "image/tiff", "image/vnd.microsoft.icon"});
+			Registry.registerTriplifier("io.github.sparqlanything.slides.PptxTriplifier", new String[]{"pptx"}, new String[]{"application/vnd.openxmlformats-officedocument.presentationml.presentation"});
 
 		} catch (TriplifierRegisterException e) {
 			throw new RuntimeException(e);
