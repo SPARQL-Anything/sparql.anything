@@ -1725,7 +1725,7 @@ b5,E
 
 Result
 
-```
+```turtle
 @prefix ex:   <http://example/> .
 @prefix fx:   <http://sparql.xyz/facade-x/ns/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
