@@ -68,7 +68,7 @@ This property matches the RDF container membership properties (e.g. ``rdf:_1``, 
 
 Query 
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
