@@ -26,6 +26,7 @@ nav:
       - RDF: 'formats/RDF_Files.md'
       - Spreadsheet: 'formats/Spreadsheet.md'
       - Word: 'formats/Word_Processing_Document.md'
+      - Slides: 'formats/Slides.md'
 extra_css: [styles.css]
 sticky_navigation: true
 markdown_extensions:
