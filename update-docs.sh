@@ -21,6 +21,7 @@ git add formats/*
 cp -f README.md docs/
 cp -f Facade-X.md docs/
 cp -f facade-x-ER.png docs/
+cp -f Grammar.jpg docs/
 cp -f BROWSER.md docs/
 cp -f Configuration.md docs/
 cp -f FUNCTIONS_AND_MAGIC_PROPERTIES.md docs/
