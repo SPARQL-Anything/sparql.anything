@@ -68,7 +68,7 @@ This property matches the RDF container membership properties (e.g. ``rdf:_1``, 
 
 Query 
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -114,7 +114,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -159,7 +159,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
@@ -194,7 +194,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -236,7 +236,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -278,7 +278,7 @@ Container membership property
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -323,7 +323,7 @@ Container membership property
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -368,7 +368,7 @@ Container membership property
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -414,7 +414,7 @@ Container membership property
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -461,7 +461,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -501,7 +501,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -541,7 +541,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -581,7 +581,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -621,7 +621,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -661,7 +661,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -701,7 +701,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -741,7 +741,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -781,7 +781,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -799,7 +799,7 @@ WHERE
 
 Result
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -829,7 +829,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -869,7 +869,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -909,7 +909,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -953,7 +953,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -993,7 +993,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1033,7 +1033,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1074,7 +1074,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1114,7 +1114,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1157,7 +1157,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1197,7 +1197,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1237,7 +1237,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1277,7 +1277,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1318,7 +1318,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1358,7 +1358,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1403,7 +1403,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1442,7 +1442,7 @@ String, The name of a supported character [encoding](https://docs.oracle.com/en/
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1486,7 +1486,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1520,7 +1520,7 @@ Result
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1572,7 +1572,7 @@ URI Node
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1616,7 +1616,7 @@ Literal node
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1645,7 +1645,7 @@ Result
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1685,7 +1685,7 @@ Blank node
 
 #### Example
 
-```
+```sparql
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  ex:   <http://example/>
@@ -1725,7 +1725,7 @@ b5,E
 
 Result
 
-```
+```turtle
 @prefix ex:   <http://example/> .
 @prefix fx:   <http://sparql.xyz/facade-x/ns/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -1761,7 +1761,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1791,7 +1791,7 @@ Double
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1821,7 +1821,7 @@ Double
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1851,7 +1851,7 @@ Double
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1881,7 +1881,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1913,7 +1913,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1944,7 +1944,7 @@ Double
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
