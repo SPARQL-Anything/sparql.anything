@@ -5,6 +5,7 @@ edit_uri: null
 site_description: SPARQL Anything online documentation
 theme:
   name: readthedocs
+  logo: logo.png
 nav:
   - Reference:
     - Introduction: 'README.md'
