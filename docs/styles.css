@@ -47,6 +47,7 @@ div.rst-content table.field-list thead
     background-size: 150px;
     width: 151px;
     background-repeat: no-repeat;
+    color: rgba(0, 0, 0, 0);
 }
 
 .wy-side-nav-search {
