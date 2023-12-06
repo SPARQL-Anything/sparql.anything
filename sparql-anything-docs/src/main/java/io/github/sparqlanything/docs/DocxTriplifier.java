@@ -51,7 +51,7 @@ public class DocxTriplifier implements Triplifier {
 		if (url == null)
 			return;
 
-		String dataSourceId = "";
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		boolean mergeParagraphs = Boolean.parseBoolean(properties.getProperty(MERGE_PARAGRAPHS, "false"));
 		boolean headers = Boolean.parseBoolean(properties.getProperty(TABLE_HEADERS, "false"));
