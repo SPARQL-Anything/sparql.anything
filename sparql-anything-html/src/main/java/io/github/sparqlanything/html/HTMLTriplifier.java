@@ -82,7 +82,7 @@ public class HTMLTriplifier implements Triplifier {
 		boolean blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
-		String dataSourceId = "";
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 
 		log.trace(properties.toString());
 		if (properties.containsKey(PROPERTY_METADATA) && Boolean.parseBoolean(properties.getProperty(PROPERTY_METADATA))) {

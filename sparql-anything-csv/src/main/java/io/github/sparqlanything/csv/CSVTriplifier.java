@@ -57,11 +57,11 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		// Add type Root
 		builder.addRoot(dataSourceId);
 
-		try (InputStream is = Triplifier.getInputStream(properties)) {
-			Reader in = new InputStreamReader(new BOMInputStream(is), charset);
+		try (InputStream is = Triplifier.getInputStream(properties); Reader in = new InputStreamReader(new BOMInputStream(is), charset)) {
+
 			Iterable<CSVRecord> records = format.parse(in);
 			Iterator<CSVRecord> recordIterator = records.iterator();
-			LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties, format, charset);
+			LinkedHashMap<Integer, String> headers_map = makeHeadersMapFromOpenIterator(recordIterator, properties, format, charset);
 
 			log.debug("Iterating records");
 			int rown = 0;
@@ -115,19 +115,25 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		return format;
 	}
 
-	public LinkedHashMap<Integer, String> makeHeadersMap(Iterator<CSVRecord> recordIterator, Properties properties, CSVFormat format, Charset charset) throws TriplifierHTTPException, IOException {
+	public LinkedHashMap<Integer, String> makeHeadersMapFromOpenIterator(Iterator<CSVRecord> recordIterator, Properties properties, CSVFormat format, Charset charset) throws TriplifierHTTPException, IOException {
 		int headersRow = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
 		Iterator<CSVRecord> iterator = recordIterator;
 		if (headersRow > 0) {
 			Reader in = new InputStreamReader(new BOMInputStream(Triplifier.getInputStream(properties)), charset);
 			Iterable<CSVRecord> records = format.parse(in);
 			iterator = records.iterator();
+			LinkedHashMap<Integer, String> headers_map = makeHeadersMapFromOpenIterator(properties, headersRow, iterator);
+			in.close();
+			return headers_map;
 		}
-		int rowNumber = 1;
+		return makeHeadersMapFromOpenIterator(properties, headersRow, iterator);
+	}
 
+	private static LinkedHashMap<Integer, String> makeHeadersMapFromOpenIterator(Properties properties, int headersRow, Iterator<CSVRecord> iterator) {
+		int rowNumber = 1;
 		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
 		if (hasHeaders(properties) && iterator.hasNext()) {
-			while(rowNumber!=headersRow && iterator.hasNext()){
+			while(rowNumber!= headersRow && iterator.hasNext()){
 				rowNumber ++;
 				iterator.next();
 			}
@@ -209,7 +215,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 		Iterable<CSVRecord> records = format.parse(in);
 		final Iterator<CSVRecord> recordIterator = records.iterator();
-		final LinkedHashMap<Integer, String> headers_map = makeHeadersMap(recordIterator, properties, format, charset);
+		final LinkedHashMap<Integer, String> headers_map = makeHeadersMapFromOpenIterator(recordIterator, properties, format, charset);
 
 		return new Iterable<Slice>() {
 			@Override
@@ -221,7 +227,16 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 					@Override
 					public boolean hasNext() {
-						return recordIterator.hasNext();
+						boolean hasNext = recordIterator.hasNext();
+						if(!hasNext){
+							try {
+								in.close();
+								is.close();
+							} catch (IOException e) {
+								throw new RuntimeException(e);
+							}
+						}
+						return hasNext;
 					}
 
 					@Override
