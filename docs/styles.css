@@ -46,9 +46,9 @@ div.rst-content table.field-list thead
 .wy-side-nav-search a:link,
 .wy-side-nav-search a {
     background-image: url(https://raw.githubusercontent.com/SPARQL-Anything/sparql.anything/v0.9-DEV/docs/logo.png);
-    height: 150px;
-    background-size: 150px;
-    width: 151px;
+    height: 200px;
+    background-size: 200px;
+    width: 200px;
     background-repeat: no-repeat;
     color: rgba(0, 0, 0, 0);
 }
