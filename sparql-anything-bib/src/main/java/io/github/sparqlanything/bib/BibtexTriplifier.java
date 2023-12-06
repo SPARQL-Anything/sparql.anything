@@ -49,10 +49,9 @@ public class BibtexTriplifier implements Triplifier {
 
 		builder.addRoot(dataSourceId);
 
-		try (InputStream is = Triplifier.getInputStream(properties)){
+		try (InputStream is = Triplifier.getInputStream(properties); Reader reader = new InputStreamReader(is)){
 
 			BibTeXParser bibtexParser = new BibTeXParser();
-			Reader reader = new InputStreamReader(is);
 			BibTeXDatabase bibDB = bibtexParser.parse(reader);
 			AtomicInteger count = new AtomicInteger();
 			bibDB.getEntries().forEach((key, entry) -> {
