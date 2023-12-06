@@ -40,7 +40,10 @@ div.rst-content table.field-list thead
     display: inline-table;
 }
 
-
+.wy-side-nav-search a:hover,
+.wy-side-nav-search a:visited,
+.wy-side-nav-search a:active,
+.wy-side-nav-search a:link,
 .wy-side-nav-search a {
     background-image: url(https://raw.githubusercontent.com/SPARQL-Anything/sparql.anything/v0.9-DEV/docs/logo.png);
     height: 150px;
