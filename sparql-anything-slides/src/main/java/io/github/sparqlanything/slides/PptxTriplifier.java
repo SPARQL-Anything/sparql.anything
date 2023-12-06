@@ -46,10 +46,8 @@ public class PptxTriplifier implements Triplifier {
 
 		builder.addRoot(dataSourceId);
 
-		InputStream is = url.openStream();
-		int slideNumber = 1;
-
-		try (XMLSlideShow slides = new XMLSlideShow(is)) {
+		try (InputStream is = url.openStream(); XMLSlideShow slides = new XMLSlideShow(is)) {
+			int slideNumber = 1;
 
 			builder.addType(dataSourceId, SPARQLAnythingConstants.ROOT_ID, "Presentation");
 
@@ -67,6 +65,7 @@ public class PptxTriplifier implements Triplifier {
 				}
 
 			}
+
 		}
 
 
