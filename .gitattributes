@@ -2,3 +2,7 @@
 
 # Denote all files that are truly binary and should not be modified.
 *.pptx binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+
