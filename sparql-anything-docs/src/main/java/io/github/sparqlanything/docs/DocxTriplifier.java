@@ -58,8 +58,7 @@ public class DocxTriplifier implements Triplifier {
 
 		builder.addRoot(dataSourceId);
 
-		InputStream is = url.openStream();
-		try (XWPFDocument document = new XWPFDocument(is)) {
+		try (InputStream is = url.openStream(); XWPFDocument document = new XWPFDocument(is)) {
 			List<XWPFParagraph> paragraphs = document.getParagraphs();
 
 			builder.addType(dataSourceId, SPARQLAnythingConstants.ROOT_ID,  "Document");
@@ -149,7 +148,6 @@ public class DocxTriplifier implements Triplifier {
 			}
 		}
 
-		is.close();
 	}
 
 	@Override
