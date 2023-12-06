@@ -227,7 +227,16 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 					@Override
 					public boolean hasNext() {
-						return recordIterator.hasNext();
+						boolean hasNext = recordIterator.hasNext();
+						if(!hasNext){
+							try {
+								in.close();
+								is.close();
+							} catch (IOException e) {
+								throw new RuntimeException(e);
+							}
+						}
+						return hasNext;
 					}
 
 					@Override
