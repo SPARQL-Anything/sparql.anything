@@ -36,13 +36,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PptxTriplifier implements Triplifier {
 
-	private static final Logger logger = LoggerFactory.getLogger(PptxTriplifier.class);
+//	private static final Logger logger = LoggerFactory.getLogger(PptxTriplifier.class);
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 		URL url = Triplifier.getLocation(properties);
 		if (url == null) return;
-		String dataSourceId = "";
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 
 		builder.addRoot(dataSourceId);
 
