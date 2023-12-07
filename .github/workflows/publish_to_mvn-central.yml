@@ -3,7 +3,7 @@ on:
 #  push:
 #    branches: [ v0.9-DEV ]
   release:
-    types: [created]
+    types: [published]
 jobs:
   publish:
     runs-on: ubuntu-latest
