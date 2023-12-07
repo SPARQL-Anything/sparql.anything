@@ -29,7 +29,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<antlr4.visitor>true</antlr4.visitor>
 		<antlr4.listener>true</antlr4.listener>
-		<revision>0.9.0-SNAPSHOT</revision>	
+		<revision>1.0.0-SNAPSHOT</revision>
 	</properties>
 
 
