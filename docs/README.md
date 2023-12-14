@@ -530,6 +530,12 @@ usage: java -jar sparql-anything-server-<version>.jar [-p port] [-e
 
 Also a docker image can be used by following the instructions [here](BROWSER.md).
 
+### Java Library
+
+SPARQL Anything is available on [Maven Central](https://central.sonatype.com/search?namespace=io.github.sparql-anything).
+To use it as a Java library please follows the instructions [here](JAVA_LIBRARY.md)
+
+
 ### Python Library
 
 You can use SPARQL Anything as a Python library, see
