@@ -84,16 +84,16 @@ WHERE
 
 ### Summary
 
-| Option name             | Description                                                                   | Valid Values | Default Value |
-|-------------------------|-------------------------------------------------------------------------------|--------------|---------------|
-| slides.extract-sections | It tells the document triplifier to extract the sections of the presentation. | true/false   | false         |
+| Option name             | Description                                                                             | Valid Values | Default Value |
+|-------------------------|-----------------------------------------------------------------------------------------|--------------|---------------|
+| slides.extract-sections | It tells the document triplifier to extract the sections of the presentation (see #435) | true/false   | false         |
 
 
 ### `slides.extract-sections`
 
 #### Description
 
-It tells the document triplifier to extract the sections of the presentation.
+It tells the document triplifier to extract the sections of the presentation (see #435)
 
 #### Valid Values
 
