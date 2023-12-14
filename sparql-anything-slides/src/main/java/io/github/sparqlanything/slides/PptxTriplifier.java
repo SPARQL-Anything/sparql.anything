@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PptxTriplifier implements Triplifier {
 
 
-	public static final IRIArgument EXTRACT_SECTIONS = new IRIArgument("slides.extract.sections", "false");
+	public static final IRIArgument EXTRACT_SECTIONS = new IRIArgument("slides.extract-sections", "false");
 
 	/**
 	 * See https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint
