@@ -22,7 +22,7 @@ Otherwise, if you only want to use one triplifier of a format (e.g. the JSON tri
 </dependency>
 ```
 
-A maven project showing how to SPARQL Anything as a Java library is available [here](https://github.com/SPARQL-Anything/JavaClientExample).
+
 
 ## Using via SPARQL
 
@@ -81,6 +81,8 @@ which prints
 -----------------------------------------------
 ```
 
+A maven project showing how to SPARQL Anything as a Java library is available [here](https://github.com/SPARQL-Anything/JavaClientExample).
+
 ## Using via Triplifier API
 
 You can also simply use the SPARQL Anything Triplifiers to transform a resource into an RDF dataset.
@@ -122,9 +124,76 @@ public class SPARQLAnythingClientViaTriplifier {
         DatasetGraph datasetGraph = builder.getDatasetGraph();
 
         // Use the Facade-X DatasetGraph via the Jena APIs
-        RDFDataMgr.write(System.out, datasetGraph, Lang.NQ);
+        RDFDataMgr.write(System.out, datasetGraph, Lang.TRIG);
 
 
     }
 }
 ```
+
+which prints
+
+```
+_:b0    a       <http://sparql.xyz/facade-x/ns/root> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                _:b1 ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                _:b2 ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                _:b3 .
+
+_:b3    <http://sparql.xyz/facade-x/data/movie>
+                "Kill Bill" ;
+        <http://sparql.xyz/facade-x/data/name>
+                "Beatrix" ;
+        <http://sparql.xyz/facade-x/data/surname>
+                "Kiddo" .
+
+_:b2    <http://sparql.xyz/facade-x/data/movie>
+                "Pulp fiction" ;
+        <http://sparql.xyz/facade-x/data/name>
+                "Winnfield" ;
+        <http://sparql.xyz/facade-x/data/surname>
+                "Vega" .
+
+_:b1    <http://sparql.xyz/facade-x/data/movie>
+                "Pulp fiction" ;
+        <http://sparql.xyz/facade-x/data/name>
+                "Vincent" ;
+        <http://sparql.xyz/facade-x/data/surname>
+                "Vega" .
+
+<https://sparql-anything.cc/examples/simpleArray.json#> {
+    _:b0    a       <http://sparql.xyz/facade-x/ns/root> ;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                    _:b1 ;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                    _:b2 ;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                    _:b3 .
+    
+    _:b3    <http://sparql.xyz/facade-x/data/movie>
+                    "Kill Bill" ;
+            <http://sparql.xyz/facade-x/data/name>
+                    "Beatrix" ;
+            <http://sparql.xyz/facade-x/data/surname>
+                    "Kiddo" .
+    
+    _:b2    <http://sparql.xyz/facade-x/data/movie>
+                    "Pulp fiction" ;
+            <http://sparql.xyz/facade-x/data/name>
+                    "Winnfield" ;
+            <http://sparql.xyz/facade-x/data/surname>
+                    "Vega" .
+    
+    _:b1    <http://sparql.xyz/facade-x/data/movie>
+                    "Pulp fiction" ;
+            <http://sparql.xyz/facade-x/data/name>
+                    "Vincent" ;
+            <http://sparql.xyz/facade-x/data/surname>
+                    "Vega" .
+}
+```
+
+
+A maven project showing how to SPARQL Anything as a Java library is available [here](https://github.com/SPARQL-Anything/JavaClientViaTriplifiers).
