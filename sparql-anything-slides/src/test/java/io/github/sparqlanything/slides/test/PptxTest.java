@@ -21,10 +21,25 @@ public class PptxTest extends AbstractTriplifierTester {
 
 	public PptxTest() {
 		super(new PptxTriplifier(), new Properties(), "pptx");
+		this.printWholeGraph = true;
 	}
+
+	@Override
+	protected void properties(Properties properties) {
+
+		if (name.getMethodName().equals("testPresentation2")) {
+			properties.setProperty(PptxTriplifier.EXTRACT_SECTIONS.toString(), "true");
+		}
+	}
+
 
 	@Test
 	public void testPresentation1() {
+		this.assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testPresentation2() {
 		this.assertResultIsIsomorphicWithExpected();
 	}
 }
