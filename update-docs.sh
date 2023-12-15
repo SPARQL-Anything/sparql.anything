@@ -16,10 +16,12 @@
 # limitations under the License.
 #
 
-git add README.md CLI.md Facade-X.md facade-x-ER.png .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
+git add README.md CLI.md EXTENSION_MECHANISMS.md JAVA_LIBRARY.md Facade-X.md facade-x-ER.png .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
 git add formats/*
 cp -f README.md docs/
+cp -f EXTENSION_MECHANISMS.md docs/
 cp -f Facade-X.md docs/
+cp -f JAVA_LIBRARY.md docs/
 cp -f facade-x-ER.png docs/
 cp -f Grammar.jpg docs/
 cp -f BROWSER.md docs/
@@ -30,5 +32,5 @@ cp -f A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md docs/
 cp -f LICENSE docs/
 cp -r formats docs/
 git add docs/*
-git commit -m "Update documentation #201 $1"
+git commit -m "#201 Update documentation '$1'"
 git push

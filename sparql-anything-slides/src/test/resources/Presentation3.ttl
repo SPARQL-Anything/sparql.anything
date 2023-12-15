@@ -60,7 +60,8 @@ eg:document  rdf:type  xyz:Presentation , fx:root ;
 
 <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1>
         rdf:type  xyz:TextRun ;
-        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text> .
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text> ;
+        rdf:_2    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Hyperlink> .
 
 <http://www.example.org/document/Slide_1/CENTERED_TITLE_1/Paragraph_1/TextRun_1>
         rdf:type  xyz:TextRun ;
@@ -73,7 +74,7 @@ eg:document  rdf:type  xyz:Presentation , fx:root ;
 
 <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text>
         rdf:type  xyz:Text ;
-        rdf:_1    "Bullet 1" .
+        rdf:_1    "Link" .
 
 <http://www.example.org/document/Slide_1/SUBTITLE_2/Paragraph_1>
         rdf:type  xyz:Paragraph ;
@@ -95,6 +96,10 @@ eg:document  rdf:type  xyz:Presentation , fx:root ;
 <http://www.example.org/document/Slide_3/TITLE_1>
         rdf:type  xyz:TITLE ;
         rdf:_1    <http://www.example.org/document/Slide_3/TITLE_1/Paragraph_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Hyperlink>
+        rdf:type  xyz:Hyperlink ;
+        rdf:_1    "https://sparql-anything.cc/" .
 
 <http://www.example.org/document/Slide_3>
         rdf:type  xyz:Slide ;

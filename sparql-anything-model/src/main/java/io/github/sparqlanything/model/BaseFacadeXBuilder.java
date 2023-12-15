@@ -79,7 +79,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addRoot(String dataSourceId) {
-		return add(dataSourceId2node(dataSourceId), container2node("", dataSourceId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
+		return add(dataSourceId2node(dataSourceId), container2node(SPARQLAnythingConstants.ROOT_ID, dataSourceId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
 	}
 
 	private boolean addSlotStatement(String dataSourceId, String containerId, Integer slotKey, Object object, boolean isObjectContainer) {

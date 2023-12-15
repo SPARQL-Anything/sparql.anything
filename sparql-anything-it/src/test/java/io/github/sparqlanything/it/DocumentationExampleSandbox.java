@@ -212,7 +212,7 @@ public class DocumentationExampleSandbox {
 	}
 
 	public static void slides() {
-		String queryString = "CONSTRUCT { ?s ?p ?o   } WHERE  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Presentation1.pptx> {       GRAPH ?g { ?s  ?p  ?o } }  } ";
+		String queryString = "CONSTRUCT { ?s ?p ?o   } WHERE  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Presentation2.pptx,slides.extract-sections=true> {       GRAPH ?g { ?s  ?p  ?o } }  } ";
 		System.out.println(queryString);
 		Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
 
