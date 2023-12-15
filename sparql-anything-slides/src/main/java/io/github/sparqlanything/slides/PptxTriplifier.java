@@ -18,9 +18,7 @@ package io.github.sparqlanything.slides;
 
 import io.github.sparqlanything.model.*;
 import org.apache.commons.compress.utils.Sets;
-import org.apache.poi.xslf.usermodel.XMLSlideShow;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
-import org.apache.poi.xslf.usermodel.XSLFTextShape;
+import org.apache.poi.xslf.usermodel.*;
 import org.apache.xmlbeans.XmlObject;
 import org.openxmlformats.schemas.presentationml.x2006.main.CTExtensionList;
 import org.openxmlformats.schemas.presentationml.x2006.main.CTPresentation;
@@ -41,7 +39,7 @@ public class PptxTriplifier implements Triplifier {
 	public static final IRIArgument EXTRACT_SECTIONS = new IRIArgument("slides.extract-sections", "false");
 
 	/**
-	 * See https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint
+	 * See <a href="https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint">...</a>
 	 */
 	private static void extractSections(FacadeXGraphBuilder builder, String dataSourceId, String rootId, XMLSlideShow presentation) {
 		int sectionNumber = 1;
@@ -74,21 +72,71 @@ public class PptxTriplifier implements Triplifier {
 
 	private static void addSlide(FacadeXGraphBuilder builder, String dataSourceId, String parentContainer, XSLFSlide slide, int slideNumber, String sectionId) {
 
+		// Create a container for the slide
 		String slideId = "/Slide_" + slideNumber;
 		if (sectionId != null) {
 			slideId = sectionId + slideId;
 		}
 		builder.addContainer(dataSourceId, parentContainer, slideNumber, slideId);
-		AtomicInteger slideSlotNumber = new AtomicInteger(1);
-//		addValue(builder, dataSourceId, slideId, slideSlotNumber, "SlideNumber", slideNumber);
 		builder.addType(dataSourceId, slideId, "Slide");
+		//	addValue(builder, dataSourceId, slideId, slideSlotNumber, "SlideNumber", slideNumber);
+
+		// Fill slots of the slide with shapes
+		AtomicInteger slideSlotNumber = new AtomicInteger(1);
 		for (XSLFTextShape shape : slide.getPlaceholders()) {
-			addOptionalValue(builder, dataSourceId, slideId, slideSlotNumber, shape.getTextType().toString(), shape.getText());
+			addShape(builder, dataSourceId, slideId, slideSlotNumber, shape);
+		}
+	}
+
+	private static void addShape(FacadeXGraphBuilder builder, String dataSourceId, String slideId, AtomicInteger slideSlotNumber, XSLFTextShape shape) {
+		// Create a container for the shape
+		String shapeId = slideId + "/" + shape.getTextType().toString() + "_" + slideSlotNumber.get();
+		builder.addType(dataSourceId, shapeId, shape.getTextType().toString());
+		builder.addContainer(dataSourceId, slideId, slideSlotNumber.get(), shapeId);
+		slideSlotNumber.incrementAndGet();
+
+		// Fill slots of the shape with paragraphs
+		AtomicInteger shapeSlotNumber = new AtomicInteger(1);
+		for (XSLFTextParagraph paragraph : shape.getTextParagraphs()) {
+			addParagraph(builder, dataSourceId, shapeId, shapeSlotNumber, paragraph);
+		}
+	}
+
+	private static void addParagraph(FacadeXGraphBuilder builder, String dataSourceId, String shapeId, AtomicInteger shapeSlotNumber, XSLFTextParagraph paragraph) {
+		// Create a container for the paragraph
+		String paragraphId = shapeId + "/Paragraph_" + shapeSlotNumber.get();
+		builder.addType(dataSourceId, paragraphId, "Paragraph");
+		builder.addContainer(dataSourceId, shapeId, shapeSlotNumber.get(), paragraphId);
+		shapeSlotNumber.incrementAndGet();
+
+		// Fill slot paragraphs with text runs
+		AtomicInteger paragraphSlotNumber = new AtomicInteger(1);
+		for (XSLFTextRun textRun : paragraph.getTextRuns()) {
+			addTextRun(builder, dataSourceId, paragraphId, paragraphSlotNumber, textRun);
+		}
+	}
+
+	private static void addTextRun(FacadeXGraphBuilder builder, String dataSourceId, String paragraphId, AtomicInteger paragraphSlotNumber, XSLFTextRun textRun) {
+		// Create a container for the text run
+		String textRunId = paragraphId + "/TextRun_" + paragraphSlotNumber.get();
+		builder.addType(dataSourceId, textRunId, "TextRun");
+		builder.addContainer(dataSourceId, paragraphId, paragraphSlotNumber.get(), textRunId);
+		paragraphSlotNumber.incrementAndGet();
+
+		// Fill text run slot
+		AtomicInteger textRunSlotNumber = new AtomicInteger(1);
+
+		// Fill with raw text
+		addValue(builder, dataSourceId, textRunId, textRunSlotNumber, "Text", textRun.getRawText());
+
+		// Fill with hyperlink
+		if (textRun.getHyperlink() != null) {
+			addValue(builder, dataSourceId, textRunId, textRunSlotNumber, "Hyperlink", textRun.getHyperlink().getAddress());
 		}
 	}
 
 	/**
-	 * See https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint
+	 * See <a href="https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint">...</a>
 	 */
 	private static Long getSlideId(XSLFSlide slide) {
 		if (slide == null) return null;
@@ -113,8 +161,9 @@ public class PptxTriplifier implements Triplifier {
 		}
 		return result;
 	}
+
 	/**
-	 * See https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint
+	 * See <a href="https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint">...</a>
 	 */
 	private static XmlObject[] getSections(org.openxmlformats.schemas.presentationml.x2006.main.CTExtensionList extList) {
 		if (extList == null) return new XmlObject[0];
@@ -122,7 +171,7 @@ public class PptxTriplifier implements Triplifier {
 	}
 
 	/**
-	 * See https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint
+	 * See <a href="https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint">...</a>
 	 */
 	private static XmlObject[] getSectionSldIds(XmlObject section) {
 		if (section == null) return new XmlObject[0];
@@ -130,7 +179,7 @@ public class PptxTriplifier implements Triplifier {
 	}
 
 	/**
-	 * See https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint
+	 * See <a href="https://stackoverflow.com/questions/72947727/apache-poi-java-get-section-name-powerpoint">...</a>
 	 */
 	private static Long getSectionSldId(XmlObject sectionSldId) {
 		if (sectionSldId == null) return null;

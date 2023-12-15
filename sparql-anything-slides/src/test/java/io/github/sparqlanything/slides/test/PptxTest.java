@@ -40,4 +40,9 @@ public class PptxTest extends AbstractTriplifierTester {
 	public void testPresentation2() {
 		this.assertResultIsIsomorphicWithExpected();
 	}
+
+	@Test
+	public void testPresentation3 (){
+		this.assertResultIsIsomorphicWithExpected();
+	}
 }

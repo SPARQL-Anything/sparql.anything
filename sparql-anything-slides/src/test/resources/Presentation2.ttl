@@ -12,23 +12,119 @@
 @prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
+<http://www.example.org/document/Section_2/Slide_1/TITLE_1>
+        rdf:type  xyz:TITLE ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/TITLE_1/Paragraph_1> .
+
+<http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_2/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_2/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_2/Slide_1/TITLE_1/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/TITLE_1/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Section_1/SectionName>
+        rdf:type  xyz:SectionName ;
+        rdf:_1    "Default Section" .
+
+<http://www.example.org/document/Section_2/Slide_1/CONTENT_2>
+        rdf:type  xyz:CONTENT ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_1> ;
+        rdf:_2    <http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_2> .
+
+<http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Bullet 1" .
+
+<http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_2/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Bullet 2" .
+
+<http://www.example.org/document/Section_1/Slide_1/SUBTITLE_2/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_1/Slide_1/SUBTITLE_2/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Section_2/SectionName>
+        rdf:type  xyz:SectionName ;
+        rdf:_1    "First section" .
+
+<http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_2/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_2/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_2>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_2/TextRun_1> .
+
+<http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Bullet 1" .
+
+<http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_2>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_2/TextRun_1> .
+
+<http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_2/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Bullet 2" .
+
+<http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_2>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_2/TextRun_1> .
+
+<http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_2>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_2/TextRun_1> .
+
 <http://www.example.org/document/Section_2/Slide_1>
         rdf:type  xyz:Slide ;
-        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/TITLE> ;
-        rdf:_2    <http://www.example.org/document/Section_2/Slide_1/CONTENT> .
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/TITLE_1> ;
+        rdf:_2    <http://www.example.org/document/Section_2/Slide_1/CONTENT_2> .
 
-<http://www.example.org/document/Section_2/Slide_1/TITLE>
+<http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_3/Slide_1/TITLE_1/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/TITLE_1/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_3>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_3/Text> .
+
+<http://www.example.org/document/Section_3/Slide_1/TITLE_1>
         rdf:type  xyz:TITLE ;
-        rdf:_1    "First slide – first section" .
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/TITLE_1/Paragraph_1> .
 
-<http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE>
-        rdf:type  xyz:CENTERED_TITLE ;
-        rdf:_1    "This is a test presentation" .
+<http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE_1/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE_1/Paragraph_1/TextRun_1> .
 
-eg:document  rdf:type  xyz:Presentation , fx:root ;
-        rdf:_1    <http://www.example.org/document/Section_1> ;
-        rdf:_2    <http://www.example.org/document/Section_2> ;
-        rdf:_3    <http://www.example.org/document/Section_3> .
+<http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Bullet 1" .
 
 <http://www.example.org/document/Section_3>
         rdf:type  xyz:Section ;
@@ -36,77 +132,171 @@ eg:document  rdf:type  xyz:Presentation , fx:root ;
         rdf:_2    <http://www.example.org/document/Section_3/Slide_2> ;
         rdf:_3    <http://www.example.org/document/Section_3/SectionName> .
 
+<http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_2/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Bullet 2" .
+
+<http://www.example.org/document/Section_3/SectionName>
+        rdf:type  xyz:SectionName ;
+        rdf:_1    "Second Section" .
+
+<http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_2/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_2/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE_1/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE_1/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_1> ;
+        rdf:_2    <http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_2> ;
+        rdf:_3    <http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_3> .
+
+<http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_2>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_2/Text> .
+
+<http://www.example.org/document/Section_2/Slide_2/TITLE_1>
+        rdf:type  xyz:TITLE ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/TITLE_1/Paragraph_1> .
+
+<http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_2/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Bullet 2" .
+
+<http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Bullet 1" .
+
 <http://www.example.org/document/Section_2>
         rdf:type  xyz:Section ;
         rdf:_1    <http://www.example.org/document/Section_2/Slide_1> ;
         rdf:_2    <http://www.example.org/document/Section_2/Slide_2> ;
         rdf:_3    <http://www.example.org/document/Section_2/SectionName> .
 
-<http://www.example.org/document/Section_2/Slide_1/CONTENT>
-        rdf:type  xyz:CONTENT ;
-        rdf:_1    "Bullet 1\nBullet 2" .
+<http://www.example.org/document/Section_2/Slide_2/TITLE_1/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Second slide - first section" .
 
-<http://www.example.org/document/Section_2/SectionName>
-        rdf:type  xyz:SectionName ;
-        rdf:_1    "First section" .
+<http://www.example.org/document/Section_3/Slide_1/CONTENT_2>
+        rdf:type  xyz:CONTENT ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_1> ;
+        rdf:_2    <http://www.example.org/document/Section_3/Slide_1/CONTENT_2/Paragraph_2> .
+
+<http://www.example.org/document/Section_2/Slide_1/TITLE_1/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "First slide – first section" .
+
+<http://www.example.org/document/Section_1/Slide_1>
+        rdf:type  xyz:Slide ;
+        rdf:_1    <http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE_1> ;
+        rdf:_2    <http://www.example.org/document/Section_1/Slide_1/SUBTITLE_2> .
+
+<http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE_1>
+        rdf:type  xyz:CENTERED_TITLE ;
+        rdf:_1    <http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE_1/Paragraph_1> .
+
+<http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "Second slide " .
+
+<http://www.example.org/document/Section_3/Slide_1/TITLE_1/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/TITLE_1/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_1/Slide_1/SUBTITLE_2/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "This is the subtitle" .
+
+<http://www.example.org/document/Section_2/Slide_1/TITLE_1/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/TITLE_1/Paragraph_1/TextRun_1/Text> .
+
+eg:document  rdf:type  xyz:Presentation , fx:root ;
+        rdf:_1    <http://www.example.org/document/Section_1> ;
+        rdf:_2    <http://www.example.org/document/Section_2> ;
+        rdf:_3    <http://www.example.org/document/Section_3> .
 
 <http://www.example.org/document/Section_1>
         rdf:type  xyz:Section ;
         rdf:_1    <http://www.example.org/document/Section_1/Slide_1> ;
         rdf:_2    <http://www.example.org/document/Section_1/SectionName> .
 
-<http://www.example.org/document/Section_3/Slide_2/TITLE>
-        rdf:type  xyz:TITLE ;
-        rdf:_1    "Second slide - second section" .
-
-<http://www.example.org/document/Section_2/Slide_2/CONTENT>
+<http://www.example.org/document/Section_3/Slide_2/CONTENT_2>
         rdf:type  xyz:CONTENT ;
-        rdf:_1    "Bullet 1\nBullet 2" .
-
-<http://www.example.org/document/Section_2/Slide_2/TITLE>
-        rdf:type  xyz:TITLE ;
-        rdf:_1    "Second slide - first section" .
-
-<http://www.example.org/document/Section_1/Slide_1/SUBTITLE>
-        rdf:type  xyz:SUBTITLE ;
-        rdf:_1    "This is the subtitle" .
-
-<http://www.example.org/document/Section_1/SectionName>
-        rdf:type  xyz:SectionName ;
-        rdf:_1    "Default Section" .
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_1> ;
+        rdf:_2    <http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_2> .
 
 <http://www.example.org/document/Section_3/Slide_2>
         rdf:type  xyz:Slide ;
-        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/TITLE> ;
-        rdf:_2    <http://www.example.org/document/Section_3/Slide_2/CONTENT> .
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/TITLE_1> ;
+        rdf:_2    <http://www.example.org/document/Section_3/Slide_2/CONTENT_2> .
 
-<http://www.example.org/document/Section_3/SectionName>
-        rdf:type  xyz:SectionName ;
-        rdf:_1    "Second Section" .
+<http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_3/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "section" .
 
-<http://www.example.org/document/Section_3/Slide_1/CONTENT>
+<http://www.example.org/document/Section_1/Slide_1/SUBTITLE_2>
+        rdf:type  xyz:SUBTITLE ;
+        rdf:_1    <http://www.example.org/document/Section_1/Slide_1/SUBTITLE_2/Paragraph_1> .
+
+<http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_2/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_1/CONTENT_2/Paragraph_2/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1/TextRun_2/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "- second " .
+
+<http://www.example.org/document/Section_3/Slide_2/TITLE_1>
+        rdf:type  xyz:TITLE ;
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_2/TITLE_1/Paragraph_1> .
+
+<http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE_1/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
+        rdf:_1    "This is a test presentation" .
+
+<http://www.example.org/document/Section_2/Slide_2/CONTENT_2>
         rdf:type  xyz:CONTENT ;
-        rdf:_1    "Bullet 1\nBullet 2" .
-
-<http://www.example.org/document/Section_2/Slide_2>
-        rdf:type  xyz:Slide ;
-        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/TITLE> ;
-        rdf:_2    <http://www.example.org/document/Section_2/Slide_2/CONTENT> .
-
-<http://www.example.org/document/Section_1/Slide_1>
-        rdf:type  xyz:Slide ;
-        rdf:_1    <http://www.example.org/document/Section_1/Slide_1/CENTERED_TITLE> ;
-        rdf:_2    <http://www.example.org/document/Section_1/Slide_1/SUBTITLE> .
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_1> ;
+        rdf:_2    <http://www.example.org/document/Section_2/Slide_2/CONTENT_2/Paragraph_2> .
 
 <http://www.example.org/document/Section_3/Slide_1>
         rdf:type  xyz:Slide ;
-        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/TITLE> ;
-        rdf:_2    <http://www.example.org/document/Section_3/Slide_1/CONTENT> .
+        rdf:_1    <http://www.example.org/document/Section_3/Slide_1/TITLE_1> ;
+        rdf:_2    <http://www.example.org/document/Section_3/Slide_1/CONTENT_2> .
 
-<http://www.example.org/document/Section_3/Slide_1/TITLE>
-        rdf:type  xyz:TITLE ;
+<http://www.example.org/document/Section_1/Slide_1/SUBTITLE_2/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_1/Slide_1/SUBTITLE_2/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_3/Slide_1/TITLE_1/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text ;
         rdf:_1    "First slide – second section" .
 
-<http://www.example.org/document/Section_3/Slide_2/CONTENT>
-        rdf:type  xyz:CONTENT ;
-        rdf:_1    "Bullet 1\nBullet 2" .
+<http://www.example.org/document/Section_2/Slide_2/TITLE_1/Paragraph_1>
+        rdf:type  xyz:Paragraph ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/TITLE_1/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Section_2/Slide_2/TITLE_1/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/TITLE_1/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Section_2/Slide_2>
+        rdf:type  xyz:Slide ;
+        rdf:_1    <http://www.example.org/document/Section_2/Slide_2/TITLE_1> ;
+        rdf:_2    <http://www.example.org/document/Section_2/Slide_2/CONTENT_2> .
