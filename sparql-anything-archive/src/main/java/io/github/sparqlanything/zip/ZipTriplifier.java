@@ -60,6 +60,8 @@ public class ZipTriplifier implements Triplifier {
 				i++;
 			}
 		}
+
+		zis.close();
 	}
 
 	@Override

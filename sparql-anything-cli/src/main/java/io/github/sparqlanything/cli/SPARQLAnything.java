@@ -112,12 +112,10 @@ public class SPARQLAnything {
 					break;
 				case "TEXT":
 					pw.print(createQueryExecution(query, kb, configurations).execAsk());
-					//ResultSetFormatter.outputAsCSV(pw, QueryExecutionFactory.create(q, kb).execAsk());
 					break;
 				default:
 					throw new RuntimeException("Unsupported format: " + outputFormat);
 			}
-//			pw.println(QueryExecutionFactory.create(q, kb).execAsk());
 		} else if (query.isDescribeType() || query.isConstructType()) {
 			Model m;
 			Dataset d = null;
@@ -210,12 +208,6 @@ public class SPARQLAnything {
 		while (vars.hasNext()) {
 
 			String var = vars.next();
-//			String v = "?" + var;
-//			template = template.replace(v, qs.get(var).toString());
-			// ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] |
-			// [#x203F-#x2040] )*
-			// #x00B7 middle dot
-			// chars with accents #x0300-#x036F
 
 			Pattern p = Pattern.compile("[\\?|\\$]" + var + "([^0-9a-z_])",
 					Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
@@ -429,7 +421,7 @@ public class SPARQLAnything {
 			logger.trace("[time] Process starts: {}", System.currentTimeMillis() - duration);
 		}
 
-		logger.info("SPARQL anything");
+		logger.debug("SPARQL anything");
 
 		CLI cli = new CLI();
 		if(args.length == 0){
@@ -477,12 +469,9 @@ public class SPARQLAnything {
 					logger.info("Loading files from directory: {}", loadSource);
 					// If directory, load all files
 					List<File> list = new ArrayList<>();
-					//Path base = Paths.get(".");
-					//File[] files = loadSource.listFiles();
 					Collection<File> files = FileUtils.listFiles(loadSource, null, true);
 					for (File f : files) {
 						logger.info("Adding file to be loaded: {}", f);
-//						list.add(base.relativize(f.toPath()));
 						list.add(f);
 					}
 					kb = DatasetFactory.createGeneral();
@@ -510,11 +499,11 @@ public class SPARQLAnything {
 						if(!p.isAbsolute()){
 							p = base.relativize(loadSource.toPath());
 						}
-						kb = DatasetFactory.create(p.toString());
+						kb = DatasetFactory.create(p.toFile().toURI().toString());
 					} catch (Exception e) {
 						logger.error("An error occurred while loading {}", loadSource);
 						logger.error(" - Problem was: ", e);
-				}
+					}
 				} else {
 					if(!loadSource.exists()){
 						logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
@@ -529,7 +518,7 @@ public class SPARQLAnything {
 			} else {
 				kb = DatasetFactory.createGeneral();
 			}
-			String inputFile = cli.getInputFile();
+
 			String outputFileName = cli.getOutputFile();
 			String outputPattern = cli.getOutputPattern();
 			String[] values = cli.getValues();
@@ -537,28 +526,18 @@ public class SPARQLAnything {
 			if (outputPattern != null && outputFileName != null) {
 				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
 			}
-			if (inputFile == null && values == null) {
+			if (values == null) {
 				logger.debug("No input file");
 				Query q = QueryFactory.create(query);
 				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()), configurations);
 			} else {
 
-				if (inputFile != null && values != null) {
-					throw new ParseException("Arguments 'input' and 'values' cannot be used together.");
-				}
 				ResultSet parameters = null;
-				if (inputFile != null) {
-					// XXX Deprecated by Issue #277
-					logger.warn("[Deprecated] Input file given [please use --values instead]");
-					// Load the file
-					parameters = ResultSetFactory.load(inputFile);
-				} else {
-					if(values.length == 1 && new File(values[0]).exists()){
-						logger.debug("Input file name given");
-						parameters = ResultSetFactory.load(values[0]);
-					}else {
-						parameters = new ArgValuesAsResultSet(values);
-					}
+				if(values.length == 1 && new File(values[0]).exists()){
+					logger.debug("Input file name given");
+					parameters = ResultSetFactory.load(values[0]);
+				}else {
+					parameters = new ArgValuesAsResultSet(values);
 				}
 				// Specifications
 				Specification specification = SpecificationFactory.create("", query);
@@ -597,9 +576,8 @@ public class SPARQLAnything {
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
-		} catch(ParseException e1){
-			logger.error("{}",e1.getMessage());
-			cli.printHelp();
+		} catch(QueryParseException | ParseException e1){
+			logger.error("SPARQL syntax error (or query file does not exists): {}",e1.getMessage());
 		}
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);

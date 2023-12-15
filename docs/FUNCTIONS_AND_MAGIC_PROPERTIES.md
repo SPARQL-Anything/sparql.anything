@@ -47,12 +47,13 @@ SPARQL Anything provides a number of magical functions and properties to facilit
 | [fx:entity(?a ... ?n)](#fxentity)                                                    | Function                | Any sequence of nodes                  | URI node                      | The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).                                                                                                                                                                                                                                     |
 | [fx:literal(?a, ?b)](#fxliteral)                                                     | Function                | String, (URI or language code)         | Literal node                  | The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).                                                                                                                                                                                                                                                                |
 | [fx:bnode(?a)](#fxbnode)                                                             | Function                | Any node                               | Blank node                    | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
-| [fx:LevenshteinDistance(?n1, ?n2)](#fxlevenshteindistance)                           | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                           |
-| [fx:CosineDistance(?n1, ?n2)](#fxcosinedistance)                                     | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                     |
-| [fx:JaccardDistance(?n1, ?n2)](#fxjaccarddistance)                                   | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
-| [fx:JaroWinklerDistance(?n1, ?n2)](#fxjarowinklerdistance)                           | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                          |
-| [fx:LongestCommonSubsequenceDistance(?n1, ?n2)](#fxlongestcommonsubsequencedistance) | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Longest Common Subsequence Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                               |
-| [fx:HammingDistance(?n1, ?n2)](#fxhammingdistance)                                   | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:HammDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                      |
+| [fx:LevenshteinDistance(?n1, ?n2)](#fxlevenshteindistance)                           | Function                | String, String           | Integer                       | The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                           |
+| [fx:CosineDistance(?n1, ?n2)](#fxcosinedistance)                                     | Function                | String, String           | Double                        | The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                     |
+| [fx:JaccardDistance(?n1, ?n2)](#fxjaccarddistance)                                   | Function                | String, String           | Double                        | The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
+| [fx:JaroWinklerDistance(?n1, ?n2)](#fxjarowinklerdistance)                           | Function                | String, String           | Double                        | The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                          |
+| [fx:LongestCommonSubsequenceDistance(?n1, ?n2)](#fxlongestcommonsubsequencedistance) | Function                | String, String           | Integer                       | The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Longest Common Subsequence Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                               |
+| [fx:HammingDistance(?n1, ?n2)](#fxhammingdistance)                                   | Function                | String, String           | Integer                       | The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
+| [fx:QGramDistance(?n1, ?n2)](#fxqgramdistance)                                       | Function                | String, String           | Double                        | The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).                                                                                                                                                                                                                                                                                                                                                                       |
 
 
 ## Working with sequences
@@ -67,7 +68,7 @@ This property matches the RDF container membership properties (e.g. ``rdf:_1``, 
 
 Query 
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -113,7 +114,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -158,7 +159,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
@@ -193,7 +194,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -235,7 +236,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -277,7 +278,7 @@ Container membership property
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -322,7 +323,7 @@ Container membership property
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -367,7 +368,7 @@ Container membership property
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -413,7 +414,7 @@ Container membership property
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -460,7 +461,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -500,7 +501,7 @@ Boolean
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -540,7 +541,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -580,7 +581,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -620,7 +621,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -660,7 +661,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -700,7 +701,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -740,7 +741,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -780,7 +781,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -798,7 +799,7 @@ WHERE
 
 Result
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -828,7 +829,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -868,7 +869,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -908,7 +909,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -952,7 +953,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -992,7 +993,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1032,7 +1033,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1073,7 +1074,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1113,7 +1114,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1156,7 +1157,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1196,7 +1197,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1236,7 +1237,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1276,7 +1277,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1317,7 +1318,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1357,7 +1358,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1402,7 +1403,7 @@ String
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1441,7 +1442,7 @@ String, The name of a supported character [encoding](https://docs.oracle.com/en/
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1485,7 +1486,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1519,7 +1520,7 @@ Result
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1571,7 +1572,7 @@ URI Node
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1615,7 +1616,7 @@ Literal node
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1644,7 +1645,7 @@ Result
 
 #### Example
 
-```
+```sparql
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -1684,7 +1685,7 @@ Blank node
 
 #### Example
 
-```
+```sparql
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  ex:   <http://example/>
@@ -1724,7 +1725,7 @@ b5,E
 
 Result
 
-```
+```turtle
 @prefix ex:   <http://example/> .
 @prefix fx:   <http://sparql.xyz/facade-x/ns/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -1752,7 +1753,7 @@ The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Dista
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1760,7 +1761,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1782,7 +1783,7 @@ The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance betwee
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1790,7 +1791,7 @@ Double
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1812,7 +1813,7 @@ The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance betw
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1820,7 +1821,7 @@ Double
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1832,7 +1833,7 @@ Result
 
 | result |
 |--------|
-| 0.4    |
+| 0.5    |
 
 
 
@@ -1842,7 +1843,7 @@ The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Dist
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1850,19 +1851,19 @@ Double
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
-    BIND (fx:HammingDistance("abc", "cbe") AS ?result) 
+    BIND (fx:JaroWinklerDistance("abc", "cbe") AS ?result) 
 } 
 ```
 
 Result
 
-| result |
-|--------|
-| 0.24   |
+| result              |
+|---------------------|
+| 0.44444444444444453 |
 
 
 
@@ -1872,7 +1873,7 @@ The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Long
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1880,7 +1881,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1904,7 +1905,7 @@ The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance betw
 
 #### Input
 
-Any pair of IRIs or Literals
+String, String
 
 #### Output
 
@@ -1912,7 +1913,7 @@ Integer
 
 #### Example
 
-```
+```sparql
 PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
 
 SELECT ?result WHERE { 
@@ -1925,6 +1926,37 @@ Result
 | result |
 |--------|
 | 1      |
+
+
+### fx:QGramDistance
+
+The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).
+
+#### Input
+
+
+String, String
+
+
+#### Output
+
+Double
+
+#### Example
+
+```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:QGramDistance("abcd", "abce") AS ?result) 
+} 
+```
+
+Result
+
+| result |
+|--------|
+| 2.0    |
 
 <!--
 ###

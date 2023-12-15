@@ -59,6 +59,8 @@ public class SpreadsheetTriplifier implements Triplifier {
 			populate(s, dataSourceId, builder, headers, evaluateFormulas, compositeValues, ignoreColumnsWithNoHeaders, headersRow);
 		});
 
+		wb.close();
+
 	}
 
 	@Override

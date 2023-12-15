@@ -98,12 +98,15 @@ public class BinaryTriplifier implements Triplifier {
 				outputStream.write(chunk, 0, bytesRead);
 			}
 
+			stream.close();
+
+			byte[] result = outputStream.toByteArray();
+			outputStream.close();
+			return result;
 		} catch (IOException e) {
 			logger.error("",e);
 			return null;
 		}
-
-		return outputStream.toByteArray();
 	}
 
 	@Override

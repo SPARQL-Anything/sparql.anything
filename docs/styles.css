@@ -39,3 +39,21 @@ div.rst-content table.field-list thead
 .rst-content table.docutils {
     display: inline-table;
 }
+
+.wy-side-nav-search a:hover,
+.wy-side-nav-search a:visited,
+.wy-side-nav-search a:active,
+.wy-side-nav-search a:link,
+.wy-side-nav-search a {
+    background-image: url(https://raw.githubusercontent.com/SPARQL-Anything/sparql.anything/v0.9-DEV/docs/logo.png);
+    height: 200px;
+    background-size: 200px;
+    width: 200px;
+    background-repeat: no-repeat;
+    color: rgba(0, 0, 0, 0);
+}
+
+.wy-side-nav-search {
+    background-color: #fcfcfc;
+}
+

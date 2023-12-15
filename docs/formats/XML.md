@@ -14,6 +14,7 @@ SPARQL Anything reuses namespaces declared within the original document to name 
 SPARQL Anything selects this transformer for the following file extensions:
 
 - .xml
+- .svg
 
 ## Media types
 
@@ -337,4 +338,10 @@ WHERE
         <http://sparql.xyz/facade-x/data/isbn>
                 "432-3-16-143110-1" .
 
+```
+### SVG
+
+For SVG, the media type should be "application/xml":
+```sparql
+fx:properties fx:media-type  "application/xml" .
 ```

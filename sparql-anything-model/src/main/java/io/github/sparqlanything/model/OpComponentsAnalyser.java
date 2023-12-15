@@ -16,10 +16,6 @@
 
 package io.github.sparqlanything.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -27,38 +23,14 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVisitor;
 import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.core.Quad;
-import org.apache.jena.sparql.expr.Expr;
-import org.apache.jena.sparql.expr.ExprAggregator;
-import org.apache.jena.sparql.expr.ExprFunction0;
-import org.apache.jena.sparql.expr.ExprFunction1;
-import org.apache.jena.sparql.expr.ExprFunction2;
-import org.apache.jena.sparql.expr.ExprFunction3;
-import org.apache.jena.sparql.expr.ExprFunctionN;
-import org.apache.jena.sparql.expr.ExprFunctionOp;
-import org.apache.jena.sparql.expr.ExprNone;
-import org.apache.jena.sparql.expr.ExprTripleTerm;
-import org.apache.jena.sparql.expr.ExprVar;
-import org.apache.jena.sparql.expr.ExprVisitor;
-import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.path.P_Alt;
-import org.apache.jena.sparql.path.P_Distinct;
-import org.apache.jena.sparql.path.P_FixedLength;
-import org.apache.jena.sparql.path.P_Inverse;
-import org.apache.jena.sparql.path.P_Link;
-import org.apache.jena.sparql.path.P_Mod;
-import org.apache.jena.sparql.path.P_Multi;
-import org.apache.jena.sparql.path.P_NegPropSet;
-import org.apache.jena.sparql.path.P_OneOrMore1;
-import org.apache.jena.sparql.path.P_OneOrMoreN;
-import org.apache.jena.sparql.path.P_ReverseLink;
-import org.apache.jena.sparql.path.P_Seq;
-import org.apache.jena.sparql.path.P_Shortest;
-import org.apache.jena.sparql.path.P_ZeroOrMore1;
-import org.apache.jena.sparql.path.P_ZeroOrMoreN;
-import org.apache.jena.sparql.path.P_ZeroOrOne;
-import org.apache.jena.sparql.path.PathVisitor;
+import org.apache.jena.sparql.expr.*;
+import org.apache.jena.sparql.path.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class OpComponentsAnalyser implements OpVisitor {
 	private final Logger log = LoggerFactory.getLogger(OpComponentsAnalyser.class);
@@ -210,6 +182,7 @@ public class OpComponentsAnalyser implements OpVisitor {
 
 	@Override
 	public void visit(OpPropFunc opPropFunc) {
+		opComponents.add(opPropFunc);
 		opPropFunc.getSubOp().visit(this);
 	}
 
@@ -479,6 +452,15 @@ public class OpComponentsAnalyser implements OpVisitor {
 						&& (!t.getObject().isConcrete() || t.getObject().matches(object))) {
 					return true;
 				}
+			} else if (o instanceof OpPropFunc) {
+				OpPropFunc op = (OpPropFunc) o;
+				if ((!op.getSubjectArgs().getArg().isConcrete() || op.getSubjectArgs().getArg().matches(subject))
+						&& predicateMatch(op.getProperty(), predicate) // (!t.getPredicate().isConcrete() ||
+						// t.getPredicate().matches(predicate))
+						&& (!op.getObjectArgs().getArg().isConcrete() || op.getObjectArgs().getArg().matches(object))) {
+					return true;
+				}
+
 			}
 		}
 		return false;

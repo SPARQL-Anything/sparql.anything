@@ -87,7 +87,30 @@ WHERE
 ] .
 ```
 
+## Options
 
+### Summary
+
+| Option name               | Description                                                                                                                 | Valid Values | Default Value |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------------|---------------|
+| yaml.allow-duplicate-keys | Tolerate duplicate keys (last wins). | true,false   | false         |
+
+---
+
+### `yaml.allow-duplicate-keys`
+
+#### Description
+
+Yaml 1.2 forbids duplicate keys, raising an error (default behaviour). When true, duplicate keys are tolerated (last wins). 
+
+#### Valid Values
+
+true
+false
+
+#### Default Value
+
+false
 
 <!--
 # 

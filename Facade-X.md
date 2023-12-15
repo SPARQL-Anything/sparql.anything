@@ -15,7 +15,7 @@ Containers may have a type.
 
 The following figure illustrates the resulting Facade-X as an entity-relation diagram.
 
-![Facade-X Entity-Relationship Diagram](facade-x-ER.jpg)
+![Facade-X Entity-Relationship Diagram](facade-x-ER.png)
 
 Given a resource, the transformers generate an RDF Dataset (i.e. a collection of named graphs) representing the transformation of the resource according to the Facade-X model.
 In particular, each named graph: 1. is the transformation of a data source of the input resource; and, 2. complies with the Facade-X model.
@@ -31,7 +31,7 @@ However, SPARQL Anything implements convenient conventions for homogenising IRIs
 By default, SPARQL Anything uses blank nodes to represent containers.
 
 The URI of the RDF properties is the result of the concatenation of the default namespace for data ``http://sparql.xyz/facade-x/data/`` and a string.
-The string derives from a field name (in case of a data source in JSON format), a tag attribute (in case of a data source in JSON format) etc.
+The string derives from a field name (in case of a data source in JSON format), a tag attribute (in case of a data source in XML format) etc.
 
 The URI of the RDF classes is the result of the concatenation of the default namespace for data ``http://sparql.xyz/facade-x/data/`` and a string.
 The string derives from a tag name (in case of a data source in XML format), an element type (in case of a data source in Markdown format).

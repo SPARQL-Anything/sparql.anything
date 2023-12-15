@@ -50,7 +50,6 @@ public class TarTriplifier implements Triplifier {
 
 		logger.trace("Matches {}", matches);
 
-//		Graph g = GraphFactory.createDefaultGraph();
 		builder.addRoot(dataSourceId);
 
 		try {
@@ -66,6 +65,8 @@ public class TarTriplifier implements Triplifier {
 				}
 
 			}
+
+			debInputStream.close();
 
 		} catch (ArchiveException e) {
 			throw new IOException(e);

@@ -16,7 +16,13 @@
 
 package io.github.sparqlanything.cli;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.jena.query.Query;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.util.FileUtils;
@@ -48,9 +54,9 @@ public class CLI {
 
 	public static final String FORMAT = "f";
 	public static final String FORMAT_LONG = "format";
-
-	public static final String INPUT = "i";
-	public static final String INPUT_LONG = "input";
+//
+//	public static final String INPUT = "i";
+//	public static final String INPUT_LONG = "input";
 
 	public static final String LOAD = "l";
 	public static final String LOAD_LONG = "load";
@@ -147,9 +153,9 @@ public class CLI {
 						"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set). Options passed in this way can be overwritten in the SERVICE IRI or in the Basic Graph Pattern.")
 				.longOpt(CONFIGURATION_LONG).build());
 
-		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
-						"[Deprecated] OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
-				.longOpt(INPUT_LONG).build());
+//		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
+//						"[Deprecated] OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
+//				.longOpt(INPUT_LONG).build());
 
 	}
 
@@ -171,9 +177,9 @@ public class CLI {
 		return commandLine.getOptionValue(CLI.LOAD);
 	}
 
-	public String getInputFile() {
-		return commandLine.getOptionValue(CLI.INPUT);
-	}
+//	public String getInputFile() {
+//		return commandLine.getOptionValue(CLI.INPUT);
+//	}
 
 	public String getOutputFile() {
 		return commandLine.getOptionValue(CLI.OUTPUT);

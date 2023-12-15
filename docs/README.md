@@ -1,9 +1,9 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![How to](https://img.shields.io/badge/How%20to-cite-green.svg)](#how-to-cite-our-work)
-[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml/badge.svg?branch=v0.6-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml)
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v0.6-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v0.6-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
+[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml)
+[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
+[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
 
 # SPARQL Anything
 
@@ -15,7 +15,7 @@ Main features:
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#Configuration)) and
   build knowledge graphs with `CONSTRUCT` queries
 - [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar,
-  Markdown, YAML, Bibtex, DOCx (see [pages dedicated to single formats](#supported-formats))
+  Markdown, YAML, Bibtex, DOCx, PPTX (see [pages dedicated to single formats](#supported-formats))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
 - Generates RDF, RDF-Star, and tabular data (thanks to SPARQL)
 - Full-fledged [HTTP client](Configuration.md#http-options) to query Web APIs (headers, authentication, all methods
@@ -197,6 +197,7 @@ A detailed description of the interpretation can be found in the following pages
 - [EXIF Metadata](formats/Metadata.md)
 - [Bibtex](formats/Bibtex.md)
 - [YAML](formats/YAML.md)
+- [Slides](formats/Slides.md)
 
 ... and, of course, the triples generated from the these formats can be integrated with the content of
 any [RDF Static file](formats/RDF_Files.md)
@@ -400,12 +401,13 @@ the [Apache Jena documentation](https://jena.apache.org/documentation/query/libr
 | [fx:entity(?a ... ?n)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxentity)                                                    | Function                | Any sequence of node                   | URI node                      | The function `fx:entity (?a ... ?n)` accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (`rdf:_1`,`rdf:_2`,...) are cast to numbers and then to strings (`"1","2"`).                                                                                                                                                                                                                                     |
 | [fx:literal(?a, ?b)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxliteral)                                                     | Function                | String, (URI or language code)         | Literal node                  | The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).                                                                                                                                                                                                                                                                |
 | [fx:bnode(?a)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxbnode)                                                             | Function                | Any node                               | Blank node                    | The function `fx:bnode( ?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case). |
-| [fx:LevenshteinDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxlevenshteindistance)                           | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                           |
-| [fx:CosineDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxcosinedistance)                                     | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                     |
-| [fx:JaccardDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxjaccarddistance)                                   | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
-| [fx:JaroWinklerDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxjarowinklerdistance)                           | Function                | Any pair of IRIs or Literals           | Double                        | The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                          |
+| [fx:LevenshteinDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxlevenshteindistance)                           | Function                | String, String                         | Integer                       | The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                           |
+| [fx:CosineDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxcosinedistance)                                     | Function                | String, String                         | Double                        | The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                     |
+| [fx:JaccardDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxjaccarddistance)                                   | Function                | String, String                         | Double                        | The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
+| [fx:JaroWinklerDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxjarowinklerdistance)                           | Function                | String, String                         | Double                        | The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                          |
 | [fx:LongestCommonSubsequenceDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxlongestcommonsubsequencedistance) | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Longest Common Subsequence Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                               |
-| [fx:HammingDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxhammingdistance)                                   | Function                | Any pair of IRIs or Literals           | Integer                       | The function `fx:HammDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                      |
+| [fx:HammingDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxhammingdistance)                                   | Function                | String, String                         | Integer                       | The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).                                                                                                                                                                                                                                                                                                                                                                   |
+| [fx:QGramDistance(?n1, ?n2)](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxqgramdistance)                                       | Function                | String, String                         | Double                        | The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).                                                                                                                                                                                                                                                                                                                                                                       |
 
 
 ## Usage
@@ -495,11 +497,19 @@ usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
                                        in the input result set.
 ```
 
-Logging can be configured adding the following option (SLF4J):
+Logging can be configured adding the following option (SLF4J).
 
+To enable the default logger for SPARQL anything and its dependencies:
 ```
 -Dorg.slf4j.simpleLogger.defaultLogLevel=trace
 ```
+
+To enable the default logger for SPARQL anything only:
+
+```
+-Dorg.slf4j.simpleLogger.log.io.github.sparqlanything=trace
+```
+
 
 ### Fuseki
 

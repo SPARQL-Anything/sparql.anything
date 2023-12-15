@@ -168,7 +168,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	public void transformSAX(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
-		String dataSourceId = "";
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		String root = SPARQLAnythingConstants.ROOT_ID;
 
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();

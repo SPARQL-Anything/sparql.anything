@@ -17,6 +17,7 @@
 package io.github.sparqlanything.yaml;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierHTTPException;
@@ -32,13 +33,15 @@ import java.util.Properties;
 import java.util.Set;
 
 public class YAMLTriplifier implements Triplifier {
-
+	public final static String PROPERTY_ALLOW_DUPLICATE_KEYS = "yaml.allow-duplicate-keys";
 	protected void transform(Properties properties, FacadeXGraphBuilder builder)
 		throws IOException, TriplifierHTTPException {
 
 		final InputStream is = Triplifier.getInputStream(properties);
 
-		LoadSettings settings = LoadSettings.builder().setLabel("Custom user configuration").build();
+		LoadSettings settings = LoadSettings.builder().setLabel("Custom user configuration")
+			.setAllowDuplicateKeys(PropertyUtils.getBooleanProperty(properties, PROPERTY_ALLOW_DUPLICATE_KEYS, false))
+			.build();
 		Load load = new Load(settings);
 
 		try {

@@ -25,6 +25,8 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.sparql.algebra.Algebra;
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -52,14 +54,14 @@ public class IssuesTest {
 	@Test
 	public void testIssue280() throws URISyntaxException {
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue280.json")).toURI().toString();
-		File TDBfile = new File("target/tdbIssue280/");
+		String TDBLocation = "target/tdbIssue280/";
+		File TDBfile = new File(TDBLocation);
 		if (TDBfile.exists()) {
 			boolean isTDBFileDeleted = TDBfile.delete();
 			log.trace("Has TDB folder been deleted? {}", isTDBFileDeleted);
 		}
 		boolean tdbFolderCreated = TDBfile.mkdirs();
 		log.trace("Has TDB folder been deleted? {}", tdbFolderCreated);
-		String TDBLocation = TDBfile.getAbsolutePath();
 		log.debug("TDB temp location: {}", TDBLocation);
 		Query qs = QueryFactory.create(
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
@@ -465,9 +467,21 @@ public class IssuesTest {
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue241.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query q = QueryFactory.create(queryStr);
+		Op op = Algebra.compile(q);
+		System.out.println(op);
+//		System.out.println(Algebra.optimize(op));
 		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(queryStr, ds).execSelect()));
-		// assertTrue(QueryExecutionFactory.create(queryStr,
-		// ds).execSelect().hasNext());
+//		 assertTrue(QueryExecutionFactory.create(queryStr, ds).execSelect().hasNext());
+
+//		Dataset ds2 = DatasetFactory.createGeneral();
+//		ds2.executeWrite(()->{
+//			RDFDataMgr.read(ds2, "https://www.w3.org/1999/02/22-rdf-syntax-ns#");
+//		});
+//		Query q2 = QueryFactory.create("SELECT * { SERVICE <https://data.europa.eu/sparql> { SERVICE<http://dbpedia.org/sparql>{?s ?p ?o BIND(BNODE() AS ?bob )} ?ss ?pp ?oo } } LIMIT 10");
+//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(q2, ds2).execSelect()));
+
+//		QueryExecutionHTTPBuilder.service("http://dbpedia.org/sparql").query("SELECT * {?s ?p ?o}")
 	}
 
 	/**
@@ -476,23 +490,20 @@ public class IssuesTest {
 	 */
 	@Test
 	public void testIssue280_2() throws URISyntaxException {
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
-
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue280.json")).toURI().toString();
-		File TDBfile = new File("target/tdbIssue280/");
+		String TDBLocation = "target/dbIssue280/";
+		File TDBfile = new File(TDBLocation);
 		if (TDBfile.exists()) {
 			boolean isTDBFileDeleted = TDBfile.delete();
 			log.trace("Has TDB Folder been deleted? {}", isTDBFileDeleted);
 		}
 		boolean hasTDBFolderCreated = TDBfile.mkdirs();
-		log.trace("Has TDB Folder been created? {}", hasTDBFolderCreated);
-		String TDBLocation = TDBfile.getAbsolutePath();
-		log.debug("TDB temp location: {}", TDBLocation);
-		Query qs = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "SELECT * WHERE { " + "SERVICE <x-sparql-anything:location=" + location + ",ondisk=" + TDBLocation + "> { " + " ?s xyz:name ?o }  }");
+		//log.trace("Has TDB Folder been created? {}, {}", hasTDBFolderCreated, TDBfile.exists());
+
+		String queryString = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \""+location+"\" ; fx:ondisk \""+TDBLocation+"\" .  ?s xyz:name ?o }  }";
+		//log.debug("TDB temp location: {}", TDBLocation);
+		//log.debug("Query string\n{}", queryString);
+		Query qs = QueryFactory.create(queryString);
 
 //		System.out.println(location);
 //		System.out.println(qs.toString(Syntax.defaultSyntax));
@@ -629,7 +640,7 @@ public class IssuesTest {
 
 
 	/**
-	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/292">...</a>
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/295">...</a>
 	 * <p>
 	 */
 	@Test
@@ -642,11 +653,15 @@ public class IssuesTest {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
-		File tmpTBDFolder = new File(Objects.requireNonNull(getClass().getClassLoader().getResource(".")).getPath(), "testIssue295");
+		String TDBLocation = "tmp/testIssue295";
+		File tmpTBDFolder = new File(TDBLocation);
+		if(tmpTBDFolder.exists()){
+			FileUtils.deleteDirectory(tmpTBDFolder);
+		}
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue295.sparql")).toURI(), StandardCharsets.UTF_8);
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue295.json")).toURI().toString();
 		queryStr = queryStr.replace("%%%LOCATION%%%", location);
-		queryStr = queryStr.replace("%%%TDB_PATH%%%", tmpTBDFolder.getAbsolutePath());
+		queryStr = queryStr.replace("%%%TDB_PATH%%%", TDBLocation);
 
 		query = QueryFactory.create(queryStr);
 
@@ -658,9 +673,13 @@ public class IssuesTest {
 			QuerySolution qs = rs.next();
 			actualNames.add(qs.get("name").asLiteral().getValue().toString());
 		}
-		FileUtils.deleteDirectory(tmpTBDFolder);
 		ds.end();
 		assertEquals(expectedNames, actualNames);
+		try {
+			FileUtils.deleteDirectory(tmpTBDFolder);
+		}catch(IOException e){
+			log.warn("Unable to delete {}, delete it once the program terminates.",tmpTBDFolder.getAbsolutePath());
+		}
 	}
 
 
@@ -860,6 +879,68 @@ public class IssuesTest {
 //		Assert.assertFalse(m1.isIsomorphicWith(m2));
 
 //		Assert.assertTrue(qExec.execSelect().hasNext());
+	}
+
+
+	@Test
+	public void testIssue421() throws URISyntaxException, IOException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue421.sparql")).toURI(), StandardCharsets.UTF_8);
+		query = QueryFactory.create(queryStr);
+
+//		System.out.println(Algebra.compile(query));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
+//		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
+		Set<String> result = new HashSet<>();
+		ResultSet rs = qExec1.execSelect();
+		while (rs.hasNext()){
+			result.add(rs.next().get("a").asLiteral().toString());
+		}
+		assertEquals(Sets.newHashSet("abc", "cde"), result);
+
+	}
+
+	@Test
+	public void testIssue330() throws URISyntaxException, IOException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue330.sparql")).toURI(), StandardCharsets.UTF_8);
+		query = QueryFactory.create(queryStr);
+
+//		System.out.println(Algebra.compile(query));
+//		System.out.println(query.toString(Syntax.defaultSyntax));
+
+		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
+//		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
+		Set<String> result = new HashSet<>();
+		ResultSet rs = qExec1.execSelect();
+		while (rs.hasNext()){
+			result.add(rs.next().get("a").asLiteral().toString());
+		}
+		assertEquals(Sets.newHashSet("abc", "cde"), result);
+
+//		Graph g = GraphFactory.createGraphMem();
+//		g.add(NodeFactory.createBlankNode(), RDF.li(1).asNode(), NodeFactory.createLiteral("abc;cde"));
+//		Query qq = QueryFactory.create("PREFIX apf: <http://jena.apache.org/ARQ/property#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?a { ?s rdf:_1 ?o . ?a apf:strSplit(?o \";\") }");
+//		System.out.println(qq.toString(Syntax.syntaxSPARQL_11));
+//		Op op = Algebra.compile(qq);
+//		System.out.println(op);
+//		OpBGP bgp = (OpBGP) Algebra.parse("(bgp\n" +
+//				"    (triple ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?o)\n" +
+//				"    (triple ?a <http://jena.apache.org/ARQ/property#strSplit> ??0)\n" +
+//				"    (triple ??0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> ?o)\n" +
+//				"    (triple ??0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> ??1)\n" +
+//				"    (triple ??1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \";\")\n" +
+//				"    (triple ??1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil>)\n" +
+//				"  )");
+//		System.out.println(TransformPropertyFunction.transform(bgp, ARQ.getContext()));
+//		QueryIterator qi = Algebra.exec(op, g);
+//		System.out.println(Utils.queryIteratorToString(qi));
 
 	}
 

@@ -211,6 +211,25 @@ public class DocumentationExampleSandbox {
 
 	}
 
+	public static void slides() {
+		String queryString = "CONSTRUCT { ?s ?p ?o   } WHERE  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Presentation1.pptx> {       GRAPH ?g { ?s  ?p  ?o } }  } ";
+		System.out.println(queryString);
+		Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
+
+		Dataset ds = DatasetFactory.createGeneral();
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		Model m = QueryExecutionFactory.create(query, ds).execConstruct();
+		m.setNsPrefixes(prefixes);
+
+		System.out.println("\n\n"+query.toString(Syntax.defaultSyntax)+"\n\n");
+
+		RDFDataMgr.write(System.out, m, Lang.TTL
+		);
+
+	}
+
 	public static void metadata() {
 		String queryString = "CONSTRUCT\n" + "  {\n" + "    GRAPH ?g { ?s ?p ?o }\n" + "  }\n" + "WHERE\n" + "  { SERVICE <x-sparql-anything:location=https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg,metadata=true> { \n " + "      GRAPH ?g { ?s  ?p  ?o } }\n" + "  } ";
 		System.out.println(queryString);
@@ -931,12 +950,14 @@ public class DocumentationExampleSandbox {
 //		}
 
 //		archive();
-		spreadsheet();
+//		spreadsheet();
 //		doc();
 //		yaml();
 //		metadata();
 //		bibtex();
 //		options();
+
+		slides();
 
 //		FileUtils.write(new File("/Users/lgu/Desktop/utf16.txt"), "UTF-16 test file", Charset.forName("UTF16"));
 	}
