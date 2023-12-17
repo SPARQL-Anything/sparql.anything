@@ -5,6 +5,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.annotations.Format;
 import io.github.sparqlanything.slides.PptxTriplifier;
 import org.apache.jena.query.*;
@@ -93,18 +94,13 @@ public class AnnotationGenerator {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		if (q.isConstructType()) {
-			System.out.println(q.toString());
 			Model m = QueryExecutionFactory.create(q, kb).execConstruct();
-
-			System.out.println(m.size());
-			QueryExecutionFactory.create(q, kb).execConstruct().write(baos, "TTL");
+			m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+			m.write(baos, "TTL");
 		} else if (q.isConstructQuad()) {
 			Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
 			RDFDataMgr.write(baos, d, Lang.TRIG);
 		}
-
-		System.out.println(baos.toString());
 		return baos.toString();
-
 	}
 }

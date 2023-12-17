@@ -39,7 +39,7 @@ ${defaultTransformationQuery}
 ### Facade-X RDF
 
 ```turtle
-${facadeXRdf}
+${facadeXRdf?no_esc}
 ```
 
 
