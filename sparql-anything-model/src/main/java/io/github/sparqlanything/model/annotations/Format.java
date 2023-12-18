@@ -9,18 +9,18 @@ import java.lang.annotation.Target;
 @Target({ElementType.PACKAGE, ElementType.TYPE})
 public @interface Format {
 
-	public String getDescription() default "";
+	String getDescription() default "";
 
-	public String getName();
+	String getName();
 
-	public String[] getExtensions();
+	String[] getExtensions();
 
-	public String[] getMediaTypes();
+	String[] getMediaTypes();
 
-	public Class<?>[] getTriplifiers() ;
+	Class<?>[] getTriplifiers();
 
-	public String getResourceExample();
+	String getResourceExample();
 
-	public boolean showGraphs();
+	boolean showGraphs();
 
 }

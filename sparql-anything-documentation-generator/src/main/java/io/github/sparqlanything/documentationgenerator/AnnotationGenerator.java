@@ -5,8 +5,10 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.annotations.Format;
+import io.github.sparqlanything.model.annotations.Option;
 import io.github.sparqlanything.slides.PptxTriplifier;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
@@ -17,7 +19,10 @@ import org.apache.jena.sparql.engine.main.QC;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AnnotationGenerator {
@@ -63,11 +68,20 @@ public class AnnotationGenerator {
 		Map<String, Object> var = new HashMap<>();
 
 		// This assumes that all the classes in the array are in the same package
-		Format f = example.getPackage().getAnnotation(Format.class);
-		var.put("format", f);
-		Query q = getDefaultTransformationQuery(f);
+		Format format = example.getPackage().getAnnotation(Format.class);
+		var.put("format", format);
+		Query q = getDefaultTransformationQuery(format);
 		var.put("defaultTransformationQuery", q.toString(Syntax.syntaxSPARQL_11));
 		var.put("facadeXRdf", getFacadeXRdf(q));
+
+		List<Option> options = new ArrayList<>();
+		for (Class<?> triplifier : format.getTriplifiers()) {
+			for (Field field : triplifier.getFields()) {
+				if(field.getDeclaringClass().equals(IRIArgument.class)){
+					options.add(field.getAnnotation(Option.class));
+				}
+			}
+		}
 
 		StringWriter sw = new StringWriter();
 		try {

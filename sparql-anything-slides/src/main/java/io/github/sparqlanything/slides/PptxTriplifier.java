@@ -17,6 +17,8 @@
 package io.github.sparqlanything.slides;
 
 import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.poi.xslf.usermodel.*;
 import org.apache.xmlbeans.XmlObject;
@@ -27,15 +29,15 @@ import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PptxTriplifier implements Triplifier {
 
 
+	@Example(getResource = "https://sparql-anything.cc/examples/Presentation2.pptx", getQuery = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Presentation2.pptx,slides.extract-sections=true> { ?s ?p ?o } }")
+	@Example(getResource = "https://sparql-anything.cc/examples/Presentation2.pptx", getQuery = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Presentation2.pptx,slides.extract-sections=true> { ?s ?p ?o } }")
+	@Option(getName = "slides.extract-sections", getDescription = "It tells the document triplifier to extract the sections of the presentation (see #435)", getValidValues = "true/false", getDefaultValue = "false")
 	public static final IRIArgument EXTRACT_SECTIONS = new IRIArgument("slides.extract-sections", "false");
 
 	/**
