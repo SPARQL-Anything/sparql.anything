@@ -41,216 +41,49 @@ ${defaultTransformationQuery}
 ```turtle
 ${facadeXRdf?no_esc}
 ```
-
-
 ## Options
 
 ### Summary
 
-| Option name             | Description                                                                             | Valid Values | Default Value |
-|-------------------------|-----------------------------------------------------------------------------------------|--------------|---------------|
-| slides.extract-sections | It tells the document triplifier to extract the sections of the presentation (see #435) | true/false   | false         |
+| Option name | Description | Valid Values | Default Value |
+|-------------|-------------|--------------|---------------|
+<#list optionSections as optionSection>
+| ${optionSection.option.name} | ${optionSection.option.description} | ${optionSection.option.validValues} | ${optionSection.option.defaultValue} |
 
-
-### `slides.extract-sections`
+### `${optionSection.option.name}`
 
 #### Description
 
-It tells the document triplifier to extract the sections of the presentation (see #435)
+${optionSection.option.description}
 
 #### Valid Values
 
-true/false
+${optionSection.option.validValues}
 
 #### Default Value
 
-false
+${optionSection.option.defaultValue}
 
 #### Examples
 
-##### Input
+<#list optionSection.examples as example>
+#### Input
 
-### Data
-
-Located at https://sparql-anything.cc/examples/Presentation2.pptx
-
-##### Use Case 1: Construct the dataset by extracting the
+Located at ${example.resource?no_esc}
 
 ###### Query
 
-```
-CONSTRUCT
-  {
-    ?s ?p ?o .
-  }
-WHERE
-  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Presentation2.pptx,slides.extract-sections=true>
-      { ?s  ?p  ?o }
-  }
-```
+${example.query?no_esc}
 
 ###### Result
 
 ```turtle
-@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz: <http://sparql.xyz/facade-x/data/> .
-
-[ rdf:type  fx:root , xyz:Presentation ;
-  rdf:_1    [ rdf:type  xyz:Section ;
-              rdf:_1    [ rdf:type  xyz:Slide ;
-                          rdf:_1    [ rdf:type  xyz:CENTERED_TITLE ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "This is a test presentation"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ] ;
-                          rdf:_2    [ rdf:type  xyz:SUBTITLE ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "This is the subtitle"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ]
-                        ] ;
-              rdf:_2    [ rdf:type  xyz:SectionName ;
-                          rdf:_1    "Default Section"
-                        ]
-            ] ;
-  rdf:_2    [ rdf:type  xyz:Section ;
-              rdf:_1    [ rdf:type  xyz:Slide ;
-                          rdf:_1    [ rdf:type  xyz:TITLE ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "First slide – first section"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ] ;
-                          rdf:_2    [ rdf:type  xyz:CONTENT ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Bullet 1"
-                                                                        ]
-                                                            ]
-                                                ] ;
-                                      rdf:_2    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Bullet 2"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ]
-                        ] ;
-              rdf:_2    [ rdf:type  xyz:Slide ;
-                          rdf:_1    [ rdf:type  xyz:TITLE ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Second slide - first section"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ] ;
-                          rdf:_2    [ rdf:type  xyz:CONTENT ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Bullet 1"
-                                                                        ]
-                                                            ]
-                                                ] ;
-                                      rdf:_2    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Bullet 2"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ]
-                        ] ;
-              rdf:_3    [ rdf:type  xyz:SectionName ;
-                          rdf:_1    "First section"
-                        ]
-            ] ;
-  rdf:_3    [ rdf:type  xyz:Section ;
-              rdf:_1    [ rdf:type  xyz:Slide ;
-                          rdf:_1    [ rdf:type  xyz:TITLE ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "First slide – second section"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ] ;
-                          rdf:_2    [ rdf:type  xyz:CONTENT ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Bullet 1"
-                                                                        ]
-                                                            ]
-                                                ] ;
-                                      rdf:_2    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Bullet 2"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ]
-                        ] ;
-              rdf:_2    [ rdf:type  xyz:Slide ;
-                          rdf:_1    [ rdf:type  xyz:TITLE ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Second slide "
-                                                                        ]
-                                                            ] ;
-                                                  rdf:_2    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "- second "
-                                                                        ]
-                                                            ] ;
-                                                  rdf:_3    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "section"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ] ;
-                          rdf:_2    [ rdf:type  xyz:CONTENT ;
-                                      rdf:_1    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Bullet 1"
-                                                                        ]
-                                                            ]
-                                                ] ;
-                                      rdf:_2    [ rdf:type  xyz:Paragraph ;
-                                                  rdf:_1    [ rdf:type  xyz:TextRun ;
-                                                              rdf:_1    [ rdf:type  xyz:Text ;
-                                                                          rdf:_1    "Bullet 2"
-                                                                        ]
-                                                            ]
-                                                ]
-                                    ]
-                        ] ;
-              rdf:_3    [ rdf:type  xyz:SectionName ;
-                          rdf:_1    "Second Section"
-                        ]
-            ]
-] .
-
+${example.result?no_esc}
 ```
+
+</#list>
+</#list>
+
+
+
+

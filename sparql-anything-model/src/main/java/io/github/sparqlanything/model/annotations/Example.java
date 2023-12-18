@@ -7,6 +7,8 @@ import java.lang.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
 @Repeatable(Examples.class)
 public @interface Example {
 

@@ -7,6 +7,7 @@ import freemarker.template.TemplateExceptionHandler;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import io.github.sparqlanything.model.annotations.Examples;
 import io.github.sparqlanything.model.annotations.Format;
 import io.github.sparqlanything.model.annotations.Option;
 import io.github.sparqlanything.slides.PptxTriplifier;
@@ -20,10 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AnnotationGenerator {
 
@@ -54,7 +52,7 @@ public class AnnotationGenerator {
 		freemarkerCfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
 		// Don't log exceptions inside FreeMarker that it will thrown at you anyway:
-		freemarkerCfg.setLogTemplateExceptions(false);
+		freemarkerCfg.setLogTemplateExceptions(true);
 
 		// Wrap unchecked exceptions thrown during template processing into
 		// TemplateException-s.
@@ -74,14 +72,20 @@ public class AnnotationGenerator {
 		var.put("defaultTransformationQuery", q.toString(Syntax.syntaxSPARQL_11));
 		var.put("facadeXRdf", getFacadeXRdf(q));
 
-		List<Option> options = new ArrayList<>();
+		List<OptionSection> optionSections = new ArrayList<>();
 		for (Class<?> triplifier : format.getTriplifiers()) {
 			for (Field field : triplifier.getFields()) {
-				if(field.getDeclaringClass().equals(IRIArgument.class)){
-					options.add(field.getAnnotation(Option.class));
+				if (field.getType().equals(IRIArgument.class)) {
+					Option o = field.getAnnotation(Option.class);
+					Examples e = field.getAnnotation(Examples.class);
+					if (o != null && e != null) {
+						optionSections.add(new OptionSection(o, e.value()));
+					}
 				}
 			}
 		}
+		System.out.println(optionSections.size());
+		var.put("optionSections", optionSections);
 
 		StringWriter sw = new StringWriter();
 		try {
@@ -99,7 +103,7 @@ public class AnnotationGenerator {
 		}
 	}
 
-	private static String getFacadeXRdf(Query q) {
+	static String getFacadeXRdf(Query q) {
 		// Set FacadeX OpExecutor as default executor factory
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
@@ -114,6 +118,14 @@ public class AnnotationGenerator {
 		} else if (q.isConstructQuad()) {
 			Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
 			RDFDataMgr.write(baos, d, Lang.TRIG);
+		} else if(q.isSelectType()){
+			return ResultSetFormatter.asText(QueryExecutionFactory.create(q,kb).execSelect());
+		} else if(q.isAskType()){
+			return Boolean.toString(QueryExecutionFactory.create(q,kb).execAsk());
+		} else if(q.isDescribeType()){
+			Model m = QueryExecutionFactory.create(q,kb).execDescribe();
+			m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+			m.write(baos, "TTL");
 		}
 		return baos.toString();
 	}
