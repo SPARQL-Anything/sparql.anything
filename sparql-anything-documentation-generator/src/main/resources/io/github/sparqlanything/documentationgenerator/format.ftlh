@@ -1,3 +1,5 @@
+<!-- This page has been generated with sparql-anything-documentation-generator module -->
+
 # ${format.name}
 
 ${format.description}
@@ -21,7 +23,7 @@ SPARQL Anything selects this transformer for the following media types:
 ## Default implementation
 
 <#list format.triplifiers as triplifier>
-- [${triplifier.name}](../sparql-anything-${format.name?lower_case}/src/main/java/com/github/sparqlanything/${format.name?lower_case}/${triplifier.simpleName}.java)
+- [${triplifier.className}](../sparql-anything-${format.name?lower_case}/src/main/java/com/github/sparqlanything/${format.name?lower_case}/${triplifier.klazz.simpleName}.java)
 </#list>
 
 ## Default Transformation
@@ -33,13 +35,13 @@ Located at ${format.resourceExample}
 ### Query
 
 ```
-${defaultTransformationQuery}
+${format.defaultTransformationQuery?no_esc}
 ```
 
 ### Facade-X RDF
 
 ```turtle
-${facadeXRdf?no_esc}
+${format.facadeXRdf?no_esc}
 ```
 ## Options
 
@@ -47,33 +49,41 @@ ${facadeXRdf?no_esc}
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
-<#list optionSections as optionSection>
-| ${optionSection.option.name} | ${optionSection.option.description} | ${optionSection.option.validValues} | ${optionSection.option.defaultValue} |
+<#list format.optionSections as optionSection>
+| ${optionSection.name} | ${optionSection.description} | ${optionSection.validValues} | ${optionSection.defaultValue} |
+</#list>
 
-### `${optionSection.option.name}`
+<#list format.optionSections as optionSection>
+### `${optionSection.name}`
 
 #### Description
 
-${optionSection.option.description}
+${optionSection.description}
 
 #### Valid Values
 
-${optionSection.option.validValues}
+${optionSection.validValues}
 
 #### Default Value
 
-${optionSection.option.defaultValue}
+${optionSection.defaultValue}
 
 #### Examples
 
 <#list optionSection.examples as example>
-#### Input
+##### Example ${example?index + 1 }
 
-Located at ${example.resource?no_esc}
+${example.description}
+
+###### Input
+
+${example.resource?no_esc}
 
 ###### Query
 
+```
 ${example.query?no_esc}
+```
 
 ###### Result
 

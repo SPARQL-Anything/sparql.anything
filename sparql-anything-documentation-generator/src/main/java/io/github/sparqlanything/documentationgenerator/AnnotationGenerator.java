@@ -5,30 +5,55 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.SPARQLAnythingConstants;
-import io.github.sparqlanything.model.annotations.Examples;
+import io.github.sparqlanything.engine.TriplifierRegister;
 import io.github.sparqlanything.model.annotations.Format;
-import io.github.sparqlanything.model.annotations.Option;
-import io.github.sparqlanything.slides.PptxTriplifier;
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
+import io.github.sparqlanything.model.annotations.Triplifier;
+import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.main.QC;
 
-import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class AnnotationGenerator {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		String formatFolder = args[0];
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Map<Package, Set<Class<?>>> packageToClasses = getFormatPackages();
 		Configuration freemarkerCfg = getConfiguration();
 		Template temp = freemarkerCfg.getTemplate("format.ftlh");
-		generateTemplateForFormat(temp, PptxTriplifier.class);
+		packageToClasses.forEach((p, classes) -> {
+			try {
+				generateTemplateForFormat(temp, p, classes, formatFolder);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		});
+	}
+
+	public static Map<Package, Set<Class<?>>> getFormatPackages() throws ClassNotFoundException {
+		Map<Package, Set<Class<?>>> packageToClass = new HashMap<>();
+		for (String triplifier : TriplifierRegister.getInstance().getTriplifiers()) {
+			Class<?> triplifierClass = Class.forName(triplifier);
+			if (triplifierClass.getAnnotation(Triplifier.class) != null) {
+				Package p = triplifierClass.getPackage();
+				Format f = p.getAnnotation(Format.class);
+				if (f != null) {
+					Set<Class<?>> classes = packageToClass.get(p);
+					if (classes == null) {
+						classes = new HashSet<>();
+					}
+					classes.add(triplifierClass);
+					packageToClass.put(p, classes);
+				}
+			}
+		}
+		return packageToClass;
+//		return Arrays.stream(Package.getPackages()).filter(aPackage -> aPackage.getAnnotation(Format.class)!=null).collect(Collectors.toList());
 	}
 
 	private static Configuration getConfiguration() {
@@ -62,71 +87,20 @@ public class AnnotationGenerator {
 		return freemarkerCfg;
 	}
 
-	private static void generateTemplateForFormat(Template temp, Class<?> example) {
+	private static void generateTemplateForFormat(Template temp, Package p, Set<Class<?>> classes, String formatFolder) throws IOException {
 		Map<String, Object> var = new HashMap<>();
 
-		// This assumes that all the classes in the array are in the same package
-		Format format = example.getPackage().getAnnotation(Format.class);
-		var.put("format", format);
-		Query q = getDefaultTransformationQuery(format);
-		var.put("defaultTransformationQuery", q.toString(Syntax.syntaxSPARQL_11));
-		var.put("facadeXRdf", getFacadeXRdf(q));
+		FormatSection formatSection = new FormatSection(p, classes);
+		var.put("format", formatSection);
 
-		List<OptionSection> optionSections = new ArrayList<>();
-		for (Class<?> triplifier : format.getTriplifiers()) {
-			for (Field field : triplifier.getFields()) {
-				if (field.getType().equals(IRIArgument.class)) {
-					Option o = field.getAnnotation(Option.class);
-					Examples e = field.getAnnotation(Examples.class);
-					if (o != null && e != null) {
-						optionSections.add(new OptionSection(o, e.value()));
-					}
-				}
-			}
-		}
-		System.out.println(optionSections.size());
-		var.put("optionSections", optionSections);
-
-		StringWriter sw = new StringWriter();
+		FileWriter fileWriter = new FileWriter(formatFolder + "/" + formatSection.getName() + ".md");
 		try {
-			temp.process(var, sw);
+			temp.process(var, fileWriter);
 		} catch (TemplateException | IOException ignored) {
 		}
-		System.out.println(sw.getBuffer().toString());
 	}
 
-	public static Query getDefaultTransformationQuery(Format f) {
-		if (f.showGraphs()) {
-			return QueryFactory.create(String.format("CONSTRUCT {GRAPH ?g {?s ?p ?o}} WHERE {SERVICE<x-sparql-anything:location=%s> { GRAPH ?g { ?s ?p ?o}}}", f.getResourceExample()));
-		} else {
-			return QueryFactory.create(String.format("CONSTRUCT {?s ?p ?o} WHERE {SERVICE<x-sparql-anything:location=%s> {GRAPH ?g { ?s ?p ?o}}}", f.getResourceExample()));
-		}
-	}
 
-	static String getFacadeXRdf(Query q) {
-		// Set FacadeX OpExecutor as default executor factory
-		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
-		// Execute the query by using standard Jena ARQ's API
-		Dataset kb = DatasetFactory.createGeneral();
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		if (q.isConstructType()) {
-			Model m = QueryExecutionFactory.create(q, kb).execConstruct();
-			m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
-			m.write(baos, "TTL");
-		} else if (q.isConstructQuad()) {
-			Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
-			RDFDataMgr.write(baos, d, Lang.TRIG);
-		} else if(q.isSelectType()){
-			return ResultSetFormatter.asText(QueryExecutionFactory.create(q,kb).execSelect());
-		} else if(q.isAskType()){
-			return Boolean.toString(QueryExecutionFactory.create(q,kb).execAsk());
-		} else if(q.isDescribeType()){
-			Model m = QueryExecutionFactory.create(q,kb).execDescribe();
-			m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
-			m.write(baos, "TTL");
-		}
-		return baos.toString();
-	}
 }

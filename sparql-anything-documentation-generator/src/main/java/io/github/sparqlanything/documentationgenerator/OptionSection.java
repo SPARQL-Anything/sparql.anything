@@ -7,12 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OptionSection {
-	private Option option;
-	private Example[] examples;
+	private final Option option;
 
-	public OptionSection(Option option, Example[] examples) {
+	private List<ExampleSection> examples;
+
+	public OptionSection(Option option, Example[] es) {
 		this.option = option;
-		this.examples = examples;
+		examples = new ArrayList<>();
+		for (Example e : es) {
+			examples.add(new ExampleSection(e));
+		}
 	}
 
 	public Option getOption() {
@@ -20,11 +24,23 @@ public class OptionSection {
 	}
 
 	public List<ExampleSection> getExamples() {
-		List<ExampleSection> result = new ArrayList<>();
-		for(Example e:this.examples){
-			result.add(new ExampleSection(e));
-		}
-		return result;
+		return this.examples;
+	}
+
+	public String getName() {
+		return option.name();
+	}
+
+	public String getDescription() {
+		return option.description();
+	}
+
+	public String getValidValues() {
+		return option.validValues();
+	}
+
+	public String getDefaultValue() {
+		return option.defaultValue();
 	}
 
 }

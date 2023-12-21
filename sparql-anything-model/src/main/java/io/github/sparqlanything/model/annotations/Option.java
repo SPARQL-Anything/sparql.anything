@@ -9,12 +9,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Option {
 
-	String getDescription();
+	String description();
 
-	String getValidValues();
+	String validValues();
 
-	String getDefaultValue();
+	String defaultValue();
 
-	String getName();
+	String name();
 
 }

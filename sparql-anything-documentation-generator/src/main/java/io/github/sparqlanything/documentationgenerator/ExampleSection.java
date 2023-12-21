@@ -13,18 +13,18 @@ public class ExampleSection {
 	}
 
 	public String getQuery(){
-		return QueryFactory.create(example.getQuery()).toString(Syntax.syntaxSPARQL_11);
+		return QueryFactory.create(example.query()).toString(Syntax.syntaxSPARQL_11);
 	}
 
 	public String getResource() {
-		return example.getResource();
+		return example.resource();
 	}
 
 	public String getDescription() {
-		return example.getDescription();
+		return example.description();
 	}
 
 	public String getResult() {
-		return AnnotationGenerator.getFacadeXRdf(QueryFactory.create(example.getQuery()));
+		return Utils.getFacadeXRdf(QueryFactory.create(example.query()));
 	}
  }
