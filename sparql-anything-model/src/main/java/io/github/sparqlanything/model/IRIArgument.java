@@ -39,7 +39,7 @@ public class IRIArgument {
 	public static final IRIArgument OP_SERVICE_SILENT = new IRIArgument("opservice.silent");
 	public static final IRIArgument ANNOTATE_TRIPLES_WITH_SLOT_KEYS = new IRIArgument("annotate-triples-with-slot-keys", "false");
 
-	private final String s;
+	private final String name;
 	private final String defaultValue;
 
 	public IRIArgument(String s) {
@@ -47,13 +47,13 @@ public class IRIArgument {
 	}
 
 	public IRIArgument(String s, String defaultValue) {
-		this.s = s;
+		this.name = s;
 		this.defaultValue = defaultValue;
 	}
 
 	@Override
 	public String toString() {
-		return s;
+		return name;
 	}
 
 	public String getDefaultValue() {

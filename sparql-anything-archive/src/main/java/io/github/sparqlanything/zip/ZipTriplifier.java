@@ -38,7 +38,7 @@ public class ZipTriplifier implements Triplifier {
 	private static Logger logger = LoggerFactory.getLogger(ZipTriplifier.class);
 
 	@Example(resource = "https://sparql-anything.cc/examples/example.tar", description = "Select and triplify only .csv and .txt files within the archive.", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s1 ?p1 ?o1 . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/example.tar> { fx:properties fx:archive.matches \".*txt|.*csv\" . ?s fx:anySlot ?file1 SERVICE <x-sparql-anything:> { fx:properties fx:location ?file1 ; fx:from-archive \"https://sparql-anything.cc/examples/example.tar\" . ?s1 ?p1 ?o1 } } }")
-	@Option(name = "archive.matches", description = "It tells sparql.anything to evaluate a regular expression on the filenames within the archives. In this case the slots will be filled with the files that match the regex only.", validValues = "Any valid regular expression", defaultValue = ".*")
+	@Option( description = "It tells sparql.anything to evaluate a regular expression on the filenames within the archives. In this case the slots will be filled with the files that match the regex only.", validValues = "Any valid regular expression")
 	public static final IRIArgument MATCHES = new IRIArgument("archive.matches",".*");
 
 	@Override

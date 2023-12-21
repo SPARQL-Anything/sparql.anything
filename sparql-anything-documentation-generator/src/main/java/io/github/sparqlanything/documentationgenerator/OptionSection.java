@@ -1,8 +1,11 @@
 package io.github.sparqlanything.documentationgenerator;
 
+import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +14,15 @@ public class OptionSection {
 
 	private List<ExampleSection> examples;
 
-	public OptionSection(Option option, Example[] es) {
+	private Field field;
+
+	public OptionSection(Field field, Option option, Example[] es) {
 		this.option = option;
 		examples = new ArrayList<>();
 		for (Example e : es) {
 			examples.add(new ExampleSection(e));
 		}
+		this.field = field;
 	}
 
 	public Option getOption() {
@@ -27,8 +33,8 @@ public class OptionSection {
 		return this.examples;
 	}
 
-	public String getName() {
-		return option.name();
+	public String getName() throws NoSuchMethodException, IllegalAccessException {
+		return this.field.get(null).toString();
 	}
 
 	public String getDescription() {
@@ -39,8 +45,8 @@ public class OptionSection {
 		return option.validValues();
 	}
 
-	public String getDefaultValue() {
-		return option.defaultValue();
+	public String getDefaultValue() throws IllegalAccessException {
+		return ((IRIArgument)this.field.get(null)).getDefaultValue();
 	}
 
 }

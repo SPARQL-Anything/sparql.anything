@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PptxTriplifier implements Triplifier {
 
 	@Example(resource = "https://sparql-anything.cc/examples/Presentation2.pptx", query = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Presentation2.pptx,slides.extract-sections=true> { ?s ?p ?o } }")
-	@Option(name = "slides.extract-sections", description = "It tells the document triplifier to extract the sections of the presentation (see #435)", validValues = "true/false", defaultValue = "false")
+	@Option( description = "It tells the document triplifier to extract the sections of the presentation (see #435)", validValues = "true/false")
 	public static final IRIArgument EXTRACT_SECTIONS = new IRIArgument("slides.extract-sections", "false");
 
 	/**

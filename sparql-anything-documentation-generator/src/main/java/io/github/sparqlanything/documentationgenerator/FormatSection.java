@@ -48,9 +48,9 @@ public class FormatSection {
 					Examples examples = field.getAnnotation(Examples.class);
 					Example example = field.getAnnotation(Example.class);
 					if (o != null && examples != null) {
-						optionSections.add(new OptionSection(o, examples.value()));
+						optionSections.add(new OptionSection(field, o, examples.value()));
 					} else if (o !=null && example!=null) {
-						optionSections.add(new OptionSection(o, new Example[]{example}));
+						optionSections.add(new OptionSection(field, o, new Example[]{example}));
 					}
 				}
 			}

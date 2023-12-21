@@ -13,8 +13,6 @@ public @interface Option {
 
 	String validValues();
 
-	String defaultValue();
 
-	String name();
 
 }
