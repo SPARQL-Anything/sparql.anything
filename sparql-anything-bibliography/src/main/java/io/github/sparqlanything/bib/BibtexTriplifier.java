@@ -35,6 +35,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class BibtexTriplifier implements Triplifier {
 	private static final Logger logger = LoggerFactory.getLogger(BibtexTriplifier.class);
 	public BibtexTriplifier() {

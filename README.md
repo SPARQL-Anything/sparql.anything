@@ -195,7 +195,7 @@ A detailed description of the interpretation can be found in the following pages
 - [Spreadsheets: XLS, XLSx](formats/Spreadsheet.md)
 - [Documents: DOCx](formats/Word_Processing_Document.md)
 - [EXIF Metadata](formats/Metadata.md)
-- [Bibtex](formats/Bibtex.md)
+- [Bibliography](formats/Bibliography.md)
 - [YAML](formats/YAML.md)
 - [Slides](formats/Slides.md)
 
