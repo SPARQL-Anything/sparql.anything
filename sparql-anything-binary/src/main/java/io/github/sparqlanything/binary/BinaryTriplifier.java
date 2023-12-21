@@ -24,6 +24,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -31,11 +33,12 @@ import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class BinaryTriplifier implements Triplifier {
 
 	private static final Logger logger = LoggerFactory.getLogger(BinaryTriplifier.class);
 
-//	public static final String ENCODING = "bin.encoding";
+	@Option(description = "The encoding to use for generating the representation of the file.", validValues = "BASE64")
 	public static final IRIArgument ENCODING = new IRIArgument("bin.encoding", Encoding.BASE64.name());
 
 	public static enum Encoding {
