@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class AnnotationGenerator {
+public class DocumentationGenerator {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String formatFolder = args[0];
@@ -64,7 +64,7 @@ public class AnnotationGenerator {
 
 		// Specify the source where the template files come from. Here I set a
 		// plain directory for it, but non-file-system sources are possible too:
-		freemarkerCfg.setClassLoaderForTemplateLoading(AnnotationGenerator.class.getClassLoader(), ".");
+		freemarkerCfg.setClassLoaderForTemplateLoading(DocumentationGenerator.class.getClassLoader(), ".");
 		freemarkerCfg.setNumberFormat("computer");
 
 		// Set the preferred charset template files are stored in. UTF-8 is
@@ -83,7 +83,7 @@ public class AnnotationGenerator {
 		// TemplateException-s.
 		freemarkerCfg.setWrapUncheckedExceptions(true);
 
-		freemarkerCfg.setClassForTemplateLoading(AnnotationGenerator.class, "");
+		freemarkerCfg.setClassForTemplateLoading(DocumentationGenerator.class, "");
 		return freemarkerCfg;
 	}
 
