@@ -23,7 +23,7 @@ SPARQL Anything selects this transformer for the following media types:
 ## Default implementation
 
 <#list format.triplifiers as triplifier>
-- [${triplifier.className}](../sparql-anything-${format.name?lower_case}/src/main/java/com/github/sparqlanything/${format.name?lower_case}/${triplifier.klazz.simpleName}.java)
+- [${triplifier.className}](../sparql-anything-${format.name?lower_case}/src/main/java/io/github/sparqlanything/${format.name?lower_case}/${triplifier.klazz.simpleName}.java)
 </#list>
 
 ## Default Transformation

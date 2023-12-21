@@ -22,7 +22,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ## Default implementation
 
-- [io.github.sparqlanything.slides.PptxTriplifier](../sparql-anything-slides/src/main/java/com/github/sparqlanything/slides/PptxTriplifier.java)
+- [io.github.sparqlanything.slides.PptxTriplifier](../sparql-anything-slides/src/main/java/io/github/sparqlanything/slides/PptxTriplifier.java)
 
 ## Default Transformation
 

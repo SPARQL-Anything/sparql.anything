@@ -17,6 +17,7 @@
 package io.github.sparqlanything.zip;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.compress.archivers.ArchiveException;
@@ -33,6 +34,9 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
+import static io.github.sparqlanything.zip.ZipTriplifier.MATCHES;
+
+@io.github.sparqlanything.model.annotations.Triplifier
 public class TarTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(TarTriplifier.class);
@@ -46,7 +50,7 @@ public class TarTriplifier implements Triplifier {
 		}
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		String dataSourceId = "";
-		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
+		String matches = PropertyUtils.getStringProperty(properties, MATCHES);
 
 		logger.trace("Matches {}", matches);
 

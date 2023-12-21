@@ -1,85 +1,34 @@
-# Archive Files and Directories
+<!-- This page has been generated with sparql-anything-documentation-generator module -->
 
-Archives and directories can be seen as files with the purpose of collecting other files.
+# Archive
 
-According to the Facade-X metamodel archives and directories can be seen as lists of filenames.
-
+Archives and directories can be seen as files with the purpose of collecting other files. According to the Facade-X metamodel archives and directories can be seen as lists of filenames.
 
 ## Extensions
 
 SPARQL Anything selects this transformer for the following file extensions:
 
-- zip
 - tar
+- zip
 
 ## Media types
 
 SPARQL Anything selects this transformer for the following media types:
 
-- application/zip
 - application/x-tar
+- application/zip
 
 ## Default implementation
 
-- Tar: [io.github.sparqlanything.zip.TarTriplifier](../sparql-anything-archive/src/main/java/com/github/sparqlanything/zip/TarTriplifier.java)
-- Zip: [io.github.sparqlanything.zip.ZipTriplifier](../sparql-anything-archive/src/main/java/com/github/sparqlanything/zip/ZipTriplifier.java)
-- File-system directories: [io.github.sparqlanything.zip.FolderTriplifier](../sparql-anything-archive/src/main/java/com/github/sparqlanything/zip/FolderTriplifier.java)
+- [io.github.sparqlanything.zip.TarTriplifier](../sparql-anything-archive/src/main/java/io/github/sparqlanything/archive/TarTriplifier.java)
+- [io.github.sparqlanything.zip.ZipTriplifier](../sparql-anything-archive/src/main/java/io/github/sparqlanything/archive/ZipTriplifier.java)
+- [io.github.sparqlanything.zip.FolderTriplifier](../sparql-anything-archive/src/main/java/io/github/sparqlanything/archive/FolderTriplifier.java)
 
 ## Default Transformation
 
-
 ### Data
 
-```
-example.tar
-├── test.csv
-├── test.json
-├── test.txt
-└── test.xml
-```
-
 Located at https://sparql-anything.cc/examples/example.tar
-
-### Query
-
-```
-CONSTRUCT
-  {
-    ?s ?p ?o .
-  }
-WHERE
-  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/example.tar>
-      { ?s  ?p  ?o }
-  }
-
-```
-
-### Facade-X RDF
-
-```turtle
-@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz: <http://sparql.xyz/facade-x/data/> .
-
-[ rdf:type  fx:root ;
-  rdf:_1    "example/" ;
-  rdf:_2    "example/test.csv" ;
-  rdf:_3    "example/test.json" ;
-  rdf:_4    "example/test.xml" ;
-  rdf:_5    "example/test.txt"
-] .
-```
-
-### Data: Directory  `/Users/lgu/Desktop/example`
-
-```
-/Users/lgu/Desktop/example
-├── test.csv
-├── test.json
-├── test.txt
-└── test.xml
-```
 
 ### Query
 
@@ -89,8 +38,10 @@ CONSTRUCT
     ?s ?p ?o .
   }
 WHERE
-  { SERVICE <x-sparql-anything:location=/Users/lgu/Desktop/example>
-      { ?s  ?p  ?o }
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/example.tar>
+      { GRAPH ?g
+          { ?s  ?p  ?o }
+      }
   }
 
 ```
@@ -98,30 +49,36 @@ WHERE
 ### Facade-X RDF
 
 ```turtle
-@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
 [ rdf:type  fx:root ;
-  rdf:_1    "file:///Users/lgu/Desktop/example/" ;
-  rdf:_2    "file:///Users/lgu/Desktop/example/test.csv" ;
-  rdf:_3    "file:///Users/lgu/Desktop/example/test.json" ;
-  rdf:_4    "file:///Users/lgu/Desktop/example/test.xml" ;
-  rdf:_5    "file:///Users/lgu/Desktop/example/test.txt"
+  rdf:_1    "example/" ;
+  rdf:_2    "example/test.csv" ;
+  rdf:_3    "example/test.json" ;
+  rdf:_4    "example/test.xml" ;
+  rdf:_5    "example/test.txt"
 ] .
+
 ```
-
-
 ## Options
 
 ### Summary
 
-| Option name      | Description | Valid Values | Default Value |
-|------------------|-------------|--------------|---------------|
-| archive.matches  |It tells sparql.anything to evaluate a regular expression on the filenames within the archives. In this case the slots will be filled with the files that match the regex only.|Any valid regular expression|.*| 
-
-
+| Option name | Description | Valid Values | Default Value |
+|-------------|-------------|--------------|---------------|
+| archive.matches | It tells sparql.anything to evaluate a regular expression on the filenames within the archives. In this case the slots will be filled with the files that match the regex only. | Any valid regular expression | .* |
 
 ### `archive.matches`
 
@@ -131,34 +88,25 @@ It tells sparql.anything to evaluate a regular expression on the filenames withi
 
 #### Valid Values
 
-Any valid regular expression.
+Any valid regular expression
 
 #### Default Value
 
-`.*`
+.*
 
 #### Examples
 
-##### Input
+##### Example 1
 
-### Data
+Select and triplify only .csv and .txt files within the archive.
 
-```
-example.tar
-├── test.csv
-├── test.json
-├── test.txt
-└── test.xml
-```
+###### Input
 
-Located at https://sparql-anything.cc/examples/example.tar
-
-##### Use Case 1: Select and triplify only .csv and .txt files within the archive.
+https://sparql-anything.cc/examples/example.tar
 
 ###### Query
 
 ```
-
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -186,13 +134,22 @@ WHERE
 ###### Result
 
 ```turtle
-
-@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
 [ rdf:type  fx:root ;
+  rdf:_1    "this is a test" ;
   rdf:_1    [ rdf:_1  "Year" ;
               rdf:_2  "Make" ;
               rdf:_3  "Model" ;
@@ -225,12 +182,9 @@ WHERE
             ]
 ] .
 
-[ rdf:type  fx:root ;
-  rdf:_1    "this is a test"
-] .
-
-
-
 ```
+
+
+
 
 

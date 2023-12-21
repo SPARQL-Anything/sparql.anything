@@ -117,6 +117,7 @@ public final class TriplifierRegister {
 		Set<String> result = new HashSet<>();
 		result.addAll(extension.values());
 		result.addAll(mimeType.values());
+		result.add("io.github.sparqlanything.zip.FolderTriplifier");
 		return result;
 	}
 
