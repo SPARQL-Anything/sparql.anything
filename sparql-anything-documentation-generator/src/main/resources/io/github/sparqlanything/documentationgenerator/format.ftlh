@@ -43,12 +43,14 @@ ${format.defaultTransformationQuery?no_esc}
 ```turtle
 ${format.facadeXRdf?no_esc}
 ```
+<#if format.optionSections?has_content>
 ## Options
 
 ### Summary
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
+</#if>
 <#list format.optionSections as optionSection>
 | ${optionSection.name} | ${optionSection.description} | ${optionSection.validValues} | ${optionSection.defaultValue} |
 </#list>

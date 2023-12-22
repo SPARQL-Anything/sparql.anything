@@ -86,12 +86,6 @@ WHERE
 ] .
 
 ```
-## Options
-
-### Summary
-
-| Option name | Description | Valid Values | Default Value |
-|-------------|-------------|--------------|---------------|
 
 
 
