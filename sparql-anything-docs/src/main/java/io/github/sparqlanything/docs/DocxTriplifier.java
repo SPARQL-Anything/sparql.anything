@@ -39,8 +39,8 @@ import java.util.Set;
 
 public class DocxTriplifier implements Triplifier {
 
-	public final static String MERGE_PARAGRAPHS = "docs.merge-paragraphs";
-	public final static String TABLE_HEADERS = "docs.table-headers";
+	public final static IRIArgument MERGE_PARAGRAPHS = new IRIArgument("docs.merge-paragraphs", "false");
+	public final static IRIArgument TABLE_HEADERS = new IRIArgument("docs.table-headers","false");
 
 	private static final Logger logger = LoggerFactory.getLogger(DocxTriplifier.class);
 
@@ -53,8 +53,8 @@ public class DocxTriplifier implements Triplifier {
 
 		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
-		boolean mergeParagraphs = Boolean.parseBoolean(properties.getProperty(MERGE_PARAGRAPHS, "false"));
-		boolean headers = Boolean.parseBoolean(properties.getProperty(TABLE_HEADERS, "false"));
+		boolean mergeParagraphs = PropertyUtils.getBooleanProperty(properties, MERGE_PARAGRAPHS);
+		boolean headers = PropertyUtils.getBooleanProperty(properties, TABLE_HEADERS);
 
 		builder.addRoot(dataSourceId);
 

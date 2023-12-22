@@ -74,7 +74,7 @@ public class TestTriplifier {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p)))
 					.isIsomorphicWith(expectedGraph));
 
-			p.setProperty(DocxTriplifier.MERGE_PARAGRAPHS, "true");
+			p.setProperty(DocxTriplifier.MERGE_PARAGRAPHS.toString(), "true");
 
 			b = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
