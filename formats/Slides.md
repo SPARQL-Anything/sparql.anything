@@ -157,6 +157,7 @@ WHERE
 |-------------|-------------|--------------|---------------|
 | [slides.extract-sections](#slidesextractsections) | It tells the document triplifier to extract the sections of the presentation (see #435) | true/false | false |
 
+---
 ### `slides.extract-sections`
 
 #### Description

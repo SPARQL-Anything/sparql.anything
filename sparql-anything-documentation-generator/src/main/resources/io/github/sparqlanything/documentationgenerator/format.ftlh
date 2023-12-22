@@ -56,6 +56,7 @@ ${format.facadeXRdf?no_esc}
 </#list>
 
 <#list format.optionSections as optionSection>
+---
 ### `${optionSection.name}`
 
 #### Description

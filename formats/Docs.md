@@ -103,6 +103,7 @@ WHERE
 | [docs.merge-paragraphs](#docsmergeparagraphs) | It tells the document triplifier to merge all the paragraphs of the document into a single slot (new line characters are preserved) | true/false | false |
 | [docs.table-headers](#docstableheaders) | It tells the document triplifier to use the headers of the tables within the document file for minting the properties of the generated triples. | true/false | false |
 
+---
 ### `docs.merge-paragraphs`
 
 #### Description
@@ -177,6 +178,7 @@ WHERE
 
 ```
 
+---
 ### `docs.table-headers`
 
 #### Description

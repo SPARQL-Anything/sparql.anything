@@ -104,6 +104,7 @@ WHERE
 | [csv.null-string](#csvnullstring) | It tells the CSV triplifier to not produce triples where the specified string would be in the object position of the triple | Any String | Not set |
 | [csv.ignore-columns-with-no-header](#csvignorecolumnswithnoheader) | It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180 | true/false | false |
 
+---
 ### `csv.headers`
 
 #### Description
@@ -156,6 +157,7 @@ WHERE
 
 ```
 
+---
 ### `csv.headers-row`
 
 #### Description
@@ -208,6 +210,7 @@ WHERE
 
 ```
 
+---
 ### `csv.format`
 
 #### Description
@@ -274,6 +277,7 @@ WHERE
 
 ```
 
+---
 ### `csv.delimiter`
 
 #### Description
@@ -329,6 +333,7 @@ WHERE
 
 ```
 
+---
 ### `csv.quote-char`
 
 #### Description
@@ -405,6 +410,7 @@ WHERE
 
 ```
 
+---
 ### `csv.null-string`
 
 #### Description
@@ -459,6 +465,7 @@ WHERE
 
 ```
 
+---
 ### `csv.ignore-columns-with-no-header`
 
 #### Description
