@@ -71,7 +71,9 @@ ${optionSection.validValues}
 
 ${optionSection.defaultValue}
 
+<#if optionSection.examples?has_content>
 #### Examples
+</#if>
 
 <#list optionSection.examples as example>
 ##### Example ${example?index + 1 }

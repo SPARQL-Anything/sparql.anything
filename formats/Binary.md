@@ -79,6 +79,29 @@ WHERE
 ] .
 
 ```
+## Options
+
+### Summary
+
+| Option name | Description | Valid Values | Default Value |
+|-------------|-------------|--------------|---------------|
+| [bin.encoding](#binencoding) | The encoding to use for generating the representation of the file. | BASE64 | BASE64 |
+
+---
+### `bin.encoding`
+
+#### Description
+
+The encoding to use for generating the representation of the file.
+
+#### Valid Values
+
+BASE64
+
+#### Default Value
+
+BASE64
+
 
 
 

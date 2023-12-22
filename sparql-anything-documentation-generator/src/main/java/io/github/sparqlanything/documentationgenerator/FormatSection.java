@@ -61,6 +61,8 @@ public class FormatSection {
 						optionSections.add(new OptionSection(field, o, examples.value()));
 					} else if (o !=null && example!=null) {
 						optionSections.add(new OptionSection(field, o, new Example[]{example}));
+					} else {
+						optionSections.add(new OptionSection(field, o, new Example[]{}));
 					}
 				}
 			}
