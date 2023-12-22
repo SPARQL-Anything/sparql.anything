@@ -24,7 +24,6 @@ import java.util.Properties;
 public class HTMLMicrodataTest extends AbstractTriplifierTester {
 
 	public HTMLMicrodataTest() {
-
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
 	}
 
@@ -34,7 +33,7 @@ public class HTMLMicrodataTest extends AbstractTriplifierTester {
 	}
 
 	protected void properties(Properties properties) {
-		properties.setProperty(HTMLTriplifier.PROPERTY_METADATA, "true");
+		properties.setProperty(HTMLTriplifier.PROPERTY_METADATA.toString(), "true");
 	}
 
 }

@@ -45,13 +45,13 @@ import java.util.*;
 
 public class HTMLTriplifier implements Triplifier {
 
-	public static final String PROPERTY_METADATA = "html.metadata";
 	private static final Logger log = LoggerFactory.getLogger(HTMLTriplifier.class);
-	private static final String PROPERTY_SELECTOR = "html.selector";
-	private static final String PROPERTY_BROWSER = "html.browser";
-	private static final String PROPERTY_BROWSER_WAIT = "html.browser.wait";
-	private static final String PROPERTY_BROWSER_SCREENSHOT = "html.browser.screenshot";
-	private static final String PROPERTY_BROWSER_TIMEOUT = "html.browser.timeout";
+	public static final IRIArgument PROPERTY_METADATA = new IRIArgument("html.metadata", "false");
+	private static final IRIArgument PROPERTY_SELECTOR = new IRIArgument("html.selector", ":root");
+	private static final IRIArgument PROPERTY_BROWSER = new IRIArgument("html.browser");
+	private static final IRIArgument PROPERTY_BROWSER_WAIT = new IRIArgument("html.browser.wait");
+	private static final IRIArgument PROPERTY_BROWSER_SCREENSHOT = new IRIArgument("html.browser.screenshot");
+	private static final IRIArgument PROPERTY_BROWSER_TIMEOUT = new IRIArgument("html.browser.timeout", "30000");
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
@@ -81,11 +81,12 @@ public class HTMLTriplifier implements Triplifier {
 		Charset charset = Triplifier.getCharsetArgument(properties);
 		boolean blank_nodes = PropertyUtils.getBooleanProperty(properties, IRIArgument.BLANK_NODES);
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
-		String selector = properties.getProperty(PROPERTY_SELECTOR, ":root");
+		String selector = PropertyUtils.getStringProperty(properties, PROPERTY_SELECTOR);
 		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 
 		log.trace(properties.toString());
-		if (properties.containsKey(PROPERTY_METADATA) && Boolean.parseBoolean(properties.getProperty(PROPERTY_METADATA))) {
+		boolean extractMetadata = PropertyUtils.getBooleanProperty(properties, PROPERTY_METADATA);
+		if (extractMetadata) {
 			log.trace("Extracting metadata (needs HTTP location)");
 			try {
 				URL url = Triplifier.getLocation(properties);
@@ -208,7 +209,7 @@ public class HTMLTriplifier implements Triplifier {
 
 	private String useBrowserToNavigate(String url, Properties properties) {
 		// navigate to the page at url and return the HTML as a string
-		String browserProperty = properties.getProperty(PROPERTY_BROWSER);
+		String browserProperty = PropertyUtils.getStringProperty(properties, PROPERTY_BROWSER);
 
 		// first pull out http headers that we need to pass to the browser
 		Map<String, String> props = new HashMap<String, String>((Map) properties);
@@ -245,8 +246,8 @@ public class HTMLTriplifier implements Triplifier {
 		Page page = context.newPage();
 		page.setExtraHTTPHeaders(headers);
 		Page.NavigateOptions options = new Page.NavigateOptions();
-		if (properties.containsKey(PROPERTY_BROWSER_TIMEOUT)) {
-			int timeoutMilliseconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_TIMEOUT));
+		if (properties.containsKey(PROPERTY_BROWSER_TIMEOUT.toString())) {
+			int timeoutMilliseconds = PropertyUtils.getIntegerProperty(properties, PROPERTY_BROWSER_TIMEOUT);
 			log.debug("headless browser navigating to url with timeout of {} milliseconds", timeoutMilliseconds);
 			options.setTimeout(timeoutMilliseconds);
 			page.navigate(url, options);
@@ -254,14 +255,14 @@ public class HTMLTriplifier implements Triplifier {
 			page.navigate(url);
 		}
 		try {
-			if (properties.containsKey(PROPERTY_BROWSER_WAIT)) {
-				int waitSeconds = Integer.parseInt(properties.getProperty(PROPERTY_BROWSER_WAIT));
+			if (properties.containsKey(PROPERTY_BROWSER_WAIT.toString())) {
+				int waitSeconds = PropertyUtils.getIntegerProperty(properties, PROPERTY_BROWSER_WAIT);
 				log.debug("headless browser navigated to url and now will wait for {} seconds...", waitSeconds);
 				// sleep before we try to pull the HTML content out the the browser
 				java.util.concurrent.TimeUnit.SECONDS.sleep(waitSeconds);
 			}
-			if (properties.containsKey(PROPERTY_BROWSER_SCREENSHOT)) {
-				page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(new URI(properties.getProperty(PROPERTY_BROWSER_SCREENSHOT)))));
+			if (properties.containsKey(PROPERTY_BROWSER_SCREENSHOT.toString())) {
+				page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(new URI(PropertyUtils.getStringProperty(properties, PROPERTY_BROWSER_SCREENSHOT)))));
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
