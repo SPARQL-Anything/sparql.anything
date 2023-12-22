@@ -38,7 +38,9 @@ import java.util.Set;
 public class CSVTriplifier implements Triplifier, Slicer {
 	public final static IRIArgument PROPERTY_HEADERS = new IRIArgument("csv.headers", "false");
 	public final static IRIArgument PROPERTY_HEADER_ROW = new IRIArgument("csv.headers-row", "1");
-	public final static String PROPERTY_FORMAT = "csv.format";
+//	public final static String PROPERTY_FORMAT = "csv.format";
+
+	public final static IRIArgument PROPERTY_FORMAT = new IRIArgument("csv.format", CSVFormat.Predefined.Default.name());
 	public final static String PROPERTY_DELIMITER = "csv.delimiter";
 	public final static String PROPERTY_QUOTE_CHAR = "csv.quote-char";
 	public final static String PROPERTY_NULL_STRING = "csv.null-string";
@@ -91,13 +93,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	}
 
 	public static CSVFormat buildFormat(Properties properties) throws IOException {
-		CSVFormat format;
-		try {
-			format = CSVFormat.valueOf(properties.getProperty(PROPERTY_FORMAT, CSVFormat.Predefined.Default.name()));
-		} catch (Exception e) {
-			log.warn("Unsupported csv format: '{}', using default.", properties.getProperty(PROPERTY_FORMAT));
-			format = CSVFormat.DEFAULT;
-		}
+		CSVFormat format = CSVFormat.valueOf(PropertyUtils.getStringProperty(properties, PROPERTY_FORMAT));
+
 		if (properties.containsKey(PROPERTY_NULL_STRING)) {
 			format = format.withNullString(properties.getProperty(PROPERTY_NULL_STRING));
 		}
