@@ -100,8 +100,8 @@ WHERE
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
-| [docs.merge-paragraphs](#docs.mergeparagraphs) | It tells the document triplifier to merge all the paragraphs of the document into a single slot (new line characters are preserved) | true/false | false |
-| [docs.table-headers](#docs.tableheaders) | It tells the document triplifier to use the headers of the tables within the document file for minting the properties of the generated triples. | true/false | false |
+| [docs.merge-paragraphs](#docsmerge-paragraphs) | It tells the document triplifier to merge all the paragraphs of the document into a single slot (new line characters are preserved) | true/false | false |
+| [docs.table-headers](#docstable-headers) | It tells the document triplifier to use the headers of the tables within the document file for minting the properties of the generated triples. | true/false | false |
 
 ---
 ### `docs.merge-paragraphs`
