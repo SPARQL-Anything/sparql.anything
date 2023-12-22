@@ -52,7 +52,7 @@ ${format.facadeXRdf?no_esc}
 |-------------|-------------|--------------|---------------|
 </#if>
 <#list format.optionSections as optionSection>
-| ${optionSection.name} | ${optionSection.description} | ${optionSection.validValues} | ${optionSection.defaultValue} |
+| [${optionSection.name}](#${optionSection.link}) | ${optionSection.description} | ${optionSection.validValues} | ${optionSection.defaultValue} |
 </#list>
 
 <#list format.optionSections as optionSection>

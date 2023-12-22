@@ -78,7 +78,7 @@ WHERE
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
-| archive.matches | It tells sparql.anything to evaluate a regular expression on the filenames within the archives. In this case the slots will be filled with the files that match the regex only. | Any valid regular expression | .* |
+| [archive.matches](#archivematches) | It tells sparql.anything to evaluate a regular expression on the filenames within the archives. In this case the slots will be filled with the files that match the regex only. | Any valid regular expression | .* |
 
 ### `archive.matches`
 

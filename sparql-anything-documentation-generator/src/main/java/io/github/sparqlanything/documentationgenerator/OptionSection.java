@@ -32,6 +32,11 @@ public class OptionSection {
 		return this.field.get(null).toString();
 	}
 
+	public String getLink() throws NoSuchMethodException, IllegalAccessException {
+		return getName().toLowerCase().replace("-","").replace(".","");
+	}
+
+
 	public String getDescription() {
 		return option.description();
 	}
