@@ -10,25 +10,25 @@ From a structural standpoint, a binary file can be seen as sequence of bytes.
 
 SPARQL Anything selects this transformer for the following file extensions:
 
-- tif
-- jpg
-- tiff
-- bmp
-- ico
 - bin
+- bmp
 - dat
-- png
+- ico
 - jpeg
+- jpg
+- png
+- tif
+- tiff
 
 ## Media types
 
 SPARQL Anything selects this transformer for the following media types:
 
-- image/png
 - application/octet-stream
-- image/jpeg
-- image/tiff
 - image/bmp
+- image/jpeg
+- image/png
+- image/tiff
 - image/vnd.microsoft.icon
 
 ## Default implementation

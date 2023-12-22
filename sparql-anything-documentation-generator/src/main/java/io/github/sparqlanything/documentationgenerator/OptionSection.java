@@ -24,10 +24,6 @@ public class OptionSection {
 		this.field = field;
 	}
 
-	public Option getOption() {
-		return option;
-	}
-
 	public List<ExampleSection> getExamples() {
 		return this.examples;
 	}

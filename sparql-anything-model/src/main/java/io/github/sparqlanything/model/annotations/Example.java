@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 @Repeatable(Examples.class)
 public @interface Example {
 
-	String resource();
+	String resource() default "Inline content";
 
 	String query();
 

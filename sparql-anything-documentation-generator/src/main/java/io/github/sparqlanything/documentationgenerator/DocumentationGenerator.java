@@ -10,6 +10,8 @@ import io.github.sparqlanything.model.annotations.Format;
 import io.github.sparqlanything.model.annotations.Triplifier;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.main.QC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class DocumentationGenerator {
+
+	private static final Logger logger = LoggerFactory.getLogger(DocumentationGenerator.class);
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String formatFolder = args[0];
@@ -93,11 +97,17 @@ public class DocumentationGenerator {
 		FormatSection formatSection = new FormatSection(p, classes);
 		var.put("format", formatSection);
 
-		FileWriter fileWriter = new FileWriter(formatFolder + "/" + formatSection.getName() + ".md");
+		String filename = formatFolder + "/" + formatSection.getName() + ".md";
+		FileWriter fileWriter = new FileWriter(filename);
 		try {
 			temp.process(var, fileWriter);
-		} catch (TemplateException | IOException ignored) {
+		} catch (TemplateException | IOException e) {
+			e.printStackTrace();
 		}
+
+		logger.info("{} generated!", filename);
+
+
 	}
 
 

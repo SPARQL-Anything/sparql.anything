@@ -17,6 +17,8 @@
 package io.github.sparqlanything.csv;
 
 import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
@@ -35,16 +37,35 @@ import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class CSVTriplifier implements Triplifier, Slicer {
-	public final static IRIArgument PROPERTY_HEADERS = new IRIArgument("csv.headers", "false");
-	public final static IRIArgument PROPERTY_HEADER_ROW = new IRIArgument("csv.headers-row", "1");
-//	public final static String PROPERTY_FORMAT = "csv.format";
 
+	@Example(resource = "https://sparql-anything.cc/examples/simple.tsv", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (AVG(xsd:float(?petalLength)) AS ?avgPetalLength) WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true,csv.format=TDF> { ?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength FILTER ( xsd:float(?length) > 4.9 ) } }", description = "Compute the average petal length of the species having sepal length greater than 4.9")
+	@Option(description = "It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.", validValues = "true/false")
+	public final static IRIArgument PROPERTY_HEADERS = new IRIArgument("csv.headers", "false");
+
+	@Example(resource = "https://sparql-anything.cc/examples/simple.tsv", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (AVG(xsd:float(?petalLength)) AS ?avgPetalLength) WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true,csv.format=TDF,csv.headers-row=3> { ?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength FILTER ( xsd:float(?length) > 4.9 ) } }", description = "Compute the average petal length of the species having sepal length greater than 4.9")
+	@Option(description = "It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see #179", validValues = "Any integer")
+	public final static IRIArgument PROPERTY_HEADER_ROW = new IRIArgument("csv.headers-row", "1");
+
+	@Example(resource = "https://sparql-anything.cc/examples/simple.tsv", query = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.format=TDF> { ?s ?p ?o } } ", description = "Constructing a Facade-X RDF graph out of the TSV file available at https://sparql-anything.cc/examples/simple.tsv")
+	@Option(description = "The format of the input CSV file.", validValues = "Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache's commons CSV library.")
 	public final static IRIArgument PROPERTY_FORMAT = new IRIArgument("csv.format", CSVFormat.Predefined.Default.name());
 
+	@Example(resource = "https://sparql-anything.cc/examples/simple.tsv", description = "Compute the maximum petal length of the species having sepal length less than 4.9", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (MAX(xsd:float(?petalLength)) AS ?maxPetalLength) WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true> { fx:properties fx:csv.delimiter \"\\t\" . ?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength FILTER ( xsd:float(?length) < 4.9 ) } }")
+	@Option(description = "It sets the column delimiter, usually ,;\\t etc.", validValues = "Any single character")
 	public final static IRIArgument PROPERTY_DELIMITER = new IRIArgument("csv.delimiter", ",");
+
+	@Example(resource = "https://sparql-anything.cc/examples/csv_with_commas.csv", description = "Constructing a Facade-X RDF graph out of the CSV available at https://sparql-anything.cc/examples/csv_with_commas.csv", query = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/csv_with_commas.csv,csv.headers=true,csv.quote-char='> { ?s ?p ?o } }")
+	@Option(description = "It sets the quoting character", validValues = "Any single character")
 	public final static IRIArgument PROPERTY_QUOTE_CHAR = new IRIArgument("csv.quote-char", "\"");
+
+	@Example(resource = "https://sparql-anything.cc/examples/simple_with_null.csv", description = "Retrieving name surname of who doesn't have an email address.", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?name ?surname WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple_with_null.csv,csv.headers=true> { fx:properties fx:csv.null-string \"\" . ?c xyz:name ?name ; xyz:surname ?surname FILTER NOT EXISTS { ?c xyz:email ?email } } }")
+	@Option(description = "It tells the CSV triplifier to not produce triples where the specified string would be in the object position of the triple", validValues = "Any String")
 	public final static IRIArgument PROPERTY_NULL_STRING = new IRIArgument("csv.null-string", null);
+
+	@Example( query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT DISTINCT ?fred ?sally WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:csv.headers true . fx:properties fx:content \",state\\nfred,CO\\nsally,FL\" . fx:properties fx:media-type \"text/csv\" . fx:properties fx:csv.ignore-columns-with-no-header true . ?root a fx:root ; rdf:_1 [rdf:_1 ?fred] ; rdf:_2 [rdf:_1 ?sally] . } }")
+	@Option(description = "It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180", validValues = "true/false")
 	public final static IRIArgument IGNORE_COLUMNS_WITH_NO_HEADERS = new IRIArgument("csv.ignore-columns-with-no-header", "false");
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 
@@ -229,7 +250,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					@Override
 					public boolean hasNext() {
 						boolean hasNext = recordIterator.hasNext();
-						if(!hasNext){
+						if (!hasNext) {
 							try {
 								in.close();
 								is.close();

@@ -12,30 +12,36 @@ import java.io.ByteArrayOutputStream;
 
 public class Utils {
 
-	public static String getFacadeXRdf(Query q){
-		// Set FacadeX OpExecutor as default executor factory
-		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+	public static String getFacadeXRdf(Query q) {
+		try {
+			// Set FacadeX OpExecutor as default executor factory
+			QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
-		// Execute the query by using standard Jena ARQ's API
-		Dataset kb = DatasetFactory.createGeneral();
+			// Execute the query by using standard Jena ARQ's API
+			Dataset kb = DatasetFactory.createGeneral();
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		if (q.isConstructType()) {
-			Model m = QueryExecutionFactory.create(q, kb).execConstruct();
-			m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
-			m.write(baos, "TTL");
-		} else if (q.isConstructQuad()) {
-			Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
-			RDFDataMgr.write(baos, d, Lang.TRIG);
-		} else if (q.isSelectType()) {
-			return ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect());
-		} else if (q.isAskType()) {
-			return Boolean.toString(QueryExecutionFactory.create(q, kb).execAsk());
-		} else if (q.isDescribeType()) {
-			Model m = QueryExecutionFactory.create(q, kb).execDescribe();
-			m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
-			m.write(baos, "TTL");
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			if (q.isConstructType()) {
+				Model m = QueryExecutionFactory.create(q, kb).execConstruct();
+				m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+				m.write(baos, "TTL");
+			} else if (q.isConstructQuad()) {
+				Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
+				RDFDataMgr.write(baos, d, Lang.TRIG);
+			} else if (q.isSelectType()) {
+				return ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect());
+			} else if (q.isAskType()) {
+				return Boolean.toString(QueryExecutionFactory.create(q, kb).execAsk());
+			} else if (q.isDescribeType()) {
+				Model m = QueryExecutionFactory.create(q, kb).execDescribe();
+				m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+				m.write(baos, "TTL");
+			}
+			return baos.toString();
+		} catch (Exception e) {
+			System.err.println("Error with query \n" + q.toString(Syntax.syntaxSPARQL_11));
+			e.printStackTrace();
 		}
-		return baos.toString();
+		return "";
 	}
 }

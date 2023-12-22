@@ -6,12 +6,11 @@ import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Examples;
 import io.github.sparqlanything.model.annotations.Format;
 import io.github.sparqlanything.model.annotations.Option;
+import org.apache.commons.text.diff.StringsComparator;
 import org.apache.jena.query.*;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class FormatSection {
 
@@ -31,7 +30,11 @@ public class FormatSection {
 		this.triplifiers = new ArrayList<>();
 		this.extensions = new ArrayList<>();
 		this.mimeTypes = new ArrayList<>();
+		this.optionSections = new ArrayList<>();
+		init(classes);
+	}
 
+	private void init(Set<Class<?>> classes) {
 		TriplifierRegister triplifierRegister = TriplifierRegister.getInstance();
 		for (Class<?> triplifierClass : classes) {
 			TriplifierSection triplifierSection = new TriplifierSection(triplifierClass.getName(), triplifierClass);
@@ -39,8 +42,15 @@ public class FormatSection {
 			this.mimeTypes.addAll(triplifierRegister.getTriplifierMimeType(triplifierClass.getName()));
 			triplifiers.add(triplifierSection);
 		}
+		Collections.sort(extensions);
+		Collections.sort(mimeTypes);
+		triplifiers.sort(new Comparator<TriplifierSection>() {
+			@Override
+			public int compare(TriplifierSection o1, TriplifierSection o2) {
+				return o1.getClassName().compareTo(o2.getClassName());
+			}
+		});
 
-		optionSections = new ArrayList<>();
 		for (Class<?> triplifier : classes) {
 			for (Field field : triplifier.getFields()) {
 				if (field.getType().equals(IRIArgument.class)) {

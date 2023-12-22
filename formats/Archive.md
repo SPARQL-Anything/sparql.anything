@@ -8,21 +8,21 @@ Archives and directories can be seen as files with the purpose of collecting oth
 
 SPARQL Anything selects this transformer for the following file extensions:
 
-- zip
 - tar
+- zip
 
 ## Media types
 
 SPARQL Anything selects this transformer for the following media types:
 
-- application/zip
 - application/x-tar
+- application/zip
 
 ## Default implementation
 
 - [io.github.sparqlanything.zip.FolderTriplifier](../sparql-anything-archive/src/main/java/io/github/sparqlanything/archive/FolderTriplifier.java)
-- [io.github.sparqlanything.zip.ZipTriplifier](../sparql-anything-archive/src/main/java/io/github/sparqlanything/archive/ZipTriplifier.java)
 - [io.github.sparqlanything.zip.TarTriplifier](../sparql-anything-archive/src/main/java/io/github/sparqlanything/archive/TarTriplifier.java)
+- [io.github.sparqlanything.zip.ZipTriplifier](../sparql-anything-archive/src/main/java/io/github/sparqlanything/archive/ZipTriplifier.java)
 
 ## Default Transformation
 
