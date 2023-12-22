@@ -55,7 +55,6 @@ public class Utils {
 				StringBuilder subString = new StringBuilder();
 				int index2 = index + 1;
 				for (; index2 < string.length(); index2++) {
-
 					if (Character.isDigit(string.charAt(index2))) {
 						subString.append(string.charAt(index2));
 					} else {
@@ -70,7 +69,8 @@ public class Utils {
 					sb.append("#").append(subString.toString());
 				}
 
-				sb.append(" ");
+				if(index2<string.length())
+					sb.append(string.charAt(index2));
 				index = index2;
 
 			} else {
