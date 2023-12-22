@@ -5,16 +5,15 @@ import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OptionSection {
 	private final Option option;
 
-	private List<ExampleSection> examples;
+	private final List<ExampleSection> examples;
 
-	private Field field;
+	private final Field field;
 
 	public OptionSection(Field field, Option option, Example[] es) {
 		this.option = option;
@@ -46,7 +45,9 @@ public class OptionSection {
 	}
 
 	public String getDefaultValue() throws IllegalAccessException {
-		return ((IRIArgument)this.field.get(null)).getDefaultValue();
+		String defaultValue = ((IRIArgument) this.field.get(null)).getDefaultValue();
+		if (defaultValue == null) return "Not set";
+		return defaultValue;
 	}
 
 }
