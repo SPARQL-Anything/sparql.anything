@@ -155,14 +155,14 @@ WHERE
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
-| [slides.extract-sections](#slidesextract-sections) | It tells the document triplifier to extract the sections of the presentation (see #435) | true/false | false |
+| [slides.extract-sections](#slidesextract-sections) | It tells the document triplifier to extract the sections of the presentation (see [#435](https://github.com/SPARQL-Anything/sparql.anything/issues/435)  | true/false | `false` |
 
 ---
 ### `slides.extract-sections`
 
 #### Description
 
-It tells the document triplifier to extract the sections of the presentation (see #435)
+It tells the document triplifier to extract the sections of the presentation (see [#435](https://github.com/SPARQL-Anything/sparql.anything/issues/435) 
 
 #### Valid Values
 
@@ -170,7 +170,7 @@ true/false
 
 #### Default Value
 
-false
+`false`
 
 #### Examples
 

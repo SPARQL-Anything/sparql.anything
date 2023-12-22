@@ -96,13 +96,13 @@ WHERE
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
-| [csv.headers](#csvheaders) | It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples. | true/false | false |
-| [csv.headers-row](#csvheaders-row) | It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see #179 | Any integer | 1 |
-| [csv.format](#csvformat) | The format of the input CSV file. | Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache&#39;s commons CSV library. | Default |
-| [csv.delimiter](#csvdelimiter) | It sets the column delimiter, usually ,;\t etc. | Any single character | , |
-| [csv.quote-char](#csvquote-char) | It sets the quoting character | Any single character | &quot; |
+| [csv.headers](#csvheaders) | It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples. | true/false | `false` |
+| [csv.headers-row](#csvheaders-row) | It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see [#179](https://github.com/SPARQL-Anything/sparql.anything/issues/179)  | Any integer | `1` |
+| [csv.format](#csvformat) | The format of the input CSV file. | Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache&#39;s commons CSV library. | `Default` |
+| [csv.delimiter](#csvdelimiter) | It sets the column delimiter, usually ,;\t etc. | Any single character | `,` |
+| [csv.quote-char](#csvquote-char) | It sets the quoting character | Any single character | `&quot;` |
 | [csv.null-string](#csvnull-string) | It tells the CSV triplifier to not produce triples where the specified string would be in the object position of the triple | Any String | Not set |
-| [csv.ignore-columns-with-no-header](#csvignore-columns-with-no-header) | It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180 | true/false | false |
+| [csv.ignore-columns-with-no-header](#csvignore-columns-with-no-header) | It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see [#180](https://github.com/SPARQL-Anything/sparql.anything/issues/180)  | true/false | `false` |
 
 ---
 ### `csv.headers`
@@ -117,7 +117,7 @@ true/false
 
 #### Default Value
 
-false
+`false`
 
 #### Examples
 
@@ -162,7 +162,7 @@ WHERE
 
 #### Description
 
-It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see #179
+It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see [#179](https://github.com/SPARQL-Anything/sparql.anything/issues/179) 
 
 #### Valid Values
 
@@ -170,7 +170,7 @@ Any integer
 
 #### Default Value
 
-1
+`1`
 
 #### Examples
 
@@ -223,7 +223,7 @@ Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs
 
 #### Default Value
 
-Default
+`Default`
 
 #### Examples
 
@@ -290,7 +290,7 @@ Any single character
 
 #### Default Value
 
-,
+`,`
 
 #### Examples
 
@@ -346,7 +346,7 @@ Any single character
 
 #### Default Value
 
-&quot;
+`&quot;`
 
 #### Examples
 
@@ -470,7 +470,7 @@ WHERE
 
 #### Description
 
-It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180
+It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see [#180](https://github.com/SPARQL-Anything/sparql.anything/issues/180) 
 
 #### Valid Values
 
@@ -478,7 +478,7 @@ true/false
 
 #### Default Value
 
-false
+`false`
 
 #### Examples
 

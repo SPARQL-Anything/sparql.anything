@@ -96,12 +96,12 @@ WHERE
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
-| [html.selector](#htmlselector) | A CSS selector that restricts the HTML tags to consider for the triplification. | Any valid CSS selector. | :root |
-| [html.metadata](#htmlmetadata) | It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. -- See #164 | true/false | false |
+| [html.selector](#htmlselector) | A CSS selector that restricts the HTML tags to consider for the triplification. | Any valid CSS selector. | `:root` |
+| [html.metadata](#htmlmetadata) | It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. -- See [#164](https://github.com/SPARQL-Anything/sparql.anything/issues/164)  | true/false | `false` |
 | [html.browser](#htmlbrowser) | It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](https://github.com/SPARQL-Anything/sparql.anything/blob/v1.0-DEV/BROWSER.md) and [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | chromium|webkit|firefox | Not set |
 | [html.browser.wait](#htmlbrowserwait) | When using a browser to navigate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML. -- See See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | Not set |
 | [html.browser.screenshot](#htmlbrowserscreenshot) | When using a browser to navigate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here. See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any valid URL | Not set |
-| [html.browser.timeout](#htmlbrowsertimeout) | When using a browser to navigate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | 30000 |
+| [html.browser.timeout](#htmlbrowsertimeout) | When using a browser to navigate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | `30000` |
 
 ---
 ### `html.selector`
@@ -116,7 +116,7 @@ Any valid CSS selector.
 
 #### Default Value
 
-:root
+`:root`
 
 #### Examples
 
@@ -157,7 +157,7 @@ WHERE
 
 #### Description
 
-It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. -- See #164
+It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. -- See [#164](https://github.com/SPARQL-Anything/sparql.anything/issues/164) 
 
 #### Valid Values
 
@@ -165,7 +165,7 @@ true/false
 
 #### Default Value
 
-false
+`false`
 
 #### Examples
 
@@ -306,7 +306,7 @@ Any integer
 
 #### Default Value
 
-30000
+`30000`
 
 
 

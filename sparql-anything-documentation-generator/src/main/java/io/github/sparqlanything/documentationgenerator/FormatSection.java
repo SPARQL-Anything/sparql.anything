@@ -74,7 +74,7 @@ public class FormatSection {
 	}
 
 	public String getDescription() {
-		return description;
+		return Utils.addLinkToIssues(description);
 	}
 
 	public List<TriplifierSection> getTriplifiers() {

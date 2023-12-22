@@ -44,4 +44,39 @@ public class Utils {
 		}
 		return "";
 	}
+
+	public static String addLinkToIssues(String string) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int index = 0; index < string.length(); index++) {
+			if (string.charAt(index) == '#') {
+				// [#num](https://github.com/SPARQL-Anything/sparql.anything/issues/num)
+				// read up to next space
+				StringBuilder subString = new StringBuilder();
+				int index2 = index + 1;
+				for (; index2 < string.length(); index2++) {
+
+					if (Character.isDigit(string.charAt(index2))) {
+						subString.append(string.charAt(index2));
+					} else {
+						break;
+					}
+				}
+
+				try {
+					int issueNumber = Integer.parseInt(subString.toString());
+					sb.append(String.format("[#%d](https://github.com/SPARQL-Anything/sparql.anything/issues/%d)", issueNumber, issueNumber));
+				} catch (NumberFormatException nfe) {
+					sb.append("#").append(subString.toString());
+				}
+
+				sb.append(" ");
+				index = index2;
+
+			} else {
+				sb.append(string.charAt(index));
+			}
+		}
+		return sb.toString();
+	}
 }

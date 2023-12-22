@@ -37,7 +37,7 @@ public class OptionSection {
 	}
 
 	public String getDescription() {
-		return option.description();
+		return Utils.addLinkToIssues(option.description());
 	}
 
 	public String getValidValues() {
