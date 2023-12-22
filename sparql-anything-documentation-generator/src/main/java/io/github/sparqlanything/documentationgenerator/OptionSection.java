@@ -33,7 +33,7 @@ public class OptionSection {
 	}
 
 	public String getLink() throws NoSuchMethodException, IllegalAccessException {
-		return getName().toLowerCase().replace("-","").replace(".","");
+		return getName().toLowerCase().replace("-","");
 	}
 
 

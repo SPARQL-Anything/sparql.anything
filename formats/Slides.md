@@ -155,7 +155,7 @@ WHERE
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
-| [slides.extract-sections](#slidesextractsections) | It tells the document triplifier to extract the sections of the presentation (see #435) | true/false | false |
+| [slides.extract-sections](#slides.extractsections) | It tells the document triplifier to extract the sections of the presentation (see #435) | true/false | false |
 
 ---
 ### `slides.extract-sections`
