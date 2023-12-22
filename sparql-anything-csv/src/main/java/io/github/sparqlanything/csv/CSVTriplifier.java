@@ -41,7 +41,8 @@ public class CSVTriplifier implements Triplifier, Slicer {
 //	public final static String PROPERTY_FORMAT = "csv.format";
 
 	public final static IRIArgument PROPERTY_FORMAT = new IRIArgument("csv.format", CSVFormat.Predefined.Default.name());
-	public final static String PROPERTY_DELIMITER = "csv.delimiter";
+
+	public final static IRIArgument PROPERTY_DELIMITER = new IRIArgument("csv.delimiter", ",");
 	public final static String PROPERTY_QUOTE_CHAR = "csv.quote-char";
 	public final static String PROPERTY_NULL_STRING = "csv.null-string";
 	public final static String IGNORE_COLUMNS_WITH_NO_HEADERS = "csv.ignore-columns-with-no-header";
@@ -102,13 +103,11 @@ public class CSVTriplifier implements Triplifier, Slicer {
 			log.debug("Setting quote char to '{}'", properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0));
 			format = format.withQuote(properties.getProperty(PROPERTY_QUOTE_CHAR).charAt(0));
 		}
-		if (properties.containsKey(PROPERTY_DELIMITER)) {
-			log.debug("Setting delimiter to {}", properties.getProperty(PROPERTY_DELIMITER));
-			if (properties.getProperty(PROPERTY_DELIMITER).length() != 1) {
-				throw new IOException("Bad value for property " + PROPERTY_DELIMITER + ": string length must be 1, " + properties.getProperty(PROPERTY_DELIMITER).length() + " given");
-			}
-			format = format.withDelimiter(properties.getProperty(PROPERTY_DELIMITER).charAt(0));
+		String delimiter = PropertyUtils.getStringProperty(properties, PROPERTY_DELIMITER);
+		if (delimiter.length() != 1) {
+			throw new IOException("Bad value for property " + PROPERTY_DELIMITER + ": string length must be 1, " + delimiter.length() + " given");
 		}
+		format = format.withDelimiter(delimiter.charAt(0));
 		return format;
 	}
 
