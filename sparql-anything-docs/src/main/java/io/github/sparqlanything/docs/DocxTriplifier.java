@@ -17,6 +17,8 @@
 package io.github.sparqlanything.docs;
 
 import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
@@ -37,9 +39,15 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class DocxTriplifier implements Triplifier {
 
+	@Example(resource = "https://sparql-anything.cc/examples/Doc1.docx", description = "Construct the graph by merging multiple consecutive paragraphs into single a single slot.", query = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Doc1.docx,docs.merge-paragraphs=true> { ?s ?p ?o } }")
+	@Option(description = "It tells the document triplifier to merge all the paragraphs of the document into a single slot (new line characters are preserved)", validValues = "true/false")
 	public final static IRIArgument MERGE_PARAGRAPHS = new IRIArgument("docs.merge-paragraphs", "false");
+
+	@Example(description = "Construct the dataset by using the headers of the columns of the tables to mint the property URIs.", query = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Doc1.docx,docs.table-headers=true> { ?s ?p ?o } }", resource = "https://sparql-anything.cc/examples/Doc1.docx")
+	@Option(description = "It tells the document triplifier to use the headers of the tables within the document file for minting the properties of the generated triples.", validValues = "true/false")
 	public final static IRIArgument TABLE_HEADERS = new IRIArgument("docs.table-headers","false");
 
 	private static final Logger logger = LoggerFactory.getLogger(DocxTriplifier.class);

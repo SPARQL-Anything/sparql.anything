@@ -193,7 +193,7 @@ A detailed description of the interpretation can be found in the following pages
 - [Markdown](formats/Markdown.md)
 - [File system and archives (ZIP, Tar)](formats/Archive.md)
 - [Spreadsheets: XLS, XLSx](formats/Spreadsheet.md)
-- [Documents: DOCx](formats/Word_Processing_Document.md)
+- [Documents: DOCx](formats/Docs.md)
 - [EXIF Metadata](formats/Metadata.md)
 - [Bibliography](formats/Bibliography.md)
 - [YAML](formats/YAML.md)
