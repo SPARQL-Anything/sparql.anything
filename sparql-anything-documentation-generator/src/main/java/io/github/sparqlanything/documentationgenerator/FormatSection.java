@@ -59,9 +59,9 @@ public class FormatSection {
 					Example example = field.getAnnotation(Example.class);
 					if (o != null && examples != null) {
 						optionSections.add(new OptionSection(field, o, examples.value()));
-					} else if (o !=null && example!=null) {
+					} else if (o != null && example != null) {
 						optionSections.add(new OptionSection(field, o, new Example[]{example}));
-					} else {
+					} else if (o != null) {
 						optionSections.add(new OptionSection(field, o, new Example[]{}));
 					}
 				}
@@ -89,6 +89,10 @@ public class FormatSection {
 		return mimeTypes;
 	}
 
+	public String getFacadeXRdf() {
+		return Utils.getFacadeXRdf(QueryFactory.create(getDefaultTransformationQuery()));
+	}
+
 	public String getDefaultTransformationQuery() {
 		//return QueryFactory.create(String.format("CONSTRUCT {GRAPH ?g {?s ?p ?o}} WHERE {SERVICE<x-sparql-anything:location=%s> { GRAPH ?g { ?s ?p ?o}}}", f.getResourceExample()));
 		return QueryFactory.create(String.format("CONSTRUCT {?s ?p ?o} WHERE {SERVICE<x-sparql-anything:location=%s> {GRAPH ?g { ?s ?p ?o}}}", getResourceExample())).toString(Syntax.syntaxSPARQL_11);
@@ -98,11 +102,7 @@ public class FormatSection {
 		return resourceExample;
 	}
 
-	public String getFacadeXRdf() {
-		return Utils.getFacadeXRdf(QueryFactory.create(getDefaultTransformationQuery()));
-	}
-
-	public List<OptionSection> getOptionSections(){
+	public List<OptionSection> getOptionSections() {
 		return optionSections;
 	}
 }

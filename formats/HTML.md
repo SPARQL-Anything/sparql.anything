@@ -96,7 +96,61 @@ WHERE
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
+| [html.selector](#htmlselector) | A CSS selector that restricts the HTML tags to consider for the triplification. | Any valid CSS selector. | :root |
 | [html.metadata](#htmlmetadata) | It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. -- See #164 | true/false | false |
+| [html.browser](#htmlbrowser) | It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](https://github.com/SPARQL-Anything/sparql.anything/blob/v1.0-DEV/BROWSER.md) and [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | chromium|webkit|firefox | Not set |
+| [html.browser.wait](#htmlbrowserwait) | When using a browser to navigate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML. -- See See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | Not set |
+| [html.browser.screenshot](#htmlbrowserscreenshot) | When using a browser to navigate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here. See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any valid URL | Not set |
+| [html.browser.timeout](#htmlbrowsertimeout) | When using a browser to navigate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | 30000 |
+
+---
+### `html.selector`
+
+#### Description
+
+A CSS selector that restricts the HTML tags to consider for the triplification.
+
+#### Valid Values
+
+Any valid CSS selector.
+
+#### Default Value
+
+:root
+
+#### Examples
+
+##### Example 1
+
+Selecting text contained in elements of the class &quot;paragraph&quot;
+
+###### Input
+
+https://sparql-anything.cc/examples/simple.html
+
+###### Query
+
+```
+PREFIX  whatwg: <https://html.spec.whatwg.org/#>
+
+SELECT  ?text
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.html,html.selector=.paragraph>
+      { ?s  whatwg:innerText  ?text }
+  }
+
+```
+
+###### Result
+
+```turtle
+-----------------
+| text          |
+=================
+| "Hello world" |
+-----------------
+
+```
 
 ---
 ### `html.metadata`
@@ -190,6 +244,70 @@ WHERE
                 ] .
 
 ```
+
+---
+### `html.browser`
+
+#### Description
+
+It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](https://github.com/SPARQL-Anything/sparql.anything/blob/v1.0-DEV/BROWSER.md) and [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
+
+#### Valid Values
+
+chromium|webkit|firefox
+
+#### Default Value
+
+Not set
+
+
+---
+### `html.browser.wait`
+
+#### Description
+
+When using a browser to navigate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML. -- See See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
+
+#### Valid Values
+
+Any integer
+
+#### Default Value
+
+Not set
+
+
+---
+### `html.browser.screenshot`
+
+#### Description
+
+When using a browser to navigate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here. See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
+
+#### Valid Values
+
+Any valid URL
+
+#### Default Value
+
+Not set
+
+
+---
+### `html.browser.timeout`
+
+#### Description
+
+When using a browser to navigate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).
+
+#### Valid Values
+
+Any integer
+
+#### Default Value
+
+30000
+
 
 
 

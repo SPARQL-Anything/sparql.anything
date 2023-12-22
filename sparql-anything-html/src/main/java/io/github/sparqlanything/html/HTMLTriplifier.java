@@ -50,9 +50,9 @@ public class HTMLTriplifier implements Triplifier {
 
 	private static final Logger log = LoggerFactory.getLogger(HTMLTriplifier.class);
 
-	@Example(resource = "https://sparql-anything.cc/examples/simple.html", description = "Selecting text contained in elements of the class \"paragraph\"", query = "SELECT ?text WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.html,html.selector=.paragraph> { ?s whatwg:innerText ?text } }")
+	@Example(resource = "https://sparql-anything.cc/examples/simple.html", description = "Selecting text contained in elements of the class \"paragraph\"", query = "PREFIX whatwg: <https://html.spec.whatwg.org/#> SELECT ?text WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.html,html.selector=.paragraph> { ?s whatwg:innerText ?text } }")
 	@Option(description = "A CSS selector that restricts the HTML tags to consider for the triplification.", validValues = "Any valid CSS selector.")
-	private static final IRIArgument PROPERTY_SELECTOR = new IRIArgument("html.selector", ":root");
+	public static final IRIArgument PROPERTY_SELECTOR = new IRIArgument("html.selector", ":root");
 
 	@Example(resource = "https://sparql-anything.cc/examples/Microdata1.html", description = "Extract triples embedded in the web page at the following address https://sparql-anything.cc/examples/Microdata1.html", query = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Microdata1.html,html.metadata=true> { GRAPH ?g { ?s ?p ?o } } }")
 	@Option(description = "It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. -- See #164", validValues = "true/false")
@@ -60,16 +60,16 @@ public class HTMLTriplifier implements Triplifier {
 
 
 	@Option(description = "It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](https://github.com/SPARQL-Anything/sparql.anything/blob/v1.0-DEV/BROWSER.md) and [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "chromium|webkit|firefox")
-	private static final IRIArgument PROPERTY_BROWSER = new IRIArgument("html.browser");
+	public static final IRIArgument PROPERTY_BROWSER = new IRIArgument("html.browser");
 
-	@Option(description = "When using a browser to nagivate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML. -- See See [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "Any integer")
-	private static final IRIArgument PROPERTY_BROWSER_WAIT = new IRIArgument("html.browser.wait");
+	@Option(description = "When using a browser to navigate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML. -- See See [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "Any integer")
+	public static final IRIArgument PROPERTY_BROWSER_WAIT = new IRIArgument("html.browser.wait");
 
 	@Option(description = "When using a browser to navigate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here. See [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "Any valid URL")
-	private static final IRIArgument PROPERTY_BROWSER_SCREENSHOT = new IRIArgument("html.browser.screenshot");
+	public static final IRIArgument PROPERTY_BROWSER_SCREENSHOT = new IRIArgument("html.browser.screenshot");
 
-	@Option(description = "When using a browser to nagivate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "Any integer")
-	private static final IRIArgument PROPERTY_BROWSER_TIMEOUT = new IRIArgument("html.browser.timeout", "30000");
+	@Option(description = "When using a browser to navigate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "Any integer")
+	public static final IRIArgument PROPERTY_BROWSER_TIMEOUT = new IRIArgument("html.browser.timeout", "30000");
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
