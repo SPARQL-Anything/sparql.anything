@@ -28,14 +28,13 @@ public class OptionSection {
 		return this.examples;
 	}
 
+	public String getLink() throws NoSuchMethodException, IllegalAccessException {
+		return getName().toLowerCase().replace(".", "");
+	}
+
 	public String getName() throws NoSuchMethodException, IllegalAccessException {
 		return this.field.get(null).toString();
 	}
-
-	public String getLink() throws NoSuchMethodException, IllegalAccessException {
-		return getName().toLowerCase().replace(".","");
-	}
-
 
 	public String getDescription() {
 		return option.description();
@@ -48,7 +47,9 @@ public class OptionSection {
 	public String getDefaultValue() throws IllegalAccessException {
 		String defaultValue = ((IRIArgument) this.field.get(null)).getDefaultValue();
 		if (defaultValue == null) return "Not set";
-		return defaultValue;
+		return String.format("`%s`", defaultValue);
 	}
+
+
 
 }
