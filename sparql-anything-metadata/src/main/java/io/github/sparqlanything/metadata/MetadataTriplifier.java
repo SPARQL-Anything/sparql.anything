@@ -22,6 +22,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -47,8 +48,8 @@ public class MetadataTriplifier implements Triplifier {
 		if (url == null)
 			return;
 
-		String dataSourceId = Triplifier.getRootArgument(properties);
-		String root = dataSourceId;
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
+		String root = SPARQLAnythingConstants.ROOT_ID;
 		File f = new File(FilenameUtils.getName(url.getFile()));
 		FileUtils.copyURLToFile(url, f);
 		readBasicAttributes(f.toPath(), dataSourceId, root, builder);
