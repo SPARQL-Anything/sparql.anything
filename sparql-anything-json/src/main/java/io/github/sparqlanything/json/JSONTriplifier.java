@@ -267,7 +267,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, "json.path");
 		if (!jsonPaths.isEmpty()) {
 			transformFromJSONPath(properties, builder, jsonPaths);
 		} else {
@@ -313,7 +313,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
+		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
 		if (!jsonPaths.isEmpty()) {
 			return sliceFromJSONPath(properties);
 		} else {
@@ -328,7 +328,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		Collector collector = surfer.collector(us);
 		List<String> jsonPathExpr = new ArrayList<String>();
 		final Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
+		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
 		for (String jpath : jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
 			matches.add(m);

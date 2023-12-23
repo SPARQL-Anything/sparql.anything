@@ -16,6 +16,8 @@
 
 package io.github.sparqlanything.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class PropertyUtils {
@@ -67,4 +69,35 @@ public class PropertyUtils {
 		}
 		return getIntegerProperty(p, key, null);
 	}
+
+    /**
+     * Get all values from a property key. Supports single and multi-valued, e.g.
+     * <p>
+     * - key.name = value - key.name.0 = value0 - key.name.1 = value1
+     *
+     * @param properties the properties
+     * @param prefix the prefix
+     * @return the list of values starting with prefix
+     */
+    public static List<String> getPropertyValues(Properties properties, String prefix) {
+        List<String> values = new ArrayList<String>();
+        if (properties.containsKey(prefix)) {
+            values.add(properties.getProperty(prefix));
+        }
+        int i = 0; // Starts with 0
+        String propName = prefix + "." + i;
+        if (properties.containsKey(propName)) {
+            values.add(properties.getProperty(propName));
+        }
+        i++;
+        // ... or starts with 1
+        propName = prefix + "." + i;
+
+        while (properties.containsKey(propName)) {
+            values.add(properties.getProperty(propName));
+            i++;
+            propName = prefix + "." + i;
+        }
+        return values;
+    }
 }

@@ -321,7 +321,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
-		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
+		List<String> xpaths = PropertyUtils.getPropertyValues(properties, PROPERTY_XPATH);
 		if (!xpaths.isEmpty()) {
 			transformWithXPath(xpaths, properties, builder);
 		} else {
@@ -342,7 +342,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		final String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
-		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
+		List<String> xpaths = PropertyUtils.getPropertyValues(properties, PROPERTY_XPATH);
 
 		try {
 			VTDNav vn = buildVTDNav(properties);
