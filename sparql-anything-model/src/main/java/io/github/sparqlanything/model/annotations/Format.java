@@ -11,6 +11,8 @@ public @interface Format {
 
 	String description() default "";
 
+	String query() default "";
+
 	String name();
 
 	String resourceExample();

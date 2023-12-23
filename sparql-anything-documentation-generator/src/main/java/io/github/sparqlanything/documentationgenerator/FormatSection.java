@@ -22,8 +22,10 @@ public class FormatSection {
 
 	private final List<OptionSection> optionSections;
 
+	private final Format format;
+
 	public FormatSection(Package p, Set<Class<?>> classes) {
-		Format format = p.getAnnotation(Format.class);
+		this.format = p.getAnnotation(Format.class);
 		this.name = format.name();
 		this.description = format.description();
 		this.resourceExample = format.resourceExample();
@@ -94,8 +96,9 @@ public class FormatSection {
 	}
 
 	public String getDefaultTransformationQuery() {
-		//return QueryFactory.create(String.format("CONSTRUCT {GRAPH ?g {?s ?p ?o}} WHERE {SERVICE<x-sparql-anything:location=%s> { GRAPH ?g { ?s ?p ?o}}}", f.getResourceExample()));
-		return QueryFactory.create(String.format("CONSTRUCT {?s ?p ?o} WHERE {SERVICE<x-sparql-anything:location=%s> {GRAPH ?g { ?s ?p ?o}}}", getResourceExample())).toString(Syntax.syntaxSPARQL_11);
+		if(format.query().isEmpty())
+			return QueryFactory.create(String.format("CONSTRUCT {?s ?p ?o} WHERE {SERVICE<x-sparql-anything:location=%s> {GRAPH ?g { ?s ?p ?o}}}", getResourceExample())).toString(Syntax.syntaxSPARQL_11);
+		return QueryFactory.create(format.query()).toString(Syntax.syntaxSPARQL_11);
 	}
 
 	public String getResourceExample() {
