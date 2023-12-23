@@ -69,6 +69,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 
 	private final static Logger logger = LoggerFactory.getLogger(MARKDOWNTriplifier.class);
