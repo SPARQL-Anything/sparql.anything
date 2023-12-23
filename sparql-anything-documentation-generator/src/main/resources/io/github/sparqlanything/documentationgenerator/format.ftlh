@@ -4,17 +4,21 @@
 
 ${format.description}
 
+<#if format.extensions?has_content>
 ## Extensions
 
 SPARQL Anything selects this transformer for the following file extensions:
+</#if>
 
 <#list format.extensions as extension>
 - ${extension}
 </#list>
 
+<#if format.mediaTypes?has_content>
 ## Media types
 
 SPARQL Anything selects this transformer for the following media types:
+</#if>
 
 <#list format.mediaTypes as mediaType>
 - ${mediaType}
