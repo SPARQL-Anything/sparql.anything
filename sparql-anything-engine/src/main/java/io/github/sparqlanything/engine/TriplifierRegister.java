@@ -118,6 +118,7 @@ public final class TriplifierRegister {
 		result.addAll(extension.values());
 		result.addAll(mimeType.values());
 		result.add("io.github.sparqlanything.zip.FolderTriplifier");
+		result.add("io.github.sparqlanything.metadata.MetadataTriplifier");
 		return result;
 	}
 
