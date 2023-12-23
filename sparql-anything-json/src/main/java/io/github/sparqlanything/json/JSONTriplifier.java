@@ -46,7 +46,7 @@ import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 
 public class JSONTriplifier implements Triplifier, Slicer {
 
-	public static final String PROPERTY_JSONPATH = "json.path";
+	public static final IRIArgument PROPERTY_JSONPATH = new IRIArgument("json.path");
 	private static final Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
 	private void transform(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
@@ -313,7 +313,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH);
+		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
 		if (!jsonPaths.isEmpty()) {
 			return sliceFromJSONPath(properties);
 		} else {
@@ -328,7 +328,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		Collector collector = surfer.collector(us);
 		List<String> jsonPathExpr = new ArrayList<String>();
 		final Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH);
+		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
 		for (String jpath : jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
 			matches.add(m);
