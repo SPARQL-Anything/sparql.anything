@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.jsfr.json.Collector;
@@ -44,8 +45,12 @@ import java.util.Set;
 import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class JSONTriplifier implements Triplifier, Slicer {
 
+	@Option(description = "One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option. \n" +
+			"    It will pre-process the JSON before the execution of the query. \n" +
+			"    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).", validValues = "Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))")
 	public static final IRIArgument PROPERTY_JSONPATH = new IRIArgument("json.path");
 	private static final Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
