@@ -110,6 +110,74 @@ Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/J
 
 Not set
 
+#### Examples
+
+##### Example 1
+
+Constructing a Facade-X RDF Graph selecting only containers that match the Json Path `$[?(@.name==&quot;Friends&quot;)]`.
+
+###### Input
+
+https://sparql-anything.cc/example1.json
+
+###### Query
+
+```
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json>
+      { fx:properties
+                  fx:json.path  "$[?(@.name==\"Friends\")]" .
+        ?s        ?p            ?o
+      }
+  }
+
+```
+
+###### Result
+
+```turtle
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type  fx:root ;
+  rdf:_1    [ xyz:genres     [ rdf:_1  "Comedy" ;
+                               rdf:_2  "Romance"
+                             ] ;
+              xyz:language   "English" ;
+              xyz:name       "Friends" ;
+              xyz:premiered  "1994-09-22" ;
+              xyz:stars      [ rdf:_1  "Jennifer Aniston" ;
+                               rdf:_2  "Courteney Cox" ;
+                               rdf:_3  "Lisa Kudrow" ;
+                               rdf:_4  "Matt LeBlanc" ;
+                               rdf:_5  "Matthew Perry" ;
+                               rdf:_6  "David Schwimmer"
+                             ] ;
+              xyz:status     "Ended" ;
+              xyz:summary    "Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan."
+            ]
+] .
+
+```
 
 
 
