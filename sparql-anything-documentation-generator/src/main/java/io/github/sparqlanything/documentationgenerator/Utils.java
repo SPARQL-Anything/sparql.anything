@@ -22,12 +22,16 @@ public class Utils {
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			if (q.isConstructType()) {
-				Model m = QueryExecutionFactory.create(q, kb).execConstruct();
-				m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
-				m.write(baos, "TTL");
-			} else if (q.isConstructQuad()) {
-				Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
-				RDFDataMgr.write(baos, d, Lang.TRIG);
+
+				if (q.isConstructQuad()) {
+					Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
+					RDFDataMgr.write(baos, d, Lang.TRIG);
+				} else {
+					Model m = QueryExecutionFactory.create(q, kb).execConstruct();
+					m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+					m.write(baos, "TTL");
+				}
+
 			} else if (q.isSelectType()) {
 				return ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect());
 			} else if (q.isAskType()) {
@@ -66,11 +70,10 @@ public class Utils {
 					int issueNumber = Integer.parseInt(subString.toString());
 					sb.append(String.format("[#%d](https://github.com/SPARQL-Anything/sparql.anything/issues/%d)", issueNumber, issueNumber));
 				} catch (NumberFormatException nfe) {
-					sb.append("#").append(subString.toString());
+					sb.append("#").append(subString);
 				}
 
-				if(index2<string.length())
-					sb.append(string.charAt(index2));
+				if (index2 < string.length()) sb.append(string.charAt(index2));
 				index = index2;
 
 			} else {

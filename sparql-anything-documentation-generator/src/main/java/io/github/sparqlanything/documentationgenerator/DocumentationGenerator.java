@@ -26,13 +26,22 @@ public class DocumentationGenerator {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String formatFolder = args[0];
+		final String targetPackage;
+		if (args.length > 1) {
+			targetPackage = args[1];
+		} else {
+			targetPackage = null;
+		}
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Map<Package, Set<Class<?>>> packageToClasses = getFormatPackages();
 		Configuration freemarkerCfg = getConfiguration();
 		Template temp = freemarkerCfg.getTemplate("format.ftlh");
+
 		packageToClasses.forEach((p, classes) -> {
 			try {
-				generateTemplateForFormat(temp, p, classes, formatFolder);
+				if (targetPackage == null || p.getName().matches(targetPackage)) {
+					generateTemplateForFormat(temp, p, classes, formatFolder);
+				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -109,8 +118,6 @@ public class DocumentationGenerator {
 
 
 	}
-
-
 
 
 }
