@@ -39,6 +39,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class RDFTriplifier implements Triplifier {
 
 //	private static Logger logger = LoggerFactory.getLogger(RDFTriplifier.class);
