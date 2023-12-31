@@ -40,7 +40,7 @@ public class TestTriplifier {
 		SpreadsheetTriplifier st = new SpreadsheetTriplifier();
 		URL spreadsheet = st.getClass().getClassLoader().getResource("./testResources/Book2.xlsx");
 		Properties p = new Properties();
-		p.setProperty(SpreadsheetTriplifier.PROPERTY_COMPOSITE_VALUES, "true");
+		p.setProperty(SpreadsheetTriplifier.PROPERTY_COMPOSITE_VALUES.toString(), "true");
 		DatasetGraph dg;
 		try {
 

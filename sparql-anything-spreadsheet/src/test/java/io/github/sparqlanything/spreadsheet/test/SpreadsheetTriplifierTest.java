@@ -38,11 +38,11 @@ public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
 		}
 
 		if(name.getMethodName().equals("testFormulaEvaluator")){
-			properties.setProperty(SpreadsheetTriplifier.PROPERTY_EVALUATE_FORMULAS, "true");
+			properties.setProperty(SpreadsheetTriplifier.PROPERTY_EVALUATE_FORMULAS.toString(), "true");
 		}
 
 		if(name.getMethodName().equals("test2")){
-			properties.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS, "true");
+			properties.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS.toString(), "true");
 		}
 
 	}

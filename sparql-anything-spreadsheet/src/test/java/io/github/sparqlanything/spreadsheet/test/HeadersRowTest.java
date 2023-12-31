@@ -22,7 +22,7 @@ public class HeadersRowTest  extends AbstractTriplifierTester  {
 
 		if(name.getMethodName().equals("testHeaderRow")){
 			properties.setProperty(SpreadsheetTriplifier.PROPERTY_HEADER_ROW.toString(), "4");
-			properties.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS, "true");
+			properties.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS.toString(), "true");
 		}
 
 	}

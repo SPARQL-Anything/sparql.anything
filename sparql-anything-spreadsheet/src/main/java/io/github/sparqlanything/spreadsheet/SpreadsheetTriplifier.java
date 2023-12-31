@@ -28,11 +28,11 @@ import java.util.*;
 
 public class SpreadsheetTriplifier implements Triplifier {
 
-	public final static String PROPERTY_HEADERS = "spreadsheet.headers";
-	public final static String PROPERTY_EVALUATE_FORMULAS = "spreadsheet.evaluate-formulas";
-	public final static String PROPERTY_COMPOSITE_VALUES = "spreadsheet.composite-values";
+	public final static IRIArgument PROPERTY_HEADERS = new IRIArgument("spreadsheet.headers", "false");
+	public final static IRIArgument PROPERTY_EVALUATE_FORMULAS = new IRIArgument("spreadsheet.evaluate-formulas", "false");
+	public final static IRIArgument PROPERTY_COMPOSITE_VALUES = new IRIArgument("spreadsheet.composite-values", "false");
 	public final static IRIArgument PROPERTY_HEADER_ROW = new IRIArgument("spreadsheet.headers-row", "1");
-	public final static String IGNORE_COLUMNS_WITH_NO_HEADERS = "spreadsheet.ignore-columns-with-no-header";
+	public final static IRIArgument IGNORE_COLUMNS_WITH_NO_HEADERS = new IRIArgument("spreadsheet.ignore-columns-with-no-header", "false");
 	private static final Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
 	private FormulaEvaluator evaluator;
 
@@ -45,10 +45,10 @@ public class SpreadsheetTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
-		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
-		final boolean headers = PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false);
-		final boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
+		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS);
+		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES);
+		final boolean headers = PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS);
+		final boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS);
 		final int headersRow = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
 
 		Workbook wb = WorkbookFactory.create(url.openStream());
