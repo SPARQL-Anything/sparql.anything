@@ -22,19 +22,18 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import io.github.sparqlanything.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.riot.other.G;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
-
 public class TextTriplifier implements Triplifier {
 
-	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
+	public static final IRIArgument REGEX = new IRIArgument("txt.regex");
+	public static final IRIArgument GROUP = new IRIArgument("txt.group", "-1");
+	public static final IRIArgument SPLIT = new IRIArgument("txt.split");
 	private static final Logger logger = LoggerFactory.getLogger(TextTriplifier.class);
 
 	@Override
@@ -52,8 +51,8 @@ public class TextTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId);
 
 		Pattern pattern = null;
-		if (properties.containsKey(REGEX)) {
-			String regexString = properties.getProperty(REGEX);
+		String regexString = PropertyUtils.getStringProperty(properties, REGEX);
+		if (regexString!=null) {
 			logger.trace("Regex {}", regexString);
 			try {
 				pattern = Pattern.compile(regexString);
@@ -65,21 +64,9 @@ public class TextTriplifier implements Triplifier {
 			}
 
 		}
+		int group = PropertyUtils.getIntegerProperty(properties, GROUP);
+		String splitStr = PropertyUtils.getStringProperty(properties, SPLIT);
 
-		int group = -1;
-		if (properties.containsKey(GROUP) && pattern != null) {
-			logger.trace("Group property set");
-			try {
-				int gr = Integer.parseInt(properties.getProperty(GROUP));
-				if (gr >= 0) {
-					group = gr;
-				} else {
-					logger.warn("Group number is supposed to be a positive integer, using default (group 0)");
-				}
-			} catch (Exception e) {
-				logger.error("", e);
-			}
-		}
 
 		if (pattern != null) {
 			logger.trace("Instantiating the matcher group {}", group);
@@ -98,10 +85,10 @@ public class TextTriplifier implements Triplifier {
 		} else {
 			logger.trace("No pattern set");
 
-			if (properties.containsKey(SPLIT)) {
+			if (splitStr!=null) {
 
-				logger.trace("Splitting regex: {}", properties.getProperty(SPLIT));
-				String[] split = value.split(properties.getProperty(SPLIT));
+				logger.trace("Splitting regex: {}", splitStr);
+				String[] split = value.split(splitStr);
 				for (int i = 0; i < split.length; i++) {
 					builder.addValue(dataSourceId, rootId, i + 1, split[i]);
 				}

@@ -45,8 +45,7 @@ public class TextTriplifierTest {
 	@Test
 	public void test1() throws MalformedURLException, TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
-		File f = new File("src/main/resources/testfile");
-		URL url = f.toURI().toURL();
+		URL url = getClass().getClassLoader().getResource("testfile");
 		try {
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
@@ -69,11 +68,10 @@ public class TextTriplifierTest {
 	@Test
 	public void testRegex() throws MalformedURLException, TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
-		File f = new File("src/main/resources/testfile");
-		URL url = f.toURI().toURL();
+		URL url = getClass().getClassLoader().getResource("testfile");
 		try {
 			Properties p = new Properties();
-			p.setProperty(TextTriplifier.REGEX, "\\w+");
+			p.setProperty(TextTriplifier.REGEX.toString(), "\\w+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, b);
@@ -104,11 +102,10 @@ public class TextTriplifierTest {
 	@Test
 	public void testSplit() throws MalformedURLException, TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
-		File f = new File("src/main/resources/testfile");
-		URL url = f.toURI().toURL();
+		URL url = getClass().getClassLoader().getResource("testfile");
 		try {
 			Properties p = new Properties();
-			p.setProperty(TextTriplifier.SPLIT, "\\s+");
+			p.setProperty(TextTriplifier.SPLIT.toString(), "\\s+");
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, b);
