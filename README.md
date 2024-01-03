@@ -189,7 +189,7 @@ A detailed description of the interpretation can be found in the following pages
 - [CSV](formats/CSV.md)
 - [XML](formats/XML.md)
 - [Binary](formats/Binary.md)
-- [TXT](formats/TXT.md)
+- [Text](formats/Text.md)
 - [Markdown](formats/Markdown.md)
 - [File system and archives (ZIP, Tar)](formats/Archive.md)
 - [Spreadsheets: XLS, XLSx](formats/Spreadsheet.md)
@@ -200,7 +200,7 @@ A detailed description of the interpretation can be found in the following pages
 - [Slides](formats/Slides.md)
 
 ... and, of course, the triples generated from the these formats can be integrated with the content of
-any [RDF Static file](formats/RDF_Files.md)
+any [RDF Static file](formats/RDF.md)
 
 ## Configuration
 
