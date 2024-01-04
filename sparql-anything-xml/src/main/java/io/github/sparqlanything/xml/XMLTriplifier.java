@@ -53,7 +53,7 @@ import java.util.Set;
 
 public class XMLTriplifier implements Triplifier, Slicer {
 
-	public static final String PROPERTY_XPATH = "xml.path";
+	public static final IRIArgument PROPERTY_XPATH = new IRIArgument("xml.path");
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
