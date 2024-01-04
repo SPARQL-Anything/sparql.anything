@@ -16,11 +16,7 @@
 
 package io.github.sparqlanything.yaml;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.PropertyUtils;
-import io.github.sparqlanything.model.SPARQLAnythingConstants;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
@@ -33,14 +29,14 @@ import java.util.Properties;
 import java.util.Set;
 
 public class YAMLTriplifier implements Triplifier {
-	public final static String PROPERTY_ALLOW_DUPLICATE_KEYS = "yaml.allow-duplicate-keys";
+	public final static IRIArgument PROPERTY_ALLOW_DUPLICATE_KEYS = new IRIArgument("yaml.allow-duplicate-keys", "false");
 	protected void transform(Properties properties, FacadeXGraphBuilder builder)
 		throws IOException, TriplifierHTTPException {
 
 		final InputStream is = Triplifier.getInputStream(properties);
 
 		LoadSettings settings = LoadSettings.builder().setLabel("Custom user configuration")
-			.setAllowDuplicateKeys(PropertyUtils.getBooleanProperty(properties, PROPERTY_ALLOW_DUPLICATE_KEYS, false))
+			.setAllowDuplicateKeys(PropertyUtils.getBooleanProperty(properties, PROPERTY_ALLOW_DUPLICATE_KEYS))
 			.build();
 		Load load = new Load(settings);
 
