@@ -17,6 +17,8 @@ SPARQL Anything reuses namespaces declared within the original document to name 
 
 SPARQL Anything selects this transformer for the following file extensions:
 
+- svg
+- svgz
 - xml
 
 ## Media types
@@ -24,6 +26,7 @@ SPARQL Anything selects this transformer for the following file extensions:
 SPARQL Anything selects this transformer for the following media types:
 
 - application/xml
+- image/svg+xml
 - text/xml
 
 ## Default implementation
