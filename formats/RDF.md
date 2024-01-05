@@ -44,6 +44,13 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+```RDF
+@prefix ex: <http://example.org/> .
+
+ex:subject ex:predicate ex:object .
+
+```
+
 Located at https://sparql-anything.cc/examples/simple.ttl
 
 ### Query

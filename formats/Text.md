@@ -24,6 +24,12 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+```Text
+Hello world!
+Hello world!
+
+```
+
 Located at https://sparql-anything.cc/examples/simple.txt
 
 ### Query
@@ -97,6 +103,12 @@ Retrieving lines of the file.
 
 ###### Input
 
+```Text
+Hello world!
+Hello world!
+
+```
+
 https://sparql-anything.cc/examples/simple.txt
 
 ###### Query
@@ -149,6 +161,12 @@ Any valid regular expression according to the [Pattern class](https://docs.oracl
 Retrieving the lines of the file and strips `\n` out.
 
 ###### Input
+
+```Text
+Hello world!
+Hello world!
+
+```
 
 https://sparql-anything.cc/examples/simple.txt
 
@@ -203,6 +221,12 @@ Not set
 Retrieving the lines of the file by splitting by `\n`
 
 ###### Input
+
+```Text
+Hello world!
+Hello world!
+
+```
 
 https://sparql-anything.cc/examples/simple.txt
 

@@ -38,6 +38,17 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+```JSON
+{
+    "stringArg": "stringValue",
+    "intArg": 1,
+    "booleanArg": true,
+    "nullArg": null,
+    "arr": [ 0, 1 ]
+}
+
+```
+
 Located at https://sparql-anything.cc/examples/simple.json
 
 ### Query
@@ -118,6 +129,49 @@ Retrieving the lists of stars of the TV Series named &quot;Friends&quot; and &qu
 
 ###### Input
 
+```JSON
+[
+   {
+      "name":"Friends",
+      "genres":[
+         "Comedy",
+         "Romance"
+      ],
+      "language":"English",
+      "status":"Ended",
+      "premiered":"1994-09-22",
+      "summary":"Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan.",
+      "stars":[
+         "Jennifer Aniston",
+         "Courteney Cox",
+         "Lisa Kudrow",
+         "Matt LeBlanc",
+         "Matthew Perry",
+         "David Schwimmer"
+      ]
+   },
+   {
+      "name":"Cougar Town",
+      "genres":[
+         "Comedy",
+         "Romance"
+      ],
+      "language":"English",
+      "status":"Ended",
+      "premiered":"2009-09-23",
+      "summary":"Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself.",
+      "stars":[
+         "Courteney Cox",
+         "David Arquette",
+         "Bill Lawrence",
+         "Linda Videtti Figueiredo",
+         "Blake McCormick"
+      ]
+   }
+]
+
+```
+
 https://sparql-anything.cc/example1.json
 
 ###### Query
@@ -183,6 +237,49 @@ WHERE
 
 ###### Input
 
+```JSON
+[
+   {
+      "name":"Friends",
+      "genres":[
+         "Comedy",
+         "Romance"
+      ],
+      "language":"English",
+      "status":"Ended",
+      "premiered":"1994-09-22",
+      "summary":"Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan.",
+      "stars":[
+         "Jennifer Aniston",
+         "Courteney Cox",
+         "Lisa Kudrow",
+         "Matt LeBlanc",
+         "Matthew Perry",
+         "David Schwimmer"
+      ]
+   },
+   {
+      "name":"Cougar Town",
+      "genres":[
+         "Comedy",
+         "Romance"
+      ],
+      "language":"English",
+      "status":"Ended",
+      "premiered":"2009-09-23",
+      "summary":"Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself.",
+      "stars":[
+         "Courteney Cox",
+         "David Arquette",
+         "Bill Lawrence",
+         "Linda Videtti Figueiredo",
+         "Blake McCormick"
+      ]
+   }
+]
+
+```
+
 https://sparql-anything.cc/example1.json
 
 ###### Query
@@ -219,6 +316,49 @@ WHERE
 Constructing a Facade-X RDF Graph selecting only containers that match the Json Path `$[?(@.name==&quot;Friends&quot;)]`.
 
 ###### Input
+
+```JSON
+[
+   {
+      "name":"Friends",
+      "genres":[
+         "Comedy",
+         "Romance"
+      ],
+      "language":"English",
+      "status":"Ended",
+      "premiered":"1994-09-22",
+      "summary":"Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan.",
+      "stars":[
+         "Jennifer Aniston",
+         "Courteney Cox",
+         "Lisa Kudrow",
+         "Matt LeBlanc",
+         "Matthew Perry",
+         "David Schwimmer"
+      ]
+   },
+   {
+      "name":"Cougar Town",
+      "genres":[
+         "Comedy",
+         "Romance"
+      ],
+      "language":"English",
+      "status":"Ended",
+      "premiered":"2009-09-23",
+      "summary":"Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself.",
+      "stars":[
+         "Courteney Cox",
+         "David Arquette",
+         "Bill Lawrence",
+         "Linda Videtti Figueiredo",
+         "Blake McCormick"
+      ]
+   }
+]
+
+```
 
 https://sparql-anything.cc/example1.json
 
