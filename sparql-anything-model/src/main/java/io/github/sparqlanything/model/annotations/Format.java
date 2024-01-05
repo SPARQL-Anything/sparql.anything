@@ -17,5 +17,7 @@ public @interface Format {
 
 	String resourceExample();
 
+	boolean binary() default false;
+
 
 }

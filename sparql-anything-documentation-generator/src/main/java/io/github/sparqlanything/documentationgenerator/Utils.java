@@ -91,8 +91,19 @@ public class Utils {
 	public static String readResourceToString(String resourceExample) throws IOException {
 		if (resourceExample != null) {
 			URL url = new URL(resourceExample);
+
 			return IOUtils.toString(url.openStream(), Charset.defaultCharset());
 		}
 		return "";
+	}
+
+	public static void main(String[] args) throws IOException {
+		System.out.println(Character.isDefined('a'));
+		URL url = new URL("https://sparql-anything.cc/examples/spreadsheet.xls");
+		System.out.println(Character.isLetterOrDigit(url.openStream().read()));
+		System.out.println(Character.isValidCodePoint(url.openStream().read()));
+
+
+
 	}
 }

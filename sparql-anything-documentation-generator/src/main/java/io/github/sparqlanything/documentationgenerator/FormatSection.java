@@ -117,4 +117,8 @@ public class FormatSection {
 	public List<OptionSection> getOptionSections() {
 		return optionSections;
 	}
+
+	public boolean getBinary(){
+		return format.binary();
+	}
 }

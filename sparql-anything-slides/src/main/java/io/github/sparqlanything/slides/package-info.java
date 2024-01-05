@@ -1,4 +1,4 @@
-@Format(
+@Format(binary = true,
 		name = "Slides",
 		description = "A slide is a single page of a presentation. Collectively, a group of slides may be known as a slide deck.\n" +
 		"We can interpret a slide deck as a sequence of slides where each slide is a sequence of blocks (e.g. title, text boxes etc.), called shapes.\n" +

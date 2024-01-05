@@ -34,7 +34,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
-<#if format.resourceExamplePreview?has_content>
+<#if format.resourceExamplePreview?has_content && !format.binary>
 ```${format.name}
 ${format.resourceExamplePreview?no_esc}
 ```
@@ -92,7 +92,7 @@ ${example.description}
 
 ###### Input
 
-<#if example.resourceExamplePreview?has_content>
+<#if example.resourceExamplePreview?has_content && !format.binary>
 ```${format.name}
 ${example.resourceExamplePreview?no_esc}
 ```
