@@ -16,6 +16,12 @@
 # limitations under the License.
 #
 
+# Generate documentation pages for supported formats
+mvn clean install
+cd sparql-anything-documentation-generator/
+mvn exec:java  -Dexec.mainClass="io.github.sparqlanything.documentationgenerator.DocumentationGenerator"  -Dexec.args="../formats/"
+cd ..
+
 git add README.md CLI.md EXTENSION_MECHANISMS.md JAVA_LIBRARY.md Facade-X.md facade-x-ER.png .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
 git add formats/*
 cp -f README.md docs/
