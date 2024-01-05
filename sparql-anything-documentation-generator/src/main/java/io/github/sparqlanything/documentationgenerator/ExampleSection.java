@@ -4,6 +4,8 @@ import io.github.sparqlanything.model.annotations.Example;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.Syntax;
 
+import java.io.IOException;
+
 public class ExampleSection {
 
 	private Example example;
@@ -26,5 +28,9 @@ public class ExampleSection {
 
 	public String getResult() {
 		return Utils.getFacadeXRdf(QueryFactory.create(example.query()));
+	}
+
+	public String getResourceExamplePreview() throws IOException {
+		return Utils.readResourceToString(example.resource());
 	}
  }

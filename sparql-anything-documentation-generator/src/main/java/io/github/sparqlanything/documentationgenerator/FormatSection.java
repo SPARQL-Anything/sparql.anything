@@ -6,10 +6,15 @@ import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Examples;
 import io.github.sparqlanything.model.annotations.Format;
 import io.github.sparqlanything.model.annotations.Option;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.diff.StringsComparator;
 import org.apache.jena.query.*;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.*;
 
 public class FormatSection {
@@ -96,13 +101,17 @@ public class FormatSection {
 	}
 
 	public String getDefaultTransformationQuery() {
-		if(format.query().isEmpty())
+		if (format.query().isEmpty())
 			return QueryFactory.create(String.format("CONSTRUCT {?s ?p ?o} WHERE {SERVICE<x-sparql-anything:location=%s> {GRAPH ?g { ?s ?p ?o}}}", getResourceExample())).toString(Syntax.syntaxSPARQL_11);
 		return QueryFactory.create(format.query()).toString(Syntax.syntaxSPARQL_11);
 	}
 
 	public String getResourceExample() {
 		return resourceExample;
+	}
+
+	public String getResourceExamplePreview() throws IOException {
+		return Utils.readResourceToString(resourceExample);
 	}
 
 	public List<OptionSection> getOptionSections() {

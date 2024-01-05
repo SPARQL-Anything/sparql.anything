@@ -34,6 +34,12 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+<#if format.resourceExamplePreview?has_content>
+```${format.name}
+${format.resourceExamplePreview?no_esc}
+```
+</#if>
+
 Located at ${format.resourceExample}
 
 ### Query
@@ -85,6 +91,12 @@ ${optionSection.defaultValue}
 ${example.description}
 
 ###### Input
+
+<#if example.resourceExamplePreview?has_content>
+```${format.name}
+${example.resourceExamplePreview?no_esc}
+```
+</#if>
 
 ${example.resource?no_esc}
 

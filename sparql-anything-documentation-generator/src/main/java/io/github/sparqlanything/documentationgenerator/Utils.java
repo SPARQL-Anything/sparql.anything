@@ -2,6 +2,7 @@ package io.github.sparqlanything.documentationgenerator;
 
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
@@ -9,6 +10,10 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 
 public class Utils {
 
@@ -81,5 +86,13 @@ public class Utils {
 			}
 		}
 		return sb.toString();
+	}
+
+	public static String readResourceToString(String resourceExample) throws IOException {
+		if (resourceExample != null) {
+			URL url = new URL(resourceExample);
+			return IOUtils.toString(url.openStream(), Charset.defaultCharset());
+		}
+		return "";
 	}
 }
