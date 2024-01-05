@@ -30,6 +30,23 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+```YAML
+key: value
+another-key:
+  - name: john
+    surname: smith
+# A comment
+boolean: true
+float: 0.1
+two-values:
+  - 1
+  - "2"
+nested-array:
+  - nested-array:
+      - nested:key: "Value with spaces"
+
+```
+
 Located at https://sparql-anything.cc/examples/example.yaml
 
 ### Query
