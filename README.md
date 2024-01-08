@@ -4,6 +4,7 @@
 [![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml)
 [![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
 [![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
+[![CodeQL](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml)
 
 # SPARQL Anything
 
