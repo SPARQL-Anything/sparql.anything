@@ -7,7 +7,7 @@ WORKDIR $HOME
 
 ADD pom.xml $HOME
 ADD sparql-anything-archive/pom.xml $HOME/sparql-anything-archive/
-ADD sparql-anything-bib/pom.xml $HOME/sparql-anything-bib/
+ADD sparql-anything-bibliography/pom.xml $HOME/sparql-anything-bibliography/
 ADD sparql-anything-binary/pom.xml $HOME/sparql-anything-binary/
 ADD sparql-anything-cli/pom.xml $HOME/sparql-anything-cli/
 ADD sparql-anything-csv/pom.xml $HOME/sparql-anything-csv/
