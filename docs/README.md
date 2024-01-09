@@ -189,18 +189,18 @@ A detailed description of the interpretation can be found in the following pages
 - [CSV](formats/CSV.md)
 - [XML](formats/XML.md)
 - [Binary](formats/Binary.md)
-- [TXT](formats/TXT.md)
+- [Text](formats/Text.md)
 - [Markdown](formats/Markdown.md)
 - [File system and archives (ZIP, Tar)](formats/Archive.md)
 - [Spreadsheets: XLS, XLSx](formats/Spreadsheet.md)
-- [Documents: DOCx](formats/Word_Processing_Document.md)
+- [Documents: DOCx](formats/Docs.md)
 - [EXIF Metadata](formats/Metadata.md)
-- [Bibtex](formats/Bibtex.md)
+- [Bibliography](formats/Bibliography.md)
 - [YAML](formats/YAML.md)
 - [Slides](formats/Slides.md)
 
 ... and, of course, the triples generated from the these formats can be integrated with the content of
-any [RDF Static file](formats/RDF_Files.md)
+any [RDF Static file](formats/RDF.md)
 
 ## Configuration
 

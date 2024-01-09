@@ -1,20 +1,20 @@
+<!-- This page has been generated with sparql-anything-documentation-generator module -->
+
 # CSV
 
 A comma-separated values (CSV) file is a text file that uses a comma to separate an ordered sequence of values in a data record and a carriage return to separate the data records of a sequence.
 
 A CSV can be represented as a list of lists in which the outer list captures the sequence of data records (representable as containers), while the inner list captures the sequence of primitive values within a record.
 
+
+
 ## Extensions
 
 SPARQL Anything selects this transformer for the following file extensions:
 
-- .csv
-- .tsv
-- .tab
-
-## Default implementation
-
-- [io.github.sparqlanything.csv.CSVTriplifier](../sparql-anything-csv/src/main/java/com/github/sparqlanything/csv/CSVTriplifier.java)
+- csv
+- tab
+- tsv
 
 ## Media types
 
@@ -23,12 +23,15 @@ SPARQL Anything selects this transformer for the following media types:
 - text/csv
 - text/tab-separated-values
 
-## Default Transformation
+## Default implementation
 
+- [io.github.sparqlanything.csv.CSVTriplifier](../sparql-anything-csv/src/main/java/io/github/sparqlanything/csv/CSVTriplifier.java)
+
+## Default Transformation
 
 ### Data
 
-```csv
+```CSV
 email,name,surname
 laura@example.com,Laura,Grey
 craig@example.com,Craig,Johnson
@@ -42,23 +45,35 @@ Located at https://sparql-anything.cc/examples/simple.csv
 ### Query
 
 ```
-
-CONSTRUCT
-  {
+CONSTRUCT 
+  { 
     ?s ?p ?o .
   }
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.csv>
-      { ?s  ?p  ?o }
+      { GRAPH ?g
+          { ?s  ?p  ?o }
+      }
   }
 
 ```
 
-### Facade-X RDF:
+### Facade-X RDF
 
 ```turtle
-@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
 [ rdf:type  fx:root ;
   rdf:_1    [ rdf:_1  "email" ;
@@ -82,127 +97,24 @@ WHERE
               rdf:_3  "Smith"
             ]
 ] .
-```
 
+```
 ## Options
 
 ### Summary
 
-| Option name                        | Description                                                                                                                                                                                                                                     | Valid Values                                                                                                                                                | Default Value |
-|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
-| csv.format                         | The format of the input CSV file.                                                                                                                                                                                                               | Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache's commons CSV library | Default       |
-| csv.headers                        | It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.                                                                                                                             | true/false                                                                                                                                                  | false         |
-| csv.delimiter                      | The column delimiter, usually `,`,`;`,`\t`, ...                                                                                                                                                                                                 | any single char                                                                                                                                             | `,`           |
-| csv.quote-char                     | The quoting character                                                                                                                                                                                                                           | any single char                                                                                                                                             | `"`           |
-| csv.null-string                    | It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.                                                                                                                   | any string                                                                                                                                                  | not set       |
-| csv.ignore-columns-with-no-headers | It tells the CSV triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180 | true/false                                                                                                                                                  | false         |
-| csv.headers-row                    | It specifies the number of the row to use for extracting column headers. **Note** this option affects the performance as it requires to pass through input twice. -- see #179                                                                   | any integer                                                                                                                                                 | 1             |
+| Option name | Description | Valid Values | Default Value |
+|-------------|-------------|--------------|---------------|
+| [csv.headers](#csvheaders) | It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples. | true/false | `false` |
+| [csv.headers-row](#csvheaders-row) | It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see [#179](https://github.com/SPARQL-Anything/sparql.anything/issues/179) | Any integer | `1` |
+| [csv.format](#csvformat) | The format of the input CSV file. | Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache&#39;s commons CSV library. | `Default` |
+| [csv.delimiter](#csvdelimiter) | It sets the column delimiter, usually ,;\t etc. | Any single character | `,` |
+| [csv.quote-char](#csvquote-char) | It sets the quoting character | Any single character | `&quot;` |
+| [csv.null-string](#csvnull-string) | It tells the CSV triplifier to not produce triples where the specified string would be in the object position of the triple | Any String | Not set |
+| [csv.ignore-columns-with-no-header](#csvignore-columns-with-no-header) | It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see [#180](https://github.com/SPARQL-Anything/sparql.anything/issues/180) | true/false | `false` |
 
 ---
-
-### `csv.format`
-
-#### Description
-
-The format of the input CSV file.
-
-
-#### Valid Values
-
-Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache's commons CSV library.
-
-#### Default Value
-
-`Default`
-
-#### Examples
-
-##### Input
-
-```
-
-Sepal_length	Sepal_width	Petal_length	Petal_width	Species
-5.1	3.5	1.4	0.2	I. setosa
-4.9	3.0	1.4	0.2	I. setosa
-4.7	3.2	1.3	0.2	I. setosa
-4.6	3.1	1.5	0.2	I. setosa
-5.0	3.6	1.4	0.2	I. setosa
-
-```
-
-Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
-
-##### Use Case 1: Constructing a Facade-X RDF graph out of the TSV file available at https://sparql-anything.cc/examples/simple.tsv
-
-###### Query
-
-```
-
-CONSTRUCT
-  {
-    ?s ?p ?o .
-  }
-WHERE
-  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.format=TDF>
-      { ?s  ?p  ?o }
-  }
-
-```
-
-###### Result
-
-```
-
-@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz: <http://sparql.xyz/facade-x/data/> .
-
-[ rdf:type  fx:root ;
-  rdf:_1    [ rdf:_1  "Sepal_length" ;
-              rdf:_2  "Sepal_width" ;
-              rdf:_3  "Petal_length" ;
-              rdf:_4  "Petal_width" ;
-              rdf:_5  "Species"
-            ] ;
-  rdf:_2    [ rdf:_1  "5.1" ;
-              rdf:_2  "3.5" ;
-              rdf:_3  "1.4" ;
-              rdf:_4  "0.2" ;
-              rdf:_5  "I. setosa"
-            ] ;
-  rdf:_3    [ rdf:_1  "4.9" ;
-              rdf:_2  "3.0" ;
-              rdf:_3  "1.4" ;
-              rdf:_4  "0.2" ;
-              rdf:_5  "I. setosa"
-            ] ;
-  rdf:_4    [ rdf:_1  "4.7" ;
-              rdf:_2  "3.2" ;
-              rdf:_3  "1.3" ;
-              rdf:_4  "0.2" ;
-              rdf:_5  "I. setosa"
-            ] ;
-  rdf:_5    [ rdf:_1  "4.6" ;
-              rdf:_2  "3.1" ;
-              rdf:_3  "1.5" ;
-              rdf:_4  "0.2" ;
-              rdf:_5  "I. setosa"
-            ] ;
-  rdf:_6    [ rdf:_1  "5.0" ;
-              rdf:_2  "3.6" ;
-              rdf:_3  "1.4" ;
-              rdf:_4  "0.2" ;
-              rdf:_5  "I. setosa"
-            ]
-] .
-
-```
-
----
-
 ### `csv.headers`
-
 
 #### Description
 
@@ -210,7 +122,7 @@ It tells the CSV triplifier to use the headers of the CSV file for minting the p
 
 #### Valid Values
 
-`true/false`
+true/false
 
 #### Default Value
 
@@ -218,10 +130,13 @@ It tells the CSV triplifier to use the headers of the CSV file for minting the p
 
 #### Examples
 
-##### Input
+##### Example 1
 
-```
+Compute the average petal length of the species having sepal length greater than 4.9
 
+###### Input
+
+```CSV
 Sepal_length	Sepal_width	Petal_length	Petal_width	Species
 5.1	3.5	1.4	0.2	I. setosa
 4.9	3.0	1.4	0.2	I. setosa
@@ -231,10 +146,7 @@ Sepal_length	Sepal_width	Petal_length	Petal_width	Species
 
 ```
 
-Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
-
-
-##### Use Case 1: Compute the average petal length of the species having sepal length greater than 4.9
+https://sparql-anything.cc/examples/simple.tsv
 
 ###### Query
 
@@ -255,310 +167,49 @@ WHERE
 
 ###### Result
 
-```
----------------------------------------------------
-| avgPetalLength                                  |
-===================================================
-| "1.4"^^<http://www.w3.org/2001/XMLSchema#float> |
----------------------------------------------------
-```
-
----
-
-### `csv.delimiter`
-
-#### Description
-
-It sets the  column delimiter, usually ,;\t etc.
-
-#### Valid Values
-
-Any single character
-
-#### Default Value
-
-``,``
-
-#### Examples
-
-
-##### Input
-
-```
-
-Sepal_length	Sepal_width	Petal_length	Petal_width	Species
-5.1	3.5	1.4	0.2	I. setosa
-4.9	3.0	1.4	0.2	I. setosa
-4.7	3.2	1.3	0.2	I. setosa
-4.6	3.1	1.5	0.2	I. setosa
-5.0	3.6	1.4	0.2	I. setosa
-
-```
-
-Located at [https://sparql-anything.cc/examples/simple.tsv](https://sparql-anything.cc/examples/simple.tsv)
-
-##### Use Case 1: Compute the maximum petal length of the species having sepal length less than 4.9
-
-###### Query
-
-```
-PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
-
-SELECT  (MAX(xsd:float(?petalLength)) AS ?maxPetalLength)
-WHERE
-  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true>
-      { fx:properties
-                  fx:csv.delimiter  "\t" .
-        ?s        xyz:Sepal_length  ?length ;
-                  xyz:Petal_length  ?petalLength
-        FILTER ( xsd:float(?length) < 4.9 )
-      }
-  }
-```
-
-###### Result
-
-```
----------------------------------------------------
-| maxPetalLength                                  |
-===================================================
-| "1.5"^^<http://www.w3.org/2001/XMLSchema#float> |
----------------------------------------------------
+```turtle
+------------------
+| avgPetalLength |
+==================
+| 0              |
+------------------
 
 ```
 
 ---
-
-### `csv.quote-char`
-
-#### Description
-
-It sets the quoting character
-
-#### Valid Values
-
-Any single character
-
-#### Default Value
-
-``"``
-
-#### Examples
-
-##### Input
-
-```csv
-email,name,surname
-laura@example.com,'Laura, Nancy',Grey
-craig@example.com,Craig,Johnson
-mary@example.com,Mary,Jenkins
-jamie@example.com,Jamie,Smith
-
-```
-
-Located at https://sparql-anything.cc/examples/csv_with_commas.csv
-
-##### Use Case 1: Constructing a Facade-X RDF graph out of the CSV available at https://sparql-anything.cc/examples/csv_with_commas.csv
-
-###### Query
-
-```
-CONSTRUCT
-  {
-    ?s ?p ?o .
-  }
-WHERE
-  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/csv_with_commas.csv,csv.headers=true,csv.quote-char='>
-      { ?s  ?p  ?o }
-  }
-
-```
-
-###### Result
-
-```
-
-@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz: <http://sparql.xyz/facade-x/data/> .
-
-[ rdf:type  fx:root ;
-  rdf:_1    [ xyz:email    "laura@example.com" ;
-              xyz:name     "Laura, Nancy" ;
-              xyz:surname  "Grey"
-            ] ;
-  rdf:_2    [ xyz:email    "craig@example.com" ;
-              xyz:name     "Craig" ;
-              xyz:surname  "Johnson"
-            ] ;
-  rdf:_3    [ xyz:email    "mary@example.com" ;
-              xyz:name     "Mary" ;
-              xyz:surname  "Jenkins"
-            ] ;
-  rdf:_4    [ xyz:email    "jamie@example.com" ;
-              xyz:name     "Jamie" ;
-              xyz:surname  "Smith"
-            ]
-] .
-
-```
-
-### `csv.null-string`
-
-#### Description
-
-It tells the CSV triplifier to not produce triples where the specificed string would be in the object position of the triple.
-
-#### Valid Values
-
-Any String
-
-#### Default Value
-
-Not set
-
-#### Examples
-
-##### Input
-
-```csv
-
-email,name,surname
-laura@example.com,Laura,Grey
-craig@example.com,Craig,Johnson
-,Mary,Jenkins
-jamie@example.com,Jamie,Smith
-
-```
-
-Located at https://sparql-anything.cc/examples/simple_with_null.csv
-
-
-##### Use Case 1: Retrieving name surname of who doesn't have an email address.
-
-###### Query
-
-```
-PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
-
-SELECT  ?name ?surname
-WHERE
-  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple_with_null.csv,csv.headers=true>
-      { fx:properties
-                  fx:csv.null-string  "" .
-        ?c        xyz:name            ?name ;
-                  xyz:surname         ?surname
-        FILTER NOT EXISTS { ?c  xyz:email  ?email }
-      }
-  }
-
-```
-
-###### Result
-
-```
-----------------------
-| name   | surname   |
-======================
-| "Mary" | "Jenkins" |
-----------------------
-```
-
-### `csv.ignore-columns-with-no-header`
-
-#### Description
-
-It tells the csv triplifier to ignore from the cells of columns having no headers. **Note** that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180
-
-#### Valid Values
-
-true/false
-
-#### Default Value
-
-false
-
-#### Examples
-
-##### Input
-
-#### Data
-
-```
-,state 
-fred,CO
-sally,FL
-```
-
-located at  http://example.org/spreadsheet.csv
-
-##### Use Case 1
-
-###### Query
-
-```
-PREFIX fx: <http://sparql.xyz/facade-x/ns/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT DISTINCT ?fred ?sally
-WHERE {
-   SERVICE <x-sparql-anything:location=http://example.org/spreadsheet.csv>
-   {
-
-      fx:properties fx:csv.headers true .
-      fx:properties fx:csv.ignore-columns-with-no-header true .
-
-          ?root a fx:root ;
-            rdf:_1 [rdf:_1 ?fred] ;
-            rdf:_2 [rdf:_1 ?sally] .
-   }
-}
-
-```
-
-###### Result
-
-| fred | sally |
-|------|-------|
-
-
-
 ### `csv.headers-row`
 
-
 #### Description
 
-It specifies the number of the row to use for extracting column headers. **Note** this option affects the performance as it requires to pass through input twice. -- see #179
+It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see [#179](https://github.com/SPARQL-Anything/sparql.anything/issues/179)
 
 #### Valid Values
 
-any integer
+Any integer
 
 #### Default Value
 
-1
+`1`
 
 #### Examples
 
-##### Input
+##### Example 1
 
-```
+Compute the average petal length of the species having sepal length greater than 4.9
 
+###### Input
+
+```CSV
+Sepal_length	Sepal_width	Petal_length	Petal_width	Species
 5.1	3.5	1.4	0.2	I. setosa
 4.9	3.0	1.4	0.2	I. setosa
-Sepal_length	Sepal_width	Petal_length	Petal_width	Species
 4.7	3.2	1.3	0.2	I. setosa
 4.6	3.1	1.5	0.2	I. setosa
 5.0	3.6	1.4	0.2	I. setosa
 
 ```
 
-
-
-##### Use Case 1: Compute the average petal length of the species having sepal length greater than 4.9
+https://sparql-anything.cc/examples/simple.tsv
 
 ###### Query
 
@@ -579,39 +230,72 @@ WHERE
 
 ###### Result
 
-```
----------------------------------------------------
-| avgPetalLength                                  |
-===================================================
-| "1.4"^^<http://www.w3.org/2001/XMLSchema#float> |
----------------------------------------------------
+```turtle
+------------------
+| avgPetalLength |
+==================
+| 0              |
+------------------
+
 ```
 
-
-<!--
-### `option`
+---
+### `csv.format`
 
 #### Description
 
+The format of the input CSV file.
+
 #### Valid Values
+
+Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache&#39;s commons CSV library.
 
 #### Default Value
 
+`Default`
+
 #### Examples
 
-##### Input
+##### Example 1
 
-##### Use Case 1: TODO
+Constructing a Facade-X RDF graph out of the TSV file available at https://sparql-anything.cc/examples/simple.tsv
+
+###### Input
+
+```CSV
+Sepal_length	Sepal_width	Petal_length	Petal_width	Species
+5.1	3.5	1.4	0.2	I. setosa
+4.9	3.0	1.4	0.2	I. setosa
+4.7	3.2	1.3	0.2	I. setosa
+4.6	3.1	1.5	0.2	I. setosa
+5.0	3.6	1.4	0.2	I. setosa
+
+```
+
+https://sparql-anything.cc/examples/simple.tsv
 
 ###### Query
 
 ```
-TODO
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.format=TDF>
+      { ?s  ?p  ?o }
+  }
+
 ```
 
 ###### Result
 
-```
-TODO
-```
--->
+```turtle
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.or

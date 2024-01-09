@@ -16,7 +16,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # TODO pull version number from pom?
-ENV VERSION "0.9.0-SNAPSHOT"
+ENV VERSION "1.0.0-SNAPSHOT"
 
 # normal entrypoint
 # CMD cd /app && mvn clean install -Dgenerate-server-jar=true && \

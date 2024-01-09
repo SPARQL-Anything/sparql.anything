@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,31 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.riot.other.G;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class TextTriplifier implements Triplifier {
 
-	public static final String REGEX = "txt.regex", GROUP = "txt.group", SPLIT = "txt.split";
+
+	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving lines of the file.", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fx:properties fx:txt.regex \".*\\\\n\" . ?s fx:anySlot ?line } }")
+	@Option(description = "It tells SPARQL Anything to evaluate a regular expression on the data source. In this case the slots will be filled with the bindings of the regex.", validValues = "Any valid regular expression according to the [Pattern class](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)")
+	public static final IRIArgument REGEX = new IRIArgument("txt.regex");
+
+	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving the lines of the file and strips `\\n` out.", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fx:properties fx:txt.regex \"(.*)\\\\n\" ; fx:txt.group 1 . ?s fx:anySlot ?line } }")
+	@Option(description = "It tells SPARQL Anything to generate slots by using a specific group of the regular expression.", validValues = "Any valid regular expression according to the [Pattern class](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)")
+	public static final IRIArgument GROUP = new IRIArgument("txt.group", "-1");
+
+	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving the lines of the file by splitting by `\\n`", query = " PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fx:properties fx:txt.split \"\\\\n\" . ?s fx:anySlot ?line } } ")
+	@Option(description = "It tells SPARQL Anything to split the input around the matches of the give regular expression.", validValues = "Any valid regular expression according to the [Pattern class](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)")
+	public static final IRIArgument SPLIT = new IRIArgument("txt.split");
 	private static final Logger logger = LoggerFactory.getLogger(TextTriplifier.class);
 
 	@Override
@@ -52,8 +64,8 @@ public class TextTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId);
 
 		Pattern pattern = null;
-		if (properties.containsKey(REGEX)) {
-			String regexString = properties.getProperty(REGEX);
+		String regexString = PropertyUtils.getStringProperty(properties, REGEX);
+		if (regexString!=null) {
 			logger.trace("Regex {}", regexString);
 			try {
 				pattern = Pattern.compile(regexString);
@@ -65,21 +77,9 @@ public class TextTriplifier implements Triplifier {
 			}
 
 		}
+		int group = PropertyUtils.getIntegerProperty(properties, GROUP);
+		String splitStr = PropertyUtils.getStringProperty(properties, SPLIT);
 
-		int group = -1;
-		if (properties.containsKey(GROUP) && pattern != null) {
-			logger.trace("Group property set");
-			try {
-				int gr = Integer.parseInt(properties.getProperty(GROUP));
-				if (gr >= 0) {
-					group = gr;
-				} else {
-					logger.warn("Group number is supposed to be a positive integer, using default (group 0)");
-				}
-			} catch (Exception e) {
-				logger.error("", e);
-			}
-		}
 
 		if (pattern != null) {
 			logger.trace("Instantiating the matcher group {}", group);
@@ -98,10 +98,10 @@ public class TextTriplifier implements Triplifier {
 		} else {
 			logger.trace("No pattern set");
 
-			if (properties.containsKey(SPLIT)) {
+			if (splitStr!=null) {
 
-				logger.trace("Splitting regex: {}", properties.getProperty(SPLIT));
-				String[] split = value.split(properties.getProperty(SPLIT));
+				logger.trace("Splitting regex: {}", splitStr);
+				String[] split = value.split(splitStr);
 				for (int i = 0; i < split.length; i++) {
 					builder.addValue(dataSourceId, rootId, i + 1, split[i]);
 				}

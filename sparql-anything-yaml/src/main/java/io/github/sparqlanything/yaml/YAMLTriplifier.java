@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 
 package io.github.sparqlanything.yaml;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.PropertyUtils;
-import io.github.sparqlanything.model.SPARQLAnythingConstants;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
@@ -32,15 +30,18 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class YAMLTriplifier implements Triplifier {
-	public final static String PROPERTY_ALLOW_DUPLICATE_KEYS = "yaml.allow-duplicate-keys";
+
+	@Option(description = "Yaml 1.2 forbids duplicate keys, raising an error (default behaviour). When true, duplicate keys are tolerated (last wins). ", validValues = "true/false")
+	public final static IRIArgument PROPERTY_ALLOW_DUPLICATE_KEYS = new IRIArgument("yaml.allow-duplicate-keys", "false");
 	protected void transform(Properties properties, FacadeXGraphBuilder builder)
 		throws IOException, TriplifierHTTPException {
 
 		final InputStream is = Triplifier.getInputStream(properties);
 
 		LoadSettings settings = LoadSettings.builder().setLabel("Custom user configuration")
-			.setAllowDuplicateKeys(PropertyUtils.getBooleanProperty(properties, PROPERTY_ALLOW_DUPLICATE_KEYS, false))
+			.setAllowDuplicateKeys(PropertyUtils.getBooleanProperty(properties, PROPERTY_ALLOW_DUPLICATE_KEYS))
 			.build();
 		Load load = new Load(settings);
 

@@ -27,6 +27,17 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+```Markdown
+# Title
+The following list of issues:
+
+- first issue
+- second issue
+
+---
+Footer paragraph.
+```
+
 Located at https://sparql-anything.cc/examples/simple.md
 
 ### Query

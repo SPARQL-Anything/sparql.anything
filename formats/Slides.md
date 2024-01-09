@@ -28,6 +28,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+
 Located at https://sparql-anything.cc/examples/Presentation3.pptx
 
 ### Query
@@ -179,6 +180,7 @@ true/false
 
 
 ###### Input
+
 
 https://sparql-anything.cc/examples/Presentation2.pptx
 

@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.sparqlanything.documentationgenerator;
 
 import freemarker.template.Configuration;
@@ -26,13 +42,22 @@ public class DocumentationGenerator {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String formatFolder = args[0];
+		final String targetPackage;
+		if (args.length > 1) {
+			targetPackage = args[1];
+		} else {
+			targetPackage = null;
+		}
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Map<Package, Set<Class<?>>> packageToClasses = getFormatPackages();
 		Configuration freemarkerCfg = getConfiguration();
 		Template temp = freemarkerCfg.getTemplate("format.ftlh");
+
 		packageToClasses.forEach((p, classes) -> {
 			try {
-				generateTemplateForFormat(temp, p, classes, formatFolder);
+				if (targetPackage == null || p.getName().matches(targetPackage)) {
+					generateTemplateForFormat(temp, p, classes, formatFolder);
+				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -109,8 +134,6 @@ public class DocumentationGenerator {
 
 
 	}
-
-
 
 
 }

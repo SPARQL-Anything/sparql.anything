@@ -39,6 +39,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+
 Located at https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg
 
 ### Query

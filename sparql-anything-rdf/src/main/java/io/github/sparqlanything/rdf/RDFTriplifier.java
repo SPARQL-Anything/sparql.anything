@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class RDFTriplifier implements Triplifier {
 
 //	private static Logger logger = LoggerFactory.getLogger(RDFTriplifier.class);

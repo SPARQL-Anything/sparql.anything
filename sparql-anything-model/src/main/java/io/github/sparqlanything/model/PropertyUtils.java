@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,4 +100,18 @@ public class PropertyUtils {
         }
         return values;
     }
+
+
+	/**
+	 * Get all values from a property key. Supports single and multi-valued, e.g.
+	 * <p>
+	 * - key.name = value - key.name.0 = value0 - key.name.1 = value1
+	 *
+	 * @param properties the properties
+	 * @param prefix the prefix
+	 * @return the list of values starting with prefix
+	 */
+	public static List<String> getPropertyValues(Properties properties, IRIArgument prefix) {
+		return getPropertyValues(properties, prefix.toString());
+	}
 }

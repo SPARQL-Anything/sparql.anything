@@ -30,6 +30,18 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+```HTML
+<html>
+   <head>
+      <title>Hello world!</title>
+   </head>
+   <body>
+      <p class="paragraph">Hello world</p>
+   </body>
+</html>
+
+```
+
 Located at https://sparql-anything.cc/examples/simple.html
 
 ### Query
@@ -126,6 +138,18 @@ Selecting text contained in elements of the class &quot;paragraph&quot;
 
 ###### Input
 
+```HTML
+<html>
+   <head>
+      <title>Hello world!</title>
+   </head>
+   <body>
+      <p class="paragraph">Hello world</p>
+   </body>
+</html>
+
+```
+
 https://sparql-anything.cc/examples/simple.html
 
 ###### Query
@@ -174,6 +198,38 @@ true/false
 Extract triples embedded in the web page at the following address https://sparql-anything.cc/examples/Microdata1.html
 
 ###### Input
+
+```HTML
+<!--
+  ~ Copyright (c) 2022 SPARQL Anything Contributors @ http://github.com/sparql-anything
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<html>
+
+<body>
+
+	<div itemscope itemtype="https://schema.org/Movie">
+		<h1 itemprop="name">Avatar</h1>
+		<span>Director: James Cameron (born August 16, 1954)</span>
+	</div>
+
+</body>
+
+</html>
+```
 
 https://sparql-anything.cc/examples/Microdata1.html
 
