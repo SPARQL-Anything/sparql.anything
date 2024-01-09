@@ -18,13 +18,13 @@
 		"\n" +
 		"The query does not need to include a SERVICE clause, so you can use the tool to just query some RDF file of your choice.\n" +
 		"This is useful when you want to break down the process so that RDF files produced by previous SPARQL Anything processes are joined with data coming from additional transformatioons.\n" +
-		"Examples of this can be found in the [tutorials](TUTORIALS.md)." +
+		"Examples of this can be found in the [tutorials](../TUTORIALS.md).\n\n" +
 		"This feature is enabled with the command line argument `-l|--load` that accepts a file or a directory.\n" +
 		"The files are loaded in a Dataset which becomes the target for the query execution.\n" +
 		"A single file will be loaded in the default Graph. \n" +
 		"In the second case, all RDF files in the folder are loaded, each one on a Named Graph.\n" +
 		"\n" +
-		"See also the documentation of the [Command Line Interface (CLI)](CLI.md).\n",
+		"See also the documentation of the [Command Line Interface (CLI)](../CLI.md).\n",
 name="RDF",
 resourceExample = "https://sparql-anything.cc/examples/simple.ttl")
 package io.github.sparqlanything.rdf;
