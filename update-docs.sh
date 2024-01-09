@@ -26,6 +26,7 @@ git add README.md CLI.md EXTENSION_MECHANISMS.md JAVA_LIBRARY.md Facade-X.md fac
 git add formats/*
 cp -f README.md docs/
 cp -f EXTENSION_MECHANISMS.md docs/
+cp -f CLI.md docs/
 cp -f Facade-X.md docs/
 cp -f JAVA_LIBRARY.md docs/
 cp -f facade-x-ER.png docs/
