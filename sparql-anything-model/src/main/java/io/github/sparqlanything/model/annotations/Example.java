@@ -23,7 +23,9 @@ import java.lang.annotation.*;
 @Repeatable(Examples.class)
 public @interface Example {
 
-	String resource() default "Inline content";
+	public static final String INLINE_CONTENT = "Inline content";
+
+	String resource() default INLINE_CONTENT;
 
 	String query();
 

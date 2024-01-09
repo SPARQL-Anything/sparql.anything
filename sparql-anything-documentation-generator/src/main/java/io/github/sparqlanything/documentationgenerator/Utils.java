@@ -18,6 +18,7 @@ package io.github.sparqlanything.documentationgenerator;
 
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import io.github.sparqlanything.model.annotations.Example;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
@@ -105,9 +106,8 @@ public class Utils {
 	}
 
 	public static String readResourceToString(String resourceExample) throws IOException {
-		if (resourceExample != null) {
+		if (resourceExample != null && !resourceExample.equals(Example.INLINE_CONTENT)) {
 			URL url = new URL(resourceExample);
-
 			return IOUtils.toString(url.openStream(), Charset.defaultCharset());
 		}
 		return "";
