@@ -28,6 +28,7 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+
 Located at https://sparql-anything.cc/examples/example.tar
 
 ### Query
@@ -102,6 +103,7 @@ Any valid regular expression
 Select and triplify only .csv and .txt files within the archive.
 
 ###### Input
+
 
 https://sparql-anything.cc/examples/example.tar
 

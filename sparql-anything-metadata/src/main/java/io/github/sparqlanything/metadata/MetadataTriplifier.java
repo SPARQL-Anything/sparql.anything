@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class MetadataTriplifier implements Triplifier {
 
 

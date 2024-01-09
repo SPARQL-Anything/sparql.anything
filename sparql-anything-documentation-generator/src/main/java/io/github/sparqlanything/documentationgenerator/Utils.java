@@ -1,7 +1,24 @@
+/*
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.sparqlanything.documentationgenerator;
 
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
@@ -9,6 +26,10 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 
 public class Utils {
 
@@ -22,12 +43,16 @@ public class Utils {
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			if (q.isConstructType()) {
-				Model m = QueryExecutionFactory.create(q, kb).execConstruct();
-				m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
-				m.write(baos, "TTL");
-			} else if (q.isConstructQuad()) {
-				Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
-				RDFDataMgr.write(baos, d, Lang.TRIG);
+
+				if (q.isConstructQuad()) {
+					Dataset d = QueryExecutionFactory.create(q, kb).execConstructDataset();
+					RDFDataMgr.write(baos, d, Lang.TRIG);
+				} else {
+					Model m = QueryExecutionFactory.create(q, kb).execConstruct();
+					m.setNsPrefixes(SPARQLAnythingConstants.PREFIXES);
+					m.write(baos, "TTL");
+				}
+
 			} else if (q.isSelectType()) {
 				return ResultSetFormatter.asText(QueryExecutionFactory.create(q, kb).execSelect());
 			} else if (q.isAskType()) {
@@ -66,11 +91,10 @@ public class Utils {
 					int issueNumber = Integer.parseInt(subString.toString());
 					sb.append(String.format("[#%d](https://github.com/SPARQL-Anything/sparql.anything/issues/%d)", issueNumber, issueNumber));
 				} catch (NumberFormatException nfe) {
-					sb.append("#").append(subString.toString());
+					sb.append("#").append(subString);
 				}
 
-				if(index2<string.length())
-					sb.append(string.charAt(index2));
+				if (index2 < string.length()) sb.append(string.charAt(index2));
 				index = index2;
 
 			} else {
@@ -78,5 +102,24 @@ public class Utils {
 			}
 		}
 		return sb.toString();
+	}
+
+	public static String readResourceToString(String resourceExample) throws IOException {
+		if (resourceExample != null) {
+			URL url = new URL(resourceExample);
+
+			return IOUtils.toString(url.openStream(), Charset.defaultCharset());
+		}
+		return "";
+	}
+
+	public static void main(String[] args) throws IOException {
+		System.out.println(Character.isDefined('a'));
+		URL url = new URL("https://sparql-anything.cc/examples/spreadsheet.xls");
+		System.out.println(Character.isLetterOrDigit(url.openStream().read()));
+		System.out.println(Character.isValidCodePoint(url.openStream().read()));
+
+
+
 	}
 }

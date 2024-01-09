@@ -1,26 +1,28 @@
+<!-- This page has been generated with sparql-anything-documentation-generator module -->
+
 # Metadata
 
-Metadata is "data that provides information about other data", but not the content of the data, such as the text of a message or the image itself [[From Wikipedia]](https://en.wikipedia.org/wiki/Metadata)
+Metadata is &quot;data that provides information about other data&quot;, but not the content of the data, such as the text of a message or the image itself [[From Wikipedia]](https://en.wikipedia.org/wiki/Metadata)
 
 According to the Facade-X model, metadata are interpreted as a map associated with the resource triplified.
 
 At the moment SPARQL Anything is able to extract [EXIF metadata](https://en.wikipedia.org/wiki/Exif).
+Metadata transformer has to be invoked explicitly by setting the metadata option as true. In this case metadata is extracted from the data source and stored in the named graph with URI http://sparql.xyz/facade-x/data/metadata
 
-## Extensions and Media types
 
-Metadata transformer has to be invoked explicitly by setting the `metadata` option as `true`.
-In this case metadata is extracted from the data source and stored in the named graph with URI <http://sparql.xyz/facade-x/data/metadata>
+
+
+
+
 
 ## Default implementation
 
-- [io.github.sparqlanything.metadata.MetadataTriplifier](../sparql-anything-metadata/src/main/java/com/github/sparqlanything/metadata/MetadataTriplifier.java)
+- [io.github.sparqlanything.metadata.MetadataTriplifier](../sparql-anything-metadata/src/main/java/io/github/sparqlanything/metadata/MetadataTriplifier.java)
 
 ## Default Transformation
 
-
 ### Data
 
-<p><img src="https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg"/></p>
 
 Located at https://raw.githubusercontent.com/ianare/exif-samples/master/jpg/Canon_40D.jpg
 
@@ -38,6 +40,7 @@ WHERE
           { ?s  ?p  ?o }
       }
   }
+
 ```
 
 ### Facade-X RDF
@@ -119,7 +122,7 @@ WHERE
             <http://sparql.xyz/facade-x/data/F-Number>
                     "f/7.1" ;
             <http://sparql.xyz/facade-x/data/File%20Modified%20Date>
-                    "Tue Aug 02 11:08:53 +02:00 2022" ;
+                    "Mon Jan 08 11:21:29 +01:00 2024" ;
             <http://sparql.xyz/facade-x/data/File%20Name>
                     "Canon_40D.jpg" ;
             <http://sparql.xyz/facade-x/data/File%20Size>
@@ -221,7 +224,7 @@ WHERE
             <http://sparql.xyz/facade-x/data/User%20Comment>
                     "" ;
             <http://sparql.xyz/facade-x/data/Version>
-                    "1.1" , "2.1.0" ;
+                    "2.1.0" , "1.1" ;
             <http://sparql.xyz/facade-x/data/Viewing%20Conditions>
                     "view (0x76696577): 36 bytes" ;
             <http://sparql.xyz/facade-x/data/Viewing%20Conditions%20Description>
@@ -229,7 +232,7 @@ WHERE
             <http://sparql.xyz/facade-x/data/White%20Balance%20Mode>
                     "Auto white balance" ;
             <http://sparql.xyz/facade-x/data/X%20Resolution>
-                    "72 dots per inch" , "72 dots" ;
+                    "72 dots" , "72 dots per inch" ;
             <http://sparql.xyz/facade-x/data/XYZ%20values>
                     "0.964 1 0.825" ;
             <http://sparql.xyz/facade-x/data/Y%20Resolution>
@@ -239,90 +242,10 @@ WHERE
             <http://sparql.xyz/facade-x/data/size>
                     "7958"^^<http://www.w3.org/2001/XMLSchema#long> .
 }
-```
-
-
-<!--
-# 
-
-
-
-## Extensions
-
-SPARQL Anything selects this transformer for the following file extensions:
-
--
-
-## Media types
-
-SPARQL Anything selects this transformer for the following media types:
-
-- 
-
-## Default Transformation
-
-
-### Data
-
-```
-
-```
-
-Located at https://sparql-anything.cc/examples/example.tar
-
-### Query
-
-```
-
-```
-
-### Facade-X RDF
-
-```turtle
 
 ```
 
 
-## Options
-
-### Summary
 
 
 
-### ``
-
-#### Description
-
-
-
-#### Valid Values
-
-
-#### Default Value
-
-
-#### Examples
-
-##### Input
-
-### Data
-
-```
-```
-
-Located at https://sparql-anything.cc/examples/example.tar
-
-##### Use Case 1: 
-
-###### Query
-
-```
-```
-
-###### Result
-
-```turtle
-```
-
-
--->

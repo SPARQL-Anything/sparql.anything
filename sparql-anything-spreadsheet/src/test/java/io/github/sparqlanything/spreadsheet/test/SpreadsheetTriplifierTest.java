@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,11 @@ public class SpreadsheetTriplifierTest extends AbstractTriplifierTester {
 		}
 
 		if(name.getMethodName().equals("testFormulaEvaluator")){
-			properties.setProperty(SpreadsheetTriplifier.PROPERTY_EVALUATE_FORMULAS, "true");
+			properties.setProperty(SpreadsheetTriplifier.PROPERTY_EVALUATE_FORMULAS.toString(), "true");
 		}
 
 		if(name.getMethodName().equals("test2")){
-			properties.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS, "true");
+			properties.setProperty(SpreadsheetTriplifier.PROPERTY_HEADERS.toString(), "true");
 		}
 
 	}
