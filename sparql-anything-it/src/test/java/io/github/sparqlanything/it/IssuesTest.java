@@ -33,6 +33,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.junit.Assume;
+import io.github.sparqlanything.model.HTTPHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -356,6 +358,7 @@ public class IssuesTest {
 	 */
 	@Test
 	public void testIssue175() throws URISyntaxException, IOException {
+		Assume.assumeTrue(HTTPHelper.checkHostIsReachable("https://sparql-anything.cc"));
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue175.sparql")).toURI(), StandardCharsets.UTF_8);
 		String queryStr2 = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue175-2.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
@@ -371,6 +374,9 @@ public class IssuesTest {
 	 */
 	@Test
 	public void testIssue173() throws URISyntaxException, IOException {
+		Assume.assumeTrue(HTTPHelper.checkHostIsReachable("https://sparql-anything.cc"));
+
+
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue173-1.sparql")).toURI(), StandardCharsets.UTF_8);
 		String queryStr2 = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue173-2.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
@@ -386,6 +392,8 @@ public class IssuesTest {
 	 */
 	@Test
 	public void testIssue194() throws URISyntaxException, IOException {
+		Assume.assumeTrue(HTTPHelper.checkHostIsReachable("https://raw.githubusercontent.com"));
+
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue194.sparql")).toURI(), StandardCharsets.UTF_8);
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);

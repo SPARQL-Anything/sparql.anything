@@ -20,12 +20,16 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.junit.Assume;
+import io.github.sparqlanything.model.HTTPHelper;
 
 public class LoadSubdirsTest {
 	public static final Logger L = LoggerFactory.getLogger(LoadSubdirsTest.class);
 
 	@Test
 	public void test() throws Exception {
+		Assume.assumeTrue(HTTPHelper.checkHostIsReachable("https://schema.org"));
+
 		String q = getClass().getClassLoader().getResource("count-triples.sparql").toString();
 		String d = getClass().getClassLoader().getResource("./load-subdirs").toURI().toString();
 		SPARQLAnything sa = new SPARQLAnything();
