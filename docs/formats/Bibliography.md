@@ -28,6 +28,31 @@ SPARQL Anything selects this transformer for the following media types:
 
 ### Data
 
+```Bibliography
+@article{Knuth1984,
+  title={Literate Programming},
+  author={Donald E. Knuth},
+  journal={The Computer Journal},
+  volume={27},
+  number={2},
+  pages={97--111},
+  year={1984},
+  publisher={Oxford University Press}
+}
+
+
+@article{Berners2001,
+  title={The semantic web},
+  author={Berners-Lee, Tim and Hendler, James and Lassila, Ora},
+  journal={Scientific american},
+  volume={284},
+  number={5},
+  pages={34--43},
+  year={2001}
+}
+
+```
+
 Located at https://sparql-anything.cc/examples/example.bib
 
 ### Query
