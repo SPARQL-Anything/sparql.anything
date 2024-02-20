@@ -120,7 +120,7 @@ public class HTMLTriplifier implements Triplifier {
 		// If location is a http or https, raise exception if status is not 200
 
 		URL url = Triplifier.getLocation(properties);
-		if (properties.containsKey(PROPERTY_BROWSER)) {
+		if (properties.containsKey(PROPERTY_BROWSER.toString())) {
 			log.debug("Browser used (needs an HTTP location): {}", url);
 			log.debug("Loading URL: {}", url);
 			doc = Jsoup.parse(useBrowserToNavigate(Objects.requireNonNull(url).toString(), properties));
