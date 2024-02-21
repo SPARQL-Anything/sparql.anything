@@ -188,7 +188,7 @@ public class HTMLTriplifier implements Triplifier {
 		if (!innerHtml.trim().equals("")) {
 			builder.addValue(dataSourceId, resourceId, new URI(DOM_NS + "innerHTML"), innerHtml);
 		}
-		String innerText = element.select("*").text();
+		String innerText = element.text();
 		if (!innerText.trim().equals("")) {
 			builder.addValue(dataSourceId, resourceId, new URI(DOM_NS + "innerText"), innerText);
 		}
