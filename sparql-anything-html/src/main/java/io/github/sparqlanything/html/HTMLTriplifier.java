@@ -27,11 +27,15 @@ import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.W3CDom;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
+import org.jsoup.parser.ParseSettings;
+import org.jsoup.parser.Parser;
+import org.jsoup.parser.Tag;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +66,19 @@ public class HTMLTriplifier implements Triplifier {
 	@Option(description = "It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](https://github.com/SPARQL-Anything/sparql.anything/blob/v1.0-DEV/BROWSER.md) and [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "chromium|webkit|firefox")
 	public static final IRIArgument PROPERTY_BROWSER = new IRIArgument("html.browser");
 
+
+	@Option(description = "It tells the triplifier to use the specified JSoup parser (default: html).", validValues = "xml html")
+	public static final IRIArgument PROPERTY_PARSER = new IRIArgument("html.parser");
+	private enum ParamParser {
+		HTML("html"), XML("xml");
+		private String str;
+		ParamParser(String str){
+			this.str = str;
+		}
+		boolean is(String str){
+			return str.equals(this.str);
+		}
+	}
 	@Option(description = "When using a browser to navigate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML. -- See See [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "Any integer")
 	public static final IRIArgument PROPERTY_BROWSER_WAIT = new IRIArgument("html.browser.wait");
 
@@ -73,6 +90,7 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
+	private W3CDom w3cDom = new W3CDom().namespaceAware(true);
 
 	private static String localName(Element element) {
 		String tagName = element.tagName().replace(':', '|');
@@ -92,7 +110,6 @@ public class HTMLTriplifier implements Triplifier {
 		}
 		return selector.toString().replaceAll(" > ", "/").replaceAll(":nth-child\\(([0-9]+)\\)", ":$1");
 	}
-
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
@@ -101,7 +118,7 @@ public class HTMLTriplifier implements Triplifier {
 		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String selector = PropertyUtils.getStringProperty(properties, PROPERTY_SELECTOR);
 		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
-
+		String parser = PropertyUtils.getStringProperty(properties, PROPERTY_PARSER, "html");
 		log.trace(properties.toString());
 		boolean extractMetadata = PropertyUtils.getBooleanProperty(properties, PROPERTY_METADATA);
 		if (extractMetadata) {
@@ -123,10 +140,22 @@ public class HTMLTriplifier implements Triplifier {
 		if (properties.containsKey(PROPERTY_BROWSER.toString())) {
 			log.debug("Browser used (needs an HTTP location): {}", url);
 			log.debug("Loading URL: {}", url);
+			if(!ParamParser.HTML.is(parser)){
+				log.warn("Parser not supported in browser mode: {} (ignored)", parser);
+			}
 			doc = Jsoup.parse(useBrowserToNavigate(Objects.requireNonNull(url).toString(), properties));
 		} else {
+			Parser p;
+			if(ParamParser.XML.is(parser)){
+				p = Parser.xmlParser();
+			}else if(ParamParser.HTML.is(parser)){
+				p = Parser.htmlParser();
+			}else{
+				log.warn("Parser not supported: {} (ignored)", parser);
+				p = Parser.htmlParser();
+			}
 			try (InputStream is = Triplifier.getInputStream(properties)) {
-				doc = Jsoup.parse(is, charset.toString(), Triplifier.getResourceId(properties));
+				doc = Jsoup.parse(is, charset.toString(), Triplifier.getResourceId(properties), p);
 			}
 		}
 
@@ -180,9 +209,46 @@ public class HTMLTriplifier implements Triplifier {
 		}
 	}
 
+	private String makeURI(String tagOrAttribute, Element currentElement){
+		// If name is prefixed, try to find the declaration from the given element upwards
+// Is the TagName with a prefix? See #452 #466
+		String ns = null;
+		String localName = null;
+		if(tagOrAttribute.split(":").length == 2){
+			String[] elarr = tagOrAttribute.split(":");
+			String prefixName =  elarr[0];
+			localName =  elarr[1];
+			// Check if namespace is declared in current attribute
+			Attribute nsAttr = null;
+			Element parent = currentElement;
+			while (nsAttr == null){
+				// Check if namespace is declared in any parent attributes
+				nsAttr = parent.attributes().attribute("xmlns:" + prefixName);
+				if(nsAttr == null && parent.hasParent()){
+					parent = parent.parent();
+					continue;
+				}
+				break; // root was reached
+			}
+
+			if (nsAttr != null){
+				// Namespace was declared
+				ns = nsAttr.getValue();
+			}
+		}
+		if(ns == null){
+			// Namespace was not declared (ignore prefix)
+			// Default namespace
+			ns = HTML_NS;
+			localName = tagOrAttribute;
+		}
+		return (ns.endsWith("#")? ns: ns+"#") + localName;
+	}
 	private void populate(FacadeXGraphBuilder builder, String dataSourceId, Element element, boolean blank_nodes, String resourceId) throws URISyntaxException {
 
-		String tagName = element.tagName(); // tagname is the type
+		//String tagName = element.tagName(); // tagname is the type
+		String typeURI = makeURI(element.tagName(), element);
+
 //		String resourceId = toResourceId(element, blank_nodes);
 		String innerHtml = element.html();
 		if (!innerHtml.trim().equals("")) {
@@ -192,12 +258,13 @@ public class HTMLTriplifier implements Triplifier {
 		if (!innerText.trim().equals("")) {
 			builder.addValue(dataSourceId, resourceId, new URI(DOM_NS + "innerText"), innerText);
 		}
-		builder.addType(dataSourceId, resourceId, new URI(HTML_NS + tagName));
+		builder.addType(dataSourceId, resourceId, new URI(typeURI));
 		// attributes
 		for (Attribute attribute : element.attributes()) {
 			String key = attribute.getKey();
+			String attributeURI = makeURI(key, element);
 			String value = attribute.getValue();
-			builder.addValue(dataSourceId, resourceId, new URI(HTML_NS + key), value);
+			builder.addValue(dataSourceId, resourceId, new URI(attributeURI), value);
 		}
 		// Children
 		int counter = 0;

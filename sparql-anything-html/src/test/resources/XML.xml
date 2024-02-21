@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<gml:FeatureCollection xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" xmlns:base2="http://inspire.ec.europa.eu/schemas/base2/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:plu="http://inspire.ec.europa.eu/schemas/plu/4.0" xmlns:lunom="http://inspire.ec.europa.eu/schemas/lunom/4.0" xmlns:base="http://inspire.ec.europa.eu/schemas/base/3.3" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:ns1="http://www.w3.org/1999/xhtml" xmlns:gss="http://www.isotc211.org/2005/gss" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:ad="http://inspire.ec.europa.eu/schemas/ad/4.0" xmlns:au="http://inspire.ec.europa.eu/schemas/au/4.0" xmlns:gn="http://inspire.ec.europa.eu/schemas/gn/4.0" xmlns:bu-base="http://inspire.ec.europa.eu/schemas/bu-base/4.0" xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xmlns:cp="http://inspire.ec.europa.eu/schemas/cp/4.0" xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0" xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:hfp="http://www.w3.org/2001/XMLSchema-hasFacetAndProperty" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/plu/4.0 https://inspire.ec.europa.eu/schemas/plu/4.0/PlannedLandUse.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/deprecatedTypes.xsd">
+    <gml:featureMember>
+        <plu:SupplementaryRegulation gml:id="_bp_ueberbaubaregrundstuecksflaeche.3">
+            <gml:identifier codeSpace="http://inspire.ec.europa.eu/ids">REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3</gml:identifier>
+            <plu:specificSupplementaryRegulation xlink:href="https://registry.gdi-de.org/codelist/de.xleitstelle.inspire_plu/LandUse/3_49_UeberbaubareGrundstuecksFlaeche"></plu:specificSupplementaryRegulation>
+            <plu:processStepGeneral nilReason="other:unpopulated" xsi:nil="true"></plu:processStepGeneral>
+            <plu:backgroundMap nilReason="other:unpopulated" xsi:nil="true"></plu:backgroundMap>
+            <plu:beginLifespanVersion nilReason="other:unpopulated" xsi:nil="true"></plu:beginLifespanVersion>
+            <plu:dimensioningIndication>
+                <plu:DimensioningIndicationIntegerValue>
+                    <plu:indicationReference>full_storeys</plu:indicationReference>
+                    <plu:value>6</plu:value>
+                </plu:DimensioningIndicationIntegerValue>
+            </plu:dimensioningIndication>
+            <plu:dimensioningIndication>
+                <plu:DimensioningIndicationMeasureValue>
+                    <plu:indicationReference>total_floor_area</plu:indicationReference>
+                    <plu:value uom="m2">4820.0</plu:value>
+                </plu:DimensioningIndicationMeasureValue>
+            </plu:dimensioningIndication>
+            <plu:dimensioningIndication>
+                <plu:DimensioningIndicationMeasureValue>
+                    <plu:indicationReference>plot_coverage</plu:indicationReference>
+                    <plu:value uom="m2">869.0</plu:value>
+                </plu:DimensioningIndicationMeasureValue>
+            </plu:dimensioningIndication>
+            <plu:dimensioningIndication>
+                <plu:DimensioningIndicationMeasureValue>
+                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMin</plu:indicationReference>
+                    <plu:value uom="m">55.5</plu:value>
+                </plu:DimensioningIndicationMeasureValue>
+            </plu:dimensioningIndication>
+            <plu:dimensioningIndication>
+                <plu:DimensioningIndicationMeasureValue>
+                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMax</plu:indicationReference>
+                    <plu:value uom="m">57.0</plu:value>
+                </plu:DimensioningIndicationMeasureValue>
+            </plu:dimensioningIndication>
+            <plu:inspireId>
+                <base:Identifier>
+                    <base:localId>_bp_ueberbaubaregrundstuecksflaeche.3</base:localId>
+                    <base:namespace>REPLACEME/</base:namespace>
+                </base:Identifier>
+            </plu:inspireId>
+            <plu:geometry>
+                <gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/25833" srsDimension="2">
+                    <gml:exterior>
+                        <gml:LinearRing>
+                            <gml:posList>385919.31860777 5824690.697477636</gml:posList>
+                        </gml:LinearRing>
+                    </gml:exterior>
+                </gml:Polygon>
+            </plu:geometry>
+            <plu:inheritedFromOtherPlans nilReason="other:unpopulated" xsi:nil="true"></plu:inheritedFromOtherPlans>
+            <plu:specificRegulationNature nilReason="other:unpopulated" xsi:nil="true"></plu:specificRegulationNature>
+            <plu:regulationNature xlink:href="http://inspire.ec.europa.eu/codelist/RegulationNatureValue/generallyBinding"></plu:regulationNature>
+            <plu:supplementaryRegulation xlink:href="http://inspire.ec.europa.eu/codelist/SupplementaryRegulationValue/5_1_UsableBuildingArea"></plu:supplementaryRegulation>
+            <plu:officialDocument xlink:href="#OfficialDocumentation_175e7d8d3bafcc8e759e00bff1a33b34d0e017fbd8eb19155912fa887c254df5"></plu:officialDocument>
+            <plu:plan xlink:href="#_bp_plan.1"></plu:plan>
+        </plu:SupplementaryRegulation>
+    </gml:featureMember>
+</gml:FeatureCollection>

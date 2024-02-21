@@ -1,0 +1,240 @@
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type             fx:root , <http://www.opengis.net/gml/3.2#FeatureCollection> ;
+  rdf:_1               [ rdf:type          <http://www.opengis.net/gml/3.2#featureMember> ;
+                         rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#SupplementaryRegulation> ;
+                                             rdf:_1            [ rdf:type          <http://www.opengis.net/gml/3.2#identifier> ;
+                                                                 rdf:_1            "REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3" ;
+                                                                 xhtml:codeSpace   "http://inspire.ec.europa.eu/ids" ;
+                                                                 whatwg:innerHTML  "REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3" ;
+                                                                 whatwg:innerText  "REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3"
+                                                               ] ;
+                                             rdf:_10           [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#dimensioningIndication> ;
+                                                                 rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#DimensioningIndicationMeasureValue> ;
+                                                                                     rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#indicationReference> ;
+                                                                                                         rdf:_1            "standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMax" ;
+                                                                                                         whatwg:innerHTML  "standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMax" ;
+                                                                                                         whatwg:innerText  "standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMax"
+                                                                                                       ] ;
+                                                                                     rdf:_2            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#value> ;
+                                                                                                         rdf:_1            "57.0" ;
+                                                                                                         xhtml:uom         "m" ;
+                                                                                                         whatwg:innerHTML  "57.0" ;
+                                                                                                         whatwg:innerText  "57.0"
+                                                                                                       ] ;
+                                                                                     whatwg:innerHTML  "\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMax</plu:indicationReference>\n                    <plu:value uom=\"m\">57.0</plu:value>\n                " ;
+                                                                                     whatwg:innerText  "standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMax 57.0"
+                                                                                   ] ;
+                                                                 whatwg:innerHTML  "\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMax</plu:indicationReference>\n                    <plu:value uom=\"m\">57.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            " ;
+                                                                 whatwg:innerText  "standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMax 57.0"
+                                                               ] ;
+                                             rdf:_11           [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#inspireId> ;
+                                                                 rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/base/3.3#Identifier> ;
+                                                                                     rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/base/3.3#localId> ;
+                                                                                                         rdf:_1            "_bp_ueberbaubaregrundstuecksflaeche.3" ;
+                                                                                                         whatwg:innerHTML  "_bp_ueberbaubaregrundstuecksflaeche.3" ;
+                                                                                                         whatwg:innerText  "_bp_ueberbaubaregrundstuecksflaeche.3"
+                                                                                                       ] ;
+                                                                                     rdf:_2            [ rdf:type          <http://inspire.ec.europa.eu/schemas/base/3.3#namespace> ;
+                                                                                                         rdf:_1            "REPLACEME/" ;
+                                                                                                         whatwg:innerHTML  "REPLACEME/" ;
+                                                                                                         whatwg:innerText  "REPLACEME/"
+                                                                                                       ] ;
+                                                                                     whatwg:innerHTML  "\n                    <base:localId>_bp_ueberbaubaregrundstuecksflaeche.3</base:localId>\n                    <base:namespace>REPLACEME/</base:namespace>\n                " ;
+                                                                                     whatwg:innerText  "_bp_ueberbaubaregrundstuecksflaeche.3 REPLACEME/"
+                                                                                   ] ;
+                                                                 whatwg:innerHTML  "\n                <base:Identifier>\n                    <base:localId>_bp_ueberbaubaregrundstuecksflaeche.3</base:localId>\n                    <base:namespace>REPLACEME/</base:namespace>\n                </base:Identifier>\n            " ;
+                                                                 whatwg:innerText  "_bp_ueberbaubaregrundstuecksflaeche.3 REPLACEME/"
+                                                               ] ;
+                                             rdf:_12           [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#geometry> ;
+                                                                 rdf:_1            [ rdf:type            <http://www.opengis.net/gml/3.2#Polygon> ;
+                                                                                     rdf:_1              [ rdf:type          <http://www.opengis.net/gml/3.2#exterior> ;
+                                                                                                           rdf:_1            [ rdf:type          <http://www.opengis.net/gml/3.2#LinearRing> ;
+                                                                                                                               rdf:_1            [ rdf:type          <http://www.opengis.net/gml/3.2#posList> ;
+                                                                                                                                                   rdf:_1            "385919.31860777 5824690.697477636" ;
+                                                                                                                                                   whatwg:innerHTML  "385919.31860777 5824690.697477636" ;
+                                                                                                                                                   whatwg:innerText  "385919.31860777 5824690.697477636"
+                                                                                                                                                 ] ;
+                                                                                                                               whatwg:innerHTML  "\n                            <gml:posList>385919.31860777 5824690.697477636</gml:posList>\n                        " ;
+                                                                                                                               whatwg:innerText  "385919.31860777 5824690.697477636"
+                                                                                                                             ] ;
+                                                                                                           whatwg:innerHTML  "\n                        <gml:LinearRing>\n                            <gml:posList>385919.31860777 5824690.697477636</gml:posList>\n                        </gml:LinearRing>\n                    " ;
+                                                                                                           whatwg:innerText  "385919.31860777 5824690.697477636"
+                                                                                                         ] ;
+                                                                                     xhtml:srsDimension  "2" ;
+                                                                                     xhtml:srsName       "http://www.opengis.net/def/crs/EPSG/0/25833" ;
+                                                                                     whatwg:innerHTML    "\n                    <gml:exterior>\n                        <gml:LinearRing>\n                            <gml:posList>385919.31860777 5824690.697477636</gml:posList>\n                        </gml:LinearRing>\n                    </gml:exterior>\n                " ;
+                                                                                     whatwg:innerText    "385919.31860777 5824690.697477636"
+                                                                                   ] ;
+                                                                 whatwg:innerHTML  "\n                <gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/25833\" srsDimension=\"2\">\n                    <gml:exterior>\n                        <gml:LinearRing>\n                            <gml:posList>385919.31860777 5824690.697477636</gml:posList>\n                        </gml:LinearRing>\n                    </gml:exterior>\n                </gml:Polygon>\n            " ;
+                                                                 whatwg:innerText  "385919.31860777 5824690.697477636"
+                                                               ] ;
+                                             rdf:_13           [ rdf:type         <http://inspire.ec.europa.eu/schemas/plu/4.0#inheritedFromOtherPlans> ;
+                                                                 xhtml:nilReason  "other:unpopulated" ;
+                                                                 <http://www.w3.org/2001/XMLSchema-instance#nil>
+                                                                         "true"
+                                                               ] ;
+                                             rdf:_14           [ rdf:type         <http://inspire.ec.europa.eu/schemas/plu/4.0#specificRegulationNature> ;
+                                                                 xhtml:nilReason  "other:unpopulated" ;
+                                                                 <http://www.w3.org/2001/XMLSchema-instance#nil>
+                                                                         "true"
+                                                               ] ;
+                                             rdf:_15           [ rdf:type  <http://inspire.ec.europa.eu/schemas/plu/4.0#regulationNature> ;
+                                                                 <http://www.w3.org/1999/xlink#href>
+                                                                         "http://inspire.ec.europa.eu/codelist/RegulationNatureValue/generallyBinding"
+                                                               ] ;
+                                             rdf:_16           [ rdf:type  <http://inspire.ec.europa.eu/schemas/plu/4.0#supplementaryRegulation> ;
+                                                                 <http://www.w3.org/1999/xlink#href>
+                                                                         "http://inspire.ec.europa.eu/codelist/SupplementaryRegulationValue/5_1_UsableBuildingArea"
+                                                               ] ;
+                                             rdf:_17           [ rdf:type  <http://inspire.ec.europa.eu/schemas/plu/4.0#officialDocument> ;
+                                                                 <http://www.w3.org/1999/xlink#href>
+                                                                         "#OfficialDocumentation_175e7d8d3bafcc8e759e00bff1a33b34d0e017fbd8eb19155912fa887c254df5"
+                                                               ] ;
+                                             rdf:_18           [ rdf:type  <http://inspire.ec.europa.eu/schemas/plu/4.0#plan> ;
+                                                                 <http://www.w3.org/1999/xlink#href>
+                                                                         "#_bp_plan.1"
+                                                               ] ;
+                                             rdf:_2            [ rdf:type  <http://inspire.ec.europa.eu/schemas/plu/4.0#specificSupplementaryRegulation> ;
+                                                                 <http://www.w3.org/1999/xlink#href>
+                                                                         "https://registry.gdi-de.org/codelist/de.xleitstelle.inspire_plu/LandUse/3_49_UeberbaubareGrundstuecksFlaeche"
+                                                               ] ;
+                                             rdf:_3            [ rdf:type         <http://inspire.ec.europa.eu/schemas/plu/4.0#processStepGeneral> ;
+                                                                 xhtml:nilReason  "other:unpopulated" ;
+                                                                 <http://www.w3.org/2001/XMLSchema-instance#nil>
+                                                                         "true"
+                                                               ] ;
+                                             rdf:_4            [ rdf:type         <http://inspire.ec.europa.eu/schemas/plu/4.0#backgroundMap> ;
+                                                                 xhtml:nilReason  "other:unpopulated" ;
+                                                                 <http://www.w3.org/2001/XMLSchema-instance#nil>
+                                                                         "true"
+                                                               ] ;
+                                             rdf:_5            [ rdf:type         <http://inspire.ec.europa.eu/schemas/plu/4.0#beginLifespanVersion> ;
+                                                                 xhtml:nilReason  "other:unpopulated" ;
+                                                                 <http://www.w3.org/2001/XMLSchema-instance#nil>
+                                                                         "true"
+                                                               ] ;
+                                             rdf:_6            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#dimensioningIndication> ;
+                                                                 rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#DimensioningIndicationIntegerValue> ;
+                                                                                     rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#indicationReference> ;
+                                                                                                         rdf:_1            "full_storeys" ;
+                                                                                                         whatwg:innerHTML  "full_storeys" ;
+                                                                                                         whatwg:innerText  "full_storeys"
+                                                                                                       ] ;
+                                                                                     rdf:_2            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#value> ;
+                                                                                                         rdf:_1            "6" ;
+                                                                                                         whatwg:innerHTML  "6" ;
+                                                                                                         whatwg:innerText  "6"
+                                                                                                       ] ;
+                                                                                     whatwg:innerHTML  "\n                    <plu:indicationReference>full_storeys</plu:indicationReference>\n                    <plu:value>6</plu:value>\n                " ;
+                                                                                     whatwg:innerText  "full_storeys 6"
+                                                                                   ] ;
+                                                                 whatwg:innerHTML  "\n                <plu:DimensioningIndicationIntegerValue>\n                    <plu:indicationReference>full_storeys</plu:indicationReference>\n                    <plu:value>6</plu:value>\n                </plu:DimensioningIndicationIntegerValue>\n            " ;
+                                                                 whatwg:innerText  "full_storeys 6"
+                                                               ] ;
+                                             rdf:_7            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#dimensioningIndication> ;
+                                                                 rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#DimensioningIndicationMeasureValue> ;
+                                                                                     rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#indicationReference> ;
+                                                                                                         rdf:_1            "total_floor_area" ;
+                                                                                                         whatwg:innerHTML  "total_floor_area" ;
+                                                                                                         whatwg:innerText  "total_floor_area"
+                                                                                                       ] ;
+                                                                                     rdf:_2            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#value> ;
+                                                                                                         rdf:_1            "4820.0" ;
+                                                                                                         xhtml:uom         "m2" ;
+                                                                                                         whatwg:innerHTML  "4820.0" ;
+                                                                                                         whatwg:innerText  "4820.0"
+                                                                                                       ] ;
+                                                                                     whatwg:innerHTML  "\n                    <plu:indicationReference>total_floor_area</plu:indicationReference>\n                    <plu:value uom=\"m2\">4820.0</plu:value>\n                " ;
+                                                                                     whatwg:innerText  "total_floor_area 4820.0"
+                                                                                   ] ;
+                                                                 whatwg:innerHTML  "\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>total_floor_area</plu:indicationReference>\n                    <plu:value uom=\"m2\">4820.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            " ;
+                                                                 whatwg:innerText  "total_floor_area 4820.0"
+                                                               ] ;
+                                             rdf:_8            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#dimensioningIndication> ;
+                                                                 rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#DimensioningIndicationMeasureValue> ;
+                                                                                     rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#indicationReference> ;
+                                                                                                         rdf:_1            "plot_coverage" ;
+                                                                                                         whatwg:innerHTML  "plot_coverage" ;
+                                                                                                         whatwg:innerText  "plot_coverage"
+                                                                                                       ] ;
+                                                                                     rdf:_2            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#value> ;
+                                                                                                         rdf:_1            "869.0" ;
+                                                                                                         xhtml:uom         "m2" ;
+                                                                                                         whatwg:innerHTML  "869.0" ;
+                                                                                                         whatwg:innerText  "869.0"
+                                                                                                       ] ;
+                                                                                     whatwg:innerHTML  "\n                    <plu:indicationReference>plot_coverage</plu:indicationReference>\n                    <plu:value uom=\"m2\">869.0</plu:value>\n                " ;
+                                                                                     whatwg:innerText  "plot_coverage 869.0"
+                                                                                   ] ;
+                                                                 whatwg:innerHTML  "\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>plot_coverage</plu:indicationReference>\n                    <plu:value uom=\"m2\">869.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            " ;
+                                                                 whatwg:innerText  "plot_coverage 869.0"
+                                                               ] ;
+                                             rdf:_9            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#dimensioningIndication> ;
+                                                                 rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#DimensioningIndicationMeasureValue> ;
+                                                                                     rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#indicationReference> ;
+                                                                                                         rdf:_1            "standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMin" ;
+                                                                                                         whatwg:innerHTML  "standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMin" ;
+                                                                                                         whatwg:innerText  "standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMin"
+                                                                                                       ] ;
+                                                                                     rdf:_2            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#value> ;
+                                                                                                         rdf:_1            "55.5" ;
+                                                                                                         xhtml:uom         "m" ;
+                                                                                                         whatwg:innerHTML  "55.5" ;
+                                                                                                         whatwg:innerText  "55.5"
+                                                                                                       ] ;
+                                                                                     whatwg:innerHTML  "\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMin</plu:indicationReference>\n                    <plu:value uom=\"m\">55.5</plu:value>\n                " ;
+                                                                                     whatwg:innerText  "standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMin 55.5"
+                                                                                   ] ;
+                                                                 whatwg:innerHTML  "\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMin</plu:indicationReference>\n                    <plu:value uom=\"m\">55.5</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            " ;
+                                                                 whatwg:innerText  "standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMin 55.5"
+                                                               ] ;
+                                             <http://www.opengis.net/gml/3.2#id>
+                                                     "_bp_ueberbaubaregrundstuecksflaeche.3" ;
+                                             whatwg:innerHTML  "\n            <gml:identifier codeSpace=\"http://inspire.ec.europa.eu/ids\">REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3</gml:identifier>\n            <plu:specificSupplementaryRegulation xlink:href=\"https://registry.gdi-de.org/codelist/de.xleitstelle.inspire_plu/LandUse/3_49_UeberbaubareGrundstuecksFlaeche\"></plu:specificSupplementaryRegulation>\n            <plu:processStepGeneral nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:processStepGeneral>\n            <plu:backgroundMap nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:backgroundMap>\n            <plu:beginLifespanVersion nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:beginLifespanVersion>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationIntegerValue>\n                    <plu:indicationReference>full_storeys</plu:indicationReference>\n                    <plu:value>6</plu:value>\n                </plu:DimensioningIndicationIntegerValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>total_floor_area</plu:indicationReference>\n                    <plu:value uom=\"m2\">4820.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>plot_coverage</plu:indicationReference>\n                    <plu:value uom=\"m2\">869.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMin</plu:indicationReference>\n                    <plu:value uom=\"m\">55.5</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMax</plu:indicationReference>\n                    <plu:value uom=\"m\">57.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:inspireId>\n                <base:Identifier>\n                    <base:localId>_bp_ueberbaubaregrundstuecksflaeche.3</base:localId>\n                    <base:namespace>REPLACEME/</base:namespace>\n                </base:Identifier>\n            </plu:inspireId>\n            <plu:geometry>\n                <gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/25833\" srsDimension=\"2\">\n                    <gml:exterior>\n                        <gml:LinearRing>\n                            <gml:posList>385919.31860777 5824690.697477636</gml:posList>\n                        </gml:LinearRing>\n                    </gml:exterior>\n                </gml:Polygon>\n            </plu:geometry>\n            <plu:inheritedFromOtherPlans nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:inheritedFromOtherPlans>\n            <plu:specificRegulationNature nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:specificRegulationNature>\n            <plu:regulationNature xlink:href=\"http://inspire.ec.europa.eu/codelist/RegulationNatureValue/generallyBinding\"></plu:regulationNature>\n            <plu:supplementaryRegulation xlink:href=\"http://inspire.ec.europa.eu/codelist/SupplementaryRegulationValue/5_1_UsableBuildingArea\"></plu:supplementaryRegulation>\n            <plu:officialDocument xlink:href=\"#OfficialDocumentation_175e7d8d3bafcc8e759e00bff1a33b34d0e017fbd8eb19155912fa887c254df5\"></plu:officialDocument>\n            <plu:plan xlink:href=\"#_bp_plan.1\"></plu:plan>\n        " ;
+                                             whatwg:innerText  "REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3 full_storeys 6 total_floor_area 4820.0 plot_coverage 869.0 standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMin 55.5 standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMax 57.0 _bp_ueberbaubaregrundstuecksflaeche.3 REPLACEME/ 385919.31860777 5824690.697477636"
+                                           ] ;
+                         whatwg:innerHTML  "\n        <plu:SupplementaryRegulation gml:id=\"_bp_ueberbaubaregrundstuecksflaeche.3\">\n            <gml:identifier codeSpace=\"http://inspire.ec.europa.eu/ids\">REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3</gml:identifier>\n            <plu:specificSupplementaryRegulation xlink:href=\"https://registry.gdi-de.org/codelist/de.xleitstelle.inspire_plu/LandUse/3_49_UeberbaubareGrundstuecksFlaeche\"></plu:specificSupplementaryRegulation>\n            <plu:processStepGeneral nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:processStepGeneral>\n            <plu:backgroundMap nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:backgroundMap>\n            <plu:beginLifespanVersion nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:beginLifespanVersion>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationIntegerValue>\n                    <plu:indicationReference>full_storeys</plu:indicationReference>\n                    <plu:value>6</plu:value>\n                </plu:DimensioningIndicationIntegerValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>total_floor_area</plu:indicationReference>\n                    <plu:value uom=\"m2\">4820.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>plot_coverage</plu:indicationReference>\n                    <plu:value uom=\"m2\">869.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMin</plu:indicationReference>\n                    <plu:value uom=\"m\">55.5</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMax</plu:indicationReference>\n                    <plu:value uom=\"m\">57.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:inspireId>\n                <base:Identifier>\n                    <base:localId>_bp_ueberbaubaregrundstuecksflaeche.3</base:localId>\n                    <base:namespace>REPLACEME/</base:namespace>\n                </base:Identifier>\n            </plu:inspireId>\n            <plu:geometry>\n                <gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/25833\" srsDimension=\"2\">\n                    <gml:exterior>\n                        <gml:LinearRing>\n                            <gml:posList>385919.31860777 5824690.697477636</gml:posList>\n                        </gml:LinearRing>\n                    </gml:exterior>\n                </gml:Polygon>\n            </plu:geometry>\n            <plu:inheritedFromOtherPlans nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:inheritedFromOtherPlans>\n            <plu:specificRegulationNature nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:specificRegulationNature>\n            <plu:regulationNature xlink:href=\"http://inspire.ec.europa.eu/codelist/RegulationNatureValue/generallyBinding\"></plu:regulationNature>\n            <plu:supplementaryRegulation xlink:href=\"http://inspire.ec.europa.eu/codelist/SupplementaryRegulationValue/5_1_UsableBuildingArea\"></plu:supplementaryRegulation>\n            <plu:officialDocument xlink:href=\"#OfficialDocumentation_175e7d8d3bafcc8e759e00bff1a33b34d0e017fbd8eb19155912fa887c254df5\"></plu:officialDocument>\n            <plu:plan xlink:href=\"#_bp_plan.1\"></plu:plan>\n        </plu:SupplementaryRegulation>\n    " ;
+                         whatwg:innerText  "REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3 full_storeys 6 total_floor_area 4820.0 plot_coverage 869.0 standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMin 55.5 standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMax 57.0 _bp_ueberbaubaregrundstuecksflaeche.3 REPLACEME/ 385919.31860777 5824690.697477636"
+                       ] ;
+  xhtml:xmlns:ad       "http://inspire.ec.europa.eu/schemas/ad/4.0" ;
+  xhtml:xmlns:au       "http://inspire.ec.europa.eu/schemas/au/4.0" ;
+  xhtml:xmlns:base     "http://inspire.ec.europa.eu/schemas/base/3.3" ;
+  xhtml:xmlns:base2    "http://inspire.ec.europa.eu/schemas/base2/2.0" ;
+  xhtml:xmlns:bu-base  "http://inspire.ec.europa.eu/schemas/bu-base/4.0" ;
+  xhtml:xmlns:cp       "http://inspire.ec.europa.eu/schemas/cp/4.0" ;
+  xhtml:xmlns:gco      "http://www.isotc211.org/2005/gco" ;
+  xhtml:xmlns:gmd      "http://www.isotc211.org/2005/gmd" ;
+  xhtml:xmlns:gml      "http://www.opengis.net/gml/3.2" ;
+  xhtml:xmlns:gmlcov   "http://www.opengis.net/gmlcov/1.0" ;
+  xhtml:xmlns:gn       "http://inspire.ec.europa.eu/schemas/gn/4.0" ;
+  xhtml:xmlns:gsr      "http://www.isotc211.org/2005/gsr" ;
+  xhtml:xmlns:gss      "http://www.isotc211.org/2005/gss" ;
+  xhtml:xmlns:gts      "http://www.isotc211.org/2005/gts" ;
+  xhtml:xmlns:hfp      "http://www.w3.org/2001/XMLSchema-hasFacetAndProperty" ;
+  xhtml:xmlns:lunom    "http://inspire.ec.europa.eu/schemas/lunom/4.0" ;
+  xhtml:xmlns:net      "http://inspire.ec.europa.eu/schemas/net/4.0" ;
+  xhtml:xmlns:ns1      "http://www.w3.org/1999/xhtml" ;
+  xhtml:xmlns:plu      "http://inspire.ec.europa.eu/schemas/plu/4.0" ;
+  xhtml:xmlns:sc       "http://www.interactive-instruments.de/ShapeChange/AppInfo" ;
+  xhtml:xmlns:swe      "http://www.opengis.net/swe/2.0" ;
+  xhtml:xmlns:tn       "http://inspire.ec.europa.eu/schemas/tn/4.0" ;
+  xhtml:xmlns:xlink    "http://www.w3.org/1999/xlink" ;
+  xhtml:xmlns:xsi      "http://www.w3.org/2001/XMLSchema-instance" ;
+  <http://www.w3.org/2001/XMLSchema-instance#schemaLocation>
+          "http://inspire.ec.europa.eu/schemas/plu/4.0 https://inspire.ec.europa.eu/schemas/plu/4.0/PlannedLandUse.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/deprecatedTypes.xsd" ;
+  whatwg:innerHTML     "\n    <gml:featureMember>\n        <plu:SupplementaryRegulation gml:id=\"_bp_ueberbaubaregrundstuecksflaeche.3\">\n            <gml:identifier codeSpace=\"http://inspire.ec.europa.eu/ids\">REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3</gml:identifier>\n            <plu:specificSupplementaryRegulation xlink:href=\"https://registry.gdi-de.org/codelist/de.xleitstelle.inspire_plu/LandUse/3_49_UeberbaubareGrundstuecksFlaeche\"></plu:specificSupplementaryRegulation>\n            <plu:processStepGeneral nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:processStepGeneral>\n            <plu:backgroundMap nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:backgroundMap>\n            <plu:beginLifespanVersion nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:beginLifespanVersion>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationIntegerValue>\n                    <plu:indicationReference>full_storeys</plu:indicationReference>\n                    <plu:value>6</plu:value>\n                </plu:DimensioningIndicationIntegerValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>total_floor_area</plu:indicationReference>\n                    <plu:value uom=\"m2\">4820.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>plot_coverage</plu:indicationReference>\n                    <plu:value uom=\"m2\">869.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMin</plu:indicationReference>\n                    <plu:value uom=\"m\">55.5</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:dimensioningIndication>\n                <plu:DimensioningIndicationMeasureValue>\n                    <plu:indicationReference>standard_elevation_zero_NHN&amp;top_edge_as_vertical_datum&amp;reference_point_heightMax</plu:indicationReference>\n                    <plu:value uom=\"m\">57.0</plu:value>\n                </plu:DimensioningIndicationMeasureValue>\n            </plu:dimensioningIndication>\n            <plu:inspireId>\n                <base:Identifier>\n                    <base:localId>_bp_ueberbaubaregrundstuecksflaeche.3</base:localId>\n                    <base:namespace>REPLACEME/</base:namespace>\n                </base:Identifier>\n            </plu:inspireId>\n            <plu:geometry>\n                <gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/25833\" srsDimension=\"2\">\n                    <gml:exterior>\n                        <gml:LinearRing>\n                            <gml:posList>385919.31860777 5824690.697477636</gml:posList>\n                        </gml:LinearRing>\n                    </gml:exterior>\n                </gml:Polygon>\n            </plu:geometry>\n            <plu:inheritedFromOtherPlans nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:inheritedFromOtherPlans>\n            <plu:specificRegulationNature nilReason=\"other:unpopulated\" xsi:nil=\"true\"></plu:specificRegulationNature>\n            <plu:regulationNature xlink:href=\"http://inspire.ec.europa.eu/codelist/RegulationNatureValue/generallyBinding\"></plu:regulationNature>\n            <plu:supplementaryRegulation xlink:href=\"http://inspire.ec.europa.eu/codelist/SupplementaryRegulationValue/5_1_UsableBuildingArea\"></plu:supplementaryRegulation>\n            <plu:officialDocument xlink:href=\"#OfficialDocumentation_175e7d8d3bafcc8e759e00bff1a33b34d0e017fbd8eb19155912fa887c254df5\"></plu:officialDocument>\n            <plu:plan xlink:href=\"#_bp_plan.1\"></plu:plan>\n        </plu:SupplementaryRegulation>\n    </gml:featureMember>\n" ;
+  whatwg:innerText     "REPLACEME/_bp_ueberbaubaregrundstuecksflaeche.3 full_storeys 6 total_floor_area 4820.0 plot_coverage 869.0 standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMin 55.5 standard_elevation_zero_NHN&top_edge_as_vertical_datum&reference_point_heightMax 57.0 _bp_ueberbaubaregrundstuecksflaeche.3 REPLACEME/ 385919.31860777 5824690.697477636"
+] .
