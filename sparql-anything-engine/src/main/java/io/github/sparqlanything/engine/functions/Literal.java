@@ -17,19 +17,24 @@
 package io.github.sparqlanything.engine.functions;
 
 import org.apache.jena.datatypes.BaseDatatype;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.sparql.expr.ExprEvalTypeException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Literal extends FunctionBase2 {
+	private static Logger L = LoggerFactory.getLogger(Literal.class);
 	@Override
 	public NodeValue exec(NodeValue v1, NodeValue v2) {
 		if(v2.isIRI()){
 			return NodeValue.makeNode(v1.asString(), new BaseDatatype(v2.getNode().getURI()));
-		}else if(v2.isString() && v2.getString().length() == 2){
+		}else if(v2.isString() && !v2.getString().isEmpty()){
 			return NodeValue.makeLangString(v1.asString(), v2.getString());
 		}
-		throw new ExprEvalTypeException("Can only work with args (string,iri) or (string,string[2])"); // # NodeValue.NONE.getConstant();
+		L.error("Invalid value for lang or datatype: {}", v2);
+		throw new ExprEvalTypeException("Invalid value. Expected (string,iri) or (string,string). Given: " + v2); // # NodeValue.NONE.getConstant();
 	}
 }
 
