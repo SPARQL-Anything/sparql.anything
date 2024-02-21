@@ -90,8 +90,6 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
-	private W3CDom w3cDom = new W3CDom().namespaceAware(true);
-
 	private static String localName(Element element) {
 		String tagName = element.tagName().replace(':', '|');
 		StringBuilder selector = new StringBuilder(tagName);
