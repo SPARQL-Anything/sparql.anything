@@ -23,7 +23,7 @@ _:Bnode1hn5vtssbx2 <https://schema.org/name> "Avatar" .
 <http://www.example.org/document/html/body/div/h1> <http://www.w3.org/1999/xhtml#itemprop> "name" .
 <http://www.example.org/document/html/body/div/h1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Avatar" .
 <http://www.example.org/document/html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> .
-<file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> <http://www.w3.org/1999/xhtml/microdata#item> _:Bnode1hn5vtssbx2 .
+<location> <http://www.w3.org/1999/xhtml/microdata#item> _:Bnode1hn5vtssbx2 .
 <http://www.example.org/document/html/body> <https://html.spec.whatwg.org/#innerHTML> "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n</div>" .
 <http://www.example.org/document/html/body> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954)" .
 <http://www.example.org/document/html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> .
@@ -52,7 +52,7 @@ _:Bnode1hn5vtssbx2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://sc
 <http://www.example.org/document/html/body/div/h1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#h1> <http://www.example.org/document> .
 <http://www.example.org/document/html/body/div/h1> <https://html.spec.whatwg.org/#innerText> "Avatar" <http://www.example.org/document> .
 <http://www.example.org/document/html/body/div/h1> <https://html.spec.whatwg.org/#innerHTML> "Avatar" <http://www.example.org/document> .
-<file:/Users/ed4565/Development/sparql-anything/sparql.anything/sparql-anything-html/target/test-classes/Microdata1.html> <http://www.w3.org/1999/xhtml/microdata#item> _:Bnode1hn5vtssbx2 <http://www.example.org/document> .
+<location> <http://www.w3.org/1999/xhtml/microdata#item> _:Bnode1hn5vtssbx2 <http://www.example.org/document> .
 <http://www.example.org/document/html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> <http://www.example.org/document> .
 <http://www.example.org/document/html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div> <http://www.example.org/document> .
 <http://www.example.org/document/html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> <http://www.example.org/document> .
