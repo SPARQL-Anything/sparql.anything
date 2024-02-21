@@ -18,14 +18,14 @@ package io.github.sparqlanything.html;
 
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
 import java.util.Properties;
 
-public class XMLTest extends AbstractTriplifierTester {
-	public XMLTest() {
-		super(new HTMLTriplifier(), new Properties(), "xml");
+public class XHTMLTest extends AbstractTriplifierTester {
+	public XHTMLTest() {
+		super(new HTMLTriplifier(), new Properties(), "xhtml");
 	}
 
 	protected void properties(Properties properties) {
@@ -35,7 +35,7 @@ public class XMLTest extends AbstractTriplifierTester {
 	}
 
 	@Test
-	public void testXML() {
+	public void testXHTML() {
 		this.assertResultIsIsomorphicWithExpected();
 	}
 
