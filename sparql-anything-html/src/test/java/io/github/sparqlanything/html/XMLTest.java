@@ -31,7 +31,6 @@ public class XMLTest extends AbstractTriplifierTester {
 	protected void properties(Properties properties) {
 		properties.setProperty(IRIArgument.BLANK_NODES.toString(), "true");
 		properties.setProperty(HTMLTriplifier.PROPERTY_PARSER.toString(), "xml");
-		printWholeGraph = true;
 	}
 
 	@Test
