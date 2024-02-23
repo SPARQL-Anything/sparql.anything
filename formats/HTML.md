@@ -111,7 +111,7 @@ WHERE
 | [html.selector](#htmlselector) | A CSS selector that restricts the HTML tags to consider for the triplification. | Any valid CSS selector. | `:root` |
 | [html.metadata](#htmlmetadata) | It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. -- See [#164](https://github.com/SPARQL-Anything/sparql.anything/issues/164) | true/false | `false` |
 | [html.browser](#htmlbrowser) | It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](https://github.com/SPARQL-Anything/sparql.anything/blob/v1.0-DEV/BROWSER.md) and [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | chromium|webkit|firefox | Not set |
-| [html.parser](#htmlparser) | It tells the triplifier to use the specified JSoup parser (default: html). | xml html | Not set |
+| [html.parser](#htmlparser) | It tells the triplifier to use the specified JSoup parser (default: html). | xml html | `html` |
 | [html.browser.wait](#htmlbrowserwait) | When using a browser to navigate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML. -- See See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | Not set |
 | [html.browser.screenshot](#htmlbrowserscreenshot) | When using a browser to navigate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here. See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any valid URL | Not set |
 | [html.browser.timeout](#htmlbrowsertimeout) | When using a browser to navigate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | `30000` |
@@ -331,8 +331,60 @@ xml html
 
 #### Default Value
 
-Not set
+`html`
 
+#### Examples
+
+##### Example 1
+
+The element names are case-sensitive when using the XML parser.
+
+###### Input
+
+```HTML
+<html>
+   <head>
+      <title>Hello world!</title>
+   </head>
+   <body>
+      <p class="paragraph">Hello world</p>
+   </body>
+</html>
+
+```
+
+https://sparql-anything.cc/examples/simple.html
+
+###### Query
+
+```
+PREFIX  whatwg: <https://html.spec.whatwg.org/#>
+
+SELECT  ?text
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.xml,html.parser=xml>
+      { ?s  ?p  ?o }
+  }
+
+```
+
+###### Result
+
+```turtle
+--------
+| text |
+========
+|      |
+|      |
+|      |
+|      |
+|      |
+|      |
+|      |
+|      |
+--------
+
+```
 
 ---
 ### `html.browser.wait`
