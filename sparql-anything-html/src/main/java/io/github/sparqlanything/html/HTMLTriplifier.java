@@ -66,9 +66,9 @@ public class HTMLTriplifier implements Triplifier {
 	@Option(description = "It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](https://github.com/SPARQL-Anything/sparql.anything/blob/v1.0-DEV/BROWSER.md) and [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "chromium|webkit|firefox")
 	public static final IRIArgument PROPERTY_BROWSER = new IRIArgument("html.browser");
 
-
+	@Example(resource = "https://sparql-anything.cc/examples/simple.html", description = "The element names are case-sensitive when using the XML parser.", query = "CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.xml,html.parser=xml> { ?s ?p ?o } }")
 	@Option(description = "It tells the triplifier to use the specified JSoup parser (default: html).", validValues = "xml html")
-	public static final IRIArgument PROPERTY_PARSER = new IRIArgument("html.parser");
+	public static final IRIArgument PROPERTY_PARSER = new IRIArgument("html.parser", "html");
 	private enum ParamParser {
 		HTML("html"), XML("xml");
 		private String str;

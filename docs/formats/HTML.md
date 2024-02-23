@@ -358,9 +358,10 @@ https://sparql-anything.cc/examples/simple.html
 ###### Query
 
 ```
-PREFIX  whatwg: <https://html.spec.whatwg.org/#>
-
-SELECT  ?text
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.xml,html.parser=xml>
       { ?s  ?p  ?o }
@@ -371,18 +372,28 @@ WHERE
 ###### Result
 
 ```turtle
---------
-| text |
-========
-|      |
-|      |
-|      |
-|      |
-|      |
-|      |
-|      |
-|      |
---------
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type  <http://www.example.org#Element> , fx:root ;
+  rdf:_1    [ rdf:type  <http://www.example.org#someThing> ;
+              rdf:_1    "Hallo world"
+            ] ;
+  rdf:_2    [ rdf:type                      <http://www.example.org#someThingElse> ;
+              <http://www.example.org#key>  "0.1"
+            ]
+] .
 
 ```
 
