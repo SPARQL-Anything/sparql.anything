@@ -342,18 +342,18 @@ The element names are case-sensitive when using the XML parser.
 ###### Input
 
 ```HTML
-<html>
-   <head>
-      <title>Hello world!</title>
-   </head>
-   <body>
-      <p class="paragraph">Hello world</p>
-   </body>
-</html>
+<?xml version="1.0" ?>
+<xx:Element xmlns:xx="http://www.example.org">
+	<xx:someThing>Hallo world</xx:someThing>
+	<xx:someThingElse xx:key="0.1"/>
+</xx:Element>
+
+
+
 
 ```
 
-https://sparql-anything.cc/examples/simple.html
+https://sparql-anything.cc/examples/simple.xml
 
 ###### Query
 
@@ -363,7 +363,7 @@ CONSTRUCT
     ?s ?p ?o .
   }
 WHERE
-  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.xml,html.parser=xml>
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.xml,triplifier=io.github.sparqlanything.html.HTMLTriplifier,html.parser=xml>
       { ?s  ?p  ?o }
   }
 
@@ -386,13 +386,18 @@ WHERE
 @prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
-[ rdf:type  <http://www.example.org#Element> , fx:root ;
-  rdf:_1    [ rdf:type  <http://www.example.org#someThing> ;
-              rdf:_1    "Hallo world"
-            ] ;
-  rdf:_2    [ rdf:type                      <http://www.example.org#someThingElse> ;
-              <http://www.example.org#key>  "0.1"
-            ]
+[ rdf:type          <http://www.example.org#Element> , fx:root ;
+  rdf:_1            [ rdf:type          <http://www.example.org#someThing> ;
+                      rdf:_1            "Hallo world" ;
+                      whatwg:innerHTML  "Hallo world" ;
+                      whatwg:innerText  "Hallo world"
+                    ] ;
+  rdf:_2            [ rdf:type                      <http://www.example.org#someThingElse> ;
+                      <http://www.example.org#key>  "0.1"
+                    ] ;
+  xhtml:xmlns:xx    "http://www.example.org" ;
+  whatwg:innerHTML  "\n\t<xx:someThing>Hallo world</xx:someThing>\n\t<xx:someThingElse xx:key=\"0.1\" />\n" ;
+  whatwg:innerText  "Hallo world"
 ] .
 
 ```
