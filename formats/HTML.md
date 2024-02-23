@@ -85,7 +85,7 @@ WHERE
                                           whatwg:innerText  "Hello world!"
                                         ] ;
                       whatwg:innerHTML  "<title>Hello world!</title>" ;
-                      whatwg:innerText  "Hello world! Hello world!"
+                      whatwg:innerText  "Hello world!"
                     ] ;
   rdf:_2            [ rdf:type          xhtml:body ;
                       rdf:_1            [ rdf:type          xhtml:p ;
@@ -95,10 +95,10 @@ WHERE
                                           whatwg:innerText  "Hello world"
                                         ] ;
                       whatwg:innerHTML  "<p class=\"paragraph\">Hello world</p>" ;
-                      whatwg:innerText  "Hello world Hello world"
+                      whatwg:innerText  "Hello world"
                     ] ;
   whatwg:innerHTML  "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <p class=\"paragraph\">Hello world</p>\n</body>" ;
-  whatwg:innerText  "Hello world! Hello world Hello world! Hello world! Hello world Hello world"
+  whatwg:innerText  "Hello world! Hello world"
 ] .
 
 ```
@@ -111,6 +111,7 @@ WHERE
 | [html.selector](#htmlselector) | A CSS selector that restricts the HTML tags to consider for the triplification. | Any valid CSS selector. | `:root` |
 | [html.metadata](#htmlmetadata) | It tells the triplifier to extract inline RDF from HTML pages. The triples extracted will be included in the default graph. -- See [#164](https://github.com/SPARQL-Anything/sparql.anything/issues/164) | true/false | `false` |
 | [html.browser](#htmlbrowser) | It tells the triplifier to use the specified browser to navigate to the page to obtain HTML. By default a browser is not used. The use of a browser has some dependencies -- see [BROWSER](https://github.com/SPARQL-Anything/sparql.anything/blob/v1.0-DEV/BROWSER.md) and [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | chromium|webkit|firefox | Not set |
+| [html.parser](#htmlparser) | It tells the triplifier to use the specified JSoup parser (default: html). | xml html | Not set |
 | [html.browser.wait](#htmlbrowserwait) | When using a browser to navigate, it tells the triplifier to wait for the specified number of seconds (after telling the browser to navigate to the page) before attempting to obtain HTML. -- See See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | Not set |
 | [html.browser.screenshot](#htmlbrowserscreenshot) | When using a browser to navigate, take a screenshot of the webpage (perhaps for troubleshooting) and save it here. See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any valid URL | Not set |
 | [html.browser.timeout](#htmlbrowsertimeout) | When using a browser to navigate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004&#39;s blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql). | Any integer | `30000` |
@@ -283,14 +284,14 @@ WHERE
                                                             ] ;
                                           xhtml:itemscope   "" ;
                                           xhtml:itemtype    "https://schema.org/Movie" ;
-                                          whatwg:innerHTML  "<h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>" ;
-                                          whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)"
+                                          whatwg:innerHTML  "<h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>" ;
+                                          whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
                                         ] ;
-                      whatwg:innerHTML  "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>\n</div>" ;
-                      whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)"
+                      whatwg:innerHTML  "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n</div>" ;
+                      whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
                     ] ;
-  whatwg:innerHTML  "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1> <span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>" ;
-  whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)  Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954) Avatar Director: James Cameron (born August 16, 1954)"
+  whatwg:innerHTML  "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>" ;
+  whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
 ] .
 
 <https://sparql-anything.cc/examples/Microdata1.html>
@@ -311,6 +312,22 @@ It tells the triplifier to use the specified browser to navigate to the page to 
 #### Valid Values
 
 chromium|webkit|firefox
+
+#### Default Value
+
+Not set
+
+
+---
+### `html.parser`
+
+#### Description
+
+It tells the triplifier to use the specified JSoup parser (default: html).
+
+#### Valid Values
+
+xml html
 
 #### Default Value
 
