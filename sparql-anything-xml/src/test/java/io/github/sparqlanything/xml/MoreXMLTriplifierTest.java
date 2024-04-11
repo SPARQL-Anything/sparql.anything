@@ -25,64 +25,75 @@ import java.util.Properties;
 
 public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 	private final Logger L = LoggerFactory.getLogger(MoreXMLTriplifierTest.class);
+
 	public MoreXMLTriplifierTest() {
 		super(new XMLTriplifier(), new Properties(), "xml", "ttl");
 	}
 
 	@Override
 	protected void properties(Properties properties) {
-		if(name.getMethodName().equals("testSimple$1")){
+		if (name.getMethodName().equals("testSimple$1")) {
 			properties.put("blank-nodes", "false");
-		}else
-		if(name.getMethodName().equals("testBooks$1")){
+		} else if (name.getMethodName().equals("testBooks$1")) {
 			properties.put("blank-nodes", "false");
-		}else
-		if(name.getMethodName().equals("testBooks_1$1")){
+		} else if (name.getMethodName().equals("testBooks_1$1")) {
 			properties.put("blank-nodes", "false");
 			properties.put("xml.path", "//book");
-		}else
-		if(name.getMethodName().equals("testSliceBooks$1")){
+		} else if (name.getMethodName().equals("testSliceBooks$1")) {
 			properties.put("blank-nodes", "false");
 			properties.put("slice", "true");
 			properties.put("xml.path", "//book");
-		}else if(name.getMethodName().equals("testBooks_2$1")){
+		} else if (name.getMethodName().equals("testBooks_2$1")) {
 			properties.put("blank-nodes", "false");
 			properties.put("xml.path", "//book");
+		} else if(name.getMethodName().equals("testXPathAndSlice")){
+			properties.put("blank-nodes", "true");
+			properties.put("xml.path", "//Record");
+			properties.put("slice", "true");
 		}
 	}
 
 	@Test
-	public void testSimple$1(){
+	public void testSimple$1() {
 		L.debug("Test XML (one go)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
-	public void testBooks$1(){
+	public void testBooks$1() {
 		L.debug("Test XML books (one go)");
 //		RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
-	public void testBooks_1$1(){
+	public void testBooks_1$1() {
 		L.debug("Test XML books (XPath //book, one go)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
-	public void testBooks_2$1(){
+	public void testBooks_2$1() {
 		L.debug("Test XML books (XPath //book, one go) -- different input but same output as _1");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
 	@Test
-	public void testSliceBooks$1(){
+	public void testSliceBooks$1() {
 		L.debug("Test XML books (XPath //book, with slicing)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
+
+	@Test
+	public void testXPathAndSlice() {
+		L.debug("Test XML books (XPath //Record, with slicing)");
+		//RDFDataMgr.write(System.err, result, Lang.TTL);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+
 }

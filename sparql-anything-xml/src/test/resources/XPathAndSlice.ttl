@@ -1,0 +1,59 @@
+@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:  <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type  fx:root ;
+  rdf:_1    [ rdf:type  xyz:Record ;
+              rdf:_1    [ rdf:type  xyz:shape_id ;
+                          rdf:_1    "0000000000000000000o"
+                        ] ;
+              rdf:_2    [ rdf:type  xyz:shape_pt_lat ;
+                          rdf:_1    "39248"
+                        ] ;
+              rdf:_3    [ rdf:type  xyz:shape_pt_lon ;
+                          rdf:_1    "39208"
+                        ] ;
+              rdf:_4    [ rdf:type  xyz:shape_pt_sequence ;
+                          rdf:_1    "1008430"
+                        ] ;
+              rdf:_5    [ rdf:type  xyz:shape_dist_traveled ;
+                          rdf:_1    "8429"
+                        ]
+            ] ;
+  rdf:_2    [ rdf:type  xyz:Record ;
+              rdf:_1    [ rdf:type  xyz:shape_id ;
+                          rdf:_1    "0000000000000000000k"
+                        ] ;
+              rdf:_2    [ rdf:type  xyz:shape_pt_lat ;
+                          rdf:_1    "8469"
+                        ] ;
+              rdf:_3    [ rdf:type  xyz:shape_pt_lon ;
+                          rdf:_1    "8429"
+                        ] ;
+              rdf:_4    [ rdf:type  xyz:shape_pt_sequence ;
+                          rdf:_1    "1010130"
+                        ] ;
+              rdf:_5    [ rdf:type  xyz:shape_dist_traveled ;
+                          rdf:_1    "21148"
+                        ]
+            ] ;
+  rdf:_3    [ rdf:type  xyz:Record ;
+              rdf:_1    [ rdf:type  xyz:shape_id ;
+                          rdf:_1    "0000000000000000000c"
+                        ] ;
+              rdf:_2    [ rdf:type  xyz:shape_pt_lat ;
+                          rdf:_1    "39798"
+                        ] ;
+              rdf:_3    [ rdf:type  xyz:shape_pt_lon ;
+                          rdf:_1    "39758"
+                        ] ;
+              rdf:_4    [ rdf:type  xyz:shape_pt_sequence ;
+                          rdf:_1    "1001667"
+                        ] ;
+              rdf:_5    [ rdf:type  xyz:shape_dist_traveled ;
+                          rdf:_1    "17663"
+                        ]
+            ]
+] .
