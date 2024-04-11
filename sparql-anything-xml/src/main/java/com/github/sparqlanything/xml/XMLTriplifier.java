@@ -166,6 +166,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				log.trace(" -- tag: {} ", tag);
 				String childId = String.join("", parentId , "/" , Integer.toString(child), ":", tag);
 				builder.addContainer(dataSourceId, parentId, child, childId);
+				builder.addType(dataSourceId, childId, XYZ_NS+tag);
 
 				// Attributes
 				int attrCount = vn.getAttrCount();
