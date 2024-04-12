@@ -24,7 +24,7 @@
 		<groupId>com.github.sparqlanything</groupId>
 		<artifactId>sparql-anything-parent</artifactId>
 		<relativePath>..</relativePath>
-		<version>0.8.2</version>
+		<version>0.8.3</version>
 	</parent>
 	<artifactId>sparql-anything-fuseki</artifactId>
 	
