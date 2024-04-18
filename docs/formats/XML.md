@@ -126,18 +126,25 @@ Not set
 ###### Input
 
 ```XML
-<?xml version="1.0" ?>
-<xx:Element xmlns:xx="http://www.example.org">
-	<xx:someThing>Hallo world</xx:someThing>
-	<xx:someThingElse xx:key="0.1"/>
-</xx:Element>
-
-
-
+<?xml version="1.0" encoding="UTF-8"?>
+<breakfast_menu>
+	<food>
+		<name>Belgian Waffles</name>
+		<price>$5.95</price>
+		<desc>Two of our famous Belgian Waffles with plenty of real maple syrup</desc>
+		<calories>650</calories>
+	</food>
+	<food>
+		<name>Strawberry Belgian Waffles</name>
+		<price>$7.95</price>
+		<desc>Light Belgian waffles covered with strawberries and whipped cream</desc>
+		<calories>900</calories>
+	</food>
+</breakfast_menu>
 
 ```
 
-https://sparql-anything.cc/examples/simple.xml
+https://sparql-anything.cc/examples/simple-menu.xml
 
 ###### Query
 
@@ -151,7 +158,7 @@ CONSTRUCT
 WHERE
   { SERVICE <x-sparql-anything:>
       { fx:properties
-                  fx:location     "https://sparql-anything.cc/examples/simple.xml" ;
+                  fx:location     "https://sparql-anything.cc/examples/simple-menu.xml" ;
                   fx:xml.path     "//food" ;
                   fx:blank-nodes  false .
         ?s        ?p              ?o
@@ -177,8 +184,56 @@ WHERE
 @prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
-<https://sparql-anything.cc/examples/simple.xml#>
-        rdf:type  fx:root .
+<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/1:name>
+        rdf:type  xyz:name ;
+        rdf:_1    "Belgian Waffles" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#>
+        rdf:type  fx:root ;
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food> ;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food> .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/2:food/4:calories>
+        rdf:type  xyz:calories ;
+        rdf:_1    "900" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/2:price>
+        rdf:type  xyz:price ;
+        rdf:_1    "$5.95" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/2:food/3:desc>
+        rdf:type  xyz:desc ;
+        rdf:_1    "Light Belgian waffles covered with strawberries and whipped cream" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/1:food>
+        rdf:type  xyz:food ;
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/1:name> ;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/2:price> ;
+        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/3:desc> ;
+        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/4:calories> .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/2:food/2:price>
+        rdf:type  xyz:price ;
+        rdf:_1    "$7.95" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/2:food>
+        rdf:type  xyz:food ;
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/1:name> ;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/2:price> ;
+        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/3:desc> ;
+        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/4:calories> .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/2:food/1:name>
+        rdf:type  xyz:name ;
+        rdf:_1    "Strawberry Belgian Waffles" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/4:calories>
+        rdf:type  xyz:calories ;
+        rdf:_1    "650" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/3:desc>
+        rdf:type  xyz:desc ;
+        rdf:_1    "Two of our famous Belgian Waffles with plenty of real maple syrup" .
 
 ```
 
