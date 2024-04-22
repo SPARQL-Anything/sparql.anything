@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public class TestTriplifier {
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p)))
 					.isIsomorphicWith(expectedGraph));
 
-			p.setProperty(DocxTriplifier.MERGE_PARAGRAPHS, "true");
+			p.setProperty(DocxTriplifier.MERGE_PARAGRAPHS.toString(), "true");
 
 			b = new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);

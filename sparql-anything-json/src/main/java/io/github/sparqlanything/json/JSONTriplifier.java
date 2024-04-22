@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.jsfr.json.Collector;
@@ -44,9 +46,16 @@ import java.util.Set;
 import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class JSONTriplifier implements Triplifier, Slicer {
 
-	public static final String PROPERTY_JSONPATH = "json.path";
+	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Retrieving the lists of stars of the TV Series named \"Friends\" and \"Cougar Town\".", query = " PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path.1 \"$[?(@.name==\\\"Friends\\\")].stars\" ; fx:json.path.2 \"$[?(@.name==\\\"Cougar Town\\\")].stars\" . ?s ?p ?o } } ")
+	@Example(resource = "https://sparql-anything.cc/example1.json", description = " Retrieving the language of the TV series named \"Friends\".", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?language WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . _:b0 xyz:language ?language } }")
+	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Constructing a Facade-X RDF Graph selecting only containers that match the Json Path `$[?(@.name==\"Friends\")]`.", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . ?s ?p ?o } }")
+	@Option(description = "One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option. \n" +
+			"    It will pre-process the JSON before the execution of the query. \n" +
+			"    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).", validValues = "Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))")
+	public static final IRIArgument PROPERTY_JSONPATH = new IRIArgument("json.path");
 	private static final Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
 	private void transform(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
@@ -267,7 +276,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, "json.path");
+		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, "json.path");
 		if (!jsonPaths.isEmpty()) {
 			transformFromJSONPath(properties, builder, jsonPaths);
 		} else {
@@ -313,7 +322,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH);
+		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
 		if (!jsonPaths.isEmpty()) {
 			return sliceFromJSONPath(properties);
 		} else {
@@ -328,7 +337,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		Collector collector = surfer.collector(us);
 		List<String> jsonPathExpr = new ArrayList<String>();
 		final Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
-		List<String> jsonPaths = Triplifier.getPropertyValues(properties, PROPERTY_JSONPATH);
+		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
 		for (String jpath : jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
 			matches.add(m);

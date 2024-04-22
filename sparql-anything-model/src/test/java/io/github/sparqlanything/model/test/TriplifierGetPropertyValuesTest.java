@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package io.github.sparqlanything.model.test;
 
-import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.PropertyUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -39,7 +39,7 @@ public class TriplifierGetPropertyValuesTest {
 			p.put(en.getKey(), en.getValue());
 		}
 
-		List<String> values = Triplifier.getPropertyValues(p, "key.name");
+		List<String> values = PropertyUtils.getPropertyValues(p, "key.name");
 		for(Map.Entry en: testSet.entrySet()){
 			Assert.assertTrue(values.contains(en.getValue()));
 		}
@@ -59,7 +59,7 @@ public class TriplifierGetPropertyValuesTest {
 			p.put(en.getKey(), en.getValue());
 		}
 
-		List<String> values = Triplifier.getPropertyValues(p, "key.name");
+		List<String> values = PropertyUtils.getPropertyValues(p, "key.name");
 		for(Map.Entry en: testSet.entrySet()){
 			Assert.assertTrue(values.contains(en.getValue()));
 		}
@@ -79,7 +79,7 @@ public class TriplifierGetPropertyValuesTest {
 			p.put(en.getKey(), en.getValue());
 		}
 
-		List<String> values = Triplifier.getPropertyValues(p, "key.name");
+		List<String> values = PropertyUtils.getPropertyValues(p, "key.name");
 		for(Map.Entry en: testSet.entrySet()){
 			Assert.assertTrue(values.contains(en.getValue()));
 		}

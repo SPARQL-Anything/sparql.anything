@@ -5,15 +5,15 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
 
 
-<http://www.example.org/document/3:book/3:genre>
+<http://www.example.org/document/3:book/3:genre> a xyz:genre ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Fantasy" .
 
-<http://www.example.org/document/2:book/6:description>
+<http://www.example.org/document/2:book/6:description> a xyz:description ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "A former architect battles corporate zombies,\n            an evil sorceress, and her own childhood to become queen\n            of the world." .
 
-<http://www.example.org/document/1:book/1:author>
+<http://www.example.org/document/1:book/1:author> a xyz:author ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Gambardella, Matthew" .
 
@@ -26,35 +26,35 @@
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
                 <http://www.example.org/document/3:book> .
 
-<http://www.example.org/document/3:book/1:author>
+<http://www.example.org/document/3:book/1:author> a xyz:author ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Corets, Eva" .
 
-<http://www.example.org/document/1:book/5:publish_date>
+<http://www.example.org/document/1:book/5:publish_date> a xyz:publish_date ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "2000-10-01" .
 
-<http://www.example.org/document/2:book/3:genre>
+<http://www.example.org/document/2:book/3:genre> a xyz:genre ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Fantasy" .
 
-<http://www.example.org/document/2:book/5:publish_date>
+<http://www.example.org/document/2:book/5:publish_date> a xyz:publish_date ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "2000-12-16" .
 
-<http://www.example.org/document/3:book/4:price>
+<http://www.example.org/document/3:book/4:price> a xyz:price ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "5.95" .
 
-<http://www.example.org/document/1:book/3:genre>
+<http://www.example.org/document/1:book/3:genre> a xyz:genre ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Computer" .
 
-<http://www.example.org/document/3:book/2:title>
+<http://www.example.org/document/3:book/2:title> a xyz:title ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Maeve Ascendant" .
 
-<http://www.example.org/document/1:book>
+<http://www.example.org/document/1:book> a xyz:book ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 <http://www.example.org/document/1:book/1:author> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -70,39 +70,39 @@
         <http://sparql.xyz/facade-x/data/isbn>
                 "978-3-12-148410-0" .
 
-<http://www.example.org/document/2:book/4:price>
+<http://www.example.org/document/2:book/4:price> a xyz:price ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "5.95" .
 
-<http://www.example.org/document/1:book/6:description>
+<http://www.example.org/document/1:book/6:description> a xyz:description ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "An in-depth look at creating applications\n            with XML." .
 
-<http://www.example.org/document/3:book/5:publish_date>
+<http://www.example.org/document/3:book/5:publish_date> a xyz:publish_date ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "2000-11-17" .
 
-<http://www.example.org/document/2:book/1:author>
+<http://www.example.org/document/2:book/1:author> a xyz:author ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Ralls, Kim" .
 
-<http://www.example.org/document/2:book/2:title>
+<http://www.example.org/document/2:book/2:title> a xyz:title ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "Midnight Rain" .
 
-<http://www.example.org/document/1:book/4:price>
+<http://www.example.org/document/1:book/4:price> a xyz:price ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "44.95" .
 
-<http://www.example.org/document/1:book/2:title>
+<http://www.example.org/document/1:book/2:title> a xyz:title ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "XML Developer's Guide" .
 
-<http://www.example.org/document/3:book/6:description>
+<http://www.example.org/document/3:book/6:description> a xyz:description ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 "After the collapse of a nanotechnology\n            society in England, the young survivors lay the\n            foundation for a new society." .
 
-<http://www.example.org/document/2:book>
+<http://www.example.org/document/2:book> a xyz:book ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 <http://www.example.org/document/2:book/1:author> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -118,7 +118,7 @@
         <http://sparql.xyz/facade-x/data/isbn>
                 "928-3-16-148410-0" .
 
-<http://www.example.org/document/3:book>
+<http://www.example.org/document/3:book> a xyz:book ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 <http://www.example.org/document/3:book/1:author> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>

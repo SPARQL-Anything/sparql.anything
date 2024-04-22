@@ -5,9 +5,9 @@ name: Java 14
 
 on:
   push:
-    branches: [ v0.9-DEV ]
+    branches: [ v1.0-DEV ]
   pull_request:
-    branches: [ v0.9-DEV ]
+    branches: [ v1.0-DEV ]
 
 jobs:
   build:

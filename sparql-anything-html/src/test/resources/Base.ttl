@@ -20,7 +20,7 @@
                                           whatwg:innerText  "Hello world!"
                                         ] ;
                       whatwg:innerHTML  "<title>Hello world!</title>" ;
-                      whatwg:innerText  "Hello world! Hello world!"
+                      whatwg:innerText  "Hello world!"
                     ] ;
   rdf:_2            [ rdf:type          xhtml:body ;
                       rdf:_1            [ rdf:type          xhtml:p ;
@@ -30,9 +30,9 @@
                                           whatwg:innerText  "Hello world"
                                         ] ;
                       whatwg:innerHTML  "<p class=\"paragraph\">Hello world</p>" ;
-                      whatwg:innerText  "Hello world Hello world"
+                      whatwg:innerText  "Hello world"
                     ] ;
   whatwg:innerHTML  "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <p class=\"paragraph\">Hello world</p>\n</body>" ;
-  whatwg:innerText  "Hello world! Hello world Hello world! Hello world! Hello world Hello world"
+  whatwg:innerText  "Hello world! Hello world"
 ] .
 

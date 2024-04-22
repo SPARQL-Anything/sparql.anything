@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -110,37 +108,6 @@ public interface Triplifier {
 	static String toSafeURIString(String s) {
 		// s = s.replaceAll("\\s", "_");
 		return basicEscaper.escape(s);
-	}
-
-	/**
-	 * Get all values from a property key. Supports single and multi-valued, e.g.
-	 * <p>
-	 * - key.name = value - key.name.0 = value0 - key.name.1 = value1
-	 *
-	 * @param properties the properties
-	 * @param prefix the prefix
-	 * @return the list of values starting with prefix
-	 */
-	static List<String> getPropertyValues(Properties properties, String prefix) {
-		List<String> values = new ArrayList<String>();
-		if (properties.containsKey(prefix)) {
-			values.add(properties.getProperty(prefix));
-		}
-		int i = 0; // Starts with 0
-		String propName = prefix + "." + i;
-		if (properties.containsKey(propName)) {
-			values.add(properties.getProperty(propName));
-		}
-		i++;
-		// ... or starts with 1
-		propName = prefix + "." + i;
-
-		while (properties.containsKey(propName)) {
-			values.add(properties.getProperty(propName));
-			i++;
-			propName = prefix + "." + i;
-		}
-		return values;
 	}
 
 	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {

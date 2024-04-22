@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,8 +52,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -370,4 +373,25 @@ public class HTTPHelper {
         log.debug("Downloaded {} :: {}", url, response.getStatusLine().getStatusCode());
         return response;
     }
+
+	public static boolean checkHostIsReachable(String url){
+		String host = null;
+		try{
+			return checkHostIsReachable(new URL(url));
+		} catch (MalformedURLException e) {
+			log.debug("URL is malformed: {}", url);
+			return false;
+        }
+    }
+
+	public static boolean checkHostIsReachable(URL url){
+		String host = url.getHost();
+		try{
+			InetAddress.getByName(host);
+			return true;
+		}catch(UnknownHostException uhe){
+			log.debug("Host is not reachable: {}", host);
+			return false;
+		}
+	}
 }

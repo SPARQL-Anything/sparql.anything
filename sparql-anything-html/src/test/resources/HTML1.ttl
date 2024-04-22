@@ -16,7 +16,7 @@ eg:document  rdf:type     xhtml:html , fx:root ;
         rdf:_1            <http://www.example.org/document/html/head> ;
         rdf:_2            <http://www.example.org/document/html/body> ;
         whatwg:innerHTML  "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <p class=\"paragraph\">Hello world</p>\n</body>" ;
-        whatwg:innerText  "Hello world! Hello world Hello world! Hello world! Hello world Hello world" .
+        whatwg:innerText  "Hello world! Hello world" .
 
 <http://www.example.org/document/html/head/title>
         rdf:type          xhtml:title ;
@@ -35,10 +35,10 @@ eg:document  rdf:type     xhtml:html , fx:root ;
         rdf:type          xhtml:head ;
         rdf:_1            <http://www.example.org/document/html/head/title> ;
         whatwg:innerHTML  "<title>Hello world!</title>" ;
-        whatwg:innerText  "Hello world! Hello world!" .
+        whatwg:innerText  "Hello world!" .
 
 <http://www.example.org/document/html/body>
         rdf:type          xhtml:body ;
         rdf:_1            <http://www.example.org/document/html/body/p.paragraph> ;
         whatwg:innerHTML  "<p class=\"paragraph\">Hello world</p>" ;
-        whatwg:innerText  "Hello world Hello world" .
+        whatwg:innerText  "Hello world" .

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
 
-import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -31,14 +33,13 @@ import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.Triplifier;
-
+@io.github.sparqlanything.model.annotations.Triplifier
 public class BinaryTriplifier implements Triplifier {
 
-	private static Logger logger = LoggerFactory.getLogger(BinaryTriplifier.class);
+	private static final Logger logger = LoggerFactory.getLogger(BinaryTriplifier.class);
 
-	public static final String ENCODING = "bin.encoding";
+	@Option(description = "The encoding to use for generating the representation of the file.", validValues = "BASE64")
+	public static final IRIArgument ENCODING = new IRIArgument("bin.encoding", Encoding.BASE64.name());
 
 	public static enum Encoding {
 		BASE64
@@ -52,22 +53,9 @@ public class BinaryTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		Encoding encoding = Encoding.BASE64;
-
-		if (properties.contains(ENCODING)) {
-			try {
-				encoding = Encoding.valueOf(properties.getProperty(ENCODING).toUpperCase());
-			} catch (java.lang.IllegalArgumentException e) {
-				logger.warn("{} - Using default encoding (Base64)", e.getMessage());
-			}
-		} else {
-			logger.warn("Using default encoding (Base64)");
-		}
-
-		String dataSourceId = "";
-//		Charset charset = getCharsetArgument(properties);
-//		boolean blank_nodes = Triplifier.getBlankNodeArgument(properties);
-//		String namespace = url.toString() + "#";
+		String encodingString = PropertyUtils.getStringProperty(properties, ENCODING);
+		Encoding encoding = Encoding.valueOf(encodingString);
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 
 		String value;
 		byte[] file = downloadUrl(url);

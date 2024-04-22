@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -51,9 +53,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class XMLTriplifier implements Triplifier, Slicer {
 
-	public static final String PROPERTY_XPATH = "xml.path";
+	@Example(resource = "https://sparql-anything.cc/examples/simple-menu.xml", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"https://sparql-anything.cc/examples/simple-menu.xml\" ; fx:xml.path \"//food\" ; fx:blank-nodes false . ?s ?p ?o } }")
+	@Option(description = "One or more XPath expressions as filters. E.g. `xml.path=value` or `xml.path.1`, `xml.path.2`,`...` to add multiple expressions.", validValues = "Any valid XPath")
+	public static final IRIArgument PROPERTY_XPATH = new IRIArgument("xml.path");
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
@@ -89,6 +94,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				log.trace(" -- tag: {} ", tag);
 				String childId = String.join("", parentId, "/", Integer.toString(child), ":", tag);
 				builder.addContainer(dataSourceId, parentId, child, childId);
+				builder.addType(dataSourceId, childId, tag);
 
 				// Attributes
 				int attrCount = vn.getAttrCount();
@@ -321,7 +327,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
-		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
+		List<String> xpaths = PropertyUtils.getPropertyValues(properties, PROPERTY_XPATH);
 		if (!xpaths.isEmpty()) {
 			transformWithXPath(xpaths, properties, builder);
 		} else {
@@ -342,7 +348,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	@Override
 	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		final String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
-		List<String> xpaths = Triplifier.getPropertyValues(properties, PROPERTY_XPATH);
+		List<String> xpaths = PropertyUtils.getPropertyValues(properties, PROPERTY_XPATH);
 
 		try {
 			VTDNav vn = buildVTDNav(properties);

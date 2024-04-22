@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ public final class TriplifierRegister {
 
 	private static TriplifierRegister instance;
 
-	private Map<String, String> mimeType = new HashMap<>();
-	private Map<String, String> extension = new HashMap<>();
+	private final Map<String, String> mimeType = new HashMap<>();
+	private final Map<String, String> extension = new HashMap<>();
 
 	private TriplifierRegister() {
 
@@ -64,7 +64,6 @@ public final class TriplifierRegister {
 			log.trace("Registering triplifier for mime-type {} : {}", mimeType, t);
 			this.mimeType.put(mimeType, t);
 		}
-
 	}
 
 	public void removeTriplifier(String t) {
@@ -103,9 +102,7 @@ public final class TriplifierRegister {
 	}
 
 	public void printMediaTypes() {
-		this.mimeType.keySet().forEach(mt -> {
-			System.out.println(mt);
-		});
+		this.mimeType.keySet().forEach(System.out::println);
 	}
 
 	public Set<String> getRegisteredExtensions() {
@@ -116,4 +113,30 @@ public final class TriplifierRegister {
 		return mimeType.keySet();
 	}
 
+	public Set<String> getTriplifiers(){
+		Set<String> result = new HashSet<>();
+		result.addAll(extension.values());
+		result.addAll(mimeType.values());
+		result.add("io.github.sparqlanything.zip.FolderTriplifier");
+		result.add("io.github.sparqlanything.metadata.MetadataTriplifier");
+		return result;
+	}
+
+	public Set<String> getTriplifierExtensions(String triplifier){
+		Set<String> result = new HashSet<>();
+		this.extension.forEach((extension, t)->{
+			if(t.equals(triplifier))
+				result.add(extension);
+		});
+		return result;
+	}
+
+	public Set<String> getTriplifierMimeType(String triplifier){
+		Set<String> result = new HashSet<>();
+		this.mimeType.forEach((mimeType, t)->{
+			if(t.equals(triplifier))
+				result.add(mimeType);
+		});
+		return result;
+	}
 }

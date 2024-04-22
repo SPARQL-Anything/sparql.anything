@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -36,6 +37,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Properties;
 import java.util.Set;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class MetadataTriplifier implements Triplifier {
 
 
@@ -47,8 +49,8 @@ public class MetadataTriplifier implements Triplifier {
 		if (url == null)
 			return;
 
-		String dataSourceId = Triplifier.getRootArgument(properties);
-		String root = dataSourceId;
+		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
+		String root = SPARQLAnythingConstants.ROOT_ID;
 		File f = new File(FilenameUtils.getName(url.getFile()));
 		FileUtils.copyURLToFile(url, f);
 		readBasicAttributes(f.toPath(), dataSourceId, root, builder);

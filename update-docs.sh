@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+# Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,10 +16,17 @@
 # limitations under the License.
 #
 
+# Generate documentation pages for supported formats
+mvn clean install
+cd sparql-anything-documentation-generator/
+mvn exec:java  -Dexec.mainClass="io.github.sparqlanything.documentationgenerator.DocumentationGenerator"  -Dexec.args="../formats/"
+cd ..
+
 git add README.md CLI.md EXTENSION_MECHANISMS.md JAVA_LIBRARY.md Facade-X.md facade-x-ER.png .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
 git add formats/*
 cp -f README.md docs/
 cp -f EXTENSION_MECHANISMS.md docs/
+cp -f CLI.md docs/
 cp -f Facade-X.md docs/
 cp -f JAVA_LIBRARY.md docs/
 cp -f facade-x-ER.png docs/

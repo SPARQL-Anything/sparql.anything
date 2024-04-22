@@ -1,6 +1,6 @@
 
 <html/body> <https://html.spec.whatwg.org/#innerHTML> "<div id=\"notUnique\"></div>\n<p class=\"paragraph\">Hello world</p>\n<p class=\"paragraph\">Hello world 2</p>\n<p class=\"paragraph\">Hello world 3</p>\n<div id=\"notUnique\"></div>" .
-<html/body> <https://html.spec.whatwg.org/#innerText> "Hello world Hello world 2 Hello world 3  Hello world Hello world 2 Hello world 3 " .
+<html/body> <https://html.spec.whatwg.org/#innerText> "Hello world Hello world 2 Hello world 3" .
 <html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> .
 <html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/div:1> .
 <html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body/p.paragraph:2> .
@@ -15,7 +15,7 @@
 <html/body/p.paragraph:4> <http://www.w3.org/1999/xhtml#class> "paragraph" .
 <html/body/p.paragraph:4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world 3" .
 <html/head> <https://html.spec.whatwg.org/#innerHTML> "<title>Hello world!</title>" .
-<html/head> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world!" .
+<html/head> <https://html.spec.whatwg.org/#innerText> "Hello world!" .
 <html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> .
 <html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head/title> .
 <html/body/p.paragraph:2> <https://html.spec.whatwg.org/#innerHTML> "Hello world" .
@@ -25,7 +25,7 @@
 <html/body/p.paragraph:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world" .
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
 <html> <https://html.spec.whatwg.org/#innerHTML> "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <div id=\"notUnique\"></div>\n <p class=\"paragraph\">Hello world</p>\n <p class=\"paragraph\">Hello world 2</p>\n <p class=\"paragraph\">Hello world 3</p>\n <div id=\"notUnique\"></div>\n</body>" .
-<html> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world Hello world 2 Hello world 3 Hello world! Hello world! Hello world Hello world 2 Hello world 3  Hello world Hello world 2 Hello world 3 " .
+<html> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world Hello world 2 Hello world 3" .
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> .
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head> .
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body> .
@@ -46,7 +46,7 @@
 <html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body/p.paragraph:2> <location> .
 <html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/body/div:1> <location> .
 <html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> <location> .
-<html/body> <https://html.spec.whatwg.org/#innerText> "Hello world Hello world 2 Hello world 3  Hello world Hello world 2 Hello world 3 " <location> .
+<html/body> <https://html.spec.whatwg.org/#innerText> "Hello world Hello world 2 Hello world 3" <location> .
 <html/body> <https://html.spec.whatwg.org/#innerHTML> "<div id=\"notUnique\"></div>\n<p class=\"paragraph\">Hello world</p>\n<p class=\"paragraph\">Hello world 2</p>\n<p class=\"paragraph\">Hello world 3</p>\n<div id=\"notUnique\"></div>" <location> .
 <html/body/div:1> <http://www.w3.org/1999/xhtml#id> "notUnique" <location> .
 <html/body/div:1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#div> <location> .
@@ -67,7 +67,7 @@
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <html/body> <location> .
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <html/head> <location> .
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <location> .
-<html> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world Hello world 2 Hello world 3 Hello world! Hello world! Hello world Hello world 2 Hello world 3  Hello world Hello world 2 Hello world 3 " <location> .
+<html> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world Hello world 2 Hello world 3" <location> .
 <html> <https://html.spec.whatwg.org/#innerHTML> "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <div id=\"notUnique\"></div>\n <p class=\"paragraph\">Hello world</p>\n <p class=\"paragraph\">Hello world 2</p>\n <p class=\"paragraph\">Hello world 3</p>\n <div id=\"notUnique\"></div>\n</body>" <location> .
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <location> .
 <html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world!" <location> .

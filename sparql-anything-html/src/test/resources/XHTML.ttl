@@ -1,0 +1,62 @@
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+[ rdf:type          fx:root , xhtml:html ;
+  rdf:_1            [ rdf:type          <http://www.example.org/#head> ;
+                      rdf:_1            [ rdf:type          xhtml:title ;
+                                          rdf:_1            "Hello World" ;
+                                          whatwg:innerHTML  "Hello World" ;
+                                          whatwg:innerText  "Hello World"
+                                        ] ;
+                      whatwg:innerHTML  "\n    <title>Hello World</title>\n" ;
+                      whatwg:innerText  "Hello World"
+                    ] ;
+  rdf:_2            [ rdf:type          <http://www.example.org/#body> ;
+                      rdf:_1            [ rdf:type          <http://www.example.org/#block> ;
+                                          rdf:_1            [ rdf:type          <http://www.example.org/personal#stuff> ;
+                                                              rdf:_1            [ rdf:type          <http://www.example.org/#some> ;
+                                                                                  rdf:_1            [ rdf:type     <http://www.example.org/#text> ;
+                                                                                                      xhtml:value  "Example text here"
+                                                                                                    ] ;
+                                                                                  rdf:_2            [ rdf:type     <http://www.example.org/personal#text> ;
+                                                                                                      xhtml:value  "Personal text here"
+                                                                                                    ] ;
+                                                                                  rdf:_3            [ rdf:type          <http://www.example.org/personal#other> ;
+                                                                                                      rdf:_1            "Content of other form" ;
+                                                                                                      xhtml:value       "Other value" ;
+                                                                                                      whatwg:innerHTML  "Content of other form" ;
+                                                                                                      whatwg:innerText  "Content of other form"
+                                                                                                    ] ;
+                                                                                  xhtml:content     "2" ;
+                                                                                  xhtml:extended    "100000" ;
+                                                                                  whatwg:innerHTML  "\n                <h:text value=\"Example text here\" />\n                <p:text value=\"Personal text here\" />\n\n                <p:other value=\"Other value\">Content of other form</p:other>\n            " ;
+                                                                                  whatwg:innerText  "Content of other form"
+                                                                                ] ;
+                                                              xhtml:attr1       "Attribute 1 value" ;
+                                                              whatwg:innerHTML  "\n            <h:some content=\"2\" extended=\"100000\">\n                <h:text value=\"Example text here\" />\n                <p:text value=\"Personal text here\" />\n\n                <p:other value=\"Other value\">Content of other form</p:other>\n            </h:some>\n        " ;
+                                                              whatwg:innerText  "Content of other form"
+                                                            ] ;
+                                          whatwg:innerHTML  "\n\n        <p:stuff attr1=\"Attribute 1 value\">\n            <h:some content=\"2\" extended=\"100000\">\n                <h:text value=\"Example text here\" />\n                <p:text value=\"Personal text here\" />\n\n                <p:other value=\"Other value\">Content of other form</p:other>\n            </h:some>\n        </p:stuff>\n\n    " ;
+                                          whatwg:innerText  "Content of other form"
+                                        ] ;
+                      whatwg:innerHTML  "\n    <h:block>\n\n        <p:stuff attr1=\"Attribute 1 value\">\n            <h:some content=\"2\" extended=\"100000\">\n                <h:text value=\"Example text here\" />\n                <p:text value=\"Personal text here\" />\n\n                <p:other value=\"Other value\">Content of other form</p:other>\n            </h:some>\n        </p:stuff>\n\n    </h:block>\n" ;
+                      whatwg:innerText  "Content of other form"
+                    ] ;
+  xhtml:lang        "en" ;
+  xhtml:xmlns       "http://www.w3.org/1999/xhtml" ;
+  xhtml:xmlns:h     "http://www.example.org/" ;
+  xhtml:xmlns:p     "http://www.example.org/personal" ;
+  whatwg:innerHTML  "\n<h:head>\n    <title>Hello World</title>\n</h:head>\n\n\n\n<h:body>\n    <h:block>\n\n        <p:stuff attr1=\"Attribute 1 value\">\n            <h:some content=\"2\" extended=\"100000\">\n                <h:text value=\"Example text here\" />\n                <p:text value=\"Personal text here\" />\n\n                <p:other value=\"Other value\">Content of other form</p:other>\n            </h:some>\n        </p:stuff>\n\n    </h:block>\n</h:body>" ;
+  whatwg:innerText  "Hello World Content of other form"
+] .

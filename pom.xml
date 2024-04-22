@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+  ~ Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -114,8 +114,9 @@
         <module>sparql-anything-rdf</module>
         <module>sparql-anything-archive</module>
         <module>sparql-anything-docs</module>
-        <module>sparql-anything-bib</module>
+        <module>sparql-anything-bibliography</module>
         <module>sparql-anything-slides</module>
+        <module>sparql-anything-documentation-generator</module>
         <module>sparql-anything-jdbc</module>
     </modules>
 
@@ -280,12 +281,6 @@
                 <version>${jena.version}</version>
             </dependency>
 
-            <!-- Commons configuration -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-configuration2</artifactId>
-                <version>2.1.1</version>
-            </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
@@ -316,7 +311,8 @@
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <!--				<version>1.14.2</version>-->
-                <version>1.15.3</version>
+<!--                <version>1.15.3</version>-->
+                <version>1.17.2</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
@@ -374,7 +370,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.21</version>
+                <version>1.26.0</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package io.github.sparqlanything.zip;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.ext.com.google.common.collect.Sets;
@@ -33,6 +34,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static io.github.sparqlanything.zip.ZipTriplifier.MATCHES;
+
+@io.github.sparqlanything.model.annotations.Triplifier
 public class FolderTriplifier implements Triplifier {
 
 	private static Logger logger = LoggerFactory.getLogger(FolderTriplifier.class);
@@ -46,7 +50,7 @@ public class FolderTriplifier implements Triplifier {
 			return;
 		}
 		String dataSourceId = "";
-		String matches = properties.getProperty(ZipTriplifier.MATCHES, ".*");
+		String matches = PropertyUtils.getStringProperty(properties, MATCHES);
 
 		logger.trace("Matches {}", matches);
 

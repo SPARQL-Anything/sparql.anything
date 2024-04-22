@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -212,7 +212,7 @@ public class DocumentationExampleSandbox {
 	}
 
 	public static void slides() {
-		String queryString = "CONSTRUCT { ?s ?p ?o   } WHERE  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Presentation2.pptx,slides.extract-sections=true> {       GRAPH ?g { ?s  ?p  ?o } }  } ";
+		String queryString = "CONSTRUCT { ?s ?p ?o   } WHERE  { SERVICE <x-sparql-anything:location=/Users/lgu/workspace/SPARQLAnything/sparql.anything/sparql-anything-slides/src/test/resources/Presentation2.pptx,slides.extract-sections=true> {       GRAPH ?g { ?s  ?p  ?o } }  } ";
 		System.out.println(queryString);
 		Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
 

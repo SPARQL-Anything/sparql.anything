@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -391,7 +391,7 @@ public class ItTest {
 	public void testPptx() throws  URISyntaxException {
 		String pptx = Objects.requireNonNull(getClass().getClassLoader().getResource("Presentation1.pptx")).toURI().toString();
 
-		String q = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT * {SERVICE <x-sparql-anything:> {  fx:properties fx:location ?location .  ?title a xyz:CENTERED_TITLE ; rdf:_1 ?o} }";
+		String q = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT * {SERVICE <x-sparql-anything:> {  fx:properties fx:location ?location .  ?title a xyz:CENTERED_TITLE ; rdf:_1+ [ a xyz:Text ; rdf:_1 ?o ]} }";
 
 		ParameterizedSparqlString pss = new ParameterizedSparqlString(q);
 		pss.setIri("location", pptx);

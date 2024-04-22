@@ -1,9 +1,10 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![How to](https://img.shields.io/badge/How%20to-cite-green.svg)](#how-to-cite-our-work)
-[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml)
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v0.9-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
+[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml)
+[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
+[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
+[![CodeQL](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml/badge.svg?branch=v1.0-DEV)](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml)
 
 # SPARQL Anything
 
@@ -189,18 +190,18 @@ A detailed description of the interpretation can be found in the following pages
 - [CSV](formats/CSV.md)
 - [XML](formats/XML.md)
 - [Binary](formats/Binary.md)
-- [TXT](formats/TXT.md)
+- [Text](formats/Text.md)
 - [Markdown](formats/Markdown.md)
 - [File system and archives (ZIP, Tar)](formats/Archive.md)
 - [Spreadsheets: XLS, XLSx](formats/Spreadsheet.md)
-- [Documents: DOCx](formats/Word_Processing_Document.md)
+- [Documents: DOCx](formats/Docs.md)
 - [EXIF Metadata](formats/Metadata.md)
-- [Bibtex](formats/Bibtex.md)
+- [Bibliography](formats/Bibliography.md)
 - [YAML](formats/YAML.md)
 - [Slides](formats/Slides.md)
 
 ... and, of course, the triples generated from the these formats can be integrated with the content of
-any [RDF Static file](formats/RDF_Files.md)
+any [RDF Static file](formats/RDF.md)
 
 ## Configuration
 

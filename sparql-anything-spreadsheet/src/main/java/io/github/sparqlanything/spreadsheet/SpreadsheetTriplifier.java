@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package io.github.sparqlanything.spreadsheet;
 
 import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
@@ -26,13 +28,28 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+@io.github.sparqlanything.model.annotations.Triplifier
 public class SpreadsheetTriplifier implements Triplifier {
 
-	public final static String PROPERTY_HEADERS = "spreadsheet.headers";
-	public final static String PROPERTY_EVALUATE_FORMULAS = "spreadsheet.evaluate-formulas";
-	public final static String PROPERTY_COMPOSITE_VALUES = "spreadsheet.composite-values";
+	@Example(resource = "https://sparql-anything.cc/examples/Book1.xlsx", query = "CONSTRUCT { GRAPH ?g { ?s ?p ?o .} } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book1.xlsx,spreadsheet.headers=true> { GRAPH ?g { ?s ?p ?o } } }", description = "Construct the dataset by using the headers of the columns to mint the property URIs.")
+	@Option(description = "It tells the spreadsheet triplifier to use the headers of the spreadsheet file for minting the properties of the generated triples.", validValues = "true/false")
+	public final static IRIArgument PROPERTY_HEADERS = new IRIArgument("spreadsheet.headers", "false");
+
+	@Example(resource = "https://sparql-anything.cc/examples/Book2.xlsx", query = "CONSTRUCT { GRAPH ?g { ?s ?p ?o .} } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book2.xlsx,spreadsheet.evaluate-formulas=true> { GRAPH ?g { ?s ?p ?o } } }", description = "Construct the dataset by evaluating the formulas.")
+	@Option(description = "It tells the spreadsheet triplifier to evaluate formulas of the spreadsheet.", validValues = "true/false")
+	public final static IRIArgument PROPERTY_EVALUATE_FORMULAS = new IRIArgument("spreadsheet.evaluate-formulas", "false");
+
+	@Example(resource = "https://sparql-anything.cc/examples/Book3.xlsx", query = "CONSTRUCT { GRAPH ?g { ?s ?p ?o .} } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book3.xlsx,spreadsheet.composite-values=true> { GRAPH ?g { ?s ?p ?o } } } ", description = "Construct the dataset by extracting hyperlinks and comments from the cells.")
+	@Option(description = "It tells the spreadsheet triplifier to extract from the cells hyperlinks and comments. If enabled, the cells will be triplified as containers instead of literals (see #308)", validValues = "true/false")
+	public final static IRIArgument PROPERTY_COMPOSITE_VALUES = new IRIArgument("spreadsheet.composite-values", "false");
+
+	@Example(resource = "https://sparql-anything.cc/examples/Book1.xlsx", description = "Construct the dataset by using the headers of the columns to mint the property URIs.", query = "CONSTRUCT { GRAPH ?g { ?s ?p ?o .} } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/Book1.xlsx,spreadsheet.headers=true,spreadsheet.headers-row=2> { GRAPH ?g { ?s ?p ?o } } }")
+	@Option(description = "It specifies the number of the row to use for extracting column headers. -- see #179", validValues = "Any integer")
 	public final static IRIArgument PROPERTY_HEADER_ROW = new IRIArgument("spreadsheet.headers-row", "1");
-	public final static String IGNORE_COLUMNS_WITH_NO_HEADERS = "spreadsheet.ignore-columns-with-no-header";
+
+	@Example(resource = "https://sparql-anything.cc/examples/spreadsheet.xls", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT DISTINCT ?fred ?sally WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/spreadsheet.xls> { fx:properties fx:spreadsheet.headers true . fx:properties fx:spreadsheet.ignore-columns-with-no-header true . GRAPH <https://sparql-anything.cc/examples/spreadsheet.xls#Sheet1> { ?root a fx:root ; rdf:_1 [rdf:_1 ?fred] ; rdf:_2 [rdf:_1 ?sally] . } } } ", description = "Construct the dataset by using the headers of the columns to mint the property URIs.")
+	@Option(description = "It tells the spreadsheet triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when spreadsheet.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180", validValues = "Any integer")
+	public final static IRIArgument IGNORE_COLUMNS_WITH_NO_HEADERS = new IRIArgument("spreadsheet.ignore-columns-with-no-header", "false");
 	private static final Logger logger = LoggerFactory.getLogger(SpreadsheetTriplifier.class);
 	private FormulaEvaluator evaluator;
 
@@ -45,10 +62,10 @@ public class SpreadsheetTriplifier implements Triplifier {
 			logger.warn("No location provided");
 			return;
 		}
-		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS, false);
-		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES, false);
-		final boolean headers = PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS, false);
-		final boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
+		boolean evaluateFormulas = PropertyUtils.getBooleanProperty(properties, PROPERTY_EVALUATE_FORMULAS);
+		boolean compositeValues = PropertyUtils.getBooleanProperty(properties, PROPERTY_COMPOSITE_VALUES);
+		final boolean headers = PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS);
+		final boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(properties, IGNORE_COLUMNS_WITH_NO_HEADERS);
 		final int headersRow = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
 
 		Workbook wb = WorkbookFactory.create(url.openStream());
