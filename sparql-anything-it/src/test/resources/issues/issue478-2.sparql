@@ -1,0 +1,13 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT * WHERE {
+  SERVICE <x-sparql-anything:> {
+    fx:properties fx:location "%%%LOCATION%%%" .
+          GRAPH ?g {
+          ?s ?p ?o
+         }
+    FILTER (STR(?g) = "file:///Users/lgu/workspace/SPARQLAnything/sparql.anything/sparql-anything-it/target/test-classes/issues/issue%20478.xls#Sheet1")
+  }
+}
