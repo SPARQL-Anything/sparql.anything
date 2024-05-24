@@ -928,11 +928,10 @@ public class IssuesTest {
 	}
 
 
-	@Ignore
 	@Test
 	public void testIssue478() throws URISyntaxException, IOException {
-		executeTest("issues/issue478.sparql", "issues/issue 478.xls", false, false, true);
-		executeTest("issues/issue478-2.sparql", "issues/issue 478.xls", false, false, true);
+		executeTest("issues/issue478.sparql", "issues/issue 478.xls", false, false, false);
+		executeTest("issues/issue478-2.sparql", "issues/issue 478.xls", false, false, false);
 	}
 
 	private QueryExecution executeTest(String queryPath, String resourcePath, boolean printQueryString, boolean printFormattedQuery, boolean printResults) throws IOException, URISyntaxException {
