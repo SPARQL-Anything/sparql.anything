@@ -65,12 +65,7 @@ public class IssuesTest {
 		boolean tdbFolderCreated = TDBfile.mkdirs();
 		log.trace("Has TDB folder been deleted? {}", tdbFolderCreated);
 		log.debug("TDB temp location: {}", TDBLocation);
-		Query qs = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " +
-						"PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
-						"SELECT * WHERE { " +
-						"SERVICE <x-sparql-anything:location=" + location + ",ondisk=" + TDBLocation + "> { " +
-						" ?s xyz:name ?o }  }");
+		Query qs = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "SELECT * WHERE { " + "SERVICE <x-sparql-anything:location=" + location + ",ondisk=" + TDBLocation + "> { " + " ?s xyz:name ?o }  }");
 
 //		System.out.println(location);
 //		System.out.println(qs.toString(Syntax.defaultSyntax));
@@ -88,9 +83,7 @@ public class IssuesTest {
 		assertTrue(results.contains("Cougar Town"));
 
 
-		qs = QueryFactory.create(
-				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"" + TDBLocation + "\" .  " +
-						" ?s xyz:name ?o }  }");
+		qs = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"" + TDBLocation + "\" .  " + " ?s xyz:name ?o }  }");
 
 
 		rs = QueryExecutionFactory.create(qs, ds).execSelect();
@@ -134,23 +127,7 @@ public class IssuesTest {
 //		System.out.println(ResultSetFormatter.asText(rs));
 
 
-		Query qs = QueryFactory.create("PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" +
-				"PREFIX xyz: <http://sparql.xyz/facade-x/data/>\n" +
-				"base  <http://example.com/base/> \n" +
-				"\n" +
-				"CONSTRUCT\n" +
-				"  {\n" +
-				"    ?subject0 <http://example.com/id> ?0 .\n" +
-				" }\n" +
-				"WHERE\n" +
-				"  {\n" +
-				"    SERVICE <x-sparql-anything:location=" + location + ">\n" +
-				"      {\n" +
-				"      \t?s0   xyz:students/fx:anySlot ?iterator0 . \n" +
-				"        ?iterator0  xyz:ID    ?0;\n" +
-				"        bind(fx:entity(\"http://example.com/\", ?0) as ?subject0)\n" +
-				"      }\n" +
-				"  }");
+		Query qs = QueryFactory.create("PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n" + "PREFIX xyz: <http://sparql.xyz/facade-x/data/>\n" + "base  <http://example.com/base/> \n" + "\n" + "CONSTRUCT\n" + "  {\n" + "    ?subject0 <http://example.com/id> ?0 .\n" + " }\n" + "WHERE\n" + "  {\n" + "    SERVICE <x-sparql-anything:location=" + location + ">\n" + "      {\n" + "      \t?s0   xyz:students/fx:anySlot ?iterator0 . \n" + "        ?iterator0  xyz:ID    ?0;\n" + "        bind(fx:entity(\"http://example.com/\", ?0) as ?subject0)\n" + "      }\n" + "  }");
 
 //		System.out.println(qs.toString());
 
@@ -184,9 +161,7 @@ public class IssuesTest {
 	public void testIssue356CLI() throws Exception {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 		String query = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue356.sparql")).toURI(), StandardCharsets.UTF_8);
-		String output = SPARQLAnything.callMain(new String[]{
-				"-q", query
-		});
+		String output = SPARQLAnything.callMain(new String[]{"-q", query});
 		Assert.assertTrue(output.contains("http://www.w3.org/1999/02/22-rdf-syntax-ns#type,http://sparql.xyz/facade-x/ns/root"));
 	}
 
@@ -508,7 +483,7 @@ public class IssuesTest {
 		boolean hasTDBFolderCreated = TDBfile.mkdirs();
 		//log.trace("Has TDB Folder been created? {}, {}", hasTDBFolderCreated, TDBfile.exists());
 
-		String queryString = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \""+location+"\" ; fx:ondisk \""+TDBLocation+"\" .  ?s xyz:name ?o }  }";
+		String queryString = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>  PREFIX xyz: <http://sparql.xyz/facade-x/data/> SELECT * WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"" + location + "\" ; fx:ondisk \"" + TDBLocation + "\" .  ?s xyz:name ?o }  }";
 		//log.debug("TDB temp location: {}", TDBLocation);
 		//log.debug("Query string\n{}", queryString);
 		Query qs = QueryFactory.create(queryString);
@@ -663,7 +638,7 @@ public class IssuesTest {
 		Query query;
 		String TDBLocation = "tmp/testIssue295";
 		File tmpTBDFolder = new File(TDBLocation);
-		if(tmpTBDFolder.exists()){
+		if (tmpTBDFolder.exists()) {
 			FileUtils.deleteDirectory(tmpTBDFolder);
 		}
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue295.sparql")).toURI(), StandardCharsets.UTF_8);
@@ -685,8 +660,8 @@ public class IssuesTest {
 		assertEquals(expectedNames, actualNames);
 		try {
 			FileUtils.deleteDirectory(tmpTBDFolder);
-		}catch(IOException e){
-			log.warn("Unable to delete {}, delete it once the program terminates.",tmpTBDFolder.getAbsolutePath());
+		} catch (IOException e) {
+			log.warn("Unable to delete {}, delete it once the program terminates.", tmpTBDFolder.getAbsolutePath());
 		}
 	}
 
@@ -803,7 +778,7 @@ public class IssuesTest {
 
 		query = QueryFactory.create(queryStr);
 		qExec = QueryExecutionFactory.create(query, ds);
- 		rs = qExec.execSelect();
+		rs = qExec.execSelect();
 
 		assertTrue(rs.hasNext());
 		qs = rs.next();
@@ -855,7 +830,7 @@ public class IssuesTest {
 		QueryExecution qExec = QueryExecutionFactory.create(query, ds);
 		ResultSet rs = qExec.execSelect();
 		assertTrue(rs.hasNext());
-		assertEquals("http://example.org/document",rs.next().get("root").asResource().getURI());
+		assertEquals("http://example.org/document", rs.next().get("root").asResource().getURI());
 		assertFalse(rs.hasNext());
 	}
 
@@ -905,7 +880,7 @@ public class IssuesTest {
 //		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
 		Set<String> result = new HashSet<>();
 		ResultSet rs = qExec1.execSelect();
-		while (rs.hasNext()){
+		while (rs.hasNext()) {
 			result.add(rs.next().get("a").asLiteral().toString());
 		}
 		assertEquals(Sets.newHashSet("abc", "cde"), result);
@@ -927,7 +902,7 @@ public class IssuesTest {
 //		System.out.println(ResultSetFormatter.asText(qExec1.execSelect()));
 		Set<String> result = new HashSet<>();
 		ResultSet rs = qExec1.execSelect();
-		while (rs.hasNext()){
+		while (rs.hasNext()) {
 			result.add(rs.next().get("a").asLiteral().toString());
 		}
 		assertEquals(Sets.newHashSet("abc", "cde"), result);
@@ -949,6 +924,43 @@ public class IssuesTest {
 //		System.out.println(TransformPropertyFunction.transform(bgp, ARQ.getContext()));
 //		QueryIterator qi = Algebra.exec(op, g);
 //		System.out.println(Utils.queryIteratorToString(qi));
+
+	}
+
+
+	@Test
+	public void testIssue478() throws URISyntaxException, IOException {
+		executeTest("issues/issue478.sparql", "issues/issue 478.xls", false, false, false);
+		executeTest("issues/issue478-2.sparql", "issues/issue 478.xls", false, false, false);
+	}
+
+	private QueryExecution executeTest(String queryPath, String resourcePath, boolean printQueryString, boolean printFormattedQuery, boolean printResults) throws IOException, URISyntaxException {
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Query query;
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(queryPath)).toURI(), StandardCharsets.UTF_8);
+		String loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(resourcePath)).toURI()).toUri().toString();
+		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+		if (printQueryString) {
+			System.out.println(queryStr);
+		}
+		query = QueryFactory.create(queryStr);
+
+		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
+		if (printResults) {
+			if (query.isSelectType()) {
+				ResultSet rs = qExec1.execSelect();
+				Assert.assertTrue(rs.hasNext());
+				System.out.println(ResultSetFormatter.asText(rs));
+			} else {
+				qExec1.execConstruct().write(System.out, "TTL");
+			}
+		}
+		if (printFormattedQuery) {
+			System.out.println(query.toString(Syntax.defaultSyntax));
+		}
+
+		return QueryExecutionFactory.create(query, ds);
 
 	}
 

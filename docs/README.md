@@ -4,6 +4,7 @@
 [![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
 [![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
 [![CodeQL](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml/badge.svg?branch=v1.0-DEV)](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml)
+[![How to](https://img.shields.io/badge/How%20to-use-green.svg)](#usage)
 [![How to](https://img.shields.io/badge/How%20to-join-blue.svg)](https://forms.gle/t1paTLz7jVu3RYnu8)
 
 # SPARQL Anything
