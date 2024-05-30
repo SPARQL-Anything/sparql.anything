@@ -938,7 +938,6 @@ public class IssuesTest {
 	@Test
 	public void testIssue482() throws URISyntaxException, IOException {
 		QueryExecution qExec = executeTest("issues/issue482.sparql", "issues/issue482.xlsx", false, false, false);
-		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Rome"));
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(new Date(1716933600000L));
 		ResultSet rs = qExec.execSelect();
