@@ -927,11 +927,20 @@ public class IssuesTest {
 
 	}
 
-
+	@Ignore
 	@Test
 	public void testIssue478() throws URISyntaxException, IOException {
 		executeTest("issues/issue478.sparql", "issues/issue 478.xls", false, false, false);
 		executeTest("issues/issue478-2.sparql", "issues/issue 478.xls", false, false, false);
+	}
+
+	@Test
+	public void testIssue482() throws URISyntaxException, IOException {
+		QueryExecution qExec = executeTest("issues/issue482.sparql", "issues/issue482.xlsx", false, false, false);
+		ResultSet rs = qExec.execSelect();
+		assertTrue(rs.hasNext());
+		assertEquals("2024-05-29T00:00:00+02:00",rs.next().get("o").asLiteral().getString());
+		assertFalse(rs.hasNext());
 	}
 
 	private QueryExecution executeTest(String queryPath, String resourcePath, boolean printQueryString, boolean printFormattedQuery, boolean printResults) throws IOException, URISyntaxException {
