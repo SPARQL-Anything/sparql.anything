@@ -185,7 +185,7 @@ public class SpreadsheetTriplifier implements Triplifier {
 			case NUMERIC:
 				if(DateUtil.isCellDateFormatted(cell)){
 					Date date = cell.getDateCellValue();
-					Calendar c = Calendar.getInstance();
+					Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 					c.setTime(date);
 					return NodeFactory.createLiteral(DatatypeConverter.printDateTime(c), XSDDatatype.XSDdateTime);
 				}

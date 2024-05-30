@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.junit.Assume;
 import io.github.sparqlanything.model.HTTPHelper;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -937,9 +938,12 @@ public class IssuesTest {
 	@Test
 	public void testIssue482() throws URISyntaxException, IOException {
 		QueryExecution qExec = executeTest("issues/issue482.sparql", "issues/issue482.xlsx", false, false, false);
+		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Rome"));
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		c.setTime(new Date(1716933600000L));
 		ResultSet rs = qExec.execSelect();
 		assertTrue(rs.hasNext());
-		assertEquals("2024-05-29T00:00:00+02:00",rs.next().get("o").asLiteral().getString());
+		assertEquals(DatatypeConverter.printDateTime(c),rs.next().get("o").asLiteral().getString());
 		assertFalse(rs.hasNext());
 	}
 
