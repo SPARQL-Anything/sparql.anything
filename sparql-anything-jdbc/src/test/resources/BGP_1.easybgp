@@ -1,0 +1,6 @@
+?s <http://www.example.org/address> ?addressId
+?s a <http://www.example.org/Person>
+?address <http://www.example.org/id> ?addressId
+?address a <http://www.example.org/Address>
+?address <http://www.example.org/postcode> "GG889901"
+?address <http://www.example.org/houseNumber> "1"

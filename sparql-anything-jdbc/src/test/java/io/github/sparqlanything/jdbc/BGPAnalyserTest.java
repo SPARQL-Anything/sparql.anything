@@ -17,8 +17,10 @@
 
 package io.github.sparqlanything.jdbc;
 
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -35,9 +37,14 @@ import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -59,6 +66,7 @@ public class BGPAnalyserTest {
 	public void before(){
 		bp = new BasicPattern();
 		properties = new Properties();
+		properties();
 	}
 
 	protected Map<Node, NodeInterpretation> constraints(){
@@ -70,12 +78,12 @@ public class BGPAnalyserTest {
 	}
 
 	protected void properties(){
-		//
+		properties.setProperty(JDBC.PROPERTY_NAMESPACE, "http://www.example.org/");
+		properties.setProperty(IRIArgument.NAMESPACE.toString(), "http://www.example.org/data/");
 	}
 
 	protected void analyseConstraints(){
 		OpBGP op = new OpBGP(bp);
-		properties();
 		analyser = new BGPAnalyser(properties, op);
 		boolean canResolve = analyser.getConstraints().isException();
 		constraints = analyser.getConstraints();
@@ -120,8 +128,60 @@ public class BGPAnalyserTest {
 		bp.add(t);
 	}
 
+	/**
+	 * Easybgp means 1 triple per line separated in SPARQL syntax, no dots between triples
+	 * @param easyBgpFile
+	 * @throws IOException
+	 */
+	private void readBGP(String easyBgpFile) throws IOException {
+		BasicPattern bp = new BasicPattern();
+//		L.info("{}", easyBgpFile);
+		URL url = getClass().getClassLoader().getResource("./" + easyBgpFile + ".easybgp");
+		L.trace("easy bgp: {}", url);
+		String sBGP =IOUtils.toString(url, StandardCharsets.UTF_8);
+//		L.trace("sBGP: {}", sBGP);
+		String[] lines = sBGP.split("\n");
+//		L.trace("lines: {} {}", lines,lines.length);
+		for(String line : lines){
+//			L.trace("line: {}", line);
+			List<Node> nodes = new ArrayList<Node>();
+			String[] tr = line.split(" ");
+			Triple t = null;
+			for (int c = 0; c<3; c++) {
+				if(tr[c].trim().startsWith("<")){
+					nodes.add(u(tr[c].trim().substring(1, tr[c].trim().length()-1)));
+				}else
+				if(tr[c].trim().startsWith("?")){
+					nodes.add(v(tr[c].trim().substring(1)));
+				}else
+				if(tr[c].trim().startsWith("_:")){
+					nodes.add(b(tr[c].trim().substring(2)));
+				}else
+				if(tr[c].trim().startsWith("\"")){
+					nodes.add(v(tr[c].trim().substring(1,tr[c].trim().length()-1)));
+				}else
+				if(tr[c].trim().equals("a")){
+					nodes.add(u(RDF.type.getURI()));
+				}else{
+					// other
+					nodes.add(v(tr[c].trim()));
+				}
+			}
+			t = new Triple(nodes.get(0),
+				nodes.get(1),
+				nodes.get(2));
+			bp.add(t);
+		}
+		L.trace("BGP: \n{}\n",bp);
+		add(bp);
+	}
+
 	private void add(Node s, Node p, Node o){
 		bp.add(t(s,p,o));
+	}
+
+	private void add(BasicPattern bgp){
+		bp.addAll(bgp);
 	}
 
 	private void IsA(Node n, Class<?> cz){
@@ -279,8 +339,6 @@ public class BGPAnalyserTest {
 
 	@Test
 	public void u_P_u(){
-		properties.setProperty(JDBC.PROPERTY_NAMESPACE, "http://www.example.org/");
-		properties.setProperty(IRIArgument.NAMESPACE.toString(), "http://www.example.org/data/");
 		add(u("http://www.example.org/tablename"), v("p"), v("o"));
 		analyseConstraints();
 		IsA(u("http://www.example.org/tablename"), NodeInterpretation.ContainerTable.class);
@@ -381,6 +439,7 @@ public class BGPAnalyserTest {
 				BGPInterpretation next = new BGPInterpretation(initialInterpretation, constrained.interpretations());
 				nexts.add(next);
 			}catch(Exception e){
+				L.trace("Ignore invalid combination");
 				// Ignore this combination because it is invalid
 			}
 		}
@@ -429,7 +488,7 @@ public class BGPAnalyserTest {
 		generateInterpretations();
 		//
 		for(BGPInterpretation st: interpretations){
-			L.info("[{}] ==> {}", st.isFinalState(), BGPInterpretation.toString(st));
+			L.trace("[{}] ==> {}", st.isFinalState(), BGPInterpretation.toString(st));
 			Assert.assertTrue(st.isFinalState());
 		}
 		showInterpretations();
@@ -441,6 +500,19 @@ public class BGPAnalyserTest {
 
 		add(v("s"), v("p"), v("o"));
 		//add(b, v("p2"), v("o"));
+		analyseConstraints();
+		generateInterpretations();
+		//
+		for(BGPInterpretation st: interpretations){
+			L.error("[{}] ==> {}", st.isFinalState(), BGPInterpretation.toString(st));
+			Assert.assertTrue(st.isFinalState());
+		}
+		showInterpretations();
+	}
+
+	@Test
+	public void testBGP_1() throws IOException {
+		readBGP(name.getMethodName().substring(4));
 		analyseConstraints();
 		generateInterpretations();
 		//

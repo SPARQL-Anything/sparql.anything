@@ -38,7 +38,7 @@ public class BGPAnalyser {
 	final static Logger L = LoggerFactory.getLogger(BGPAnalyser.class);
 
 	private Properties properties;
-	private String namesNamespace;
+//	private String namesNamespace;
 	private OpBGP opBGP;
 	private Translation translation;
 
@@ -49,7 +49,7 @@ public class BGPAnalyser {
 	public BGPAnalyser(Properties properties, OpBGP opBGP){
 		this.properties = properties;
 		this.opBGP = opBGP;
-		this.translation = new Translation(properties);
+		this.translation = new Translation(this.properties);
 		this.constraints = new BGPConstraints(translation, opBGP);
 		this.interpretations = traverse(this.constraints);
 	}
