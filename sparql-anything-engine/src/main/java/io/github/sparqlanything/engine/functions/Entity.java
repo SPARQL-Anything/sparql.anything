@@ -34,7 +34,9 @@ public class Entity extends FunctionBase implements FXFunction {
 			}else if(node.isInteger()){
 				sb.append(Integer.toString(node.getInteger().intValue()));
 			}else if(node.isLiteral()){
-				sb.append(node.getString());
+				sb.append(node.asString());
+			}else if(node.isBlank()){
+				sb.append(node.getNode().getBlankNodeId());
 			}else if(node.isIRI()){
 				if(isContainerMembershipProperty(node)){
 					sb.append(Integer.toString(getInt(node)));
