@@ -25,7 +25,6 @@ import org.apache.any23.extractor.ExtractionException;
 import org.apache.any23.source.DocumentSource;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
-import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
 import org.jsoup.internal.StringUtil;
@@ -190,12 +189,16 @@ public class HTMLTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("text/html");
+		Set<String> r = new HashSet<>();
+		r.add("text/html");
+		return  r;
 	}
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("html");
+		Set<String> r = new HashSet<>();
+		r.add("html");
+		return  r;
 	}
 
 	private void extractMetadata(URL url, FacadeXGraphBuilder builder) throws IOException, URISyntaxException, ExtractionException, TripleHandlerException {

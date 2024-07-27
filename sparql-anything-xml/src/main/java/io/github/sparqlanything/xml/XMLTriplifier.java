@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.xml;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -29,7 +30,6 @@ import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

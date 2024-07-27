@@ -20,7 +20,7 @@ import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
-import org.apache.jena.ext.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

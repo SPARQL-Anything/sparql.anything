@@ -26,7 +26,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.system.Txn;
-import org.apache.jena.tdb.TDBFactory;
+import org.apache.jena.tdb1.TDB1Factory;
 import org.apache.jena.tdb2.DatabaseMgr;
 import org.apache.jena.tdb2.TDB2Factory;
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 				try {
 					FileUtils.deleteDirectory(ondiskFile);
 				} catch (IOException e) {
-					if (TDBFactory.inUseLocation(ondiskPath)) {
+					if (TDB1Factory.inUseLocation(ondiskPath)) {
 						DatasetGraph dg = TDB2Factory.connectDataset(ondiskPath).asDatasetGraph();
 						dg.end();
 						Txn.executeWrite(dg, dg::clear);
@@ -88,7 +88,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 
-		if (p_null_string != null && object.isLiteral() && object.getLiteral().toString().equals(p_null_string)) {
+		if (p_null_string != null && object.isLiteral() && object.getLiteral().getLexicalForm().equals(p_null_string)) {
 			return false;
 		}
 		Triple t = Triple.create(subject, predicate, object);

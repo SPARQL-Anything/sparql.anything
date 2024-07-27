@@ -28,6 +28,7 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,7 @@ import static org.junit.Assert.assertTrue;
 
 public class BibtexTriplifierTest {
 	final static Logger logger = LoggerFactory.getLogger(BibtexTriplifierTest.class);
+
 	@Test
 	public void test1() {
 		BibtexTriplifier jt = new BibtexTriplifier();
@@ -56,27 +58,27 @@ public class BibtexTriplifierTest {
 			
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(Triple.create(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			Node article = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), article));
+			expectedGraph.add(Triple.create(n, RDF.li(1).asNode(), article));
 			expectedGraph
-					.add(new Triple(article, RDF.type.asNode(), NodeFactory.createURI(Triplifier.XYZ_NS + "article")));
-			expectedGraph.add(new Triple(article, NodeFactory.createURI(Triplifier.XYZ_NS + "author"),
-					NodeFactory.createLiteral("Donald E. Knuth")));
-			expectedGraph.add(new Triple(article, NodeFactory.createURI(Triplifier.XYZ_NS + "journal"),
-					NodeFactory.createLiteral("The Computer Journal")));
-			expectedGraph.add(new Triple(article, NodeFactory.createURI(Triplifier.XYZ_NS + "number"),
-					NodeFactory.createLiteral("2")));
-			expectedGraph.add(new Triple(article, NodeFactory.createURI(Triplifier.XYZ_NS + "pages"),
-					NodeFactory.createLiteral("97--111")));
-			expectedGraph.add(new Triple(article, NodeFactory.createURI(Triplifier.XYZ_NS + "publisher"),
-					NodeFactory.createLiteral("Oxford University Press")));
-			expectedGraph.add(new Triple(article, NodeFactory.createURI(Triplifier.XYZ_NS + "title"),
-					NodeFactory.createLiteral("Literate Programming")));
-			expectedGraph.add(new Triple(article, NodeFactory.createURI(Triplifier.XYZ_NS + "volume"),
-					NodeFactory.createLiteral("27")));
-			expectedGraph.add(new Triple(article, NodeFactory.createURI(Triplifier.XYZ_NS + "year"),
-					NodeFactory.createLiteral("1984")));
+					.add(Triple.create(article, RDF.type.asNode(), NodeFactory.createURI(Triplifier.XYZ_NS + "article")));
+			expectedGraph.add(Triple.create(article, NodeFactory.createURI(Triplifier.XYZ_NS + "author"),
+					NodeFactory.createLiteralString("Donald E. Knuth")));
+			expectedGraph.add(Triple.create(article, NodeFactory.createURI(Triplifier.XYZ_NS + "journal"),
+					NodeFactory.createLiteralString("The Computer Journal")));
+			expectedGraph.add(Triple.create(article, NodeFactory.createURI(Triplifier.XYZ_NS + "number"),
+					NodeFactory.createLiteralString("2")));
+			expectedGraph.add(Triple.create(article, NodeFactory.createURI(Triplifier.XYZ_NS + "pages"),
+					NodeFactory.createLiteralString("97--111")));
+			expectedGraph.add(Triple.create(article, NodeFactory.createURI(Triplifier.XYZ_NS + "publisher"),
+					NodeFactory.createLiteralString("Oxford University Press")));
+			expectedGraph.add(Triple.create(article, NodeFactory.createURI(Triplifier.XYZ_NS + "title"),
+					NodeFactory.createLiteralString("Literate Programming")));
+			expectedGraph.add(Triple.create(article, NodeFactory.createURI(Triplifier.XYZ_NS + "volume"),
+					NodeFactory.createLiteralString("27")));
+			expectedGraph.add(Triple.create(article, NodeFactory.createURI(Triplifier.XYZ_NS + "year"),
+					NodeFactory.createLiteralString("1984")));
 
 			assertTrue(expectedGraph.isIsomorphicWith(g1.getDefaultGraph()));
 

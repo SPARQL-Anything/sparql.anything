@@ -158,7 +158,7 @@ public class OpComponentsAnalyser implements OpVisitor {
 
 			@Override
 			public void visit(P_Link pathNode) {
-				opComponents.add(new Triple(Node.ANY, pathNode.getNode(), Node.ANY));
+				opComponents.add(Triple.create(Node.ANY, pathNode.getNode(), Node.ANY));
 
 			}
 		});
@@ -224,7 +224,7 @@ public class OpComponentsAnalyser implements OpVisitor {
 			public void visit(NodeValue nv) {
 				log.trace("Expr - NodeValue");
 				if (nv.getNode().isURI()) {
-					opComponents.add(new Triple(Node.ANY, nv.getNode(), Node.ANY));
+					opComponents.add(Triple.create(Node.ANY, nv.getNode(), Node.ANY));
 				}
 			}
 

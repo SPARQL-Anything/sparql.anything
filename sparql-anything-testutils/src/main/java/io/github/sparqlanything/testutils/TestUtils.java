@@ -62,24 +62,22 @@ public class TestUtils {
 	}
 
 	public static void printDebugDiff(DatasetGraph expected, DatasetGraph result) {
-		if (logger.isDebugEnabled()) {
 
-			logger.debug(">> Test expected items are also in result");
-			Iterator<Quad> it = expected.find();
-			while (it.hasNext()) {
-				Quad q = it.next();
-				if (!result.contains(q)) {
-					logger.debug(">> {} not found in expected", q);
-				}
+		logger.debug(">> Test expected items are also in result");
+		Iterator<Quad> it = expected.find();
+		while (it.hasNext()) {
+			Quad q = it.next();
+			if (!result.contains(q)) {
+				logger.debug(">> {} not found in expected", q);
 			}
+		}
 
-			logger.debug(">> Test result items are also in expected");
-			it = result.find();
-			while (it.hasNext()) {
-				Quad t = it.next();
-				if (!expected.contains(t)) {
-					logger.debug("<< {} not found in result", t);
-				}
+		logger.debug(">> Test result items are also in expected");
+		it = result.find();
+		while (it.hasNext()) {
+			Quad t = it.next();
+			if (!expected.contains(t)) {
+				logger.debug("<< {} not found in result", t);
 			}
 		}
 	}

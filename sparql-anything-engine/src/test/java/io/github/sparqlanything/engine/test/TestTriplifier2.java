@@ -19,7 +19,7 @@ package io.github.sparqlanything.engine.test;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.ext.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.graph.GraphFactory;
@@ -49,7 +49,7 @@ public class TestTriplifier2 implements Triplifier {
 		String content = IOUtils.toString(url, Charset.defaultCharset());
 
 		builder.add(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "g"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "s"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "p"),
-				NodeFactory.createLiteral(content));
+				NodeFactory.createLiteralString(content));
 	}
 
 	@Override

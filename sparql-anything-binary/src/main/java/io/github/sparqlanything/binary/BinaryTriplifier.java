@@ -28,7 +28,7 @@ import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.ext.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

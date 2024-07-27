@@ -17,6 +17,7 @@
 package io.github.sparqlanything.cli;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jena.sys.JenaSystem;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,7 +32,7 @@ public class TestIssue320 {
 		// No output form below
 //		ResultSetFormatter.outputAsCSV(System.err,true);
 //		ResultSetFormatter.outputAsCSV(System.err,false);
-
+		JenaSystem.init();
 		String str = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("./ask.sparql")), StandardCharsets.UTF_8);
 		String output = SPARQLAnything.callMain(new String[]{"-q", str, "-f", "text"});
 

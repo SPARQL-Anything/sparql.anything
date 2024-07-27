@@ -24,7 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.protocol.HTTP;
-import org.apache.jena.ext.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.riot.Lang;
@@ -108,7 +108,7 @@ public class RDFTriplifier implements Triplifier {
 			}
 			Lang l = getRDFLang(properties, url.toString(), contentType);
 
-			if (Sets.newHashSet(Lang.RDFXML, Lang.TTL, Lang.NT, Lang.JSONLD, Lang.JSONLD10, Lang.JSONLD11, Lang.RDFJSON).contains(l)) {
+			if (Sets.newHashSet(Lang.RDFXML, Lang.TTL, Lang.NT, Lang.JSONLD, Lang.JSONLD11, Lang.RDFJSON).contains(l)) {
 				Graph g = dg.getDefaultGraph();
 				RDFDataMgr.read(g, is, l);
 				dg.addGraph(NodeFactory.createURI(url.toString()), g);

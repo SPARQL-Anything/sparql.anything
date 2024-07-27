@@ -19,7 +19,7 @@ package io.github.sparqlanything.engine.test;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
-import org.apache.jena.ext.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
@@ -163,7 +163,7 @@ public class FunctionsTest {
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
 		String trueStr = result.next().get("true").asNode().toString();
-		Assert.assertEquals("\"true\"^^http://www.w3.org/2001/XMLSchema#boolean", trueStr);
+		Assert.assertEquals("\"true\"^^xsd:boolean", trueStr);
 	}
 
 	@Test
@@ -174,7 +174,7 @@ public class FunctionsTest {
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
 		String trueStr = result.next().get("true").asNode().toString();
-		Assert.assertEquals("\"true\"^^http://www.w3.org/2001/XMLSchema#boolean", trueStr);
+		Assert.assertEquals("\"true\"^^xsd:boolean", trueStr);
 	}
 
 	@Test

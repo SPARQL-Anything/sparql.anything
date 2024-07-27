@@ -37,7 +37,7 @@ public class TestTriplifier {
 
 	private static Graph getTestGraph() {
 		Graph gs1 = GraphFactory.createGraphMem();
-		gs1.add(new Triple(NodeFactory.createURI("http://example.org/a"), NodeFactory.createURI("http://example.org/b"),
+		gs1.add(Triple.create(NodeFactory.createURI("http://example.org/a"), NodeFactory.createURI("http://example.org/b"),
 				NodeFactory.createURI("http://example.org/c")));
 		return gs1;
 	}

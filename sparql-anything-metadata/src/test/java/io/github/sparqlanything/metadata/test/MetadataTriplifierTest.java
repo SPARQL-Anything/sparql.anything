@@ -29,7 +29,7 @@ public class MetadataTriplifierTest {
 //		try {
 //			DatasetGraph dg = bt.triplify(url, new Properties());
 //			Graph expectedGraph = GraphFactory.createGraphMem();
-//			expectedGraph.add(new Triple(NodeFactory.createBlankNode(), RDF.value.asNode(),
+//			expectedGraph.add(Triple.create(NodeFactory.createBlankNode(), RDF.value.asNode(),
 //					NodeFactory.createLiteral("dGhpcyBpcyBhIHRlc3Q=", XSDDatatype.XSDbase64Binary)));
 //			
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out,"TTL");

@@ -52,7 +52,7 @@ public class JSONTripleFilteringTest {
 		JSONTriplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		OpBGP bgp = new OpBGP();
-		bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"),
+		bgp.getPattern().add(Triple.create(new Node_Variable("a"), new Node_Variable("b"),
 				ResourceFactory.createPlainLiteral("Romance").asNode()));
 		DatasetGraph g1;
 		properties.setProperty(IRIArgument.LOCATION.toString(),
@@ -76,9 +76,9 @@ public class JSONTripleFilteringTest {
 		JSONTriplifier jt = new JSONTriplifier();
 		Properties properties = new Properties();
 		OpBGP bgp = new OpBGP();
-		bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"),
+		bgp.getPattern().add(Triple.create(new Node_Variable("a"), new Node_Variable("b"),
 				ResourceFactory.createPlainLiteral("Romance").asNode()));
-		bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"),
+		bgp.getPattern().add(Triple.create(new Node_Variable("a"), new Node_Variable("b"),
 				ResourceFactory.createPlainLiteral("Comedy").asNode()));
 		DatasetGraph g1;
 		properties.setProperty(IRIArgument.LOCATION.toString(),

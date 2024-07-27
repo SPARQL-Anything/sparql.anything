@@ -20,6 +20,7 @@ import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
@@ -50,10 +51,10 @@ public class Issue325Test {
 		logger.debug("{}", graph);
 
 		Iterator<Quad> iter = graph.find(null, null, RDF.li(1).asNode(),
-				NodeFactory.createLiteral("THIS_TEXT_IS_INSIDE_SUBJECT"));
+				NodeFactory.createLiteralString("THIS_TEXT_IS_INSIDE_SUBJECT"));
 		Assert.assertTrue(iter.hasNext());
 		Iterator<Quad> iter2 = graph.find(null, null, RDF.li(1).asNode(),
-				NodeFactory.createLiteral("THIS_TEXT_IS_OUTSIDE_SUBJECT"));
+				NodeFactory.createLiteralString("THIS_TEXT_IS_OUTSIDE_SUBJECT"));
 		Assert.assertTrue(iter2.hasNext());
 	}
 }

@@ -1,5 +1,5 @@
 #### build layer
-FROM maven:3.8.6-openjdk-11-slim as build
+FROM maven:3.8.5-openjdk-17-slim as build
 ARG GITHUB_REF
 ENV HOME=/app
 RUN mkdir -p $HOME

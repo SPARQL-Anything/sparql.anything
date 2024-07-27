@@ -17,6 +17,7 @@
 package io.github.sparqlanything.model.test;
 
 import io.github.sparqlanything.model.TripleFilteringFacadeXGraphBuilder;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Node_Variable;
@@ -35,134 +36,96 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 public class TripleFilteringFacadeXBuilderTest {
-    public static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilderTest.class);
+	public static final Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXBuilderTest.class);
 
-	private static Properties getProperties(){
+	/**
+	 * BGP, 1, {? ? L}
+	 */
+	@Test
+	public void bgp1() {
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(Triple.create(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
+
+		TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
+		Resource g = ResourceFactory.createResource("http://www.example.org/");
+		f.add(g.asNode(), ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+		f.add(g.asNode(), ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+	}
+
+	private static Properties getProperties() {
 		Properties p = new Properties();
 		p.put("location", "http://www.example.org/");
 		return p;
 	}
 
-    /**
-     * BGP, 1, {? ? L}
-     */
-    @Test
-    public void bgp1(){
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
+	/**
+	 * BGP, 1, {[] ? L}
+	 */
+	@Test
+	public void bgp2() {
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(Triple.create(Node_Variable.ANY, new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
-		Resource g = ResourceFactory.createResource("http://www.example.org/");
-        f.add(g.asNode(), ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-        f.add(g.asNode(),ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-    }
-
-    /**
-     * BGP, 1, {[] ? L}
-     */
-    @Test
-    public void bgp2(){
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(Node_Variable.ANY, new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
-
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
+		TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
-        f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-        f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-    }
+		f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+		f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+	}
 
-    /**
-     * BGP, 1, {[] P L}
-     */
-    @Test
-    public void bgp3(){
-        Property property = ResourceFactory.createProperty("http://sparql.xyz/facade-x/data/property");
+	/**
+	 * BGP, 1, {[] P L}
+	 */
+	@Test
+	public void bgp3() {
+		Property property = ResourceFactory.createProperty("http://sparql.xyz/facade-x/data/property");
 
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(Node_Variable.ANY, property.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(Triple.create(Node_Variable.ANY, property.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
+		TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
 		//
-        f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 0);
-        f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
-        Assert.assertTrue(f.getModel().size() == 0);
-        //
-        f.add(g, ResourceFactory.createResource().asNode(), property.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-        f.add(g, ResourceFactory.createResource().asNode(), property.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-    }
+		f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(0, f.getModel().size());
+		f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
+		Assert.assertEquals(0, f.getModel().size());
+		//
+		f.add(g, ResourceFactory.createResource().asNode(), property.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+		f.add(g, ResourceFactory.createResource().asNode(), property.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+	}
 
-    /**
-     * BGP, 2, {[] P L, [] P2 L}
-     */
-    @Test
-    public void bgp4(){
-        Property property1 = ResourceFactory.createProperty("http://sparql.xyz/facade-x/data/property1");
-        Property property2 = ResourceFactory.createProperty("http://sparql.xyz/facade-x/data/property2");
+	/**
+	 * BGP, 2, {[] P L, [] P2 L}
+	 */
+	@Test
+	public void bgp4() {
+		Property property1 = ResourceFactory.createProperty("http://sparql.xyz/facade-x/data/property1");
+		Property property2 = ResourceFactory.createProperty("http://sparql.xyz/facade-x/data/property2");
 
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(Node_Variable.ANY, property1.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
-        bgp.getPattern().add(new Triple(Node_Variable.ANY, property2.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(Triple.create(Node_Variable.ANY, property1.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
+		bgp.getPattern().add(Triple.create(Node_Variable.ANY, property2.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode()));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
+		TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
 		//
-        f.add(g, ResourceFactory.createResource().asNode(), property1.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-        f.add(g, ResourceFactory.createResource().asNode(), property2.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 2);
-    }
+		f.add(g, ResourceFactory.createResource().asNode(), property1.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+		f.add(g, ResourceFactory.createResource().asNode(), property2.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(2, f.getModel().size());
+	}
 
-    /**
-     * BGP, 2, {R1 P1 R3, R2 P2 R4}
-     */
-    @Test
-    public void bgp5(){
-        Node property1 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/property1");
-		Node property2 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/property2");
-		Node resource1 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource1");
-		Node resource2 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource2");
-		Node resource3 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource3");
-		Node resource4 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource4");
-
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(resource1, property1, resource3));
-        bgp.getPattern().add(new Triple(resource2, property2, resource4));
-
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
-		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
-		//
-        f.add(g,ResourceFactory.createResource().asNode(), property1, NodeFactory.createLiteral("Hello world"));
-        Assert.assertTrue(f.getModel().size() == 0);
-        f.add(g, NodeFactory.createBlankNode(), property2, NodeFactory.createLiteral("Hello world"));
-        Assert.assertTrue(f.getModel().size() == 0);
-        //
-        f.add(g, resource1, property1, resource3); // OK
-        Assert.assertTrue(f.getModel().size() == 1);
-        f.add(g, resource1, property1, resource2); // NOT OK
-        Assert.assertTrue(f.getModel().size() == 1);
-
-        f.add(g, resource2, property2, resource4); // OK
-        Assert.assertTrue(f.getModel().size() == 2);
-        f.add(g, resource2, property1, resource2); // NOT OK
-        f.add(g, resource2, property1, resource3); // NOT OK
-        f.add(g, resource2, property1, resource4); // NOT OK
-        f.add(g, resource1, property2, resource4); // NOT OK
-        Assert.assertTrue(f.getModel().size() == 2);
-    }
-
-    /**
-     * BGP, 3, {R1 P1 R3, R2 P2 R4, [] ? []}
-     */
-    @Test
-    public void bgp6(){
+	/**
+	 * BGP, 2, {R1 P1 R3, R2 P2 R4}
+	 */
+	@Test
+	public void bgp5() {
 		Node property1 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/property1");
 		Node property2 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/property2");
 		Node resource1 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource1");
@@ -170,56 +133,37 @@ public class TripleFilteringFacadeXBuilderTest {
 		Node resource3 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource3");
 		Node resource4 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource4");
 
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(resource1, property1, resource3));
-        bgp.getPattern().add(new Triple(resource2, property2, resource4));
-        bgp.getPattern().add(new Triple(Node_Variable.ANY, new Node_Variable("p"), Node_Variable.ANY));
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(Triple.create(resource1, property1, resource3));
+		bgp.getPattern().add(Triple.create(resource2, property2, resource4));
 
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
+		TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
-        //
-        f.add(g, NodeFactory.createBlankNode(), property1, NodeFactory.createLiteral("Hello world"));
-        Assert.assertTrue(f.getModel().size() == 1);
-        f.add(g, NodeFactory.createBlankNode(), property2, NodeFactory.createLiteral("Hello world"));
-        Assert.assertTrue(f.getModel().size() == 2);
-        //
-        f.add(g, resource1, property1, resource3); // OK
-        Assert.assertTrue(f.getModel().size() == 3);
-        f.add(g, resource1, property1, resource2); // OK
-        Assert.assertTrue(f.getModel().size() == 4);
+		//
+		f.add(g, ResourceFactory.createResource().asNode(), property1, NodeFactory.createLiteralDT("Hello world", XSDDatatype.XSDstring));
+		Assert.assertEquals(0, f.getModel().size());
+		f.add(g, NodeFactory.createBlankNode(), property2, NodeFactory.createLiteralDT("Hello world", XSDDatatype.XSDstring));
+		Assert.assertEquals(0, f.getModel().size());
+		//
+		f.add(g, resource1, property1, resource3); // OK
+		Assert.assertEquals(1, f.getModel().size());
+		f.add(g, resource1, property1, resource2); // NOT OK
+		Assert.assertEquals(1, f.getModel().size());
 
-        f.add(g, resource2, property2, resource4); // OK
-        Assert.assertTrue(f.getModel().size() == 5);
-        f.add(g, resource2, property1, resource2); // OK
-        f.add(g, resource2, property1, resource3); // OK
-        f.add(g, resource2, property1, resource4); // OK
-        f.add(g, resource1, property2, resource4); // OK
-        Assert.assertTrue(f.getModel().size() == 9);
-    }
+		f.add(g, resource2, property2, resource4); // OK
+		Assert.assertEquals(2, f.getModel().size());
+		f.add(g, resource2, property1, resource2); // NOT OK
+		f.add(g, resource2, property1, resource3); // NOT OK
+		f.add(g, resource2, property1, resource4); // NOT OK
+		f.add(g, resource1, property2, resource4); // NOT OK
+		Assert.assertEquals(2, f.getModel().size());
+	}
 
-    /**
-     * QP, 1, {? ? ? L}
-     */
-    @Test
-    public void qp1(){
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
-
-        OpQuadPattern qp = new OpQuadPattern(new Node_Variable("g"), bgp.getPattern());
-
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", qp, getProperties());
-		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
-        f.add(g, NodeFactory.createBlankNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-        f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-    }
-
-    /**
-     * QP, 1, {G1 {R1 P1 R3, R2 P2 R4, [] ? []}}
-     */
-    @Test
-    public void qp2(){
+	/**
+	 * BGP, 3, {R1 P1 R3, R2 P2 R4, [] ? []}
+	 */
+	@Test
+	public void bgp6() {
 		Node property1 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/property1");
 		Node property2 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/property2");
 		Node resource1 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource1");
@@ -227,32 +171,89 @@ public class TripleFilteringFacadeXBuilderTest {
 		Node resource3 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource3");
 		Node resource4 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource4");
 
-        OpBGP bgp = new OpBGP();
-        bgp.getPattern().add(new Triple(resource1, property1, resource3));
-        bgp.getPattern().add(new Triple(resource2, property2, resource4));
-        bgp.getPattern().add(new Triple(Node_Variable.ANY, new Node_Variable("p"), Node_Variable.ANY));
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(Triple.create(resource1, property1, resource3));
+		bgp.getPattern().add(Triple.create(resource2, property2, resource4));
+		bgp.getPattern().add(Triple.create(Node_Variable.ANY, new Node_Variable("p"), Node_Variable.ANY));
 
-        OpQuadPattern qp = new OpQuadPattern(NodeFactory.createURI("http://www.example.org/"), bgp.getPattern());
-
-        TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", qp, getProperties());
+		TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", bgp, getProperties());
 		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
-        //
-        f.add(g, ResourceFactory.createResource().asNode(), property1, ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 1);
-        f.add(g, ResourceFactory.createResource().asNode(), property2, ResourceFactory.createPlainLiteral("Hello world").asNode());
-        Assert.assertTrue(f.getModel().size() == 2);
-        //
-        f.add(g, resource1, property1, resource3); // OK
-        Assert.assertTrue(f.getModel().size() == 3);
-        f.add(g, resource1, property1, resource2); // OK
-        Assert.assertTrue(f.getModel().size() == 4);
+		//
+		f.add(g, NodeFactory.createBlankNode(), property1, NodeFactory.createLiteralDT("Hello world", XSDDatatype.XSDstring));
+		Assert.assertEquals(1, f.getModel().size());
+		f.add(g, NodeFactory.createBlankNode(), property2, NodeFactory.createLiteralDT("Hello world", XSDDatatype.XSDstring));
+		Assert.assertEquals(2, f.getModel().size());
+		//
+		f.add(g, resource1, property1, resource3); // OK
+		Assert.assertEquals(3, f.getModel().size());
+		f.add(g, resource1, property1, resource2); // OK
+		Assert.assertEquals(4, f.getModel().size());
 
-        f.add(g, resource2, property2, resource4); // OK
-        Assert.assertTrue(f.getModel().size() == 5);
-        f.add(g, resource2, property1, resource2); // OK
-        f.add(g, resource2, property1, resource3); // OK
-        f.add(g, resource2, property1, resource4); // OK
-        f.add(g, resource1, property2, resource4); // OK
-        Assert.assertTrue(f.getModel().size() == 9);
-    }
+		f.add(g, resource2, property2, resource4); // OK
+		Assert.assertEquals(5, f.getModel().size());
+		f.add(g, resource2, property1, resource2); // OK
+		f.add(g, resource2, property1, resource3); // OK
+		f.add(g, resource2, property1, resource4); // OK
+		f.add(g, resource1, property2, resource4); // OK
+		Assert.assertEquals(9, f.getModel().size());
+	}
+
+	/**
+	 * QP, 1, {? ? ? L}
+	 */
+	@Test
+	public void qp1() {
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(Triple.create(new Node_Variable("a"), new Node_Variable("b"), ResourceFactory.createPlainLiteral("Hello world").asNode()));
+
+		OpQuadPattern qp = new OpQuadPattern(new Node_Variable("g"), bgp.getPattern());
+
+		TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", qp, getProperties());
+		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
+		f.add(g, NodeFactory.createBlankNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+		f.add(g, ResourceFactory.createResource().asNode(), RDF.type.asNode(), ResourceFactory.createPlainLiteral("Hello world not!").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+	}
+
+	/**
+	 * QP, 1, {G1 {R1 P1 R3, R2 P2 R4, [] ? []}}
+	 */
+	@Test
+	public void qp2() {
+		Node property1 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/property1");
+		Node property2 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/property2");
+		Node resource1 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource1");
+		Node resource2 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource2");
+		Node resource3 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource3");
+		Node resource4 = NodeFactory.createURI("http://sparql.xyz/facade-x/data/resource4");
+
+		OpBGP bgp = new OpBGP();
+		bgp.getPattern().add(Triple.create(resource1, property1, resource3));
+		bgp.getPattern().add(Triple.create(resource2, property2, resource4));
+		bgp.getPattern().add(Triple.create(Node_Variable.ANY, new Node_Variable("p"), Node_Variable.ANY));
+
+		OpQuadPattern qp = new OpQuadPattern(NodeFactory.createURI("http://www.example.org/"), bgp.getPattern());
+
+		TripleFilteringFacadeXGraphBuilder f = new TripleFilteringFacadeXGraphBuilder("http://www.example.org/", qp, getProperties());
+		Node g = ResourceFactory.createResource("http://www.example.org/").asNode();
+		//
+		f.add(g, ResourceFactory.createResource().asNode(), property1, ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(1, f.getModel().size());
+		f.add(g, ResourceFactory.createResource().asNode(), property2, ResourceFactory.createPlainLiteral("Hello world").asNode());
+		Assert.assertEquals(2, f.getModel().size());
+		//
+		f.add(g, resource1, property1, resource3); // OK
+		Assert.assertEquals(3, f.getModel().size());
+		f.add(g, resource1, property1, resource2); // OK
+		Assert.assertEquals(4, f.getModel().size());
+
+		f.add(g, resource2, property2, resource4); // OK
+		Assert.assertEquals(5, f.getModel().size());
+		f.add(g, resource2, property1, resource2); // OK
+		f.add(g, resource2, property1, resource3); // OK
+		f.add(g, resource2, property1, resource4); // OK
+		f.add(g, resource1, property2, resource4); // OK
+		Assert.assertEquals(9, f.getModel().size());
+	}
 }

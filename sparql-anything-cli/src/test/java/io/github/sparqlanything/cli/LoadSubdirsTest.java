@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.cli;
 
+import org.apache.jena.sys.JenaSystem;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -25,6 +26,10 @@ import io.github.sparqlanything.model.HTTPHelper;
 
 public class LoadSubdirsTest {
 	public static final Logger L = LoggerFactory.getLogger(LoadSubdirsTest.class);
+
+	public LoadSubdirsTest() {
+		JenaSystem.init();
+	}
 
 	@Test
 	public void test() throws Exception {

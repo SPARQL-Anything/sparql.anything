@@ -22,12 +22,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.ext.com.google.common.collect.Sets;
-import org.apache.jena.riot.other.G;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,7 +122,7 @@ public class TextTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("text/plain");
+		return Sets.newHashSet();
 	}
 
 	@Override

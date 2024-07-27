@@ -19,6 +19,7 @@ import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.apache.any23.extractor.ExtractionContext;
 import org.apache.any23.writer.TripleHandlerException;
 import org.apache.any23.writer.TripleWriterHandler;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.BlankNodeId;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -64,11 +65,11 @@ public class MetadataWriter extends TripleWriterHandler {
 
 	public Node resolveValue(Value r) {
 		if (r instanceof BNode) {
-			return NodeFactory.createBlankNode(BlankNodeId.create(((BNode) r).getID()));
+			return NodeFactory.createBlankNode(((BNode) r).getID());
 		} else if (r instanceof IRI) {
 			return NodeFactory.createURI(r.stringValue());
 		} else {
-			return NodeFactory.createLiteral(r.stringValue());
+			return NodeFactory.createLiteralDT(r.stringValue(), XSDDatatype.XSDstring);
 		}
 	}
 

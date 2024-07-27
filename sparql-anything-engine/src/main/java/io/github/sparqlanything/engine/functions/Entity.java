@@ -17,6 +17,7 @@
 package io.github.sparqlanything.engine.functions;
 
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Node_Blank;
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase;
@@ -36,7 +37,7 @@ public class Entity extends FunctionBase implements FXFunction {
 			}else if(node.isLiteral()){
 				sb.append(node.asString());
 			}else if(node.isBlank()){
-				sb.append(node.getNode().getBlankNodeId());
+				sb.append(node.getNode().getBlankNodeLabel());
 			}else if(node.isIRI()){
 				if(isContainerMembershipProperty(node)){
 					sb.append(Integer.toString(getInt(node)));
