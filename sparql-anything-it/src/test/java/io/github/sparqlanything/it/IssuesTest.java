@@ -909,7 +909,7 @@ public class IssuesTest {
 		assertEquals(Sets.newHashSet("abc", "cde"), result);
 
 //		Graph g = GraphFactory.createGraphMem();
-//		g.add(NodeFactory.createBlankNode(), RDF.li(1).asNode(), NodeFactory.createLiteral("abc;cde"));
+//		g.add(NodeFactory.createBlankNode(), RDF.li(1).asNode(), NodeFactory.createLiteralString("abc;cde"));
 //		Query qq = QueryFactory.create("PREFIX apf: <http://jena.apache.org/ARQ/property#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?a { ?s rdf:_1 ?o . ?a apf:strSplit(?o \";\") }");
 //		System.out.println(qq.toString(Syntax.syntaxSPARQL_11));
 //		Op op = Algebra.compile(qq);

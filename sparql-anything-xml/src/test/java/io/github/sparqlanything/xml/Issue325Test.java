@@ -20,7 +20,6 @@ import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.TriplifierHTTPException;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
@@ -33,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Properties;
 
 public class Issue325Test {
@@ -43,7 +43,7 @@ public class Issue325Test {
 	public void test() throws TriplifierHTTPException, IOException {
 		Properties properties = new Properties();
 		URL xml1 = getClass().getClassLoader().getResource("./Issue325.xml");
-		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
+		properties.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(xml1).toString());
 		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(properties);
 		XMLTriplifier triplifier = new XMLTriplifier();
 		triplifier.triplify(properties, builder);

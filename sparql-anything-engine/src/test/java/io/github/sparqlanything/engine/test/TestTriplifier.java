@@ -29,11 +29,8 @@ import java.util.Set;
 
 public class TestTriplifier implements Triplifier {
 
-	public TestTriplifier() {
-	}
-
 	@Override
-	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder)  {
 //		return
 		DatasetGraph dg = TriplifierRegistryTest.createExampleGraph();
 		Iterator<Quad> quad = dg.find();

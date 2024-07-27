@@ -29,8 +29,8 @@ import java.util.Properties;
  */
 public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder {
 	private final Op op;
-	private OpComponentsAnalyser analyser;
-	private Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXGraphBuilder.class);
+	private final OpComponentsAnalyser analyser;
+	//private Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXGraphBuilder.class);
 	
 	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
 		super(properties);

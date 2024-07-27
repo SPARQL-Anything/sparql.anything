@@ -180,10 +180,10 @@ public class FolderTriplifierTest {
 //			Node n = NodeFactory.createURI(
 //					url.toString()+"#");
 //			expectedGraph.add(Triple.create(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
-//			expectedGraph.add(Triple.create(n, RDF.li(1).asNode(), NodeFactory.createLiteral(url + "#test.csv")));
-//			expectedGraph.add(Triple.create(n, RDF.li(2).asNode(), NodeFactory.createLiteral(url + "#test.json")));
-//			expectedGraph.add(Triple.create(n, RDF.li(3).asNode(), NodeFactory.createLiteral(url + "#test.xml")));
-//			expectedGraph.add(Triple.create(n, RDF.li(4).asNode(), NodeFactory.createLiteral(url + "#test.txt")));
+//			expectedGraph.add(Triple.create(n, RDF.li(1).asNode(), NodeFactory.createLiteralString(url + "#test.csv")));
+//			expectedGraph.add(Triple.create(n, RDF.li(2).asNode(), NodeFactory.createLiteralString(url + "#test.json")));
+//			expectedGraph.add(Triple.create(n, RDF.li(3).asNode(), NodeFactory.createLiteralString(url + "#test.xml")));
+//			expectedGraph.add(Triple.create(n, RDF.li(4).asNode(), NodeFactory.createLiteralString(url + "#test.txt")));
 //			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 //			assertTrue(dg.getGraph(NodeFactory.createURI(url.toString())).isIsomorphicWith(expectedGraph));
 //

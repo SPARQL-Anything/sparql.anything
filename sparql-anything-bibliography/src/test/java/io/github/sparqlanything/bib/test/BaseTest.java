@@ -59,7 +59,7 @@ public class BaseTest {
 			expected.add(n, RDF.li(1).asNode(), article);
 			expected.add(article, RDF.type.asNode(), NodeFactory.createURI(Triplifier.XYZ_NS + "article"));
 			expected.add(article, NodeFactory.createURI(Triplifier.XYZ_NS + "title"),
-					NodeFactory.createLiteral("Literate Programming"));
+					NodeFactory.createLiteralString("Literate Programming"));
 			assertTrue(g1.getDefaultGraph().isIsomorphicWith(expected));
 
 		} catch (IOException e1) {

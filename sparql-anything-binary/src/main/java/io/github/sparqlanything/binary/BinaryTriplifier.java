@@ -24,7 +24,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import io.github.sparqlanything.model.*;
-import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -41,7 +40,7 @@ public class BinaryTriplifier implements Triplifier {
 	@Option(description = "The encoding to use for generating the representation of the file.", validValues = "BASE64")
 	public static final IRIArgument ENCODING = new IRIArgument("bin.encoding", Encoding.BASE64.name());
 
-	public static enum Encoding {
+	public enum Encoding {
 		BASE64
 	}
 

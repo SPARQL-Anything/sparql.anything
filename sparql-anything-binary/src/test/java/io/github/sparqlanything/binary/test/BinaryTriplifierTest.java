@@ -59,7 +59,7 @@ public class BinaryTriplifierTest {
 			Node n = NodeFactory.createBlankNode();
 			expectedGraph.add(Triple.create(n,RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(Triple.create(n, RDF.li(1).asNode(),
-					NodeFactory.createLiteral("dGhpcyBpcyBhIHRlc3Q=", XSDDatatype.XSDbase64Binary)));
+					NodeFactory.createLiteralDT("dGhpcyBpcyBhIHRlc3Q=", XSDDatatype.XSDbase64Binary)));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 		} catch (IOException e) {

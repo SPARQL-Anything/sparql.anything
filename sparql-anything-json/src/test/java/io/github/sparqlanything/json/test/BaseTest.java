@@ -64,7 +64,7 @@ public class BaseTest {
 //			RDFDataMgr.write(System.out, g1, RDFFormat.TRIG);
 			Graph expected = GraphFactory.createDefaultGraph();
 			Node n = NodeFactory.createBlankNode();
-			expected.add(n, NodeFactory.createURI(Triplifier.XYZ_NS + "a"), NodeFactory.createLiteral("b"));
+			expected.add(n, NodeFactory.createURI(Triplifier.XYZ_NS + "a"), NodeFactory.createLiteralString("b"));
 			expected.add(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
 			
 			assertTrue(g1.getDefaultGraph().isIsomorphicWith(expected));

@@ -20,7 +20,6 @@ import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -99,7 +98,7 @@ public class DocxTriplifier implements Triplifier {
 					sb.append("\n");
 				}
 				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count,
-						NodeFactory.createLiteral(sb.toString(), XSDDatatype.XSDstring));
+						NodeFactory.createLiteralString(sb.toString()));
 				count++;
 			}
 
