@@ -1,0 +1,90 @@
+
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
+
+<http://www.example.org/document/Comment_1/CommentId>
+        rdf:type  xyz:CommentId;
+        rdf:_1    "1" .
+
+<http://www.example.org/document/Comment_1/CommentText>
+        rdf:type  xyz:CommentText;
+        rdf:_1    "This is another comment" .
+
+<http://www.example.org/document/Comment_1/Author>
+        rdf:type  xyz:CommentAuthor;
+        rdf:_1    "Luigi Asprino" .
+
+<http://www.example.org/document/Comment_1>
+        rdf:type  xyz:Comment;
+        rdf:_1    <http://www.example.org/document/Comment_1/Author>;
+        rdf:_2    <http://www.example.org/document/Comment_1/CommentText>;
+        rdf:_3    <http://www.example.org/document/Comment_1/CommentId> .
+
+<http://www.example.org/document/Comment_0/CommentId>
+        rdf:type  xyz:CommentId;
+        rdf:_1    "0" .
+
+<http://www.example.org/document/Comment_0/CommentText>
+        rdf:type  xyz:CommentText;
+        rdf:_1    "This is a comment" .
+
+<http://www.example.org/document/Comment_0/Author>
+        rdf:type  xyz:CommentAuthor;
+        rdf:_1    "Luigi Asprino" .
+
+<http://www.example.org/document/Comment_0>
+        rdf:type  xyz:Comment;
+        rdf:_1    <http://www.example.org/document/Comment_0/Author>;
+        rdf:_2    <http://www.example.org/document/Comment_0/CommentText>;
+        rdf:_3    <http://www.example.org/document/Comment_0/CommentId> .
+
+<http://www.example.org/document/paragraph/7>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    "Paragraph3" .
+
+<http://www.example.org/document/Heading2/6>
+        rdf:type  xyz:Heading2;
+        rdf:_1    "Title 2" .
+
+<http://www.example.org/document/ListParagraph/5>
+        rdf:type  xyz:ListParagraph;
+        rdf:_1    "Bullet2" .
+
+<http://www.example.org/document/ListParagraph/4>
+        rdf:type  xyz:ListParagraph;
+        rdf:_1    "Bullet1 " .
+
+<http://www.example.org/document/paragraph/3>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    "Paragraph2";
+        rdf:_2    <http://www.example.org/document/Comment_1> .
+
+<http://www.example.org/document/paragraph/2>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    "Paragraph1";
+        rdf:_2    <http://www.example.org/document/Comment_0> .
+
+<http://www.example.org/document/Heading1/1>
+        rdf:type  xyz:Heading1;
+        rdf:_1    "Title 1" .
+
+eg:document  rdf:type  xyz:Document , fx:root;
+        rdf:_1    <http://www.example.org/document/Heading1/1>;
+        rdf:_2    <http://www.example.org/document/paragraph/2>;
+        rdf:_3    <http://www.example.org/document/paragraph/3>;
+        rdf:_4    <http://www.example.org/document/ListParagraph/4>;
+        rdf:_5    <http://www.example.org/document/ListParagraph/5>;
+        rdf:_6    <http://www.example.org/document/Heading2/6>;
+        rdf:_7    <http://www.example.org/document/paragraph/7> .
+
