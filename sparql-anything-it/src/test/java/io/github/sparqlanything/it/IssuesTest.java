@@ -931,13 +931,13 @@ public class IssuesTest {
 	@Ignore
 	@Test
 	public void testIssue478() throws URISyntaxException, IOException {
-		executeTest("issues/issue478.sparql", "issues/issue 478.xls", false, false, false);
-		executeTest("issues/issue478-2.sparql", "issues/issue 478.xls", false, false, false);
+		executeTest("issues/issue478.sparql", "issues/issue 478.xls", false, false, false, false);
+		executeTest("issues/issue478-2.sparql", "issues/issue 478.xls", false, false, false, false);
 	}
 
 	@Test
 	public void testIssue482() throws URISyntaxException, IOException {
-		QueryExecution qExec = executeTest("issues/issue482.sparql", "issues/issue482.xlsx", false, false, false);
+		QueryExecution qExec = executeTest("issues/issue482.sparql", "issues/issue482.xlsx", false, false, false, false);
 		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Rome"));
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(new Date(1716933600000L));
@@ -947,10 +947,33 @@ public class IssuesTest {
 		assertFalse(rs.hasNext());
 	}
 
-	private QueryExecution executeTest(String queryPath, String resourcePath, boolean printQueryString, boolean printFormattedQuery, boolean printResults) throws IOException, URISyntaxException {
+	@Test
+	public void testIssue429() throws URISyntaxException, IOException {
+		QueryExecution qExec = executeTest("issues/issue429.sparql", "issues/issue429.pptx", false, false, false, false);
+		ResultSet rs = qExec.execSelect();
+		Set<Integer> slideNumbers = new HashSet<>();
+		assertTrue(rs.hasNext());
+		while(rs.hasNext()){
+			QuerySolution qs = rs.next();
+			slideNumbers.add(qs.get("slideNumber").asLiteral().getInt());
+		}
+		Assert.assertTrue(slideNumbers.contains(1));
+
+//		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Rome"));
+//		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+//		c.setTime(new Date(1716933600000L));
+//		ResultSet rs = qExec.execSelect();
+//		assertTrue(rs.hasNext());
+//		assertEquals(DatatypeConverter.printDateTime(c),rs.next().get("o").asLiteral().getString());
+//		assertFalse(rs.hasNext());
+	}
+
+	private QueryExecution executeTest(String queryPath, String resourcePath, boolean printQueryString, boolean printFormattedQuery, boolean printResults, boolean constructResource) throws IOException, URISyntaxException {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
+		if(constructResource)
+			queryPath = "constructResource.sparql";
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(queryPath)).toURI(), StandardCharsets.UTF_8);
 		String loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(resourcePath)).toURI()).toUri().toString();
 		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
@@ -958,6 +981,10 @@ public class IssuesTest {
 			System.out.println(queryStr);
 		}
 		query = QueryFactory.create(queryStr);
+
+		if (printFormattedQuery) {
+			System.out.println(query.toString(Syntax.defaultSyntax));
+		}
 
 		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
 		if (printResults) {
@@ -968,9 +995,6 @@ public class IssuesTest {
 			} else {
 				qExec1.execConstruct().write(System.out, "TTL");
 			}
-		}
-		if (printFormattedQuery) {
-			System.out.println(query.toString(Syntax.defaultSyntax));
 		}
 
 		return QueryExecutionFactory.create(query, ds);

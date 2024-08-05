@@ -85,22 +85,49 @@ public class PptxTriplifier implements Triplifier {
 		// Fill slots of the slide with shapes
 		AtomicInteger slideSlotNumber = new AtomicInteger(1);
 		for (XSLFTextShape shape : slide.getPlaceholders()) {
+			addTextShape(builder, dataSourceId, slideId, slideSlotNumber, shape);
+		}
+
+		for (XSLFShape shape : slide.getShapes()) {
 			addShape(builder, dataSourceId, slideId, slideSlotNumber, shape);
 		}
 	}
 
-	private static void addShape(FacadeXGraphBuilder builder, String dataSourceId, String slideId, AtomicInteger slideSlotNumber, XSLFTextShape shape) {
+	private static void addTextShape(FacadeXGraphBuilder builder, String dataSourceId, String slideId, AtomicInteger slideSlotNumber, XSLFTextShape shape) {
 		// Create a container for the shape
 		String shapeId = slideId + "/" + shape.getTextType().toString() + "_" + slideSlotNumber.get();
 		builder.addType(dataSourceId, shapeId, shape.getTextType().toString());
 		builder.addContainer(dataSourceId, slideId, slideSlotNumber.get(), shapeId);
 		slideSlotNumber.incrementAndGet();
 
+		addTextParagraphs(builder, dataSourceId, shape.getTextParagraphs(), shapeId);
+	}
+
+	private static void addTextParagraphs(FacadeXGraphBuilder builder, String dataSourceId, List<XSLFTextParagraph> textparagraphs, String shapeId) {
 		// Fill slots of the shape with paragraphs
 		AtomicInteger shapeSlotNumber = new AtomicInteger(1);
-		for (XSLFTextParagraph paragraph : shape.getTextParagraphs()) {
+		for (XSLFTextParagraph paragraph : textparagraphs) {
 			addParagraph(builder, dataSourceId, shapeId, shapeSlotNumber, paragraph);
 		}
+	}
+
+	private static void addShape(FacadeXGraphBuilder builder, String dataSourceId, String slideId, AtomicInteger slideSlotNumber, XSLFShape shape) {
+
+		if(shape.getClass().equals(XSLFTextBox.class)){
+
+			XSLFTextBox textBox = (XSLFTextBox) shape;
+
+			// Create a container for the shape
+			String shapeId = slideId + "/TextBox_" + textBox.getShapeId() + "_" + slideSlotNumber.get();
+			builder.addType(dataSourceId, shapeId, "TextBox");
+			builder.addContainer(dataSourceId, slideId, slideSlotNumber.get(), shapeId);
+			slideSlotNumber.incrementAndGet();
+
+			addTextParagraphs(builder, dataSourceId, textBox.getTextParagraphs(), shapeId);
+		} else {
+			log.warn("Shape type ({}) not supported!", shape.getClass());
+		}
+
 	}
 
 	private static void addParagraph(FacadeXGraphBuilder builder, String dataSourceId, String shapeId, AtomicInteger shapeSlotNumber, XSLFTextParagraph paragraph) {

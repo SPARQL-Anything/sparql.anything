@@ -1,0 +1,296 @@
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_12/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Performance optimisation" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_12/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_12/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_12>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_12/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_11/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Other SPARQL forms" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_11/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_11/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_11>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_11/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_10/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Default and named graphs" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_10/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_10/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_10>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_10/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_9/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Federated queries" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_9/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_9/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_9>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_9/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_8/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Querying Wikidata" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_8/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_8/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_8>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_8/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_7/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Property paths" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_7/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_7/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_7>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_7/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_6/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Negated, optional, and combined" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_6/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_6/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_6>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_6/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_5/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "String functions" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_5/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_5/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_5>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_5/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_4/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Counting and binding" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_4/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_4/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_4>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_4/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3/TextRun_2/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    " patterns" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3/TextRun_2>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3/TextRun_2/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Graph" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3/TextRun_1>;
+        rdf:_2    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3/TextRun_2> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_2/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "SPARQL language and protocol" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_2/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_2/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_2>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_2/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "RDF (recap)" .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/CONTENT_2>
+        rdf:type  xyz:CONTENT;
+        rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_1>;
+        rdf:_10   <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_10>;
+        rdf:_11   <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_11>;
+        rdf:_12   <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_12>;
+        rdf:_2    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_2>;
+        rdf:_3    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_3>;
+        rdf:_4    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_4>;
+        rdf:_5    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_5>;
+        rdf:_6    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_6>;
+        rdf:_7    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_7>;
+        rdf:_8    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_8>;
+        rdf:_9    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_9> .
+
+<http://www.example.org/document/Slide_2/TITLE_1/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Journey" .
+
+<http://www.example.org/document/Slide_2/TITLE_1/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_2/TITLE_1/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_2/TITLE_1/Paragraph_1>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_2/TITLE_1/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Slide_2/TITLE_1>
+        rdf:type  xyz:TITLE;
+        rdf:_1    <http://www.example.org/document/Slide_2/TITLE_1/Paragraph_1> .
+
+<http://www.example.org/document/Slide_2>
+        rdf:type  xyz:Slide;
+        rdf:_1    <http://www.example.org/document/Slide_2/TITLE_1>;
+        rdf:_2    <http://www.example.org/document/Slide_2/CONTENT_2> .
+
+<http://www.example.org/document/Slide_1/TextBox_3_5/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "v.IB.20231117.2 " .
+
+<http://www.example.org/document/Slide_1/TextBox_3_5/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_3_5/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_1/TextBox_3_5/Paragraph_1>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_3_5/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_3_5>
+        rdf:type  xyz:TextBox;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_3_5/Paragraph_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_4_4/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "Hands-on training course on" .
+
+<http://www.example.org/document/Slide_1/TextBox_4_4/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_4_4/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_1/TextBox_4_4/Paragraph_1>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_4_4/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_4_4>
+        rdf:type  xyz:TextBox;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_4_4/Paragraph_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_34_3/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "ivo@velitchkov.eu" .
+
+<http://www.example.org/document/Slide_1/TextBox_34_3/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_34_3/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_1/TextBox_34_3/Paragraph_1>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_34_3/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_34_3>
+        rdf:type  xyz:TextBox;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_34_3/Paragraph_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_2_2/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "2023" .
+
+<http://www.example.org/document/Slide_1/TextBox_2_2/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_2_2/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_1/TextBox_2_2/Paragraph_1>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_2_2/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_2_2>
+        rdf:type  xyz:TextBox;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_2_2/Paragraph_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_11_1/Paragraph_1/TextRun_1/Text>
+        rdf:type  xyz:Text;
+        rdf:_1    "SPARQL" .
+
+<http://www.example.org/document/Slide_1/TextBox_11_1/Paragraph_1/TextRun_1>
+        rdf:type  xyz:TextRun;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_11_1/Paragraph_1/TextRun_1/Text> .
+
+<http://www.example.org/document/Slide_1/TextBox_11_1/Paragraph_1>
+        rdf:type  xyz:Paragraph;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_11_1/Paragraph_1/TextRun_1> .
+
+<http://www.example.org/document/Slide_1/TextBox_11_1>
+        rdf:type  xyz:TextBox;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_11_1/Paragraph_1> .
+
+<http://www.example.org/document/Slide_1>
+        rdf:type  xyz:Slide;
+        rdf:_1    <http://www.example.org/document/Slide_1/TextBox_11_1>;
+        rdf:_2    <http://www.example.org/document/Slide_1/TextBox_2_2>;
+        rdf:_3    <http://www.example.org/document/Slide_1/TextBox_34_3>;
+        rdf:_4    <http://www.example.org/document/Slide_1/TextBox_4_4>;
+        rdf:_5    <http://www.example.org/document/Slide_1/TextBox_3_5> .
+
+eg:document  rdf:type  xyz:Presentation , fx:root;
+        rdf:_1    <http://www.example.org/document/Slide_1>;
+        rdf:_2    <http://www.example.org/document/Slide_2> .
+
+
