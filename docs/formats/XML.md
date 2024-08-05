@@ -70,25 +70,25 @@ WHERE
 ### Facade-X RDF
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root , <http://www.example.org#Element> ;
-  rdf:_1    [ rdf:type  <http://www.example.org#someThing> ;
+[ rdf:type  fx:root , <http://www.example.org#Element>;
+  rdf:_1    [ rdf:type  <http://www.example.org#someThing>;
               rdf:_1    "Hallo world"
-            ] ;
-  rdf:_2    [ rdf:type                      <http://www.example.org#someThingElse> ;
+            ];
+  rdf:_2    [ rdf:type                      <http://www.example.org#someThingElse>;
               <http://www.example.org#key>  "0.1"
             ]
 ] .
@@ -170,70 +170,70 @@ WHERE
 ###### Result
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
-
-<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/1:name>
-        rdf:type  xyz:name ;
-        rdf:_1    "Belgian Waffles" .
-
-<https://sparql-anything.cc/examples/simple-menu.xml#>
-        rdf:type  fx:root ;
-        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food> ;
-        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/4:calories>
-        rdf:type  xyz:calories ;
+        rdf:type  xyz:calories;
         rdf:_1    "900" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/2:price>
-        rdf:type  xyz:price ;
-        rdf:_1    "$5.95" .
-
 <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/3:desc>
-        rdf:type  xyz:desc ;
+        rdf:type  xyz:desc;
         rdf:_1    "Light Belgian waffles covered with strawberries and whipped cream" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/1:food>
-        rdf:type  xyz:food ;
-        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/1:name> ;
-        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/2:price> ;
-        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/3:desc> ;
-        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/4:calories> .
-
 <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/2:price>
-        rdf:type  xyz:price ;
+        rdf:type  xyz:price;
         rdf:_1    "$7.95" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/2:food>
-        rdf:type  xyz:food ;
-        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/1:name> ;
-        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/2:price> ;
-        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/3:desc> ;
-        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/4:calories> .
-
 <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/1:name>
-        rdf:type  xyz:name ;
+        rdf:type  xyz:name;
         rdf:_1    "Strawberry Belgian Waffles" .
 
+<https://sparql-anything.cc/examples/simple-menu.xml#/2:food>
+        rdf:type  xyz:food;
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/1:name>;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/2:price>;
+        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/3:desc>;
+        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/4:calories> .
+
 <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/4:calories>
-        rdf:type  xyz:calories ;
+        rdf:type  xyz:calories;
         rdf:_1    "650" .
 
 <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/3:desc>
-        rdf:type  xyz:desc ;
+        rdf:type  xyz:desc;
         rdf:_1    "Two of our famous Belgian Waffles with plenty of real maple syrup" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/2:price>
+        rdf:type  xyz:price;
+        rdf:_1    "$5.95" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/1:name>
+        rdf:type  xyz:name;
+        rdf:_1    "Belgian Waffles" .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#/1:food>
+        rdf:type  xyz:food;
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/1:name>;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/2:price>;
+        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/3:desc>;
+        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/4:calories> .
+
+<https://sparql-anything.cc/examples/simple-menu.xml#>
+        rdf:type  fx:root;
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food>;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food> .
 
 ```
 

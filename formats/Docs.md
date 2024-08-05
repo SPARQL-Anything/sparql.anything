@@ -2,7 +2,7 @@
 
 # Docs
 
-A word processing document is any text-based document compiled using word processor software. We can interpret a document (compiled with a Word processor) as a sequence of blocks (e.g. paragraphs, lists, headings, code blocks). Some blocks (e.g. list items) contain other blocks, whereas others contain inline contents (e.g. links, images etc.). A document can be represented as a list of typed containers. In fact, blocks can be specified as typed containers, where the type denotes the kind of block (e.g. heading, paragraph, emphasised text, link, image etc.); lists are needed for specifying the sequence of the blocks. Additional attributes such as the depth of the header or the type of list (bullets, numbers, etc...) can be also supported, relying on the key-value structure.
+A word processing document is any text-based document compiled using word processor software. We can interpret a document (compiled with a Word processor) as a sequence of blocks (e.g. paragraphs, lists, headings, code blocks). Some blocks (e.g. list items) contain other blocks, whereas others contain inline contents (e.g. links, images etc.). A document can be represented as a list of typed containers. In fact, blocks can be specified as typed containers, where the type denotes the kind of block (e.g. heading, paragraph, emphasised text, link, image etc.); lists are needed for specifying the sequence of the blocks. Additional attributes such as the depth of the header or the type of list (bullets, numbers, etc...) can be also supported, relying on the key-value structure. Comments are interpreted as containers with three slots containing the id, the author and the text of the comment. Comment Containers are attached to the paragraph the comment refers to.
 
 ## Extensions
 
@@ -46,49 +46,49 @@ WHERE
 ### Facade-X RDF
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root , xyz:Document ;
-  rdf:_1    [ rdf:type  xyz:Heading1 ;
+[ rdf:type  fx:root , xyz:Document;
+  rdf:_1    [ rdf:type  xyz:Heading1;
               rdf:_1    "Title 1"
-            ] ;
-  rdf:_2    [ rdf:type  xyz:Paragraph ;
+            ];
+  rdf:_2    [ rdf:type  xyz:Paragraph;
               rdf:_1    "Paragraph1"
-            ] ;
-  rdf:_3    [ rdf:type  xyz:Paragraph ;
+            ];
+  rdf:_3    [ rdf:type  xyz:Paragraph;
               rdf:_1    "Paragraph2"
-            ] ;
-  rdf:_4    [ rdf:type  xyz:Heading2 ;
+            ];
+  rdf:_4    [ rdf:type  xyz:Heading2;
               rdf:_1    "Title 2"
-            ] ;
-  rdf:_5    [ rdf:type  xyz:Paragraph ;
+            ];
+  rdf:_5    [ rdf:type  xyz:Paragraph;
               rdf:_1    "Paragraph3"
-            ] ;
-  rdf:_6    [ rdf:type  xyz:Paragraph ;
+            ];
+  rdf:_6    [ rdf:type  xyz:Paragraph;
               rdf:_1    ""
-            ] ;
-  rdf:_7    [ rdf:_1  [ rdf:_1  "A" ;
-                        rdf:_2  "B" ;
+            ];
+  rdf:_7    [ rdf:_1  [ rdf:_1  "A";
+                        rdf:_2  "B";
                         rdf:_3  "C"
-                      ] ;
-              rdf:_2  [ rdf:_1  "A1" ;
-                        rdf:_2  "B1" ;
+                      ];
+              rdf:_2  [ rdf:_1  "A1";
+                        rdf:_2  "B1";
                         rdf:_3  "C1"
-                      ] ;
-              rdf:_3  [ rdf:_1  "A2" ;
-                        rdf:_2  "B2" ;
+                      ];
+              rdf:_3  [ rdf:_1  "A2";
+                        rdf:_2  "B2";
                         rdf:_3  "C2"
                       ]
             ]
@@ -147,32 +147,32 @@ WHERE
 ###### Result
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  xyz:Document , fx:root ;
-  rdf:_1    "Title 1\nParagraph1\nParagraph2\nTitle 2\nParagraph3\n\n" ;
-  rdf:_2    [ rdf:_1  [ rdf:_1  "A" ;
-                        rdf:_2  "B" ;
+[ rdf:type  xyz:Document , fx:root;
+  rdf:_1    "Title 1\nParagraph1\nParagraph2\nTitle 2\nParagraph3\n\n";
+  rdf:_2    [ rdf:_1  [ rdf:_1  "A";
+                        rdf:_2  "B";
                         rdf:_3  "C"
-                      ] ;
-              rdf:_2  [ rdf:_1  "A1" ;
-                        rdf:_2  "B1" ;
+                      ];
+              rdf:_2  [ rdf:_1  "A1";
+                        rdf:_2  "B1";
                         rdf:_3  "C1"
-                      ] ;
-              rdf:_3  [ rdf:_1  "A2" ;
-                        rdf:_2  "B2" ;
+                      ];
+              rdf:_3  [ rdf:_1  "A2";
+                        rdf:_2  "B2";
                         rdf:_3  "C2"
                       ]
             ]
@@ -223,45 +223,45 @@ WHERE
 ###### Result
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  xyz:Document , fx:root ;
-  rdf:_1    [ rdf:type  xyz:Heading1 ;
+[ rdf:type  xyz:Document , fx:root;
+  rdf:_1    [ rdf:type  xyz:Heading1;
               rdf:_1    "Title 1"
-            ] ;
-  rdf:_2    [ rdf:type  xyz:Paragraph ;
+            ];
+  rdf:_2    [ rdf:type  xyz:Paragraph;
               rdf:_1    "Paragraph1"
-            ] ;
-  rdf:_3    [ rdf:type  xyz:Paragraph ;
+            ];
+  rdf:_3    [ rdf:type  xyz:Paragraph;
               rdf:_1    "Paragraph2"
-            ] ;
-  rdf:_4    [ rdf:type  xyz:Heading2 ;
+            ];
+  rdf:_4    [ rdf:type  xyz:Heading2;
               rdf:_1    "Title 2"
-            ] ;
-  rdf:_5    [ rdf:type  xyz:Paragraph ;
+            ];
+  rdf:_5    [ rdf:type  xyz:Paragraph;
               rdf:_1    "Paragraph3"
-            ] ;
-  rdf:_6    [ rdf:type  xyz:Paragraph ;
+            ];
+  rdf:_6    [ rdf:type  xyz:Paragraph;
               rdf:_1    ""
-            ] ;
-  rdf:_7    [ rdf:_1  [ xyz:A   "A1" ;
-                        xyz:B   "B1" ;
+            ];
+  rdf:_7    [ rdf:_1  [ xyz:A   "A1";
+                        xyz:B   "B1";
                         xyz:C   "C1"
-                      ] ;
-              rdf:_2  [ xyz:A   "A2" ;
-                        xyz:B   "B2" ;
+                      ];
+              rdf:_2  [ xyz:A   "A2";
+                        xyz:B   "B2";
                         xyz:C   "C2"
                       ]
             ]

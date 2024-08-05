@@ -68,34 +68,34 @@ WHERE
 ### Facade-X RDF
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type          fx:root ;
-  xyz:another-key   [ rdf:_1  [ xyz:name     "john" ;
+[ rdf:type          fx:root;
+  xyz:another-key   [ rdf:_1  [ xyz:name     "john";
                                 xyz:surname  "smith"
                               ]
-                    ] ;
-  xyz:boolean       true ;
-  xyz:float         "0.1"^^xsd:double ;
-  xyz:key           "value" ;
+                    ];
+  xyz:boolean       true;
+  xyz:float         "0.1"^^xsd:double;
+  xyz:key           "value";
   xyz:nested-array  [ rdf:_1  [ xyz:nested-array  [ rdf:_1  [ <http://sparql.xyz/facade-x/data/nested%3Akey>
                                                                       "Value with spaces" ]
                                                   ]
                               ]
-                    ] ;
-  xyz:two-values    [ rdf:_1  "1"^^xsd:int ;
+                    ];
+  xyz:two-values    [ rdf:_1  "1"^^xsd:int;
                       rdf:_2  "2"
                     ]
 ] .

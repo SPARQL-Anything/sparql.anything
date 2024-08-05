@@ -1,8 +1,6 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Java 11](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java11.yml)
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java14.yml)
-[![Java 14](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
+[![Java 17](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
 [![CodeQL](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml/badge.svg?branch=v1.0-DEV)](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml)
 [![How to](https://img.shields.io/badge/How%20to-use-green.svg)](#usage)
 [![How to](https://img.shields.io/badge/How%20to-join-blue.svg)](https://forms.gle/t1paTLz7jVu3RYnu8)
@@ -415,6 +413,8 @@ the [Apache Jena documentation](https://jena.apache.org/documentation/query/libr
 ## Usage
 
 SPARQL Anything is available as Java Library, Command Line Interface, Web Application Server, and also Python library.
+
+*Note*: as of version 1.0.0, SPARQL Anything requires Java 17+.
 
 ### Command Line Interface (CLI)
 

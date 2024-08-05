@@ -63,41 +63,41 @@ WHERE
 ### Facade-X RDF
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type          fx:root , xhtml:html ;
-  rdf:_1            [ rdf:type          xhtml:head ;
-                      rdf:_1            [ rdf:type          xhtml:title ;
-                                          rdf:_1            "Hello world!" ;
-                                          whatwg:innerHTML  "Hello world!" ;
+[ rdf:type          fx:root , xhtml:html;
+  rdf:_1            [ rdf:type          xhtml:head;
+                      rdf:_1            [ rdf:type          xhtml:title;
+                                          rdf:_1            "Hello world!";
+                                          whatwg:innerHTML  "Hello world!";
                                           whatwg:innerText  "Hello world!"
-                                        ] ;
-                      whatwg:innerHTML  "<title>Hello world!</title>" ;
+                                        ];
+                      whatwg:innerHTML  "<title>Hello world!</title>";
                       whatwg:innerText  "Hello world!"
-                    ] ;
-  rdf:_2            [ rdf:type          xhtml:body ;
-                      rdf:_1            [ rdf:type          xhtml:p ;
-                                          rdf:_1            "Hello world" ;
-                                          xhtml:class       "paragraph" ;
-                                          whatwg:innerHTML  "Hello world" ;
+                    ];
+  rdf:_2            [ rdf:type          xhtml:body;
+                      rdf:_1            [ rdf:type          xhtml:p;
+                                          rdf:_1            "Hello world";
+                                          xhtml:class       "paragraph";
+                                          whatwg:innerHTML  "Hello world";
                                           whatwg:innerText  "Hello world"
-                                        ] ;
-                      whatwg:innerHTML  "<p class=\"paragraph\">Hello world</p>" ;
+                                        ];
+                      whatwg:innerHTML  "<p class=\"paragraph\">Hello world</p>";
                       whatwg:innerText  "Hello world"
-                    ] ;
-  whatwg:innerHTML  "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <p class=\"paragraph\">Hello world</p>\n</body>" ;
+                    ];
+  whatwg:innerHTML  "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <p class=\"paragraph\">Hello world</p>\n</body>";
   whatwg:innerText  "Hello world! Hello world"
 ] .
 
@@ -253,52 +253,52 @@ WHERE
 ###### Result
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
-
-[ rdf:type          fx:root , xhtml:html ;
-  rdf:_1            [ rdf:type  xhtml:head ] ;
-  rdf:_2            [ rdf:type          xhtml:body ;
-                      rdf:_1            [ rdf:type          xhtml:div ;
-                                          rdf:_1            [ rdf:type          xhtml:h1 ;
-                                                              rdf:_1            "Avatar" ;
-                                                              xhtml:itemprop    "name" ;
-                                                              whatwg:innerHTML  "Avatar" ;
-                                                              whatwg:innerText  "Avatar"
-                                                            ] ;
-                                          rdf:_2            [ rdf:type          xhtml:span ;
-                                                              rdf:_1            "Director: James Cameron (born August 16, 1954)" ;
-                                                              whatwg:innerHTML  "Director: James Cameron (born August 16, 1954)" ;
-                                                              whatwg:innerText  "Director: James Cameron (born August 16, 1954)"
-                                                            ] ;
-                                          xhtml:itemscope   "" ;
-                                          xhtml:itemtype    "https://schema.org/Movie" ;
-                                          whatwg:innerHTML  "<h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>" ;
-                                          whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
-                                        ] ;
-                      whatwg:innerHTML  "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n</div>" ;
-                      whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
-                    ] ;
-  whatwg:innerHTML  "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>" ;
-  whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
-] .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 <https://sparql-anything.cc/examples/Microdata1.html>
         <http://www.w3.org/1999/xhtml/microdata#item>
-                [ rdf:type                   <https://schema.org/Movie> ;
+                [ rdf:type                   <https://schema.org/Movie>;
                   <https://schema.org/name>  "Avatar"
                 ] .
+
+[ rdf:type          fx:root , xhtml:html;
+  rdf:_1            [ rdf:type  xhtml:head ];
+  rdf:_2            [ rdf:type          xhtml:body;
+                      rdf:_1            [ rdf:type          xhtml:div;
+                                          rdf:_1            [ rdf:type          xhtml:h1;
+                                                              rdf:_1            "Avatar";
+                                                              xhtml:itemprop    "name";
+                                                              whatwg:innerHTML  "Avatar";
+                                                              whatwg:innerText  "Avatar"
+                                                            ];
+                                          rdf:_2            [ rdf:type          xhtml:span;
+                                                              rdf:_1            "Director: James Cameron (born August 16, 1954)";
+                                                              whatwg:innerHTML  "Director: James Cameron (born August 16, 1954)";
+                                                              whatwg:innerText  "Director: James Cameron (born August 16, 1954)"
+                                                            ];
+                                          xhtml:itemscope   "";
+                                          xhtml:itemtype    "https://schema.org/Movie";
+                                          whatwg:innerHTML  "<h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>";
+                                          whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
+                                        ];
+                      whatwg:innerHTML  "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n</div>";
+                      whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
+                    ];
+  whatwg:innerHTML  "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>";
+  whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
+] .
 
 ```
 
@@ -372,31 +372,31 @@ WHERE
 ###### Result
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type          <http://www.example.org#Element> , fx:root ;
-  rdf:_1            [ rdf:type          <http://www.example.org#someThing> ;
-                      rdf:_1            "Hallo world" ;
-                      whatwg:innerHTML  "Hallo world" ;
+[ rdf:type          <http://www.example.org#Element> , fx:root;
+  rdf:_1            [ rdf:type          <http://www.example.org#someThing>;
+                      rdf:_1            "Hallo world";
+                      whatwg:innerHTML  "Hallo world";
                       whatwg:innerText  "Hallo world"
-                    ] ;
-  rdf:_2            [ rdf:type                      <http://www.example.org#someThingElse> ;
+                    ];
+  rdf:_2            [ rdf:type                      <http://www.example.org#someThingElse>;
                       <http://www.example.org#key>  "0.1"
-                    ] ;
-  xhtml:xmlns:xx    "http://www.example.org" ;
-  whatwg:innerHTML  "\n\t<xx:someThing>Hallo world</xx:someThing>\n\t<xx:someThingElse xx:key=\"0.1\" />\n" ;
+                    ];
+  xhtml:xmlns:xx    "http://www.example.org";
+  whatwg:innerHTML  "\n\t<xx:someThing>Hallo world</xx:someThing>\n\t<xx:someThingElse xx:key=\"0.1\" />\n";
   whatwg:innerText  "Hallo world"
 ] .
 
