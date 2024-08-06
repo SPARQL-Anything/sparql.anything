@@ -17,15 +17,19 @@
 package io.github.sparqlanything.model;
 
 import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
 import java.net.URI;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQuadHandler, FacadeXComponentHandler {
+	protected static final Set<String> predicateKeys = new HashSet<>();
 	protected final Properties properties;
 	protected final boolean p_blank_nodes;
 	protected final String p_namespace;
@@ -34,6 +38,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	protected final String p_null_string;
 	protected final boolean p_use_rdfs_member;
 	protected final boolean p_reify_slot_statements;
+	protected final boolean p_generate_predicate_labels;
 
 	public BaseFacadeXBuilder(Properties properties) {
 		this.properties = properties;
@@ -44,10 +49,24 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		this.p_null_string = PropertyUtils.getStringProperty(properties, IRIArgument.NULL_STRING);
 		this.p_use_rdfs_member = PropertyUtils.getBooleanProperty(properties, IRIArgument.USE_RDFS_MEMBER);
 		this.p_reify_slot_statements = PropertyUtils.getBooleanProperty(properties, IRIArgument.ANNOTATE_TRIPLES_WITH_SLOT_KEYS);
+		this.p_generate_predicate_labels = PropertyUtils.getBooleanProperty(properties, IRIArgument.GENERATE_PREDICATE_LABELS);
+	}
+
+	protected String keepLabel(String key) {
+		if (p_generate_predicate_labels) predicateKeys.add(key);
+		return key;
+	}
+
+	protected void addPredicateLabelTriples(Graph graph) {
+		if (p_generate_predicate_labels) {
+			for (String key : predicateKeys) {
+				graph.add(key2predicate(key), RDFS.label.asNode(), NodeFactory.createLiteralString(key));
+			}
+		}
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, String slotKey, String childContainerId) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), key2predicate(slotKey), container2node(childContainerId, dataSourceId));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), key2predicate(keepLabel(slotKey)), container2node(childContainerId, dataSourceId));
 	}
 
 	public boolean addContainer(String dataSourceId, String containerId, URI customKey, String childContainerId) {
@@ -59,7 +78,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addType(String dataSourceId, String containerId, String typeId) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), RDF.type.asNode(), key2predicate(typeId));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), RDF.type.asNode(), key2predicate(keepLabel(typeId)));
 	}
 
 	public boolean addType(String dataSourceId, String containerId, URI type) {
@@ -67,7 +86,7 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value) {
-		return add(dataSourceId2node(dataSourceId), container2node(containerId,dataSourceId), key2predicate(slotKey), value2node(value));
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), key2predicate(keepLabel(slotKey)), value2node(value));
 	}
 
 	public boolean addValue(String dataSourceId, String containerId, URI customKey, Object value) {
@@ -93,14 +112,6 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		return add(g, s, p, o);
 	}
 
-	public Node value2node(Object value) {
-		// trims_strings == true and if object is string, trim it
-		if (p_trim_strings && value instanceof String) {
-			value = ((String) value).trim();
-		}
-		return FacadeXNodeBuilder.super.value2node(value);
-	}
-
 	public Node container2node(String containerId, String dataSourceId) {
 		if (p_blank_nodes) {
 			return container2BlankNode(containerId);
@@ -109,12 +120,20 @@ public abstract class BaseFacadeXBuilder implements FacadeXNodeBuilder, FacadeXQ
 		}
 	}
 
+	public String getRootURI(String dataSourceId) {
+		return p_root.concat(dataSourceId);
+	}
+
 	public String getNamespace() {
 		return p_namespace;
 	}
 
-	public String getRootURI(String dataSourceId) {
-		return p_root.concat(dataSourceId);
+	public Node value2node(Object value) {
+		// trims_strings == true and if object is string, trim it
+		if (p_trim_strings && value instanceof String) {
+			value = ((String) value).trim();
+		}
+		return FacadeXNodeBuilder.super.value2node(value);
 	}
 
 }

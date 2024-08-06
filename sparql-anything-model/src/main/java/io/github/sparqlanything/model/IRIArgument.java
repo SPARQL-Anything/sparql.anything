@@ -39,6 +39,8 @@ public class IRIArgument {
 	public static final IRIArgument OP_SERVICE_SILENT = new IRIArgument("opservice.silent");
 	public static final IRIArgument ANNOTATE_TRIPLES_WITH_SLOT_KEYS = new IRIArgument("annotate-triples-with-slot-keys", "false");
 
+	public static final IRIArgument GENERATE_PREDICATE_LABELS = new IRIArgument("generate-predicate-labels", "false");
+
 	private final String name;
 	private final String defaultValue;
 

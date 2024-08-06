@@ -95,6 +95,7 @@ WHERE {
 | [slice](#slice)                                                     | The resource is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row); JSON (when array slice by item, when json object requires `json.path`); XML (requires `xml.path`)                                                                                                                              | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [use-rdfs-member](#use-rdfs-member)                                 | It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...)                                                                                                                                                                                                               | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [annotate-triples-with-slot-keys](#annotate-triples-with-slot-keys) | It tells SPARQL Anything to annotate slot statements with slot keys (see issue [#378](https://github.com/SPARQL-Anything/sparql.anything/issues/378))                                                                                                                                                                                         | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
+| [generate-predicate-labels](#generate-predicate-labels)             | It tells SPARQL Anything to create labels for extracted predicates and classes (see issue [#462](https://github.com/SPARQL-Anything/sparql.anything/issues/462))                                                                                                                                                                              | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 
 \* It is mandatory to provide either `location`, `content`, or `command`.
 
@@ -1122,8 +1123,61 @@ _:b0    rdf:type     fx:root ;
         fx:slot-key  3 .
 ```
 
+### generate-predicate-labels
+
+It tells SPARQL Anything to create labels for extracted predicates and classes (see issue [#462](https://github.com/SPARQL-Anything/sparql.anything/issues/462))
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+false
+
+#### Examples
+
+```sparql
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content            "<Element1 attr=\"value\"/> " ;
+                  fx:generate-predicate-labels  true ;
+                  fx:media-type         "application/xml" .
+        ?s        ?p                    ?o
+      }
+  }
+```
+
+Result
+
+```turtle
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+
+[ rdf:type  xyz:Element1 , fx:root;
+  xyz:attr  "value"
+] .
+
+xyz:attr  <http://www.w3.org/2000/01/rdf-schema#label>
+                "attr" .
+
+xyz:Element1  <http://www.w3.org/2000/01/rdf-schema#label>
+                "Element1" .
+```
+
 <!--
 
+###
 
 #### Valid Values 
 

@@ -118,6 +118,9 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 			// so that means you need to do `graph ?g {?s ?p ?o}` instead of simply
 			// `{?s ?p ?o}` in a query when you use a TDB2
 		}
+		if(p_generate_predicate_labels){
+			addPredicateLabelTriples(datasetGraph.getDefaultGraph());
+		}
 		return datasetGraph;
 	}
 
