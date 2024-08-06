@@ -61,6 +61,31 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	public static final IRIArgument PROPERTY_XPATH = new IRIArgument("xml.path");
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
+	private static String normaliseNamespace(QName qname) {
+		if (qname.getNamespaceURI().endsWith("/") || qname.getNamespaceURI().endsWith("#"))
+			return qname.getNamespaceURI();
+		else return qname.getNamespaceURI().concat("#");
+
+	}
+
+	private static void addNamespacedType(FacadeXGraphBuilder builder, String dataSourceId, String resourceId, QName qname) throws URISyntaxException {
+		if (qname.getNamespaceURI().equals("")) {
+			builder.addType(dataSourceId, resourceId, qname.getLocalPart());
+		} else {
+			builder.addType(dataSourceId, resourceId, new URI(normaliseNamespace(qname).concat(qname.getLocalPart())));
+		}
+	}
+
+	private static void addNamespacedValue(FacadeXGraphBuilder builder, String dataSourceId, String resourceId, QName qname, String attribute1) throws URISyntaxException {
+		if (qname.getNamespaceURI().equals("")) {
+			builder.addValue(dataSourceId, resourceId, qname.getLocalPart(), attribute1);
+		} else {
+			builder.addValue(dataSourceId, resourceId, new URI(normaliseNamespace(qname).concat(qname.getLocalPart())), attribute1);
+		}
+
+
+	}
+
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		String dataSourceId = "";
@@ -276,10 +301,11 @@ public class XMLTriplifier implements Triplifier, Slicer {
 					isRoot = false;
 				}
 				try {
-					builder.addType(dataSourceId, resourceId, new URI(toIRI(se.getName(), namespace)));
+					addNamespacedType(builder, dataSourceId, resourceId, se.getName());
 				} catch (URISyntaxException e) {
-					throw new IOException(e);
+					throw new RuntimeException(e);
 				}
+
 				if (!members.containsKey(resourceId)) {
 					members.put(resourceId, 0);
 				}
@@ -294,7 +320,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 					Attribute attribute = attributes.next();
 					log.trace("attribute: {}", attribute);
 					try {
-						builder.addValue(dataSourceId, resourceId, new URI(toIRI(attribute.getName(), namespace)), attribute.getValue());
+						addNamespacedValue(builder, dataSourceId, resourceId, attribute.getName(), attribute.getValue());
 					} catch (URISyntaxException e) {
 						throw new IOException(e);
 					}
@@ -309,20 +335,6 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				charBuilder.append(event.asCharacters().getData().trim());
 			}
 		}
-	}
-
-	private String toIRI(QName qname, String namespace) {
-		String ns;
-		if (qname.getNamespaceURI().equals("")) {
-			ns = namespace;
-		} else {
-			if (qname.getNamespaceURI().endsWith("/") || qname.getNamespaceURI().endsWith("#")) {
-				ns = qname.getNamespaceURI();
-			} else {
-				ns = qname.getNamespaceURI() + '#';
-			}
-		}
-		return ns + qname.getLocalPart();
 	}
 
 	@Override
@@ -445,8 +457,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	@Override
 	public void triplify(Slice slice, Properties properties, FacadeXGraphBuilder builder) {
 		builder.addRoot(slice.getDatasourceId());
-		if (slice instanceof XPathSlice) {
-			XPathSlice xs = (XPathSlice) slice;
+		if (slice instanceof XPathSlice xs) {
 			try {
 				transformFromXPath(xs.get().getKey(), xs.get().getValue(), xs.iteration(), SPARQLAnythingConstants.ROOT_ID, slice.getDatasourceId(), builder);
 			} catch (NavException e) {
