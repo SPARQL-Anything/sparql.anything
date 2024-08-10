@@ -26,7 +26,6 @@ public class DocxTriplifierTest extends AbstractTriplifierTester {
 
 	public DocxTriplifierTest() {
 		super(new DocxTriplifier(), new Properties(), "docx");
-		this.printWholeGraph = true;
 	}
 
 	@Test
