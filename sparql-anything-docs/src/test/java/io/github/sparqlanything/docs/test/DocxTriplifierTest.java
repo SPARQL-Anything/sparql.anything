@@ -26,6 +26,7 @@ public class DocxTriplifierTest extends AbstractTriplifierTester {
 
 	public DocxTriplifierTest() {
 		super(new DocxTriplifier(), new Properties(), "docx");
+		this.printWholeGraph = true;
 	}
 
 	@Test
@@ -45,6 +46,11 @@ public class DocxTriplifierTest extends AbstractTriplifierTester {
 
 	@Test
 	public void testDoc4() {
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testDoc5() {
 		assertResultIsIsomorphicWithExpected();
 	}
 

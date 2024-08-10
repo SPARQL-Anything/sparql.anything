@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @io.github.sparqlanything.model.annotations.Triplifier
 public class DocxTriplifier implements Triplifier {
@@ -65,10 +64,8 @@ public class DocxTriplifier implements Triplifier {
 			builder.addType(dataSourceId, SPARQLAnythingConstants.ROOT_ID, "Document");
 
 			int count = 1;
-			if (!mergeParagraphs)
-				count = extractParagraphs(builder, dataSourceId, paragraphs, count);
-			 else
-				count = extractParagraphsAsASingleSlot(builder, dataSourceId, paragraphs, count);
+			if (!mergeParagraphs) count = extractParagraphs(builder, dataSourceId, paragraphs, count);
+			else count = extractParagraphsAsASingleSlot(builder, dataSourceId, paragraphs, count);
 
 			count = extractTables(builder, dataSourceId, namespace, headers, document, count);
 
@@ -76,6 +73,57 @@ public class DocxTriplifier implements Triplifier {
 
 		}
 
+	}
+
+	private static int extractParagraphs(FacadeXGraphBuilder builder, String dataSourceId, List<XWPFParagraph> paragraphs, int count) {
+		for (XWPFParagraph para : paragraphs) {
+			logger.trace("Paragraph {} {}", count, para.getText());
+			String paragraphId;
+			if (para.getStyle() != null) {
+				paragraphId = "/".concat(Triplifier.toSafeURIString(para.getStyle())).concat("/").concat(String.valueOf(count));
+				builder.addType(dataSourceId, paragraphId, Triplifier.toSafeURIString(para.getStyle()));
+			} else {
+				paragraphId = "/paragraph/".concat(String.valueOf(count));
+				builder.addType(dataSourceId, paragraphId, "Paragraph");
+			}
+
+			int paragraphSlots = 1;
+			builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count, paragraphId);
+			builder.addValue(dataSourceId, paragraphId, paragraphSlots, para.getText());
+			paragraphSlots++;
+
+			int commentNumber = 1;
+
+			for (CTMarkupRange markup : para.getCTP().getCommentRangeStartList()) {
+
+				String commentId = getCommentId(dataSourceId, markup.getId().toString());
+
+				// attach comment to the paragraph
+				builder.addContainer(dataSourceId, paragraphId, paragraphSlots, commentId);
+				paragraphSlots++;
+
+				// add comment number in thread
+				String commentNumberId = commentId.concat("/ThreadCommentNumber");
+				builder.addContainer(dataSourceId, commentId, 4, commentNumberId);
+				builder.addType(dataSourceId, commentNumberId, "ThreadCommentNumber");
+				builder.addValue(dataSourceId, commentNumberId, 1, commentNumber);
+				commentNumber++;
+			}
+
+			count++;
+		}
+		return count;
+	}
+
+	private static int extractParagraphsAsASingleSlot(FacadeXGraphBuilder builder, String dataSourceId, List<XWPFParagraph> paragraphs, int count) {
+		StringBuilder sb = new StringBuilder();
+		for (XWPFParagraph para : paragraphs) {
+			sb.append(para.getText());
+			sb.append("\n");
+		}
+		builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count, NodeFactory.createLiteralString(sb.toString()));
+		count++;
+		return count;
 	}
 
 	private static int extractTables(FacadeXGraphBuilder builder, String dataSourceId, String namespace, boolean headers, XWPFDocument document, int count) {
@@ -133,54 +181,10 @@ public class DocxTriplifier implements Triplifier {
 		return count;
 	}
 
-	private static int extractParagraphs(FacadeXGraphBuilder builder, String dataSourceId, List<XWPFParagraph> paragraphs, int count) {
-		for (XWPFParagraph para : paragraphs) {
-			logger.trace("Paragraph {} {}", count, para.getText());
-			String paragraphId;
-			if (para.getStyle() != null) {
-				paragraphId = "/".concat(Triplifier.toSafeURIString(para.getStyle())).concat("/").concat(String.valueOf(count));
-				builder.addType(dataSourceId, paragraphId, Triplifier.toSafeURIString(para.getStyle()));
-			} else {
-				paragraphId = "/paragraph/".concat(String.valueOf(count));
-				builder.addType(dataSourceId, paragraphId, "Paragraph");
-			}
-
-			int paragraphSlots = 1;
-			builder.addContainer(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count, paragraphId);
-			builder.addValue(dataSourceId, paragraphId, paragraphSlots, para.getText());
-			paragraphSlots ++;
-
-			for (CTMarkupRange markup : para.getCTP().getCommentRangeStartList()) {
-				builder.addContainer(dataSourceId, paragraphId, paragraphSlots, getCommentId(dataSourceId, markup.getId().toString()));
-				paragraphSlots ++;
-			}
-
-			count++;
-		}
-		return count;
-	}
-
-	private static int extractParagraphsAsASingleSlot(FacadeXGraphBuilder builder, String dataSourceId, List<XWPFParagraph> paragraphs, int count) {
-		StringBuilder sb = new StringBuilder();
-		for (XWPFParagraph para : paragraphs) {
-			sb.append(para.getText());
-			sb.append("\n");
-		}
-		builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, count, NodeFactory.createLiteralString(sb.toString()));
-		count++;
-		return count;
-	}
-
-	private static String getCommentId(String dataSourceId, String id){
-		return dataSourceId.concat("/Comment_").concat(id);
-	}
-
 	private static void extractComments(FacadeXGraphBuilder builder, XWPFDocument document, String dataSourceId, String documentId) {
 		for (XWPFComment comment : document.getComments()) {
 			String commentId = getCommentId(dataSourceId, comment.getId());
 			builder.addType(dataSourceId, commentId, "Comment");
-			//builder.addContainer(dataSourceId, documentId, slotCounter.getAndIncrement(), commentId);
-
 
 			// add author
 			String authorCommentId = commentId.concat("/Author");
@@ -200,6 +204,10 @@ public class DocxTriplifier implements Triplifier {
 			builder.addContainer(dataSourceId, commentId, 3, commentIdId);
 			builder.addValue(dataSourceId, commentIdId, 1, comment.getId());
 		}
+	}
+
+	private static String getCommentId(String dataSourceId, String id) {
+		return dataSourceId.concat("/Comment_").concat(id);
 	}
 
 	@Override
