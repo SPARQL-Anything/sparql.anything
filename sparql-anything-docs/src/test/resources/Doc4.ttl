@@ -1,4 +1,3 @@
-
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
@@ -25,12 +24,6 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
         rdf:type  xyz:CommentAuthor;
         rdf:_1    "Luigi Asprino" .
 
-<http://www.example.org/document/Comment_1>
-        rdf:type  xyz:Comment;
-        rdf:_1    <http://www.example.org/document/Comment_1/Author>;
-        rdf:_2    <http://www.example.org/document/Comment_1/CommentText>;
-        rdf:_3    <http://www.example.org/document/Comment_1/CommentId> .
-
 <http://www.example.org/document/Comment_0/CommentId>
         rdf:type  xyz:CommentId;
         rdf:_1    "0" .
@@ -42,12 +35,6 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 <http://www.example.org/document/Comment_0/Author>
         rdf:type  xyz:CommentAuthor;
         rdf:_1    "Luigi Asprino" .
-
-<http://www.example.org/document/Comment_0>
-        rdf:type  xyz:Comment;
-        rdf:_1    <http://www.example.org/document/Comment_0/Author>;
-        rdf:_2    <http://www.example.org/document/Comment_0/CommentText>;
-        rdf:_3    <http://www.example.org/document/Comment_0/CommentId> .
 
 <http://www.example.org/document/paragraph/7>
         rdf:type  xyz:Paragraph;
@@ -65,10 +52,32 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
         rdf:type  xyz:ListParagraph;
         rdf:_1    "Bullet1 " .
 
+<http://www.example.org/document/Comment_1/ThreadCommentNumber>
+        rdf:type  xyz:ThreadCommentNumber;
+        rdf:_1    "1"^^xsd:int .
+
+<http://www.example.org/document/Comment_1>
+        rdf:type  xyz:Comment;
+        rdf:_1    <http://www.example.org/document/Comment_1/Author>;
+        rdf:_2    <http://www.example.org/document/Comment_1/CommentText>;
+        rdf:_3    <http://www.example.org/document/Comment_1/CommentId>;
+        rdf:_4    <http://www.example.org/document/Comment_1/ThreadCommentNumber> .
+
 <http://www.example.org/document/paragraph/3>
         rdf:type  xyz:Paragraph;
         rdf:_1    "Paragraph2";
         rdf:_2    <http://www.example.org/document/Comment_1> .
+
+<http://www.example.org/document/Comment_0/ThreadCommentNumber>
+        rdf:type  xyz:ThreadCommentNumber;
+        rdf:_1    "1"^^xsd:int .
+
+<http://www.example.org/document/Comment_0>
+        rdf:type  xyz:Comment;
+        rdf:_1    <http://www.example.org/document/Comment_0/Author>;
+        rdf:_2    <http://www.example.org/document/Comment_0/CommentText>;
+        rdf:_3    <http://www.example.org/document/Comment_0/CommentId>;
+        rdf:_4    <http://www.example.org/document/Comment_0/ThreadCommentNumber> .
 
 <http://www.example.org/document/paragraph/2>
         rdf:type  xyz:Paragraph;
@@ -87,4 +96,3 @@ eg:document  rdf:type  xyz:Document , fx:root;
         rdf:_5    <http://www.example.org/document/ListParagraph/5>;
         rdf:_6    <http://www.example.org/document/Heading2/6>;
         rdf:_7    <http://www.example.org/document/paragraph/7> .
-
