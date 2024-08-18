@@ -233,7 +233,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		// XXX How do we close the inputstream?
 		final InputStream is = Triplifier.getInputStream(properties);
 
-		Reader in = new InputStreamReader(new BOMInputStream(is), charset);
+		Reader in = new InputStreamReader(BOMInputStream.builder().setInputStream(is).get(), charset);
 
 		Iterable<CSVRecord> records = format.parse(in);
 		final Iterator<CSVRecord> recordIterator = records.iterator();
