@@ -24,6 +24,7 @@ import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Sets;
+import org.apache.jena.atlas.iterator.IteratorCloseable;
 import org.jsfr.json.Collector;
 import org.jsfr.json.JacksonParser;
 import org.jsfr.json.JsonSurfer;
@@ -321,8 +322,9 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	public CloseableIterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
+		Iterable<Slice> r = sliceFromJSONPath(properties);
 		if (!jsonPaths.isEmpty()) {
 			return sliceFromJSONPath(properties);
 		} else {
@@ -331,7 +333,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	}
 
-	private Iterable<Slice> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
+	private CloseableIterable<Slice> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
 		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
 		final InputStream us = Triplifier.getInputStream(properties);
 		Collector collector = surfer.collector(us);
@@ -347,12 +349,19 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			collector.exec();
 			Iterator<ValueBox<Collection<Object>>> matchesIterator = matches.iterator();
 			// Only 1 data source expected
-			return new Iterable<Slice>() {
+			return new CloseableIterable<Slice>() {
+
+				@Override
+				public void close() throws IOException {
+					us.close();
+				}
+
 				@Override
 				public Iterator<Slice> iterator() {
 
 					log.debug("Iterating slices");
 					return new Iterator<Slice>() {
+
 						int sln = 0;
 						Object next = null;
 						Iterator<Object> objectIterator = null;
@@ -403,7 +412,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		}
 	}
 
-	private Iterable<Slice> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
+	private CloseableIterable<Slice> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
 		// XXX How do we close the input stream?
 		final InputStream us = Triplifier.getInputStream(properties);
 		JsonFactory factory = JsonFactory.builder().build();
@@ -417,7 +426,13 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		}
 
 		// Only 1 data source expected
-		return new Iterable<Slice>() {
+		return new CloseableIterable<Slice>() {
+
+			@Override
+			public void close() throws IOException {
+				us.close();
+			}
+
 			JsonToken next = null;
 
 			@Override

@@ -224,7 +224,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	public CloseableIterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 
 		CSVFormat format = buildFormat(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -239,7 +239,13 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		final Iterator<CSVRecord> recordIterator = records.iterator();
 		final LinkedHashMap<Integer, String> headers_map = makeHeadersMapFromOpenIterator(recordIterator, properties, format, charset);
 
-		return new Iterable<Slice>() {
+		return new CloseableIterable<Slice>() {
+
+			@Override
+			public void close() throws IOException {
+				// The InputStream is closed by hasNext method of the iterator
+			}
+
 			@Override
 			public Iterator<Slice> iterator() {
 				log.debug("Iterating slices");

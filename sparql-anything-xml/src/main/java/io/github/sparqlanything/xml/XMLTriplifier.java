@@ -358,27 +358,37 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	public CloseableIterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		final String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		List<String> xpaths = PropertyUtils.getPropertyValues(properties, PROPERTY_XPATH);
 
 		try {
 			VTDNav vn = buildVTDNav(properties);
 			final Iterator<Pair<VTDNav, Integer>> it = evaluateXPaths(vn, xpaths);
-			return () -> new Iterator<>() {
-				int theCount = 1;
-
+			return new CloseableIterable<Slice>() {
 				@Override
-				public boolean hasNext() {
-					return it.hasNext();
+				public Iterator<Slice> iterator() {
+					return new Iterator<>() {
+						int theCount = 1;
+
+						@Override
+						public boolean hasNext() {
+							return it.hasNext();
+						}
+
+						@Override
+						public Slice next() {
+							Pair<VTDNav, Integer> pair = it.next();
+							int c = theCount;
+							theCount++;
+							return XPathSlice.make(pair.getKey(), pair.getValue(), c, dataSourceId);
+						}
+					};
 				}
 
 				@Override
-				public Slice next() {
-					Pair<VTDNav, Integer> pair = it.next();
-					int c = theCount;
-					theCount++;
-					return XPathSlice.make(pair.getKey(), pair.getValue(), c, dataSourceId);
+				public void close() throws IOException {
+					// Input stream is already closed as evaluateXPaths reads it all and close it
 				}
 			};
 		} catch (Exception e) {
@@ -388,7 +398,9 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	private VTDNav buildVTDNav(Properties properties) throws TriplifierHTTPException, IOException, ParseException {
 		VTDGen vg = new VTDGen();
-		byte[] bytes = IOUtils.toByteArray(Triplifier.getInputStream(properties));
+		InputStream is = Triplifier.getInputStream(properties);
+		byte[] bytes = IOUtils.toByteArray(is);
+		is.close();
 		vg.setDoc(bytes);
 		// TODO Support namespaces
 		vg.parse(false);

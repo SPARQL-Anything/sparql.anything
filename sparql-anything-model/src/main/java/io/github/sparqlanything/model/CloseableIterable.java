@@ -16,12 +16,11 @@
 
 package io.github.sparqlanything.model;
 
-import java.io.IOException;
-import java.util.Properties;
 
-public interface Slicer {
+import java.io.Closeable;
+import java.util.Iterator;
 
-	CloseableIterable<Slice> slice(Properties p) throws IOException, TriplifierHTTPException;
+public interface CloseableIterable<T> extends Iterable<T>, Closeable {
 
-	void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder);
+	Iterator<T> iterator();
 }
