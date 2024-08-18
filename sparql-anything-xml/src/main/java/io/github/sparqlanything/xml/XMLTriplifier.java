@@ -54,7 +54,7 @@ import java.util.Properties;
 import java.util.Set;
 
 @io.github.sparqlanything.model.annotations.Triplifier
-public class XMLTriplifier implements Triplifier, Slicer {
+public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 
 	@Example(resource = "https://sparql-anything.cc/examples/simple-menu.xml", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"https://sparql-anything.cc/examples/simple-menu.xml\" ; fx:xml.path \"//food\" ; fx:blank-nodes false . ?s ?p ?o } }")
 	@Option(description = "One or more XPath expressions as filters. E.g. `xml.path=value` or `xml.path.1`, `xml.path.2`,`...` to add multiple expressions.", validValues = "Any valid XPath")
@@ -112,10 +112,9 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	public int transformFromXPath(VTDNav vn, int result, int child, String parentId, String dataSourceId, FacadeXGraphBuilder builder) throws NavException {
 		log.trace(" -- index: {} type: {}", result, vn.getTokenType(result));
 		switch (vn.getTokenType(result)) {
-			case VTDNav.TOKEN_STARTING_TAG:
+			case VTDNav.TOKEN_STARTING_TAG -> {
 				String tag;
 				tag = vn.toString(result);
-
 				log.trace(" -- tag: {} ", tag);
 				String childId = String.join("", parentId, "/", Integer.toString(child), ":", tag);
 				builder.addContainer(dataSourceId, parentId, child, childId);
@@ -164,7 +163,8 @@ public class XMLTriplifier implements Triplifier, Slicer {
 					childc++;
 				}
 				return index - 1;
-			case VTDNav.TOKEN_ATTR_NAME:
+			}
+			case VTDNav.TOKEN_ATTR_NAME -> {
 				// Attribute
 				String name = vn.toString(result);
 				String value = vn.toString(result + 1);
@@ -173,32 +173,31 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				builder.addContainer(dataSourceId, parentId, child, attrChildId);
 				builder.addValue(dataSourceId, attrChildId, name, value);
 				return result + 1;
-			case VTDNav.TOKEN_ATTR_VAL:
+			}
+			case VTDNav.TOKEN_ATTR_VAL -> {
 				// Attribute value
 				log.trace("Attribute value: {}", vn.toString(result));
 				builder.addValue(dataSourceId, parentId, child, vn.toString(result));
-				break;
-			case VTDNav.TOKEN_CHARACTER_DATA:
+			}
+			case VTDNav.TOKEN_CHARACTER_DATA -> {
 				// Text
 				String text = vn.toNormalizedString(result);
 				log.trace("Text: {}", text);
 				builder.addValue(dataSourceId, parentId, child, vn.toString(result));
-				break;
-			case VTDNav.TOKEN_DEC_ATTR_NAME:
+			}
+			case VTDNav.TOKEN_DEC_ATTR_NAME -> {
 				log.trace("Attribute (dec): {} = {}", vn.toString(result), vn.toString(result + 1));
 				return result + 1;
-			case VTDNav.TOKEN_DEC_ATTR_VAL:
-				log.trace("Attribute value (dec) {}", vn.toString(result));
-				break;
-			default:
-				log.warn("Ignored event: {} {}", vn.getTokenType(result), vn.toString(result));
+			}
+			case VTDNav.TOKEN_DEC_ATTR_VAL -> log.trace("Attribute value (dec) {}", vn.toString(result));
+			default -> log.warn("Ignored event: {} {}", vn.getTokenType(result), vn.toString(result));
 		}
 		return result;
 	}
 
 	public void transformSAX(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
+//		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		String root = SPARQLAnythingConstants.ROOT_ID;
 
@@ -358,16 +357,16 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public CloseableIterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	public CloseableIterable<Slice<Pair<VTDNav,Integer>>> slice(Properties properties) {
 		final String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		List<String> xpaths = PropertyUtils.getPropertyValues(properties, PROPERTY_XPATH);
 
 		try {
 			VTDNav vn = buildVTDNav(properties);
 			final Iterator<Pair<VTDNav, Integer>> it = evaluateXPaths(vn, xpaths);
-			return new CloseableIterable<Slice>() {
+			return new CloseableIterable<>() {
 				@Override
-				public Iterator<Slice> iterator() {
+				public Iterator<Slice<Pair<VTDNav,Integer>>> iterator() {
 					return new Iterator<>() {
 						int theCount = 1;
 
@@ -377,7 +376,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 						}
 
 						@Override
-						public Slice next() {
+						public Slice<Pair<VTDNav, Integer>> next() {
 							Pair<VTDNav, Integer> pair = it.next();
 							int c = theCount;
 							theCount++;
@@ -387,7 +386,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				}
 
 				@Override
-				public void close() throws IOException {
+				public void close() {
 					// Input stream is already closed as evaluateXPaths reads it all and close it
 				}
 			};
@@ -467,7 +466,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public void triplify(Slice slice, Properties properties, FacadeXGraphBuilder builder) {
+	public void triplify(Slice<Pair<VTDNav,Integer>> slice, Properties properties, FacadeXGraphBuilder builder) {
 		builder.addRoot(slice.getDatasourceId());
 		if (slice instanceof XPathSlice xs) {
 			try {
