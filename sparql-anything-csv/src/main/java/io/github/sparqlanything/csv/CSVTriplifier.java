@@ -81,7 +81,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		// Add type Root
 		builder.addRoot(dataSourceId);
 
-		try (InputStream is = Triplifier.getInputStream(properties); Reader in = new InputStreamReader(new BOMInputStream(is), charset)) {
+		try (InputStream is = Triplifier.getInputStream(properties); Reader in = new InputStreamReader(BOMInputStream.builder().setInputStream(is).get(), charset)) {
 
 			Iterable<CSVRecord> records = format.parse(in);
 			Iterator<CSVRecord> recordIterator = records.iterator();
@@ -135,7 +135,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		int headersRow = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
 		Iterator<CSVRecord> iterator = recordIterator;
 		if (headersRow > 0) {
-			Reader in = new InputStreamReader(new BOMInputStream(Triplifier.getInputStream(properties)), charset);
+			Reader in = new InputStreamReader(BOMInputStream.builder().setInputStream(Triplifier.getInputStream(properties)).get(), charset);
 			Iterable<CSVRecord> records = format.parse(in);
 			iterator = records.iterator();
 			LinkedHashMap<Integer, String> headers_map = makeHeadersMapFromOpenIterator(properties, headersRow, iterator);
