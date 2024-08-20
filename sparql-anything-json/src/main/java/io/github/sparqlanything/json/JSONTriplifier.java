@@ -24,7 +24,6 @@ import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Sets;
-import org.apache.jena.atlas.iterator.IteratorCloseable;
 import org.jsfr.json.Collector;
 import org.jsfr.json.JacksonParser;
 import org.jsfr.json.JsonSurfer;
@@ -48,14 +47,15 @@ import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 
 @io.github.sparqlanything.model.annotations.Triplifier
-public class JSONTriplifier implements Triplifier, Slicer {
+public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 
 	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Retrieving the lists of stars of the TV Series named \"Friends\" and \"Cougar Town\".", query = " PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path.1 \"$[?(@.name==\\\"Friends\\\")].stars\" ; fx:json.path.2 \"$[?(@.name==\\\"Cougar Town\\\")].stars\" . ?s ?p ?o } } ")
 	@Example(resource = "https://sparql-anything.cc/example1.json", description = " Retrieving the language of the TV series named \"Friends\".", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?language WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . _:b0 xyz:language ?language } }")
 	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Constructing a Facade-X RDF Graph selecting only containers that match the Json Path `$[?(@.name==\"Friends\")]`.", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . ?s ?p ?o } }")
-	@Option(description = "One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option. \n" +
-			"    It will pre-process the JSON before the execution of the query. \n" +
-			"    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).", validValues = "Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))")
+	@Option(description = """
+			One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option.\s
+			    It will pre-process the JSON before the execution of the query.\s
+			    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).""", validValues = "Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))")
 	public static final IRIArgument PROPERTY_JSONPATH = new IRIArgument("json.path");
 	private static final Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
@@ -87,39 +87,24 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	private void transformArrayItem(int i, JsonToken token, JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder) throws IOException {
 		switch (token) {
-			case START_ARRAY:
+			case START_ARRAY -> {
 				String childContainerIdArray = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
 				builder.addContainer(dataSourceId, containerId, i + 1, childContainerIdArray);
 				transformArray(parser, dataSourceId, childContainerIdArray, builder);
-				break;
-			case START_OBJECT:
+			}
+			case START_OBJECT -> {
 				String childContainerId = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
 				builder.addContainer(dataSourceId, containerId, i + 1, childContainerId);
 				transformObject(parser, dataSourceId, childContainerId, builder);
-				break;
-			case VALUE_FALSE:
-			case VALUE_TRUE:
-				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsBoolean());
-				break;
-			case VALUE_NUMBER_FLOAT:
-				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsDouble());
-				break;
-			case VALUE_NUMBER_INT:
-				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsInt());
-				break;
-			case VALUE_STRING:
-				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsString());
-				break;
-			case VALUE_NULL:
-			case END_ARRAY:
-			case END_OBJECT:
-			case FIELD_NAME:
-			case VALUE_EMBEDDED_OBJECT:
-			case NOT_AVAILABLE:
-			default:
-				// NOP
-				break;
-
+			}
+			case VALUE_FALSE, VALUE_TRUE ->
+					builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsBoolean());
+			case VALUE_NUMBER_FLOAT -> builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsDouble());
+			case VALUE_NUMBER_INT -> builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsInt());
+			case VALUE_STRING -> builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsString());
+			case VALUE_NULL, END_ARRAY, END_OBJECT, FIELD_NAME, VALUE_EMBEDDED_OBJECT, NOT_AVAILABLE -> {
+			}
+			// NOP
 		}
 	}
 
@@ -182,21 +167,21 @@ public class JSONTriplifier implements Triplifier, Slicer {
 				String k = parser.getText();
 				token = parser.nextToken();
 				switch (token) {
-					case START_ARRAY:
+					case START_ARRAY -> {
 						String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
 						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerIdArr);
 						transformArray(parser, dataSourceId, childContainerIdArr, builder);
-						break;
-					case START_OBJECT:
+					}
+					case START_OBJECT -> {
 						String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
 						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
 						transformObject(parser, dataSourceId, childContainerId, builder);
-						break;
-					case VALUE_NUMBER_FLOAT:
+					}
+					case VALUE_NUMBER_FLOAT -> {
 						logger.trace("{} float", k);
 						builder.addValue(dataSourceId, containerId, k, parser.getValueAsDouble());
-						break;
-					case VALUE_NUMBER_INT:
+					}
+					case VALUE_NUMBER_INT -> {
 						logger.trace("{} int", k);
 						coercedInt = null;
 						coercedStr = null;
@@ -210,22 +195,12 @@ public class JSONTriplifier implements Triplifier, Slicer {
 							coercedStr = parser.getValueAsString();
 						}
 						builder.addValue(dataSourceId, containerId, k, kIsInteger ? coercedInt : coercedStr);
-						break;
-					case VALUE_STRING:
-						builder.addValue(dataSourceId, containerId, k, parser.getValueAsString());
-						break;
-					case VALUE_FALSE:
-					case VALUE_TRUE:
-						builder.addValue(dataSourceId, containerId, k, parser.getValueAsBoolean());
-						break;
-					case END_ARRAY:
-					case END_OBJECT:
-					case FIELD_NAME:
-					case VALUE_EMBEDDED_OBJECT:
-					case NOT_AVAILABLE:
-					case VALUE_NULL:
-					default:
-						break;
+					}
+					case VALUE_STRING -> builder.addValue(dataSourceId, containerId, k, parser.getValueAsString());
+					case VALUE_FALSE, VALUE_TRUE ->
+							builder.addValue(dataSourceId, containerId, k, parser.getValueAsBoolean());
+					case END_ARRAY, END_OBJECT, FIELD_NAME, VALUE_EMBEDDED_OBJECT, NOT_AVAILABLE, VALUE_NULL -> {
+					}
 				}
 			} else {
 				throw new IOException("Unexpected token in object");
@@ -322,9 +297,9 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public CloseableIterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	public CloseableIterable<Slice<JsonToken>> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
-		Iterable<Slice> r = sliceFromJSONPath(properties);
+		Iterable<Slice<JsonToken>> r = sliceFromJSONPath(properties);
 		if (!jsonPaths.isEmpty()) {
 			return sliceFromJSONPath(properties);
 		} else {
@@ -333,7 +308,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 
 	}
 
-	private CloseableIterable<Slice> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
+	private CloseableIterable<Slice<JsonToken>> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
 		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
 		final InputStream us = Triplifier.getInputStream(properties);
 		Collector collector = surfer.collector(us);
@@ -349,7 +324,7 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			collector.exec();
 			Iterator<ValueBox<Collection<Object>>> matchesIterator = matches.iterator();
 			// Only 1 data source expected
-			return new CloseableIterable<Slice>() {
+			return new CloseableIterable<>() {
 
 				@Override
 				public void close() throws IOException {
@@ -357,10 +332,10 @@ public class JSONTriplifier implements Triplifier, Slicer {
 				}
 
 				@Override
-				public Iterator<Slice> iterator() {
+				public Iterator<Slice<JsonToken>> iterator() {
 
 					log.debug("Iterating slices");
-					return new Iterator<Slice>() {
+					return new Iterator<Slice<JsonToken>>() {
 
 						int sln = 0;
 						Object next = null;
@@ -412,21 +387,19 @@ public class JSONTriplifier implements Triplifier, Slicer {
 		}
 	}
 
-	private CloseableIterable<Slice> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
+	private CloseableIterable<Slice<JsonToken>> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
 		// XXX How do we close the input stream?
 		final InputStream us = Triplifier.getInputStream(properties);
 		JsonFactory factory = JsonFactory.builder().build();
 		JsonParser parser = factory.createParser(us);
 		JsonToken token = parser.nextToken();
 		// If the root is an array.
-		if (token == JsonToken.START_ARRAY) {
-
-		} else {
+		if (token != JsonToken.START_ARRAY) {
 			throw new IOException("Not a JSON array");
 		}
 
 		// Only 1 data source expected
-		return new CloseableIterable<Slice>() {
+		return new CloseableIterable<Slice<JsonToken>>() {
 
 			@Override
 			public void close() throws IOException {
@@ -436,9 +409,9 @@ public class JSONTriplifier implements Triplifier, Slicer {
 			JsonToken next = null;
 
 			@Override
-			public Iterator<Slice> iterator() {
+			public Iterator<Slice<JsonToken>> iterator() {
 				log.debug("Iterating slices");
-				return new Iterator<Slice>() {
+				return new Iterator<>() {
 					int sln = 0;
 
 					@Override
@@ -496,6 +469,5 @@ public class JSONTriplifier implements Triplifier, Slicer {
 	private void processSlice(int iteration, String rootId, String dataSourceId, JsonToken token, JsonParser parser, FacadeXGraphBuilder builder) {
 		String sliceContainerId = StringUtils.join(rootId, "#slice", iteration);
 		builder.addContainer(dataSourceId, rootId, iteration, sliceContainerId);
-
 	}
 }
