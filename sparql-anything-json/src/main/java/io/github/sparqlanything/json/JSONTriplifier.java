@@ -299,7 +299,6 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 	@Override
 	public CloseableIterable<Slice<JsonToken>> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
-		Iterable<Slice<JsonToken>> r = sliceFromJSONPath(properties);
 		if (!jsonPaths.isEmpty()) {
 			return sliceFromJSONPath(properties);
 		} else {
