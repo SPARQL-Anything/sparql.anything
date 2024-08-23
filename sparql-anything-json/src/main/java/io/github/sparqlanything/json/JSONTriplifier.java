@@ -46,6 +46,7 @@ import java.util.Set;
 import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 @io.github.sparqlanything.model.annotations.Triplifier
 public class JSONTriplifier implements Triplifier, Slicer<Object> {
 
@@ -107,6 +108,7 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 			// NOP
 		}
 	}
+
 
 	private void transformArrayItem(int i, Object o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
 		if (o instanceof List) {
@@ -210,9 +212,7 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 	}
 
 	private void transformMap(Map o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
-		Iterator<Map.Entry> it = o.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry entry = it.next();
+		for (Map.Entry entry : (Iterable<Map.Entry>) o.entrySet()) {
 			String k = (String) entry.getKey();
 			Object val = entry.getValue();
 			if (val instanceof List) {
@@ -397,12 +397,12 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 		// Only 1 data source expected
 		return new CloseableIterable<>() {
 
+			JsonToken next = null;
+
 			@Override
 			public void close() throws IOException {
 				us.close();
 			}
-
-			JsonToken next = null;
 
 			@Override
 			public Iterator<Slice<Object>> iterator() {
