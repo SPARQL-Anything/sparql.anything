@@ -16,45 +16,7 @@
 
 package io.github.sparqlanything.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import io.github.sparqlanything.model.Slice;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class JSONSlice implements Slice<JsonToken> {
-	private static Logger logger = LoggerFactory.getLogger(JSONSlice.class);
-	private JsonToken token;
-	private JsonParser parser;
-	private int iteration;
-	private String dataSourceId;
-	private JSONSlice(){}
-
-	@Override
-	public JsonToken get() {
-		return token;
-	}
-
-	public JsonParser getParser() {
-		return parser;
-	}
-
-	@Override
-	public int iteration() {
-		return iteration;
-	}
-
-	@Override
-	public String getDatasourceId() {
-		return dataSourceId;
-	}
-
-	public static JSONSlice makeSlice(JsonToken token, JsonParser parser, int iteration, String dataSourceId){
-		JSONSlice r = new JSONSlice();
-		r.token = token;
-		r.parser = parser;
-		r.iteration = iteration;
-		r.dataSourceId = dataSourceId;
-		return r;
-	}
+public abstract class JSONSlice implements Slice<Object> {
 }

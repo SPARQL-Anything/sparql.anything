@@ -47,7 +47,7 @@ import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 
 @io.github.sparqlanything.model.annotations.Triplifier
-public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
+public class JSONTriplifier implements Triplifier, Slicer<Object> {
 
 	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Retrieving the lists of stars of the TV Series named \"Friends\" and \"Cougar Town\".", query = " PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path.1 \"$[?(@.name==\\\"Friends\\\")].stars\" ; fx:json.path.2 \"$[?(@.name==\\\"Cougar Town\\\")].stars\" . ?s ?p ?o } } ")
 	@Example(resource = "https://sparql-anything.cc/example1.json", description = " Retrieving the language of the TV series named \"Friends\".", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?language WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . _:b0 xyz:language ?language } }")
@@ -210,8 +210,6 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 	}
 
 	private void transformMap(Map o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
-		Integer coercedInt;
-		String coercedStr;
 		Iterator<Map.Entry> it = o.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry entry = it.next();
@@ -274,7 +272,7 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
 		final InputStream us = Triplifier.getInputStream(properties);
 		Collector collector = surfer.collector(us);
-		List<ValueBox<Collection<Object>>> matches = new ArrayList<ValueBox<Collection<Object>>>();
+		List<ValueBox<Collection<Object>>> matches = new ArrayList<>();
 
 		for (String jpath : jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
@@ -297,7 +295,7 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 	}
 
 	@Override
-	public CloseableIterable<Slice<JsonToken>> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	public CloseableIterable<Slice<Object>> slice(Properties properties) throws IOException, TriplifierHTTPException {
 		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
 		if (!jsonPaths.isEmpty()) {
 			return sliceFromJSONPath(properties);
@@ -307,12 +305,11 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 
 	}
 
-	private CloseableIterable<Slice<JsonToken>> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
+	private CloseableIterable<Slice<Object>> sliceFromJSONPath(Properties properties) throws TriplifierHTTPException, IOException {
 		JsonSurfer surfer = new JsonSurfer(JacksonParser.INSTANCE, JacksonProvider.INSTANCE);
 		final InputStream us = Triplifier.getInputStream(properties);
 		Collector collector = surfer.collector(us);
-		List<String> jsonPathExpr = new ArrayList<String>();
-		final Set<ValueBox<Collection<Object>>> matches = new HashSet<ValueBox<Collection<Object>>>();
+		final Set<ValueBox<Collection<Object>>> matches = new HashSet<>();
 		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, PROPERTY_JSONPATH.toString());
 		for (String jpath : jsonPaths) {
 			ValueBox<Collection<Object>> m = collector.collectAll(jpath);
@@ -331,10 +328,10 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 				}
 
 				@Override
-				public Iterator<Slice<JsonToken>> iterator() {
+				public Iterator<Slice<Object>> iterator() {
 
 					log.debug("Iterating slices");
-					return new Iterator<Slice<JsonToken>>() {
+					return new Iterator<Slice<Object>>() {
 
 						int sln = 0;
 						Object next = null;
@@ -370,7 +367,7 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 						}
 
 						@Override
-						public Slice next() {
+						public JSONSlice next() {
 							if (next == null) {
 								return null;
 							}
@@ -386,7 +383,7 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 		}
 	}
 
-	private CloseableIterable<Slice<JsonToken>> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
+	private CloseableIterable<Slice<Object>> sliceFromArray(Properties properties) throws IOException, TriplifierHTTPException {
 		// XXX How do we close the input stream?
 		final InputStream us = Triplifier.getInputStream(properties);
 		JsonFactory factory = JsonFactory.builder().build();
@@ -398,7 +395,7 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 		}
 
 		// Only 1 data source expected
-		return new CloseableIterable<Slice<JsonToken>>() {
+		return new CloseableIterable<>() {
 
 			@Override
 			public void close() throws IOException {
@@ -408,7 +405,7 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 			JsonToken next = null;
 
 			@Override
-			public Iterator<Slice<JsonToken>> iterator() {
+			public Iterator<Slice<Object>> iterator() {
 				log.debug("Iterating slices");
 				return new Iterator<>() {
 					int sln = 0;
@@ -432,7 +429,7 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 					}
 
 					@Override
-					public Slice next() {
+					public JSONSlice next() {
 						if (next == null) {
 							return null;
 						}
@@ -440,7 +437,7 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 						log.trace("next slice: {}", sln);
 						JsonToken tk = next;
 						next = null;
-						return JSONSlice.makeSlice(tk, parser, sln, "");
+						return JSONTokenSlice.makeSlice(tk, parser, sln, "");
 					}
 				};
 			}
@@ -448,15 +445,13 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 	}
 
 	@Override
-	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
+	public void triplify(Slice<Object> slice, Properties p, FacadeXGraphBuilder builder) {
 		builder.addRoot(slice.getDatasourceId());
 		try {
-			if (slice instanceof JSONSlice) {
-				JSONSlice jslice = (JSONSlice) slice;
+			if (slice instanceof JSONTokenSlice jslice) {
 				// Method is 0-indexed
 				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(), SPARQLAnythingConstants.ROOT_ID, builder);
-			} else if (slice instanceof JSONPathSlice) {
-				JSONPathSlice jslice = (JSONPathSlice) slice;
+			} else if (slice instanceof JSONPathSlice jslice) {
 				// Method is 0-indexed
 				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getDatasourceId(), SPARQLAnythingConstants.ROOT_ID, builder);
 			}
@@ -465,8 +460,8 @@ public class JSONTriplifier implements Triplifier, Slicer<JsonToken> {
 		}
 	}
 
-	private void processSlice(int iteration, String rootId, String dataSourceId, JsonToken token, JsonParser parser, FacadeXGraphBuilder builder) {
-		String sliceContainerId = StringUtils.join(rootId, "#slice", iteration);
-		builder.addContainer(dataSourceId, rootId, iteration, sliceContainerId);
-	}
+//	private void processSlice(int iteration, String rootId, String dataSourceId, JsonToken token, JsonParser parser, FacadeXGraphBuilder builder) {
+//		String sliceContainerId = StringUtils.join(rootId, "#slice", iteration);
+//		builder.addContainer(dataSourceId, rootId, iteration, sliceContainerId);
+//	}
 }

@@ -16,17 +16,23 @@
 
 package io.github.sparqlanything.json;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 
-public class JSONPathSlice extends JSONSlice {
-	private Object object;
+public class JSONTokenSlice extends JSONSlice {
+	private JsonToken token;
+	private JsonParser parser;
 	private int iteration;
 	private String dataSourceId;
-
-	private JSONPathSlice(){}
+	private JSONTokenSlice(){}
 
 	@Override
-	public Object get() {
-		return object;
+	public JsonToken get() {
+		return token;
+	}
+
+	public JsonParser getParser() {
+		return parser;
 	}
 
 	@Override
@@ -39,10 +45,10 @@ public class JSONPathSlice extends JSONSlice {
 		return dataSourceId;
 	}
 
-
-	public static JSONPathSlice makeSlice(Object object, int iteration, String dataSourceId){
-		JSONPathSlice r = new JSONPathSlice();
-		r.object = object;
+	public static JSONTokenSlice makeSlice(JsonToken token, JsonParser parser, int iteration, String dataSourceId){
+		JSONTokenSlice r = new JSONTokenSlice();
+		r.token = token;
+		r.parser = parser;
 		r.iteration = iteration;
 		r.dataSourceId = dataSourceId;
 		return r;
