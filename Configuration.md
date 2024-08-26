@@ -79,6 +79,7 @@ WHERE {
 | [location](#location)*                                              | The URL of the data source.                                                                                                                                                                                                                                                                                                                   | Any valid URL or (absolute or relative) path of the file system.                                                                                                                      | \*                                                                                                                                                                                                                                                                          |
 | [content](#content)*                                                | The content to be transformed.                                                                                                                                                                                                                                                                                                                | Any valid literal.                                                                                                                                                                    | \*                                                                                                                                                                                                                                                                          |
 | [command](#command)*                                                | An external command line to be executed. The output is handled according to the option 'media-type'                                                                                                                                                                                                                                           | Any valid literal.                                                                                                                                                                    | \*                                                                                                                                                                                                                                                                          |
+| [read-from-std-in](#read-from-std-in)*                              | It tells SPARQL Anything to read the content to be transformerd from standard input (see issue [#244](https://github.com/SPARQL-Anything/sparql.anything/issues/244))                                                                                                                                                                         | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [from-archive](#from-archive)                                       | The filename of the resource to be triplified within an archive.                                                                                                                                                                                                                                                                              | Any filename.                                                                                                                                                                         | No value                                                                                                                                                                                                                                                                    |
 | [root](#root)                                                       | The IRI of generated root resource. The root will be used as a namespace for the graphs and containers that will be generated.                                                                                                                                                                                                                | Any valid IRI.                                                                                                                                                                        | location  (in the case of location argument  set) <br/> **or** <br/> 'http://sparql.xyz/facade-x/data/' + md5Hex(content) (in the case of content argument set) <br/>**or**<br/> 'http://sparql.xyz/facade-x/data/' + md5Hex(command) (in the case of command argument set) |
 | [media-type](#media-type)                                           | The media-type of the data source.                                                                                                                                                                                                                                                                                                            | Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type).  Supported media types are specified in the [pages dedicated to the supported formats](README.md#supported-formats) | No value (the media-type will be guessed from the the file extension)                                                                                                                                                                                                       |
@@ -1175,21 +1176,64 @@ xyz:Element1  <http://www.w3.org/2000/01/rdf-schema#label>
                 "Element1" .
 ```
 
-<!--
+### read-from-std-in
 
-###
+It tells SPARQL Anything to read the content to be transformed from standard input channel (STDIN)  -- see issue [#244](https://github.com/SPARQL-Anything/sparql.anything/issues/244).
+When it is set to true, the engine reads from the STDIN and sets the input as the value for the `content` option.
+Therefore, the input from the STDIN is processed as inline content (and the inline content is overwritten by the input from the STDIN).
 
-#### Valid Values 
+#### Valid Values
 
+`true`/`false`
 
 #### Default Value
 
+`false`
 
 #### Examples
 
-##### UC1:
+```sparql
+SELECT ?v { 
+    SERVICE <x-sparql-anything:read-from-std-in=true> { 
+        ?root a <http://sparql.xyz/facade-x/ns/root> ;  
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v 
+    }
+}
+```
+
+Standard Input
 
 ```
+abc
+```
+
+Result
+
+| ?v  |
+|-----|
+| abc |
+
+<!--
+### 
+
+
+#### Valid Values
+
+``
+
+#### Default Value
+
+``
+
+#### Examples
+
+```sparql
+
+```
+
+Result
+
+```turtle
 
 ```
 -->
