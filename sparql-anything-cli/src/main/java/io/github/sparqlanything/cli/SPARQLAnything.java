@@ -65,11 +65,11 @@ public class SPARQLAnything {
 
 	// TODO This should be moved to the engine module
 	private static void initSPARQLAnythingEngine() {
+		JenaSystem.init();
 		// Register the JSON-LD parser factory for extension  .json
 		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
 		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
 		// Setup FX executor
-		JenaSystem.init();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
