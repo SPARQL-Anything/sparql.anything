@@ -40,8 +40,9 @@ public class IRIArgument {
 	public static final IRIArgument ANNOTATE_TRIPLES_WITH_SLOT_KEYS = new IRIArgument("annotate-triples-with-slot-keys", "false");
 
 	public static final IRIArgument GENERATE_PREDICATE_LABELS = new IRIArgument("generate-predicate-labels", "false");
+    public static final IRIArgument  READ_FROM_STD_IN =  new IRIArgument("read-from-std-in", "false");
 
-	private final String name;
+    private final String name;
 	private final String defaultValue;
 
 	public IRIArgument(String s) {
