@@ -91,8 +91,7 @@ public abstract class FXWorker<T extends Op> {
 				sb.append(sc.nextLine());
 				sb.append('\n');
 			}
-			logger.trace("from std in : {}", sb);
-			p.setProperty(IRIArgument.CONTENT.toString(), sb.toString());
+			p.setProperty(IRIArgument.CONTENT.toString(), sb.substring(0, sb.length()-1));
 		}
 	}
 
