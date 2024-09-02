@@ -41,6 +41,7 @@ public class IRIArgument {
 
 	public static final IRIArgument GENERATE_PREDICATE_LABELS = new IRIArgument("generate-predicate-labels", "false");
     public static final IRIArgument  READ_FROM_STD_IN =  new IRIArgument("read-from-std-in", "false");
+    public static final IRIArgument  AUDIT =  new IRIArgument("audit", "false");
 
     private final String name;
 	private final String defaultValue;

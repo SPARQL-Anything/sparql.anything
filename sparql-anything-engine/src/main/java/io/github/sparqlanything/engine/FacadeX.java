@@ -26,6 +26,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.commons.text.similarity.*;
 import org.apache.jena.query.ARQ;
+import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionFactory;
@@ -35,7 +36,9 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public final class FacadeX {
 
@@ -43,6 +46,7 @@ public final class FacadeX {
 	public final static TriplifierRegister Registry = TriplifierRegister.getInstance();
 	public static final String ANY_SLOT_URI = Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot";
 	private static final Logger log = LoggerFactory.getLogger(FacadeX.class);
+	static final Map<String, DatasetGraph> executedFacadeXIris = new HashMap<String, DatasetGraph>();
 
 	static {
 		try {

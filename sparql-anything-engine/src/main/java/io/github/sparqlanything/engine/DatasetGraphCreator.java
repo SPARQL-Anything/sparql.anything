@@ -20,6 +20,7 @@ import io.github.sparqlanything.metadata.MetadataTriplifier;
 import io.github.sparqlanything.model.*;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
+
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
@@ -30,35 +31,25 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.util.Symbol;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public class DatasetGraphCreator {
 
 	private static final Logger logger = LoggerFactory.getLogger(DatasetGraphCreator.class);
-	private final static Symbol inMemoryCache = Symbol.create("facade-x-in-memory-cache");
 	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
-	private final Map<String, DatasetGraph> executedFacadeXIris;
 	private final ExecutionContext execCxt;
 
 	public DatasetGraphCreator(ExecutionContext execCxt) {
 		this.execCxt = execCxt;
-
-		if (!execCxt.getContext().isDefined(inMemoryCache)) {
-			logger.trace("Initialising in-memory cache");
-			execCxt.getContext().set(inMemoryCache, new HashMap<String, DatasetGraph>());
-		}
-		executedFacadeXIris = execCxt.getContext().get(inMemoryCache);
 	}
 
 
@@ -69,25 +60,29 @@ public class DatasetGraphCreator {
 		}
 
 		boolean use_cache = !PropertyUtils.getBooleanProperty(p, IRIArgument.NO_CACHE);
-		logger.trace("Use cache {}",use_cache);
+		logger.trace("Use cache {}", use_cache);
 		// If the operation was already executed in a previous call, reuse the same
 		// in-memory graph
 		// XXX Future implementations may use a caching system
-		if (use_cache && executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op)))
-			return executedFacadeXIris.get(getInMemoryCacheKey(p, op));
+		if (use_cache && FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
+			dg = FacadeX.executedFacadeXIris.get(getInMemoryCacheKey(p, op));
+			createAuditGraph(dg, p, true);
+			return dg;
+		}
 
 		logger.trace("Properties extracted: {}", p);
 		String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
 
 		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op);
 		dg = triplify(op, p, t);
+		createAuditGraph(dg, p, false);
 
-		logger.debug("triplification done -- commiting and ending the write txn");
+		logger.debug("triplification done -- committing and ending the write txn");
 		dg.commit();
 		dg.end();
 
 		// Only make additional work if needed
-		if(logger.isDebugEnabled()) {
+		if (logger.isDebugEnabled()) {
 			dg.begin(ReadWrite.READ);
 			logger.debug("Size default graph {}", dg.getDefaultGraph().size());
 			logger.debug("Size of the graph {}: {}", p.getProperty(IRIArgument.LOCATION.toString()), dg.getGraph(NodeFactory.createURI(p.getProperty(IRIArgument.LOCATION.toString()) + "#")).size());
@@ -96,15 +91,13 @@ public class DatasetGraphCreator {
 
 		if (urlLocation != null) {
 			logger.trace("Location provided {}", urlLocation);
-			URL url = Triplifier.instantiateURL(urlLocation);
 			dg.begin(ReadWrite.WRITE);
 			createMetadataGraph(dg, p);
-			createAuditGraph(dg, p, url);
 			dg.commit();
 		}
 		// Remember the triplified data
-		if (use_cache && !executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
-			executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
+		if (use_cache && !FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
+			FacadeX.executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 			logger.debug("Graph added to in-memory cache");
 		}
 		// TODO wrap this in a txn or move it to a place where we are already in a txn
@@ -120,69 +113,16 @@ public class DatasetGraphCreator {
 		return dg;
 	}
 
-	private void createMetadataGraph(DatasetGraph dg, Properties p) throws IOException {
-		if (triplifyMetadata(p)) {
-			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
-			metadataTriplifier.triplify(p, builder);
-			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI), builder.getDatasetGraph().getDefaultGraph());
-		}
-	}
-
-	private boolean triplifyMetadata(Properties p) {
-		boolean result = false;
-		if (p.containsKey(IRIArgument.METADATA.toString())) {
-			try {
-				result = Boolean.parseBoolean(p.getProperty(IRIArgument.METADATA.toString()));
-			} catch (Exception e) {
-				result = false;
-			}
-		}
-		return result;
-	}
-
-	private void createAuditGraph(DatasetGraph dg, Properties p, URL url) {
-		if (p.containsKey("audit") && (p.get("audit").equals("1") || p.get("audit").equals("true"))) {
-			logger.trace("audit information in graph: {}", Triplifier.AUDIT_GRAPH_IRI);
-			logger.trace("{} triples loaded ({})", dg.getGraph(NodeFactory.createURI(url.toString())).size(), NodeFactory.createURI(url.toString()));
-			String SD = "http://www.w3.org/ns/sparql-service-description#";
-			Model audit = ModelFactory.createDefaultModel();
-			Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
-
-			// For each graph
-			Iterator<Node> graphs = dg.listGraphNodes();
-			while (graphs.hasNext()) {
-				Node g = graphs.next();
-				Resource auditGraph = audit.createResource(g.getURI());
-				root.addProperty(ResourceFactory.createProperty(SD + "namedGraph"), auditGraph);
-				auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD + "NamedGraph"));
-				auditGraph.addProperty(ResourceFactory.createProperty(SD + "name"), g.getURI());
-				auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
-			}
-			dg.addGraph(NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI), audit.getGraph());
-		}
+	private String getInMemoryCacheKey(Properties properties, Op op) {
+		String key = properties.toString().concat(op.toString());
+		logger.trace("Cache key {}", key);
+		return key;
 	}
 
 	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
 		DatasetGraph dg;
 
 		Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
-//		null;
-//		// Local value for strategy?
-//		String localStrategy = p.getProperty(IRIArgument.STRATEGY.toString());
-//		// Global value for strategy?
-//		Integer globalStrategy = execCxt.getContext().get(FacadeXOpExecutor.strategy);
-//		if(localStrategy != null){
-//			if(globalStrategy!=null){
-//				logger.warn("Local strategy {} overriding global strategy {}", localStrategy, globalStrategy);
-//			}
-//			strategy = Integer.parseInt(localStrategy);
-//		} else if(globalStrategy!=null){
-//			strategy = globalStrategy;
-//		} else{
-//			// Defaul strategy
-//			strategy = 1;
-//		}
-		URL url = Triplifier.getLocation(p);
 		String resourceId = Triplifier.getResourceId(p);
 
 		logger.debug("Execution strategy: {} {}", strategy, op.toString());
@@ -218,12 +158,61 @@ public class DatasetGraphCreator {
 			dg = DatasetFactory.create().asDatasetGraph();
 		}
 
-		// logger.trace("Union graph size {}",dg.getUnionGraph().size());
-		// logger.trace("Default graph size {}", dg.getDefaultGraph().size());
 		return dg;
 	}
 
-	private String getInMemoryCacheKey(Properties properties, Op op) {
-		return properties.toString() + op.toString();
+	private void createAuditGraph(DatasetGraph dg, Properties p, boolean b) {
+		if (PropertyUtils.getBooleanProperty(p, IRIArgument.AUDIT)) {
+			String SD = "http://www.w3.org/ns/sparql-service-description#";
+			Model audit = ModelFactory.createDefaultModel();
+			Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
+			Node nodeGraph = NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI);
+
+			// Check if the audit graph already exists (this could happen if the dataset graph comes from the cache)
+			// In this case the audit the value of the cached graph property is updated
+			if(dg.containsGraph(nodeGraph)){
+				Set<Node> graphNodes = new HashSet<>();
+				dg.find(nodeGraph, null, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), null).forEachRemaining(q->{
+					graphNodes.add(q.getSubject());
+				});
+				for (Node g: graphNodes) {
+					dg.add(nodeGraph, g, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), NodeFactory.createLiteralByValue(true));
+				}
+				return;
+			}
+
+			// For each graph
+			Iterator<Node> graphs = dg.listGraphNodes();
+			while (graphs.hasNext()) {
+				Node g = graphs.next();
+				Resource auditGraph = audit.createResource(g.getURI());
+				root.addProperty(ResourceFactory.createProperty(SD.concat("namedGraph")), auditGraph);
+				auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD.concat("NamedGraph")));
+				auditGraph.addProperty(ResourceFactory.createProperty(SD.concat("name")), g.getURI());
+				auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
+				auditGraph.addLiteral(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH), b);
+			}
+			dg.addGraph(nodeGraph, audit.getGraph());
+		}
+	}
+
+	private void createMetadataGraph(DatasetGraph dg, Properties p) throws IOException {
+		if (triplifyMetadata(p)) {
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
+			metadataTriplifier.triplify(p, builder);
+			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI), builder.getDatasetGraph().getDefaultGraph());
+		}
+	}
+
+	private boolean triplifyMetadata(Properties p) {
+		boolean result = false;
+		if (p.containsKey(IRIArgument.METADATA.toString())) {
+			try {
+				result = Boolean.parseBoolean(p.getProperty(IRIArgument.METADATA.toString()));
+			} catch (Exception e) {
+				result = false;
+			}
+		}
+		return result;
 	}
 }
