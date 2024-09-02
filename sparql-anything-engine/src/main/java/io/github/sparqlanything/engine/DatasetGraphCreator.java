@@ -178,6 +178,7 @@ public class DatasetGraphCreator {
 					graphNodes.add(q.getSubject());
 				});
 				for (Node g: graphNodes) {
+					dg.delete(nodeGraph, g, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), NodeFactory.createLiteralByValue(false));
 					dg.add(nodeGraph, g, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), NodeFactory.createLiteralByValue(true));
 				}
 				return;
