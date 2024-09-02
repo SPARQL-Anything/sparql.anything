@@ -18,7 +18,6 @@ package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.metadata.MetadataTriplifier;
 import io.github.sparqlanything.model.*;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.datatypes.xsd.XSDDateTime;
 import org.apache.jena.graph.Node;
@@ -34,10 +33,8 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
-import org.apache.jena.vocabulary.XSD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +65,7 @@ public class DatasetGraphCreator {
 		// XXX Future implementations may use a caching system
 		if (use_cache && FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
 			dg = FacadeX.executedFacadeXIris.get(getInMemoryCacheKey(p, op));
-			createAuditGraph(dg, p, true);
+			createAuditGraph(dg, p, true, op);
 			return dg;
 		}
 
@@ -77,7 +74,7 @@ public class DatasetGraphCreator {
 
 		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op);
 		dg = triplify(op, p, t);
-		createAuditGraph(dg, p, false);
+		createAuditGraph(dg, p, false, op);
 
 		logger.debug("triplification done -- committing and ending the write txn");
 		dg.commit();
@@ -105,13 +102,6 @@ public class DatasetGraphCreator {
 		// TODO wrap this in a txn or move it to a place where we are already in a txn
 		// logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
 
-//		else {
-//			logger.trace("No location, use content: {}", p.getProperty(IRIArgument.CONTENT.toString()));
-//			dg = t.triplify(p);
-//			logger.trace("Size: {} {}", dg.size(), dg.getDefaultGraph().size());
-//
-//		}
-
 		return dg;
 	}
 
@@ -119,6 +109,45 @@ public class DatasetGraphCreator {
 		String key = properties.toString().concat(op.toString());
 		logger.trace("Cache key {}", key);
 		return key;
+	}
+
+	private void createAuditGraph(DatasetGraph dg, Properties p, boolean b, Op op) {
+		if (PropertyUtils.getBooleanProperty(p, IRIArgument.AUDIT)) {
+			String SD = "http://www.w3.org/ns/sparql-service-description#";
+			Model audit = ModelFactory.createDefaultModel();
+			Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
+			Node nodeGraph = NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI);
+
+			// Check if the audit graph already exists (this could happen if the dataset graph comes from the cache)
+			// In this case the audit the value of the cached graph property is updated
+			if (dg.containsGraph(nodeGraph)) {
+				Set<Node> graphNodes = new HashSet<>();
+				dg.find(nodeGraph, null, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), null).forEachRemaining(q -> {
+					graphNodes.add(q.getSubject());
+				});
+				for (Node g : graphNodes) {
+					dg.delete(nodeGraph, g, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), NodeFactory.createLiteralByValue(false));
+					dg.add(nodeGraph, g, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), NodeFactory.createLiteralByValue(true));
+				}
+				return;
+			}
+
+			// For each graph
+			Iterator<Node> graphs = dg.listGraphNodes();
+			while (graphs.hasNext()) {
+				Node g = graphs.next();
+				Resource auditGraph = audit.createResource(g.getURI());
+				root.addProperty(ResourceFactory.createProperty(SD.concat("namedGraph")), auditGraph);
+				auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD.concat("NamedGraph")));
+				auditGraph.addProperty(ResourceFactory.createProperty(SD.concat("name")), g.getURI());
+				auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
+				auditGraph.addLiteral(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH), b);
+				auditGraph.addProperty(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH_CREATION), new XSDDateTime(Calendar.getInstance()).toString(), XSDDatatype.XSDdateTime);
+				auditGraph.addProperty(auditGraph.getModel().createProperty(Triplifier.FACADE_X_SPARQL_ALGEBRA), op.toString());
+
+			}
+			dg.addGraph(nodeGraph, audit.getGraph());
+		}
 	}
 
 	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
@@ -161,44 +190,6 @@ public class DatasetGraphCreator {
 		}
 
 		return dg;
-	}
-
-	private void createAuditGraph(DatasetGraph dg, Properties p, boolean b) {
-		if (PropertyUtils.getBooleanProperty(p, IRIArgument.AUDIT)) {
-			String SD = "http://www.w3.org/ns/sparql-service-description#";
-			Model audit = ModelFactory.createDefaultModel();
-			Resource root = audit.createResource(Triplifier.AUDIT_GRAPH_IRI + "#root");
-			Node nodeGraph = NodeFactory.createURI(Triplifier.AUDIT_GRAPH_IRI);
-
-			// Check if the audit graph already exists (this could happen if the dataset graph comes from the cache)
-			// In this case the audit the value of the cached graph property is updated
-			if(dg.containsGraph(nodeGraph)){
-				Set<Node> graphNodes = new HashSet<>();
-				dg.find(nodeGraph, null, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), null).forEachRemaining(q->{
-					graphNodes.add(q.getSubject());
-				});
-				for (Node g: graphNodes) {
-					dg.delete(nodeGraph, g, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), NodeFactory.createLiteralByValue(false));
-					dg.add(nodeGraph, g, NodeFactory.createURI(Triplifier.FACADE_X_CACHED_GRAPH), NodeFactory.createLiteralByValue(true));
-				}
-				return;
-			}
-
-			// For each graph
-			Iterator<Node> graphs = dg.listGraphNodes();
-			while (graphs.hasNext()) {
-				Node g = graphs.next();
-				Resource auditGraph = audit.createResource(g.getURI());
-				root.addProperty(ResourceFactory.createProperty(SD.concat("namedGraph")), auditGraph);
-				auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD.concat("NamedGraph")));
-				auditGraph.addProperty(ResourceFactory.createProperty(SD.concat("name")), g.getURI());
-				auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
-				auditGraph.addLiteral(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH), b);
-				auditGraph.addProperty(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH_CREATION),new XSDDateTime(Calendar.getInstance()).toString(), XSDDatatype.XSDdateTime);
-
-			}
-			dg.addGraph(nodeGraph, audit.getGraph());
-		}
 	}
 
 	private void createMetadataGraph(DatasetGraph dg, Properties p) throws IOException {

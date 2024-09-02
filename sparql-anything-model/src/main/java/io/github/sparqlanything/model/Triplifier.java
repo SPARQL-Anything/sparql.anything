@@ -49,6 +49,7 @@ public interface Triplifier {
 	String FACADE_X_TYPE_PROPERTIES = FACADE_X_CONST_NAMESPACE_IRI + "properties";
 	String FACADE_X_CACHED_GRAPH = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraph";
 	String FACADE_X_CACHED_GRAPH_CREATION = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraphCreation";
+	String FACADE_X_SPARQL_ALGEBRA = FACADE_X_CONST_NAMESPACE_IRI + "sparqlAlgebra";
 
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
