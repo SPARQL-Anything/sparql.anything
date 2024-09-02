@@ -58,12 +58,9 @@ public class DatasetGraphCreator {
 			return DatasetGraphFactory.create();
 		}
 
-		boolean use_cache = !PropertyUtils.getBooleanProperty(p, IRIArgument.NO_CACHE);
-		logger.trace("Use cache {}", use_cache);
-		// If the operation was already executed in a previous call, reuse the same
-		// in-memory graph
-		// XXX Future implementations may use a caching system
-		if (use_cache && FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
+		boolean useCache = !PropertyUtils.getBooleanProperty(p, IRIArgument.NO_CACHE);
+
+		if (useCache && FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
 			dg = FacadeX.executedFacadeXIris.get(getInMemoryCacheKey(p, op));
 			createAuditGraph(dg, p, true, op);
 			return dg;
@@ -75,6 +72,7 @@ public class DatasetGraphCreator {
 		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op);
 		dg = triplify(op, p, t);
 		createAuditGraph(dg, p, false, op);
+		createMetadataGraph(dg, p);
 
 		logger.debug("triplification done -- committing and ending the write txn");
 		dg.commit();
@@ -88,19 +86,11 @@ public class DatasetGraphCreator {
 			dg.end();
 		}
 
-		if (urlLocation != null) {
-			logger.trace("Location provided {}", urlLocation);
-			dg.begin(ReadWrite.WRITE);
-			createMetadataGraph(dg, p);
-			dg.commit();
-		}
 		// Remember the triplified data
-		if (use_cache && !FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
+		if (useCache && !FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
 			FacadeX.executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
 			logger.debug("Graph added to in-memory cache");
 		}
-		// TODO wrap this in a txn or move it to a place where we are already in a txn
-		// logger.trace("Triplified, #triples in default graph {} {}", dg.getDefaultGraph().size(), op.toString());
 
 		return dg;
 	}
