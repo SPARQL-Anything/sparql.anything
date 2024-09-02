@@ -71,10 +71,10 @@ public class ItTripleFilteringTest {
 						"PREFIX void: <http://rdfs.org/ns/void#>\n" +
 						"SELECT DISTINCT ?g ?triples WHERE { " +
 						"{" +
-						"SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=1,location="
+						"SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=true,location="
 						+ location + "> { graph ?g {[] ?p [] } . graph xyz:audit { ?g void:triples ?triples } } " +
 						"} UNION {" +
-						"SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=1,location="
+						"SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=true,location="
 						+ location + "> { graph ?g {[] a [] } . graph xyz:audit { ?g void:triples ?triples } } " +
 						"" +
 						"}}");

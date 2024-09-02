@@ -190,6 +190,7 @@ public class DatasetGraphCreator {
 				auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD.concat("NamedGraph")));
 				auditGraph.addProperty(ResourceFactory.createProperty(SD.concat("name")), g.getURI());
 				auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
+//				auditGraph.addLiteral(VOID., dg.getGraph(g).size());
 				auditGraph.addLiteral(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH), b);
 			}
 			dg.addGraph(nodeGraph, audit.getGraph());
