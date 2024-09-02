@@ -18,6 +18,9 @@ package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.metadata.MetadataTriplifier;
 import io.github.sparqlanything.model.*;
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.datatypes.xsd.XSDDateTime;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 
@@ -31,16 +34,15 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.ExecutionContext;
+import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
+import org.apache.jena.vocabulary.XSD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class DatasetGraphCreator {
 
@@ -190,8 +192,9 @@ public class DatasetGraphCreator {
 				auditGraph.addProperty(RDF.type, ResourceFactory.createResource(SD.concat("NamedGraph")));
 				auditGraph.addProperty(ResourceFactory.createProperty(SD.concat("name")), g.getURI());
 				auditGraph.addLiteral(VOID.triples, dg.getGraph(g).size());
-//				auditGraph.addLiteral(VOID., dg.getGraph(g).size());
 				auditGraph.addLiteral(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH), b);
+				auditGraph.addProperty(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH_CREATION),new XSDDateTime(Calendar.getInstance()).toString(), XSDDatatype.XSDdateTime);
+
 			}
 			dg.addGraph(nodeGraph, audit.getGraph());
 		}
