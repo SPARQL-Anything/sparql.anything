@@ -40,9 +40,9 @@ import java.util.Set;
 
 public interface Triplifier {
 
-	String METADATA_GRAPH_IRI = "http://sparql.xyz/facade-x/data/metadata";
-	String AUDIT_GRAPH_IRI = "http://sparql.xyz/facade-x/data/audit";
 	String XYZ_NS = "http://sparql.xyz/facade-x/data/";
+	String METADATA_GRAPH_IRI = XYZ_NS + "metadata";
+	String AUDIT_GRAPH_IRI = XYZ_NS + "audit";
 	String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
 	String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
 	String FACADE_X_SLOT_KEY = FACADE_X_CONST_NAMESPACE_IRI + "slot-key";

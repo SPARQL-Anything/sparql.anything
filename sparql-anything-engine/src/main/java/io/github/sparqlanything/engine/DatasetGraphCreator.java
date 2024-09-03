@@ -24,7 +24,6 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 
 import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
@@ -51,12 +50,9 @@ public class DatasetGraphCreator {
 		this.execCxt = execCxt;
 	}
 
-
 	public DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException {
 		DatasetGraph dg;
-		if (t == null) {
-			return DatasetGraphFactory.create();
-		}
+		if (t == null) return DatasetGraphFactory.create();
 
 		boolean useCache = !PropertyUtils.getBooleanProperty(p, IRIArgument.NO_CACHE);
 
@@ -66,31 +62,15 @@ public class DatasetGraphCreator {
 			return dg;
 		}
 
-		logger.trace("Properties extracted: {}", p);
-		String urlLocation = p.getProperty(IRIArgument.LOCATION.toString());
-
-		logger.trace("Triplifier {}\n{}", t.getClass().toString(), op);
 		dg = triplify(op, p, t);
 		createAuditGraph(dg, p, false, op);
 		createMetadataGraph(dg, p);
 
-		logger.debug("triplification done -- committing and ending the write txn");
 		dg.commit();
 		dg.end();
 
-		// Only make additional work if needed
-		if (logger.isDebugEnabled()) {
-			dg.begin(ReadWrite.READ);
-			logger.debug("Size default graph {}", dg.getDefaultGraph().size());
-			logger.debug("Size of the graph {}: {}", p.getProperty(IRIArgument.LOCATION.toString()), dg.getGraph(NodeFactory.createURI(p.getProperty(IRIArgument.LOCATION.toString()) + "#")).size());
-			dg.end();
-		}
-
 		// Remember the triplified data
-		if (useCache && !FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
-			FacadeX.executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
-			logger.debug("Graph added to in-memory cache");
-		}
+		persistDatasetGraphInCache(p, op, dg, useCache);
 
 		return dg;
 	}
@@ -134,7 +114,6 @@ public class DatasetGraphCreator {
 				auditGraph.addLiteral(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH), b);
 				auditGraph.addProperty(auditGraph.getModel().createProperty(Triplifier.FACADE_X_CACHED_GRAPH_CREATION), new XSDDateTime(Calendar.getInstance()).toString(), XSDDatatype.XSDdateTime);
 				auditGraph.addProperty(auditGraph.getModel().createProperty(Triplifier.FACADE_X_SPARQL_ALGEBRA), op.toString());
-
 			}
 			dg.addGraph(nodeGraph, audit.getGraph());
 		}
@@ -187,6 +166,13 @@ public class DatasetGraphCreator {
 			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			metadataTriplifier.triplify(p, builder);
 			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI), builder.getDatasetGraph().getDefaultGraph());
+		}
+	}
+
+	private void persistDatasetGraphInCache(Properties p, Op op, DatasetGraph dg, boolean useCache) {
+		if (useCache && !FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
+			FacadeX.executedFacadeXIris.put(getInMemoryCacheKey(p, op), dg);
+			logger.debug("Graph added to in-memory cache");
 		}
 	}
 
