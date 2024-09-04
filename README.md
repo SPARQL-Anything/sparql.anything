@@ -9,6 +9,112 @@
 
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
+## Quickstart
+
+```bash
+# have java and curl installed
+$ curl -L -O 'https://github.com/SPARQL-Anything/sparql.anything/releases/download/0.9.0/sparql-anything-0.9.0.jar'
+```
+
+```csv
+$ cat some.csv
+id,name,height_inches
+5,alice,66
+2,fred,67
+9,william,73
+```
+
+```sparql
+justin@parens:~/Downloads$ cat some.rq 
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+CONSTRUCT { ?s ?p ?o  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:location     "some.csv" ;
+                  fx:csv.headers  "true" .
+        ?s        ?p              ?o
+      }
+  }
+```
+
+```turtle
+$ java -jar sparql-anything-0.8.1.jar --query some.rq 
+[main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ a       fx:root ;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+          [ xyz:height_inches  "66" ;
+            xyz:id             "5" ;
+            xyz:name           "alice"
+          ] ;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+          [ xyz:height_inches  "67" ;
+            xyz:id             "2" ;
+            xyz:name           "fred"
+          ] ;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+          [ xyz:height_inches  "73" ;
+            xyz:id             "9" ;
+            xyz:name           "william"
+          ]
+] .
+```
+
+```sparql
+# and you can use everything you know about SPARQL to construct the RDF you want
+justin@parens:~/Downloads$ cat some.rq
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  ex:   <http://example.com/>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+CONSTRUCT {
+?person a ex:Person ;
+  ex:name ?name ;
+  ex:height ?height .
+}
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:location     "some.csv" ;
+                  fx:csv.headers  "true" .
+        ?row xyz:height_inches ?height_string .
+        ?row xyz:id ?id_string .
+        ?row xyz:name ?name .
+        bind(xsd:integer(?id) as ?id)
+        bind(xsd:float(?height_string) as ?height)
+        bind(iri(concat(str(ex:),"Person/",?id_string)) as ?person)
+      }
+  }
+```
+
+```turtle
+justin@parens:~/Downloads$ java -jar sparql-anything-0.8.1.jar --query some.rq
+[main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
+@prefix ex:  <http://example.com/> .
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+<http://example.com/Person/2>
+        a          ex:Person ;
+        ex:height  "67"^^xsd:float ;
+        ex:name    "fred" .
+
+<http://example.com/Person/5>
+        a          ex:Person ;
+        ex:height  "66"^^xsd:float ;
+        ex:name    "alice" .
+
+<http://example.com/Person/9>
+        a          ex:Person ;
+        ex:height  "73"^^xsd:float ;
+        ex:name    "william" .
+```
+
 Main features:
 
 - Provides a homogenous view over heterogeneous  data sources, thanks to the Facade-X meta-model (see [Facade-X specification](Facade-X.md) )
@@ -29,7 +135,7 @@ Main features:
   and [#203](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
 - Supports an [on-disk option](#Configuration) (with Apache Jena TDB2)
 
-## Quickstart
+## Introduction
 
 SPARQL Anything uses a single generic abstraction for all data source formats called Facade-X.
 
