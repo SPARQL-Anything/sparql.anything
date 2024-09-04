@@ -70,7 +70,7 @@ $ java -jar sparql-anything-0.9.0.jar --query some.rq
 
 ```sparql
 # and now you can use everything you know about SPARQL to construct the RDF you want
-# by transforming the Facade-X representaion into the desired RDF
+# by transforming the Facade-X representation into the desired RDF
 $ cat some.rq
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
