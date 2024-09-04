@@ -11,6 +11,9 @@ SPARQL Anything is a system for Semantic Web re-engineering that allows users to
 
 ## Quickstart
 
+One of the most common uses of SPARQL Anything is to start with some structured data (e.g. csv) and produce RDF using a particular ontology (e.g. [gist](https://github.com/semanticarts/gist)).
+Here is how that can be done.
+
 ```bash
 # have java and curl installed
 $ curl -L -O 'https://github.com/SPARQL-Anything/sparql.anything/releases/download/0.9.0/sparql-anything-0.9.0.jar'
@@ -25,6 +28,7 @@ id,name,height_inches
 ```
 
 ```sparql
+# first let's write a simple query that just shows us the Facade-X representaion of the csv
 $ cat some.rq 
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
@@ -65,16 +69,21 @@ $ java -jar sparql-anything-0.9.0.jar --query some.rq
 ```
 
 ```sparql
-# and you can use everything you know about SPARQL to construct the RDF you want
+# and now you can use everything you know about SPARQL to construct the RDF you want
+# by transforming the Facade-X representaion into the desired RDF
 $ cat some.rq
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  ex:   <http://example.com/>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  gist: <https://w3id.org/semanticarts/ns/ontology/gist/>
 CONSTRUCT {
-?person a ex:Person ;
-  ex:name ?name ;
-  ex:height ?height .
+?person a gist:Person ;
+  gist:name ?name ;
+  gist:hasMagnitude ?height_magnitude .
+?height_magnitude a gist:Extent ;
+  gist:hasUnitOfMeasure gist:_inch ;
+  gist:numericValue ?height .
 }
 WHERE
   { SERVICE <x-sparql-anything:>
@@ -84,7 +93,7 @@ WHERE
         ?row xyz:height_inches ?height_string .
         ?row xyz:id ?id_string .
         ?row xyz:name ?name .
-        bind(xsd:integer(?id) as ?id)
+        bind(bnode() as ?height_magnitude)
         bind(xsd:float(?height_string) as ?height)
         bind(iri(concat(str(ex:),"Person/",?id_string)) as ?person)
       }
@@ -93,26 +102,35 @@ WHERE
 
 ```turtle
 $ java -jar sparql-anything-0.9.0.jar --query some.rq
-[main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
-@prefix ex:  <http://example.com/> .
-@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz: <http://sparql.xyz/facade-x/data/> .
-
-<http://example.com/Person/2>
-        a          ex:Person ;
-        ex:height  "67"^^xsd:float ;
-        ex:name    "fred" .
-
-<http://example.com/Person/5>
-        a          ex:Person ;
-        ex:height  "66"^^xsd:float ;
-        ex:name    "alice" .
+@prefix ex:   <http://example.com/> .
+@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
+@prefix gist: <https://w3id.org/semanticarts/ns/ontology/gist/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:  <http://sparql.xyz/facade-x/data/> .
 
 <http://example.com/Person/9>
-        a          ex:Person ;
-        ex:height  "73"^^xsd:float ;
-        ex:name    "william" .
+        a                  gist:Person ;
+        gist:hasMagnitude  [ a                      gist:Extent ;
+                             gist:hasUnitOfMeasure  gist:_inch ;
+                             gist:numericValue      "73"^^xsd:float
+                           ] ;
+        gist:name          "william" .
+
+<http://example.com/Person/2>
+        a                  gist:Person ;
+        gist:hasMagnitude  [ a                      gist:Extent ;
+                             gist:hasUnitOfMeasure  gist:_inch ;
+                             gist:numericValue      "67"^^xsd:float
+                           ] ;
+        gist:name          "fred" .
+
+<http://example.com/Person/5>
+        a                  gist:Person ;
+        gist:hasMagnitude  [ a                      gist:Extent ;
+                             gist:hasUnitOfMeasure  gist:_inch ;
+                             gist:numericValue      "66"^^xsd:float
+                           ] ;
+        gist:name          "alice" .
 ```
 
 Main features:
