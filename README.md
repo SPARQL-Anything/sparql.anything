@@ -25,7 +25,7 @@ id,name,height_inches
 ```
 
 ```sparql
-justin@parens:~/Downloads$ cat some.rq 
+$ cat some.rq 
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 CONSTRUCT { ?s ?p ?o  }
@@ -66,7 +66,7 @@ $ java -jar sparql-anything-0.8.1.jar --query some.rq
 
 ```sparql
 # and you can use everything you know about SPARQL to construct the RDF you want
-justin@parens:~/Downloads$ cat some.rq
+$ cat some.rq
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  ex:   <http://example.com/>
@@ -92,7 +92,7 @@ WHERE
 ```
 
 ```turtle
-justin@parens:~/Downloads$ java -jar sparql-anything-0.8.1.jar --query some.rq
+$ java -jar sparql-anything-0.8.1.jar --query some.rq
 [main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
 @prefix ex:  <http://example.com/> .
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
