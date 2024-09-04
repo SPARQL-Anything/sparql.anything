@@ -19,7 +19,7 @@ import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.apache.any23.extractor.ExtractionContext;
 import org.apache.any23.writer.TripleHandlerException;
 import org.apache.any23.writer.TripleWriterHandler;
-import org.apache.jena.graph.BlankNodeId;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.eclipse.rdf4j.model.BNode;
@@ -39,7 +39,7 @@ public class MetadataWriter extends TripleWriterHandler {
 	}
 
 	@Override
-	public void close() throws TripleHandlerException {
+	public void close() {
 
 	}
 
@@ -57,23 +57,23 @@ public class MetadataWriter extends TripleWriterHandler {
 	}
 
 	@Override
-	public void writeTriple(Resource s, IRI p, Value o, Resource g) throws TripleHandlerException {
+	public void writeTriple(Resource s, IRI p, Value o, Resource g) {
 		log.debug("Write metadata triple on graph: {}:: {}, {}, {}", g, s.toString(), p.toString(), o.toString());
 		facadeXGraphBuilder.add(facadeXGraphBuilder.dataSourceId2node(""), resolveValue(s), NodeFactory.createURI(p.stringValue()), resolveValue(o));
 	}
 
 	public Node resolveValue(Value r) {
 		if (r instanceof BNode) {
-			return NodeFactory.createBlankNode(BlankNodeId.create(((BNode) r).getID()));
+			return NodeFactory.createBlankNode(((BNode) r).getID());
 		} else if (r instanceof IRI) {
 			return NodeFactory.createURI(r.stringValue());
 		} else {
-			return NodeFactory.createLiteral(r.stringValue());
+			return NodeFactory.createLiteralDT(r.stringValue(), XSDDatatype.XSDstring);
 		}
 	}
 
 	@Override
-	public void writeNamespace(String prefix, String uri) throws TripleHandlerException {
+	public void writeNamespace(String prefix, String uri)  {
 
 	}
 

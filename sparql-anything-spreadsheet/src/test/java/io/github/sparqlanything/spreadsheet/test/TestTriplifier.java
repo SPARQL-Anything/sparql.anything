@@ -20,9 +20,11 @@ import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.spreadsheet.SpreadsheetTriplifier;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,6 +36,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class TestTriplifier {
+
+	@Ignore
+	@Test
+	public void bnode(){
+		System.out.println(NodeFactory.createBlankNode("ha").getBlankNodeLabel());
+	}
 
 	@Test
 	public void testCellLink() {

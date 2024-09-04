@@ -50,11 +50,13 @@ public class QueryIterSlicer extends QueryIter {
 	private QueryIterator current = null;
 	private final Properties p;
 
+	private final CloseableIterable<Slice> it;
+
 	public QueryIterSlicer(ExecutionContext execCxt, QueryIterator input, Triplifier t, Properties properties, Op op) throws TriplifierHTTPException, IOException {
 		super(execCxt);
-		slicer = (Slicer) t;
+		this.slicer = (Slicer) t;
 		this.p = properties;
-		final Iterable<Slice> it = slicer.slice(p);
+		this.it = slicer.slice(p);
 		this.input = input;
 
 		elements = new ArrayList<>();
@@ -102,7 +104,7 @@ public class QueryIterSlicer extends QueryIter {
 				FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
 				logger.trace("Op {}", op);
 				logger.trace("OpName {}", op.getName());
-				/**
+				/*
 				 * input needs to be reset before each execution, otherwise the executor will skip subsequent executions
 				 * since input bindings have been flushed!
 				 */
@@ -116,14 +118,19 @@ public class QueryIterSlicer extends QueryIter {
 				}
 			} else {
 				logger.trace("Slices finished");
-				/**
+				/*
 				 * Input iterator can be closed
 				 */
 				input.cancel();
 				// Make sure the original Op is executed
-				// XXX Maybe there is a better qay of doing it?
+				// XXX Maybe there is a better way of doing it?
 				ExecutionContext exc = new ExecutionContext(DatasetGraphFactory.create());
 				QC.execute(op, QueryIterNullIterator.create(exc), exc);
+				try {
+					this.it.close();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				return false;
 			}
 		}

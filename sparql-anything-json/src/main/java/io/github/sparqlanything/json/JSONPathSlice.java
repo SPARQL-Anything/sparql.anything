@@ -16,12 +16,8 @@
 
 package io.github.sparqlanything.json;
 
-import io.github.sparqlanything.model.Slice;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class JSONPathSlice implements Slice<Object> {
-	private static Logger logger = LoggerFactory.getLogger(JSONPathSlice.class);
+public class JSONPathSlice extends JSONSlice {
 	private Object object;
 	private int iteration;
 	private String dataSourceId;

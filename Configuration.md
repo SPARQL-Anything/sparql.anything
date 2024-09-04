@@ -79,6 +79,7 @@ WHERE {
 | [location](#location)*                                              | The URL of the data source.                                                                                                                                                                                                                                                                                                                   | Any valid URL or (absolute or relative) path of the file system.                                                                                                                      | \*                                                                                                                                                                                                                                                                          |
 | [content](#content)*                                                | The content to be transformed.                                                                                                                                                                                                                                                                                                                | Any valid literal.                                                                                                                                                                    | \*                                                                                                                                                                                                                                                                          |
 | [command](#command)*                                                | An external command line to be executed. The output is handled according to the option 'media-type'                                                                                                                                                                                                                                           | Any valid literal.                                                                                                                                                                    | \*                                                                                                                                                                                                                                                                          |
+| [read-from-std-in](#read-from-std-in)*                              | It tells SPARQL Anything to read the content to be transformerd from standard input (see issue [#244](https://github.com/SPARQL-Anything/sparql.anything/issues/244))                                                                                                                                                                         | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [from-archive](#from-archive)                                       | The filename of the resource to be triplified within an archive.                                                                                                                                                                                                                                                                              | Any filename.                                                                                                                                                                         | No value                                                                                                                                                                                                                                                                    |
 | [root](#root)                                                       | The IRI of generated root resource. The root will be used as a namespace for the graphs and containers that will be generated.                                                                                                                                                                                                                | Any valid IRI.                                                                                                                                                                        | location  (in the case of location argument  set) <br/> **or** <br/> 'http://sparql.xyz/facade-x/data/' + md5Hex(content) (in the case of content argument set) <br/>**or**<br/> 'http://sparql.xyz/facade-x/data/' + md5Hex(command) (in the case of command argument set) |
 | [media-type](#media-type)                                           | The media-type of the data source.                                                                                                                                                                                                                                                                                                            | Any valid [Media-Type](https://en.wikipedia.org/wiki/Media_type).  Supported media types are specified in the [pages dedicated to the supported formats](README.md#supported-formats) | No value (the media-type will be guessed from the the file extension)                                                                                                                                                                                                       |
@@ -95,6 +96,8 @@ WHERE {
 | [slice](#slice)                                                     | The resource is sliced and the SPARQL query executed on each one of the parts. Supported by: CSV (row by row); JSON (when array slice by item, when json object requires `json.path`); XML (requires `xml.path`)                                                                                                                              | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [use-rdfs-member](#use-rdfs-member)                                 | It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...)                                                                                                                                                                                                               | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [annotate-triples-with-slot-keys](#annotate-triples-with-slot-keys) | It tells SPARQL Anything to annotate slot statements with slot keys (see issue [#378](https://github.com/SPARQL-Anything/sparql.anything/issues/378))                                                                                                                                                                                         | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
+| [generate-predicate-labels](#generate-predicate-labels)             | It tells SPARQL Anything to create labels for extracted predicates and classes (see issue [#462](https://github.com/SPARQL-Anything/sparql.anything/issues/462))                                                                                                                                                                              | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
+| [audit](#audit)                                                     | It tells SPARQL Anything to generate an additional graph containing information for auditing the result of the triplification. The audit graph has the URI &lt;http://sparql.xyz/facade-x/data/audit&gt;                                                                                                                                      | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 
 \* It is mandatory to provide either `location`, `content`, or `command`.
 
@@ -1122,20 +1125,185 @@ _:b0    rdf:type     fx:root ;
         fx:slot-key  3 .
 ```
 
-<!--
+### generate-predicate-labels
 
+It tells SPARQL Anything to create labels for extracted predicates and classes (see issue [#462](https://github.com/SPARQL-Anything/sparql.anything/issues/462))
 
-#### Valid Values 
+#### Valid Values
 
+true/false
 
 #### Default Value
 
+false
 
 #### Examples
 
-##### UC1:
+```sparql
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+CONSTRUCT 
+  { 
+    ?s ?p ?o .
+  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content            "<Element1 attr=\"value\"/> " ;
+                  fx:generate-predicate-labels  true ;
+                  fx:media-type         "application/xml" .
+        ?s        ?p                    ?o
+      }
+  }
+```
+
+Result
+
+```turtle
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+
+[ rdf:type  xyz:Element1 , fx:root;
+  xyz:attr  "value"
+] .
+
+xyz:attr  <http://www.w3.org/2000/01/rdf-schema#label>
+                "attr" .
+
+xyz:Element1  <http://www.w3.org/2000/01/rdf-schema#label>
+                "Element1" .
+```
+
+### read-from-std-in
+
+It tells SPARQL Anything to read the content to be transformed from standard input channel (STDIN)  -- see issue [#244](https://github.com/SPARQL-Anything/sparql.anything/issues/244).
+When it is set to true, the engine reads from the STDIN and sets the input as the value for the `content` option.
+Therefore, the input from the STDIN is processed as inline content (and the inline content is overwritten by the input from the STDIN).
+
+#### Valid Values
+
+`true`/`false`
+
+#### Default Value
+
+`false`
+
+#### Examples
+
+```sparql
+SELECT ?v { 
+    SERVICE <x-sparql-anything:read-from-std-in=true> { 
+        ?root a <http://sparql.xyz/facade-x/ns/root> ;  
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v 
+    }
+}
+```
+
+Standard Input
 
 ```
+abc
+```
+
+Result
+
+| ?v  |
+|-----|
+| abc |
+
+
+### audit
+
+It tells SPARQL Anything to generate an additional graph containing information for auditing the result of the triplification. The audit graph has the URI &lt;http://sparql.xyz/facade-x/data/audit&gt;
+For each content graph generated by the triplifier, the audit graph specifies:
+- the graph name;
+- the number of triples in the content graph;
+- whether the graph was retrieved from the cache;
+- the datetime when the graph was created;
+- a string representation of the SPARQL algebra of the operation that generated the graph.
+
+**Note** Do not use strategy 1 (i.e. triple filtering) for querying the audit graph (specifically, do not add triple patterns matching the audit graph) otherwise the engine will filter out all the triples in the content graph.
+
+#### Valid Values
+
+`true`/`false`
+
+#### Default Value
+
+`false`
+
+#### Examples
+
+```sparql
+CONSTRUCT 
+  { 
+    GRAPH ?g 
+      { ?s ?p ?o .}
+  }
+WHERE
+  { SERVICE <x-sparql-anything:content=abc,audit=true,strategy=0>
+      { GRAPH ?g
+          { ?s  ?p  ?o }
+      }
+  }
+
+```
+
+Result
+
+```turtle
+
+<http://sparql.xyz/facade-x/data/900150983cd24fb0d6963f7d28e17f72#> {
+    [ a       <http://sparql.xyz/facade-x/ns/root>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "abc"
+    ] .
+}
+
+<http://sparql.xyz/facade-x/data/audit> {
+    <http://sparql.xyz/facade-x/data/900150983cd24fb0d6963f7d28e17f72#>
+            a       <http://www.w3.org/ns/sparql-service-description#NamedGraph>;
+            <http://rdfs.org/ns/void#triples>
+                    "2"^^<http://www.w3.org/2001/XMLSchema#long>;
+            <http://sparql.xyz/facade-x/ns/cachedGraph>
+                    false;
+            <http://sparql.xyz/facade-x/ns/cachedGraphCreation>
+                    "2024-09-03T14:32:57.174Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+            <http://sparql.xyz/facade-x/ns/sparqlAlgebra>
+                    "(service <x-sparql-anything:content=abc,audit=true,strategy=0>\n  (graph ?g\n    (bgp (triple ?s ?p ?o))))\n";
+            <http://www.w3.org/ns/sparql-service-description#name>
+                    "http://sparql.xyz/facade-x/data/900150983cd24fb0d6963f7d28e17f72#" .
+    
+    <http://sparql.xyz/facade-x/data/audit#root>
+            <http://www.w3.org/ns/sparql-service-description#namedGraph>
+                    <http://sparql.xyz/facade-x/data/900150983cd24fb0d6963f7d28e17f72#> .
+}
+```
+
+<!--
+### 
+
+
+#### Valid Values
+
+``
+
+#### Default Value
+
+``
+
+#### Examples
+
+```sparql
+
+```
+
+Result
+
+```turtle
 
 ```
 -->

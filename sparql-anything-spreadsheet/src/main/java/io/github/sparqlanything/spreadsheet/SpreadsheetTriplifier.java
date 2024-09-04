@@ -16,14 +16,17 @@
 
 package io.github.sparqlanything.spreadsheet;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
-import org.apache.jena.ext.com.google.common.collect.Sets;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -175,6 +178,12 @@ public class SpreadsheetTriplifier implements Triplifier {
 			case STRING:
 				return cell.getStringCellValue();
 			case NUMERIC:
+				if(DateUtil.isCellDateFormatted(cell)){
+					Date date = cell.getDateCellValue();
+					Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+					c.setTime(date);
+					return NodeFactory.createLiteralString(DatatypeConverter.printDateTime(c));
+				}
 				return cell.getNumericCellValue();
 			case FORMULA:
 				if (evaluateFormulas) {

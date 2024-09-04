@@ -39,7 +39,11 @@ public class IRIArgument {
 	public static final IRIArgument OP_SERVICE_SILENT = new IRIArgument("opservice.silent");
 	public static final IRIArgument ANNOTATE_TRIPLES_WITH_SLOT_KEYS = new IRIArgument("annotate-triples-with-slot-keys", "false");
 
-	private final String name;
+	public static final IRIArgument GENERATE_PREDICATE_LABELS = new IRIArgument("generate-predicate-labels", "false");
+    public static final IRIArgument  READ_FROM_STD_IN =  new IRIArgument("read-from-std-in", "false");
+    public static final IRIArgument  AUDIT =  new IRIArgument("audit", "false");
+
+    private final String name;
 	private final String defaultValue;
 
 	public IRIArgument(String s) {

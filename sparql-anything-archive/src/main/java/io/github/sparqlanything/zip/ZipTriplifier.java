@@ -19,7 +19,7 @@ package io.github.sparqlanything.zip;
 import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
-import org.apache.jena.ext.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ public class ZipTriplifier implements Triplifier {
 		int i = 1;
 		while ((ze = zis.getNextEntry()) != null) {
 			if (ze.getName().matches(matches)) {
-				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, i, NodeFactory.createLiteral(ze.getName()));
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, i, NodeFactory.createLiteralString(ze.getName()));
 				i++;
 			}
 		}

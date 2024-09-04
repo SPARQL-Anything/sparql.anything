@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.cli;
 
+import org.apache.jena.sys.JenaSystem;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -23,15 +24,20 @@ import org.slf4j.LoggerFactory;
 import org.junit.Assume;
 import io.github.sparqlanything.model.HTTPHelper;
 
+import java.util.Objects;
+
 public class LoadSubdirsTest {
-	public static final Logger L = LoggerFactory.getLogger(LoadSubdirsTest.class);
+
+	public LoadSubdirsTest() {
+		JenaSystem.init();
+	}
 
 	@Test
 	public void test() throws Exception {
 		Assume.assumeTrue(HTTPHelper.checkHostIsReachable("https://schema.org"));
 
-		String q = getClass().getClassLoader().getResource("count-triples.sparql").toString();
-		String d = getClass().getClassLoader().getResource("./load-subdirs").toURI().toString();
+		String q = Objects.requireNonNull(getClass().getClassLoader().getResource("count-triples.sparql")).toString();
+		String d = Objects.requireNonNull(getClass().getClassLoader().getResource("./load-subdirs")).toURI().toString();
 		SPARQLAnything sa = new SPARQLAnything();
 		String out = sa.callMain(new String[]{
 				"-q", q, "-l", d

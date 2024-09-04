@@ -27,6 +27,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.*;
@@ -53,6 +54,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 public class SPARQLAnything {
@@ -63,11 +65,11 @@ public class SPARQLAnything {
 
 	// TODO This should be moved to the engine module
 	private static void initSPARQLAnythingEngine() {
+		JenaSystem.init();
 		// Register the JSON-LD parser factory for extension  .json
 		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
 		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
 		// Setup FX executor
-		JenaSystem.init();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
@@ -282,13 +284,18 @@ public class SPARQLAnything {
 					Pair p = (Pair) j;
 					String var = (String) p.getLeft();
 					String val = (String) p.getRight();
-					bins.put(Var.alloc(var), NodeFactory.createLiteral(val));
+					bins.put(Var.alloc(var), NodeFactory.createLiteralDT(val, XSDDatatype.XSDstring));
 				}
 
 				this.bindings.add(new Binding() {
 					@Override
 					public Iterator<Var> vars() {
 						return bins.keySet().iterator();
+					}
+
+					@Override
+					public Set<Var> varsMentioned() {
+						throw new UnsupportedOperationException("Not implemented!");
 					}
 
 					@Override
@@ -337,6 +344,11 @@ public class SPARQLAnything {
 		@Override
 		public QuerySolution next() {
 			return nextSolution();
+		}
+
+		@Override
+		public void forEachRemaining(Consumer<? super QuerySolution> consumer) {
+			throw new UnsupportedOperationException("forEachRemaining not implemented");
 		}
 
 		@Override

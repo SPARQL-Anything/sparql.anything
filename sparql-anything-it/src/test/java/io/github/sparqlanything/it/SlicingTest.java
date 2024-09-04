@@ -29,7 +29,7 @@ public class SlicingTest extends AbstractExecutionTester {
 		QuerySolution qs;
 		qs = result.next();
 //		ex = expected.next();
-		System.out.println(qs);
+//		System.out.println(qs);
 		Assert.assertEquals("a1", qs.getLiteral("X").getString());
 		Assert.assertEquals("b1", qs.getLiteral("Y").getString());
 		Assert.assertEquals("c1", qs.getLiteral("Z").getString());
@@ -53,7 +53,7 @@ public class SlicingTest extends AbstractExecutionTester {
 		Assert.assertEquals("c1", qs.getLiteral("Z").getString());
 
 		qs = result.next();
-		System.out.println(qs);
+//		System.out.println(qs);
 		Assert.assertEquals("a2", qs.getLiteral("X").getString());
 		Assert.assertEquals("b2", qs.getLiteral("Y").getString());
 		Assert.assertEquals("c2", qs.getLiteral("Z").getString());

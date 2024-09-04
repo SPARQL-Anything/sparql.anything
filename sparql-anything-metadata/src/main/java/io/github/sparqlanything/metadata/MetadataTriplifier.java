@@ -21,12 +21,12 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.jena.ext.com.google.common.collect.Sets;
 
 import java.io.File;
 import java.io.IOException;

@@ -16,13 +16,8 @@
 
 package io.github.sparqlanything.text.test;
 
-import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.text.TextTriplifier;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -32,10 +27,9 @@ import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Properties;
 
 import static org.junit.Assert.assertTrue;
@@ -43,21 +37,21 @@ import static org.junit.Assert.assertTrue;
 public class TextTriplifierTest {
 
 	@Test
-	public void test1() throws MalformedURLException, TriplifierHTTPException {
+	public void test1() throws TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
 		URL url = getClass().getClassLoader().getResource("testfile");
 		try {
 			Properties p = new Properties();
-			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(url).toString());
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, b);
 			DatasetGraph dg = b.getDatasetGraph();
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
-			expectedGraph.add(new Triple(n, RDF.li(1).asNode(),
-					NodeFactory.createLiteral("this is a test", XSDDatatype.XSDstring)));
+			expectedGraph.add(Triple.create(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(Triple.create(n, RDF.li(1).asNode(),
+					NodeFactory.createLiteralString("this is a test")));
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p))).isIsomorphicWith(expectedGraph));
 		} catch (IOException e) {
@@ -66,13 +60,13 @@ public class TextTriplifierTest {
 	}
 
 	@Test
-	public void testRegex() throws MalformedURLException, TriplifierHTTPException {
+	public void testRegex() throws TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
 		URL url = getClass().getClassLoader().getResource("testfile");
 		try {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.REGEX.toString(), "\\w+");
-			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(url).toString());
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, b);
 			DatasetGraph dg = b.getDatasetGraph();
@@ -80,15 +74,15 @@ public class TextTriplifierTest {
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph
-					.add(new Triple(root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+					.add(Triple.create(root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(
-					new Triple(root, RDF.li(1).asNode(), NodeFactory.createLiteral("this", XSDDatatype.XSDstring)));
+					Triple.create(root, RDF.li(1).asNode(), NodeFactory.createLiteralString("this")));
 			expectedGraph
-					.add(new Triple(root, RDF.li(2).asNode(), NodeFactory.createLiteral("is", XSDDatatype.XSDstring)));
+					.add(Triple.create(root, RDF.li(2).asNode(), NodeFactory.createLiteralString("is")));
 			expectedGraph
-					.add(new Triple(root, RDF.li(3).asNode(), NodeFactory.createLiteral("a", XSDDatatype.XSDstring)));
+					.add(Triple.create(root, RDF.li(3).asNode(), NodeFactory.createLiteralString("a")));
 			expectedGraph.add(
-					new Triple(root, RDF.li(4).asNode(), NodeFactory.createLiteral("test", XSDDatatype.XSDstring)));
+					Triple.create(root, RDF.li(4).asNode(), NodeFactory.createLiteralString("test")));
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
@@ -100,28 +94,28 @@ public class TextTriplifierTest {
 	}
 
 	@Test
-	public void testSplit() throws MalformedURLException, TriplifierHTTPException {
+	public void testSplit() throws TriplifierHTTPException {
 		TextTriplifier tt = new TextTriplifier();
 		URL url = getClass().getClassLoader().getResource("testfile");
 		try {
 			Properties p = new Properties();
 			p.setProperty(TextTriplifier.SPLIT.toString(), "\\s+");
-			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(url).toString());
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(p);
 			tt.triplify(p, b);
 			DatasetGraph dg = b.getDatasetGraph();
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node root = NodeFactory.createBlankNode();
 			expectedGraph
-					.add(new Triple(root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+					.add(Triple.create(root, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(
-					new Triple(root, RDF.li(1).asNode(), NodeFactory.createLiteral("this", XSDDatatype.XSDstring)));
+					Triple.create(root, RDF.li(1).asNode(), NodeFactory.createLiteralString("this")));
 			expectedGraph
-					.add(new Triple(root, RDF.li(2).asNode(), NodeFactory.createLiteral("is", XSDDatatype.XSDstring)));
+					.add(Triple.create(root, RDF.li(2).asNode(), NodeFactory.createLiteralString("is")));
 			expectedGraph
-					.add(new Triple(root, RDF.li(3).asNode(), NodeFactory.createLiteral("a", XSDDatatype.XSDstring)));
+					.add(Triple.create(root, RDF.li(3).asNode(), NodeFactory.createLiteralString("a")));
 			expectedGraph.add(
-					new Triple(root, RDF.li(4).asNode(), NodeFactory.createLiteral("test", XSDDatatype.XSDstring)));
+					Triple.create(root, RDF.li(4).asNode(), NodeFactory.createLiteralString("test")));
 
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 

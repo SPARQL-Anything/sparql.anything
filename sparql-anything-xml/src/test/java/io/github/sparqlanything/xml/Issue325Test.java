@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Properties;
 
 public class Issue325Test {
@@ -42,7 +43,7 @@ public class Issue325Test {
 	public void test() throws TriplifierHTTPException, IOException {
 		Properties properties = new Properties();
 		URL xml1 = getClass().getClassLoader().getResource("./Issue325.xml");
-		properties.setProperty(IRIArgument.LOCATION.toString(), xml1.toString());
+		properties.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(xml1).toString());
 		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(properties);
 		XMLTriplifier triplifier = new XMLTriplifier();
 		triplifier.triplify(properties, builder);
@@ -50,10 +51,10 @@ public class Issue325Test {
 		logger.debug("{}", graph);
 
 		Iterator<Quad> iter = graph.find(null, null, RDF.li(1).asNode(),
-				NodeFactory.createLiteral("THIS_TEXT_IS_INSIDE_SUBJECT"));
+				NodeFactory.createLiteralString("THIS_TEXT_IS_INSIDE_SUBJECT"));
 		Assert.assertTrue(iter.hasNext());
 		Iterator<Quad> iter2 = graph.find(null, null, RDF.li(1).asNode(),
-				NodeFactory.createLiteral("THIS_TEXT_IS_OUTSIDE_SUBJECT"));
+				NodeFactory.createLiteralString("THIS_TEXT_IS_OUTSIDE_SUBJECT"));
 		Assert.assertTrue(iter2.hasNext());
 	}
 }

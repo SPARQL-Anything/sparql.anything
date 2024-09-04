@@ -61,39 +61,39 @@ WHERE
 ### Facade-X RDF
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root ;
-  rdf:_1    [ rdf:_1  "email" ;
-              rdf:_2  "name" ;
+[ rdf:type  fx:root;
+  rdf:_1    [ rdf:_1  "email";
+              rdf:_2  "name";
               rdf:_3  "surname"
-            ] ;
-  rdf:_2    [ rdf:_1  "laura@example.com" ;
-              rdf:_2  "Laura" ;
+            ];
+  rdf:_2    [ rdf:_1  "laura@example.com";
+              rdf:_2  "Laura";
               rdf:_3  "Grey"
-            ] ;
-  rdf:_3    [ rdf:_1  "craig@example.com" ;
-              rdf:_2  "Craig" ;
+            ];
+  rdf:_3    [ rdf:_1  "craig@example.com";
+              rdf:_2  "Craig";
               rdf:_3  "Johnson"
-            ] ;
-  rdf:_4    [ rdf:_1  "mary@example.com" ;
-              rdf:_2  "Mary" ;
+            ];
+  rdf:_4    [ rdf:_1  "mary@example.com";
+              rdf:_2  "Mary";
               rdf:_3  "Jenkins"
-            ] ;
-  rdf:_5    [ rdf:_1  "jamie@example.com" ;
-              rdf:_2  "Jamie" ;
+            ];
+  rdf:_5    [ rdf:_1  "jamie@example.com";
+              rdf:_2  "Jamie";
               rdf:_3  "Smith"
             ]
 ] .
@@ -291,26 +291,26 @@ WHERE
 ###### Result
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root ;
-  rdf:_1    [ rdf:_1  "Sepal_length\tSepal_width\tPetal_length\tPetal_width\tSpecies" ] ;
-  rdf:_2    [ rdf:_1  "5.1\t3.5\t1.4\t0.2\tI. setosa" ] ;
-  rdf:_3    [ rdf:_1  "4.9\t3.0\t1.4\t0.2\tI. setosa" ] ;
-  rdf:_4    [ rdf:_1  "4.7\t3.2\t1.3\t0.2\tI. setosa" ] ;
-  rdf:_5    [ rdf:_1  "4.6\t3.1\t1.5\t0.2\tI. setosa" ] ;
+[ rdf:type  fx:root;
+  rdf:_1    [ rdf:_1  "Sepal_length\tSepal_width\tPetal_length\tPetal_width\tSpecies" ];
+  rdf:_2    [ rdf:_1  "5.1\t3.5\t1.4\t0.2\tI. setosa" ];
+  rdf:_3    [ rdf:_1  "4.9\t3.0\t1.4\t0.2\tI. setosa" ];
+  rdf:_4    [ rdf:_1  "4.7\t3.2\t1.3\t0.2\tI. setosa" ];
+  rdf:_5    [ rdf:_1  "4.6\t3.1\t1.5\t0.2\tI. setosa" ];
   rdf:_6    [ rdf:_1  "5.0\t3.6\t1.4\t0.2\tI. setosa" ]
 ] .
 
@@ -433,35 +433,35 @@ WHERE
 ###### Result
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root ;
-  rdf:_1    [ xyz:email    "laura@example.com" ;
-              xyz:name     "Laura, Nancy" ;
+[ rdf:type  fx:root;
+  rdf:_1    [ xyz:email    "laura@example.com";
+              xyz:name     "Laura, Nancy";
               xyz:surname  "Grey"
-            ] ;
-  rdf:_2    [ xyz:email    "craig@example.com" ;
-              xyz:name     "Craig" ;
+            ];
+  rdf:_2    [ xyz:email    "craig@example.com";
+              xyz:name     "Craig";
               xyz:surname  "Johnson"
-            ] ;
-  rdf:_3    [ xyz:email    "mary@example.com" ;
-              xyz:name     "Mary" ;
+            ];
+  rdf:_3    [ xyz:email    "mary@example.com";
+              xyz:name     "Mary";
               xyz:surname  "Jenkins"
-            ] ;
-  rdf:_4    [ xyz:email    "jamie@example.com" ;
-              xyz:name     "Jamie" ;
+            ];
+  rdf:_4    [ xyz:email    "jamie@example.com";
+              xyz:name     "Jamie";
               xyz:surname  "Smith"
             ]
 ] .

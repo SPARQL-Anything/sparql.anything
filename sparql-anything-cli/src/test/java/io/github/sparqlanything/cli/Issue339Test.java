@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.cli;
 
+import org.apache.jena.sys.JenaSystem;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ public class Issue339Test {
 
 	@Test
 	public void test() throws Exception {
+		JenaSystem.init();
 		Assume.assumeTrue(HTTPHelper.checkHostIsReachable("https://schema.org"));
 		String q = getClass().getClassLoader().getResource("./JsonldTest.sparql").toString();
 		String d = getClass().getClassLoader().getResource("./JsonldTest.json").toURI().toString();

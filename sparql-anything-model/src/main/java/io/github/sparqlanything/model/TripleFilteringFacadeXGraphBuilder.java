@@ -29,9 +29,8 @@ import java.util.Properties;
  */
 public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder {
 	private final Op op;
-	private OpComponentsAnalyser analyser;
-	private Logger log = LoggerFactory.getLogger(TripleFilteringFacadeXGraphBuilder.class);
-	
+	private final OpComponentsAnalyser analyser;
+
 	public TripleFilteringFacadeXGraphBuilder(String resourceId, Op op, DatasetGraph ds, Properties properties) {
 		super(properties);
 		this.op = op;
@@ -51,7 +50,7 @@ public class TripleFilteringFacadeXGraphBuilder extends BaseFacadeXGraphBuilder 
 	@Override
 	public boolean add(Node graph, Node subject, Node predicate, Node object) {
 		if (analyser.match(graph, subject, predicate, object)) {
-//			datasetGraph.getGraph(graph).add(new Triple(subject, predicate, object));
+//			datasetGraph.getGraph(graph).add(Triple.create(subject, predicate, object));
 			return super.add(graph, subject, predicate, object);
 		}
 		return false;

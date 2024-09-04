@@ -58,7 +58,7 @@ public class NullStringTest {
 		triplifier.triplify(properties, b);
 		DatasetGraph graph = b.getDatasetGraph();
 		// with csv.null-string set to nullString we should not see any quads with nullString in the object position
-		if (graph.find(Node.ANY, Node.ANY, Node.ANY, NodeFactory.createLiteral(nullString)).hasNext()) {
+		if (graph.find(Node.ANY, Node.ANY, Node.ANY, NodeFactory.createLiteralString(nullString)).hasNext()) {
 			fail("csv.null-string didn't work for: \"" + nullString + "\"");
 		}
 	}

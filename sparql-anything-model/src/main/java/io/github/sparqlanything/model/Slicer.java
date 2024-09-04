@@ -19,9 +19,9 @@ package io.github.sparqlanything.model;
 import java.io.IOException;
 import java.util.Properties;
 
-public interface Slicer {
+public interface Slicer<T> {
 
-	Iterable<Slice> slice(Properties p) throws IOException, TriplifierHTTPException;
+	CloseableIterable<Slice<T>> slice(Properties p) throws IOException, TriplifierHTTPException;
 
-	void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder);
+	void triplify(Slice<T> slice, Properties p, FacadeXGraphBuilder builder);
 }

@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.csv;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
@@ -23,7 +24,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ import java.util.Properties;
 import java.util.Set;
 
 @io.github.sparqlanything.model.annotations.Triplifier
-public class CSVTriplifier implements Triplifier, Slicer {
+public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 
 	@Example(resource = "https://sparql-anything.cc/examples/simple.tsv", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (AVG(xsd:float(?petalLength)) AS ?avgPetalLength) WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true,csv.format=TDF> { ?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength FILTER ( xsd:float(?length) > 4.9 ) } }", description = "Compute the average petal length of the species having sepal length greater than 4.9")
 	@Option(description = "It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.", validValues = "true/false")
@@ -81,7 +81,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		// Add type Root
 		builder.addRoot(dataSourceId);
 
-		try (InputStream is = Triplifier.getInputStream(properties); Reader in = new InputStreamReader(new BOMInputStream(is), charset)) {
+		try (InputStream is = Triplifier.getInputStream(properties); Reader in = new InputStreamReader(BOMInputStream.builder().setInputStream(is).get(), charset)) {
 
 			Iterable<CSVRecord> records = format.parse(in);
 			Iterator<CSVRecord> recordIterator = records.iterator();
@@ -135,7 +135,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		int headersRow = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
 		Iterator<CSVRecord> iterator = recordIterator;
 		if (headersRow > 0) {
-			Reader in = new InputStreamReader(new BOMInputStream(Triplifier.getInputStream(properties)), charset);
+			Reader in = new InputStreamReader(BOMInputStream.builder().setInputStream(Triplifier.getInputStream(properties)).get(), charset);
 			Iterable<CSVRecord> records = format.parse(in);
 			iterator = records.iterator();
 			LinkedHashMap<Integer, String> headers_map = makeHeadersMapFromOpenIterator(properties, headersRow, iterator);
@@ -176,7 +176,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 
 	private static LinkedHashMap<Integer, String> makeHeadersMapFromOpenIterator(Properties properties, int headersRow, Iterator<CSVRecord> iterator) {
 		int rowNumber = 1;
-		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<Integer, String>();
+		LinkedHashMap<Integer, String> headers_map = new LinkedHashMap<>();
 		if (hasHeaders(properties) && iterator.hasNext()) {
 			while (rowNumber != headersRow && iterator.hasNext()) {
 				rowNumber++;
@@ -224,7 +224,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	public  CloseableIterable<Slice<CSVRecord>> slice(Properties properties) throws IOException, TriplifierHTTPException {
 
 		CSVFormat format = buildFormat(properties);
 		Charset charset = Triplifier.getCharsetArgument(properties);
@@ -233,17 +233,23 @@ public class CSVTriplifier implements Triplifier, Slicer {
 		// XXX How do we close the inputstream?
 		final InputStream is = Triplifier.getInputStream(properties);
 
-		Reader in = new InputStreamReader(new BOMInputStream(is), charset);
+		Reader in = new InputStreamReader(BOMInputStream.builder().setInputStream(is).get(), charset);
 
 		Iterable<CSVRecord> records = format.parse(in);
 		final Iterator<CSVRecord> recordIterator = records.iterator();
 		final LinkedHashMap<Integer, String> headers_map = makeHeadersMapFromOpenIterator(recordIterator, properties, format, charset);
 
-		return new Iterable<Slice>() {
+		return new CloseableIterable<>() {
+
 			@Override
-			public Iterator<Slice> iterator() {
+			public void close() {
+				// The InputStream is closed by hasNext method of the iterator
+			}
+
+			@Override
+			public Iterator<Slice<CSVRecord>> iterator() {
 				log.debug("Iterating slices");
-				return new Iterator<Slice>() {
+				return new Iterator<>() {
 					int rown = 0;
 					int headersRowNumber = PropertyUtils.getIntegerProperty(properties, PROPERTY_HEADER_ROW);
 
@@ -262,7 +268,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 					}
 
 					@Override
-					public Slice next() {
+					public Slice<CSVRecord> next() {
 						rown++;
 						if (rown == headersRowNumber && !headers_map.isEmpty()) {
 							// skip headers row
@@ -279,7 +285,7 @@ public class CSVTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public void triplify(Slice slice, Properties p, FacadeXGraphBuilder builder) {
+	public void triplify(Slice<CSVRecord> slice, Properties p, FacadeXGraphBuilder builder) {
 		CSVSlice csvo = (CSVSlice) slice;
 		boolean ignoreColumnsWithNoHeaders = PropertyUtils.getBooleanProperty(p, IGNORE_COLUMNS_WITH_NO_HEADERS, false);
 		builder.addRoot(csvo.getDatasourceId());

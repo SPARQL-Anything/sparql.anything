@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.xml;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -29,7 +30,6 @@ import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,12 +54,37 @@ import java.util.Properties;
 import java.util.Set;
 
 @io.github.sparqlanything.model.annotations.Triplifier
-public class XMLTriplifier implements Triplifier, Slicer {
+public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 
 	@Example(resource = "https://sparql-anything.cc/examples/simple-menu.xml", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"https://sparql-anything.cc/examples/simple-menu.xml\" ; fx:xml.path \"//food\" ; fx:blank-nodes false . ?s ?p ?o } }")
 	@Option(description = "One or more XPath expressions as filters. E.g. `xml.path=value` or `xml.path.1`, `xml.path.2`,`...` to add multiple expressions.", validValues = "Any valid XPath")
 	public static final IRIArgument PROPERTY_XPATH = new IRIArgument("xml.path");
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
+
+	private static String normaliseNamespace(QName qname) {
+		if (qname.getNamespaceURI().endsWith("/") || qname.getNamespaceURI().endsWith("#"))
+			return qname.getNamespaceURI();
+		else return qname.getNamespaceURI().concat("#");
+
+	}
+
+	private static void addNamespacedType(FacadeXGraphBuilder builder, String dataSourceId, String resourceId, QName qname) throws URISyntaxException {
+		if (qname.getNamespaceURI().equals("")) {
+			builder.addType(dataSourceId, resourceId, qname.getLocalPart());
+		} else {
+			builder.addType(dataSourceId, resourceId, new URI(normaliseNamespace(qname).concat(qname.getLocalPart())));
+		}
+	}
+
+	private static void addNamespacedValue(FacadeXGraphBuilder builder, String dataSourceId, String resourceId, QName qname, String attribute1) throws URISyntaxException {
+		if (qname.getNamespaceURI().equals("")) {
+			builder.addValue(dataSourceId, resourceId, qname.getLocalPart(), attribute1);
+		} else {
+			builder.addValue(dataSourceId, resourceId, new URI(normaliseNamespace(qname).concat(qname.getLocalPart())), attribute1);
+		}
+
+
+	}
 
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
@@ -87,10 +112,9 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	public int transformFromXPath(VTDNav vn, int result, int child, String parentId, String dataSourceId, FacadeXGraphBuilder builder) throws NavException {
 		log.trace(" -- index: {} type: {}", result, vn.getTokenType(result));
 		switch (vn.getTokenType(result)) {
-			case VTDNav.TOKEN_STARTING_TAG:
+			case VTDNav.TOKEN_STARTING_TAG -> {
 				String tag;
 				tag = vn.toString(result);
-
 				log.trace(" -- tag: {} ", tag);
 				String childId = String.join("", parentId, "/", Integer.toString(child), ":", tag);
 				builder.addContainer(dataSourceId, parentId, child, childId);
@@ -139,7 +163,8 @@ public class XMLTriplifier implements Triplifier, Slicer {
 					childc++;
 				}
 				return index - 1;
-			case VTDNav.TOKEN_ATTR_NAME:
+			}
+			case VTDNav.TOKEN_ATTR_NAME -> {
 				// Attribute
 				String name = vn.toString(result);
 				String value = vn.toString(result + 1);
@@ -148,32 +173,31 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				builder.addContainer(dataSourceId, parentId, child, attrChildId);
 				builder.addValue(dataSourceId, attrChildId, name, value);
 				return result + 1;
-			case VTDNav.TOKEN_ATTR_VAL:
+			}
+			case VTDNav.TOKEN_ATTR_VAL -> {
 				// Attribute value
 				log.trace("Attribute value: {}", vn.toString(result));
 				builder.addValue(dataSourceId, parentId, child, vn.toString(result));
-				break;
-			case VTDNav.TOKEN_CHARACTER_DATA:
+			}
+			case VTDNav.TOKEN_CHARACTER_DATA -> {
 				// Text
 				String text = vn.toNormalizedString(result);
 				log.trace("Text: {}", text);
 				builder.addValue(dataSourceId, parentId, child, vn.toString(result));
-				break;
-			case VTDNav.TOKEN_DEC_ATTR_NAME:
+			}
+			case VTDNav.TOKEN_DEC_ATTR_NAME -> {
 				log.trace("Attribute (dec): {} = {}", vn.toString(result), vn.toString(result + 1));
 				return result + 1;
-			case VTDNav.TOKEN_DEC_ATTR_VAL:
-				log.trace("Attribute value (dec) {}", vn.toString(result));
-				break;
-			default:
-				log.warn("Ignored event: {} {}", vn.getTokenType(result), vn.toString(result));
+			}
+			case VTDNav.TOKEN_DEC_ATTR_VAL -> log.trace("Attribute value (dec) {}", vn.toString(result));
+			default -> log.warn("Ignored event: {} {}", vn.getTokenType(result), vn.toString(result));
 		}
 		return result;
 	}
 
 	public void transformSAX(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
-		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
+//		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		String root = SPARQLAnythingConstants.ROOT_ID;
 
@@ -276,10 +300,11 @@ public class XMLTriplifier implements Triplifier, Slicer {
 					isRoot = false;
 				}
 				try {
-					builder.addType(dataSourceId, resourceId, new URI(toIRI(se.getName(), namespace)));
+					addNamespacedType(builder, dataSourceId, resourceId, se.getName());
 				} catch (URISyntaxException e) {
-					throw new IOException(e);
+					throw new RuntimeException(e);
 				}
+
 				if (!members.containsKey(resourceId)) {
 					members.put(resourceId, 0);
 				}
@@ -294,7 +319,7 @@ public class XMLTriplifier implements Triplifier, Slicer {
 					Attribute attribute = attributes.next();
 					log.trace("attribute: {}", attribute);
 					try {
-						builder.addValue(dataSourceId, resourceId, new URI(toIRI(attribute.getName(), namespace)), attribute.getValue());
+						addNamespacedValue(builder, dataSourceId, resourceId, attribute.getName(), attribute.getValue());
 					} catch (URISyntaxException e) {
 						throw new IOException(e);
 					}
@@ -309,20 +334,6 @@ public class XMLTriplifier implements Triplifier, Slicer {
 				charBuilder.append(event.asCharacters().getData().trim());
 			}
 		}
-	}
-
-	private String toIRI(QName qname, String namespace) {
-		String ns;
-		if (qname.getNamespaceURI().equals("")) {
-			ns = namespace;
-		} else {
-			if (qname.getNamespaceURI().endsWith("/") || qname.getNamespaceURI().endsWith("#")) {
-				ns = qname.getNamespaceURI();
-			} else {
-				ns = qname.getNamespaceURI() + '#';
-			}
-		}
-		return ns + qname.getLocalPart();
 	}
 
 	@Override
@@ -346,27 +357,37 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public Iterable<Slice> slice(Properties properties) throws IOException, TriplifierHTTPException {
+	public CloseableIterable<Slice<Pair<VTDNav,Integer>>> slice(Properties properties) {
 		final String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		List<String> xpaths = PropertyUtils.getPropertyValues(properties, PROPERTY_XPATH);
 
 		try {
 			VTDNav vn = buildVTDNav(properties);
 			final Iterator<Pair<VTDNav, Integer>> it = evaluateXPaths(vn, xpaths);
-			return () -> new Iterator<>() {
-				int theCount = 1;
-
+			return new CloseableIterable<>() {
 				@Override
-				public boolean hasNext() {
-					return it.hasNext();
+				public Iterator<Slice<Pair<VTDNav,Integer>>> iterator() {
+					return new Iterator<>() {
+						int theCount = 1;
+
+						@Override
+						public boolean hasNext() {
+							return it.hasNext();
+						}
+
+						@Override
+						public Slice<Pair<VTDNav, Integer>> next() {
+							Pair<VTDNav, Integer> pair = it.next();
+							int c = theCount;
+							theCount++;
+							return XPathSlice.make(pair.getKey(), pair.getValue(), c, dataSourceId);
+						}
+					};
 				}
 
 				@Override
-				public Slice next() {
-					Pair<VTDNav, Integer> pair = it.next();
-					int c = theCount;
-					theCount++;
-					return XPathSlice.make(pair.getKey(), pair.getValue(), c, dataSourceId);
+				public void close() {
+					// Input stream is already closed as evaluateXPaths reads it all and close it
 				}
 			};
 		} catch (Exception e) {
@@ -376,7 +397,9 @@ public class XMLTriplifier implements Triplifier, Slicer {
 
 	private VTDNav buildVTDNav(Properties properties) throws TriplifierHTTPException, IOException, ParseException {
 		VTDGen vg = new VTDGen();
-		byte[] bytes = IOUtils.toByteArray(Triplifier.getInputStream(properties));
+		InputStream is = Triplifier.getInputStream(properties);
+		byte[] bytes = IOUtils.toByteArray(is);
+		is.close();
 		vg.setDoc(bytes);
 		// TODO Support namespaces
 		vg.parse(false);
@@ -443,10 +466,9 @@ public class XMLTriplifier implements Triplifier, Slicer {
 	}
 
 	@Override
-	public void triplify(Slice slice, Properties properties, FacadeXGraphBuilder builder) {
+	public void triplify(Slice<Pair<VTDNav,Integer>> slice, Properties properties, FacadeXGraphBuilder builder) {
 		builder.addRoot(slice.getDatasourceId());
-		if (slice instanceof XPathSlice) {
-			XPathSlice xs = (XPathSlice) slice;
+		if (slice instanceof XPathSlice xs) {
 			try {
 				transformFromXPath(xs.get().getKey(), xs.get().getValue(), xs.iteration(), SPARQLAnythingConstants.ROOT_ID, slice.getDatasourceId(), builder);
 			} catch (NavException e) {

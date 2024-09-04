@@ -38,6 +38,12 @@ public class SandboxTest {
 
 	@Ignore
 	@Test
+	public void bnode(){
+		System.out.println(NodeFactory.createBlankNode("hey").getURI());
+	}
+
+	@Ignore
+	@Test
 	public void m(){
 		QGram d = new QGram();
 		System.out.println(d.distance("ABCD", "ABCE"));
@@ -79,7 +85,7 @@ public class SandboxTest {
         Graph g = d.asDatasetGraph().getDefaultGraph();
         double start = System.nanoTime();
         for(int i = 1; i < 10000000; i ++){
-            g.add(new Triple(NodeFactory.createBlankNode(new Object().toString()), RDF.li(i).asNode(), NodeFactory.createLiteral(String.valueOf(i))));
+            g.add(Triple.create(NodeFactory.createBlankNode(new Object().toString()), RDF.li(i).asNode(), NodeFactory.createLiteralString(String.valueOf(i))));
         }
         double loaded = System.nanoTime();
         String query = "SELECT * WHERE {[] ?P []} ORDER BY DESC(1)";

@@ -19,23 +19,26 @@ package io.github.sparqlanything.fuseki;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
 public class YASGUIServlet extends HttpServlet {
 	final static Logger logger = LoggerFactory.getLogger(YASGUIServlet.class);
+	@Serial
 	private static final long serialVersionUID = 1L;
 
-	private String fxPrefix, endpointPath;
+	private final String fxPrefix;
+	private final String endpointPath;
 
 	public YASGUIServlet(String fxPrefix, String endpointPath) {
 		this.fxPrefix = fxPrefix;

@@ -17,7 +17,6 @@
 package io.github.sparqlanything.bib;
 
 import io.github.sparqlanything.model.*;
-import org.apache.jena.ext.com.google.common.collect.Sets;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXParser;
 import org.jbibtex.ParseException;
@@ -31,6 +30,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -74,12 +74,17 @@ public class BibtexTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/x-bibtex");
+		Set<String> r = new HashSet<>();
+		r.add("application/x-bibtex");
+		return r;
 	}
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("bib", "bibtex");
+		Set<String> r = new HashSet<>();
+		r.add("bib");
+		r.add("bibtex");
+		return r;
 	}
 
 }

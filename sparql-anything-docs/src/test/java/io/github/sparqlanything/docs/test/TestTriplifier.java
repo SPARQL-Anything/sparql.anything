@@ -21,7 +21,7 @@ import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
+
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -40,8 +40,10 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Properties;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TestTriplifier {
@@ -54,7 +56,7 @@ public class TestTriplifier {
 		Properties p = new Properties();
 		DatasetGraph dg;
 		try {
-			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(doc).toString());
 			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
 			dg = b.getDatasetGraph();
@@ -62,10 +64,9 @@ public class TestTriplifier {
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
-			expectedGraph.add(new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral(
-					"Title 11Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.2Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Title 23Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-					XSDDatatype.XSDstring)));
+			expectedGraph.add(Triple.create(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(Triple.create(n, RDF.li(1).asNode(), NodeFactory.createLiteralString(
+					"Title 11Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.2Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Title 23Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")));
 			Iterator<Node> graphNodes = dg.listGraphNodes();
 			while (graphNodes.hasNext()) {
 				System.err.println(graphNodes.next());
@@ -83,21 +84,18 @@ public class TestTriplifier {
 
 			expectedGraph = GraphFactory.createGraphMem();
 			n = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(Triple.create(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(
-					new Triple(n, RDF.li(1).asNode(), NodeFactory.createLiteral("Title 1", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), NodeFactory.createLiteral(
-					"1Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-					XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(n, RDF.li(3).asNode(), NodeFactory.createLiteral(
-					"2Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-					XSDDatatype.XSDstring)));
+					Triple.create(n, RDF.li(1).asNode(), NodeFactory.createLiteralString("Title 1")));
+			expectedGraph.add(Triple.create(n, RDF.li(2).asNode(), NodeFactory.createLiteralString(
+					"1Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")));
+			expectedGraph.add(Triple.create(n, RDF.li(3).asNode(), NodeFactory.createLiteralString(
+					"2Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")));
 			expectedGraph.add(
-					new Triple(n, RDF.li(4).asNode(), NodeFactory.createLiteral("Title 2", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(n, RDF.li(5).asNode(), NodeFactory.createLiteral(
-					"3Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-					XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(n, RDF.li(6).asNode(), NodeFactory.createLiteral("", XSDDatatype.XSDstring)));
+					Triple.create(n, RDF.li(4).asNode(), NodeFactory.createLiteralString("Title 2")));
+			expectedGraph.add(Triple.create(n, RDF.li(5).asNode(), NodeFactory.createLiteralString(
+					"3Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")));
+			expectedGraph.add(Triple.create(n, RDF.li(6).asNode(), NodeFactory.createLiteralString("")));
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p)))
@@ -116,7 +114,7 @@ public class TestTriplifier {
 		Properties p = new Properties();
 		DatasetGraph dg;
 		try {
-			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(doc).toString());
 			p.setProperty(IRIArgument.BLANK_NODES.toString(), "false");
 
 			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(p);
@@ -125,10 +123,10 @@ public class TestTriplifier {
 			RDFDataMgr.write(System.out, dg, RDFFormat.NQ);
 
 			dg.find(null, null, null, null).forEachRemaining(q -> {
-				assertTrue(!q.getGraph().isBlank());
-				assertTrue(!q.getSubject().isBlank());
-				assertTrue(!q.getPredicate().isBlank());
-				assertTrue(!q.getObject().isBlank());
+				assertFalse(q.getGraph().isBlank());
+				assertFalse(q.getSubject().isBlank());
+				assertFalse(q.getPredicate().isBlank());
+				assertFalse(q.getObject().isBlank());
 			});
 
 //			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
@@ -148,7 +146,7 @@ public class TestTriplifier {
 		DatasetGraph dg;
 		try {
 
-			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(doc).toString());
 
 			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
@@ -158,65 +156,65 @@ public class TestTriplifier {
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
-			expectedGraph.add(new Triple(n, RDF.li(1).asNode(),
-					NodeFactory.createLiteral("Title 1Paragraph1Title 2Paragraph2", XSDDatatype.XSDstring)));
+			expectedGraph.add(Triple.create(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(Triple.create(n, RDF.li(1).asNode(),
+					NodeFactory.createLiteralString("Title 1Paragraph1Title 2Paragraph2")));
 
 			Node table = NodeFactory.createBlankNode();
 
-			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), table));
+			expectedGraph.add(Triple.create(n, RDF.li(2).asNode(), table));
 
 			Node row1 = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(table, RDF.li(1).asNode(), row1));
+			expectedGraph.add(Triple.create(table, RDF.li(1).asNode(), row1));
 			expectedGraph
-					.add(new Triple(row1, RDF.li(1).asNode(), NodeFactory.createLiteral("11", XSDDatatype.XSDstring)));
+					.add(Triple.create(row1, RDF.li(1).asNode(), NodeFactory.createLiteralString("11")));
 			expectedGraph
-					.add(new Triple(row1, RDF.li(2).asNode(), NodeFactory.createLiteral("12", XSDDatatype.XSDstring)));
+					.add(Triple.create(row1, RDF.li(2).asNode(), NodeFactory.createLiteralString("12")));
 			expectedGraph
-					.add(new Triple(row1, RDF.li(3).asNode(), NodeFactory.createLiteral("13", XSDDatatype.XSDstring)));
+					.add(Triple.create(row1, RDF.li(3).asNode(), NodeFactory.createLiteralString("13")));
 			expectedGraph
-					.add(new Triple(row1, RDF.li(4).asNode(), NodeFactory.createLiteral("14", XSDDatatype.XSDstring)));
+					.add(Triple.create(row1, RDF.li(4).asNode(), NodeFactory.createLiteralString("14")));
 			expectedGraph
-					.add(new Triple(row1, RDF.li(5).asNode(), NodeFactory.createLiteral("15", XSDDatatype.XSDstring)));
+					.add(Triple.create(row1, RDF.li(5).asNode(), NodeFactory.createLiteralString("15")));
 
 			Node row2 = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(table, RDF.li(2).asNode(), row2));
+			expectedGraph.add(Triple.create(table, RDF.li(2).asNode(), row2));
 			expectedGraph
-					.add(new Triple(row2, RDF.li(1).asNode(), NodeFactory.createLiteral("21", XSDDatatype.XSDstring)));
+					.add(Triple.create(row2, RDF.li(1).asNode(), NodeFactory.createLiteralString("21")));
 			expectedGraph
-					.add(new Triple(row2, RDF.li(2).asNode(), NodeFactory.createLiteral("22", XSDDatatype.XSDstring)));
+					.add(Triple.create(row2, RDF.li(2).asNode(), NodeFactory.createLiteralString("22")));
 			expectedGraph
-					.add(new Triple(row2, RDF.li(3).asNode(), NodeFactory.createLiteral("23", XSDDatatype.XSDstring)));
+					.add(Triple.create(row2, RDF.li(3).asNode(), NodeFactory.createLiteralString("23")));
 			expectedGraph
-					.add(new Triple(row2, RDF.li(4).asNode(), NodeFactory.createLiteral("24", XSDDatatype.XSDstring)));
+					.add(Triple.create(row2, RDF.li(4).asNode(), NodeFactory.createLiteralString("24")));
 			expectedGraph
-					.add(new Triple(row2, RDF.li(5).asNode(), NodeFactory.createLiteral("25", XSDDatatype.XSDstring)));
+					.add(Triple.create(row2, RDF.li(5).asNode(), NodeFactory.createLiteralString("25")));
 
 			Node row3 = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(table, RDF.li(3).asNode(), row3));
+			expectedGraph.add(Triple.create(table, RDF.li(3).asNode(), row3));
 			expectedGraph
-					.add(new Triple(row3, RDF.li(1).asNode(), NodeFactory.createLiteral("31", XSDDatatype.XSDstring)));
+					.add(Triple.create(row3, RDF.li(1).asNode(), NodeFactory.createLiteralString("31")));
 			expectedGraph
-					.add(new Triple(row3, RDF.li(2).asNode(), NodeFactory.createLiteral("32", XSDDatatype.XSDstring)));
+					.add(Triple.create(row3, RDF.li(2).asNode(), NodeFactory.createLiteralString("32")));
 			expectedGraph
-					.add(new Triple(row3, RDF.li(3).asNode(), NodeFactory.createLiteral("33", XSDDatatype.XSDstring)));
+					.add(Triple.create(row3, RDF.li(3).asNode(), NodeFactory.createLiteralString("33")));
 			expectedGraph
-					.add(new Triple(row3, RDF.li(4).asNode(), NodeFactory.createLiteral("34", XSDDatatype.XSDstring)));
+					.add(Triple.create(row3, RDF.li(4).asNode(), NodeFactory.createLiteralString("34")));
 			expectedGraph
-					.add(new Triple(row3, RDF.li(5).asNode(), NodeFactory.createLiteral("35", XSDDatatype.XSDstring)));
+					.add(Triple.create(row3, RDF.li(5).asNode(), NodeFactory.createLiteralString("35")));
 
 			Node row4 = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(table, RDF.li(4).asNode(), row4));
+			expectedGraph.add(Triple.create(table, RDF.li(4).asNode(), row4));
 			expectedGraph
-					.add(new Triple(row4, RDF.li(1).asNode(), NodeFactory.createLiteral("41", XSDDatatype.XSDstring)));
+					.add(Triple.create(row4, RDF.li(1).asNode(), NodeFactory.createLiteralString("41")));
 			expectedGraph
-					.add(new Triple(row4, RDF.li(2).asNode(), NodeFactory.createLiteral("42", XSDDatatype.XSDstring)));
+					.add(Triple.create(row4, RDF.li(2).asNode(), NodeFactory.createLiteralString("42")));
 			expectedGraph
-					.add(new Triple(row4, RDF.li(3).asNode(), NodeFactory.createLiteral("43", XSDDatatype.XSDstring)));
+					.add(Triple.create(row4, RDF.li(3).asNode(), NodeFactory.createLiteralString("43")));
 			expectedGraph
-					.add(new Triple(row4, RDF.li(4).asNode(), NodeFactory.createLiteral("44", XSDDatatype.XSDstring)));
+					.add(Triple.create(row4, RDF.li(4).asNode(), NodeFactory.createLiteralString("44")));
 			expectedGraph
-					.add(new Triple(row4, RDF.li(5).asNode(), NodeFactory.createLiteral("45", XSDDatatype.XSDstring)));
+					.add(Triple.create(row4, RDF.li(5).asNode(), NodeFactory.createLiteralString("45")));
 
 			assertTrue(dg.getDefaultGraph().isIsomorphicWith(expectedGraph));
 			assertTrue(dg.getGraph(NodeFactory.createURI(Triplifier.getRootArgument(p)))
@@ -240,7 +238,7 @@ public class TestTriplifier {
 		Properties p = new Properties();
 		DatasetGraph dg;
 		try {
-			p.setProperty(IRIArgument.LOCATION.toString(), doc.toString());
+			p.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(doc).toString());
 			p.setProperty(DocxTriplifier.TABLE_HEADERS.toString(), "true");
 			FacadeXGraphBuilder b =new BaseFacadeXGraphBuilder(p);
 			st.triplify(p, b);
@@ -250,55 +248,55 @@ public class TestTriplifier {
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
 			Node n = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
-			expectedGraph.add(new Triple(n, RDF.li(1).asNode(),
-					NodeFactory.createLiteral("Title 1Paragraph1Title 2Paragraph2", XSDDatatype.XSDstring)));
+			expectedGraph.add(Triple.create(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
+			expectedGraph.add(Triple.create(n, RDF.li(1).asNode(),
+					NodeFactory.createLiteralString("Title 1Paragraph1Title 2Paragraph2")));
 
 			Node table = NodeFactory.createBlankNode();
 
-			expectedGraph.add(new Triple(n, RDF.li(2).asNode(), table));
+			expectedGraph.add(Triple.create(n, RDF.li(2).asNode(), table));
 
 //			NodeFactory.createURI(Triplifier.XYZ_NS+"11")
 
 			Node row2 = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(table, RDF.li(1).asNode(), row2));
-			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
-					NodeFactory.createLiteral("21", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
-					NodeFactory.createLiteral("22", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
-					NodeFactory.createLiteral("23", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
-					NodeFactory.createLiteral("24", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
-					NodeFactory.createLiteral("25", XSDDatatype.XSDstring)));
+			expectedGraph.add(Triple.create(table, RDF.li(1).asNode(), row2));
+			expectedGraph.add(Triple.create(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
+					NodeFactory.createLiteralString("21")));
+			expectedGraph.add(Triple.create(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
+					NodeFactory.createLiteralString("22")));
+			expectedGraph.add(Triple.create(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
+					NodeFactory.createLiteralString("23")));
+			expectedGraph.add(Triple.create(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
+					NodeFactory.createLiteralString("24")));
+			expectedGraph.add(Triple.create(row2, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
+					NodeFactory.createLiteralString("25")));
 
 			Node row3 = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(table, RDF.li(2).asNode(), row3));
+			expectedGraph.add(Triple.create(table, RDF.li(2).asNode(), row3));
 
-			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
-					NodeFactory.createLiteral("31", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
-					NodeFactory.createLiteral("32", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
-					NodeFactory.createLiteral("33", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
-					NodeFactory.createLiteral("34", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
-					NodeFactory.createLiteral("35", XSDDatatype.XSDstring)));
+			expectedGraph.add(Triple.create(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
+					NodeFactory.createLiteralString("31")));
+			expectedGraph.add(Triple.create(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
+					NodeFactory.createLiteralString("32")));
+			expectedGraph.add(Triple.create(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
+					NodeFactory.createLiteralString("33")));
+			expectedGraph.add(Triple.create(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
+					NodeFactory.createLiteralString("34")));
+			expectedGraph.add(Triple.create(row3, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
+					NodeFactory.createLiteralString("35")));
 
 			Node row4 = NodeFactory.createBlankNode();
-			expectedGraph.add(new Triple(table, RDF.li(3).asNode(), row4));
-			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
-					NodeFactory.createLiteral("41", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
-					NodeFactory.createLiteral("42", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
-					NodeFactory.createLiteral("43", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
-					NodeFactory.createLiteral("44", XSDDatatype.XSDstring)));
-			expectedGraph.add(new Triple(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
-					NodeFactory.createLiteral("45", XSDDatatype.XSDstring)));
+			expectedGraph.add(Triple.create(table, RDF.li(3).asNode(), row4));
+			expectedGraph.add(Triple.create(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "11"),
+					NodeFactory.createLiteralString("41")));
+			expectedGraph.add(Triple.create(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "12"),
+					NodeFactory.createLiteralString("42")));
+			expectedGraph.add(Triple.create(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "13"),
+					NodeFactory.createLiteralString("43")));
+			expectedGraph.add(Triple.create(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "14"),
+					NodeFactory.createLiteralString("44")));
+			expectedGraph.add(Triple.create(row4, NodeFactory.createURI(Triplifier.XYZ_NS + "15"),
+					NodeFactory.createLiteralString("45")));
 
 			if (!dg.getDefaultGraph().isIsomorphicWith(expectedGraph)) {
 				ModelFactory.createModelForGraph(expectedGraph)

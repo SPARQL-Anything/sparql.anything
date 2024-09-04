@@ -20,7 +20,7 @@ import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.ext.com.google.common.collect.Lists;
+import com.google.common.collect.Lists;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.vocabulary.RDF;

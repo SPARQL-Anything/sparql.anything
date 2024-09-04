@@ -18,7 +18,7 @@ package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.Triplifier;
-import org.apache.jena.ext.com.google.common.collect.Sets;
+import com.google.common.collect.Sets;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 
@@ -29,11 +29,8 @@ import java.util.Set;
 
 public class TestTriplifier implements Triplifier {
 
-	public TestTriplifier() {
-	}
-
 	@Override
-	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
+	public void triplify(Properties properties, FacadeXGraphBuilder builder)  {
 //		return
 		DatasetGraph dg = TriplifierRegistryTest.createExampleGraph();
 		Iterator<Quad> quad = dg.find();

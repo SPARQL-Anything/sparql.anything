@@ -43,4 +43,14 @@ public class DocxTriplifierTest extends AbstractTriplifierTester {
 		assertResultIsIsomorphicWithExpected();
 	}
 
+	@Test
+	public void testDoc4() {
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testDoc5() {
+		assertResultIsIsomorphicWithExpected();
+	}
+
 }

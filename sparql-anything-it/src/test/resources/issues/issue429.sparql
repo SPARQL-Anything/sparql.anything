@@ -1,0 +1,26 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX apf: <http://jena.apache.org/ARQ/property#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+#SELECT ?slideNumber ?type ?text
+SELECT *
+WHERE {
+  SERVICE <x-sparql-anything:>
+  {
+   fx:properties fx:media-type  "application/vnd.openxmlformats-officedocument.presentationml.presentation" ;
+   fx:location "%%%LOCATION%%%"
+         .
+    ?Presentation a xyz:Presentation ;
+                  ?hasSlide [?hasContent [ a ?type ;
+                                rdf:_1 ?text ;]
+                ] .
+
+  }
+  # BIND (xsd:int(STRAFTER(STR(?hasSlide), "rdf:_")) AS ?slideNumber)
+  BIND (fx:cardinal(?hasSlide) AS ?slideNumber)
+}
+
+ORDER BY ?slideNumber ?hasContent

@@ -16,10 +16,15 @@
 
 package io.github.sparqlanything.cli;
 
+import org.apache.jena.sys.JenaSystem;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class OptionsViaCommandLineTest {
+
+	public OptionsViaCommandLineTest (){
+		JenaSystem.init();
+	}
 
 	@Test
 	public void test() throws Exception {

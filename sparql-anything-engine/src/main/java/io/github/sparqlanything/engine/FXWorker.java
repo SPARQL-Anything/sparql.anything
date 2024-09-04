@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
+import java.util.Scanner;
 
 public abstract class FXWorker<T extends Op> {
 
@@ -50,7 +51,10 @@ public abstract class FXWorker<T extends Op> {
 
 		//then, from opservice (so that can be overwritten)
 		extractProperties(p, op);
-		//PropertyExtractor.extractPropertiesFromOp(opService, p);
+
+		// Possibly read from STD in
+		readFromStdIn(p);
+
 
 		// guess triplifier
 		Triplifier t = PropertyExtractor.getTriplifier(p, tr);
@@ -71,14 +75,25 @@ public abstract class FXWorker<T extends Op> {
 		}
 
 		// Execute with default, bulk method
-//		DatasetGraph dg = dgc.getDatasetGraph(t, p, op.getSubOp());
 		DatasetGraph dg = dgc.getDatasetGraph(t, p, op);
 		Utils.ensureReadingTxn(dg);
 
 		return execute(op, input, executionContext, dg, p);
 	}
 
-	public abstract QueryIterator execute(T op, QueryIterator input, ExecutionContext executionContext, DatasetGraph dg, Properties p);
-
 	public abstract void extractProperties(Properties p, T op) throws UnboundVariableException;
+
+	private void readFromStdIn(Properties p) {
+		if (p.containsKey(IRIArgument.READ_FROM_STD_IN.toString())) {
+			Scanner sc = new Scanner(System.in);
+			StringBuilder sb = new StringBuilder();
+			while (sc.hasNextLine()) {
+				sb.append(sc.nextLine());
+				sb.append('\n');
+			}
+			p.setProperty(IRIArgument.CONTENT.toString(), sb.substring(0, sb.length()-1));
+		}
+	}
+
+	public abstract QueryIterator execute(T op, QueryIterator input, ExecutionContext executionContext, DatasetGraph dg, Properties p);
 }

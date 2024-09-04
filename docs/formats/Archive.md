@@ -50,25 +50,25 @@ WHERE
 ### Facade-X RDF
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root ;
-  rdf:_1    "example/" ;
-  rdf:_2    "example/test.csv" ;
-  rdf:_3    "example/test.json" ;
-  rdf:_4    "example/test.xml" ;
+[ rdf:type  fx:root;
+  rdf:_1    "example/";
+  rdf:_2    "example/test.csv";
+  rdf:_3    "example/test.json";
+  rdf:_4    "example/test.xml";
   rdf:_5    "example/test.txt"
 ] .
 
@@ -137,50 +137,50 @@ WHERE
 ###### Result
 
 ```turtle
-@prefix dc:     <http://purl.org/dc/elements/1.1/> .
-@prefix eg:     <http://www.example.org/> .
-@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
-@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
-@prefix owl:    <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rss:    <http://purl.org/rss/1.0/> .
-@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
-@prefix whatwg: <https://html.spec.whatwg.org/#> .
-@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
-@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
-@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+PREFIX dc:     <http://purl.org/dc/elements/1.1/>
+PREFIX eg:     <http://www.example.org/>
+PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
+PREFIX owl:    <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rss:    <http://purl.org/rss/1.0/>
+PREFIX vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#>
+PREFIX whatwg: <https://html.spec.whatwg.org/#>
+PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root ;
-  rdf:_1    "this is a test" ;
-  rdf:_1    [ rdf:_1  "Year" ;
-              rdf:_2  "Make" ;
-              rdf:_3  "Model" ;
-              rdf:_4  "Description" ;
+[ rdf:type  fx:root;
+  rdf:_1    "this is a test";
+  rdf:_1    [ rdf:_1  "Year";
+              rdf:_2  "Make";
+              rdf:_3  "Model";
+              rdf:_4  "Description";
               rdf:_5  "Price"
-            ] ;
-  rdf:_2    [ rdf:_1  "1997" ;
-              rdf:_2  "Ford" ;
-              rdf:_3  "E350" ;
-              rdf:_4  "ac, abs, moon" ;
+            ];
+  rdf:_2    [ rdf:_1  "1997";
+              rdf:_2  "Ford";
+              rdf:_3  "E350";
+              rdf:_4  "ac, abs, moon";
               rdf:_5  "3000.00"
-            ] ;
-  rdf:_3    [ rdf:_1  "1999" ;
-              rdf:_2  "Chevy" ;
-              rdf:_3  "Venture \"Extended Edition\"" ;
-              rdf:_4  "" ;
+            ];
+  rdf:_3    [ rdf:_1  "1999";
+              rdf:_2  "Chevy";
+              rdf:_3  "Venture \"Extended Edition\"";
+              rdf:_4  "";
               rdf:_5  "4900.00"
-            ] ;
-  rdf:_4    [ rdf:_1  "1999" ;
-              rdf:_2  "Chevy" ;
-              rdf:_3  "Venture \"Extended Edition, Very Large\"" ;
-              rdf:_4  "" ;
+            ];
+  rdf:_4    [ rdf:_1  "1999";
+              rdf:_2  "Chevy";
+              rdf:_3  "Venture \"Extended Edition, Very Large\"";
+              rdf:_4  "";
               rdf:_5  "5000.00"
-            ] ;
-  rdf:_5    [ rdf:_1  "1996" ;
-              rdf:_2  "Jeep" ;
-              rdf:_3  "Grand Cherokee" ;
-              rdf:_4  "MUST SELL!\nair, moon roof, loaded" ;
+            ];
+  rdf:_5    [ rdf:_1  "1996";
+              rdf:_2  "Jeep";
+              rdf:_3  "Grand Cherokee";
+              rdf:_4  "MUST SELL!\nair, moon roof, loaded";
               rdf:_5  "4799.00"
             ]
 ] .

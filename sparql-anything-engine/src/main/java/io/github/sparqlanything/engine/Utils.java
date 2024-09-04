@@ -121,7 +121,7 @@ public class Utils {
 				if (t.getObject().isVariable()) {
 					Var s = Var.alloc("s" + System.currentTimeMillis());
 					Var p = Var.alloc("p" + System.currentTimeMillis());
-					pattern.add(new Triple(s, p, t.getObject()));
+					pattern.add(Triple.create(s, p, t.getObject()));
 				}
 			}
 		}

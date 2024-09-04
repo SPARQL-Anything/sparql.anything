@@ -82,6 +82,6 @@ public class HTTPHelperTest {
 
     @Test
     public void testX() throws Exception {
-        System.out.println(url.getProtocol());
+		test();
     }
 }

@@ -58,11 +58,10 @@ public class TriplifierRegistryTest {
 
 	static DatasetGraph createExampleGraph() {
 		DatasetGraph dg = DatasetGraphFactory.create();
-		Graph g = GraphFactory.createGraphMem();
-		g.add(new Triple(NodeFactory.createURI(PREFIX + "s"), NodeFactory.createURI(PREFIX + "p"),
+		Graph g = dg.getDefaultGraph();
+		g.add(Triple.create(NodeFactory.createURI(PREFIX + "s"), NodeFactory.createURI(PREFIX + "p"),
 				NodeFactory.createURI(PREFIX + "o")));
 		dg.addGraph(NodeFactory.createURI(PREFIX + "g"), g);
-		dg.setDefaultGraph(g);
 		return dg;
 	}
 
