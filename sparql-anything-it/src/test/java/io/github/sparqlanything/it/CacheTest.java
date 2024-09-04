@@ -16,24 +16,51 @@
 
 package io.github.sparqlanything.it;
 
+import com.sun.source.tree.AssertTree;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class CacheTest {
 
 	@Test
-	public void test1(){
+	public void testDefaultSetting(){
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
-		String queryStr = "SELECT * { SERVICE <x-sparql-anything:content=abc,txt.split=b,audit=true> {GRAPH ?g { ?s ?p ?o} }}";
+		String queryStr = "SELECT ?o { SERVICE <x-sparql-anything:content=abc,txt.split=b,audit=true,strategy=0> {GRAPH <http://sparql.xyz/facade-x/data/audit> { ?s  <http://sparql.xyz/facade-x/ns/cachedGraph>  ?o} }}";
 		Query query = QueryFactory.create(queryStr);
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query,ds).execSelect()));
+		// System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query,ds).execSelect()));
+		ResultSet rs1 = QueryExecutionFactory.create(query,ds).execSelect();
+		Assert.assertTrue(rs1.hasNext());
+		Assert.assertFalse(rs1.next().getLiteral("o").asLiteral().getBoolean());
 
-		System.err.println("--- new exec ---");
-		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query,ds).execSelect()));
+		ResultSet rs2 = QueryExecutionFactory.create(query,ds).execSelect();
+		Assert.assertTrue(rs2.hasNext());
+		Assert.assertTrue(rs2.next().getLiteral("o").asLiteral().getBoolean());
+
+
+	}
+
+
+	@Test
+	public void testNoCache(){
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		String queryStr = "SELECT ?o { SERVICE <x-sparql-anything:content=abc,txt.split=b,audit=true,strategy=0,no-cache=true> {GRAPH <http://sparql.xyz/facade-x/data/audit> { ?s  <http://sparql.xyz/facade-x/ns/cachedGraph>  ?o} }}";
+		Query query = QueryFactory.create(queryStr);
+		// System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query,ds).execSelect()));
+		ResultSet rs1 = QueryExecutionFactory.create(query,ds).execSelect();
+		Assert.assertTrue(rs1.hasNext());
+		Assert.assertFalse(rs1.next().getLiteral("o").asLiteral().getBoolean());
+
+		ResultSet rs2 = QueryExecutionFactory.create(query,ds).execSelect();
+		Assert.assertTrue(rs2.hasNext());
+		Assert.assertFalse(rs2.next().getLiteral("o").asLiteral().getBoolean());
+
 
 	}
 }
