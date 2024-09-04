@@ -40,7 +40,7 @@ WHERE
 ```
 
 ```turtle
-$ java -jar sparql-anything-0.8.1.jar --query some.rq 
+$ java -jar sparql-anything-0.9.0.jar --query some.rq 
 [main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
@@ -92,7 +92,7 @@ WHERE
 ```
 
 ```turtle
-$ java -jar sparql-anything-0.8.1.jar --query some.rq
+$ java -jar sparql-anything-0.9.0.jar --query some.rq
 [main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
 @prefix ex:  <http://example.com/> .
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
