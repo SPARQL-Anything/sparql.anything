@@ -9,9 +9,133 @@
 
 SPARQL Anything is a system for Semantic Web re-engineering that allows users to ... query anything with SPARQL.
 
-Main features:
+## Quickstart
 
-- Provides a homogenous view over heterogeneous  data sources, thanks to the Facade-X meta-model (see [Facade-X specification](Facade-X.md) )
+One of the most common uses of SPARQL Anything is to start with some structured data (e.g. csv) and produce RDF using a particular ontology (e.g. [gist](https://github.com/semanticarts/gist)).
+Here is how that can be done.
+
+```bash
+# have java and curl installed
+$ curl -L -O 'https://github.com/SPARQL-Anything/sparql.anything/releases/download/0.9.0/sparql-anything-0.9.0.jar'
+```
+
+```csv
+$ cat some.csv
+id,name,height_inches
+5,alice,66
+2,fred,67
+9,william,73
+```
+
+```sparql
+# first let's write a simple query that just shows us the Facade-X representaion of the csv
+$ cat some.rq 
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+CONSTRUCT { ?s ?p ?o  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:location     "some.csv" ;
+                  fx:csv.headers  "true" .
+        ?s        ?p              ?o
+      }
+  }
+```
+
+```turtle
+$ java -jar sparql-anything-0.9.0.jar --query some.rq 
+[main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ a       fx:root ;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+          [ xyz:height_inches  "66" ;
+            xyz:id             "5" ;
+            xyz:name           "alice"
+          ] ;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+          [ xyz:height_inches  "67" ;
+            xyz:id             "2" ;
+            xyz:name           "fred"
+          ] ;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+          [ xyz:height_inches  "73" ;
+            xyz:id             "9" ;
+            xyz:name           "william"
+          ]
+] .
+```
+
+```sparql
+# and now you can use everything you know about SPARQL to construct the RDF you want
+# by transforming the Facade-X representation into the desired RDF
+$ cat some.rq
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  ex:   <http://example.com/>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  gist: <https://w3id.org/semanticarts/ns/ontology/gist/>
+CONSTRUCT {
+?person a gist:Person ;
+  gist:name ?name ;
+  gist:hasMagnitude ?height_magnitude .
+?height_magnitude a gist:Extent ;
+  gist:hasUnitOfMeasure gist:_inch ;
+  gist:numericValue ?height .
+}
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:location     "some.csv" ;
+                  fx:csv.headers  "true" .
+        ?row xyz:height_inches ?height_string .
+        ?row xyz:id ?id_string .
+        ?row xyz:name ?name .
+        bind(bnode() as ?height_magnitude)
+        bind(xsd:float(?height_string) as ?height)
+        bind(iri(concat(str(ex:),"Person/",?id_string)) as ?person)
+      }
+  }
+```
+
+```turtle
+$ java -jar sparql-anything-0.9.0.jar --query some.rq
+@prefix ex:   <http://example.com/> .
+@prefix fx:   <http://sparql.xyz/facade-x/ns/> .
+@prefix gist: <https://w3id.org/semanticarts/ns/ontology/gist/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:  <http://sparql.xyz/facade-x/data/> .
+
+<http://example.com/Person/9>
+        a                  gist:Person ;
+        gist:hasMagnitude  [ a                      gist:Extent ;
+                             gist:hasUnitOfMeasure  gist:_inch ;
+                             gist:numericValue      "73"^^xsd:float
+                           ] ;
+        gist:name          "william" .
+
+<http://example.com/Person/2>
+        a                  gist:Person ;
+        gist:hasMagnitude  [ a                      gist:Extent ;
+                             gist:hasUnitOfMeasure  gist:_inch ;
+                             gist:numericValue      "67"^^xsd:float
+                           ] ;
+        gist:name          "fred" .
+
+<http://example.com/Person/5>
+        a                  gist:Person ;
+        gist:hasMagnitude  [ a                      gist:Extent ;
+                             gist:hasUnitOfMeasure  gist:_inch ;
+                             gist:numericValue      "66"^^xsd:float
+                           ] ;
+        gist:name          "alice" .
+```
+
+## Main features
+
+- Provides a homogeneous view over heterogeneous  data sources, thanks to the Facade-X meta-model (see [Facade-X specification](Facade-X.md) and [System overview](SystemOverview.md) )
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#Configuration)) and
   build knowledge graphs with `CONSTRUCT` queries
 - [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar,
@@ -29,7 +153,7 @@ Main features:
   and [#203](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
 - Supports an [on-disk option](#Configuration) (with Apache Jena TDB2)
 
-## Quickstart
+## Introduction
 
 SPARQL Anything uses a single generic abstraction for all data source formats called Facade-X.
 
@@ -298,6 +422,7 @@ WHERE {
 | [use-rdfs-member](Configuration.md#use-rdfs-member)                                 | It tells SPARQL Anything to use the (super)property rdfs:member instead of container membership properties (rdf:_1, rdf:_2 ...)                                                                                                                                                                                                               | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [annotate-triples-with-slot-keys](Configuration.md#annotate-triples-with-slot-keys) | It tells SPARQL Anything to annotate slot statements with slot keys (see issue [#378](https://github.com/SPARQL-Anything/sparql.anything/issues/378))                                                                                                                                                                                         | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [generate-predicate-labels](Configuration.md#generate-predicate-labels)             | It tells SPARQL Anything to create labels for extracted predicates and classes (see issue [#462](https://github.com/SPARQL-Anything/sparql.anything/issues/462))                                                                                                                                                                              | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
+| [audit](Configuration.md#audit)                                                     | It tells SPARQL Anything to generate an additional graph containing information for auditing the result of the triplification. The audit graph has the URI &lt;http://sparql.xyz/facade-x/data/audit&gt;                                                                                                                                      | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 
 \* If `read-from-std-in` is set to false, it is mandatory to provide either `location`, `content`, or `command`.
 
