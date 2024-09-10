@@ -587,7 +587,7 @@ usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
                                        Variables should start with '?' and
                                        refer to bindings from the input
                                        file. This option can only be used
-                                       in combination with 'input' and is
+                                       in combination with 'values' and is
                                        ignored otherwise. This option
                                        overrides 'output'.
  -v,--values <values>                  OPTIONAL - Values passed as input
@@ -616,14 +616,6 @@ usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
                                        set). Options passed in this way
                                        can be overwritten in the SERVICE
                                        IRI or in the Basic Graph Pattern.
- -i,--input <input>                    [Deprecated] OPTIONAL - The path to
-                                       a SPARQL result set file to be used
-                                       as input. When present, the query
-                                       is pre-processed by substituting
-                                       variable names with values from the
-                                       bindings provided. The query is
-                                       repeated for each set of bindings
-                                       in the input result set.
 ```
 
 Logging can be configured adding the following option (SLF4J).
