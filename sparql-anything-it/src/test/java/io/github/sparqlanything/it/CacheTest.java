@@ -16,7 +16,6 @@
 
 package io.github.sparqlanything.it;
 
-import com.sun.source.tree.AssertTree;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
@@ -46,11 +45,11 @@ public class CacheTest {
 
 
 	@Test
-	public void testNoCache(){
+	public void testUseCache(){
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 
-		String queryStr = "SELECT ?o { SERVICE <x-sparql-anything:content=abc,txt.split=b,audit=true,strategy=0,no-cache=true> {GRAPH <http://sparql.xyz/facade-x/data/audit> { ?s  <http://sparql.xyz/facade-x/ns/cachedGraph>  ?o} }}";
+		String queryStr = "SELECT ?o { SERVICE <x-sparql-anything:content=abc,txt.split=b,audit=true,strategy=0,use-cache=true> {GRAPH <http://sparql.xyz/facade-x/data/audit> { ?s  <http://sparql.xyz/facade-x/ns/cachedGraph>  ?o} }}";
 		Query query = QueryFactory.create(queryStr);
 		// System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query,ds).execSelect()));
 		ResultSet rs1 = QueryExecutionFactory.create(query,ds).execSelect();
