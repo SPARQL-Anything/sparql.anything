@@ -423,6 +423,7 @@ WHERE {
 | [annotate-triples-with-slot-keys](Configuration.md#annotate-triples-with-slot-keys) | It tells SPARQL Anything to annotate slot statements with slot keys (see issue [#378](https://github.com/SPARQL-Anything/sparql.anything/issues/378))                                                                                                                                                                                         | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [generate-predicate-labels](Configuration.md#generate-predicate-labels)             | It tells SPARQL Anything to create labels for extracted predicates and classes (see issue [#462](https://github.com/SPARQL-Anything/sparql.anything/issues/462))                                                                                                                                                                              | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 | [audit](Configuration.md#audit)                                                     | It tells SPARQL Anything to generate an additional graph containing information for auditing the result of the triplification. The audit graph has the URI &lt;http://sparql.xyz/facade-x/data/audit&gt;                                                                                                                                      | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
+| [use-cache](Configuration.md#use-cache)                                             | When set to true, the result of the triplification is cached in memory and used to answer the same query again.                                                                                                                                                                                                                               | true/false                                                                                                                                                                            | false                                                                                                                                                                                                                                                                       |
 
 \* If `read-from-std-in` is set to false, it is mandatory to provide either `location`, `content`, or `command`.
 
@@ -587,7 +588,7 @@ usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
                                        Variables should start with '?' and
                                        refer to bindings from the input
                                        file. This option can only be used
-                                       in combination with 'input' and is
+                                       in combination with 'values' and is
                                        ignored otherwise. This option
                                        overrides 'output'.
  -v,--values <values>                  OPTIONAL - Values passed as input
@@ -616,14 +617,6 @@ usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
                                        set). Options passed in this way
                                        can be overwritten in the SERVICE
                                        IRI or in the Basic Graph Pattern.
- -i,--input <input>                    [Deprecated] OPTIONAL - The path to
-                                       a SPARQL result set file to be used
-                                       as input. When present, the query
-                                       is pre-processed by substituting
-                                       variable names with values from the
-                                       bindings provided. The query is
-                                       repeated for each set of bindings
-                                       in the input result set.
 ```
 
 Logging can be configured adding the following option (SLF4J).
