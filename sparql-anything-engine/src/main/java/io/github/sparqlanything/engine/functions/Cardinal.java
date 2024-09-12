@@ -24,7 +24,7 @@ import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.apache.jena.sparql.util.FmtUtils;
-import org.semarglproject.vocab.XSD;
+import io.github.sparqlanything.html.org.semarglproject.vocab.XSD;
 
 public class Cardinal extends FunctionBase1 implements FXFunction {
 
