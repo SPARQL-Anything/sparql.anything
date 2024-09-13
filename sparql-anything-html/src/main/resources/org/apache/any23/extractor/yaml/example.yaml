@@ -1,0 +1,16 @@
+%YAML 1.2
+---
+- parameter1: val1
+- par1a
+- par1b
+
+- parameter2:
+  - val2
+  - val3
+  - val4
+  - val5
+---
+- parameter3: [val6, val7, val8]
+- parameter4
+- parameter5
+
