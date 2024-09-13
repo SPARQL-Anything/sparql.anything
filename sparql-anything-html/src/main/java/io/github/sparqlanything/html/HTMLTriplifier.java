@@ -18,6 +18,11 @@ package io.github.sparqlanything.html;
 
 import com.microsoft.playwright.*;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorRegistryImpl;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.*;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.HRecipeExtractorFactory;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.*;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.HCardExtractorFactory;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.HResumeExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFa11ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFaExtractorFactory;
@@ -90,12 +95,33 @@ public class HTMLTriplifier implements Triplifier {
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
-
-
 	static {
 		ExtractorRegistryImpl.getInstance().register(new RDFa11ExtractorFactory());
 		ExtractorRegistryImpl.getInstance().register(new RDFaExtractorFactory());
 		ExtractorRegistryImpl.getInstance().register(new MicrodataExtractorFactory());
+		ExtractorRegistryImpl.getInstance().register(new HCardExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new AdrExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HCalendarExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HCardExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new EmbeddedJSONLDExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new GeoExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HeadLinkExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HRecipeExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HReviewAggregateExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HTMLMetaExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new ICBMExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new LicenseExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new SpeciesExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new TitleExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new TurtleHTMLExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new XFNExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HAdrExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HEntryExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HEventExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HGeoExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HItemExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HProductExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HResumeExtractorFactory());
 	}
 
 	private static final Any23 any23 = new Any23();
