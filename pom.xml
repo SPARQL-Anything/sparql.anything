@@ -40,7 +40,7 @@
         <owlapi.version>5.1.20</owlapi.version>
         <rdf4j.version>3.7.4</rdf4j.version>
         <tika.version>2.4.0</tika.version>
-        <jackson.version>2.13.1</jackson.version>
+        <jackson.version>2.13.4.2</jackson.version>
     </properties>
 
     <licenses>
