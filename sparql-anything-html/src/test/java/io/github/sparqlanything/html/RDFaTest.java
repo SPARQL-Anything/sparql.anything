@@ -23,14 +23,13 @@ import org.junit.Test;
 import java.util.Properties;
 
 
-public class TestRDFaParser extends AbstractTriplifierTester {
+public class RDFaTest extends AbstractTriplifierTester {
 
-	public TestRDFaParser() {
+	public RDFaTest() {
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
 		this.printWholeGraph = true;
 	}
 
-	@Ignore
 	@Test
 	public void testRDFa() {
 		this.assertResultIsIsomorphicWithExpected();
