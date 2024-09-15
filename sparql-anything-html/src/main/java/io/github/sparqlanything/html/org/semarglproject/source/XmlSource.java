@@ -47,6 +47,7 @@ final class XmlSource extends AbstractSource<XmlSink> {
         }
         try {
             sink.setBaseUri(baseUri);
+			xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             xmlReader.parse(new InputSource(reader));
         } catch (SAXException e) {
             ParseException wrappedException = sink.processException(e);
