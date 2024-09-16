@@ -17,7 +17,7 @@
 
 package io.github.sparqlanything.jdbc;
 
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
+//import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.io.IOUtils;
@@ -95,7 +95,7 @@ public class BGPAnalyserTest {
 	}
 
 	private Triple t(Node s, Node p, Node o){
-		return new Triple(s,p,o);
+		return Triple.create(s,p,o);
 	}
 	private Node v(String v){
 		return NodeFactory.createVariable(v);
@@ -167,7 +167,7 @@ public class BGPAnalyserTest {
 					nodes.add(v(tr[c].trim()));
 				}
 			}
-			t = new Triple(nodes.get(0),
+			t = Triple.create(nodes.get(0),
 				nodes.get(1),
 				nodes.get(2));
 			bp.add(t);
