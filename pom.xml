@@ -121,6 +121,7 @@
         <module>sparql-anything-bibliography</module>
         <module>sparql-anything-slides</module>
         <module>sparql-anything-documentation-generator</module>
+        <module>sparql-anything-libs</module>
         <!--		<module>sparql-anything-jdbc</module>
         -->
     </modules>
