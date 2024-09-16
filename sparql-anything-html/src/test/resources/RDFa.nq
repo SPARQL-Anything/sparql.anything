@@ -1,0 +1,95 @@
+<http://www.example.org/document/html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> .
+<http://www.example.org/document/html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> .
+<http://www.example.org/document/html/body> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" .
+<http://www.example.org/document/html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div> .
+<http://www.example.org/document/html/body> <https://html.spec.whatwg.org/#innerHTML> "<div vocab=\"http://xmlns.com/foaf/0.1/\" typeof=\"Person\">\n <p><span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a></p>\n</div>" .
+<http://www.example.org/document/html/body/div> <http://www.w3.org/1999/xhtml#typeof> "Person" .
+<http://www.example.org/document/html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#div> .
+<http://www.example.org/document/html/body/div> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" .
+<http://www.example.org/document/html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div/p> .
+<http://www.example.org/document/html/body/div> <https://html.spec.whatwg.org/#innerHTML> "<p><span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a></p>" .
+<http://www.example.org/document/html/body/div> <http://www.w3.org/1999/xhtml#vocab> "http://xmlns.com/foaf/0.1/" .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/document/html/body> .
+<http://www.example.org/document> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/head> .
+<http://www.example.org/document> <https://html.spec.whatwg.org/#innerHTML> "<head></head>\n<body>\n <div vocab=\"http://xmlns.com/foaf/0.1/\" typeof=\"Person\">\n  <p><span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a></p>\n </div>\n</body>" .
+<http://www.example.org/document/html/body/div/p/span> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#span> .
+<http://www.example.org/document/html/body/div/p/span> <http://www.w3.org/1999/xhtml#property> "name" .
+<http://www.example.org/document/html/body/div/p/span> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick" .
+<http://www.example.org/document/html/body/div/p/span> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Alice Birpemswick" .
+<http://www.example.org/document/html/body/div/p/span> <https://html.spec.whatwg.org/#innerHTML> "Alice Birpemswick" .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#p> .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> ", Email: " .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5> <http://www.example.org/document/html/body/div/p/a:3> .
+<http://www.example.org/document/html/body/div/p> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div/p/span> .
+<http://www.example.org/document/html/body/div/p> <https://html.spec.whatwg.org/#innerHTML> "<span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a>" .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4> ", Phone: " .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> <http://www.example.org/document/html/body/div/p/a:2> .
+<http://www.example.org/document/html/body/div/p/a:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#a> .
+<http://www.example.org/document/html/body/div/p/a:2> <http://www.w3.org/1999/xhtml#property> "mbox" .
+<http://www.example.org/document/html/body/div/p/a:2> <https://html.spec.whatwg.org/#innerText> "alice@example.com" .
+<http://www.example.org/document/html/body/div/p/a:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "alice@example.com" .
+<http://www.example.org/document/html/body/div/p/a:2> <https://html.spec.whatwg.org/#innerHTML> "alice@example.com" .
+<http://www.example.org/document/html/body/div/p/a:2> <http://www.w3.org/1999/xhtml#href> "mailto:alice@example.com" .
+<http://www.example.org/document/html/body/div/p/a:3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#a> .
+<http://www.example.org/document/html/body/div/p/a:3> <http://www.w3.org/1999/xhtml#property> "phone" .
+<http://www.example.org/document/html/body/div/p/a:3> <https://html.spec.whatwg.org/#innerText> "+1 617.555.7332" .
+<http://www.example.org/document/html/body/div/p/a:3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "+1 617.555.7332" .
+<http://www.example.org/document/html/body/div/p/a:3> <https://html.spec.whatwg.org/#innerHTML> "+1 617.555.7332" .
+<http://www.example.org/document/html/body/div/p/a:3> <http://www.w3.org/1999/xhtml#href> "tel:+1-617-555-7332" .
+<location> <http://www.w3.org/ns/rdfa#usesVocabulary> <http://xmlns.com/foaf/0.1/> .
+_:Bedd7d40151074328111a4249b727f22a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+_:Bedd7d40151074328111a4249b727f22a <http://xmlns.com/foaf/0.1/phone> <tel:+1-617-555-7332> .
+_:Bedd7d40151074328111a4249b727f22a <http://xmlns.com/foaf/0.1/mbox> <mailto:alice@example.com> .
+_:Bedd7d40151074328111a4249b727f22a <http://xmlns.com/foaf/0.1/name> "Alice Birpemswick" .
+<http://www.example.org/document/html/head> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#head> <http://www.example.org/document> .
+<http://www.example.org/document/html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#body> <http://www.example.org/document> .
+<http://www.example.org/document/html/body> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" <http://www.example.org/document> .
+<http://www.example.org/document/html/body> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div> <http://www.example.org/document> .
+<http://www.example.org/document/html/body> <https://html.spec.whatwg.org/#innerHTML> "<div vocab=\"http://xmlns.com/foaf/0.1/\" typeof=\"Person\">\n <p><span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a></p>\n</div>" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div> <http://www.w3.org/1999/xhtml#typeof> "Person" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#div> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div/p> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div> <https://html.spec.whatwg.org/#innerHTML> "<p><span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a></p>" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div> <http://www.w3.org/1999/xhtml#vocab> "http://xmlns.com/foaf/0.1/" <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/document/html/body> <http://www.example.org/document> .
+<http://www.example.org/document> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/head> <http://www.example.org/document> .
+<http://www.example.org/document> <https://html.spec.whatwg.org/#innerHTML> "<head></head>\n<body>\n <div vocab=\"http://xmlns.com/foaf/0.1/\" typeof=\"Person\">\n  <p><span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a></p>\n </div>\n</body>" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/span> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#span> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/span> <http://www.w3.org/1999/xhtml#property> "name" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/span> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/span> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Alice Birpemswick" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/span> <https://html.spec.whatwg.org/#innerHTML> "Alice Birpemswick" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#p> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> ", Email: " <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5> <http://www.example.org/document/html/body/div/p/a:3> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div/p/span> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p> <https://html.spec.whatwg.org/#innerHTML> "<span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a>" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4> ", Phone: " <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3> <http://www.example.org/document/html/body/div/p/a:2> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#a> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:2> <http://www.w3.org/1999/xhtml#property> "mbox" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:2> <https://html.spec.whatwg.org/#innerText> "alice@example.com" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "alice@example.com" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:2> <https://html.spec.whatwg.org/#innerHTML> "alice@example.com" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:2> <http://www.w3.org/1999/xhtml#href> "mailto:alice@example.com" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#a> <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:3> <http://www.w3.org/1999/xhtml#property> "phone" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:3> <https://html.spec.whatwg.org/#innerText> "+1 617.555.7332" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "+1 617.555.7332" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:3> <https://html.spec.whatwg.org/#innerHTML> "+1 617.555.7332" <http://www.example.org/document> .
+<http://www.example.org/document/html/body/div/p/a:3> <http://www.w3.org/1999/xhtml#href> "tel:+1-617-555-7332" <http://www.example.org/document> .
+<location> <http://www.w3.org/ns/rdfa#usesVocabulary> <http://xmlns.com/foaf/0.1/> <http://www.example.org/document> .
+_:Bedd7d40151074328111a4249b727f22a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> <http://www.example.org/document> .
+_:Bedd7d40151074328111a4249b727f22a <http://xmlns.com/foaf/0.1/phone> <tel:+1-617-555-7332> <http://www.example.org/document> .
+_:Bedd7d40151074328111a4249b727f22a <http://xmlns.com/foaf/0.1/mbox> <mailto:alice@example.com> <http://www.example.org/document> .
+_:Bedd7d40151074328111a4249b727f22a <http://xmlns.com/foaf/0.1/name> "Alice Birpemswick" <http://www.example.org/document> .
+

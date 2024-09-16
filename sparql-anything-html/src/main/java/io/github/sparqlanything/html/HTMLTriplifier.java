@@ -17,14 +17,23 @@
 package io.github.sparqlanything.html;
 
 import com.microsoft.playwright.*;
+import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorRegistryImpl;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.*;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.HRecipeExtractorFactory;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.*;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.HCardExtractorFactory;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.HResumeExtractorFactory;
+import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataExtractorFactory;
+import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFa11ExtractorFactory;
+import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFaExtractorFactory;
 import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
-import org.apache.any23.Any23;
-import org.apache.any23.extractor.ExtractionException;
-import org.apache.any23.source.DocumentSource;
-import org.apache.any23.writer.TripleHandler;
-import org.apache.any23.writer.TripleHandlerException;
+import io.github.sparqlanything.html.org.apache.any23.Any23;
+import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
+import io.github.sparqlanything.html.org.apache.any23.source.DocumentSource;
+import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
+import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Attribute;
@@ -85,6 +94,37 @@ public class HTMLTriplifier implements Triplifier {
 	public static final IRIArgument PROPERTY_BROWSER_TIMEOUT = new IRIArgument("html.browser.timeout", "30000");
 	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
 	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
+
+	static {
+		ExtractorRegistryImpl.getInstance().register(new RDFa11ExtractorFactory());
+		ExtractorRegistryImpl.getInstance().register(new RDFaExtractorFactory());
+		ExtractorRegistryImpl.getInstance().register(new MicrodataExtractorFactory());
+		ExtractorRegistryImpl.getInstance().register(new HCardExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new AdrExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HCalendarExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HCardExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new EmbeddedJSONLDExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new GeoExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HeadLinkExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HRecipeExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HReviewAggregateExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HTMLMetaExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new ICBMExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new LicenseExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new SpeciesExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new TitleExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new TurtleHTMLExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new XFNExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HAdrExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HEntryExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HEventExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HGeoExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HItemExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HProductExtractorFactory());
+//		ExtractorRegistryImpl.getInstance().register(new HResumeExtractorFactory());
+	}
+
+	private static final Any23 any23 = new Any23();
 
 	private static String localName(Element element) {
 		String tagName = element.tagName().replace(':', '|');
@@ -199,17 +239,16 @@ public class HTMLTriplifier implements Triplifier {
 	}
 
 	private void extractMetadata(URL url, FacadeXGraphBuilder builder) throws IOException, URISyntaxException, ExtractionException, TripleHandlerException {
-		Any23 runner = new Any23();
-		runner.setHTTPUserAgent("test-user-agent");
-		DocumentSource source = runner.createDocumentSource(url.toString());
+		any23.setHTTPUserAgent("test-user-agent");
+		DocumentSource source = any23.createDocumentSource(url.toString());
 		try (TripleHandler handler = new MetadataWriter(builder)) {
-			runner.extract(source, handler);
+			any23.extract(source, handler);
 		}
 	}
 
 	private String makeURI(String tagOrAttribute, Element currentElement){
 		// If name is prefixed, try to find the declaration from the given element upwards
-// Is the TagName with a prefix? See #452 #466
+		// Is the TagName with a prefix? See #452 #466
 		String ns = null;
 		String localName = null;
 		if(tagOrAttribute.split(":").length == 2){

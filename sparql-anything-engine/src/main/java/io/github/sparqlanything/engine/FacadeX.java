@@ -21,7 +21,6 @@ import info.debatty.java.stringsimilarity.QGram;
 import io.github.sparqlanything.engine.functions.*;
 import io.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
 import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.rdf.RDFTriplifier;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.commons.text.similarity.*;
@@ -69,7 +68,7 @@ public final class FacadeX {
 			Registry.registerTriplifier("io.github.sparqlanything.json.JSONTriplifier", new String[]{"json"}, new String[]{"application/json", "application/problem+json"});
 			Registry.registerTriplifier("io.github.sparqlanything.yaml.YAMLTriplifier", new String[]{"yaml"}, new String[]{"application/yaml", "text/yaml", "x-text/yaml"});
 			Registry.registerTriplifier("io.github.sparqlanything.spreadsheet.SpreadsheetTriplifier", new String[]{"xls", "xlsx"}, new String[]{"application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
-			Registry.registerTriplifier(RDFTriplifier.class.getCanonicalName(), new String[]{"rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix", "trdf"}, new String[]{"application/rdf+thrift", "application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle", "application/rdf+xml", "application/n-triples", "application/ld+json"});
+			Registry.registerTriplifier("io.github.sparqlanything.rdf.RDFTriplifier", new String[]{"rdf", "ttl", "nt", "jsonld", "owl", "trig", "nq", "trix", "trdf"}, new String[]{"application/rdf+thrift", "application/trix+xml", "application/n-quads", "text/trig", "application/owl+xml", "text/turtle", "application/rdf+xml", "application/n-triples", "application/ld+json"});
 			Registry.registerTriplifier("io.github.sparqlanything.binary.BinaryTriplifier", new String[]{"png", "jpeg", "jpg", "bmp", "tiff", "tif", "ico"}, new String[]{"image/png", "image/jpeg", "image/bmp", "image/tiff", "image/vnd.microsoft.icon"});
 			Registry.registerTriplifier("io.github.sparqlanything.slides.PptxTriplifier", new String[]{"pptx"}, new String[]{"application/vnd.openxmlformats-officedocument.presentationml.presentation"});
 

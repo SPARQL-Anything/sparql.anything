@@ -1283,6 +1283,21 @@ Result
 }
 ```
 
+### use-cache
+
+When set to true, the result of the triplification is cached in memory and used to answer the same query again. (see issue [#371](https://github.com/SPARQL-Anything/sparql.anything/issues/371) and [#372](https://github.com/SPARQL-Anything/sparql.anything/issues/372)).
+You can check out whether a query has been evaluated over a cached graph via the `fx:cachedGraph` assertion of the [audit graph](#audit).
+
+#### Valid Values
+
+`true`/`false`
+
+#### Default Value
+
+`false`
+
+
+
 <!--
 ### 
 

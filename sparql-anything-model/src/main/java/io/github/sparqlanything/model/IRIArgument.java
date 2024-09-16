@@ -22,7 +22,7 @@ public class IRIArgument {
 	public static final IRIArgument NAMESPACE = new IRIArgument("namespace", Triplifier.XYZ_NS);
 	public static final IRIArgument ROOT = new IRIArgument("root");
 	public static final IRIArgument BLANK_NODES = new IRIArgument("blank-nodes", "true");
-	public static final IRIArgument NO_CACHE = new IRIArgument("no-cache", "false");
+	public static final IRIArgument USE_CACHE = new IRIArgument("use-cache", "false");
 	public static final IRIArgument TRIPLIFIER = new IRIArgument("triplifier");
 	public static final IRIArgument CHARSET = new IRIArgument("charset", "UTF-8");
 	public static final IRIArgument METADATA = new IRIArgument("metadata", "false");

@@ -18,13 +18,16 @@ package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.commons.io.IOUtils;
 import com.google.common.collect.Sets;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.graph.GraphFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
@@ -37,16 +40,13 @@ public class TestTriplifier2 implements Triplifier {
 	}
 
 	@Override
-	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
-
-		Graph g = GraphFactory.createGraphMem();
-
+	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 		URL url = Triplifier.getLocation(properties);
 
 		if (url == null)
 			return;
 
-		String content = IOUtils.toString(url, Charset.defaultCharset());
+		String content = IOUtils.toString(Triplifier.getInputStream(properties), Charset.defaultCharset());
 
 		builder.add(NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "g"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "s"), NodeFactory.createURI(TriplifierRegistryTest.PREFIX + "p"),
 				NodeFactory.createLiteralString(content));

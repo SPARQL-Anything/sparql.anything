@@ -1,0 +1,5 @@
+Prefix: : <http://example.org/example-manchestersyntax#>
+
+Ontology: <http://example.org/example-manchestersyntax>
+  Individual: TestIndividual
+  Annotations: rdfs:comment "Test individual is a unique individual"

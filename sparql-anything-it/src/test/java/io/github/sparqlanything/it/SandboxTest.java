@@ -20,6 +20,7 @@ import info.debatty.java.stringsimilarity.QGram;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.iri.IRIFactory;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -35,6 +36,11 @@ import org.junit.Test;
 import java.util.regex.Pattern;
 
 public class SandboxTest {
+
+	@Test
+	public void iri(){
+		System.out.println(IRIFactory.iriImplementation().create("http", "www.w3.org","","","item"));
+	}
 
 	@Ignore
 	@Test
