@@ -16,9 +16,8 @@
 
 package io.github.sparqlanything.html.org.apache.any23.rdf;
 
-import io.github.sparqlanything.html.org.apache.any23.rdf.PopularPrefixes;
-import io.github.sparqlanything.html.org.apache.any23.util.MathUtils;
 import io.github.sparqlanything.html.org.apache.any23.util.StringUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -382,7 +381,7 @@ public class RDFUtils {
      * @return the valid {@link BNode}
      */
     public static BNode getBNode(String id) {
-        return valueFactory.createBNode("node" + MathUtils.md5(id));
+        return valueFactory.createBNode("node" + DigestUtils.md5Hex(id));
     }
 
     /**
