@@ -190,7 +190,7 @@ public class RDFUtils {
         escapedIRI = escapedIRI.replaceAll(">.*$", "");
 
         // Drop the triple if any of these appear in the URL: <>[]|*{}"<>\
-        if (escapedIRI.matches("[<>\\[\\]|\\*\\{\\}\"\\\\]"))
+        if (escapedIRI.contains("<")||escapedIRI.contains(">")||escapedIRI.matches("[\\[\\]|\\*\\{\\}\"\\\\]"))
             throw new IllegalArgumentException("Invalid character in org.eclipse.rdf4j.model.IRI: " + unescapedIRI);
 
         return escapedIRI;
