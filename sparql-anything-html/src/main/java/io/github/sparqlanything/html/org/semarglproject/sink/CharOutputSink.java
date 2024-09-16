@@ -103,7 +103,7 @@ public final class CharOutputSink implements CharSink {
     @Override
     public CharOutputSink process(String str) throws ParseException {
         buffer.append(str);
-        bufferSize += str.length();
+        bufferSize = (short) (bufferSize + str.length());
         writeBuffer();
         return this;
     }
@@ -119,7 +119,7 @@ public final class CharOutputSink implements CharSink {
     @Override
     public CharOutputSink process(char[] buffer, int start, int count) throws ParseException {
         this.buffer.append(buffer, start, count);
-        bufferSize += count;
+        bufferSize = (short) (bufferSize + count);
         writeBuffer();
         return this;
     }
