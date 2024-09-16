@@ -187,7 +187,8 @@ public class RDFUtils {
         // escapedIRI = escapedIRI.replaceAll("\\<.*?\\>", "");
 
         // >.*$ from end of lines (Neko didn't quite manage to fix broken markup)
-		 escapedIRI = escapedIRI.substring(0, escapedIRI.lastIndexOf('>'));
+		if(escapedIRI.contains(">"))
+		 	escapedIRI = escapedIRI.substring(0, escapedIRI.lastIndexOf('>'));
 //        escapedIRI = escapedIRI.replaceAll(">.*$", "");
 
         // Drop the triple if any of these appear in the URL: <>[]|*{}"<>\
