@@ -44,6 +44,90 @@
         </dependency>
 
         <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-binary</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-spreadsheet</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-rdf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-csv</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-xml</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-docs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-html</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-text</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-yaml</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-markdown</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-bibliography</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-archive</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-slides</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.github.basilapi</groupId>
             <artifactId>sparql</artifactId>
         </dependency>

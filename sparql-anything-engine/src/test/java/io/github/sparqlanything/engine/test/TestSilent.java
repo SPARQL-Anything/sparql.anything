@@ -17,6 +17,7 @@
 package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.engine.TriplifierRegister;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
@@ -24,89 +25,43 @@ import org.junit.Test;
 
 public class TestSilent {
 
+
 	public ResultSet execute(String queryString) {
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Dataset kb = DatasetFactory.createGeneral();
 		Query q = QueryFactory.create(queryString);
-		ResultSet result = QueryExecutionFactory.create(q, kb).execSelect();
-		return result;
+		return QueryExecutionFactory.create(q, kb).execSelect();
 	}
 
-	@Test
-	public void testSilent() {
-		boolean failed = false;
-		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
-				"select * where {" +
-				"service silent <x-sparql-anything:> {" +
-				"fx:properties fx:location \"http://www.example.org2562456294865\";" +
-				"	fx:media-type \"application/json\"." +
-				" ?s ?p ?o" +
-				"}" +
-				"}";
-		try {
-			execute(q);
-		} catch (Exception e) {
-			failed = true;
-		}
-		Assert.assertFalse(failed);
-	}
-
-	@Test
-	public void testNoSilent() {
-		boolean failed = true;
-		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
-				"select * where {" +
-				"service <x-sparql-anything:> {" +
-				"fx:properties fx:location \"http://www.example.org2562456294865\";" +
-				"	fx:media-type \"application/json\"." +
-				" ?s ?p ?o" +
-				"}" +
-				"}";
-		try {
-			execute(q);
-		} catch (Exception e) {
-			failed = false;
-		}
-		Assert.assertFalse(failed);
-	}
-
-	@Test
-	public void test404NoSilent() {
-		boolean raisesException = false;
-		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
-				"select * where {" +
-				"service <x-sparql-anything:> {" +
-				"fx:properties fx:location \"https://sparql.xyz/qewrqetqert\";" +
-				"	fx:media-type \"application/json\"." +
-				" ?s ?p ?o" +
-				"}" +
-				"}";
-		try {
-			execute(q);
-		} catch (Exception e) {
-			//e.printStackTrace();
-			raisesException = true;
-		}
-		Assert.assertTrue(raisesException);
-	}
 
 	@Test
 	public void test404Silent() {
 		boolean raisesException = false;
-		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
-				"select * where {" +
-				"service silent <x-sparql-anything:> {" +
-				"fx:properties fx:location \"https://sparql.xyz/qewrqetqert\";" +
-				"	fx:media-type \"application/json\"." +
-				" ?s ?p ?o" +
-				"}" +
-				"}";
+
+		String q = "SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE SILENT <x-sparql-anything:media-type=test-mime2,location=https://sparql.xyz/qewrqetqert> {GRAPH ?g {?s ?p ?o}}}";
+
 		try {
+			TriplifierRegister.getInstance().registerTriplifier("io.github.sparqlanything.engine.test.TestTriplifier2", new String[]{"test2"}, new String[]{"test-mime2"});
 			execute(q);
 		} catch (Exception e) {
 			raisesException = true;
 		}
 		Assert.assertFalse(raisesException);
+	}
+
+	@Test
+	public void test404NOSilent() {
+		boolean raisesException = false;
+
+		String q = "SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE <x-sparql-anything:media-type=test-mime2,location=https://sparql.xyz/qewrqetqert> {GRAPH ?g {?s ?p ?o}}}";
+
+		try {
+			TriplifierRegister.getInstance().registerTriplifier("io.github.sparqlanything.engine.test.TestTriplifier2", new String[]{"test2"}, new String[]{"test-mime2"});
+			execute(q);
+		} catch (Exception e) {
+			raisesException = true;
+		}
+		Assert.assertTrue(raisesException);
 	}
 }
