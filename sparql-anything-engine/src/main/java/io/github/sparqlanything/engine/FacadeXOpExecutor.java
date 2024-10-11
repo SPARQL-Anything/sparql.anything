@@ -16,12 +16,12 @@
 
 package io.github.sparqlanything.engine;
 
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.OpBGP;
-import org.apache.jena.sparql.algebra.op.OpPropFunc;
-import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.algebra.optimize.TransformPropertyFunction;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
@@ -41,49 +41,35 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	public final static Symbol strategy = Symbol.create("facade-x-strategy");
 	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
-	private final FXWorkerOpService fxWorkerService;
-	private final FXWorkerOpBGP fxWorkerOpBGP;
+	private final FXWorkerOpService fxWorkerOpService;
 
-	private final FXWorkerOpPropFunc fxWorkerOpPropFunc ;
+	private final FXWorkerOp fxWorkerOp;
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
 		TriplifierRegister triplifierRegister = TriplifierRegister.getInstance();
 		DatasetGraphCreator dgc = new DatasetGraphCreator(execCxt);
-		fxWorkerService = new FXWorkerOpService(triplifierRegister, dgc);
-		fxWorkerOpBGP = new FXWorkerOpBGP(triplifierRegister, dgc);
-		fxWorkerOpPropFunc = new FXWorkerOpPropFunc(triplifierRegister, dgc);
+		fxWorkerOpService = new FXWorkerOpService(triplifierRegister, dgc);
+		fxWorkerOp = new FXWorkerOp(triplifierRegister, dgc);
 	}
 
-	protected QueryIterator execute(final OpPropFunc opPropFunc, QueryIterator input){
-		logger.trace("OpProp  {}", opPropFunc);
-		if(!Utils.isFacadeXMagicPropertyNode(opPropFunc.getProperty())||this.execCxt.getClass() == FacadeXExecutionContext.class){
-			return super.execute(opPropFunc, input);
-		}else {
+
+	protected QueryIterator exec(Op op, QueryIterator input) {
+		if (this.execCxt.getContext().isDefined(SPARQLAnythingConstants.NO_SERVICE_MODE) && this.execCxt.getContext().getTrueOrFalse(SPARQLAnythingConstants.NO_SERVICE_MODE)) {
 			try {
-				return fxWorkerOpPropFunc.execute(opPropFunc, input, this.execCxt);
-			} catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
-					 IllegalAccessException | NoSuchMethodException | IOException | UnboundVariableException |
-					 TriplifierHTTPException e) {
+				this.execCxt.getContext().setFalse(SPARQLAnythingConstants.NO_SERVICE_MODE);
+				return fxWorkerOp.execute(op, input, this.execCxt);
+			} catch (ClassNotFoundException | NoSuchMethodException | TriplifierHTTPException |
+					 InvocationTargetException | InstantiationException | IllegalAccessException | IOException |
+					 UnboundVariableException e) {
 				throw new RuntimeException(e);
 			}
 		}
+		return super.exec(op, input);
 	}
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
 		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
-
-
-
-		if(hasFXSymbols(this.execCxt) && !this.execCxt.getContext().isDefined(FacadeXExecutionContext.hasServiceClause)){
-			try {
-				return fxWorkerOpBGP.execute(opBGP, input, this.execCxt);
-			} catch (IOException | InstantiationException | IllegalAccessException | InvocationTargetException |
-					 NoSuchMethodException | ClassNotFoundException | UnboundVariableException |
-					 TriplifierHTTPException e) {
-				throw new RuntimeException(e);
-			}
-		}
 
 		// check that the BGP is within a FacadeX-SERVICE clause
 		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {
@@ -96,50 +82,44 @@ public class FacadeXOpExecutor extends OpExecutor {
 			} else {
 				// execute BGP by excluding FX properties
 				logger.trace("Execute BGP by excluding FX properties");
-				//return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(this.execCxt.getDataset()));
-				return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(execCxt));
+				return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(ARQ.getContext(), execCxt.getActiveGraph(), execCxt.getDataset(), execCxt.getExecutor()));
 			}
 		}
 
-		Op opTransformed =  TransformPropertyFunction.transform(opBGP, this.execCxt.getContext());
-		if(!opTransformed.equals(opBGP)){
+		Op opTransformed = TransformPropertyFunction.transform(opBGP, this.execCxt.getContext());
+		if (!opTransformed.equals(opBGP)) {
 			return super.executeOp(opTransformed, input);
 		}
 		logger.trace("Execute with default Jena execution");
-
 
 		// go with the default Jena execution
 		return super.execute(opBGP, input);
 	}
 
-	private boolean hasFXSymbols(ExecutionContext execCxt) {
-		for(Symbol s : execCxt.getContext().keys()){
-			if(s.getClass() == FXSymbol.class){
-				return true;
-			}
-		}
-		return false;
-	}
-
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
 		logger.trace("Execute opService {}", opService.toString());
-		// check if service iri is a variable, in case postpone the execution
-		if (opService.getService().isVariable()) return Utils.postpone(opService, input, execCxt);
 
-		// check if the service is a FacadeXURI
-		if (opService.getService().isURI() && Utils.isFacadeXURI(opService.getService().getURI())) {
-			try {
-				// go with the FacadeX default execution
+		if(!this.execCxt.getContext().isDefined(SPARQLAnythingConstants.NO_SERVICE_MODE)) {
+
+			// check if service iri is a variable, in case postpone the execution
+			if (opService.getService().isVariable()) return Utils.postpone(opService, input, execCxt);
+
+			// check if the service is a FacadeXURI
+			if (opService.getService().isURI() && Utils.isFacadeXURI(opService.getService().getURI())) {
+
+				try {
+					// go with the FacadeX default execution
 //				return executeDefaultFacadeX(opService, input);
-				return fxWorkerService.execute(opService, input, execCxt);
-			} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
-					 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
-					 ClassNotFoundException | TriplifierHTTPException e) {
-				logger.error("An error occurred: {}", e.getMessage());
-				throw new RuntimeException(e);
-			} catch (UnboundVariableException e) {
-				// manage the case of properties are passed via BGP and there are variables in it
-				return catchUnboundVariableException(opService, e.getOpBGP(), input, e);
+					return fxWorkerOpService.execute(opService, input, execCxt);
+				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
+						 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+						 ClassNotFoundException | TriplifierHTTPException e) {
+					logger.error("An error occurred: {}", e.getMessage());
+					throw new RuntimeException(e);
+				} catch (UnboundVariableException e) {
+					// manage the case of properties are passed via BGP and there are variables in it
+					return catchUnboundVariableException(opService, e.getOpBGP(), input, e);
+				}
 			}
 		}
 

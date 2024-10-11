@@ -16,18 +16,41 @@
 
 package io.github.sparqlanything.engine;
 
+import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.util.Symbol;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class FacadeXExecutionContext extends ExecutionContext {
 
 	private boolean silent = false;
-	public static final Symbol hasServiceClause = Symbol.create("has-service");
+	public static final Symbol processed = Symbol.create("processed");
 
 	public FacadeXExecutionContext(ExecutionContext other) {
 		super(other);
-		other.getContext().set(hasServiceClause, true);
 	}
+
+	public static boolean isAlreadyProcessed(ExecutionContext ex, Op op){
+		if(!ex.getContext().isDefined(processed)){
+			return false;
+		}
+		HashSet<Op> processedOps = ex.getContext().get(processed);
+		return processedOps.contains(op);
+	}
+
+	public static void addProcessedOp(ExecutionContext ex, Op op){
+		if(!ex.getContext().isDefined(processed)){
+			ex.getContext().set(processed, new HashSet<Op>());
+		}
+		Set<Op> executedOps = ex.getContext().get(processed);
+		executedOps.add(op);
+	}
+
+
+
+
 
 	public boolean isSilent() {
 		return silent;

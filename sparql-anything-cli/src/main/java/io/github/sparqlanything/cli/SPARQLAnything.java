@@ -23,6 +23,7 @@ import io.github.basilapi.basil.sparql.VariablesBinder;
 import io.github.sparqlanything.engine.FXSymbol;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -420,6 +421,7 @@ public class SPARQLAnything {
 
 	private static void setConfigurationsToContext(String[] configurations, QueryExecution qExec) {
 		if (configurations != null) {
+			qExec.getContext().setTrue(SPARQLAnythingConstants.NO_SERVICE_MODE);
 			for (String configuration : configurations) {
 				String[] configurationSplit = configuration.split("=");
 				qExec.getContext().set(FXSymbol.create(configurationSplit[0]), configurationSplit[1]);
