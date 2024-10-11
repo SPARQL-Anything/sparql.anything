@@ -551,7 +551,7 @@ An executable JAR can be obtained from the [Releases](https://github.com/spice-h
 The jar can be executed as follows:
 
 ```
-usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
+usage: java -jar sparql.anything-<version>  -q query [-f <output format>] [-v
             <filepath | name=value> ... ] [-c option=value]  [-l path] [-o
             filepath]
  -q,--query <query>                    The path to the file storing the
@@ -588,7 +588,7 @@ usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
                                        Variables should start with '?' and
                                        refer to bindings from the input
                                        file. This option can only be used
-                                       in combination with 'values' and is
+                                       in combination with 'input' and is
                                        ignored otherwise. This option
                                        overrides 'output'.
  -v,--values <values>                  OPTIONAL - Values passed as input
@@ -614,9 +614,7 @@ usage: java -jar sparql.anything-null  -q query [-f <output format>] [-v
                                        define them in the SERVICE IRI).
                                        The argument can be passed multiple
                                        times (one for each option to be
-                                       set). Options passed in this way
-                                       can be overwritten in the SERVICE
-                                       IRI or in the Basic Graph Pattern.
+                                       set).
 ```
 
 Logging can be configured adding the following option (SLF4J).
