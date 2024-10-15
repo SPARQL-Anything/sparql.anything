@@ -681,8 +681,8 @@ SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 
 **For citing SPARQL Anything in academic papers please use:**
 
-Luigi Asprino, Enrico Daga, Aldo Gangemi, and Paul Mulholland. 2022. Knowledge Graph Construction with a façade: a
-unified method to access heterogeneous data sources on the Web. ACM Trans. Internet Technol. Just Accepted (2022)
+Luigi Asprino, Enrico Daga, Aldo Gangemi, and Paul Mulholland. "Knowledge Graph Construction with a façade: a
+unified method to access heterogeneous data sources on the Web". ACM Transactions on the Internet Technologies (2022)
 . https://doi.org/10.1145/3555312 [Preprint](https://sparql.xyz/FacadeX_TOIT.pdf)
 
 ```bibtex
@@ -701,11 +701,9 @@ unified method to access heterogeneous data sources on the Web. ACM Trans. Inter
 }
 ```
 
-P. Warren, P. Mulholland, E. Daga, and L. Asprino. “Path-based and triplification
-approaches to mapping data into RDF: user behaviours and recommendations”. In:
-Semantic Web (2024), to appear [Pre-print](https://content.iospress.com/articles/semantic-web/sw243585)
+Paul Warren, Paul Mulholland, Enrico Daga, and Luigi Asprino. "Path-based and triplification approaches to mapping data into RDF: user behaviours and recommendations". In: Semantic Web (2024), to appear [Pre-print](https://content.iospress.com/articles/semantic-web/sw243585)
 
-```
+```bibtex
 @article{Warren2024,
   title={Path-based and triplification approaches to mapping data into RDF: User behaviours and recommendations},
   author={Warren, Paul and Mulholland, Paul and Daga, Enrico and Asprino, Luigi},
@@ -717,9 +715,7 @@ Semantic Web (2024), to appear [Pre-print](https://content.iospress.com/articles
 
 
 
-Daga, Enrico; Asprino, Luigi; Mulholland, Paul and Gangemi, Aldo (2021). Facade-X: An Opinionated Approach to SPARQL
-Anything. In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume
-53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
+Enrico Daga, Luigi Asprino, Paul Mulholland, and Aldo Gangemi. "Facade-X: An Opinionated Approach to SPARQL Anything". In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume 53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
 
 DOI: https://doi.org/10.3233/ssw210035 | [PDF](http://oro.open.ac.uk/78973/1/78973.pdf)
 
