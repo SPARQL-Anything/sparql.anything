@@ -682,7 +682,7 @@ SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 **For citing SPARQL Anything in academic papers please use:**
 
 Luigi Asprino, Enrico Daga, Aldo Gangemi, and Paul Mulholland. "Knowledge Graph Construction with a façade: a
-unified method to access heterogeneous data sources on the Web". ACM Transactions on the Internet Technologies (2022)
+unified method to access heterogeneous data sources on the Web". ACM Transactions on the Internet Technology (2022)
 . https://doi.org/10.1145/3555312 [Preprint](https://sparql.xyz/FacadeX_TOIT.pdf)
 
 ```bibtex
