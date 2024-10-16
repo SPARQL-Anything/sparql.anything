@@ -22,6 +22,7 @@ jobs:
             echo -e "Releasing ${{ github.ref_name }}"
             echo -e "$(tty)"
             gpg --version
+            mvn -version
             # This avoids gpg: signing failed: Inappropriate ioctl for device error
             # See https://github.com/keybase/keybase-issues/issues/2798
             export GPG_TTY=$(tty)
