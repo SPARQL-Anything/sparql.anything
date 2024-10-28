@@ -23,19 +23,18 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.Query;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 public class CLI {
@@ -85,33 +84,14 @@ public class CLI {
 		this.commandLine = cmdLineParser.parse(options, args);
 	}
 
-	private static String getQuery(String queryArgument) throws IOException {
-		String query = queryArgument;
 
-		// XXX Check if queryArgument is a URI first
-		File queryFile;
-		try{
-			queryFile = new File(new URL(queryArgument).toURI());
-		}catch(MalformedURLException | URISyntaxException e){
-			queryFile = new File(queryArgument);
-		}
-		if (queryFile.exists()) {
-			logger.trace("Loading query from file");
-			// LOAD query from file
-			BufferedReader br = new BufferedReader(new FileReader(queryFile));
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-				sb.append('\n');
-			}
-			query = sb.toString();
-			br.close();
-		}
-		return query;
-	}
 	public String getQuery() throws IOException {
-		return getQuery(commandLine.getOptionValue(CLI.QUERY));
+		String queryArgument = commandLine.getOptionValue(CLI.QUERY);
+		try{
+			return IOUtils.toString(new URL(queryArgument).toURI(), Charset.defaultCharset());
+		} catch (MalformedURLException | URISyntaxException e) {
+			return queryArgument;
+		}
 	}
 	void init(){
 		this.options = new Options();
