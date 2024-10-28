@@ -96,11 +96,11 @@ public class CLI {
 	void init(){
 		this.options = new Options();
 
-		options.addOption(Option.builder(QUERY).argName("query").hasArg().required(true)
-				.desc("The path to the file storing the query to execute or the query itself.").longOpt(QUERY_LONG)
+		options.addOption(Option.builder(QUERY).argName("query or URL or filepath").hasArg().required(true)
+				.desc("The path or the URL to the file storing the query to execute or the query itself.").longOpt(QUERY_LONG)
 				.build());
 
-		options.addOption(Option.builder(OUTPUT).argName("file").hasArg()
+		options.addOption(Option.builder(OUTPUT).argName("filepath").hasArg()
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
 		options.addOption(Option.builder(OUTPUT_APPEND).hasArg(false)
