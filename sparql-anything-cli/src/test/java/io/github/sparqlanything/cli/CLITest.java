@@ -20,7 +20,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -66,6 +65,14 @@ public class CLITest {
 	public void infileQueryWithValues() throws Exception {
 		String f = Objects.requireNonNull(getClass().getClassLoader().getResource("books.xml")).toURI().toString();
 		String queryFile = Objects.requireNonNull(getClass().getClassLoader().getResource("CLITestOnFileQuery1.sparql")).toURI().toString();
+		query(new String[]{"-q", queryFile, "-v", "loc=" + f, "-f", "CSV"});
+	}
+
+	@Test
+	public void infileQueryWithValuesAndPath() throws Exception {
+		String f = Objects.requireNonNull(getClass().getClassLoader().getResource("books.xml")).toURI().toString();
+		String queryFile = Objects.requireNonNull(getClass().getClassLoader().getResource("CLITestOnFileQuery1.sparql")).getFile();
+		System.out.println(queryFile);
 		query(new String[]{"-q", queryFile, "-v", "loc=" + f, "-f", "CSV"});
 	}
 

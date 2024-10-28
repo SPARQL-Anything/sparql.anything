@@ -30,6 +30,7 @@ import org.apache.jena.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -87,11 +88,17 @@ public class CLI {
 
 	public String getQuery() throws IOException {
 		String queryArgument = commandLine.getOptionValue(CLI.QUERY);
+		logger.trace("Parsing query argument {}", queryArgument);
 		try{
+			logger.trace("Trying interpreting as a URL...");
 			return IOUtils.toString(new URL(queryArgument).toURI(), Charset.defaultCharset());
 		} catch (MalformedURLException | URISyntaxException e) {
-			return queryArgument;
+			logger.trace("Trying interpreting as a file path...");
+			if(new File(queryArgument).exists())
+				return IOUtils.toString(new File(queryArgument).toURI(), Charset.defaultCharset());
 		}
+		logger.trace("Trying interpreting as a inline query...");
+		return queryArgument;
 	}
 	void init(){
 		this.options = new Options();
