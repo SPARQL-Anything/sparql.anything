@@ -20,6 +20,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -37,7 +38,11 @@ public class CLITest {
 	}
 
 	private static void query(String f, String q) throws Exception {
-		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "location=" + f, "-f", "CSV"});
+		query(new String[]{"-q", q, "-c", "location=" + f, "-f", "CSV"});
+	}
+
+	private static String query(String[] args) throws Exception {
+		String out = SPARQLAnything.callMain(args);
 		CSVParser parser = new CSVParser(new StringReader(out), CSVFormat.DEFAULT);
 		Set<String> actualSet = new HashSet<>();
 		for (CSVRecord record : parser) {
@@ -54,8 +59,15 @@ public class CLITest {
 		expectedSet.add("http://sparql.xyz/facade-x/data/genre");
 		expectedSet.add("http://sparql.xyz/facade-x/data/publish_date");
 		Assert.assertEquals(expectedSet, actualSet);
+		return out;
 	}
 
+	@Test
+	public void infileQueryWithValues() throws Exception {
+		String f = Objects.requireNonNull(getClass().getClassLoader().getResource("books.xml")).toURI().toString();
+		String queryFile = Objects.requireNonNull(getClass().getClassLoader().getResource("CLITestOnFileQuery1.sparql")).toURI().toString();
+		query(new String[]{"-q", queryFile, "-v", "loc=" + f, "-f", "CSV"});
+	}
 
 	@Test
 	public void infileQuery() throws Exception {
