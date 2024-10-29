@@ -121,7 +121,7 @@ public class CLI {
 				.longOpt(LOAD_LONG).build());
 
 		options.addOption(Option.builder(FORMAT).argName("string").hasArg().desc(
-						"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: CSV or TTL]")
+						"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: CSV (for SELECT queries) or TEXT (for ASK queries) or TTL (for CONSTRUCT queries)]")
 				.longOpt(FORMAT_LONG).build());
 
 		options.addOption(Option.builder(STRATEGY).argName("strategy").hasArg().optionalArg(true).desc(
