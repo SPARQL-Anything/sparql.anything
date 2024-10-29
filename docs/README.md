@@ -577,7 +577,7 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>] [-v
  -f,--format <string>                    OPTIONAL -  Format of the output
                                          file. Supported values: JSON,
                                          XML, CSV, TEXT, TTL, NT, NQ.
-                                         [Default: TEXT or TTL]
+                                         [Default: CSV or TTL]
  -s,--strategy <strategy>                OPTIONAL - Strategy for query
                                          evaluation. Possible values: '1'
                                          - triple filtering (default), '0'
