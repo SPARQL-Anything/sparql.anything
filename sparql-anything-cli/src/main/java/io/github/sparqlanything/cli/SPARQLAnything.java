@@ -50,6 +50,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -463,75 +464,8 @@ public class SPARQLAnything {
 			if(logger.isTraceEnabled()) {
 				logger.trace("[time] After init: {}", System.currentTimeMillis() - duration);
 			}
-			Dataset kb = null;
-			String load = cli.getLoad();
-			if (load != null) {
 
-				logger.info("Loading data from: {}", load);
-				if(logger.isTraceEnabled()) {
-					logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
-				}
-				// XXX Check if load is a URI first
-				File loadSource;
-				try{
-					loadSource = new File(new URL(load).toURI());
-				}catch(MalformedURLException e){
-					loadSource = new File(load);
-				}
-				if (loadSource.isDirectory()) {
-
-					logger.info("Loading files from directory: {}", loadSource);
-					// If directory, load all files
-					List<File> list = new ArrayList<>();
-					Collection<File> files = FileUtils.listFiles(loadSource, null, true);
-					for (File f : files) {
-						logger.info("Adding file to be loaded: {}", f);
-						list.add(f);
-					}
-					kb = DatasetFactory.createGeneral();
-					for (File f : list) {
-						try {
-							Model m = ModelFactory.createDefaultModel();
-							// read into the model.
-							m.read(f.getAbsolutePath());
-							kb.addNamedModel(f.toURI().toString(), m);
-						} catch (Exception e) {
-							logger.error("An error occurred while loading {}", f);
-							logger.error(" - Problem was: {}", e.getMessage());
-							if(logger.isDebugEnabled()){
-								logger.error("",e);
-							}
-						}
-					}
-					logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
-				} else if (loadSource.isFile()) {
-					// If it is a file, load it
-					logger.info("Load file: {}", loadSource);
-					Path base = Paths.get(".");
-					try{
-						Path p =  loadSource.toPath();
-						if(!p.isAbsolute()){
-							p = base.relativize(loadSource.toPath());
-						}
-						kb = DatasetFactory.create(p.toFile().toURI().toString());
-					} catch (Exception e) {
-						logger.error("An error occurred while loading {}", loadSource);
-						logger.error(" - Problem was: ", e);
-					}
-				} else {
-					if(!loadSource.exists()){
-						logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
-					}else {
-						logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
-					}
-					return;
-				}
-				if(logger.isTraceEnabled()) {
-					logger.trace("[time] After load: {}", System.currentTimeMillis() - duration);
-				}
-			} else {
-				kb = DatasetFactory.createGeneral();
-			}
+			Dataset kb = createDataset(cli.getLoad());
 
 			String outputFileName = cli.getOutputFile();
 			String outputPattern = cli.getOutputPattern();
@@ -596,6 +530,78 @@ public class SPARQLAnything {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);
 		}
+	}
+
+	private static Dataset createDataset(String load) {
+		Dataset kb = DatasetFactory.createGeneral();
+		if (load != null) {
+
+			logger.info("Loading data from: {}", load);
+			if (logger.isTraceEnabled()) {
+				logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
+			}
+			// XXX Check if load is a URI first
+			File loadSource;
+			try {
+				loadSource = new File(new URL(load).toURI());
+			} catch (MalformedURLException | URISyntaxException e) {
+				loadSource = new File(load);
+			} catch (IllegalArgumentException e) {
+				Model m = ModelFactory.createDefaultModel();
+				RDFDataMgr.read(m, load);
+				kb.addNamedModel(load, m);
+				return kb;
+			}
+			if (loadSource.isDirectory()) {
+
+				logger.info("Loading files from directory: {}", loadSource);
+				// If directory, load all files
+				Collection<File> files = FileUtils.listFiles(loadSource, null, true);
+				for (File f : files) {
+					logger.info("Adding file to be loaded: {}", f);
+					try {
+						Model m = ModelFactory.createDefaultModel();
+						// read into the model.
+						m.read(f.getAbsolutePath());
+						kb.addNamedModel(f.toURI().toString(), m);
+					} catch (Exception e) {
+						logger.error("An error occurred while loading {}", f);
+						logger.error(" - Problem was: {}", e.getMessage());
+						if (logger.isDebugEnabled()) {
+							logger.error("", e);
+						}
+					}
+				}
+
+				logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
+			} else if (loadSource.isFile()) {
+				// If it is a file, load it
+				logger.info("Load file: {}", loadSource);
+				Path base = Paths.get(".");
+				try {
+					Path p = loadSource.toPath();
+					if (!p.isAbsolute()) {
+						p = base.relativize(loadSource.toPath());
+					}
+					kb = DatasetFactory.create(p.toFile().toURI().toString());
+				} catch (Exception e) {
+					logger.error("An error occurred while loading {}", loadSource);
+					logger.error(" - Problem was: ", e);
+				}
+			} else {
+				if (!loadSource.exists()) {
+					logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
+				} else {
+					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+				}
+				return kb;
+			}
+			if (logger.isTraceEnabled()) {
+				logger.trace("[time] After load: {}", System.currentTimeMillis() - duration);
+			}
+		}
+
+		return kb;
 	}
 
 	public static String callMain(String[] args) throws Exception {

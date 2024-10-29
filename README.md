@@ -568,12 +568,12 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>] [-v
                                          and not using blank nodes)
  -e,--explain                            OPTIONAL - Explain query
                                          execution
- -l,--load <load>                        OPTIONAL - The path to one RDF
-                                         file or a folder including a set
-                                         of files to be loaded. When
-                                         present, the data is loaded in
-                                         memory and the query executed
-                                         against it.
+ -l,--load <URL or filepath>             OPTIONAL - The path or the URL to
+                                         one RDF file or a filepath to a
+                                         folder including a set of files
+                                         to be loaded. When present, the
+                                         data is loaded in memory and the
+                                         query executed against it.
  -f,--format <string>                    OPTIONAL -  Format of the output
                                          file. Supported values: JSON,
                                          XML, CSV, TEXT, TTL, NT, NQ.

@@ -18,6 +18,7 @@ package io.github.sparqlanything.cli;
 
 import org.apache.jena.sys.JenaSystem;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,7 @@ public class LoadSubdirsTest {
 
 		String q = Objects.requireNonNull(getClass().getClassLoader().getResource("count-triples.sparql")).toString();
 		String d = Objects.requireNonNull(getClass().getClassLoader().getResource("./load-subdirs")).toURI().toString();
-		SPARQLAnything sa = new SPARQLAnything();
-		String out = sa.callMain(new String[]{
+		String out = SPARQLAnything.callMain(new String[]{
 				"-q", q, "-l", d
 		});
 		Assert.assertTrue(out.contains("51"));

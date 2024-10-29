@@ -92,4 +92,15 @@ public class CLITest {
 		String queryFile = "https://sparql-anything.cc/examples/CLITestOnFileQuery.sparql";
 		query(f, queryFile);
 	}
+
+	@Test
+	public void testRemoteLoad() throws Exception {
+		Assume.assumeTrue(HTTPHelper.checkHostIsReachable("https://sparql-anything.cc"));
+		String q = Objects.requireNonNull(getClass().getClassLoader().getResource("count-triples.sparql")).toString();
+		String l = "https://sparql-anything.cc/examples/example.ttl";
+		String out = SPARQLAnything.callMain(new String[]{
+				"-q", q, "-l", l
+		});
+		Assert.assertTrue(out.contains("10"));
+	}
 }

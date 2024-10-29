@@ -116,8 +116,8 @@ public class CLI {
 		options.addOption(Option.builder(EXPLAIN).argName("explain").hasArg(false)
 				.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
 
-		options.addOption(Option.builder(LOAD).argName("load").hasArg().desc(
-						"OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
+		options.addOption(Option.builder(LOAD).argName("URL or filepath").hasArg().desc(
+						"OPTIONAL - The path or the URL to one RDF file or a filepath to a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
 				.longOpt(LOAD_LONG).build());
 
 		options.addOption(Option.builder(FORMAT).argName("string").hasArg().desc(
