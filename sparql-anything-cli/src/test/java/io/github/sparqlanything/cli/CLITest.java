@@ -16,10 +16,12 @@
 
 package io.github.sparqlanything.cli;
 
+import io.github.sparqlanything.model.HTTPHelper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -85,6 +87,7 @@ public class CLITest {
 
 	@Test
 	public void remoteQuery() throws Exception {
+		Assume.assumeTrue(HTTPHelper.checkHostIsReachable("https://sparql-anything.cc"));
 		String f = Objects.requireNonNull(getClass().getClassLoader().getResource("books.xml")).toURI().toString();
 		String queryFile = "https://sparql-anything.cc/examples/CLITestOnFileQuery.sparql";
 		query(f, queryFile);
