@@ -16,10 +16,7 @@
 
 package io.github.sparqlanything.cli;
 
-import io.github.basilapi.basil.sparql.QueryParameter;
-import io.github.basilapi.basil.sparql.Specification;
-import io.github.basilapi.basil.sparql.SpecificationFactory;
-import io.github.basilapi.basil.sparql.VariablesBinder;
+import io.github.basilapi.basil.sparql.*;
 import io.github.sparqlanything.engine.FXSymbol;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
@@ -479,48 +476,7 @@ public class SPARQLAnything {
 				Query q = QueryFactory.create(query);
 				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()), configurations);
 			} else {
-
-				ResultSet parameters = null;
-				if(values.length == 1 && new File(values[0]).exists()){
-					logger.debug("Input file name given");
-					parameters = ResultSetFactory.load(values[0]);
-				}else {
-					parameters = new ArgValuesAsResultSet(values);
-				}
-				// Specifications
-				Specification specification = SpecificationFactory.create("", query);
-				// Iterate over parameters
-				while (parameters.hasNext()) {
-					QuerySolution qs = parameters.nextSolution();
-					Query q;
-					try {
-						q = bindParameters(specification, qs);
-					} catch (Exception e1) {
-						logger.error("An exception occurred while evaluating the input parameters", e1);
-						logger.error(
-								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
-						continue;
-					}
-					String outputFile = null;
-					if (outputPattern != null) {
-						outputFile = prepareOutputFromPattern(outputPattern, qs);
-					} else {
-						if (outputFileName != null) {
-							outputFile = FilenameUtils.removeExtension(outputFileName) + "-" + parameters.getRowNumber() + "." + FilenameUtils.getExtension(outputFileName);
-						}
-						// else stays null and output goes to STDOUT
-					}
-					try {
-						logger.trace("Executing Query: {}", q);
-						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()), configurations);
-					} catch (Exception e1) {
-						logger.error(
-								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
-						if (logger.isDebugEnabled()) {
-							logger.error("Details:", e1);
-						}
-					}
-				}
+				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
@@ -529,6 +485,50 @@ public class SPARQLAnything {
 		}
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);
+		}
+	}
+
+	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException {
+		ResultSet parameters = null;
+		if(values.length == 1 && new File(values[0]).exists()){
+			logger.debug("Input file name given");
+			parameters = ResultSetFactory.load(values[0]);
+		}else {
+			parameters = new ArgValuesAsResultSet(values);
+		}
+		// Specifications
+		Specification specification = SpecificationFactory.create("", query);
+		// Iterate over parameters
+		while (parameters.hasNext()) {
+			QuerySolution qs = parameters.nextSolution();
+			Query q;
+			try {
+				q = bindParameters(specification, qs);
+			} catch (Exception e1) {
+				logger.error("An exception occurred while evaluating the input parameters", e1);
+				logger.error(
+						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+				continue;
+			}
+			String outputFile = null;
+			if (outputPattern != null) {
+				outputFile = prepareOutputFromPattern(outputPattern, qs);
+			} else {
+				if (outputFileName != null) {
+					outputFile = FilenameUtils.removeExtension(outputFileName) + (parameters.getRowNumber()==1 && parameters.hasNext()? "-" + parameters.getRowNumber():"") + "." + FilenameUtils.getExtension(outputFileName);
+				}
+				// else stays null and output goes to STDOUT
+			}
+			try {
+				logger.trace("Executing Query: {}", q);
+				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()), configurations);
+			} catch (Exception e1) {
+				logger.error(
+						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+				if (logger.isDebugEnabled()) {
+					logger.error("Details:", e1);
+				}
+			}
 		}
 	}
 

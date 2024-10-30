@@ -37,7 +37,6 @@ public class Issue331Test {
 		String dir = Objects.requireNonNull(getClass().getClassLoader().getResource("")).getFile();
 		String f = dir.concat("out.ttl");
 		String f2 = dir.concat("out-1.ttl");
-		System.out.println(f);
 		File fileOut = new File(f);
 		File fileOut2 = new File(f2);
 
@@ -45,10 +44,57 @@ public class Issue331Test {
 			fileOut.delete();
 		}
 
+		if(fileOut2.exists()){
+			fileOut2.delete();
+		}
+
 		String q = "CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> { ?s ?p ?o } }";
 		SPARQLAnything.callMain(new String[]{"-q", q,"-f", "ttl", "-o", f, "-c", IRIArgument.READ_FROM_STD_IN.toString().concat("=true")});
 
 		Assert.assertTrue(fileOut.exists());
 		Assert.assertFalse(fileOut2.exists());
+
+		if(fileOut.exists()){
+			fileOut.delete();
+		}
+
+		if(fileOut2.exists()){
+			fileOut2.delete();
+		}
+	}
+
+	@Test
+	public void testWithValues() throws Exception {
+		JenaSystem.init();
+		InputStream fakeIn = new ByteArrayInputStream("abc".getBytes());
+		System.setIn(fakeIn);
+
+		String dir = Objects.requireNonNull(getClass().getClassLoader().getResource("")).getFile();
+		String f = dir.concat("out.ttl");
+		String f2 = dir.concat("out-1.ttl");
+		File fileOut = new File(f);
+		File fileOut2 = new File(f2);
+
+		if(fileOut.exists()){
+			fileOut.delete();
+		}
+
+		if(fileOut2.exists()){
+			fileOut2.delete();
+		}
+
+		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT {?s ?p ?o} WHERE { SERVICE <x-sparql-anything:> {fx:properties fx:read-from-std-in ?_in . ?s ?p ?o } }";
+		SPARQLAnything.callMain(new String[]{"-q", q,"-f", "ttl", "-o", f, "-v", "in=true"});
+
+		Assert.assertTrue(fileOut.exists());
+		Assert.assertFalse(fileOut2.exists());
+
+		if(fileOut.exists()){
+			fileOut.delete();
+		}
+
+		if(fileOut2.exists()){
+			fileOut2.delete();
+		}
 	}
 }

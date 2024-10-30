@@ -150,6 +150,8 @@ public class CLI {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setOptionComparator(null); // XXX See issue #286
 		String version = SPARQLAnything.class.getPackage().getImplementationVersion();
+		if(version == null)
+			version = "<version>";
 		formatter.printHelp(
 				"java -jar sparql.anything-" + version + "  -q query [-f <output format>] [-v <filepath | name=value> ... ] [-c option=value]  [-l path] [-o filepath]",
 				options);
