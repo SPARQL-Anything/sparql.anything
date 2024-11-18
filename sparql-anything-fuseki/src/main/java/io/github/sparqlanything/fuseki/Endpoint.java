@@ -17,6 +17,7 @@
 package io.github.sparqlanything.fuseki;
 
 import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.json.JSONTriplifier;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -101,7 +102,6 @@ public class Endpoint {
 	}
 
 	public static void main(String[] args) {
-
 		logger.info("sparql.anything endpoint");
 		Options options = new Options();
 
