@@ -261,7 +261,7 @@ and get this result without caring of transforming JSON to RDF.
 
 ### Using the Command Line Interface
 
-SPARQL Anything requires `Java >= 11` to be installed in your operating system.
+SPARQL Anything requires `Java >= 17` to be installed in your operating system.
 Download the latest version of the SPARQL Anything command line from
 the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
 The command line is a file named `sparql-anything-<version>.jar`.
@@ -277,7 +277,7 @@ See the [usage section](#Usage) for details on the command line interface.
 ### Using the server
 
 SPARQL Anything is also released as a server, embedded into an instance of the Apache Jena Fuseki server.
-The server requires `Java >= 11` to be installed in your operating system.
+The server requires `Java >= 17` to be installed in your operating system.
 Download the latest version of the SPARQL Anything server from
 the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
 The command line is a file named `sparql-anything-server-<version>.jar`.
