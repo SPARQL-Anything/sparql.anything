@@ -1,0 +1,15 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT *
+WHERE {
+  {
+    SERVICE <x-sparql-anything:> {
+      fx:properties fx:media-type "text/turtle" ;
+                    fx:location "%%%LOCATION%%%" .
+      ?s ?p ?o .
+    }
+  }
+}
