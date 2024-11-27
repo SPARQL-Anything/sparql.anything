@@ -59,9 +59,9 @@ Join(n) <- ContainerRow(n) ^ ContainerRow(n) <- Object(n) ^ Subject(n)
 ;; there are not other cases where joins with different types make sense (proof!)
 
 
-Wrong:
-;; TypeTable(O) <- TypeProperty(P)
-;; ContainerRow(O) <- BN(O) // Not true, in SPARQL matches also values
+##Wrong:
+##;; TypeTable(O) <- TypeProperty(P)
+##;; ContainerRow(O) <- BN(O) // Not true, in SPARQL matches also values
 
 ### Specialising in
 Subject -> ContainerTable | ContainerRow
