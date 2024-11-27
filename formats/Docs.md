@@ -65,7 +65,21 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
               rdf:_1    "Title 1"
             ];
   rdf:_2    [ rdf:type  xyz:Paragraph;
-              rdf:_1    "Paragraph1"
+              rdf:_1    "Paragraph1";
+              rdf:_2    [ rdf:type  xyz:Comment;
+                          rdf:_1    [ rdf:type  xyz:CommentAuthor;
+                                      rdf:_1    "Luigi Asprino"
+                                    ];
+                          rdf:_2    [ rdf:type  xyz:CommentText;
+                                      rdf:_1    "This is a comment"
+                                    ];
+                          rdf:_3    [ rdf:type  xyz:CommentId;
+                                      rdf:_1    "0"
+                                    ];
+                          rdf:_4    [ rdf:type  xyz:ThreadCommentNumber;
+                                      rdf:_1    "1"^^xsd:int
+                                    ]
+                        ]
             ];
   rdf:_3    [ rdf:type  xyz:Paragraph;
               rdf:_1    "Paragraph2"
@@ -161,6 +175,18 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
+[ rdf:type  xyz:Comment;
+  rdf:_1    [ rdf:type  xyz:CommentAuthor;
+              rdf:_1    "Luigi Asprino"
+            ];
+  rdf:_2    [ rdf:type  xyz:CommentText;
+              rdf:_1    "This is a comment"
+            ];
+  rdf:_3    [ rdf:type  xyz:CommentId;
+              rdf:_1    "0"
+            ]
+] .
+
 [ rdf:type  xyz:Document , fx:root;
   rdf:_1    "Title 1\nParagraph1\nParagraph2\nTitle 2\nParagraph3\n\n";
   rdf:_2    [ rdf:_1  [ rdf:_1  "A";
@@ -242,7 +268,21 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
               rdf:_1    "Title 1"
             ];
   rdf:_2    [ rdf:type  xyz:Paragraph;
-              rdf:_1    "Paragraph1"
+              rdf:_1    "Paragraph1";
+              rdf:_2    [ rdf:type  xyz:Comment;
+                          rdf:_1    [ rdf:type  xyz:CommentAuthor;
+                                      rdf:_1    "Luigi Asprino"
+                                    ];
+                          rdf:_2    [ rdf:type  xyz:CommentText;
+                                      rdf:_1    "This is a comment"
+                                    ];
+                          rdf:_3    [ rdf:type  xyz:CommentId;
+                                      rdf:_1    "0"
+                                    ];
+                          rdf:_4    [ rdf:type  xyz:ThreadCommentNumber;
+                                      rdf:_1    "1"^^xsd:int
+                                    ]
+                        ]
             ];
   rdf:_3    [ rdf:type  xyz:Paragraph;
               rdf:_1    "Paragraph2"

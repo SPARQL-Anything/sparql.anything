@@ -23,19 +23,19 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.Query;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 public class CLI {
@@ -85,42 +85,29 @@ public class CLI {
 		this.commandLine = cmdLineParser.parse(options, args);
 	}
 
-	private static String getQuery(String queryArgument) throws IOException {
-		String query = queryArgument;
 
-		// XXX Check if queryArgument is a URI first
-		File queryFile;
-		try{
-			queryFile = new File(new URL(queryArgument).toURI());
-		}catch(MalformedURLException | URISyntaxException e){
-			queryFile = new File(queryArgument);
-		}
-		if (queryFile.exists()) {
-			logger.trace("Loading query from file");
-			// LOAD query from file
-			BufferedReader br = new BufferedReader(new FileReader(queryFile));
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-				sb.append('\n');
-			}
-			query = sb.toString();
-			br.close();
-		}
-		return query;
-	}
 	public String getQuery() throws IOException {
-		return getQuery(commandLine.getOptionValue(CLI.QUERY));
+		String queryArgument = commandLine.getOptionValue(CLI.QUERY);
+		logger.trace("Parsing query argument {}", queryArgument);
+		try{
+			logger.trace("Trying interpreting as a URL...");
+			return IOUtils.toString(new URL(queryArgument).toURI(), Charset.defaultCharset());
+		} catch (MalformedURLException | URISyntaxException e) {
+			logger.trace("Trying interpreting as a file path...");
+			if(new File(queryArgument).exists())
+				return IOUtils.toString(new File(queryArgument).toURI(), Charset.defaultCharset());
+		}
+		logger.trace("Trying interpreting as a inline query...");
+		return queryArgument;
 	}
 	void init(){
 		this.options = new Options();
 
-		options.addOption(Option.builder(QUERY).argName("query").hasArg().required(true)
-				.desc("The path to the file storing the query to execute or the query itself.").longOpt(QUERY_LONG)
+		options.addOption(Option.builder(QUERY).argName("query or URL or filepath").hasArg().required(true)
+				.desc("The path or the URL to the file storing the query to execute or the query itself.").longOpt(QUERY_LONG)
 				.build());
 
-		options.addOption(Option.builder(OUTPUT).argName("file").hasArg()
+		options.addOption(Option.builder(OUTPUT).argName("filepath").hasArg()
 				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
 		options.addOption(Option.builder(OUTPUT_APPEND).hasArg(false)
@@ -129,12 +116,12 @@ public class CLI {
 		options.addOption(Option.builder(EXPLAIN).argName("explain").hasArg(false)
 				.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
 
-		options.addOption(Option.builder(LOAD).argName("load").hasArg().desc(
-						"OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
+		options.addOption(Option.builder(LOAD).argName("URL or filepath").hasArg().desc(
+						"OPTIONAL - The path or the URL to one RDF file or a filepath to a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
 				.longOpt(LOAD_LONG).build());
 
 		options.addOption(Option.builder(FORMAT).argName("string").hasArg().desc(
-						"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]")
+						"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: CSV (for SELECT queries) or TEXT (for ASK queries) or TTL (for CONSTRUCT queries)]")
 				.longOpt(FORMAT_LONG).build());
 
 		options.addOption(Option.builder(STRATEGY).argName("strategy").hasArg().optionalArg(true).desc(
@@ -150,7 +137,7 @@ public class CLI {
 				.longOpt(VALUES_LONG).build());
 
 		options.addOption(Option.builder(CONFIGURATION).argName("option=value").hasArg(true).optionalArg(true).desc(
-						"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set). Options passed in this way can be overwritten in the SERVICE IRI or in the Basic Graph Pattern.")
+						"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set).")
 				.longOpt(CONFIGURATION_LONG).build());
 
 //		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
@@ -163,6 +150,8 @@ public class CLI {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setOptionComparator(null); // XXX See issue #286
 		String version = SPARQLAnything.class.getPackage().getImplementationVersion();
+		if(version == null)
+			version = "<version>";
 		formatter.printHelp(
 				"java -jar sparql.anything-" + version + "  -q query [-f <output format>] [-v <filepath | name=value> ... ] [-c option=value]  [-l path] [-o filepath]",
 				options);

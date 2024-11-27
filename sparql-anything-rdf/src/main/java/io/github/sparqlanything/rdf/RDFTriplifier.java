@@ -16,10 +16,7 @@
 
 package io.github.sparqlanything.rdf;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.HTTPHelper;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -44,7 +41,7 @@ public class RDFTriplifier implements Triplifier {
 
 //	private static Logger logger = LoggerFactory.getLogger(RDFTriplifier.class);
 
-	public static Lang getRDFLang(Properties properties, String url, Header contentType) {
+	private static Lang getRDFLang(Properties properties, String url, Header contentType) {
 		Lang lang = null;
 
 		// Version from HTTP content type response
@@ -60,6 +57,9 @@ public class RDFTriplifier implements Triplifier {
 		if (lang == null && properties.containsKey(HTTPHelper.HTTPHEADER_PREFIX + "accept")) {
 			lang = RDFLanguages.contentTypeToLang(properties.getProperty(HTTPHelper.HTTPHEADER_PREFIX + "accept"));
 		}
+		if (lang == null && properties.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
+			lang = RDFLanguages.contentTypeToLang(PropertyUtils.getStringProperty(properties, IRIArgument.MEDIA_TYPE));
+		}
 		if (lang == null) {
 			// Version from location file extension
 			lang = RDFLanguages.filenameToLang(url);
@@ -72,7 +72,7 @@ public class RDFTriplifier implements Triplifier {
 		// However, the JSON is not a proper LANG, therefore, we rewrite it here
 		// See #356
 		// See io.github.sparqlanything.cli.SPARQLAnything.initSPARQLAnythingEngine()
-		if(lang.getLabel().equals("JSON")){
+		if(lang!=null && lang.getLabel().equals("JSON")){
 			lang = Lang.JSONLD;
 		}
 		log.trace("Lang {}", lang);

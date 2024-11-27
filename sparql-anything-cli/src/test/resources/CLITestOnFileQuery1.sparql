@@ -1,0 +1,1 @@
+PREFIX fx:   <http://sparql.xyz/facade-x/ns/> SELECT * {  SERVICE <x-sparql-anything:> { fx:properties fx:location ?_loc . ?s ?p ?o OPTIONAL {?s a ?c}} }

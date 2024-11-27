@@ -968,6 +968,14 @@ public class IssuesTest {
 //		assertFalse(rs.hasNext());
 	}
 
+	@Test
+	public void testIssue515() throws URISyntaxException, IOException {
+		QueryExecution qExec = executeTest("issues/issue515.sparql", "issues/issue515.something", false, false, false, false);
+		ResultSet rs = qExec.execSelect();
+		assertTrue(rs.hasNext());
+	}
+
+
 	private QueryExecution executeTest(String queryPath, String resourcePath, boolean printQueryString, boolean printFormattedQuery, boolean printResults, boolean constructResource) throws IOException, URISyntaxException {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);

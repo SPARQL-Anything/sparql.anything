@@ -16,13 +16,11 @@
 
 package io.github.sparqlanything.cli;
 
-import io.github.basilapi.basil.sparql.QueryParameter;
-import io.github.basilapi.basil.sparql.Specification;
-import io.github.basilapi.basil.sparql.SpecificationFactory;
-import io.github.basilapi.basil.sparql.VariablesBinder;
+import io.github.basilapi.basil.sparql.*;
 import io.github.sparqlanything.engine.FXSymbol;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -49,6 +47,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -420,6 +419,7 @@ public class SPARQLAnything {
 
 	private static void setConfigurationsToContext(String[] configurations, QueryExecution qExec) {
 		if (configurations != null) {
+			qExec.getContext().setTrue(SPARQLAnythingConstants.NO_SERVICE_MODE);
 			for (String configuration : configurations) {
 				String[] configurationSplit = configuration.split("=");
 				qExec.getContext().set(FXSymbol.create(configurationSplit[0]), configurationSplit[1]);
@@ -461,75 +461,8 @@ public class SPARQLAnything {
 			if(logger.isTraceEnabled()) {
 				logger.trace("[time] After init: {}", System.currentTimeMillis() - duration);
 			}
-			Dataset kb = null;
-			String load = cli.getLoad();
-			if (load != null) {
 
-				logger.info("Loading data from: {}", load);
-				if(logger.isTraceEnabled()) {
-					logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
-				}
-				// XXX Check if load is a URI first
-				File loadSource;
-				try{
-					loadSource = new File(new URL(load).toURI());
-				}catch(MalformedURLException e){
-					loadSource = new File(load);
-				}
-				if (loadSource.isDirectory()) {
-
-					logger.info("Loading files from directory: {}", loadSource);
-					// If directory, load all files
-					List<File> list = new ArrayList<>();
-					Collection<File> files = FileUtils.listFiles(loadSource, null, true);
-					for (File f : files) {
-						logger.info("Adding file to be loaded: {}", f);
-						list.add(f);
-					}
-					kb = DatasetFactory.createGeneral();
-					for (File f : list) {
-						try {
-							Model m = ModelFactory.createDefaultModel();
-							// read into the model.
-							m.read(f.getAbsolutePath());
-							kb.addNamedModel(f.toURI().toString(), m);
-						} catch (Exception e) {
-							logger.error("An error occurred while loading {}", f);
-							logger.error(" - Problem was: {}", e.getMessage());
-							if(logger.isDebugEnabled()){
-								logger.error("",e);
-							}
-						}
-					}
-					logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
-				} else if (loadSource.isFile()) {
-					// If it is a file, load it
-					logger.info("Load file: {}", loadSource);
-					Path base = Paths.get(".");
-					try{
-						Path p =  loadSource.toPath();
-						if(!p.isAbsolute()){
-							p = base.relativize(loadSource.toPath());
-						}
-						kb = DatasetFactory.create(p.toFile().toURI().toString());
-					} catch (Exception e) {
-						logger.error("An error occurred while loading {}", loadSource);
-						logger.error(" - Problem was: ", e);
-					}
-				} else {
-					if(!loadSource.exists()){
-						logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
-					}else {
-						logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
-					}
-					return;
-				}
-				if(logger.isTraceEnabled()) {
-					logger.trace("[time] After load: {}", System.currentTimeMillis() - duration);
-				}
-			} else {
-				kb = DatasetFactory.createGeneral();
-			}
+			Dataset kb = createDataset(cli.getLoad());
 
 			String outputFileName = cli.getOutputFile();
 			String outputPattern = cli.getOutputPattern();
@@ -543,48 +476,7 @@ public class SPARQLAnything {
 				Query q = QueryFactory.create(query);
 				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()), configurations);
 			} else {
-
-				ResultSet parameters = null;
-				if(values.length == 1 && new File(values[0]).exists()){
-					logger.debug("Input file name given");
-					parameters = ResultSetFactory.load(values[0]);
-				}else {
-					parameters = new ArgValuesAsResultSet(values);
-				}
-				// Specifications
-				Specification specification = SpecificationFactory.create("", query);
-				// Iterate over parameters
-				while (parameters.hasNext()) {
-					QuerySolution qs = parameters.nextSolution();
-					Query q;
-					try {
-						q = bindParameters(specification, qs);
-					} catch (Exception e1) {
-						logger.error("An exception occurred while evaluating the input parameters", e1);
-						logger.error(
-								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
-						continue;
-					}
-					String outputFile = null;
-					if (outputPattern != null) {
-						outputFile = prepareOutputFromPattern(outputPattern, qs);
-					} else {
-						if (outputFileName != null) {
-							outputFile = FilenameUtils.removeExtension(outputFileName) + "-" + parameters.getRowNumber() + "." + FilenameUtils.getExtension(outputFileName);
-						}
-						// else stays null and output goes to STDOUT
-					}
-					try {
-						logger.trace("Executing Query: {}", q);
-						executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()), configurations);
-					} catch (Exception e1) {
-						logger.error(
-								"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
-						if (logger.isDebugEnabled()) {
-							logger.error("Details:", e1);
-						}
-					}
-				}
+				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
@@ -594,6 +486,122 @@ public class SPARQLAnything {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);
 		}
+	}
+
+	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException {
+		ResultSet parameters = null;
+		if(values.length == 1 && new File(values[0]).exists()){
+			logger.debug("Input file name given");
+			parameters = ResultSetFactory.load(values[0]);
+		}else {
+			parameters = new ArgValuesAsResultSet(values);
+		}
+		// Specifications
+		Specification specification = SpecificationFactory.create("", query);
+		// Iterate over parameters
+		while (parameters.hasNext()) {
+			QuerySolution qs = parameters.nextSolution();
+			Query q;
+			try {
+				q = bindParameters(specification, qs);
+			} catch (Exception e1) {
+				logger.error("An exception occurred while evaluating the input parameters", e1);
+				logger.error(
+						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+				continue;
+			}
+			String outputFile = null;
+			if (outputPattern != null) {
+				outputFile = prepareOutputFromPattern(outputPattern, qs);
+			} else {
+				if (outputFileName != null) {
+					outputFile = FilenameUtils.removeExtension(outputFileName) + (parameters.getRowNumber()==1 && parameters.hasNext()? "-" + parameters.getRowNumber():"") + "." + FilenameUtils.getExtension(outputFileName);
+				}
+				// else stays null and output goes to STDOUT
+			}
+			try {
+				logger.trace("Executing Query: {}", q);
+				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()), configurations);
+			} catch (Exception e1) {
+				logger.error(
+						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+				if (logger.isDebugEnabled()) {
+					logger.error("Details:", e1);
+				}
+			}
+		}
+	}
+
+	private static Dataset createDataset(String load) {
+		Dataset kb = DatasetFactory.createGeneral();
+		if (load != null) {
+
+			logger.info("Loading data from: {}", load);
+			if (logger.isTraceEnabled()) {
+				logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
+			}
+			// XXX Check if load is a URI first
+			File loadSource;
+			try {
+				loadSource = new File(new URL(load).toURI());
+			} catch (MalformedURLException | URISyntaxException e) {
+				loadSource = new File(load);
+			} catch (IllegalArgumentException e) {
+				Model m = ModelFactory.createDefaultModel();
+				RDFDataMgr.read(m, load);
+				kb.addNamedModel(load, m);
+				return kb;
+			}
+			if (loadSource.isDirectory()) {
+
+				logger.info("Loading files from directory: {}", loadSource);
+				// If directory, load all files
+				Collection<File> files = FileUtils.listFiles(loadSource, null, true);
+				for (File f : files) {
+					logger.info("Adding file to be loaded: {}", f);
+					try {
+						Model m = ModelFactory.createDefaultModel();
+						// read into the model.
+						m.read(f.getAbsolutePath());
+						kb.addNamedModel(f.toURI().toString(), m);
+					} catch (Exception e) {
+						logger.error("An error occurred while loading {}", f);
+						logger.error(" - Problem was: {}", e.getMessage());
+						if (logger.isDebugEnabled()) {
+							logger.error("", e);
+						}
+					}
+				}
+
+				logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
+			} else if (loadSource.isFile()) {
+				// If it is a file, load it
+				logger.info("Load file: {}", loadSource);
+				Path base = Paths.get(".");
+				try {
+					Path p = loadSource.toPath();
+					if (!p.isAbsolute()) {
+						p = base.relativize(loadSource.toPath());
+					}
+					kb = DatasetFactory.create(p.toFile().toURI().toString());
+				} catch (Exception e) {
+					logger.error("An error occurred while loading {}", loadSource);
+					logger.error(" - Problem was: ", e);
+				}
+			} else {
+				if (!loadSource.exists()) {
+					logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
+				} else {
+					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+				}
+				return kb;
+			}
+			if (logger.isTraceEnabled()) {
+				logger.trace("[time] After load: {}", System.currentTimeMillis() - duration);
+			}
+		}
+
+		return kb;
 	}
 
 	public static String callMain(String[] args) throws Exception {

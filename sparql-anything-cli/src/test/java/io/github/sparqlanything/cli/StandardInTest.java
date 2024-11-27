@@ -32,7 +32,7 @@ public class StandardInTest {
 		InputStream fakeIn = new ByteArrayInputStream("abc".getBytes());
 		System.setIn(fakeIn);
 
-		String q = "SELECT ?v { SERVICE <x-sparql-anything:> { ?root a <http://sparql.xyz/facade-x/ns/root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } }";
+		String q = "SELECT ?v { ?root a <http://sparql.xyz/facade-x/ns/root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } ";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", IRIArgument.READ_FROM_STD_IN.toString().concat("=true")});
 		Assert.assertEquals("v\r\nabc\r\n",out);
 	}
