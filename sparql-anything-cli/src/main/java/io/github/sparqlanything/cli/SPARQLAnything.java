@@ -20,7 +20,9 @@ import io.github.basilapi.basil.sparql.*;
 import io.github.sparqlanything.engine.FXSymbol;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
+import io.github.sparqlanything.model.PluginInitializer;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import io.github.sparqlanything.model.Utils;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -46,14 +48,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.regex.Pattern;
 
 public class SPARQLAnything {
@@ -427,6 +433,60 @@ public class SPARQLAnything {
 		}
 	}
 
+	private static void loadJARs(String[] paths) throws IOException {
+		if (paths == null || paths.length == 0) return;
+
+		ArrayList<String> classNames = new ArrayList<>();
+		URL[] urls = new URL[paths.length];
+		for (int i = 0; i < urls.length; i++) {
+			logger.info("Loading JAR at {}", paths[i]);
+//			urls[i] = Path.of(paths[i]).toUri().toURL();
+			urls[i] = Utils.instantiateURL(paths[i]);
+			JarInputStream jis = new JarInputStream(urls[i].openStream());
+			classNames.addAll(getClassNamesFromJar(jis));
+		}
+
+		try (URLClassLoader child = new URLClassLoader(urls, SPARQLAnything.class.getClassLoader())) {
+			for (String className : classNames) {
+				logger.trace("Loading Class {}", className);
+				try {
+					Class<?> k = child.loadClass(className);
+					if(Arrays.stream(k.getInterfaces()).anyMatch(iFaceClass -> iFaceClass == PluginInitializer.class)){
+						PluginInitializer p = (PluginInitializer) k.getConstructor().newInstance();
+						p.run();
+					}
+				} catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
+						 IllegalAccessException | NoSuchMethodException |
+						 NoClassDefFoundError | IncompatibleClassChangeError e) {
+					//throw new RuntimeException(e);
+					System.err.println("Cannot load class ".concat(className));
+				}
+			}
+		}
+
+	}
+
+	private static ArrayList<String> getClassNamesFromJar(JarInputStream jarFile) throws IOException {
+		ArrayList<String> classNames = new ArrayList<>();
+
+		JarEntry jar;
+
+		//Iterate through the contents of the jar file
+		while (true) {
+			jar = jarFile.getNextJarEntry();
+			if (jar == null) {
+				break;
+			}
+			//Pick file that has the extension of .class
+			if ((jar.getName().endsWith(".class"))) {
+				String className = jar.getName().replaceAll("/", "\\.");
+				String myClass = className.substring(0, className.lastIndexOf('.'));
+				classNames.add(myClass);
+			}
+		}
+		return classNames;
+	}
+
 	public static void main(String[] args) throws Exception {
 
 		if(logger.isTraceEnabled()){
@@ -442,6 +502,7 @@ public class SPARQLAnything {
 		}
 		try {
 			cli.parse(args);
+			loadJARs(cli.getLoadJar());
 			String query = cli.getQuery();
 			Integer strategy = cli.getStrategy();
 			if(cli.explain()) {

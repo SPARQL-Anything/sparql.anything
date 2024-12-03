@@ -19,12 +19,14 @@ package io.github.sparqlanything.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class Utils {
 
-	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
+	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 	public static OS platform;
-
-	;
 
 	static {
 		String operSys = System.getProperty("os.name").toLowerCase();
@@ -40,6 +42,19 @@ public class Utils {
 		}
 		// logger.info("os.name is: " + operSys);
 		// logger.info("OS is: " + platform);
+	}
+
+	public static URL instantiateURL(String urlLocation) throws MalformedURLException {
+		log.trace("URL Location {}", urlLocation);
+		URL url;
+		try {
+			url = new URL(urlLocation);
+		} catch (MalformedURLException u) {
+			log.trace("Malformed url interpreting as file");
+			url = new File(urlLocation).toURI().toURL();
+		}
+		log.trace("Result {}", url);
+		return url;
 	}
 
 	public enum OS {
