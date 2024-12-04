@@ -20,8 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 public class Utils {
 
@@ -55,6 +62,58 @@ public class Utils {
 		}
 		log.trace("Result {}", url);
 		return url;
+	}
+
+	public static void loadJARs(String[] paths) throws IOException {
+		if (paths == null || paths.length == 0) return;
+
+		ArrayList<String> classNames = new ArrayList<>();
+		URL[] urls = new URL[paths.length];
+		for (int i = 0; i < urls.length; i++) {
+//			urls[i] = Path.of(paths[i]).toUri().toURL();
+			urls[i] = Utils.instantiateURL(paths[i]);
+			JarInputStream jis = new JarInputStream(urls[i].openStream());
+			classNames.addAll(getClassNamesFromJar(jis));
+		}
+
+		try (URLClassLoader child = new URLClassLoader(urls, Utils.class.getClassLoader())) {
+			for (String className : classNames) {
+				try {
+					Class<?> k = child.loadClass(className);
+					if(Arrays.stream(k.getInterfaces()).anyMatch(iFaceClass -> iFaceClass == PluginInitializer.class)){
+						PluginInitializer p = (PluginInitializer) k.getConstructor().newInstance();
+						p.run();
+					}
+				} catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
+						 IllegalAccessException | NoSuchMethodException |
+						 NoClassDefFoundError | IncompatibleClassChangeError e) {
+					//throw new RuntimeException(e);
+					System.err.println("Cannot load class ".concat(className));
+				}
+			}
+		}
+
+	}
+
+	private static ArrayList<String> getClassNamesFromJar(JarInputStream jarFile) throws IOException {
+		ArrayList<String> classNames = new ArrayList<>();
+
+		JarEntry jar;
+
+		//Iterate through the contents of the jar file
+		while (true) {
+			jar = jarFile.getNextJarEntry();
+			if (jar == null) {
+				break;
+			}
+			//Pick file that has the extension of .class
+			if ((jar.getName().endsWith(".class"))) {
+				String className = jar.getName().replaceAll("/", "\\.");
+				String myClass = className.substring(0, className.lastIndexOf('.'));
+				classNames.add(myClass);
+			}
+		}
+		return classNames;
 	}
 
 	public enum OS {
