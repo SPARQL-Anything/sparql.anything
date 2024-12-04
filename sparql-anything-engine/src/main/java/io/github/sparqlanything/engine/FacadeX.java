@@ -21,6 +21,8 @@ import info.debatty.java.stringsimilarity.QGram;
 import io.github.sparqlanything.engine.functions.*;
 import io.github.sparqlanything.engine.functions.reflection.ReflectionFunctionFactory;
 import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.TriplifierRegister;
+import io.github.sparqlanything.model.TriplifierRegisterException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.commons.text.similarity.*;

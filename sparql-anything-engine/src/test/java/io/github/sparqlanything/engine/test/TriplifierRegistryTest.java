@@ -17,8 +17,8 @@
 package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
-import io.github.sparqlanything.engine.TriplifierRegister;
-import io.github.sparqlanything.engine.TriplifierRegisterException;
+import io.github.sparqlanything.model.TriplifierRegister;
+import io.github.sparqlanything.model.TriplifierRegisterException;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
@@ -33,15 +33,12 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.sparql.ARQConstants;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.sparql.graph.GraphFactory;
-import org.apache.jena.sparql.service.ServiceExecutorRegistry;
 import org.apache.jena.sys.JenaSystem;
 import org.junit.Test;
 

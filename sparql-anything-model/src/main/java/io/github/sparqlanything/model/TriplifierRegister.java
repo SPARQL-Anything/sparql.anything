@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.sparqlanything.engine;
+package io.github.sparqlanything.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

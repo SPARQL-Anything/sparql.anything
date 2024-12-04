@@ -19,6 +19,7 @@ package io.github.sparqlanything.engine;
 import io.github.sparqlanything.engine.functions.IsFacadeXExtension;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.TriplifierRegister;
 import io.github.sparqlanything.zip.FolderTriplifier;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Triple;

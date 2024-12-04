@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.sparqlanything.engine;
+package io.github.sparqlanything.model;
 
 public class TriplifierRegisterException extends Exception {
 

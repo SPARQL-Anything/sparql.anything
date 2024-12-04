@@ -21,7 +21,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.engine.TriplifierRegister;
+import io.github.sparqlanything.model.TriplifierRegister;
 import io.github.sparqlanything.model.annotations.Format;
 import io.github.sparqlanything.model.annotations.Triplifier;
 import org.apache.jena.query.ARQ;

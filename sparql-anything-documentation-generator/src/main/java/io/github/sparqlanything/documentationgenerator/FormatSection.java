@@ -16,21 +16,16 @@
 
 package io.github.sparqlanything.documentationgenerator;
 
-import io.github.sparqlanything.engine.TriplifierRegister;
+import io.github.sparqlanything.model.TriplifierRegister;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Examples;
 import io.github.sparqlanything.model.annotations.Format;
 import io.github.sparqlanything.model.annotations.Option;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.text.diff.StringsComparator;
 import org.apache.jena.query.*;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.*;
 
 public class FormatSection {

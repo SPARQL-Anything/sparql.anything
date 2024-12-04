@@ -105,7 +105,7 @@ public class IssuesTest {
 	public void testIssue284_2() throws URISyntaxException {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
 
@@ -526,7 +526,7 @@ public class IssuesTest {
 	public void testIssue284() throws URISyntaxException {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
 
@@ -578,7 +578,7 @@ public class IssuesTest {
 	public void testIssue291() {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
 		Dataset ds = DatasetFactory.createGeneral();
@@ -631,7 +631,7 @@ public class IssuesTest {
 	public void testIssue295() throws URISyntaxException, IOException {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
 		Dataset ds = DatasetFactory.createGeneral();
@@ -698,7 +698,7 @@ public class IssuesTest {
 	public void testIssue197() throws URISyntaxException, IOException {
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.TriplifierRegister", "ERROR");
+//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.TriplifierRegister", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
 //		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
 		Dataset ds = DatasetFactory.createGeneral();

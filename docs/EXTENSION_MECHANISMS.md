@@ -88,7 +88,7 @@ Finally, you can use the Triplifier [as usual](README.md#usage). For example, vi
 package sparqlanything.user ;
 
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.engine.TriplifierRegisterException;
+import io.github.sparqlanything.model.TriplifierRegisterException;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 

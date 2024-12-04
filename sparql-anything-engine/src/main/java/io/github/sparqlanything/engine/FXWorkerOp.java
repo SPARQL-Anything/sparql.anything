@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.engine;
 
+import io.github.sparqlanything.model.TriplifierRegister;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;

@@ -1,7 +1,11 @@
 # Extension Mechanisms
 
-You can extend SPARQL Anything by including new triplifiers.
-To this end, you have into include the `engine` module within your dependencies.
+You can extend SPARQL Anything by including custom triplifiers, functions or magic properties.
+There are two ways of doing that: [wrapping the extension into a new package](#wrapping-the-extension-into-a-new-package) or [develop a plugin](#develop-a-plugin).
+
+## Wrapping the extension into a new package
+
+To wrap  the extension into a new package, you have into include the `engine` module within your dependencies.
 
 ```
 <dependency>
@@ -13,10 +17,10 @@ To this end, you have into include the `engine` module within your dependencies.
 
 A maven project showing how to extend SPARQL Anything is available [here](https://github.com/SPARQL-Anything/JavaExtensionExample).
 
-This project includes defines a new triplifier, called MyTriplifier, which reads the input resource byte-by-byte, transforms each byte into a character, and adds the character as a slot of the root container.
-MyTriplifier is used to transform resources having mime type `my-mime-type` and extension `myext`.
+This project defines a new triplifier, called `MyTriplifier`, which reads the input resource byte-by-byte, transforms each byte into a character, and adds the character as a slot of the root container.
+`MyTriplifier` is used to transform resources having mime type `my-mime-type` and extension `myext`.
 
-Source code of the MyTriplifier
+Source code of the `MyTriplifier` class
 
 ```java
 package sparqlanything.user;
@@ -78,7 +82,7 @@ public class MyTriplifier implements Triplifier {
 
 Then, you can register the new triplifier via the following line.
 
-```
+```java
 FacadeX.Registry.registerTriplifier(MyTriplifier.class.getCanonicalName(), new String[]{"myext"}, new String[]{"my-mime-type"});
 ```
 
@@ -88,7 +92,7 @@ Finally, you can use the Triplifier [as usual](README.md#usage). For example, vi
 package sparqlanything.user ;
 
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.engine.TriplifierRegisterException;
+import io.github.sparqlanything.model.TriplifierRegisterException;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 
@@ -135,3 +139,6 @@ which prints
 | 3          | "c" |
 --------------------
 ```
+
+### Develop a plugin
+
