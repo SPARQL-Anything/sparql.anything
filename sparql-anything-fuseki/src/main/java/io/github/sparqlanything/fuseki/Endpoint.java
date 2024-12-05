@@ -122,7 +122,7 @@ public class Endpoint {
 				.longOpt("gui").build());
 
 		options.addOption(Option.builder(LOAD_JAR).argName("filepath").hasArg(true).optionalArg(true).desc(
-						"OPTIONAL - Filepath to an executable JAR to be dynamically included. The argument can be passed multiple times (one for each JAR file to be included).")
+						"OPTIONAL - Filepath to an executable JAR to be dynamically loaded. The argument can be passed multiple times (one for each JAR file to be loaded).")
 				.longOpt("load-jar").build());
 
 		CommandLine commandLine = null;

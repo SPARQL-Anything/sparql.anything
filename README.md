@@ -624,9 +624,9 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
                                          option to be set).
  -j,--load-jar <filepath>                OPTIONAL - Filepath to an
                                          executable JAR to be dynamically
-                                         included. The argument can be
+                                         loaded. The argument can be
                                          passed multiple times (one for
-                                         each JAR file to be included).
+                                         each JAR file to be loaded).
 ```
 
 Logging can be configured adding the following option (SLF4J).
