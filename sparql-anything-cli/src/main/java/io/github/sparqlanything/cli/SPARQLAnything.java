@@ -20,7 +20,6 @@ import io.github.basilapi.basil.sparql.*;
 import io.github.sparqlanything.engine.FXSymbol;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
-import io.github.sparqlanything.model.PluginInitializer;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Utils;
 import org.apache.commons.cli.ParseException;
@@ -48,18 +47,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 import java.util.regex.Pattern;
 
 public class SPARQLAnything {
