@@ -490,6 +490,8 @@ and constructing knowledge graphs.
 **NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on
 the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
 
+Moreover, if you run the geosparql distribution of the CLI or the server, you can also use the [GeoSPARQL functions provided by Apache Jena](https://jena.apache.org/documentation/geosparql/index.html). 
+
 | Name                                                                                                                  | Function/Magic Property | Input                                  | Output                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 |-----------------------------------------------------------------------------------------------------------------------|-------------------------|----------------------------------------|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [fx:anySlot](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxanyslot)                                                             | Magic Property          | -                                      | -                             | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).                                                                                                                                                                                                                                                                                                                                                                              | 
@@ -688,6 +690,12 @@ You can generate executable files of the command line interface and server with 
 
 ```
 mvn clean install -Dgenerate-cli-jar=true -Dgenerate-server-jar=true
+```
+
+You can generate the executable files of the SPARQL Anything geosparql distribution featuring the [Apache Jena's GeoSPARQL functions](https://jena.apache.org/documentation/geosparql/index.html).
+
+```
+mvn clean install -Dgenerate-cli-jar-geosparql=true -Dgenerate-server-jar-geosparql=true
 ```
 
 ## Licence

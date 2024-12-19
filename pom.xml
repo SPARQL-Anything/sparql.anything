@@ -294,6 +294,12 @@
                 <version>${jena.version}</version>
             </dependency>
 
+                <dependency>
+                    <groupId>org.apache.jena</groupId>
+                    <artifactId>jena-geosparql</artifactId>
+                    <version>${jena.version}</version>
+                </dependency>
+
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
@@ -475,7 +481,8 @@
             <dependency>
                 <groupId>jakarta.xml.bind</groupId>
                 <artifactId>jakarta.xml.bind-api</artifactId>
-                <version>2.3.2</version>
+                <!--version>2.3.2</version-->
+                <version>4.0.1</version>
             </dependency>
 
             <!-- BEGIN: Tika -->
