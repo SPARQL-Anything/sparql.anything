@@ -30,7 +30,7 @@ ADD sparql-anything-yaml/pom.xml $HOME/sparql-anything-yaml/
 
 RUN mvn verify clean --fail-never
 ADD . $HOME
-RUN mvn clean install -DskipTests -Dgenerate-server-jar=true -Dgenerate-cli-jar=true -Drevision=$GITHUB_REF
+RUN mvn clean install -DskipTests -Dgenerate-server-jar=true -Dgenerate-cli-jar=true -Dgenerate-cli-jar-geosparql=true -Dgenerate-server-jar-geosparql=true -Drevision=$GITHUB_REF
 
 #### runtime layer
 FROM mcr.microsoft.com/playwright/java:focal
