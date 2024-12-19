@@ -54,6 +54,9 @@ COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GI
 COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GITHUB_REF.jar $HOME/artifacts/
 COPY --from=build $HOME/sparql-anything-cli/target/sparql-anything-$GITHUB_REF.jar $HOME/artifacts/
 
+COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-${GITHUB_REF}-geosparql.jar $HOME/artifacts/
+COPY --from=build $HOME/sparql-anything-cli/target/sparql-anything-${GITHUB_REF}-geosparql.jar $HOME/artifacts/
+
 RUN chown -R 10001:0 $HOME && chmod -R og+rwx $HOME
 USER 10001
 
