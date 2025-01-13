@@ -34,6 +34,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+/**
+ * Starting from a BGP, this class generates all possible valid interpretations
+ */
 public class BGPAnalyser {
 	final static Logger L = LoggerFactory.getLogger(BGPAnalyser.class);
 

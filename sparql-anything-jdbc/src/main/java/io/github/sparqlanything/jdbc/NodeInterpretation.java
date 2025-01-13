@@ -33,6 +33,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * TODO Refactoring needed
+ * - inconsistentTypes -> inconsistentWith
+ * - specialisationOfTypes -> specialisationOf
+ * - InterpretationXYZ -> IsInterpretationXYZ
+ */
 public class NodeInterpretation {
 	private Set<Triple> triples;
 	private Node node;
@@ -290,6 +296,7 @@ public class NodeInterpretation {
 			// Override type
 			// Set the appropriate type
 			Map<Set<?>,Class<? extends NodeInterpretation>> m = new HashMap<>();
+			// TODO Rewrite this to just traverse the interpretation class so we don't have to duplicate information that we can infer from the class multi-hierarchy (specialisesInterpretationClass)
 			// Subject , Object = ContainerRow
 			// ContainerRow , Object = ContainerRow
 			// ContainerRow , Subject = ContainerRow

@@ -26,6 +26,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This class represents a single step in the search space.
+ * It collects valid interpretations of the BGP.
+ * It may or may not be the final state (a complete interpretation)
+ * It may be the initial state (no BGP node is being interpreted yet)
+ */
 public class BGPInterpretation {
 	private int hashCode = -1;
 

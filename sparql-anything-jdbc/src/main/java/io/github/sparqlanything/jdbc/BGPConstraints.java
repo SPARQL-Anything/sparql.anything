@@ -29,6 +29,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Given a BGP, this class executes inference rules once
+ *
+ * Given a BGP and previous interpretations, this class executes inference rules once and check for consistency with previous interpretations. Conflicting interpretations are discarded
+ *
+ * Returns a set of valid and new interpretations
+ */
 public class BGPConstraints {
 	final static Logger L = LoggerFactory.getLogger(BGPConstraints.class);
 	private Map<Node, NodeInterpretation> initialConstraints = null;
@@ -261,6 +268,7 @@ public class BGPConstraints {
 						if(previous instanceof NodeInterpretation.Join && ((NodeInterpretation.Join)previous).includes(constraint)){
 							return false;
 						}
+						// TODO check if we need to move makeJoin elsewhere
 						NodeInterpretation.Join joined = NodeInterpretation.makeJoin(previous, constraint);
 						constraints.put(node, joined);
 						return true;
