@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -90,22 +89,9 @@ public interface Triplifier {
 
 	static URL getLocation(Properties properties) throws MalformedURLException {
 		if (properties.containsKey(IRIArgument.LOCATION.toString())) {
-			return instantiateURL(properties.getProperty(IRIArgument.LOCATION.toString()));
+			return Utils.instantiateURL(properties.getProperty(IRIArgument.LOCATION.toString()));
 		}
 		return null;
-	}
-
-	static URL instantiateURL(String urlLocation) throws MalformedURLException {
-		log.trace("URL Location {}", urlLocation);
-		URL url;
-		try {
-			url = new URL(urlLocation);
-		} catch (MalformedURLException u) {
-			log.trace("Malformed url interpreting as file");
-			url = new File(urlLocation).toURI().toURL();
-		}
-		log.trace("Result {}", url);
-		return url;
 	}
 
 	static String toSafeURIString(String s) {
@@ -180,7 +166,7 @@ public interface Triplifier {
 		}
 
 		// Handle archives differently
-		URL urlArchive = instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
+		URL urlArchive = Utils.instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
 		try {
 			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset);
 		} catch (ArchiveException e) {

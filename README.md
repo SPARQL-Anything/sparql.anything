@@ -490,6 +490,8 @@ and constructing knowledge graphs.
 **NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on
 the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
 
+Moreover, if you run the geosparql distribution of the CLI or the server, you can also use the [GeoSPARQL functions provided by Apache Jena](https://jena.apache.org/documentation/geosparql/index.html). 
+
 | Name                                                                                                                  | Function/Magic Property | Input                                  | Output                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 |-----------------------------------------------------------------------------------------------------------------------|-------------------------|----------------------------------------|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [fx:anySlot](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxanyslot)                                                             | Magic Property          | -                                      | -                             | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).                                                                                                                                                                                                                                                                                                                                                                              | 
@@ -551,9 +553,9 @@ An executable JAR can be obtained from the [Releases](https://github.com/spice-h
 The jar can be executed as follows:
 
 ```
-usage: java -jar sparql.anything-<version>  -q query [-f <output format>] [-v
-            <filepath | name=value> ... ] [-c option=value]  [-l path] [-o
-            filepath]
+usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
+            [-v <filepath | name=value> ... ] [-c option=value] [-l
+            filepath] [-o filepath] [-j filepath]
  -q,--query <query or URL or filepath>   The path or the URL to the file
                                          storing the query to execute or
                                          the query itself.
@@ -577,9 +579,10 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>] [-v
  -f,--format <string>                    OPTIONAL -  Format of the output
                                          file. Supported values: JSON,
                                          XML, CSV, TEXT, TTL, NT, NQ.
-                                         [Default: CSV (for SELECT queries) 
-                                         or TEXT (for ASK queries) or TTL 
-                                         (for CONSTRUCT queries)]
+                                         [Default: CSV (for SELECT
+                                         queries) or TEXT (for ASK
+                                         queries) or TTL (for CONSTRUCT
+                                         queries)]
  -s,--strategy <strategy>                OPTIONAL - Strategy for query
                                          evaluation. Possible values: '1'
                                          - triple filtering (default), '0'
@@ -621,6 +624,11 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>] [-v
                                          The argument can be passed
                                          multiple times (one for each
                                          option to be set).
+ -j,--load-jar <filepath>                OPTIONAL - Filepath to an
+                                         executable JAR to be dynamically
+                                         loaded. The argument can be
+                                         passed multiple times (one for
+                                         each JAR file to be loaded).
 ```
 
 Logging can be configured adding the following option (SLF4J).
@@ -645,13 +653,18 @@ the [Releases](https://github.com/spice-h2020/sparql.anything/releases) page.
 The jar can be executed as follows:
 
 ```
-usage: java -jar sparql-anything-server-<version>.jar [-p port] [-e
+usage: java -jar sparql-anything-fuseki-<version>.jar [-p port] [-e
             sparql-endpoint-path] [-g endpoint-gui-path]
- -e,--path <path>   The path where the server will be running on (Default
-                    /sparql.anything).
- -g,--gui <gui>     The path of the SPARQL endpoint GUI (Default /sparql).
- -p,--port <port>   The port where the server will be running on (Default
-                    3000 ).
+ -e,--path <path>           The path where the server will be running on
+                            (Default /sparql.anything).
+ -g,--gui <gui>             The path of the SPARQL endpoint GUI (Default
+                            /sparql).
+ -j,--load-jar <filepath>   OPTIONAL - Filepath to an executable JAR to be
+                            dynamically included. The argument can be
+                            passed multiple times (one for each JAR file
+                            to be included).
+ -p,--port <port>           The port where the server will be running on
+                            (Default 3000 ).
 ```
 
 Also, a docker image can be used by following the instructions [here](BROWSER.md).
@@ -677,6 +690,12 @@ You can generate executable files of the command line interface and server with 
 
 ```
 mvn clean install -Dgenerate-cli-jar=true -Dgenerate-server-jar=true
+```
+
+You can generate the executable files of the SPARQL Anything geosparql distribution featuring the [Apache Jena's GeoSPARQL functions](https://jena.apache.org/documentation/geosparql/index.html).
+
+```
+mvn clean install -Dgenerate-cli-jar-geosparql=true -Dgenerate-server-jar-geosparql=true
 ```
 
 ## Licence

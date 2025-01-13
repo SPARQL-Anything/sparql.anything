@@ -17,8 +17,8 @@
 package io.github.sparqlanything.fuseki;
 
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.json.JSONTriplifier;
 import io.github.sparqlanything.model.Triplifier;
+import io.github.sparqlanything.model.Utils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -35,19 +35,23 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class Endpoint {
 
 	public static final String DEFAULT_PATH = "/sparql.anything";
 	public static final String DEFAULT_SPARQL_ENDPOINT_GUI_PATH = "/sparql";
 	public static final int DEFAULT_PORT = 3000;
 
-	private static Logger logger = LoggerFactory.getLogger(Endpoint.class);
-	private Builder builder = FusekiServer.create();
+	private static final Logger logger = LoggerFactory.getLogger(Endpoint.class);
+	private final Builder builder = FusekiServer.create();
 	private String path, guipath;
 	private FusekiServer server;
 	private int port;
 	private static Endpoint instance;
-	private static final String PORT = "p", PATH = "e", GUI = "g";
+
+	// Note that -j --load-jar is also used by the CLI, better keep the same name
+	private static final String PORT = "p", PATH = "e", GUI = "g", LOAD_JAR = "j";
 
 	private Endpoint() {
 		builder.port(DEFAULT_PORT);
@@ -117,6 +121,10 @@ public class Endpoint {
 				.desc("The path of the SPARQL endpoint GUI (Default " + DEFAULT_SPARQL_ENDPOINT_GUI_PATH + ").")
 				.longOpt("gui").build());
 
+		options.addOption(Option.builder(LOAD_JAR).argName("filepath").hasArg(true).optionalArg(true).desc(
+						"OPTIONAL - Filepath to an executable JAR to be dynamically loaded. The argument can be passed multiple times (one for each JAR file to be loaded).")
+				.longOpt("load-jar").build());
+
 		CommandLine commandLine = null;
 
 		CommandLineParser cmdLineParser = new DefaultParser();
@@ -125,7 +133,9 @@ public class Endpoint {
 
 			String path = commandLine.getOptionValue(PATH, DEFAULT_PATH);
 			String guipath = commandLine.getOptionValue(GUI, DEFAULT_SPARQL_ENDPOINT_GUI_PATH);
-			int port = Integer.parseInt(commandLine.getOptionValue(PORT, DEFAULT_PORT + ""));
+			int port = Integer.parseInt(commandLine.getOptionValue(PORT, Integer.toString(DEFAULT_PORT)));
+
+			Utils.loadJARs(commandLine.getOptionValues(LOAD_JAR));
 
 			Endpoint e = Endpoint.getInstance();
 			e.setPath(path);
@@ -137,6 +147,8 @@ public class Endpoint {
 		} catch (ParseException e) {
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("java -jar sparql-anything-fuseki-<version>.jar [-p port] [-e sparql-endpoint-path] [-g endpoint-gui-path]", options);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

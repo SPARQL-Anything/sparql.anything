@@ -22,11 +22,11 @@
     <parent>
         <groupId>io.github.sparql-anything</groupId>
         <artifactId>sparql-anything-parent</artifactId>
-		<version>${revision}</version>
-	</parent>
-	<properties>
-		<revision>1.0.0-SNAPSHOT</revision>
-	</properties>
+        <version>${revision}</version>
+    </parent>
+    <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
+    </properties>
 
     <artifactId>sparql-anything-cli</artifactId>
 
@@ -147,9 +147,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
     </dependencies>
 
     <profiles>
+
         <profile>
             <id>generate-cli-jar</id>
             <activation>
@@ -210,6 +212,80 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>generate-cli-jar-geosparql</id>
+            <activation>
+                <property>
+                    <name>generate-cli-jar-geosparql</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>2.4.3</version>
+                        <executions>
+                            <execution>
+                                <id>sparql-anything</id>
+                                <configuration>
+                                    <outputFile>target/sparql-anything-${project.version}-geosparql.jar</outputFile>
+                                    <shadedArtifactAttached>false</shadedArtifactAttached>
+
+                                    <transformers>
+                                        <transformer
+                                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <mainClass>io.github.sparqlanything.cli.SPARQLAnything</mainClass>
+                                        </transformer>
+                                        <transformer
+                                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        <transformer
+                                                implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+                                        <transformer
+                                                implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                                            <addHeader>false</addHeader>
+                                        </transformer>
+                                    </transformers>
+                                    <filters>
+                                        <filter>
+                                            <artifact>*:*</artifact>
+                                            <excludes>
+                                                <exclude>com.github.spice-h2020:sparql.anything.fuseki</exclude>
+                                                <exclude>junit:junit</exclude>
+                                                <exclude>org.apache.maven:lib:tests</exclude>
+                                                <exclude>META-INF/*.SF</exclude>
+                                                <exclude>META-INF/*.DSA</exclude>
+                                                <exclude>META-INF/*.RSA</exclude>
+                                            </excludes>
+                                        </filter>
+                                    </filters>
+                                    <!-- Additional configuration. -->
+                                </configuration>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.jena</groupId>
+                    <artifactId>jena-geosparql</artifactId>
+                </dependency>
+
+                <dependency>
+                    <!-- module jakarta.xml.bind -->
+                    <groupId>jakarta.xml.bind</groupId>
+                    <artifactId>jakarta.xml.bind-api</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
     </profiles>
 
     <build>

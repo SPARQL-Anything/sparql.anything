@@ -73,6 +73,9 @@ public class CLI {
 	public static final String EXPLAIN = "e";
 	public static final String EXPLAIN_LONG = "explain";
 
+	public static final String LOAD_JAR = "j";
+	public static final String LOAD_JAR_LONG = "load-jar";
+
 	private Options options;
 	private CommandLine commandLine = null;
 
@@ -140,6 +143,10 @@ public class CLI {
 						"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set).")
 				.longOpt(CONFIGURATION_LONG).build());
 
+		options.addOption(Option.builder(LOAD_JAR).argName("filepath").hasArg(true).optionalArg(true).desc(
+						"OPTIONAL - Filepath to an executable JAR to be dynamically loaded. The argument can be passed multiple times (one for each JAR file to be loaded).")
+				.longOpt(LOAD_JAR_LONG).build());
+
 //		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
 //						"[Deprecated] OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
 //				.longOpt(INPUT_LONG).build());
@@ -153,7 +160,7 @@ public class CLI {
 		if(version == null)
 			version = "<version>";
 		formatter.printHelp(
-				"java -jar sparql.anything-" + version + "  -q query [-f <output format>] [-v <filepath | name=value> ... ] [-c option=value]  [-l path] [-o filepath]",
+				"java -jar sparql.anything-" + version + "  -q query [-f <output format>] [-v <filepath | name=value> ... ] [-c option=value] [-l filepath] [-o filepath] [-j filepath]",
 				options);
 	}
 
@@ -187,6 +194,10 @@ public class CLI {
 
 	public String[] getConfigurations() {
 		return commandLine.getOptionValues(CLI.CONFIGURATION);
+	}
+
+	public String[] getLoadJar() {
+		return commandLine.getOptionValues(CLI.LOAD_JAR);
 	}
 
 	public static String guessLang(String name) {

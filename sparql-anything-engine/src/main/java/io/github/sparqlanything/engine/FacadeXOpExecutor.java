@@ -18,6 +18,7 @@ package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.TriplifierRegister;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.algebra.Op;

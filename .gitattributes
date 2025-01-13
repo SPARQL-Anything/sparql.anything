@@ -5,4 +5,6 @@
 *.png binary
 *.jpg binary
 *.jpeg binary
+*.jar binary
+
 

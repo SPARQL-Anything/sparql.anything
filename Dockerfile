@@ -32,6 +32,9 @@ RUN mvn verify clean --fail-never
 ADD . $HOME
 RUN mvn clean install -DskipTests -Dgenerate-server-jar=true -Dgenerate-cli-jar=true -Drevision=$GITHUB_REF
 
+# Generate geosparql distribution
+RUN mvn install -DskipTests -Dgenerate-cli-jar-geosparql=true -Dgenerate-server-jar-geosparql=true -Drevision=$GITHUB_REF
+
 #### runtime layer
 FROM mcr.microsoft.com/playwright/java:focal
 ARG GITHUB_REF
@@ -50,6 +53,9 @@ RUN mkdir $HOME/artifacts
 COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GITHUB_REF.jar $HOME/sparql-anything-server.jar
 COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-$GITHUB_REF.jar $HOME/artifacts/
 COPY --from=build $HOME/sparql-anything-cli/target/sparql-anything-$GITHUB_REF.jar $HOME/artifacts/
+
+COPY --from=build $HOME/sparql-anything-fuseki/target/sparql-anything-server-${GITHUB_REF}-geosparql.jar $HOME/artifacts/
+COPY --from=build $HOME/sparql-anything-cli/target/sparql-anything-${GITHUB_REF}-geosparql.jar $HOME/artifacts/
 
 RUN chown -R 10001:0 $HOME && chmod -R og+rwx $HOME
 USER 10001

@@ -21,6 +21,7 @@ import io.github.sparqlanything.engine.FXSymbol;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
+import io.github.sparqlanything.model.Utils;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -46,6 +47,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -65,6 +68,22 @@ public class SPARQLAnything {
 	// TODO This should be moved to the engine module
 	private static void initSPARQLAnythingEngine() {
 		JenaSystem.init();
+
+		// Setting up the Geosparql module if the dependency is included
+		try {
+			Class<?> k = Class.forName("org.apache.jena.geosparql.configuration.GeoSPARQLConfig");
+			Method m = k.getMethod("setupMemoryIndex");
+			m.invoke(null);
+		} catch (ClassNotFoundException e) {
+			logger.warn("jena-geosparql dependency not available");
+		} catch (NoSuchMethodException e) {
+			logger.warn("NoSuchMethodException");
+		} catch (InvocationTargetException e) {
+			logger.warn("InvocationTargetException");
+		} catch (IllegalAccessException e) {
+			logger.warn("IllegalAccessException");
+		}
+
 		// Register the JSON-LD parser factory for extension  .json
 		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
 		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
@@ -427,6 +446,8 @@ public class SPARQLAnything {
 		}
 	}
 
+
+
 	public static void main(String[] args) throws Exception {
 
 		if(logger.isTraceEnabled()){
@@ -442,6 +463,7 @@ public class SPARQLAnything {
 		}
 		try {
 			cli.parse(args);
+			Utils.loadJARs(cli.getLoadJar());
 			String query = cli.getQuery();
 			Integer strategy = cli.getStrategy();
 			if(cli.explain()) {

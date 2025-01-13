@@ -17,7 +17,7 @@
 package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.engine.TriplifierRegister;
+import io.github.sparqlanything.model.TriplifierRegister;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
