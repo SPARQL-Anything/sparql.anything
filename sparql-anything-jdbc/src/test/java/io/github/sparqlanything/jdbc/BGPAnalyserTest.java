@@ -85,10 +85,8 @@ public class BGPAnalyserTest {
 
 	protected void analyseConstraints(){
 		OpBGP op = new OpBGP(bp);
-		RDBInferenceRules rules = new RDBInferenceRules(new Translation(this.properties));
-//		analyser = new BGPAnalyser(properties, op, constraints);
-		//boolean canResolve = analyser.getConstraints().isException();
-//		constraints = analyser.traverse(constraints);
+		rules = new RDBInferenceRules(new Translation(this.properties));
+		analyser = new BGPAnalyser(properties, op, rules);
 		try {
 			constraints = rules.run(op);
 		} catch (InconsistentAssumptionException e) {
