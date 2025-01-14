@@ -21,12 +21,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.jena.graph.Node;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
+/***********************************************************************
  * This class represents a single step in the search space.
  * It collects valid interpretations of the BGP.
  * It may or may not be the final state (a complete interpretation)
@@ -55,8 +54,8 @@ public class BGPInterpretation {
 		this.hashCode = b.toHashCode();
 	}
 
-	public BGPInterpretation(BGPConstraints constraints){
-		init(constraints.interpretations());
+	public BGPInterpretation(Map<Node,NodeInterpretation> interpretations){
+		init(interpretations);
 	}
 
 	public BGPInterpretation(BGPInterpretation previousInterpretation, Map<Node,NodeInterpretation> thisInterpretation){

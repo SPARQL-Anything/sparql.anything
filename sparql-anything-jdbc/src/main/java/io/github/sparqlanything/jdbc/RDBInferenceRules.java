@@ -17,6 +17,7 @@
 
 package io.github.sparqlanything.jdbc;
 
+import io.github.sparqlanything.fxbgp.InferenceRules;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -36,43 +37,53 @@ import java.util.Map;
  *
  * Returns a set of valid and new interpretations
  */
-public class BGPConstraints {
-	final static Logger L = LoggerFactory.getLogger(BGPConstraints.class);
+public class RDBInferenceRules implements InferenceRules {
+	final static Logger L = LoggerFactory.getLogger(RDBInferenceRules.class);
 	private Map<Node, NodeInterpretation> initialConstraints = null;
-	private OpBGP opBGP = null;
+//	private OpBGP opBGP = null;
 	private Translation translation;
 
-	private Map<Node, NodeInterpretation> constraints = null;
+//	private Map<Node, NodeInterpretation> constraints = null;
 
 	private InconsistentAssumptionException exception = null;
 
-	public BGPConstraints(Translation translation, OpBGP bgp){
-		this.opBGP = bgp;
+	public RDBInferenceRules(Translation translation){
+		//this.opBGP = bgp;
 		this.translation = translation;
 		this.initialConstraints = new HashMap<Node, NodeInterpretation>();
-		setupConstraints();
+		//setupConstraints();
 	}
 
-	public BGPConstraints(Translation translation, OpBGP bgp, Map<Node,NodeInterpretation> possibleInterpretation){
-		this.opBGP = bgp;
+	public RDBInferenceRules(Translation translation, Map<Node,NodeInterpretation> possibleInterpretation){
+		//this.opBGP = bgp;
 		this.translation = translation;
 		this.initialConstraints = possibleInterpretation;
-		setupConstraints();
+		//setupConstraints();
+	}
+//
+//	@Override
+//	public Map<Node, NodeInterpretation> interpretations(){
+//		if(this.constraints == null){
+//			return Collections.emptyMap();
+//		}
+//		return Collections.unmodifiableMap(this.constraints);
+//	}
+
+//	@Override
+//	public boolean isException(){
+//		return this.exception != null;
+//	}
+//
+//	@Override
+//	public Exception getException() {
+//		return this.exception;
+//	}
+	public Map<Node, NodeInterpretation> run(OpBGP opBGP) throws InconsistentAssumptionException {
+		return run(opBGP, new HashMap<>());
 	}
 
-	public Map<Node, NodeInterpretation> interpretations(){
-		if(this.constraints == null){
-			return Collections.emptyMap();
-		}
-		return Collections.unmodifiableMap(this.constraints);
-	}
-
-	public boolean isException(){
-		return this.exception != null;
-	}
-
-	private void setupConstraints()  {
-		this.constraints = initialConstraints;
+	public Map<Node, NodeInterpretation> run(OpBGP opBGP, Map<Node, NodeInterpretation> initialConstraints) throws InconsistentAssumptionException {
+		Map<Node, NodeInterpretation> constraints = initialConstraints;
 		List<Triple> tripleList = opBGP.getPattern().getList();
 		try {
 			// A) Gather Interpretations from the BGP, iterate until no new Interpreations are retrieved
@@ -86,48 +97,50 @@ public class BGPConstraints {
 					Node object = triple.getObject();
 
 					// If node was observed before, retrieve previous Interpretations
-					NodeInterpretation subjectNodeInterpretation = constrainSubject(subject, triple);
-					lookForConstraints = updateConstraints(subject, subjectNodeInterpretation);
+					NodeInterpretation subjectNodeInterpretation = constrainSubject(subject, triple, constraints);
+					lookForConstraints = updateConstraints(subject, subjectNodeInterpretation, constraints);
 					L.trace("look for constraints after s: {} {}->{}", lookForConstraints,subject, subjectNodeInterpretation);
-					NodeInterpretation predicateNodeInterpretation = constrainPredicate(predicate, triple);
-					lookForConstraints = updateConstraints(predicate, predicateNodeInterpretation) || lookForConstraints;
+					NodeInterpretation predicateNodeInterpretation = constrainPredicate(predicate, triple, constraints);
+					lookForConstraints = updateConstraints(predicate, predicateNodeInterpretation, constraints) || lookForConstraints;
 					L.trace("look for constraints after p: {} {}->{}", lookForConstraints,predicate, predicateNodeInterpretation);
-					NodeInterpretation objectNodeInterpretation = constrainObject(object, triple);
-					lookForConstraints = updateConstraints(object, objectNodeInterpretation) || lookForConstraints;
+					NodeInterpretation objectNodeInterpretation = constrainObject(object, triple, constraints);
+					lookForConstraints = updateConstraints(object, objectNodeInterpretation, constraints) || lookForConstraints;
 					L.trace("look for constraints after o: {} {}->{}", lookForConstraints, object, objectNodeInterpretation);
 					//System.out.println();
 				}
 			}
 		}catch(InconsistentAssumptionException e){
-			this.exception = e;
+//			this.exception = e;
 			L.trace("No solution for BGP: {}", opBGP);
 			if(L.isDebugEnabled()){
 				L.error("Debug enabled. Logging InconsistentAssumptionException.");
 				L.error("No solution for BGP (reason):", e);
 			}
+			throw e;
 		}
+		return constraints;
 	}
 
-	private boolean hasConstraint(Node n, Class<? extends NodeInterpretation> as){
+	private boolean hasConstraint(Node n, Class<? extends NodeInterpretation> as, Map<Node,NodeInterpretation> constraints){
 		if(!constraints.containsKey(n)){
 			return false;
 		}
 		return constraints.get(n).type().equals(as);
 	}
 
-	private NodeInterpretation constrainSubject(Node subject, Triple triple) throws InconsistentAssumptionException {
+	private NodeInterpretation constrainSubject(Node subject, Triple triple, Map<Node,NodeInterpretation> constraints) throws InconsistentAssumptionException {
 
 		// ContainerTable(S) <- URI(S) | FXRoot(O) | SlotRow(P) | ContainerRow(O)
-		if(subject.isURI() || hasConstraint(triple.getObject(), NodeInterpretation.FXRoot.class) ||
-				hasConstraint(triple.getPredicate(), NodeInterpretation.SlotRow.class) ||
-				hasConstraint(triple.getObject(), NodeInterpretation.ContainerRow.class)){
+		if(subject.isURI() || hasConstraint(triple.getObject(), NodeInterpretation.FXRoot.class, constraints) ||
+				hasConstraint(triple.getPredicate(), NodeInterpretation.SlotRow.class, constraints) ||
+				hasConstraint(triple.getObject(), NodeInterpretation.ContainerRow.class, constraints)){
 			return new NodeInterpretation.ContainerTable(subject, triple);
 		}
 
 		// ContainerRow(S) <- SlotColumn(P) | SlotValue(O) | TypeTable(O)
-		if(hasConstraint(triple.getPredicate(), NodeInterpretation.SlotColumn.class) ||
-				hasConstraint(triple.getObject(), NodeInterpretation.TypeTable.class) ||
-				hasConstraint(triple.getObject(), NodeInterpretation.SlotValue.class) ){
+		if(hasConstraint(triple.getPredicate(), NodeInterpretation.SlotColumn.class, constraints) ||
+				hasConstraint(triple.getObject(), NodeInterpretation.TypeTable.class, constraints) ||
+				hasConstraint(triple.getObject(), NodeInterpretation.SlotValue.class, constraints) ){
 			return new NodeInterpretation.ContainerRow(subject, triple);
 		}
 
@@ -146,14 +159,14 @@ public class BGPConstraints {
 		}
 	}
 
-	private NodeInterpretation constrainObject(Node object, Triple triple) throws InconsistentEntityException {
+	private NodeInterpretation constrainObject(Node object, Triple triple, Map<Node,NodeInterpretation> constraints) throws InconsistentEntityException {
 		// SlotValue(O) <- SlotColumn(P)
-		if(hasConstraint(triple.getPredicate(), NodeInterpretation.SlotColumn.class) ){
+		if(hasConstraint(triple.getPredicate(), NodeInterpretation.SlotColumn.class, constraints) ){
 			return new NodeInterpretation.SlotValue(object, triple);
 		}
 
 		// ContainerRow(O) <- SlotRow(P)
-		if(hasConstraint(triple.getPredicate(), NodeInterpretation.SlotRow.class) ){
+		if(hasConstraint(triple.getPredicate(), NodeInterpretation.SlotRow.class, constraints) ){
 			return new NodeInterpretation.ContainerRow(object, triple);
 		}
 
@@ -177,18 +190,18 @@ public class BGPConstraints {
 		throw new InconsistentEntityException(object, "Object cannot be of this type");
 	}
 
-	private NodeInterpretation constrainPredicate(Node predicate, Triple triple) throws InconsistentAssumptionException {
+	private NodeInterpretation constrainPredicate(Node predicate, Triple triple, Map<Node,NodeInterpretation> constraints) throws InconsistentAssumptionException {
 		// SlotColumn(P) <- SlotValue(O)
-		if(hasConstraint(triple.getObject(), NodeInterpretation.SlotValue.class) ){
+		if(hasConstraint(triple.getObject(), NodeInterpretation.SlotValue.class, constraints) ){
 			return new NodeInterpretation.SlotColumn(predicate, triple);
 		}
 		// TypeProperty(P) <- TypeTable(O)
-		if(hasConstraint(triple.getObject(), NodeInterpretation.TypeTable.class) ||
-				hasConstraint(triple.getObject(), NodeInterpretation.FXRoot.class)){
+		if(hasConstraint(triple.getObject(), NodeInterpretation.TypeTable.class, constraints) ||
+				hasConstraint(triple.getObject(), NodeInterpretation.FXRoot.class, constraints)){
 			return new NodeInterpretation.TypeProperty(triple);
 		}
 		// SlotRow(P) <- ContainerRow(O)
-		if(hasConstraint(triple.getObject(), NodeInterpretation.ContainerRow.class) ){
+		if(hasConstraint(triple.getObject(), NodeInterpretation.ContainerRow.class, constraints) ){
 			return new NodeInterpretation.SlotRow(predicate, triple);
 		}
 
@@ -220,7 +233,7 @@ public class BGPConstraints {
 	 * @return
 	 * @throws InconsistentAssumptionException
 	 */
-	private boolean updateConstraints(Node node, NodeInterpretation constraint) throws InconsistentAssumptionException {
+	private boolean updateConstraints(Node node, NodeInterpretation constraint, Map<Node,NodeInterpretation> constraints) throws InconsistentAssumptionException {
 		NodeInterpretation previous = null;
 		// Check if node was observed before
 		if(constraints.containsKey(node)){
@@ -233,8 +246,8 @@ public class BGPConstraints {
 			Class<? extends NodeInterpretation> isType = constraint.type();
 			// If previous Interpretation exist, check consistency:
 			// If new interpretation is inconsistent with old one, throw an exception
-			if(previous.inconsistentTypes().contains(constraint.type()) ||
-					constraint.inconsistentTypes().contains(previous.type())){
+			if(previous.inconsistentWith().contains(constraint.type()) ||
+					constraint.inconsistentWith().contains(previous.type())){
 //				//
 //				Set<?> s1 = previous.inconsistentTypes();
 //				Set<?> s2 = constraint.inconsistentTypes();
@@ -252,10 +265,10 @@ public class BGPConstraints {
 			} else {
 				// Types are not the same, check if they are specialisations of one another
 				// 2) either or specialises the other (e.g. Subject > Container > ContainerTable), keep the more specialised and remove the more general
-				if(previous.specialisationOfTypes().contains(isType)){
+				if(previous.specialisationOf().contains(isType)){
 					// keep old type
 					return false;
-				} else if(constraint.specialisationOfTypes().contains(wasType)){
+				} else if(constraint.specialisationOf().contains(wasType)){
 					// keep new type
 					constraints.put(node, constraint);
 					return true;

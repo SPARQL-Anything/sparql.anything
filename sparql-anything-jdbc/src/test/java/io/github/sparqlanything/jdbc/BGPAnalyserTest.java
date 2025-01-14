@@ -51,7 +51,8 @@ import java.util.Set;
 
 public class BGPAnalyserTest {
 	final protected static Logger L = LoggerFactory.getLogger(BGPAnalyserTest.class);
-	protected BGPConstraints constraints = null;
+	protected RDBInferenceRules rules = null;
+	protected Map<Node,NodeInterpretation> constraints = null;
 
 	protected BGPAnalyser analyser = null;
 	protected BGPInterpretation initialInterpretation = null;
@@ -69,9 +70,9 @@ public class BGPAnalyserTest {
 		properties();
 	}
 
-	protected Map<Node, NodeInterpretation> constraints(){
-		return Collections.unmodifiableMap(constraints.interpretations());
-	}
+//	protected Map<Node, NodeInterpretation> constraints(){
+//		return Collections.unmodifiableMap(constraints.interpretations());
+//	}
 
 	protected BasicPattern bp(){
 		return bp;
@@ -84,10 +85,18 @@ public class BGPAnalyserTest {
 
 	protected void analyseConstraints(){
 		OpBGP op = new OpBGP(bp);
-		analyser = new BGPAnalyser(properties, op);
-		boolean canResolve = analyser.getConstraints().isException();
-		constraints = analyser.getConstraints();
+		RDBInferenceRules rules = new RDBInferenceRules(new Translation(this.properties));
+//		analyser = new BGPAnalyser(properties, op, constraints);
+		//boolean canResolve = analyser.getConstraints().isException();
+//		constraints = analyser.traverse(constraints);
+		try {
+			constraints = rules.run(op);
+		} catch (InconsistentAssumptionException e) {
+			L.error("",e);
+			constraints = Collections.emptyMap();
+		}
 	}
+
 
 	protected void generateInterpretations(){
 		initialInterpretation = new BGPInterpretation(constraints);
@@ -118,11 +127,11 @@ public class BGPAnalyserTest {
 	}
 
 	private boolean has(Node n){
-		return constraints().containsKey(n);
+		return constraints.containsKey(n);
 	}
 
 	private boolean isA(Node n, Class<?> cz){
-		return  constraints().get(n).type().equals(cz);
+		return  constraints.get(n).type().equals(cz);
 	}
 	private void add(Triple t){
 		bp.add(t);
@@ -363,8 +372,12 @@ public class BGPAnalyserTest {
 		showConstraints();
 	}
 
-	public void showConstraints(){
-		show(constraints.interpretations());
+	public void showConstraints() {
+		try {
+			show(rules.run(new OpBGP(bp)));
+		} catch (InconsistentAssumptionException e) {
+			L.error("",e);
+		}
 	}
 	public void showInterpretations(){
 		StringBuilder b = new StringBuilder();
@@ -435,8 +448,9 @@ public class BGPAnalyserTest {
 			possible.putAll(initialInterpretation.signature());
 			possible.put(ii.getLeft(),ii.getRight());
 			try{
-				BGPConstraints constrained = new BGPConstraints(analyser.getTranslation(), analyser.getOp(), possible);
-				BGPInterpretation next = new BGPInterpretation(initialInterpretation, constrained.interpretations());
+				//RDBInferenceRules constrained = new RDBInferenceRules(analyser.getTranslation(), possible);
+				Map<Node, NodeInterpretation> newInterpretations = rules.run(analyser.getOp());
+				BGPInterpretation next = new BGPInterpretation(initialInterpretation, newInterpretations);
 				nexts.add(next);
 			}catch(Exception e){
 				L.trace("Ignore invalid combination");

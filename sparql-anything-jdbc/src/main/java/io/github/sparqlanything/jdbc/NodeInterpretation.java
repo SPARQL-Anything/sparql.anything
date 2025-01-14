@@ -17,6 +17,7 @@
 
 package io.github.sparqlanything.jdbc;
 
+import io.github.sparqlanything.fxbgp.InterpretationOfNode;
 import io.github.sparqlanything.model.Triplifier;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -35,11 +36,12 @@ import java.util.Set;
 
 /**
  * TODO Refactoring needed
+ * - Create interface
  * - inconsistentTypes -> inconsistentWith
  * - specialisationOfTypes -> specialisationOf
- * - InterpretationXYZ -> IsInterpretationXYZ
+ * - InterpretationXYZ -> AsInterpretationXYZ
  */
-public class NodeInterpretation {
+public class NodeInterpretation implements InterpretationOfNode {
 	private Set<Triple> triples;
 	private Node node;
 
@@ -54,10 +56,12 @@ public class NodeInterpretation {
 		}
 	}
 
-	public Set<Class<? extends NodeInterpretation>> inconsistentTypes(){
+	@Override
+	public Set<Class<? extends NodeInterpretation>> inconsistentWith(){
 		return Collections.emptySet();
 	}
-	public Set<Class<? extends NodeInterpretation>> specialisationOfTypes(){
+	@Override
+	public Set<Class<? extends NodeInterpretation>> specialisationOf(){
 		return Collections.emptySet();
 	}
 	public Class<? extends NodeInterpretation> type(){
@@ -78,7 +82,7 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
@@ -89,7 +93,7 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(Subject.class, Object.class);
 		}
 	}
@@ -99,7 +103,7 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
@@ -110,12 +114,12 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(Subject.class, Object.class, SlotValue.class, SlotColumn.class, SlotRow.class, TypeTable.class, ContainerRow.class, ContainerTable.class);
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
@@ -126,12 +130,12 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(SlotValue.class, SlotColumn.class, SlotRow.class, ContainerRow.class, ContainerTable.class);
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			return ImmutableSet.of(Object.class);
 		}
 	}
@@ -145,12 +149,12 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(Predicate.class, SlotRow.class, SlotColumn.class, SlotValue.class, ContainerTable.class );
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			return ImmutableSet.of(Subject.class, Object.class);
 		}
 	}
@@ -161,12 +165,12 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(ContainerRow.class, Predicate.class, Object.class, Predicate.class, SlotRow.class, SlotColumn.class, SlotValue.class);
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			return ImmutableSet.of(Subject.class);
 		}
 	}
@@ -177,12 +181,12 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(SlotValue.class, ContainerRow.class, TypeProperty.class, Subject.class, Object.class, ContainerTable.class, SlotColumn.class);
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			return ImmutableSet.of(Predicate.class);
 		}
 
@@ -194,12 +198,12 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(SlotRow.class,SlotValue.class, ContainerRow.class, TypeProperty.class, Subject.class, Object.class, ContainerTable.class );
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			return ImmutableSet.of(Predicate.class);
 		}
 	}
@@ -209,12 +213,12 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(SlotRow.class,SlotColumn.class, ContainerRow.class, TypeProperty.class, Subject.class, ContainerTable.class );
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			return ImmutableSet.of(Object.class);
 		}
 	}
@@ -225,12 +229,12 @@ public class NodeInterpretation {
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			return ImmutableSet.of(SlotValue.class, SlotRow.class,SlotColumn.class, ContainerRow.class, TypeProperty.class, Predicate.class, Subject.class, ContainerTable.class );
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			return ImmutableSet.of(Object.class);
 		}
 	}
@@ -253,18 +257,18 @@ public class NodeInterpretation {
 			return type;
 		}
 		@Override
-		public Set<Class<? extends NodeInterpretation>> inconsistentTypes() {
+		public Set<Class<? extends NodeInterpretation>> inconsistentWith() {
 			Set<Class<? extends NodeInterpretation>> types = new HashSet<>();
 			for(NodeInterpretation j : joined)
-				types.addAll(j.inconsistentTypes());
+				types.addAll(j.inconsistentWith());
 			return ImmutableSet.copyOf(types);
 		}
 
 		@Override
-		public Set<Class<? extends NodeInterpretation>> specialisationOfTypes() {
+		public Set<Class<? extends NodeInterpretation>> specialisationOf() {
 			Set<Class<? extends NodeInterpretation>> s = new HashSet<>();
 			for(NodeInterpretation a:joined)
-				s.addAll(a.specialisationOfTypes());
+				s.addAll(a.specialisationOf());
 			return Collections.unmodifiableSet(s);
 		}
 
@@ -281,6 +285,7 @@ public class NodeInterpretation {
 		}
 	}
 
+	// TODO Move this within BGPContraints
 	public static Join makeJoin(NodeInterpretation assumption1, NodeInterpretation assumption2) throws InconsistentJoinException {
 
 		// Nodes must be the same
@@ -296,7 +301,7 @@ public class NodeInterpretation {
 			// Override type
 			// Set the appropriate type
 			Map<Set<?>,Class<? extends NodeInterpretation>> m = new HashMap<>();
-			// TODO Rewrite this to just traverse the interpretation class so we don't have to duplicate information that we can infer from the class multi-hierarchy (specialisesInterpretationClass)
+			// TODO rewrite this as inference rules
 			// Subject , Object = ContainerRow
 			// ContainerRow , Object = ContainerRow
 			// ContainerRow , Subject = ContainerRow
@@ -321,6 +326,7 @@ public class NodeInterpretation {
 			if(m.containsKey(key)){
 				cls = m.get(key);
 			}
+
 		}
 		if(cls == null){
 			// last check, cannot mix types

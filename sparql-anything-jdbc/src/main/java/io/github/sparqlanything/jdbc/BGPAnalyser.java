@@ -17,9 +17,7 @@
 
 package io.github.sparqlanything.jdbc;
 
-import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jena.atlas.lib.CollectionUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
@@ -29,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -43,28 +40,28 @@ public class BGPAnalyser {
 	private Properties properties;
 //	private String namesNamespace;
 	private OpBGP opBGP;
-	private Translation translation;
+//	private Translation translation;
 
-	private BGPConstraints constraints = null;
+	private RDBInferenceRules constraints = null;
 	private Set<BGPInterpretation> interpretations = null;
 	private InconsistentAssumptionException exception;
 
-	public BGPAnalyser(Properties properties, OpBGP opBGP){
+	public BGPAnalyser(Properties properties, OpBGP opBGP, RDBInferenceRules constraints){
 		this.properties = properties;
 		this.opBGP = opBGP;
-		this.translation = new Translation(this.properties);
-		this.constraints = new BGPConstraints(translation, opBGP);
-		this.interpretations = traverse(this.constraints);
+//		this.translation = new Translation(this.properties);
+		this.constraints = constraints;
+		this.interpretations = traverse();
 	}
 
-	public Translation getTranslation(){
-		return translation;
-	}
+//	public Translation getTranslation(){
+//		return translation;
+//	}
 	public OpBGP getOp(){
 		return opBGP;
 	}
 
-	public BGPConstraints getConstraints(){
+	public RDBInferenceRules getConstraints(){
 		return constraints;
 	}
 
@@ -97,8 +94,15 @@ public class BGPAnalyser {
 		return expansion;
 	}
 
-	public Set<BGPInterpretation> traverse(BGPConstraints constraints) {
-		BGPInterpretation start = new BGPInterpretation(constraints);
+	// TODO check maybe make private
+	public Set<BGPInterpretation> traverse() {
+		Map<Node,NodeInterpretation> interpretations = null;
+		try {
+			interpretations = this.constraints.run(this.opBGP);
+		} catch (InconsistentAssumptionException e) {
+			interpretations = Collections.emptyMap();
+		}
+		BGPInterpretation start = new BGPInterpretation(interpretations);
 		return traverse(start);
 	}
 
@@ -110,9 +114,16 @@ public class BGPAnalyser {
 			Map<Node,NodeInterpretation> possible = new HashMap<>();
 			possible.putAll(interpretation.signature());
 			possible.put(ii.getLeft(),ii.getRight());
-			BGPConstraints constrained = new BGPConstraints(translation, opBGP, possible);
-			if(!constrained.isException()) {
-				BGPInterpretation next = new BGPInterpretation(interpretation, constrained.interpretations());
+			//RDBInferenceRules constrained = new RDBInferenceRules(translation, opBGP, possible);
+			Map<Node,NodeInterpretation> constrained = null;
+			InconsistentAssumptionException failed = null;
+			try {
+				constrained = constraints.run(opBGP, possible);
+			} catch (InconsistentAssumptionException e) {
+				failed = e;
+			}
+			if(failed == null) {
+				BGPInterpretation next = new BGPInterpretation(interpretation, constrained);
 				nexts.add(next);
 			}
 		}
