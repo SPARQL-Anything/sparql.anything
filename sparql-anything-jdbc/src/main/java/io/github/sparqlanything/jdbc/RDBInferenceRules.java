@@ -210,7 +210,7 @@ public class RDBInferenceRules implements InferenceRules {
 				// SlotRow(P) <- CMP(P)
 				return new NodeInterpretation.SlotRow(predicate, triple);
 			}else if(translation.nodeSlotIsColumn(predicate)){
-				// SlotColumn(P) <- URI(fx:*)
+				// SlotColumn(P) <- URI(xyz:*)
 				return new NodeInterpretation.SlotColumn(predicate, triple);
 			}else if(translation.nodeSlotIsTypeProperty(predicate)){
 				// TypeProperty(P) <- URI(rdf:type)
