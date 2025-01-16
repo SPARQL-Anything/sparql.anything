@@ -9,13 +9,13 @@ import java.util.Set;
 public class FXModel {
 	private static FXModel instance = null;
 	private Set<FX> elements;
-	private Map<FX,Set<FX>> specialisesAs;
+	private Map<FX,Set<FX>> specialisedBy;
 	private Map<FX,Set<FX>> specialisationOf;
 	private Map<FX,Set<FX>> inconsistentWith;
 
 	FXModel(){
 		elements = new HashSet<>();
-		specialisesAs = new HashMap<>();
+		specialisedBy = new HashMap<>();
 		specialisationOf = new HashMap<>();
 		inconsistentWith = new HashMap<>();
 		init();
@@ -28,8 +28,8 @@ public class FXModel {
 	 * @return
 	 */
 	private boolean add(FX element){
-		if(!specialisesAs.containsKey(element)){
-			specialisesAs.put(element, new HashSet<>());
+		if(!specialisedBy.containsKey(element)){
+			specialisedBy.put(element, new HashSet<>());
 		}
 		if(!specialisationOf.containsKey(element)){
 			specialisationOf.put(element, new HashSet<>());
@@ -40,25 +40,25 @@ public class FXModel {
 		return this.elements.add(element);
 	}
 
-	protected void specialisesAs(FX thiss, FX thatt){
+	protected void setSpecialisedBy(FX thiss, FX thatt){
 		add(thiss);
 		add(thatt);
-		boolean newlyAdded = specialisesAs.get(thiss).add(thatt);
+		boolean newlyAdded = specialisedBy.get(thiss).add(thatt);
 		if(newlyAdded){
-			specialisationOf(thatt, thiss);
+			setSpecialisationOf(thatt, thiss);
 		}
 	}
 
-	protected void specialisationOf(FX thiss, FX thatt){
+	protected void setSpecialisationOf(FX thiss, FX thatt){
 		add(thiss);
 		add(thatt);
 		boolean newlyAdded = specialisationOf.get(thiss).add(thatt);
 		if(newlyAdded){
-			specialisesAs(thatt, thiss);
+			setSpecialisedBy(thatt, thiss);
 		}
 	}
 
-	protected void inconsistentWith(FX thiss, FX... thatt){
+	protected void getInconsistentWith(FX thiss, FX... thatt){
 		add(thiss);
 		for(FX th : thatt){
 			add(th);
@@ -71,21 +71,21 @@ public class FXModel {
 		return this.elements.contains(element);
 	}
 
-	public Set<FX> specialisesAs(FX element){
-		if(!specialisesAs.containsKey(element)){
+	public Set<FX> getSpecialisedBy(FX element){
+		if(!specialisedBy.containsKey(element)){
 			return Collections.emptySet();
 		}
-		return Collections.unmodifiableSet(specialisesAs.get(element));
+		return Collections.unmodifiableSet(specialisedBy.get(element));
 	}
 
-	public Set<FX> specialisationOf(FX element){
+	public Set<FX> getSpecialisationsOf(FX element){
 		if(!specialisationOf.containsKey(element)){
 			return Collections.emptySet();
 		}
 		return Collections.unmodifiableSet(specialisationOf.get(element));
 	}
 
-	public Set<FX> inconsistentWith(FX element){
+	public Set<FX> getInconsistentWith(FX element){
 		if(!inconsistentWith.containsKey(element)){
 			return Collections.emptySet();
 		}
@@ -95,7 +95,16 @@ public class FXModel {
 	public boolean inconsistent(FX el1, FX el2){
 		return inconsistentWith.get(el1).contains(el2);
 	}
+	public boolean isSpecialisedBy(FX thiss, FX thatt){
+		return specialisedBy.get(thiss).contains(thatt);
+	}
+	public boolean isSpecialisationOf(FX thiss, FX thatt){
+		return specialisedBy.get(thatt).contains(thiss);
+	}
 
+	public boolean consistent(FX el1, FX el2){
+		return !specialisedBy.get(el1).contains(el2);
+	}
 
 	private void init(){
 		// Add Elements
@@ -112,27 +121,34 @@ public class FXModel {
 		add(FX.Root);
 
 		// Add consistency table
-		inconsistentWith(FX.Subject, FX.Predicate);
-		inconsistentWith(FX.Object, FX.Predicate);
-		inconsistentWith(FX.TypeProperty, FX.Subject, FX.Object, FX.Slot, FX.Type, FX.Container);
-		inconsistentWith(FX.Type, FX.Slot, FX.Container, FX.Value);
-		inconsistentWith(FX.Container, FX.Predicate, FX.Slot, FX.Value, FX.Type);
-		inconsistentWith(FX.Slot, FX.Type, FX.Subject, FX.Object);
-		inconsistentWith(FX.Value, FX.Predicate, FX.Subject, FX.Type, FX.Container);
-		inconsistentWith(FX.Root, FX.Slot, FX.Container, FX.Predicate, FX.Value);
-		inconsistentWith(FX.SlotNumber, FX.SlotString, FX.Subject, FX.Object);
-		inconsistentWith(FX.SlotString, FX.SlotNumber, FX.Subject, FX.Object);
+		getInconsistentWith(FX.Subject, FX.Predicate);
+		getInconsistentWith(FX.Object, FX.Predicate);
+		getInconsistentWith(FX.TypeProperty, FX.Subject, FX.Object, FX.Slot, FX.Type, FX.Container);
+		getInconsistentWith(FX.Type, FX.Slot, FX.Container, FX.Value);
+		getInconsistentWith(FX.Container, FX.Predicate, FX.Slot, FX.Value, FX.Type);
+		getInconsistentWith(FX.Slot, FX.Type, FX.Subject, FX.Object);
+		getInconsistentWith(FX.Value, FX.Predicate, FX.Subject, FX.Type, FX.Container);
+		getInconsistentWith(FX.Root, FX.Slot, FX.Container, FX.Predicate, FX.Value);
+		getInconsistentWith(FX.SlotNumber, FX.SlotString, FX.Subject, FX.Object);
+		getInconsistentWith(FX.SlotString, FX.SlotNumber, FX.Subject, FX.Object);
 
 		// Add hierarchy information
-		specialisesAs(FX.Subject, FX.Container);
-		specialisesAs(FX.Predicate, FX.Slot);
-		specialisesAs(FX.Predicate, FX.TypeProperty);
-		specialisesAs(FX.Object, FX.Container);
-		specialisesAs(FX.Object, FX.Value);
-		specialisesAs(FX.Object, FX.Type);
-		specialisesAs(FX.Object, FX.Root);
-		specialisesAs(FX.Slot, FX.SlotNumber);
-		specialisesAs(FX.Slot, FX.SlotString);
+		setSpecialisedBy(FX.Subject, FX.Container);
+		setSpecialisedBy(FX.Predicate, FX.Slot);
+		setSpecialisedBy(FX.Predicate, FX.TypeProperty);
+		setSpecialisedBy(FX.Object, FX.Container);
+		setSpecialisedBy(FX.Object, FX.Value);
+		setSpecialisedBy(FX.Object, FX.Type);
+		setSpecialisedBy(FX.Object, FX.Root);
+		setSpecialisedBy(FX.Slot, FX.SlotNumber);
+		setSpecialisedBy(FX.Slot, FX.SlotString);
+	}
+
+	/**
+	 * 	An element is grounded when no element specialises it.
+	 */
+	public boolean isGrounded(FX element){
+		return getSpecialisedBy(element).isEmpty();
 	}
 
 	protected void extend(){

@@ -22,6 +22,11 @@ public class FX {
 	}
 
 	@Override
+	public String toString() {
+		return super.getClass().getCanonicalName() + "/" + getName() + "@" + hashCode();
+	}
+
+	@Override
 	public int hashCode() {
 		return hashCode;
 	}
