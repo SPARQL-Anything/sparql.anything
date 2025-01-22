@@ -1,5 +1,10 @@
 package io.github.sparqlanything.fxbgp;
 
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.vocabulary.RDF;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,18 +13,31 @@ import java.util.Set;
 
 public class FXModel {
 	private static FXModel instance = null;
+
+	private InterpretationFactory IF = null;
 	private Set<FX> elements;
 	private Map<FX,Set<FX>> specialisedBy;
 	private Map<FX,Set<FX>> specialisationOf;
 	private Map<FX,Set<FX>> inconsistentWith;
+
+	private Set<InterpretationRule> inferenceRules;
+
+	// FIXME Use constant from model package
+	protected static final Node FXRoot = NodeFactory.createURI("http://sparql.xyz/facade-x/ns/Root");
 
 	FXModel(){
 		elements = new HashSet<>();
 		specialisedBy = new HashMap<>();
 		specialisationOf = new HashMap<>();
 		inconsistentWith = new HashMap<>();
+		inferenceRules = new HashSet<>();
+		IF = new InterpretationFactory(this);
 		init();
 		extend();
+	}
+
+	protected InterpretationFactory getIF(){
+		return IF;
 	}
 
 	/**
@@ -58,7 +76,7 @@ public class FXModel {
 		}
 	}
 
-	protected void getInconsistentWith(FX thiss, FX... thatt){
+	protected void setInconsistentWith(FX thiss, FX... thatt){
 		add(thiss);
 		for(FX th : thatt){
 			add(th);
@@ -67,6 +85,13 @@ public class FXModel {
 		}
 	}
 
+	protected void addInferenceRule(InterpretationRule rule){
+		inferenceRules.add(rule);
+	}
+
+	public Set<InterpretationRule> getInferenceRules(){
+		return Collections.unmodifiableSet(inferenceRules);
+	}
 	public boolean elementExists(FX element){
 		return this.elements.contains(element);
 	}
@@ -85,7 +110,7 @@ public class FXModel {
 		return Collections.unmodifiableSet(specialisationOf.get(element));
 	}
 
-	public Set<FX> getInconsistentWith(FX element){
+	public Set<FX> setInconsistentWith(FX element){
 		if(!inconsistentWith.containsKey(element)){
 			return Collections.emptySet();
 		}
@@ -121,16 +146,16 @@ public class FXModel {
 		add(FX.Root);
 
 		// Add consistency table
-		getInconsistentWith(FX.Subject, FX.Predicate);
-		getInconsistentWith(FX.Object, FX.Predicate);
-		getInconsistentWith(FX.TypeProperty, FX.Subject, FX.Object, FX.Slot, FX.Type, FX.Container);
-		getInconsistentWith(FX.Type, FX.Slot, FX.Container, FX.Value);
-		getInconsistentWith(FX.Container, FX.Predicate, FX.Slot, FX.Value, FX.Type);
-		getInconsistentWith(FX.Slot, FX.Type, FX.Subject, FX.Object);
-		getInconsistentWith(FX.Value, FX.Predicate, FX.Subject, FX.Type, FX.Container);
-		getInconsistentWith(FX.Root, FX.Slot, FX.Container, FX.Predicate, FX.Value);
-		getInconsistentWith(FX.SlotNumber, FX.SlotString, FX.Subject, FX.Object);
-		getInconsistentWith(FX.SlotString, FX.SlotNumber, FX.Subject, FX.Object);
+		setInconsistentWith(FX.Subject, FX.Predicate);
+		setInconsistentWith(FX.Object, FX.Predicate);
+		setInconsistentWith(FX.TypeProperty, FX.Subject, FX.Object, FX.Slot, FX.Type, FX.Container);
+		setInconsistentWith(FX.Type, FX.Slot, FX.Container, FX.Value);
+		setInconsistentWith(FX.Container, FX.Predicate, FX.Slot, FX.Value, FX.Type);
+		setInconsistentWith(FX.Slot, FX.Type, FX.Subject, FX.Object);
+		setInconsistentWith(FX.Value, FX.Predicate, FX.Subject, FX.Type, FX.Container);
+		setInconsistentWith(FX.Root, FX.Slot, FX.Container, FX.Predicate, FX.Value);
+		setInconsistentWith(FX.SlotNumber, FX.SlotString, FX.Subject, FX.Object);
+		setInconsistentWith(FX.SlotString, FX.SlotNumber, FX.Subject, FX.Object);
 
 		// Add hierarchy information
 		setSpecialisedBy(FX.Subject, FX.Container);
@@ -142,6 +167,136 @@ public class FXModel {
 		setSpecialisedBy(FX.Object, FX.Root);
 		setSpecialisedBy(FX.Slot, FX.SlotNumber);
 		setSpecialisedBy(FX.Slot, FX.SlotString);
+
+		// Add inference rules
+
+		// 1. If a Subject, then a Container
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node node, InterpretationOfBGP previous) {
+				for(Triple t: previous.getOpBGP().getPattern().getList()){
+					if(t.getSubject().equals(node)){
+						set(IF.make(previous.getOpBGP(), node, FX.Container));
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		// 2. If a Property and not a variable nor rdf:type, then a Slot
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				for(Triple t: p.getOpBGP().getPattern().getList()){
+					if(t.getPredicate().equals(n) &&
+						n.isConcrete() &&
+						!n.equals(RDF.type.asNode())){
+						set(IF.make(p.getOpBGP(), n, FX.Slot));
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+
+		// 3. If Object not Var and not fx:Root but Predicate rdf:type, then Type
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				for(Triple t: p.getOpBGP().getPattern().getList()){
+					if(t.getObject().equals(n) &&
+						n.isConcrete() &&
+						!n.equals(FXRoot) &&
+						t.getPredicate().equals(RDF.type.asNode())){
+						set(IF.make(p.getOpBGP(), n, FX.Type));
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		// 4. If Object is fx:Root, then Predicate is rdf:type
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				for(Triple t: p.getOpBGP().getPattern().getList()){
+					if(t.getPredicate().equals(n) &&
+						t.getObject().equals(FXRoot)){
+						set(IF.make(p.getOpBGP(), n, FX.TypeProperty));
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		// 5. If Predicate is Slot and is a CMP, then Predicate is SlotNumber
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				if(n.isConcrete() && p.getInterpretationOfNodes().containsKey(n)
+					&& p.getInterpretationOfNodes().get(n).getInterpretation().equals(FX.Slot)){
+					String prefix = "http://www.w3.org/1999/02/22-rdf-syntax-ns#_";
+					if(n.getURI().startsWith(prefix)){
+						set(IF.make(p.getOpBGP(), n, FX.SlotNumber));
+					}
+				}
+				return false;
+			}
+		});
+
+		// 6. If Predicate is Slot and is a CMP, then Predicate is SlotNumber
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				if(n.isConcrete() && p.getInterpretationOfNodes().containsKey(n)
+					&& p.getInterpretationOfNodes().get(n).getInterpretation().equals(FX.Slot)){
+					String prefix = "http://www.w3.org/1999/02/22-rdf-syntax-ns#_";
+					if(!n.getURI().startsWith(prefix)){
+						set(IF.make(p.getOpBGP(), n, FX.SlotString));
+					}
+				}
+				return false;
+			}
+		});
+
+		// 8. If Object is IRI and Predicate is Slot, then Object is Container
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				for(Triple t: p.getOpBGP().getPattern().getList()) {
+					if (t.getObject().equals(n) && n.isURI()) {
+						Node r = t.getPredicate();
+						if(r.isConcrete() && p.getInterpretationOfNodes().containsKey(r)
+							&& p.getInterpretationOfNodes().get(r).getInterpretation().equals(FX.Slot)) {
+							set(IF.make(p.getOpBGP(), n, FX.Container));
+						}
+					}
+				}
+				return false;
+			}
+		});
+
+		// 9. If Object is Value, then Predicate is Slot
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				for(Triple t: p.getOpBGP().getPattern().getList()) {
+					if (t.getPredicate().equals(n)){
+						// If object is value
+						Node o = t.getObject();
+						if(o.isConcrete() && p.getInterpretationOfNodes().containsKey(o)
+							&& p.getInterpretationOfNodes().get(o).getInterpretation().equals(FX.Value)) {
+							set(IF.make(p.getOpBGP(), n, FX.Slot));
+						}
+				}
+				}
+				return false;
+			}
+		});
 	}
 
 	/**
@@ -151,8 +306,10 @@ public class FXModel {
 		return getSpecialisedBy(element).isEmpty();
 	}
 
+	/**
+	 * The FX model can be extended.
+	 */
 	protected void extend(){
-
 	}
 
 	public static FXModel getFXModel(){
@@ -161,5 +318,7 @@ public class FXModel {
 		}
 		return instance;
 	}
-
+	public boolean isExtension(){
+		return !this.getClass().equals(FX.class);
+	}
 }

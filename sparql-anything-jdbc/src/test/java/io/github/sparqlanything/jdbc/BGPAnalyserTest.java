@@ -18,19 +18,15 @@
 package io.github.sparqlanything.jdbc;
 
 //import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
+import io.github.sparqlanything.fxbgp.BGPTestAbstract;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.op.OpBGP;
-import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -38,18 +34,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
-public class BGPAnalyserTest {
+public class BGPAnalyserTest extends BGPTestAbstract {
 	final protected static Logger L = LoggerFactory.getLogger(BGPAnalyserTest.class);
 	protected RDBInferenceRules rules = null;
 	protected Map<Node,NodeInterpretation> constraints = null;
@@ -57,26 +48,10 @@ public class BGPAnalyserTest {
 	protected BGPAnalyser analyser = null;
 	protected BGPInterpretation initialInterpretation = null;
 	protected Set<BGPInterpretation> interpretations = null;
-	protected Properties properties = null;
-	private BasicPattern bp = null;
+
 
 	@Rule
 	public TestName name = new TestName();
-
-	@Before
-	public void before(){
-		bp = new BasicPattern();
-		properties = new Properties();
-		properties();
-	}
-
-//	protected Map<Node, NodeInterpretation> constraints(){
-//		return Collections.unmodifiableMap(constraints.interpretations());
-//	}
-
-	protected BasicPattern bp(){
-		return bp;
-	}
 
 	protected void properties(){
 		properties.setProperty(JDBC.PROPERTY_NAMESPACE, "http://www.example.org/");
@@ -84,7 +59,7 @@ public class BGPAnalyserTest {
 	}
 
 	protected void analyseConstraints(){
-		OpBGP op = new OpBGP(bp);
+		OpBGP op = new OpBGP(bp());
 		rules = new RDBInferenceRules(new Translation(this.properties));
 		analyser = new BGPAnalyser(properties, op, rules);
 		try {
@@ -101,29 +76,6 @@ public class BGPAnalyserTest {
 		interpretations = analyser.getInterpretations();//traverse(initialInterpretation);
 	}
 
-	private Triple t(Node s, Node p, Node o){
-		return Triple.create(s,p,o);
-	}
-	private Node v(String v){
-		return NodeFactory.createVariable(v);
-	}
-
-	private Node u(String v){
-		return NodeFactory.createURI(v);
-	}
-
-	private Node b(String v){
-		return NodeFactory.createBlankNode(v);
-	}
-
-	private Node b(){
-		return NodeFactory.createBlankNode();
-	}
-
-	private Node l(Object o){
-		return ResourceFactory.createTypedLiteral(o).asNode();
-	}
-
 	private boolean has(Node n){
 		return constraints.containsKey(n);
 	}
@@ -132,76 +84,16 @@ public class BGPAnalyserTest {
 		return  constraints.get(n).type().equals(cz);
 	}
 	private void add(Triple t){
-		bp.add(t);
+		bp().add(t);
 	}
 
-	/**
-	 * Easybgp means 1 triple per line separated in SPARQL syntax, no dots between triples
-	 * @param easyBgpFile
-	 * @throws IOException
-	 */
-	private void readBGP(String easyBgpFile) throws IOException {
-		BasicPattern bp = new BasicPattern();
-//		L.info("{}", easyBgpFile);
-		URL url = getClass().getClassLoader().getResource("./" + easyBgpFile + ".easybgp");
-		L.trace("easy bgp: {}", url);
-		String sBGP =IOUtils.toString(url, StandardCharsets.UTF_8);
-//		L.trace("sBGP: {}", sBGP);
-		String[] lines = sBGP.split("\n");
-//		L.trace("lines: {} {}", lines,lines.length);
-		for(String line : lines){
-//			L.trace("line: {}", line);
-			List<Node> nodes = new ArrayList<Node>();
-			String[] tr = line.split(" ");
-			Triple t = null;
-			for (int c = 0; c<3; c++) {
-				if(tr[c].trim().startsWith("<")){
-					nodes.add(u(tr[c].trim().substring(1, tr[c].trim().length()-1)));
-				}else
-				if(tr[c].trim().startsWith("?")){
-					nodes.add(v(tr[c].trim().substring(1)));
-				}else
-				if(tr[c].trim().startsWith("_:")){
-					nodes.add(b(tr[c].trim().substring(2)));
-				}else
-				if(tr[c].trim().startsWith("\"")){
-					nodes.add(v(tr[c].trim().substring(1,tr[c].trim().length()-1)));
-				}else
-				if(tr[c].trim().equals("a")){
-					nodes.add(u(RDF.type.getURI()));
-				}else{
-					// other
-					nodes.add(v(tr[c].trim()));
-				}
-			}
-			t = Triple.create(nodes.get(0),
-				nodes.get(1),
-				nodes.get(2));
-			bp.add(t);
-		}
-		L.trace("BGP: \n{}\n",bp);
-		add(bp);
-	}
 
-	private void add(Node s, Node p, Node o){
-		bp.add(t(s,p,o));
-	}
-
-	private void add(BasicPattern bgp){
-		bp.addAll(bgp);
-	}
-
-	private void IsA(Node n, Class<?> cz){
+	protected void IsA(Node n, Class<?> cz){
 		Assert.assertTrue(isA(n,cz));
 	}
-	private void Has(Node n){
+	protected void Has(Node n){
 		Assert.assertTrue(has(n));
 	}
-
-	private Node xyz(String localName){
-		return NodeFactory.createURI(JDBC.getNamespace(properties) + localName);
-	}
-
 
 	@Test
 	public void var_var_var(){
@@ -372,7 +264,7 @@ public class BGPAnalyserTest {
 
 	public void showConstraints() {
 		try {
-			show(rules.run(new OpBGP(bp)));
+			show(rules.run(new OpBGP(bp())));
 		} catch (InconsistentAssumptionException e) {
 			L.error("",e);
 		}

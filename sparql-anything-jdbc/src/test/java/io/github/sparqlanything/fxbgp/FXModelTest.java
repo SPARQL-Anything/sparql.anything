@@ -1,5 +1,8 @@
 package io.github.sparqlanything.fxbgp;
 
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

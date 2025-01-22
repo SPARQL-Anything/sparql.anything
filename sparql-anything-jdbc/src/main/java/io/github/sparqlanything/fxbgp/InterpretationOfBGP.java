@@ -1,4 +1,18 @@
 package io.github.sparqlanything.fxbgp;
 
-public interface InterpretationOfBGP extends Interpretation{
+import org.apache.jena.graph.Node;
+
+import java.util.Map;
+import java.util.Set;
+
+public interface InterpretationOfBGP extends Interpretation {
+	Map<Node, InterpretationOfNode> getInterpretationOfNodes();
+
+	public boolean isGrounded();
+
+	public boolean isStart();
+
+	public InterpretationOfNode getInterpretation(Node node);
+
+	public InterpretationOfBGP previous();
 }

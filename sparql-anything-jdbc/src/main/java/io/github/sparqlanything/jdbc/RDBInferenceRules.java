@@ -17,7 +17,6 @@
 
 package io.github.sparqlanything.jdbc;
 
-import io.github.sparqlanything.fxbgp.InferenceRules;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -37,7 +36,7 @@ import java.util.Map;
  *
  * Returns a set of valid and new interpretations
  */
-public class RDBInferenceRules implements InferenceRules {
+public class RDBInferenceRules {
 	final static Logger L = LoggerFactory.getLogger(RDBInferenceRules.class);
 	private Map<Node, NodeInterpretation> initialConstraints = null;
 //	private OpBGP opBGP = null;

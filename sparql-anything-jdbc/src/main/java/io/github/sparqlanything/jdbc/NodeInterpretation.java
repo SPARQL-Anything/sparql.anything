@@ -41,7 +41,7 @@ import java.util.Set;
  * - specialisationOfTypes -> specialisationOf
  * - InterpretationXYZ -> AsInterpretationXYZ
  */
-public class NodeInterpretation implements InterpretationOfNode {
+public class NodeInterpretation {
 	private Set<Triple> triples;
 	private Node node;
 
@@ -56,11 +56,10 @@ public class NodeInterpretation implements InterpretationOfNode {
 		}
 	}
 
-	@Override
+
 	public Set<Class<? extends NodeInterpretation>> inconsistentWith(){
 		return Collections.emptySet();
 	}
-	@Override
 	public Set<Class<? extends NodeInterpretation>> specialisationOf(){
 		return Collections.emptySet();
 	}
