@@ -15,18 +15,18 @@ public class FXModel {
 	private static FXModel instance = null;
 
 	private InterpretationFactory IF = null;
-	private Set<FX> elements;
+	private Set<FX> terms;
 	private Map<FX,Set<FX>> specialisedBy;
 	private Map<FX,Set<FX>> specialisationOf;
 	private Map<FX,Set<FX>> inconsistentWith;
 
-	private Set<InterpretationRule> inferenceRules;
+	private Set<NodeInterpretationRule> inferenceRules;
 
 	// FIXME Use constant from model package
 	protected static final Node FXRoot = NodeFactory.createURI("http://sparql.xyz/facade-x/ns/Root");
 
 	FXModel(){
-		elements = new HashSet<>();
+		terms = new HashSet<>();
 		specialisedBy = new HashMap<>();
 		specialisationOf = new HashMap<>();
 		inconsistentWith = new HashMap<>();
@@ -55,7 +55,7 @@ public class FXModel {
 		if(!inconsistentWith.containsKey(element)){
 			inconsistentWith.put(element, new HashSet<>());
 		}
-		return this.elements.add(element);
+		return this.terms.add(element);
 	}
 
 	protected void setSpecialisedBy(FX thiss, FX thatt){
@@ -85,15 +85,15 @@ public class FXModel {
 		}
 	}
 
-	protected void addInferenceRule(InterpretationRule rule){
+	protected void addInferenceRule(NodeInterpretationRule rule){
 		inferenceRules.add(rule);
 	}
 
-	public Set<InterpretationRule> getInferenceRules(){
+	public Set<NodeInterpretationRule> getInferenceRules(){
 		return Collections.unmodifiableSet(inferenceRules);
 	}
 	public boolean elementExists(FX element){
-		return this.elements.contains(element);
+		return this.terms.contains(element);
 	}
 
 	public Set<FX> getSpecialisedBy(FX element){
@@ -128,7 +128,7 @@ public class FXModel {
 	}
 
 	public boolean consistent(FX el1, FX el2){
-		return !specialisedBy.get(el1).contains(el2);
+		return !inconsistent(el1,el2);
 	}
 
 	private void init(){
@@ -145,17 +145,17 @@ public class FXModel {
 		add(FX.Type);
 		add(FX.Root);
 
-		// Add consistency table
-		setInconsistentWith(FX.Subject, FX.Predicate);
-		setInconsistentWith(FX.Object, FX.Predicate);
-		setInconsistentWith(FX.TypeProperty, FX.Subject, FX.Object, FX.Slot, FX.Type, FX.Container);
-		setInconsistentWith(FX.Type, FX.Slot, FX.Container, FX.Value);
-		setInconsistentWith(FX.Container, FX.Predicate, FX.Slot, FX.Value, FX.Type);
-		setInconsistentWith(FX.Slot, FX.Type, FX.Subject, FX.Object);
-		setInconsistentWith(FX.Value, FX.Predicate, FX.Subject, FX.Type, FX.Container);
-		setInconsistentWith(FX.Root, FX.Slot, FX.Container, FX.Predicate, FX.Value);
-		setInconsistentWith(FX.SlotNumber, FX.SlotString, FX.Subject, FX.Object);
-		setInconsistentWith(FX.SlotString, FX.SlotNumber, FX.Subject, FX.Object);
+		// Add consistency table (full binary matrix)
+		setInconsistentWith(FX.Subject, FX.Predicate, FX.Slot, FX.SlotString, FX.SlotNumber, FX.Root, FX.Type, FX.TypeProperty);
+		setInconsistentWith(FX.Object, FX.Predicate, FX.Slot, FX.SlotString, FX.SlotNumber, FX.TypeProperty);
+		setInconsistentWith(FX.TypeProperty, FX.Subject, FX.Object, FX.Slot, FX.SlotString, FX.SlotNumber, FX.Type, FX.Container, FX.Root);
+		setInconsistentWith(FX.Type, FX.Slot, FX.SlotString, FX.SlotNumber, FX.Container, FX.Value, FX.Predicate, FX.Subject, FX.Value);
+		setInconsistentWith(FX.Container, FX.Predicate, FX.Slot, FX.SlotString, FX.SlotNumber, FX.TypeProperty, FX.Value, FX.Type, FX.Root);
+		setInconsistentWith(FX.Slot, FX.Subject, FX.Object, FX.TypeProperty, FX.Root,FX.Type, FX.Container, FX.Value);
+		setInconsistentWith(FX.Value, FX.Predicate, FX.Slot, FX.Subject, FX.Type, FX.Container, FX.Root, FX.SlotNumber, FX.SlotString, FX.TypeProperty);
+		setInconsistentWith(FX.Root, FX.Slot, FX.Container, FX.Predicate, FX.Value, FX.Type, FX.SlotNumber, FX.SlotString, FX.TypeProperty);
+		setInconsistentWith(FX.SlotNumber, FX.SlotString, FX.Subject, FX.Object, FX.Container, FX.Value, FX.Type, FX.TypeProperty, FX.Root);
+		setInconsistentWith(FX.SlotString, FX.SlotNumber, FX.Subject, FX.Object, FX.Container, FX.Value, FX.Type, FX.TypeProperty, FX.Root);
 
 		// Add hierarchy information
 		setSpecialisedBy(FX.Subject, FX.Container);
@@ -174,105 +174,123 @@ public class FXModel {
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node node, InterpretationOfBGP previous) {
-				for(Triple t: previous.getOpBGP().getPattern().getList()){
-					if(t.getSubject().equals(node)){
-						set(IF.make(previous.getOpBGP(), node, FX.Container));
-						return true;
+				if(previous.getInterpretation(node).getTerm().equals(FX.Subject)){
+					set(IF.make(previous.getOpBGP(), node, FX.Container));
+					return true;
+				}else{
+					// FIXME Inspect triples, in case there is a o-s join??
+				}
+
+				return false;
+			}
+		});
+
+		// 2. If node is fx:Root, then is Root
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node node, InterpretationOfBGP previous) {
+				if(node.equals(FXRoot)){
+					set(IF.make(previous.getOpBGP(), node, FX.Root));
+					return true;
+				}
+				return false;
+			}
+		});
+
+		// 3. If node is rdf:type, then is TypeProperty
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node node, InterpretationOfBGP previous) {
+				if(node.equals(RDF.type.asNode())){
+					set(IF.make(previous.getOpBGP(), node, FX.Root));
+					return true;
+				}
+				return false;
+			}
+		});
+
+		// 4. If a Property and not a variable nor rdf:type, then a Slot
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				if(n.isConcrete()) {
+					// Find if predicate
+					for(Triple t: p.getOpBGP().getPattern().getList()) {
+						if (n.equals(t.getPredicate()) && !n.equals(RDF.type.asNode())) {
+							set(IF.make(p.getOpBGP(), n, FX.Slot));
+							return true;
+						}
 					}
 				}
 				return false;
 			}
 		});
 
-		// 2. If a Property and not a variable nor rdf:type, then a Slot
+
+		// 5. If Object not Var and not fx:Root but Predicate rdf:type, then Type
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node n, InterpretationOfBGP p) {
-				for(Triple t: p.getOpBGP().getPattern().getList()){
-					if(t.getPredicate().equals(n) &&
-						n.isConcrete() &&
-						!n.equals(RDF.type.asNode())){
-						set(IF.make(p.getOpBGP(), n, FX.Slot));
-						return true;
+				if(n.isConcrete() && p.getInterpretation(n).getTerm().equals(FX.Object) && !n.equals(FXRoot) ){
+					// Find the predicate
+					for(Triple t: p.getOpBGP().getPattern().getList()){
+						if(t.getObject().equals(n) &&
+							t.getPredicate().equals(RDF.type.asNode())){
+							set(IF.make(p.getOpBGP(), n, FX.Type));
+							return true;
+						}
 					}
 				}
 				return false;
 			}
 		});
 
-
-		// 3. If Object not Var and not fx:Root but Predicate rdf:type, then Type
+		// 6. If Predicate is focus and Object is Root, then Predicate is TypeProperty
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node n, InterpretationOfBGP p) {
-				for(Triple t: p.getOpBGP().getPattern().getList()){
-					if(t.getObject().equals(n) &&
-						n.isConcrete() &&
-						!n.equals(FXRoot) &&
-						t.getPredicate().equals(RDF.type.asNode())){
-						set(IF.make(p.getOpBGP(), n, FX.Type));
-						return true;
-					}
-				}
-				return false;
-			}
-		});
-
-		// 4. If Object is fx:Root, then Predicate is rdf:type
-		addInferenceRule(new NodeInterpretationRule() {
-			@Override
-			boolean when(Node n, InterpretationOfBGP p) {
-				for(Triple t: p.getOpBGP().getPattern().getList()){
-					if(t.getPredicate().equals(n) &&
-						t.getObject().equals(FXRoot)){
+				// Find object
+				for (Triple t : p.getOpBGP().getPattern().getList()) {
+					if (t.getPredicate().equals(n) &&
+						p.getInterpretation(t.getObject()).getTerm().equals(FX.Root)) {
 						set(IF.make(p.getOpBGP(), n, FX.TypeProperty));
 						return true;
 					}
 				}
+
 				return false;
 			}
 		});
 
-		// 5. If Predicate is Slot and is a CMP, then Predicate is SlotNumber
+		// 7. If Predicate is focus and Object is Type, then Predicate is TypeProperty
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node n, InterpretationOfBGP p) {
-				if(n.isConcrete() && p.getInterpretationOfNodes().containsKey(n)
-					&& p.getInterpretationOfNodes().get(n).getInterpretation().equals(FX.Slot)){
-					String prefix = "http://www.w3.org/1999/02/22-rdf-syntax-ns#_";
-					if(n.getURI().startsWith(prefix)){
-						set(IF.make(p.getOpBGP(), n, FX.SlotNumber));
+				// Find object
+				for (Triple t : p.getOpBGP().getPattern().getList()) {
+					if (t.getPredicate().equals(n) &&
+						p.getInterpretation(t.getObject()).getTerm().equals(FX.Type)) {
+						set(IF.make(p.getOpBGP(), n, FX.TypeProperty));
+						return true;
 					}
 				}
+
 				return false;
 			}
 		});
 
-		// 6. If Predicate is Slot and is a CMP, then Predicate is SlotNumber
+		// 8. If Predicate is a CMP, then Predicate is SlotNumber
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node n, InterpretationOfBGP p) {
-				if(n.isConcrete() && p.getInterpretationOfNodes().containsKey(n)
-					&& p.getInterpretationOfNodes().get(n).getInterpretation().equals(FX.Slot)){
-					String prefix = "http://www.w3.org/1999/02/22-rdf-syntax-ns#_";
-					if(!n.getURI().startsWith(prefix)){
-						set(IF.make(p.getOpBGP(), n, FX.SlotString));
-					}
-				}
-				return false;
-			}
-		});
-
-		// 8. If Object is IRI and Predicate is Slot, then Object is Container
-		addInferenceRule(new NodeInterpretationRule() {
-			@Override
-			boolean when(Node n, InterpretationOfBGP p) {
-				for(Triple t: p.getOpBGP().getPattern().getList()) {
-					if (t.getObject().equals(n) && n.isURI()) {
-						Node r = t.getPredicate();
-						if(r.isConcrete() && p.getInterpretationOfNodes().containsKey(r)
-							&& p.getInterpretationOfNodes().get(r).getInterpretation().equals(FX.Slot)) {
-							set(IF.make(p.getOpBGP(), n, FX.Container));
+				String prefix = "http://www.w3.org/1999/02/22-rdf-syntax-ns#_";
+				if(n.isConcrete()){
+					for(Triple t: p.getOpBGP().getPattern().getList()) {
+						if (t.getPredicate().equals(n)) {
+							if (n.getURI().startsWith(prefix)) {
+								set(IF.make(p.getOpBGP(), n, FX.SlotNumber));
+								return true;
+							}
 						}
 					}
 				}
@@ -280,19 +298,90 @@ public class FXModel {
 			}
 		});
 
-		// 9. If Object is Value, then Predicate is Slot
+		// 9. If Predicate is not Var and not rdf:type and not a CMP, then is SlotString
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node n, InterpretationOfBGP p) {
-				for(Triple t: p.getOpBGP().getPattern().getList()) {
-					if (t.getPredicate().equals(n)){
+				String prefix = "http://www.w3.org/1999/02/22-rdf-syntax-ns#_";
+				if(n.isConcrete() && !n.equals(RDF.type.asNode())){
+					for(Triple t: p.getOpBGP().getPattern().getList()) {
+						if (t.getPredicate().equals(n)) {
+							if (!n.getURI().startsWith(prefix)) {
+								set(IF.make(p.getOpBGP(), n, FX.SlotString));
+								return true;
+							}
+						}
+					}
+				}
+				return false;
+			}
+		});
+
+		// 10. If Object is Literal, then is Value
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				if(n.isConcrete()
+					&& n.isLiteral()){
+						set(IF.make(p.getOpBGP(), n, FX.Value));
+						return true;
+				}
+				return false;
+			}
+		});
+
+		// 11. If Object is IRI and Predicate is Slot, then Object is Container
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				if(n.isURI() && p.getInterpretation(n).getTerm().equals(FX.Object)){
+					// Find predicate
+					for(Triple t: p.getOpBGP().getPattern().getList()) {
+						if (t.getObject().equals(n)) {
+							Node r = t.getPredicate();
+							if(p.getInterpretation(r).getTerm().equals(FX.Slot)) {
+								set(IF.make(p.getOpBGP(), n, FX.Container));
+								return true;
+							}
+						}
+					}
+				}
+				return false;
+			}
+		});
+
+		// 12. On focus node is Predicate position: and Object is Value, then Predicate is Slot
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				// Find object
+				for (Triple t : p.getOpBGP().getPattern().getList()) {
+					if (t.getPredicate().equals(n)) {
 						// If object is value
 						Node o = t.getObject();
-						if(o.isConcrete() && p.getInterpretationOfNodes().containsKey(o)
-							&& p.getInterpretationOfNodes().get(o).getInterpretation().equals(FX.Value)) {
+						if (p.getInterpretation(o).getTerm().equals(FX.Value)) {
 							set(IF.make(p.getOpBGP(), n, FX.Slot));
+							return true;
 						}
+					}
 				}
+				return false;
+			}
+		});
+		// 13. On focus node is Predicate position: and Object is Container, then Predicate is Slot
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			boolean when(Node n, InterpretationOfBGP p) {
+				// Find object
+				for (Triple t : p.getOpBGP().getPattern().getList()) {
+					if (t.getPredicate().equals(n)) {
+						// If object is value
+						Node o = t.getObject();
+						if (p.getInterpretation(o).getTerm().equals(FX.Container)) {
+							set(IF.make(p.getOpBGP(), n, FX.Slot));
+							return true;
+						}
+					}
 				}
 				return false;
 			}

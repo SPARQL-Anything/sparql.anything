@@ -1,13 +1,14 @@
 package io.github.sparqlanything.fxbgp;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class InterpretationFactory {
@@ -16,33 +17,7 @@ public class InterpretationFactory {
 		FXM = model;
 	}
 	public InterpretationOfNode make(final OpBGP bgp, final Node node, final FX element){
-		return new InterpretationOfNode() {
-
-			@Override
-			public boolean consistentWith(InterpretationOfNode node) {
-				return false;
-			}
-
-			@Override
-			public FX getInterpretation() {
-				return element;
-			}
-
-			@Override
-			public Node getNode() {
-				return node;
-			}
-
-			@Override
-			public boolean isGrounded() {
-				return FXM.isGrounded(element);
-			}
-
-			@Override
-			public OpBGP getOpBGP() {
-				return bgp;
-			}
-		};
+		return new OfNode(bgp,node,element);
 	}
 
 	/**
@@ -58,43 +33,15 @@ public class InterpretationFactory {
 	}
 
 	/**
-	 * This method generates a starting interpretation of a BGP
+	 * This method generates a starting interpretation of a BGP.
+	 * All nodes are interpreated as Subject, Predicate, or Object.
+	 *
 	 * @param bgp
 	 * @return
 	 */
 	public InterpretationOfBGP make(final OpBGP bgp){
 		final Map<Node,InterpretationOfNode> nodeInderpretations = new HashMap<>();
-		return new InterpretationOfBGP() {
-			@Override
-			public Map<Node,InterpretationOfNode>  getInterpretationOfNodes() {
-				return Collections.unmodifiableMap(nodeInderpretations);
-			}
-
-			@Override
-			public boolean isGrounded() {
-				return false;
-			}
-
-			@Override
-			public boolean isStart() {
-				return true;
-			}
-
-			@Override
-			public InterpretationOfNode getInterpretation(Node node) {
-				return nodeInderpretations.get(node);
-			}
-
-			@Override
-			public InterpretationOfBGP previous() {
-				return null;
-			}
-
-			@Override
-			public OpBGP getOpBGP() {
-				return bgp;
-			}
-		};
+		return new OfBGP(bgp);
 	}
 
 
@@ -111,50 +58,165 @@ public class InterpretationFactory {
 	 * @return
 	 */
 	public InterpretationOfBGP make(final InterpretationOfBGP previous, InterpretationOfNode newInterpretation){
+		return new OfBGP(previous, newInterpretation);
+	}
+
+	private class OfBGP implements InterpretationOfBGP {
 		final Map<Node,InterpretationOfNode> nodeInderpretations = new HashMap<>();
-		// Inherit all previous interpretations
-		nodeInderpretations.putAll(previous.getInterpretationOfNodes());
-		// ... except for this node
-		nodeInderpretations.put(newInterpretation.getNode(),newInterpretation);
-		// Compute if this is grounded
-		boolean isGrounded = true;
-		for(Map.Entry<Node,InterpretationOfNode> ion: nodeInderpretations.entrySet()){
-			if(!ion.getValue().isGrounded()){
-				isGrounded = false;
-				break;
+		boolean isGrounded = false;
+		InterpretationOfBGP previous = null;
+		private OpBGP bgp = null;
+		private int hashCode;
+		OfBGP(OpBGP bgp){
+			this.bgp = bgp;
+			for(Triple t: bgp.getPattern().getList()){
+				if(!nodeInderpretations.containsKey(t.getSubject())) {
+					nodeInderpretations.put(t.getSubject(), make(bgp, t.getSubject(), FX.Subject));
+				}
+				if(!nodeInderpretations.containsKey(t.getPredicate())) {
+					nodeInderpretations.put(t.getPredicate(), make(bgp, t.getPredicate(), FX.Predicate));
+				}
+				if(!nodeInderpretations.containsKey(t.getObject())) {
+					nodeInderpretations.put(t.getObject(), make(bgp, t.getObject(), FX.Object));
+				}
 			}
+			hashCode = Objects.hash(bgp,nodeInderpretations);
 		}
-		final Boolean grounded = isGrounded;
-		return new InterpretationOfBGP() {
-			@Override
-			public Map<Node,InterpretationOfNode>  getInterpretationOfNodes() {
-				return Collections.unmodifiableMap(nodeInderpretations);
+
+		OfBGP(final InterpretationOfBGP previous, InterpretationOfNode newInterpretation){
+			this.previous = previous;
+			this.bgp = previous.getOpBGP();
+			// Inherit all previous interpretations
+			nodeInderpretations.putAll(previous.getInterpretationOfNodes());
+			// ... except for this node
+			nodeInderpretations.put(newInterpretation.getNode(),newInterpretation);
+			// Compute if this is grounded
+			isGrounded = true;
+			for(Map.Entry<Node,InterpretationOfNode> ion: nodeInderpretations.entrySet()){
+				if(!ion.getValue().isGrounded()){
+					isGrounded = false;
+					break;
+				}
 			}
 
-			@Override
-			public boolean isGrounded() {
-				return grounded;
-			}
+			HashCodeBuilder hcb = new HashCodeBuilder();
+			hashCode = hcb.append(bgp).append(nodeInderpretations).toHashCode();
+		}
 
-			@Override
-			public boolean isStart() {
-				return false;
-			}
+		@Override
+		public Map<Node,InterpretationOfNode>  getInterpretationOfNodes() {
+			return Collections.unmodifiableMap(nodeInderpretations);
+		}
 
-			@Override
-			public InterpretationOfNode getInterpretation(Node node) {
-				return nodeInderpretations.get(node);
-			}
+		@Override
+		public boolean isGrounded() {
+			return isGrounded;
+		}
 
-			@Override
-			public InterpretationOfBGP previous() {
-				return previous;
-			}
+		@Override
+		public boolean isStart() {
+			return previous() == null;
+		}
 
-			@Override
-			public OpBGP getOpBGP() {
-				return previous().getOpBGP();
+		@Override
+		public InterpretationOfNode getInterpretation(Node node) {
+			return nodeInderpretations.get(node);
+		}
+
+		@Override
+		public InterpretationOfBGP previous() {
+			return previous;
+		}
+
+		@Override
+		public OpBGP getOpBGP() {
+			return bgp;
+		}
+
+		@Override
+		public Set<Node> nodes() {
+			return Collections.unmodifiableSet(nodeInderpretations.keySet());
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof InterpretationOfBGP){
+				boolean samebgp = ((InterpretationOfBGP)obj).getOpBGP().getPattern().equals(this.getOpBGP().getPattern());
+				boolean sameint = ((InterpretationOfBGP)obj).getInterpretationOfNodes().equals(this.getInterpretationOfNodes());
+				return sameint && samebgp;
 			}
-		};
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append(Integer.toString(hashCode())).append("@( ");
+			for(Triple t: getOpBGP().getPattern()){
+					sb.append(getInterpretation(t.getSubject()))
+					.append(getInterpretation(t.getPredicate()))
+					.append(getInterpretation(t.getObject())).append(" . ");
+			}
+			return sb.append(" ) ").toString();
+		}
+
+		@Override
+		public int hashCode() {
+			return hashCode;
+		}
+	}
+
+	private class OfNode implements InterpretationOfNode {
+		FX element;
+		Node node;
+		OpBGP bgp;
+		OfNode(OpBGP bgp, Node node, FX element){
+			this.node = node;
+			this.bgp = bgp;
+			this.element = element;
+		}
+		@Override
+		public boolean consistentWith(InterpretationOfNode node) {
+			return false;
+		}
+
+		@Override
+		public FX getTerm() {
+			return element;
+		}
+
+		@Override
+		public Node getNode() {
+			return node;
+		}
+
+		@Override
+		public boolean isGrounded() {
+			return FXM.isGrounded(element);
+		}
+
+		@Override
+		public OpBGP getOpBGP() {
+			return bgp;
+		}
+
+		@Override
+		public String toString() {
+			return "[" + node.toString() + " as " + element.getName() + "]";
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof OfNode){
+				OfNode on = (OfNode) obj;
+				return on.getNode().equals(getNode()) && on.getOpBGP().equals(getOpBGP()) && on.getTerm().equals(getTerm());
+			}
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(element, node, bgp);
+		}
 	}
 }

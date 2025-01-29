@@ -69,6 +69,7 @@ public class FXModelTest {
 	@Test
 	public void isSpecialisedBy_1(){
 		Assert.assertTrue(FXM.isSpecialisedBy(FX.Subject, FX.Container));
+		Assert.assertTrue(FXM.getSpecialisedBy(FX.Subject).contains(FX.Container));
 		Assert.assertTrue(FXM.isSpecialisedBy(FX.Object, FX.Container));
 		Assert.assertTrue(FXM.isSpecialisedBy(FX.Object, FX.Value));
 		Assert.assertTrue(FXM.isSpecialisedBy(FX.Object, FX.Type));

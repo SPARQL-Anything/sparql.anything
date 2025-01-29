@@ -30,7 +30,7 @@ public class InterpretationFactoryTest extends BGPTestAbstract {
 		Assert.assertTrue(ibgp.isStart());
 		Assert.assertFalse(ibgp.isGrounded());
 
-		Assert.assertTrue(ibgp.getInterpretationOfNodes().isEmpty());
+		Assert.assertTrue(ibgp.getInterpretationOfNodes().size() == 3);
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class InterpretationFactoryTest extends BGPTestAbstract {
 
 		Assert.assertTrue(ibgp.isStart());
 		Assert.assertFalse(ibgp.isGrounded());
-		Assert.assertTrue(ibgp.getInterpretationOfNodes().isEmpty());
+		Assert.assertTrue(ibgp.getInterpretationOfNodes().size() == 5);
 
 		// Let's interpret the first subject as a container
 		Node s = ibgp.getOpBGP().getPattern().getList().iterator().next().getSubject();
@@ -48,4 +48,41 @@ public class InterpretationFactoryTest extends BGPTestAbstract {
 		Assert.assertFalse(ibgp2.isStart());
 		Assert.assertEquals(ibgp, ibgp2.previous());
 	}
+
+
+	@Test
+	public void equalsOfBGP() throws IOException {
+		readBGP("IF1");
+		InterpretationOfBGP ibgp = IF.make(new OpBGP(bp()));
+		InterpretationOfBGP ibgp2 = IF.make(new OpBGP(bp()));
+		Assert.assertEquals(ibgp, ibgp2);
+	}
+
+
+	@Test
+	public void equalsOfNode() throws IOException {
+		readBGP("IF1");
+		InterpretationOfNode in = IF.make(new OpBGP(bp()), new OpBGP(bp()).getPattern().getList().get(0).getSubject(), FX.Container);
+		InterpretationOfNode in2 = IF.make(new OpBGP(bp()), new OpBGP(bp()).getPattern().getList().get(0).getSubject(), FX.Container);
+		Assert.assertEquals(in, in2);
+	}
+
+	@Test
+	public void hashcodeOfBGP() throws IOException {
+		readBGP("IF1");
+		InterpretationOfBGP ibgp = IF.make(new OpBGP(bp()));
+		InterpretationOfBGP ibgp2 = IF.make(new OpBGP(bp()));
+		Assert.assertEquals(ibgp.hashCode(), ibgp2.hashCode());
+	}
+
+
+	@Test
+	public void hashcodeOfNode() throws IOException {
+		readBGP("IF1");
+		InterpretationOfNode in = IF.make(new OpBGP(bp()), new OpBGP(bp()).getPattern().getList().get(0).getSubject(), FX.Container);
+		InterpretationOfNode in2 = IF.make(new OpBGP(bp()), new OpBGP(bp()).getPattern().getList().get(0).getSubject(), FX.Container);
+		Assert.assertEquals(in, in2);
+	}
+
+
 }

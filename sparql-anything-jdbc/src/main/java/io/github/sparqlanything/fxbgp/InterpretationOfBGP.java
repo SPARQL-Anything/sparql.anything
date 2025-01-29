@@ -15,4 +15,6 @@ public interface InterpretationOfBGP extends Interpretation {
 	public InterpretationOfNode getInterpretation(Node node);
 
 	public InterpretationOfBGP previous();
+
+	public Set<Node> nodes();
 }

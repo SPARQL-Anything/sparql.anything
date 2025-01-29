@@ -1,0 +1,4 @@
+?a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/data/MyType>
+?a <http://sparql.xyz/facade-x/data/field1> ?f
+?a <http://sparql.xyz/facade-x/data/field2> ?g
+?a <http://sparql.xyz/facade-x/data/field3> "Some data"
