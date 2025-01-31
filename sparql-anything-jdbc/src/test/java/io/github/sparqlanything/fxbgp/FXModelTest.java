@@ -52,9 +52,10 @@ public class FXModelTest {
 	public void consistency_3(){
 		Assert.assertFalse(FXM.inconsistent(FX.Container, FX.Subject));
 		Assert.assertFalse(FXM.inconsistent(FX.Container, FX.Object));
-		Assert.assertFalse(FXM.inconsistent(FX.Root, FX.Type));
 		Assert.assertFalse(FXM.inconsistent(FX.Slot, FX.SlotNumber));
 		Assert.assertFalse(FXM.inconsistent(FX.Slot, FX.SlotString));
+		// Instead...
+		Assert.assertTrue(FXM.inconsistent(FX.Root, FX.Type));
 	}
 
 	public void inconsistency_4(){

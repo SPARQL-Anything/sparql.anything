@@ -9,12 +9,19 @@ public abstract class NodeInterpretationRule implements InterpretationRule{
 	}
 	abstract boolean when(Node node, InterpretationOfBGP previous);
 	public InterpretationOfNode infer(){
-		return interpretation;
+		InterpretationOfNode toReturn = interpretation;
+		clean();
+		return toReturn;
+
 	}
 	public boolean resolved(){
 		return interpretation != null;
 	}
 	protected void set(InterpretationOfNode outcome){
 		this.interpretation = outcome;
+	}
+
+	private void clean(){
+		interpretation = null;
 	}
 }

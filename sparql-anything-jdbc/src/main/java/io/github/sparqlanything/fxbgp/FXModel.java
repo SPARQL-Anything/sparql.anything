@@ -1,9 +1,12 @@
 package io.github.sparqlanything.fxbgp;
 
+import io.github.sparqlanything.jdbc.NodeInterpretation;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.vocabulary.RDF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class FXModel {
+	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	private static FXModel instance = null;
 
 	private InterpretationFactory IF = null;
@@ -25,7 +29,7 @@ public class FXModel {
 	// FIXME Use constant from model package
 	protected static final Node FXRoot = NodeFactory.createURI("http://sparql.xyz/facade-x/ns/Root");
 
-	FXModel(){
+	protected FXModel(){
 		terms = new HashSet<>();
 		specialisedBy = new HashMap<>();
 		specialisationOf = new HashMap<>();
@@ -42,6 +46,9 @@ public class FXModel {
 
 	/**
 	 * returns true if element is new.
+	 * the method is private because extending FX requires
+	 * new terms to specialise existing ones
+	 *
 	 * @param element
 	 * @return
 	 */
@@ -96,6 +103,11 @@ public class FXModel {
 		return this.terms.contains(element);
 	}
 
+	/**
+	 * returns elements that are specialisations of the element given
+	 * @param element
+	 * @return
+	 */
 	public Set<FX> getSpecialisedBy(FX element){
 		if(!specialisedBy.containsKey(element)){
 			return Collections.emptySet();
@@ -149,7 +161,7 @@ public class FXModel {
 		setInconsistentWith(FX.Subject, FX.Predicate, FX.Slot, FX.SlotString, FX.SlotNumber, FX.Root, FX.Type, FX.TypeProperty);
 		setInconsistentWith(FX.Object, FX.Predicate, FX.Slot, FX.SlotString, FX.SlotNumber, FX.TypeProperty);
 		setInconsistentWith(FX.TypeProperty, FX.Subject, FX.Object, FX.Slot, FX.SlotString, FX.SlotNumber, FX.Type, FX.Container, FX.Root);
-		setInconsistentWith(FX.Type, FX.Slot, FX.SlotString, FX.SlotNumber, FX.Container, FX.Value, FX.Predicate, FX.Subject, FX.Value);
+		setInconsistentWith(FX.Type, FX.Slot, FX.SlotString, FX.SlotNumber, FX.Container, FX.Value, FX.Subject, FX.Value, FX.Root);
 		setInconsistentWith(FX.Container, FX.Predicate, FX.Slot, FX.SlotString, FX.SlotNumber, FX.TypeProperty, FX.Value, FX.Type, FX.Root);
 		setInconsistentWith(FX.Slot, FX.Subject, FX.Object, FX.TypeProperty, FX.Root,FX.Type, FX.Container, FX.Value);
 		setInconsistentWith(FX.Value, FX.Predicate, FX.Slot, FX.Subject, FX.Type, FX.Container, FX.Root, FX.SlotNumber, FX.SlotString, FX.TypeProperty);
@@ -174,13 +186,14 @@ public class FXModel {
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node node, InterpretationOfBGP previous) {
-				if(previous.getInterpretation(node).getTerm().equals(FX.Subject)){
-					set(IF.make(previous.getOpBGP(), node, FX.Container));
-					return true;
-				}else{
-					// FIXME Inspect triples, in case there is a o-s join??
+				for(Triple t: previous.getOpBGP().getPattern().getList()) {
+					if (
+						node.equals(t.getSubject())
+					) {
+						set(IF.make(previous.getOpBGP(), node, FX.Container));
+						return true;
+					}
 				}
-
 				return false;
 			}
 		});
@@ -202,7 +215,7 @@ public class FXModel {
 			@Override
 			boolean when(Node node, InterpretationOfBGP previous) {
 				if(node.equals(RDF.type.asNode())){
-					set(IF.make(previous.getOpBGP(), node, FX.Root));
+					set(IF.make(previous.getOpBGP(), node, FX.TypeProperty));
 					return true;
 				}
 				return false;
@@ -216,7 +229,10 @@ public class FXModel {
 				if(n.isConcrete()) {
 					// Find if predicate
 					for(Triple t: p.getOpBGP().getPattern().getList()) {
-						if (n.equals(t.getPredicate()) && !n.equals(RDF.type.asNode())) {
+						if (
+							n.equals(t.getPredicate()) &&
+								!n.equals(RDF.type.asNode())
+						) {
 							set(IF.make(p.getOpBGP(), n, FX.Slot));
 							return true;
 						}
@@ -231,7 +247,7 @@ public class FXModel {
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node n, InterpretationOfBGP p) {
-				if(n.isConcrete() && p.getInterpretation(n).getTerm().equals(FX.Object) && !n.equals(FXRoot) ){
+				if(n.isConcrete() && !n.equals(FXRoot) ){
 					// Find the predicate
 					for(Triple t: p.getOpBGP().getPattern().getList()){
 						if(t.getObject().equals(n) &&
@@ -334,7 +350,7 @@ public class FXModel {
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			boolean when(Node n, InterpretationOfBGP p) {
-				if(n.isURI() && p.getInterpretation(n).getTerm().equals(FX.Object)){
+				if(n.isURI()){
 					// Find predicate
 					for(Triple t: p.getOpBGP().getPattern().getList()) {
 						if (t.getObject().equals(n)) {
@@ -409,5 +425,54 @@ public class FXModel {
 	}
 	public boolean isExtension(){
 		return !this.getClass().equals(FX.class);
+	}
+
+	public Set<FX> groundedSpecialisations(FX term){
+		Set<FX> result = new HashSet<>();
+		for(FX f : getSpecialisedBy(term)){
+			if(isGrounded(f)){
+				result.add(f);
+			}else{
+				result.addAll(groundedSpecialisations(f));
+			}
+		}
+		return result;
+	}
+
+	public boolean isConsistent(InterpretationOfBGP nibgp){
+		// Make inferences
+		for(Node focus: nibgp.nodes()) {
+			// For each node, run inference rules
+			Set<NodeInterpretationRule> rules = this.getInferenceRules();
+			for(NodeInterpretationRule rule: rules){
+				// For each rule that resolves, check if interpretation is consistent
+				boolean resolves = rule.when(focus, nibgp);
+				if(resolves){
+					InterpretationOfNode nni = rule.infer();
+					// Is it redundant?
+					InterpretationOfNode prev = nibgp.getInterpretation(focus);
+					if(nni.equals(prev)){
+						// Ignore redundant inferences, move to the next rule
+						continue;
+					}
+					// Verify consistency with previous interpretation
+					if(this.consistent(nni.getTerm(),prev.getTerm())){
+						// Check next rule
+						continue;
+					}else{
+						// If it is not consistent, discard the current interpretation 'nibgp'
+						// It means that the hypothesised specialisation cannot be!
+						// And stop executing rules!
+						LOGGER.trace(" -- inconsistency -- {} % {} vs {}",focus, nni.getTerm(),prev.getTerm());
+						return false;
+						//break;
+					}
+				}
+			}
+			// If we arrived here, all rules inferences are plausible
+			// Check the next node
+			// End for each node
+		}
+		return true;
 	}
 }

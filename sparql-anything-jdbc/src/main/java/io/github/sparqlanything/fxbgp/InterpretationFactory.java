@@ -7,6 +7,7 @@ import org.apache.jena.sparql.algebra.op.OpBGP;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -61,6 +62,10 @@ public class InterpretationFactory {
 		return new OfBGP(previous, newInterpretation);
 	}
 
+	public InterpretationOfBGP make(OpBGP bgp, List<InterpretationOfNode> interpretations){
+		return new OfBGP(bgp, interpretations);
+	}
+
 	private class OfBGP implements InterpretationOfBGP {
 		final Map<Node,InterpretationOfNode> nodeInderpretations = new HashMap<>();
 		boolean isGrounded = false;
@@ -79,6 +84,18 @@ public class InterpretationFactory {
 				if(!nodeInderpretations.containsKey(t.getObject())) {
 					nodeInderpretations.put(t.getObject(), make(bgp, t.getObject(), FX.Object));
 				}
+			}
+			hashCode = Objects.hash(bgp,nodeInderpretations);
+		}
+
+		OfBGP(OpBGP bgp, List<InterpretationOfNode> nodeInderpretations){
+			this.bgp = bgp;
+			this.isGrounded = true;
+			for (InterpretationOfNode n: nodeInderpretations){
+				if(isGrounded && !n.isGrounded()){
+					this.isGrounded = false;
+				}
+				this.nodeInderpretations.put(n.getNode(),n);
 			}
 			hashCode = Objects.hash(bgp,nodeInderpretations);
 		}
