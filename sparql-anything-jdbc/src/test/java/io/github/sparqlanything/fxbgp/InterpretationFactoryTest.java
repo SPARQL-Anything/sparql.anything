@@ -16,10 +16,14 @@ public class InterpretationFactoryTest extends BGPTestAbstract {
 	@Rule
 	public TestName name = new TestName();
 
+	public InterpretationFactoryTest() {
+		super(FXModel.getFXModel());
+	}
+
 	@Override
 	public void before() {
 		super.before();
-		IF = new InterpretationFactory(new FXModel());
+		IF = IF();
 	}
 
 	@Test

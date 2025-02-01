@@ -18,7 +18,7 @@
 package io.github.sparqlanything.jdbc;
 
 import org.apache.jena.graph.Node;
-
+@Deprecated
 public class InconsistentEntityException extends InconsistentAssumptionException {
 	private Node node;
 	public InconsistentEntityException(Node node, String message){

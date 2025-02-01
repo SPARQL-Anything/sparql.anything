@@ -62,7 +62,7 @@ public class InterpretationFactory {
 		return new OfBGP(previous, newInterpretation);
 	}
 
-	public InterpretationOfBGP make(OpBGP bgp, List<InterpretationOfNode> interpretations){
+	public InterpretationOfBGP make(OpBGP bgp, Set<InterpretationOfNode> interpretations){
 		return new OfBGP(bgp, interpretations);
 	}
 
@@ -88,7 +88,7 @@ public class InterpretationFactory {
 			hashCode = Objects.hash(bgp,nodeInderpretations);
 		}
 
-		OfBGP(OpBGP bgp, List<InterpretationOfNode> nodeInderpretations){
+		OfBGP(OpBGP bgp, Set<InterpretationOfNode> nodeInderpretations){
 			this.bgp = bgp;
 			this.isGrounded = true;
 			for (InterpretationOfNode n: nodeInderpretations){

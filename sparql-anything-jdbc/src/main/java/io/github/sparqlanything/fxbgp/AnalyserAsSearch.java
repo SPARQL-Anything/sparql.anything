@@ -11,6 +11,10 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+/**
+ * This is very inefficient...
+ */
+@Deprecated
 public class AnalyserAsSearch implements Analyser {
 	private static final Logger L = LoggerFactory.getLogger(AnalyserAsSearch.class);
 	private FXModel FXM;

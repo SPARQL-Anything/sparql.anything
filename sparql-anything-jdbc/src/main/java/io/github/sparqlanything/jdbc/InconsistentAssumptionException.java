@@ -16,7 +16,7 @@
  */
 
 package io.github.sparqlanything.jdbc;
-
+@Deprecated
 public class InconsistentAssumptionException extends Exception {
 	public InconsistentAssumptionException(String message){
 		super(message);

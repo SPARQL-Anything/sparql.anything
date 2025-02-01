@@ -16,7 +16,7 @@
  */
 
 package io.github.sparqlanything.jdbc;
-
+@Deprecated
 public class InconsistentTypesException extends InconsistentAssumptionException {
 	Class<? extends NodeInterpretation> wasType;
 	Class<? extends NodeInterpretation> isType;

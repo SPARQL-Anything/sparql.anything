@@ -16,7 +16,7 @@
  */
 
 package io.github.sparqlanything.jdbc;
-
+@Deprecated
 public class InconsistentJoinException extends InconsistentAssumptionException {
 	public InconsistentJoinException(Object a, Object b){
 		super("Cannot join: " + a + " and " + b);

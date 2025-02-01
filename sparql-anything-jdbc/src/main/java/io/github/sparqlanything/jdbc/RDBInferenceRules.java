@@ -36,6 +36,7 @@ import java.util.Map;
  *
  * Returns a set of valid and new interpretations
  */
+@Deprecated
 public class RDBInferenceRules {
 	final static Logger L = LoggerFactory.getLogger(RDBInferenceRules.class);
 	private Map<Node, NodeInterpretation> initialConstraints = null;

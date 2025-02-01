@@ -7,7 +7,7 @@ public abstract class NodeInterpretationRule implements InterpretationRule{
 	private InterpretationOfNode interpretation = null;
 	protected NodeInterpretationRule(){
 	}
-	abstract boolean when(Node node, InterpretationOfBGP previous);
+	protected abstract boolean when(Node node, InterpretationOfBGP previous);
 	public InterpretationOfNode infer(){
 		InterpretationOfNode toReturn = interpretation;
 		clean();

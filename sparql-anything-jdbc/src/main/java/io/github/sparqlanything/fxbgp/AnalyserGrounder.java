@@ -17,6 +17,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+/**
+ * TODO maybe move this as a method of FXModel
+ */
 public class AnalyserGrounder implements Analyser {
 
 	private static final Logger L = LoggerFactory.getLogger(AnalyserGrounder.class);
@@ -87,7 +90,7 @@ public class AnalyserGrounder implements Analyser {
 		Set<InterpretationOfBGP> hypotheses = new HashSet<>();
 		for(List<InterpretationOfNode> list : output){
 			L.info(" -- hypothesis > {} -- ",  list);
-			hypotheses.add(FXM.getIF().make(bgp, list));
+			hypotheses.add(FXM.getIF().make(bgp, new HashSet<>(list)));
 		}
 		Set<InterpretationOfBGP> results = new HashSet<>();
 		// Check if any is consistent and discard the rest
@@ -98,10 +101,10 @@ public class AnalyserGrounder implements Analyser {
 				throw new RuntimeException(nibgp + " is not grounded!");
 			}
 			if(FXM.isConsistent(nibgp)){
-				L.info(" -- pass > {} -- ",  nibgp);
+				L.trace(" -- pass > {} -- ",  nibgp);
 				results.add(nibgp);
 			}else{
-				L.info(" -- fail > {} -- ",  nibgp);
+				L.trace(" -- fail > {} -- ",  nibgp);
 				// discard hypothesis
 			}
 			// End for each hypothesised specialisation

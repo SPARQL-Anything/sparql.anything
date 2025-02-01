@@ -2,12 +2,14 @@ package io.github.sparqlanything.fxbgp;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.Objects;
+
 public class FX {
 	int hashCode;
 	String name;
-	FX(String name){
+	protected FX(String name){
 		this.name = name;
-		this.hashCode = new HashCodeBuilder().append(name).hashCode();
+		this.hashCode = Objects.hash(getClass(), name);
 	}
 
 	public String getName(){
@@ -15,19 +17,19 @@ public class FX {
 	}
 
 	public boolean equals(Object obj) {
-		if(!(obj instanceof FX)){
+		if(!(obj instanceof FX) ){
 			return false;
 		}
 		return this.getName().equals(((FX)obj).getName());
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return super.getClass().getCanonicalName() + "/" + getName() + "@" + hashCode();
 	}
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		return hashCode;
 	}
 

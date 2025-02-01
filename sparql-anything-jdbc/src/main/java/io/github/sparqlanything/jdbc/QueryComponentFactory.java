@@ -119,11 +119,9 @@ public class QueryComponentFactory {
 	public static Condition condition(Column left, Column right){
 		return new Condition(left, right);
 	}
-
 	public static Condition condition(Column left, Value right){
 		return new Condition(left, right);
 	}
-
 	public static Projection projection(Column column){
 		return new Projection(column);
 	}

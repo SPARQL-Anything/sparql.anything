@@ -19,6 +19,7 @@ package io.github.sparqlanything.jdbc;
 
 //import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
 import io.github.sparqlanything.fxbgp.BGPTestAbstract;
+import io.github.sparqlanything.fxbgp.FXModel;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.lang3.tuple.Pair;
@@ -52,6 +53,11 @@ public class BGPAnalyserTest extends BGPTestAbstract {
 
 	@Rule
 	public TestName name = new TestName();
+
+	public BGPAnalyserTest() {
+		// FXIME We need to remove this anyway
+		super(null);
+	}
 
 	protected void properties(){
 		properties.setProperty(JDBC.PROPERTY_NAMESPACE, "http://www.example.org/");
@@ -93,16 +99,6 @@ public class BGPAnalyserTest extends BGPTestAbstract {
 	}
 	protected void Has(Node n){
 		Assert.assertTrue(has(n));
-	}
-
-	@Test
-	public void var_var_var(){
-		add(v("x"), v("p"), v("f"));
-		analyseConstraints();
-		IsA(v("x"), NodeInterpretation.Subject.class);
-		IsA(v("p"), NodeInterpretation.Predicate.class);
-		IsA(v("f"), NodeInterpretation.Object.class);
-		showConstraints();
 	}
 
 	@Test

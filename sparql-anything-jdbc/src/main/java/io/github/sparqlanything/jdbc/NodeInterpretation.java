@@ -35,12 +35,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * TODO Refactoring needed
  * - Create interface
  * - inconsistentTypes -> inconsistentWith
  * - specialisationOfTypes -> specialisationOf
  * - InterpretationXYZ -> AsInterpretationXYZ
  */
+@Deprecated
 public class NodeInterpretation {
 	private Set<Triple> triples;
 	private Node node;

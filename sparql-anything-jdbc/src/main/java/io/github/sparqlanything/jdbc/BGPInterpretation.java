@@ -31,6 +31,7 @@ import java.util.Set;
  * It may or may not be the final state (a complete interpretation)
  * It may be the initial state (no BGP node is being interpreted yet)
  */
+@Deprecated
 public class BGPInterpretation {
 	private int hashCode = -1;
 
