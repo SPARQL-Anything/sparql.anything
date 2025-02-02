@@ -102,16 +102,6 @@ public class BGPAnalyserTest extends BGPTestAbstract {
 	}
 
 	@Test
-	public void var_rdftype_var(){
-		add(v("x"), RDF.type.asNode(), v("f"));
-		analyseConstraints();
-		IsA(v("x"), NodeInterpretation.Subject.class);
-		IsA(RDF.type.asNode(), NodeInterpretation.TypeProperty.class);
-		IsA(v("f"), NodeInterpretation.Object.class);
-		showConstraints();
-	}
-
-	@Test
 	public void var_rdftype_table(){
 		// ?table a []
 		add(t(v("container"), RDF.type.asNode(), xyz("table")));

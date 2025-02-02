@@ -1,7 +1,5 @@
 package io.github.sparqlanything.fxbgp;
 
-import io.github.sparqlanything.fxrdb.FXRDBModel;
-import io.github.sparqlanything.jdbc.NodeInterpretation;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.vocabulary.RDF;
@@ -40,8 +38,8 @@ public class AnalyserTest extends BGPTestAbstract {
 		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
 		Assert.assertEquals(6,ibgps.size());
 		for(InterpretationOfBGP fi: ibgps){
-			L.error("{}",fi.toString());
-			//Assert.assertTrue(fi.isGrounded());
+			L.info("{}",fi.toString());
+			Assert.assertTrue(fi.isGrounded());
 		}
 	}
 
@@ -51,7 +49,7 @@ public class AnalyserTest extends BGPTestAbstract {
 		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
 		Assert.assertEquals(36,ibgps.size());
 		for(InterpretationOfBGP fi: ibgps){
-			L.error("{}",fi.toString());
+			L.info("AT2 -- {}",fi.toString());
 			Assert.assertTrue(fi.isGrounded());
 		}
 	}
@@ -60,9 +58,9 @@ public class AnalyserTest extends BGPTestAbstract {
 	public void AT3() throws IOException {
 		readBGP(name.getMethodName());
 		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		L.error("Size: {}",ibgps.size());
+		L.info("Size: {}",ibgps.size());
 		for(InterpretationOfBGP fi: ibgps){
-			L.error("{}",fi.toString());
+			L.info("{}",fi.toString());
 			Assert.assertTrue(fi.isGrounded());
 		}
 	}
@@ -78,7 +76,6 @@ public class AnalyserTest extends BGPTestAbstract {
 	public void NS2() throws IOException {
 		readBGP(name.getMethodName());
 		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		L.info("{}",ibgps);
 		Assert.assertEquals(0, ibgps.size());
 	}
 
@@ -106,18 +103,44 @@ public class AnalyserTest extends BGPTestAbstract {
 	}
 
 	@Test
-	public void BGP_X() throws IOException {
-		readBGP(name.getMethodName());
+	public void BGP_1_allGrounded() throws IOException {
+		readBGP("BGP_1");
 		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		L.error("size: {}",ibgps.size());
+		L.info("size: {}",ibgps.size());
 		//Assert.assertEquals(36,ibgps.size());
 		for(InterpretationOfBGP fi: ibgps){
-			L.error("{}",fi.toString());
+			L.info("{}",fi.toString());
 			Assert.assertTrue(fi.isGrounded());
 		}
 	}
 
-
+	@Test
+	public void BGP_2() throws IOException {
+		readBGP(name.getMethodName());
+		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
+		L.info("size: {}",ibgps.size());
+		Assert.assertEquals(2,ibgps.size());
+		InterpretationOfBGP i1 = make(
+			v("s"), FX.Container,
+			u("http://www.example.org/address"), FX.SlotString,
+			v("address"), FX.Container,
+			u("http://www.example.org/Person"), FX.Type,
+			RDF.type.asNode(), FX.TypeProperty,
+			u("http://www.example.org/id"), FX.SlotString,
+			v("addressId"), FX.Value
+		);
+		InterpretationOfBGP i2 = make(
+			v("s"), FX.Container,
+			u("http://www.example.org/address"), FX.SlotString,
+			v("address"), FX.Container,
+			u("http://www.example.org/Person"), FX.Type,
+			RDF.type.asNode(), FX.TypeProperty,
+			u("http://www.example.org/id"), FX.SlotString,
+			v("addressId"), FX.Container
+		);
+		Assert.assertTrue(ibgps.contains(i1));
+		Assert.assertTrue(ibgps.contains(i2));
+	}
 
 	@Test
 	public void var_var_var(){
@@ -173,5 +196,6 @@ public class AnalyserTest extends BGPTestAbstract {
 		// No other possible
 		Assert.assertTrue(ints.size() == 2);
 	}
+
 
 }

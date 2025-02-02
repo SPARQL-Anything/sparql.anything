@@ -45,11 +45,11 @@ public class AnalyserGrounder implements Analyser {
 
 		// Generate all possible grounded interpretations
 		Set<FX> subjectTerms = FXM.groundedSpecialisations(FX.Subject);
-		L.info("subject terms: {}", subjectTerms);
+		L.debug("subject terms: {}", subjectTerms);
 		Set<FX> predicateTerms = FXM.groundedSpecialisations(FX.Predicate);
-		L.info("predicate terms: {}", predicateTerms);
+		L.debug("predicate terms: {}", predicateTerms);
 		Set<FX> objectTerms = FXM.groundedSpecialisations(FX.Object);
-		L.info("object terms: {}", objectTerms);
+		L.debug("object terms: {}", objectTerms);
 
 		Set<Node> nodes = new HashSet<>();
 		Map<Node,Set<InterpretationOfNode>> possible = new HashMap<>();
@@ -69,7 +69,6 @@ public class AnalyserGrounder implements Analyser {
 			for(FX predicateTerm : predicateTerms){
 				possible.get(t.getPredicate()).add(FXM.getIF().make(bgp, t.getPredicate(), predicateTerm));
 			}
-
 			nodes.add(t.getObject());
 			if(!possible.containsKey(t.getObject())){
 				possible.put(t.getObject(), new HashSet<>());
@@ -78,23 +77,20 @@ public class AnalyserGrounder implements Analyser {
 				possible.get(t.getObject()).add(FXM.getIF().make(bgp, t.getObject(), objectTerm));
 			}
 		}
-
-		for(Map.Entry<Node,Set<InterpretationOfNode>> entry : possible.entrySet()){
-			L.info(" -- {} > {} -- ", entry.getKey(), entry.getValue());
+		if(L.isTraceEnabled()) {
+			for (Map.Entry<Node, Set<InterpretationOfNode>> entry : possible.entrySet()) {
+				L.trace(" -- possible {} > {} -- ", entry.getKey(), entry.getValue());
+			}
 		}
 		List<Set<InterpretationOfNode>> input = new ArrayList<>();
 		input.addAll(possible.values());
 
 		Set<List<InterpretationOfNode>> output = Sets.cartesianProduct(input.toArray(new Set[input.size()]));
-		L.info("possible BGP interpretations hypotheses: {}", output.size());
-		Set<InterpretationOfBGP> hypotheses = new HashSet<>();
-		for(List<InterpretationOfNode> list : output){
-			L.info(" -- hypothesis > {} -- ",  list);
-			hypotheses.add(FXM.getIF().make(bgp, new HashSet<>(list)));
-		}
+		L.debug("possible BGP interpretations hypotheses: {}", output.size());
 		Set<InterpretationOfBGP> results = new HashSet<>();
 		// Check if any is consistent and discard the rest
-		for(InterpretationOfBGP nibgp: hypotheses){
+		for(List<InterpretationOfNode> list: output){
+			InterpretationOfBGP nibgp = FXM.getIF().make(bgp, new HashSet<>(list));
 			// They must be all grounded
 			if(!nibgp.isGrounded()){
 				// We leave this here in case we mess up...
