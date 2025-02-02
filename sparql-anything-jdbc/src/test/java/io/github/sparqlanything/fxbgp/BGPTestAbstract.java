@@ -30,7 +30,8 @@ public abstract class BGPTestAbstract {
 	protected Properties properties = null;
 	private BasicPattern bp = null;
 	private FXModel FXM = null;
-	private Analyser ANA = null;
+	protected Analyser ANA = null;
+	private Set<InterpretationOfBGP> interpretations = null;
 
 	public BGPTestAbstract(FXModel FXM){
 		this.FXM = FXM;
@@ -38,6 +39,16 @@ public abstract class BGPTestAbstract {
 
 	protected FXModel FXM(){
 		return FXM;
+	}
+	protected void setAnalyser(Analyser analyser){
+		ANA = analyser;
+	}
+
+	protected void runAnalyser(){
+		interpretations = ANA.interpret(new OpBGP(bp()));
+	}
+	protected Set<InterpretationOfBGP> interpretations(){
+		return interpretations;
 	}
 
 	protected InterpretationFactory IF(){
@@ -94,6 +105,10 @@ public abstract class BGPTestAbstract {
 
 	protected void add(BasicPattern bgp){
 		bp().addAll(bgp);
+	}
+
+	protected void add(Triple triple){
+		bp().add(triple);
 	}
 
 

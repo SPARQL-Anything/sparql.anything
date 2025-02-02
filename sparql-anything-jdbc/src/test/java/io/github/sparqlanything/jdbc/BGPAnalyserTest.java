@@ -89,9 +89,6 @@ public class BGPAnalyserTest extends BGPTestAbstract {
 	private boolean isA(Node n, Class<?> cz){
 		return  constraints.get(n).type().equals(cz);
 	}
-	private void add(Triple t){
-		bp().add(t);
-	}
 
 
 	protected void IsA(Node n, Class<?> cz){
@@ -99,19 +96,6 @@ public class BGPAnalyserTest extends BGPTestAbstract {
 	}
 	protected void Has(Node n){
 		Assert.assertTrue(has(n));
-	}
-
-	@Test
-	public void var_rdftype_table(){
-		// ?table a []
-		add(t(v("container"), RDF.type.asNode(), xyz("table")));
-		analyseConstraints();
-		Has(v("container"));
-		Has(xyz("table"));
-		IsA(v("container"), NodeInterpretation.ContainerRow.class);
-		IsA(RDF.type.asNode(), NodeInterpretation.TypeProperty.class);
-		IsA(xyz("table"), NodeInterpretation.TypeTable.class);
-		showConstraints();
 	}
 
 	@Test

@@ -188,14 +188,14 @@ public class FXRDBModel extends FXModel {
 		});
 
 		/**
-		 * 5.2 SlotNumber(p) → ContainerTable(s)
+		 * 5.2 SlotRow(p) → ContainerTable(s)
 		 */
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			protected boolean when(Node node, InterpretationOfBGP previous) {
 				for(Triple t: previous.getOpBGP().getPattern()){
 					if(t.getSubject().equals(node)
-						&& previous.getInterpretation(t.getPredicate()).getTerm().equals(FX.SlotNumber)
+						&& previous.getInterpretation(t.getPredicate()).getTerm().equals(FXRDB.SlotRow)
 					){
 						set(getIF().make(previous.getOpBGP(), node, FXRDB.ContainerTable));
 						return true;
@@ -213,7 +213,7 @@ public class FXRDBModel extends FXModel {
 			protected boolean when(Node node, InterpretationOfBGP previous) {
 				for(Triple t: previous.getOpBGP().getPattern()){
 					if(t.getObject().equals(node)
-						&& previous.getInterpretation(t.getPredicate()).getTerm().equals(FX.SlotNumber)
+						&& previous.getInterpretation(t.getPredicate()).getTerm().equals(FXRDB.SlotRow)
 					){
 						set(getIF().make(previous.getOpBGP(), node, FXRDB.ContainerEntity));
 						return true;
@@ -223,5 +223,58 @@ public class FXRDBModel extends FXModel {
 			}
 		});
 
+		/**
+		 * 6.1 SlotString(p) → SlotColumn(p)
+		 */
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			protected boolean when(Node node, InterpretationOfBGP previous) {
+				for(Triple t: previous.getOpBGP().getPattern()){
+					if(t.getPredicate().equals(node)
+						&& previous.getInterpretation(t.getPredicate()).getTerm().equals(FX.SlotString)
+					){
+						set(getIF().make(previous.getOpBGP(), node, FXRDB.SlotColumn));
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		/**
+		 * 6.2 SlotColumn(p) → ContainerEntity(s)
+		 */
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			protected boolean when(Node node, InterpretationOfBGP previous) {
+				for(Triple t: previous.getOpBGP().getPattern()){
+					if(t.getSubject().equals(node)
+						&& previous.getInterpretation(t.getPredicate()).getTerm().equals(FXRDB.SlotColumn)
+					){
+						set(getIF().make(previous.getOpBGP(), node, FXRDB.ContainerEntity));
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		/**
+		 * 6.3 SlotColumn(p) → Cell(o)
+		 */
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			protected boolean when(Node node, InterpretationOfBGP previous) {
+				for(Triple t: previous.getOpBGP().getPattern()){
+					if(t.getObject().equals(node)
+						&& previous.getInterpretation(t.getPredicate()).getTerm().equals(FXRDB.SlotColumn)
+					){
+						set(getIF().make(previous.getOpBGP(), node, FXRDB.Cell));
+						return true;
+					}
+				}
+				return false;
+			}
+		});
 	}
 }

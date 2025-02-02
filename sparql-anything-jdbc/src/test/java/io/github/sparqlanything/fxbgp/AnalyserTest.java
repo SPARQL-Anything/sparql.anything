@@ -29,15 +29,15 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Override
 	public void before() {
 		super.before();
-		ANA = new AnalyserGrounder(properties, FXM());
+		setAnalyser(new AnalyserGrounder(properties, FXM()));
 	}
 
 	@Test
 	public void AT1() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		Assert.assertEquals(6,ibgps.size());
-		for(InterpretationOfBGP fi: ibgps){
+		runAnalyser();
+		Assert.assertEquals(6,interpretations().size());
+		for(InterpretationOfBGP fi: interpretations()){
 			L.info("{}",fi.toString());
 			Assert.assertTrue(fi.isGrounded());
 		}
@@ -46,9 +46,8 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void AT2() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		Assert.assertEquals(36,ibgps.size());
-		for(InterpretationOfBGP fi: ibgps){
+		Assert.assertEquals(36,interpretations().size());
+		for(InterpretationOfBGP fi: interpretations()){
 			L.info("AT2 -- {}",fi.toString());
 			Assert.assertTrue(fi.isGrounded());
 		}
@@ -57,9 +56,8 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void AT3() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		L.info("Size: {}",ibgps.size());
-		for(InterpretationOfBGP fi: ibgps){
+		L.info("Size: {}",interpretations().size());
+		for(InterpretationOfBGP fi: interpretations()){
 			L.info("{}",fi.toString());
 			Assert.assertTrue(fi.isGrounded());
 		}
@@ -68,47 +66,40 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void NS1() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		Assert.assertEquals(0, ibgps.size());
+		Assert.assertEquals(0, interpretations().size());
 	}
 
 	@Test
 	public void NS2() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		Assert.assertEquals(0, ibgps.size());
+		Assert.assertEquals(0, interpretations().size());
 	}
 
 	@Test
 	public void NS3() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		Assert.assertEquals(0, ibgps.size());
+		Assert.assertEquals(0, interpretations().size());
 	}
 
 
 	@Test
 	public void NS4() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		Assert.assertEquals(0, ibgps.size());
+		Assert.assertEquals(0, interpretations().size());
 	}
 
 
 	@Test
 	public void NS5() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		Assert.assertEquals(0, ibgps.size());
+		Assert.assertEquals(0, interpretations().size());
 	}
 
 	@Test
 	public void BGP_1_allGrounded() throws IOException {
 		readBGP("BGP_1");
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		L.info("size: {}",ibgps.size());
-		//Assert.assertEquals(36,ibgps.size());
-		for(InterpretationOfBGP fi: ibgps){
+		L.info("size: {}",interpretations().size());
+		for(InterpretationOfBGP fi: interpretations()){
 			L.info("{}",fi.toString());
 			Assert.assertTrue(fi.isGrounded());
 		}
@@ -117,9 +108,8 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void BGP_2() throws IOException {
 		readBGP(name.getMethodName());
-		Set<InterpretationOfBGP> ibgps = ANA.interpret(new OpBGP(bp()));
-		L.info("size: {}",ibgps.size());
-		Assert.assertEquals(2,ibgps.size());
+		L.info("size: {}",interpretations().size());
+		Assert.assertEquals(2,interpretations().size());
 		InterpretationOfBGP i1 = make(
 			v("s"), FX.Container,
 			u("http://www.example.org/address"), FX.SlotString,
@@ -138,8 +128,8 @@ public class AnalyserTest extends BGPTestAbstract {
 			u("http://www.example.org/id"), FX.SlotString,
 			v("addressId"), FX.Container
 		);
-		Assert.assertTrue(ibgps.contains(i1));
-		Assert.assertTrue(ibgps.contains(i2));
+		Assert.assertTrue(interpretations().contains(i1));
+		Assert.assertTrue(interpretations().contains(i2));
 	}
 
 	@Test
