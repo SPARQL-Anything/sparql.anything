@@ -1,6 +1,6 @@
 package io.github.sparqlanything.fxbgp;
 
-import io.github.sparqlanything.jdbc.NodeInterpretation;
+import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -27,7 +27,7 @@ public class FXModel {
 	private Set<NodeInterpretationRule> inferenceRules;
 
 	// FIXME Use constant from model package
-	protected static final Node FXRoot = NodeFactory.createURI("http://sparql.xyz/facade-x/ns/Root");
+	protected static final Node FXRoot = NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT);
 
 	protected FXModel(){
 		terms = new HashSet<>();

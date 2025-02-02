@@ -31,8 +31,8 @@ public class FXRDBModel extends FXModel {
 
 		setInconsistentWith(FXRDB.ContainerTable, FXRDB.ContainerEntity, FXRDB.SlotColumn, FXRDB.SlotRow, FXRDB.Cell, FXRDB.TypeTable, FX.TypeProperty, FX.Root);
 		setInconsistentWith(FXRDB.ContainerEntity, FXRDB.ContainerTable, FXRDB.SlotColumn, FXRDB.SlotRow, FXRDB.Cell, FXRDB.TypeTable, FX.TypeProperty, FX.Root);
-		setInconsistentWith(FXRDB.SlotColumn, FXRDB.ContainerEntity, FXRDB.ContainerTable, FXRDB.SlotRow, FXRDB.Cell, FXRDB.TypeTable, FX.TypeProperty, FX.Root);
-		setInconsistentWith(FXRDB.SlotRow, FXRDB.SlotColumn, FXRDB.ContainerEntity, FXRDB.ContainerTable, FXRDB.Cell, FXRDB.TypeTable, FX.TypeProperty, FX.Root);
+		setInconsistentWith(FXRDB.SlotColumn, FXRDB.ContainerEntity, FXRDB.ContainerTable, FXRDB.SlotRow, FXRDB.Cell, FXRDB.TypeTable, FX.TypeProperty, FX.Root, FX.SlotNumber);
+		setInconsistentWith(FXRDB.SlotRow, FXRDB.SlotColumn, FXRDB.ContainerEntity, FXRDB.ContainerTable, FXRDB.Cell, FXRDB.TypeTable, FX.TypeProperty, FX.Root, FX.SlotString);
 		setInconsistentWith(FXRDB.Cell, FXRDB.SlotColumn, FXRDB.ContainerEntity, FXRDB.ContainerTable, FXRDB.SlotRow, FXRDB.TypeTable, FX.TypeProperty, FX.Root);
 		setInconsistentWith(FXRDB.TypeTable, FXRDB.SlotColumn, FXRDB.ContainerEntity, FXRDB.ContainerTable, FXRDB.SlotRow, FXRDB.Cell, FX.TypeProperty, FX.Root);
 

@@ -19,9 +19,6 @@ public class AnalyserTest extends BGPTestAbstract {
 
 	@Rule
 	public TestName name = new TestName();
-
-	private Analyser ANA = null;
-
 	public AnalyserTest() {
 		super(FXModel.getFXModel());
 	}
@@ -35,7 +32,6 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void AT1() throws IOException {
 		readBGP(name.getMethodName());
-		runAnalyser();
 		Assert.assertEquals(6,interpretations().size());
 		for(InterpretationOfBGP fi: interpretations()){
 			L.info("{}",fi.toString());
@@ -135,7 +131,6 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void var_var_var(){
 		add(v("x"), v("p"), v("f"));
-		Set<InterpretationOfBGP> ints = ANA.interpret(opBGP());
 		// We expect the following interpretation to be present
 		// Container TypeProperty Type
 		InterpretationOfBGP i1 = make(
@@ -158,17 +153,16 @@ public class AnalyserTest extends BGPTestAbstract {
 			v("p"), FX.TypeProperty,
 			v("f"), FX.Root
 		);
-		Assert.assertTrue(ints.contains(i1));
-		Assert.assertTrue(ints.contains(i2));
-		Assert.assertTrue(ints.contains(i3));
-		Assert.assertTrue(ints.contains(i4));
+		Assert.assertTrue(interpretations().contains(i1));
+		Assert.assertTrue(interpretations().contains(i2));
+		Assert.assertTrue(interpretations().contains(i3));
+		Assert.assertTrue(interpretations().contains(i4));
 	}
 
 	@Test
 	public void var_rdftype_var(){
 		Node T = RDF.type.asNode();
 		add(v("x"), T , v("f"));
-		Set<InterpretationOfBGP> ints = ANA.interpret(opBGP());
 		// We expect the following interpretation to be present
 		// Container TypeProperty Type
 		InterpretationOfBGP i1 = make(
@@ -181,10 +175,10 @@ public class AnalyserTest extends BGPTestAbstract {
 			T, FX.TypeProperty,
 			v("f"), FX.Root
 		);
-		Assert.assertTrue(ints.contains(i1));
-		Assert.assertTrue(ints.contains(i2));
+		Assert.assertTrue(interpretations().contains(i1));
+		Assert.assertTrue(interpretations().contains(i2));
 		// No other possible
-		Assert.assertTrue(ints.size() == 2);
+		Assert.assertTrue(interpretations().size() == 2);
 	}
 
 

@@ -48,6 +48,9 @@ public abstract class BGPTestAbstract {
 		interpretations = ANA.interpret(new OpBGP(bp()));
 	}
 	protected Set<InterpretationOfBGP> interpretations(){
+		if(interpretations == null){
+			runAnalyser();
+		}
 		return interpretations;
 	}
 
