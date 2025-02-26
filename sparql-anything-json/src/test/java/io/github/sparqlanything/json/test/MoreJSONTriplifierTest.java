@@ -109,6 +109,11 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("json.path.1", "$..[?(@.letter == 'A')]");
 			properties.setProperty("json.path.2", "$..[?(@.number == 2)]");
 		}
+
+		// Json Literize
+		if (name.getMethodName().equals("testJsonLiteral$1")) {
+			properties.setProperty("json.literize", "literal");
+		}
 	}
 
 	@Test
@@ -205,5 +210,11 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 	public void testMultiJsonPath$1() {
 		logger.debug("Test multiple json paths (one go + JsonPath)");
 		Assert.assertEquals(13, result.size());
+	}
+
+	@Test
+	public void testJsonLiteral$1() {
+		logger.debug("Test simple Json literal (one go)");
+		assertResultIsIsomorphicWithExpected();
 	}
 }
