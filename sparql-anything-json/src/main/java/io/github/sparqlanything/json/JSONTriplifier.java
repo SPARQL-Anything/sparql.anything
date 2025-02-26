@@ -43,8 +43,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
+import static com.fasterxml.jackson.core.JsonToken.*;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 @io.github.sparqlanything.model.annotations.Triplifier
@@ -58,7 +57,14 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 			    It will pre-process the JSON before the execution of the query.\s
 			    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).""", validValues = "Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))")
 	public static final IRIArgument PROPERTY_JSONPATH = new IRIArgument("json.path");
+	@Option(description = """
+		One or more key values as filters. E.g. `json.literize=key` or `json.literize.1`, `json.literize.2`, `...` to add multiple expressions.\s
+		The `json.literize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON.""",
+		validValues = "Any key values present in the JSON file")
+	public static final IRIArgument PROPERTY_JSONLITERIZE = new IRIArgument("json.literize");
 	private static final Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
+
+	private Set<String> literalKeys = new HashSet<>();
 
 	private void transform(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
@@ -168,6 +174,11 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 			if (token == JsonToken.FIELD_NAME) {
 				String k = parser.getText();
 				token = parser.nextToken();
+				if (literalKeys.contains(k)) {
+					logger.trace("Literal key found: {}, next token {}", k, token);
+					builder.addValue(dataSourceId, containerId, k, consumeAsString(parser, token));
+					continue;
+				}
 				switch (token) {
 					case START_ARRAY -> {
 						String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
@@ -211,6 +222,45 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 
 	}
 
+	private String consumeAsString(JsonParser parser, JsonToken token) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		if (token == FIELD_NAME) {
+			sb.append(String.format("\"%s\" : ", parser.getText()));
+			token = parser.nextToken();
+		}
+		switch (token) {
+			case START_ARRAY -> {
+				sb.append(START_ARRAY.asString());
+				token = parser.nextToken();
+				while (token != END_ARRAY) {
+					sb.append(consumeAsString(parser, token));
+					sb.append(", ");
+					token = parser.nextToken();
+				}
+				// Remove trailing comma
+				sb.delete(sb.length() - 2, sb.length());
+				sb.append(END_ARRAY.asString());
+			}
+			case START_OBJECT -> {
+				sb.append(START_OBJECT.asString());
+				token = parser.nextToken();
+				while (token != END_OBJECT) {
+					sb.append(consumeAsString(parser, token));
+					sb.append(", ");
+					token = parser.nextToken();
+				}
+				// Remove trailing comma
+				sb.delete(sb.length() - 2, sb.length());
+				sb.append(END_OBJECT.asString());
+			}
+			case VALUE_STRING -> sb.append(String.format("\"%s\"", parser.getValueAsString()));
+			default -> {
+				sb.append(parser.getValueAsString());
+			}
+		}
+		return sb.toString();
+	}
+
 	private void transformMap(Map o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
 		for (Map.Entry entry : (Iterable<Map.Entry>) o.entrySet()) {
 			String k = (String) entry.getKey();
@@ -251,6 +301,8 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, "json.path");
+		this.literalKeys = Sets.newHashSet(PropertyUtils.getPropertyValues(properties, PROPERTY_JSONLITERIZE));
+
 		if (!jsonPaths.isEmpty()) {
 			transformFromJSONPath(properties, builder, jsonPaths);
 		} else {
