@@ -40,6 +40,16 @@ public class Issue526Test {
 	}
 
 	@Test
+	public void inlineWithEmptyService() throws Exception {
+		csvNotEmpty(SPARQLAnything.callMain(new String[]{
+			"-q",
+			"SELECT * WHERE { SERVICE <x-sparql-anything:> {?x ?y ?z } } LIMIT 10",
+			"-c",
+			"location=" + csv
+		}));
+	}
+
+	@Test
 	public void rq() throws Exception {
 		graphNotEmpty(SPARQLAnything.callMain(new String[]{
 			"-q",
