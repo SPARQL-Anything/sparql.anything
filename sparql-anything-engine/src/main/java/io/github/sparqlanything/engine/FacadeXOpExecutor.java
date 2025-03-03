@@ -106,7 +106,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			if (opService.getService().isVariable()) return Utils.postpone(opService, input, execCxt);
 
 			// check if the service is a FacadeXURI
-			if (opService.getService().isURI() && Utils.isFacadeXURI(opService.getService().getURI())) {
+			if (Utils.isFacadeXServiceNode(opService)) {
 
 				try {
 					// go with the FacadeX default execution

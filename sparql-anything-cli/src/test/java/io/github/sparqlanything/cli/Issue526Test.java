@@ -14,6 +14,7 @@ public class Issue526Test {
 	String rq_1 = getClass().getClassLoader().getResource("./issue526-1.rq").getFile();
 	String rq_2 = getClass().getClassLoader().getResource("./issue526-1.rq").getFile();
 	String csv = getClass().getClassLoader().getResource("./issue526.csv").getFile();
+	String rq_3 = getClass().getClassLoader().getResource("./issue526-3.rq").getFile();
 
 	private void graphNotEmpty(String s) {
 		Dataset dataset = RDFParser.fromString(s, Lang.TURTLE).toDataset();
@@ -77,5 +78,19 @@ public class Issue526Test {
 			"-c",
 			"location=" + csv
 		}));
+	}
+
+
+	@Test
+	public void rq_3() throws Exception {
+		String r = SPARQLAnything.callMain(new String[]{
+			"-q",
+			rq_3,
+			"-c",
+			"csv.headers=false",
+			"-c",
+			"location=" + csv
+		});
+		Assert.assertTrue(r.contains("true"));
 	}
 }

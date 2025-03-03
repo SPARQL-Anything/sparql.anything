@@ -1,0 +1,8 @@
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+ASK  { SERVICE <x-sparql-anything:csv.headers=true>
+      {
+        ?s xyz:name              ?o
+        FILTER (?o = "alice")
+    }
+  }

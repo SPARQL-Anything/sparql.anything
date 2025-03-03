@@ -55,7 +55,6 @@ public abstract class FXWorker<T extends Op> {
 		// Possibly read from STD in
 		readFromStdIn(p);
 
-
 		// guess triplifier
 		Triplifier t = PropertyExtractor.getTriplifier(p, tr);
 

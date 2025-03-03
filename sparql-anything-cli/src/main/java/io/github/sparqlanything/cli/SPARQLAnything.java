@@ -37,6 +37,7 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFParserRegistry;
 import org.apache.jena.riot.ReaderRIOTFactory;
+import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.core.ResultBinding;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
@@ -438,7 +439,17 @@ public class SPARQLAnything {
 
 	private static void setConfigurationsToContext(String[] configurations, QueryExecution qExec) {
 		if (configurations != null) {
-			qExec.getContext().setTrue(SPARQLAnythingConstants.NO_SERVICE_MODE);
+			// If the query has no FX service clauses the options will be added
+			ServiceFinder sf = new ServiceFinder();
+			Algebra.compile(qExec.getQuery()).visit(sf);
+
+
+			if (!sf.hasFxService()){
+				qExec.getContext().setTrue(SPARQLAnythingConstants.NO_SERVICE_MODE);
+			} else {
+				logger.warn("Options passed with -c may be overwritten by options of the SERVICE IRI or in BGP of the query.");
+			}
+
 			for (String configuration : configurations) {
 				String[] configurationSplit = configuration.split("=");
 				qExec.getContext().set(FXSymbol.create(configurationSplit[0]), configurationSplit[1]);
