@@ -12,7 +12,7 @@ import org.junit.Test;
 public class Issue526Test {
 	String rq = getClass().getClassLoader().getResource("./issue526.rq").getFile();
 	String rq_1 = getClass().getClassLoader().getResource("./issue526-1.rq").getFile();
-	String rq_2 = getClass().getClassLoader().getResource("./issue526-1.rq").getFile();
+	String rq_2 = getClass().getClassLoader().getResource("./issue526-2.rq").getFile();
 	String csv = getClass().getClassLoader().getResource("./issue526.csv").getFile();
 	String rq_3 = getClass().getClassLoader().getResource("./issue526-3.rq").getFile();
 
