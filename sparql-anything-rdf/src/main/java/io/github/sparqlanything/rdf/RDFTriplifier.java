@@ -98,7 +98,7 @@ public class RDFTriplifier implements Triplifier {
 						log.trace("Response: {}", response);
 						log.trace("Response body: {}", IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
 					}
-					throw new TriplifierHTTPException(response.getStatusLine().toString());
+					throw new TriplifierHTTPException(url, response);
 				}
 				is = response.getEntity().getContent();
 				contentType = response.getFirstHeader(HTTP.CONTENT_TYPE);

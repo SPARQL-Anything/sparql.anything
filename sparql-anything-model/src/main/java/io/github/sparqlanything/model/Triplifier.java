@@ -155,7 +155,7 @@ public interface Triplifier {
 						log.trace("Request unsuccesful: {}", response.getStatusLine().toString());
 						log.trace("Response: {}", response);
 						log.trace("Response body: {}", IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
-						throw new TriplifierHTTPException(response.getStatusLine().toString());
+						throw new TriplifierHTTPException(url, response);
 					}
 					return response.getEntity().getContent();
 				}
