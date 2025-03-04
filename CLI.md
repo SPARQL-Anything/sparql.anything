@@ -47,12 +47,3 @@ the query repeated for each set of values.
 ### -c,--configuration <option=value>     
 OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be
 set). Options passed in this way can be overwritten in the SERVICE IRI or in the Basic Graph Pattern.
-
-### -i,--input <input> (Deprecated) 
-Superseded by `-v | --values`
-
-OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query
-is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings
-in the input result set.
-
-## Build from source
