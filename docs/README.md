@@ -490,6 +490,8 @@ and constructing knowledge graphs.
 **NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on
 the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
 
+Moreover, if you run the geosparql distribution of the CLI or the server, you can also use the [GeoSPARQL functions provided by Apache Jena](https://jena.apache.org/documentation/geosparql/index.html). 
+
 | Name                                                                                                                  | Function/Magic Property | Input                                  | Output                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 |-----------------------------------------------------------------------------------------------------------------------|-------------------------|----------------------------------------|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [fx:anySlot](FUNCTIONS_AND_MAGIC_PROPERTIES.md#fxanyslot)                                                             | Magic Property          | -                                      | -                             | This property matches the RDF container membership properties (e.g. ``rdf:_1``, ``rdf:_2`` ...).                                                                                                                                                                                                                                                                                                                                                                              | 
@@ -690,6 +692,12 @@ You can generate executable files of the command line interface and server with 
 mvn clean install -Dgenerate-cli-jar=true -Dgenerate-server-jar=true
 ```
 
+You can generate the executable files of the SPARQL Anything geosparql distribution featuring the [Apache Jena's GeoSPARQL functions](https://jena.apache.org/documentation/geosparql/index.html).
+
+```
+mvn clean install -Dgenerate-cli-jar-geosparql=true -Dgenerate-server-jar-geosparql=true
+```
+
 ## Licence
 
 SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
@@ -699,42 +707,46 @@ SPARQL Anything is distributed under [Apache 2.0 License](LICENSE)
 **For citing SPARQL Anything in academic papers please use:**
 
 Luigi Asprino, Enrico Daga, Aldo Gangemi, and Paul Mulholland. "Knowledge Graph Construction with a façade: a
-unified method to access heterogeneous data sources on the Web". ACM Transactions on Internet Technology (2022)
-. https://doi.org/10.1145/3555312 [Preprint](https://sparql.xyz/FacadeX_TOIT.pdf)
+unified method to access heterogeneous data sources on the Web". ACM Transactions on Internet Technology, Volume 23, Issue 1
+Article No.: 6, Pages 1 - 31 (2023). https://doi.org/10.1145/3555312
 
 ```bibtex
 @article{10.1145/3555312,
     author = {Asprino, Luigi and Daga, Enrico and Gangemi, Aldo and Mulholland, Paul},
     title = {Knowledge Graph Construction with a Fa\c{c}ade: A Unified Method to Access Heterogeneous Data Sources on the Web},
-    year = {2022},
+    year = {2023},
     publisher = {Association for Computing Machinery},
     address = {New York, NY, USA},
     issn = {1533-5399},
     url = {https://doi.org/10.1145/3555312},
     doi = {10.1145/3555312},
-    abstract = {Data integration is the dominant use case for RDF Knowledge Graphs. However, Web resources come in formats with weak semantics (for example CSV and JSON), or formats specific to a given application (for example BibTex, HTML, and Markdown). To solve this problem, Knowledge Graph Construction (KGC) is gaining momentum due to its focus on supporting users in transforming data into RDF. However, using existing KGC frameworks result in complex data processing pipelines, which mix structural and semantic mappings, whose development and maintenance constitute a significant bottleneck for KG engineers. Such frameworks force users to rely on different tools, sometimes based on heterogeneous languages, for inspecting sources, designing mappings, and generating triples, thus making the process unnecessarily complicated. We argue that it is possible and desirable to equip KG engineers with the ability of interacting with Web data formats by relying on their expertise in RDF and the well-established SPARQL query language&nbsp;[2]. In this article, we study a unified method for data access to heterogeneous data sources with Facade-X, a meta-model implemented in a new data integration system called SPARQL Anything. We demonstrate that our approach is theoretically sound, since it allows a single meta-model, based on RDF, to represent data from (a) any file format expressible in BNF syntax, as well as (b) any relational database. We compare our method to state-of-the-art approaches in terms of usability (cognitive complexity of the mappings) and general performance. Finally, we discuss the benefits and challenges of this novel approach by engaging with the reference user community.},
     journal = {ACM Transactions on Internet Technology},
+    volume = 23, 
+    number = 1,
+    pages = {{1-31}},
     keywords = {RDF, SPARQL, Meta-model, Re-engineering}
 }
 ```
 
-Paul Warren, Paul Mulholland, Enrico Daga, and Luigi Asprino. "Path-based and triplification approaches to mapping data into RDF: user behaviours and recommendations". In: Semantic Web (2024), to appear [Pre-print](https://content.iospress.com/articles/semantic-web/sw243585)
+### Scientific Publications
+
+Paul Warren, Paul Mulholland, Enrico Daga, and Luigi Asprino. "Path-based and triplification approaches to mapping data into RDF: user behaviours and recommendations". In:  Semantic Web, vol. 15, no. 6, pp. 2479-2505 (2024) http://doi.org/10.3233/SW-243585
 
 ```bibtex
 @article{Warren2024,
   title={Path-based and triplification approaches to mapping data into RDF: User behaviours and recommendations},
   author={Warren, Paul and Mulholland, Paul and Daga, Enrico and Asprino, Luigi},
   journal={Semantic Web},
-  number={(to appear)},
+  volume = 15,
+  pages = {{2479-2505}},
+  number = 6,
+  year={{2025}},
   publisher={IOS Press}
 }
 ```
 
-
-
 Enrico Daga, Luigi Asprino, Paul Mulholland, and Aldo Gangemi. "Facade-X: An Opinionated Approach to SPARQL Anything". In: Alam, Mehwish; Groth, Paul; de Boer, Victor; Pellegrini, Tassilo and Pandit, Harshvardhan J. eds. Volume 53: Further with Knowledge Graphs, Volume 53. IOS Press, pp. 58–73.
-
-DOI: https://doi.org/10.3233/ssw210035 | [PDF](http://oro.open.ac.uk/78973/1/78973.pdf)
+https://doi.org/10.3233/ssw210035
 
 ```bibtex
 @incollection{oro78973,
@@ -751,5 +763,18 @@ DOI: https://doi.org/10.3233/ssw210035 | [PDF](http://oro.open.ac.uk/78973/1/789
         keywords = {SPARQL; meta-model; re-engineering},
              url = {http://oro.open.ac.uk/78973/},
         abstract = {The Semantic Web research community understood since its beginning how crucial it is to equip practitioners with methods to transform non-RDF resources into RDF. Proposals focus on either engineering content transformations or accessing non-RDF resources with SPARQL. Existing solutions require users to learn specific mapping languages (e.g. RML), to know how to query and manipulate a variety of source formats (e.g. XPATH, JSON-Path), or to combine multiple languages (e.g. SPARQL Generate). In this paper, we explore an alternative solution and contribute a general-purpose meta-model for converting non-RDF resources into RDF: {\ensuremath{<}}i{\ensuremath{>}}Facade-X{\ensuremath{<}}/i{\ensuremath{>}}. Our approach can be implemented by overriding the SERVICE operator and does not require to extend the SPARQL syntax. We compare our approach with the state of art methods RML and SPARQL Generate and show how our solution has lower learning demands and cognitive complexity, and it is cheaper to implement and maintain, while having comparable extensibility and efficiency.}
+}
+```
+
+### Technical report
+
+Asprino, Luigi, Enrico Daga, Justin Dowdy, Paul Mulholland, Aldo Gangemi, and Marco Ratta. "Streamlining Knowledge Graph Construction with a fa\c {c} ade: The SPARQL Anything project." arXiv preprint arXiv:2310.16700 (2023).
+
+```bibtex
+@article{asprino2023streamlining,
+  title={Streamlining Knowledge Graph Construction with a fa$\backslash$c $\{$c$\}$ ade: The SPARQL Anything project},
+  author={Asprino, Luigi and Daga, Enrico and Dowdy, Justin and Mulholland, Paul and Gangemi, Aldo and Ratta, Marco},
+  journal={arXiv preprint arXiv:2310.16700},
+  year={2023}
 }
 ```
