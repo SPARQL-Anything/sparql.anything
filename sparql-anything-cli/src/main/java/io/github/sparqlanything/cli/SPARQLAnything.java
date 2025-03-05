@@ -561,7 +561,7 @@ public class SPARQLAnything {
 			// #528 Check no-clobber if output file already exists.
 			if(outputFile != null && cli.getOutputNoClobber() && new File(outputFile).exists()){
 				logger.info("skipping: no-clobber is on and file exists");
-				return;
+				continue;
 			}
 			try {
 				logger.trace("Executing Query: {}", q);
