@@ -28,6 +28,8 @@ public class NoClobberTest {
 	public void before() throws Exception {
 		tempFile = File.createTempFile("no-clobber-test",".ttl");
 		before = tempFile.lastModified();
+		// We halt it for a while to make sure some time passes ...
+		Thread.sleep(100);
 	}
 
 	@Test
