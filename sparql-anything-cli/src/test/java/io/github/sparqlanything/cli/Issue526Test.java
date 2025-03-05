@@ -1,12 +1,9 @@
 package io.github.sparqlanything.cli;
 
 import org.apache.jena.query.Dataset;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFParser;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class Issue526Test {
@@ -27,7 +24,6 @@ public class Issue526Test {
 	}
 
 	/**
-	 * this is the only one working atm
 	 * @throws Exception
 	 */
 	@Test
