@@ -1,0 +1,17 @@
+PREFIX fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+CONSTRUCT {
+    [ rdf:_1 ?param1 ;
+     rdf:_2 ?param2 ] .
+    ?x ?y ?z
+} WHERE {
+    SERVICE <x-sparql-anything:> {
+        ?x ?y ?z
+    }
+
+    BIND(?_param1 as ?param1)
+    BIND(?_param2 as ?param2)
+}

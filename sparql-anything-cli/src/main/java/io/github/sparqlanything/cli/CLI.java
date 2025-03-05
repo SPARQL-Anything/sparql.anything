@@ -76,6 +76,9 @@ public class CLI {
 	public static final String LOAD_JAR = "j";
 	public static final String LOAD_JAR_LONG = "load-jar";
 
+	public static final String NO_CLOBBER = "nc";
+	public static final String NO_CLOBBER_LONG = "no-clobber";
+
 	private Options options;
 	private CommandLine commandLine = null;
 
@@ -147,6 +150,10 @@ public class CLI {
 						"OPTIONAL - Filepath to an executable JAR to be dynamically loaded. The argument can be passed multiple times (one for each JAR file to be loaded).")
 				.longOpt(LOAD_JAR_LONG).build());
 
+		options.addOption(Option.builder(NO_CLOBBER).argName("no clobber").hasArg(false).optionalArg(true).desc(
+				"OPTIONAL - Do not execute if the specified output file already exists.")
+			.longOpt(NO_CLOBBER_LONG).build());
+
 //		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
 //						"[Deprecated] OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
 //				.longOpt(INPUT_LONG).build());
@@ -183,6 +190,9 @@ public class CLI {
 
 	public boolean getOutputAppend() {
 		return commandLine.hasOption(CLI.OUTPUT_APPEND);
+	}
+	public boolean getOutputNoClobber() {
+		return commandLine.hasOption(CLI.NO_CLOBBER);
 	}
 	public String getOutputPattern() {
 		return commandLine.getOptionValue(CLI.OUTPUT_PATTERN);
