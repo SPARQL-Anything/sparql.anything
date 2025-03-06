@@ -58,10 +58,10 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 			    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).""", validValues = "Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))")
 	public static final IRIArgument PROPERTY_JSONPATH = new IRIArgument("json.path");
 	@Option(description = """
-		One or more key values as filters. E.g. `json.literize=key` or `json.literize.1`, `json.literize.2`, `...` to add multiple expressions.\s
-		The `json.literize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON.""",
+		One or more key values as filters. E.g. `json.literalize=key` or `json.literalize.1`, `json.literalize.2`, `...` to add multiple expressions.\s
+		The `json.literalize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON.""",
 		validValues = "Any key values present in the JSON file")
-	public static final IRIArgument PROPERTY_JSONLITERIZE = new IRIArgument("json.literize");
+	public static final IRIArgument PROPERTY_JSONLITERALIZE = new IRIArgument("json.literalize");
 	private static final Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
 	private Set<String> literalKeys = new HashSet<>();
@@ -301,7 +301,7 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
 		List<String> jsonPaths = PropertyUtils.getPropertyValues(properties, "json.path");
-		this.literalKeys = Sets.newHashSet(PropertyUtils.getPropertyValues(properties, PROPERTY_JSONLITERIZE));
+		this.literalKeys = Sets.newHashSet(PropertyUtils.getPropertyValues(properties, PROPERTY_JSONLITERALIZE));
 
 		if (!jsonPaths.isEmpty()) {
 			transformFromJSONPath(properties, builder, jsonPaths);

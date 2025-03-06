@@ -110,9 +110,9 @@ public class MoreJSONTriplifierTest extends AbstractTriplifierTester {
 			properties.setProperty("json.path.2", "$..[?(@.number == 2)]");
 		}
 
-		// Json Literize
+		// Json Literalize
 		if (name.getMethodName().equals("testJsonLiteral$1")) {
-			properties.setProperty("json.literize", "literal");
+			properties.setProperty("json.literalize", "literal");
 		}
 	}
 
