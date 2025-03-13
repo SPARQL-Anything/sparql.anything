@@ -44,8 +44,13 @@ public class RDFTriplifier implements Triplifier {
 	private static Lang getRDFLang(Properties properties, String url, Header contentType) {
 		Lang lang = null;
 
+		// Hard configuration comes first
+		if (properties.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
+			lang = RDFLanguages.contentTypeToLang(PropertyUtils.getStringProperty(properties, IRIArgument.MEDIA_TYPE));
+		}
+
 		// Version from HTTP content type response
-		if (contentType != null) {
+		if (lang == null && contentType != null) {
 			// After issue https://github.com/SPARQL-Anything/sparql.anything/issues/317
 			if (contentType.getValue().indexOf(';') != -1) {
 				lang = RDFLanguages.contentTypeToLang(contentType.getValue().substring(0, contentType.getValue().indexOf(';')));
@@ -53,13 +58,12 @@ public class RDFTriplifier implements Triplifier {
 				lang = RDFLanguages.contentTypeToLang(contentType.getValue());
 			}
 		}
+		
 		// Version from expected content type (HTTP accept header)
 		if (lang == null && properties.containsKey(HTTPHelper.HTTPHEADER_PREFIX + "accept")) {
 			lang = RDFLanguages.contentTypeToLang(properties.getProperty(HTTPHelper.HTTPHEADER_PREFIX + "accept"));
 		}
-		if (lang == null && properties.containsKey(IRIArgument.MEDIA_TYPE.toString())) {
-			lang = RDFLanguages.contentTypeToLang(PropertyUtils.getStringProperty(properties, IRIArgument.MEDIA_TYPE));
-		}
+
 		if (lang == null) {
 			// Version from location file extension
 			lang = RDFLanguages.filenameToLang(url);
