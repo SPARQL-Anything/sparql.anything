@@ -17,6 +17,7 @@
 package io.github.sparqlanything.xml;
 
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +92,15 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 	@Test
 	public void testXPathAndSlice() {
 		L.debug("Test XML books (XPath //Record, with slicing)");
+		//RDFDataMgr.write(System.err, result, Lang.TTL);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+
+	@Ignore
+	@Test
+	public void testXPathAndSliceIssue531() {
+		L.debug("Test for bug in issue 531 (XPath //root, with slicing)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
