@@ -112,7 +112,7 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 	@Test
 	public void testXPathAndSliceIssue531_2() {
 		L.debug("Another test for bug in issue 531 (XPath //root, with slicing)");
-		RDFDataMgr.write(System.err, result, Lang.TTL);
+		//RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 }
