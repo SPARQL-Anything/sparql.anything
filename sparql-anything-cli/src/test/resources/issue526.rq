@@ -1,0 +1,9 @@
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+CONSTRUCT { ?s ?p ?o  }
+WHERE
+  { SERVICE <x-sparql-anything:>
+      {
+ 	?s        ?p              ?o
+      }
+  }

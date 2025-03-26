@@ -24,10 +24,7 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.TxnType;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.OpBGP;
-import org.apache.jena.sparql.algebra.op.OpGraph;
-import org.apache.jena.sparql.algebra.op.OpPropFunc;
-import org.apache.jena.sparql.algebra.op.OpTable;
+import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.algebra.table.TableUnit;
 import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -137,8 +134,8 @@ public class Utils {
 		return new OpBGP(result);
 	}
 
-	static boolean isFacadeXURI(String uri) {
-		return uri.startsWith(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA);
+	public static boolean isFacadeXServiceNode(OpService serviceNode) {
+		return serviceNode.getService().isURI() &&  serviceNode.getService().getURI().startsWith(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA);
 	}
 
 	static OpPropFunc getOpPropFuncAnySlot(Triple t) {

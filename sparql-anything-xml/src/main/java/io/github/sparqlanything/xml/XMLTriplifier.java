@@ -125,7 +125,7 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 				log.trace(" -- attr count: {}", attrCount);
 				int increment = 0;
 				if (attrCount > 0) {
-					for (int i = result + 1; i <= result + attrCount; i += 2) {
+					for (int i = result + 1; i <= result + (attrCount * 2); i += 2) {
 						// Not sure why but sometime attrCount is not reliable
 						if (vn.getTokenType(i) != VTDNav.TOKEN_ATTR_NAME) {
 							break;

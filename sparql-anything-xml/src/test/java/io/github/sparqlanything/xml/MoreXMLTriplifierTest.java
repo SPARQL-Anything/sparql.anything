@@ -17,6 +17,9 @@
 package io.github.sparqlanything.xml;
 
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +52,10 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 		} else if(name.getMethodName().equals("testXPathAndSlice")){
 			properties.put("blank-nodes", "true");
 			properties.put("xml.path", "//Record");
+			properties.put("slice", "true");
+		} else if(name.getMethodName().startsWith("testXPathAndSliceIssue531")){
+			properties.put("blank-nodes", "true");
+			properties.put("xml.path", "//root");
 			properties.put("slice", "true");
 		}
 	}
@@ -95,5 +102,17 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 		assertResultIsIsomorphicWithExpected();
 	}
 
+	@Test
+	public void testXPathAndSliceIssue531() {
+		L.debug("Test for bug in issue 531 (XPath //root, with slicing)");
+		//RDFDataMgr.write(System.err, result, Lang.TTL);
+		assertResultIsIsomorphicWithExpected();
+	}
 
+	@Test
+	public void testXPathAndSliceIssue531_2() {
+		L.debug("Another test for bug in issue 531 (XPath //root, with slicing)");
+		//RDFDataMgr.write(System.err, result, Lang.TTL);
+		assertResultIsIsomorphicWithExpected();
+	}
 }

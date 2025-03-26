@@ -37,6 +37,7 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFParserRegistry;
 import org.apache.jena.riot.ReaderRIOTFactory;
+import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.core.ResultBinding;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.binding.Binding;
@@ -438,7 +439,17 @@ public class SPARQLAnything {
 
 	private static void setConfigurationsToContext(String[] configurations, QueryExecution qExec) {
 		if (configurations != null) {
-			qExec.getContext().setTrue(SPARQLAnythingConstants.NO_SERVICE_MODE);
+			// If the query has no FX service clauses the options will be added
+			ServiceFinder sf = new ServiceFinder();
+			Algebra.compile(qExec.getQuery()).visit(sf);
+
+
+			if (!sf.hasFxService()){
+				qExec.getContext().setTrue(SPARQLAnythingConstants.NO_SERVICE_MODE);
+			} else {
+				logger.warn("Options passed with -c may be overwritten by options of the SERVICE IRI or in BGP of the query.");
+			}
+
 			for (String configuration : configurations) {
 				String[] configurationSplit = configuration.split("=");
 				qExec.getContext().set(FXSymbol.create(configurationSplit[0]), configurationSplit[1]);
@@ -495,6 +506,12 @@ public class SPARQLAnything {
 			}
 			if (values == null) {
 				logger.debug("No input file");
+
+				// #528 Check no-clobber if output file already exists.
+				if(outputFileName != null && cli.getOutputNoClobber() && new File(outputFileName).exists()){
+					logger.info("skipping: no-clobber is on and file exists");
+					return;
+				}
 				Query q = QueryFactory.create(query);
 				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()), configurations);
 			} else {
@@ -540,6 +557,11 @@ public class SPARQLAnything {
 					outputFile = FilenameUtils.removeExtension(outputFileName) + (parameters.getRowNumber()==1 && parameters.hasNext()? "-" + parameters.getRowNumber():"") + "." + FilenameUtils.getExtension(outputFileName);
 				}
 				// else stays null and output goes to STDOUT
+			}
+			// #528 Check no-clobber if output file already exists.
+			if(outputFile != null && cli.getOutputNoClobber() && new File(outputFile).exists()){
+				logger.info("skipping: no-clobber is on and file exists");
+				continue;
 			}
 			try {
 				logger.trace("Executing Query: {}", q);

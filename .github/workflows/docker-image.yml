@@ -42,7 +42,7 @@ jobs:
           path: /app/artifacts/.
 
       - name: Extract files to release from docker image
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ steps.extract.outputs.destination }}
           name: artifacts

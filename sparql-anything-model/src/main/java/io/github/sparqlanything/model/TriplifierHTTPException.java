@@ -16,12 +16,16 @@
 
 package io.github.sparqlanything.model;
 
+import org.apache.http.HttpResponse;
+
+import java.net.URL;
+
 public class TriplifierHTTPException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public TriplifierHTTPException(String string) {
-		super(string);
+	public TriplifierHTTPException(URL url, HttpResponse response) {
+		super(String.join(response.getStatusLine().toString(), " - URL was: ", url.toString()));
 	}
 
 }

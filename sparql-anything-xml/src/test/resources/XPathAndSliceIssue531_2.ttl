@@ -1,0 +1,18 @@
+@prefix ex:  <http://example.org/> .
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[ a       fx:root ;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+          [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                    [ a xyz:child ;
+                        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                              "1" ] ;
+            a xyz:root ;
+            xyz:id  "123" ;
+            xyz:attr1  "100.0" ;
+            xyz:attr2  "200.0" ;
+            xyz:attr3  "300.0" ;
+            xyz:attr4  "400.0" ;
+          ]
+] .
