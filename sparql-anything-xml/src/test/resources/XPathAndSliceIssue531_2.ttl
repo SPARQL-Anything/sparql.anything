@@ -10,6 +10,9 @@
                               "1" ] ;
             a xyz:root ;
             xyz:id  "123" ;
-            xyz:attr2  "100.0" ;
+            xyz:attr1  "100.0" ;
+            xyz:attr2  "200.0" ;
+            xyz:attr3  "300.0" ;
+            xyz:attr4  "400.0" ;
           ]
 ] .

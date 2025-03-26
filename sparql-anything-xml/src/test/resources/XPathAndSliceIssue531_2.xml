@@ -15,6 +15,6 @@
   ~ limitations under the License.
   -->
 
-<root id="123"  attr2="100.0">
+<root id="123" attr1="100.0" attr2="200.0" attr3="300.0" attr4="400.0">
     <child>1</child>
 </root>
