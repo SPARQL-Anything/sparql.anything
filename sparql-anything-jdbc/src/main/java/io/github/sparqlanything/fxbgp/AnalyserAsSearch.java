@@ -63,11 +63,7 @@ public class AnalyserAsSearch implements Analyser {
 		Set<InterpretationOfBGP> hypotheses = specialise(ibgp);
 		for(InterpretationOfBGP nibgp: hypotheses){
 			boolean inconsistent = false;
-			// Monitor if grounded
-			if(nibgp.isGrounded()){
-				// FIXME remove this message!!!
-//				System.err.println("see here");
-			}
+
 			// Make inferences
 			for(Node focus: nibgp.nodes()) {
 					// For each node, run inference rules

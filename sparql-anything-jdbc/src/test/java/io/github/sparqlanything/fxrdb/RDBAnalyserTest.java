@@ -286,6 +286,7 @@ public class RDBAnalyserTest extends BGPTestAbstract {
 		Node b = b();
 		add(t, v("p1"), b);
 		add(b, v("p2"), v("o"));
+		L.error("{}", bp());
 		InterpretationOfBGP i1 = make(
 			t, FXRDB.ContainerTable,
 			v("p1"), FXRDB.SlotRow,
@@ -304,6 +305,7 @@ public class RDBAnalyserTest extends BGPTestAbstract {
 		L.error("{}", interpretations());
 		Assert.assertEquals(2, interpretations().size());
 		Assert.assertTrue(interpretations().contains(i1));
+		Assert.assertTrue(interpretations().contains(i2));
 	}
 
 }

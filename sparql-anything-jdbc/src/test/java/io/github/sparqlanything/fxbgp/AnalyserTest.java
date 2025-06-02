@@ -4,6 +4,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -27,6 +28,7 @@ public class AnalyserTest extends BGPTestAbstract {
 	public void before() {
 		super.before();
 		setAnalyser(new AnalyserGrounder(properties, FXM()));
+		//setAnalyser(new AnalyserAsSearch(properties, FXM()));
 	}
 
 	@Test
@@ -92,6 +94,18 @@ public class AnalyserTest extends BGPTestAbstract {
 	}
 
 	@Test
+	public void NS6() throws IOException {
+		readBGP(name.getMethodName());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+	@Test
+	public void NS7() throws IOException {
+		readBGP(name.getMethodName());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+	@Test
 	public void BGP_1_allGrounded() throws IOException {
 		readBGP("BGP_1");
 		L.info("size: {}",interpretations().size());
@@ -126,6 +140,14 @@ public class AnalyserTest extends BGPTestAbstract {
 		);
 		Assert.assertTrue(interpretations().contains(i1));
 		Assert.assertTrue(interpretations().contains(i2));
+	}
+
+	@Ignore // This is for development only
+	@Test
+	public void BGP_X() throws IOException {
+		readBGP(name.getMethodName());
+		L.info("size: {}",interpretations().size());
+		System.out.println(interpretations());
 	}
 
 	@Test
@@ -180,6 +202,5 @@ public class AnalyserTest extends BGPTestAbstract {
 		// No other possible
 		Assert.assertTrue(interpretations().size() == 2);
 	}
-
 
 }
