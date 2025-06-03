@@ -182,6 +182,10 @@ public class DocxTriplifier implements Triplifier {
 	}
 
 	private static void extractComments(FacadeXGraphBuilder builder, XWPFDocument document, String dataSourceId, String documentId) {
+
+		if(document.getComments()==null)
+			return;
+
 		for (XWPFComment comment : document.getComments()) {
 			String commentId = getCommentId(dataSourceId, comment.getId());
 			builder.addType(dataSourceId, commentId, "Comment");
