@@ -100,20 +100,15 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
-| [json.path](#jsonpath) | One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option. 
-    It will pre-process the JSON before the execution of the query. 
-    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example). | Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer))) | Not set |
-| [json.literalize](#jsonliteralize) | One or more key values as filters. E.g. `json.literalize=key` or `json.literalize.1`, `json.literalize.2`, `...` to add multiple expressions. 
-The `json.literalize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON. | Any key values present in the JSON file | Not set |
+| [json.path](#jsonpath) | One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option.      It will pre-process the JSON before the execution of the query.      In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example). | Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer))) | Not set |
+| [json.literalize](#jsonliteralize) | One or more key values as filters. E.g. `json.literalize=key` or `json.literalize.1`, `json.literalize.2`, `...` to add multiple expressions.  The `json.literalize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON. | Any key values present in the JSON file | Not set |
 
 ---
 ### `json.path`
 
 #### Description
 
-One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option. 
-    It will pre-process the JSON before the execution of the query. 
-    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).
+One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option.      It will pre-process the JSON before the execution of the query.      In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).
 
 #### Valid Values
 
@@ -180,8 +175,8 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
 CONSTRUCT 
   { 
@@ -288,8 +283,8 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
 SELECT  ?language
 WHERE
@@ -368,8 +363,8 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
 CONSTRUCT 
   { 
@@ -428,8 +423,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 #### Description
 
-One or more key values as filters. E.g. `json.literalize=key` or `json.literalize.1`, `json.literalize.2`, `...` to add multiple expressions. 
-The `json.literalize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON.
+One or more key values as filters. E.g. `json.literalize=key` or `json.literalize.1`, `json.literalize.2`, `...` to add multiple expressions.  The `json.literalize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON.
 
 #### Valid Values
 
