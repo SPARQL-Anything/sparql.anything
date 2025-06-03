@@ -53,7 +53,7 @@ public class OptionSection {
 	}
 
 	public String getDescription() {
-		return Utils.addLinkToIssues(option.description());
+		return Utils.addLinkToIssues(option.description().replace("\n", " "));
 	}
 
 	public String getValidValues() {
