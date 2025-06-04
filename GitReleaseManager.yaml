@@ -1,0 +1,79 @@
+create:
+    # Please see
+    # https://gittools.github.io/GitReleaseManager/docs/configuration/template-configuration#editing-the-templates
+    # configuration for configuring footers
+    include-footer: false
+    include-sha-section: false
+    sha-section-heading: "SHA256 Hashes of the release artifacts"
+    sha-section-line-format: "- `{1}\t{0}`"
+    allow-update-to-published: false
+export:
+    include-created-date-in-title: false
+    created-date-string-format: ''
+    perform-regex-removal: false
+    regex-text: ''
+    multiline-regex: false
+close:
+  use-issue-comments: false
+  issue-comment: |-
+    :tada: This issue has been resolved in version {milestone} :tada:
+
+    The release is available on:
+
+    - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+
+    Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
+default-branch: master
+labels:
+    - name: Breaking Change
+      description: Functionality breaking changes
+      color: b60205
+    - name: Bug
+      description: Something isn't working
+      color: ee0701
+    - name: Build
+      description: Build pipeline
+      color: 009800
+    - name: Documentation
+      description: Improvements or additions to documentation
+      color: d4c5f9
+    - name: Feature
+      description: Request for a new feature
+      color: 84b6eb
+    - name: Good First Issue
+      description: Good for newcomers
+      color: 7057ff
+    - name: Help Wanted
+      description: Extra attention is needed
+      color: 33aa3f
+    - name: Improvement
+      description: Improvement of an existing feature
+      color: 207de5
+    - name: Question
+      description: Further information is requested
+      color: cc317c
+    - name: Management
+      description: Better management of development and release life-cycle
+      color: 006b75
+    - name: Security
+      description: Security issues
+      color: A2800F
+    - name: dependencies
+      description: Dependency management
+      color: A2800F
+issue-labels-include:
+    - Breaking Change
+    - Bug
+    - Documentation
+    - Feature
+    - Good First Issue
+    - Help Wanted
+    - Improvement
+    - Question
+    - Management
+    - Security
+    - dependencies
+issue-labels-exclude:
+    - Wontfix
+    - Management
+issue-labels-alias: []
