@@ -25,7 +25,7 @@
 		<version>${revision}</version>
 	</parent>
 	<properties>
-		<revision>1.0.0-SNAPSHOT</revision>
+		<revision>1.0.0</revision>
 	</properties>
 	<artifactId>sparql-anything-xml</artifactId>
 	<dependencies>
