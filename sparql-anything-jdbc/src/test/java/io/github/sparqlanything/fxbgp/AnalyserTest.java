@@ -96,6 +96,7 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void NS6() throws IOException {
 		readBGP(name.getMethodName());
+		System.out.println(interpretations());
 		Assert.assertEquals(0, interpretations().size());
 	}
 
