@@ -441,6 +441,19 @@ public class FXModel {
 	}
 
 	public final boolean isConsistent(InterpretationOfBGP nibgp){
+		// Check that each interpretation can be Subject, Predicate, or Object
+		for(Triple t: nibgp.getOpBGP().getPattern().getList()){
+			if(
+				this.consistent(nibgp.getInterpretation(t.getSubject()).getTerm(), FX.Subject)
+					&&
+					this.consistent(nibgp.getInterpretation(t.getPredicate()).getTerm(), FX.Predicate)
+					&&
+					this.consistent(nibgp.getInterpretation(t.getObject()).getTerm(), FX.Object)){
+				continue;
+			}else{
+				return false;
+			}
+		}
 		// Make inferences
 		for(Node focus: nibgp.nodes()) {
 			// For each node, run inference rules
@@ -457,7 +470,7 @@ public class FXModel {
 						continue;
 					}
 					// Verify consistency with previous interpretation
-					if(this.consistent(nni.getTerm(),prev.getTerm())){
+					if(this.consistent(nni.getTerm(), prev.getTerm())){
 						// Check next rule
 						continue;
 					}else{
