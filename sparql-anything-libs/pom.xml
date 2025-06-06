@@ -34,7 +34,7 @@
     </description>
 
     <properties>
-        <revision>1.0.0</revision>
+        <revision>1.1.0-jdbc-SNAPSHOT</revision>
     </properties>
 
     <dependencies>
