@@ -76,7 +76,15 @@ public class AnalyserGrounder implements Analyser {
 			for(FX objectTerm : objectTerms){
 				possible.get(t.getObject()).add(FXM.getIF().make(bgp, t.getObject(), objectTerm));
 			}
+
+			// For each node, if possible interpretations include both Predicate and either Subject or Object, there is no solution
+			if(possible.get(t.getSubject()).contains(FXM.getIF().make(bgp, t.getSubject(), FX.TypeProperty)) ||
+				possible.get(t.getObject()).contains(FXM.getIF().make(bgp, t.getObject(), FX.TypeProperty)) ||
+				possible.get(t.getPredicate()).contains(FXM.getIF().make(bgp, t.getPredicate(), FX.Container)) ){
+				return Collections.emptySet();
+			}
 		}
+
 		if(L.isTraceEnabled()) {
 			for (Map.Entry<Node, Set<InterpretationOfNode>> entry : possible.entrySet()) {
 				L.trace(" -- possible {} > {} -- ", entry.getKey(), entry.getValue());
