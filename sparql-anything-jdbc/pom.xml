@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>io.github.sparql-anything</groupId>
 		<artifactId>sparql-anything-parent</artifactId>
-		<version>${revision}}</version>
+		<version>${revision}</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<properties>
