@@ -1,0 +1,36 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix fx:   <http://sparql.xyz/facade-x/ns/>.
+@prefix xyz:  <http://sparql.xyz/facade-x/data/>.
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
+
+<http://www.example.org/document>
+        a       <http://sparql.xyz/facade-x/ns/root> ;
+        xyz:child    <http://www.example.org/document/child> ;
+        xyz:literal  "{\"first\" : 1, \"second\" : \"second\"}" ;
+        xyz:literal_string <http://www.example.org/document/literal_string> ;
+        xyz:literal_bool <http://www.example.org/document/literal_bool> ;
+        xyz:literal_int <http://www.example.org/document/literal_int> ;
+        .
+
+<http://www.example.org/document/child>
+        xyz:literal      "{\"x\" : 1, \"y\" : 2}" ;
+        xyz:non-literal  <http://www.example.org/document/child/non-literal> ;
+        .
+
+<http://www.example.org/document/child/non-literal>
+        xyz:a   "1"^^xsd:int ;
+        xyz:b   "2"^^xsd:int ;
+        .
+
+<http://www.example.org/document/literal_string>
+        xyz:literal "\"value\"" ;
+        .
+
+<http://www.example.org/document/literal_bool>
+        xyz:literal "true" ;
+        .
+
+<http://www.example.org/document/literal_int>
+        xyz:literal "9" ;
+        .

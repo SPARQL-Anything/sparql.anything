@@ -1,0 +1,25 @@
+{
+  "child" : {
+    "literal" : {
+      "x" : 1,
+      "y" : 2
+    },
+    "non-literal" : {
+      "a" : 1,
+      "b" : 2
+    }
+  },
+  "literal" : {
+    "first" : 1,
+    "second" : "second"
+  },
+  "literal_string" : {
+    "literal" : "value"
+  },
+  "literal_bool" : {
+    "literal" : true
+  },
+  "literal_int" : {
+    "literal" : 9
+  }
+}
