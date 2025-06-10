@@ -1,0 +1,75 @@
+@prefix dc:     <http://purl.org/dc/elements/1.1/> .
+@prefix eg:     <http://www.example.org/> .
+@prefix fx:     <http://sparql.xyz/facade-x/ns/> .
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss:    <http://purl.org/rss/1.0/> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+@prefix whatwg: <https://html.spec.whatwg.org/#> .
+@prefix xhtml:  <http://www.w3.org/1999/xhtml#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix xyz:    <http://sparql.xyz/facade-x/data/> .
+
+<http://www.example.org/document/html/body/p/uid\u007C>
+        a       <http://www.w3.org/1999/xhtml#uid%3A>;
+        <http://www.w3.org/1999/xhtml#%7C>
+                "";
+        <http://www.w3.org/1999/xhtml#16472722>
+                "";
+        <http://www.w3.org/1999/xhtml#article>
+                "";
+        <http://www.w3.org/1999/xhtml#kind%3A>
+                "";
+        <http://www.w3.org/1999/xhtml#name>
+                "";
+        <http://www.w3.org/1999/xhtml#name%3A>
+                "";
+        <http://www.w3.org/1999/xhtml#posted>
+                "";
+        <http://www.w3.org/1999/xhtml#stage%3A>
+                "";
+        <http://www.w3.org/1999/xhtml#topic>
+                "" .
+
+<http://www.example.org/document/html/body/p>
+        a       <http://www.w3.org/1999/xhtml#p>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document/html/body/p/uid\u007C>;
+        <https://html.spec.whatwg.org/#innerHTML>
+                "<uid: 16472722 | name: article name kind: topic stage: posted>\n</uid:>" .
+
+<http://www.example.org/document/html/body/h3>
+        a       <http://www.w3.org/1999/xhtml#h3>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "About Us";
+        <https://html.spec.whatwg.org/#innerHTML>
+                "About Us";
+        <https://html.spec.whatwg.org/#innerText>
+                "About Us" .
+
+<http://www.example.org/document/html/body>
+        a       <http://www.w3.org/1999/xhtml#body>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document/html/body/h3>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document/html/body/p>;
+        <https://html.spec.whatwg.org/#innerHTML>
+                "<h3>About Us</h3>\n<p><uid: 16472722 | name: article name kind: topic stage: posted>\n </uid:></p>";
+        <https://html.spec.whatwg.org/#innerText>
+                "About Us" .
+
+<http://www.example.org/document/html/head>
+        a       <http://www.w3.org/1999/xhtml#head> .
+
+<http://www.example.org/document>
+        a       <http://www.w3.org/1999/xhtml#html> , <http://sparql.xyz/facade-x/ns/root>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document/html/head>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document/html/body>;
+        <https://html.spec.whatwg.org/#innerHTML>
+                "<head></head>\n<body>\n <h3>About Us</h3>\n <p><uid: 16472722 | name: article name kind: topic stage: posted>\n  </uid:></p>\n</body>";
+        <https://html.spec.whatwg.org/#innerText>
+                "About Us" .

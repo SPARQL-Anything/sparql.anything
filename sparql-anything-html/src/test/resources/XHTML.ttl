@@ -55,8 +55,8 @@
                     ] ;
   xhtml:lang        "en" ;
   xhtml:xmlns       "http://www.w3.org/1999/xhtml" ;
-  xhtml:xmlns:h     "http://www.example.org/" ;
-  xhtml:xmlns:p     "http://www.example.org/personal" ;
+  xhtml:xmlns%3Ah     "http://www.example.org/" ;
+  xhtml:xmlns%3Ap     "http://www.example.org/personal" ;
   whatwg:innerHTML  "\n<h:head>\n    <title>Hello World</title>\n</h:head>\n\n\n\n<h:body>\n    <h:block>\n\n        <p:stuff attr1=\"Attribute 1 value\">\n            <h:some content=\"2\" extended=\"100000\">\n                <h:text value=\"Example text here\" />\n                <p:text value=\"Personal text here\" />\n\n                <p:other value=\"Other value\">Content of other form</p:other>\n            </h:some>\n        </p:stuff>\n\n    </h:block>\n</h:body>" ;
   whatwg:innerText  "Hello World Content of other form"
 ] .

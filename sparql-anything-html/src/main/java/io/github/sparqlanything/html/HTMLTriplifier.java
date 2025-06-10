@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.html;
 
+import com.adobe.internal.xmp.impl.Base64;
 import com.microsoft.playwright.*;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorRegistryImpl;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.*;
@@ -34,6 +35,7 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionExcept
 import io.github.sparqlanything.html.org.apache.any23.source.DocumentSource;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
+import org.apache.http.client.utils.URIUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Attribute;
@@ -50,7 +52,9 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -279,6 +283,8 @@ public class HTMLTriplifier implements Triplifier {
 			ns = HTML_NS;
 			localName = tagOrAttribute;
 		}
+		// Make locaName URI-safe (#544)
+		localName = URLEncoder.encode(localName, StandardCharsets.UTF_8);
 		return (ns.endsWith("#")? ns: ns+"#") + localName;
 	}
 	private void populate(FacadeXGraphBuilder builder, String dataSourceId, Element element, boolean blank_nodes, String resourceId) throws URISyntaxException {

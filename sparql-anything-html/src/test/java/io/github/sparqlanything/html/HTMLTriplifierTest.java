@@ -16,9 +16,16 @@
 
 package io.github.sparqlanything.html;
 
+import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
+import io.github.sparqlanything.model.FacadeXGraphBuilder;
+import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.TriplifierHTTPException;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Properties;
 
 public class HTMLTriplifierTest extends AbstractTriplifierTester {
@@ -34,6 +41,14 @@ public class HTMLTriplifierTest extends AbstractTriplifierTester {
 
 	@Test
 	public void testHTML2() {
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	/**
+	 * Testing #544
+	 */
+	@Test
+	public void testDIRTY1() {
 		assertResultIsIsomorphicWithExpected();
 	}
 

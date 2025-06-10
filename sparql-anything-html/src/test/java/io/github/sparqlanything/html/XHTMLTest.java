@@ -18,6 +18,8 @@ package io.github.sparqlanything.html;
 
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -35,6 +37,8 @@ public class XHTMLTest extends AbstractTriplifierTester {
 
 	@Test
 	public void testXHTML() {
+//		RDFDataMgr.write(System.err,expected, Lang.TURTLE);
+//		RDFDataMgr.write(System.err,result, Lang.TURTLE);
 		this.assertResultIsIsomorphicWithExpected();
 	}
 
