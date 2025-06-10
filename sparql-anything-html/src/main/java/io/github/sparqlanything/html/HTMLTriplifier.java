@@ -243,7 +243,9 @@ public class HTMLTriplifier implements Triplifier {
 	}
 
 	private void extractMetadata(URL url, FacadeXGraphBuilder builder) throws IOException, URISyntaxException, ExtractionException, TripleHandlerException {
-		any23.setHTTPUserAgent("test-user-agent");
+		if (any23.getHTTPUserAgent() == null) {
+			any23.setHTTPUserAgent("any23 / SPARQL Anything");
+		}
 		DocumentSource source = any23.createDocumentSource(url.toString());
 		try (TripleHandler handler = new MetadataWriter(builder)) {
 			any23.extract(source, handler);

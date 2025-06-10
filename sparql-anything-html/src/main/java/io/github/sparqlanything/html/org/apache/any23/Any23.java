@@ -85,7 +85,7 @@ public class Any23 {
 
     private final ExtractorGroup factories;
     private LocalCopyFactory streamCache;
-    private String userAgent;
+    private String userAgent = null;
 
     /**
      * Constructor that allows the specification of a custom configuration and of a list of extractors.
