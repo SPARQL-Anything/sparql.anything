@@ -17,9 +17,14 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+      - name: Write release version
+        run: |
+          TAG=${{ github.ref_name }}
+          echo "VERSION=${TAG#v}" >> $GITHUB_ENV
+          echo "VERSION=$VERSION"
       - name: Install gpg key and publish package
         run: |
-            echo -e "Releasing ${{ github.ref_name }}"
+            echo -e "Releasing ${VERSION}"
             echo -e "$(tty)"
             gpg --version
             mvn -version
@@ -30,8 +35,7 @@ jobs:
             # https://gist.github.com/sualeh/ae78dc16123899d7942bc38baba5203c
             echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}" | gpg --batch --import 
             gpg --list-secret-keys --keyid-format LONG
-            # mvn --batch-mode deploy  -Drevision=${{ github.ref_name }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
-            mvn --batch-mode clean deploy  -Drevision=${{ github.ref_name }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
+            mvn --batch-mode clean deploy  -Drevision=${VERSION} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
