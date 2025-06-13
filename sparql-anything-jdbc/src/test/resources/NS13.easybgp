@@ -1,0 +1,7 @@
+<iri1> ?b2 <iri3>
+<iri1> ?b3 <iri4>
+<iri3> ?b4 ?v5
+<iri4> ?b4 ?v6
+?v5 ?b5 <iri7>
+?v6 ?b6 <iri7>
+<iri7> a <something>

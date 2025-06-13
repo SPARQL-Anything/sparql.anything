@@ -34,6 +34,12 @@ public class AnalyserGrounder implements Analyser {
 	@Override
 	public Set<InterpretationOfBGP> interpret(OpBGP bgp) {
 		// Precondition...
+
+		// No cycles are allowed
+		if(FXM.hasCycle(bgp)){
+			return Collections.emptySet();
+		}
+
 		// For any triple, s, p, o are all different
 		for(Triple t : bgp.getPattern()){
 			if(t.getSubject().equals(t.getObject()) ||

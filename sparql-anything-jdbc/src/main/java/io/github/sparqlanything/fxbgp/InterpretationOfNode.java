@@ -11,5 +11,4 @@ public interface InterpretationOfNode extends Interpretation {
 
 	boolean isGrounded();
 
-
 }

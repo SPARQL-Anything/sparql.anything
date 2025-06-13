@@ -106,6 +106,46 @@ public class AnalyserTest extends BGPTestAbstract {
 	}
 
 	@Test
+	public void NS8() throws IOException {
+		// Unique path to container as object
+		readBGP(name.getMethodName());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+	@Test
+	public void NS9() throws IOException {
+		// Unique fx:root in BGP
+		readBGP(name.getMethodName());
+		System.err.println(interpretations());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+	@Test
+	public void NS10() throws IOException {
+		readBGP(name.getMethodName());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+	@Test
+	public void NS11() throws IOException {
+		readBGP(name.getMethodName());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+	@Test
+	public void NS12() throws IOException {
+		readBGP(name.getMethodName());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+	@Test
+	public void NS13() throws IOException {
+		readBGP(name.getMethodName());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+
+	@Test
 	public void BGP_1_allGrounded() throws IOException {
 		readBGP("BGP_1");
 		L.info("size: {}",interpretations().size());
@@ -175,6 +215,7 @@ public class AnalyserTest extends BGPTestAbstract {
 			v("p"), FX.TypeProperty,
 			v("f"), FX.Root
 		);
+
 		Assert.assertTrue(interpretations().contains(i1));
 		Assert.assertTrue(interpretations().contains(i2));
 		Assert.assertTrue(interpretations().contains(i3));

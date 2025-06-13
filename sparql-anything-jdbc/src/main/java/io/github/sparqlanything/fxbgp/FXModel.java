@@ -1,16 +1,22 @@
 package io.github.sparqlanything.fxbgp;
 
 import io.github.sparqlanything.model.Triplifier;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -384,7 +390,53 @@ public class FXModel {
 				return false;
 			}
 		});
-		// 13. On focus node is Predicate position: and Object is Container, then Predicate is Slot
+
+		// 13. Object cannot be IRI != Root and Root
+		addInferenceRule(new NodeInterpretationRule() {
+
+			@Override
+			protected boolean when(Node node, InterpretationOfBGP previous) {
+				if(previous.getInterpretation(node).getTerm().equals(FX.Root)){
+					if(node.isURI() && !node.equals(FXRoot)){
+						setFailure();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		// 14. Type cannot be the primitive Root
+		addInferenceRule(new NodeInterpretationRule() {
+
+			@Override
+			protected boolean when(Node node, InterpretationOfBGP previous) {
+				if(previous.getInterpretation(node).getTerm().equals(FX.Type)){
+					if(node.equals(FXRoot)){
+						setFailure();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		// 15. Object cannot be IRI and Value
+		addInferenceRule(new NodeInterpretationRule() {
+
+			@Override
+			protected boolean when(Node node, InterpretationOfBGP previous) {
+				if(previous.getInterpretation(node).getTerm().equals(FX.Value)){
+					if(node.isURI()){
+						setFailure();
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+		// 16. On focus node is Predicate position: and Object is Container, then Predicate is Slot
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			protected boolean when(Node n, InterpretationOfBGP p) {
@@ -402,6 +454,154 @@ public class FXModel {
 				return false;
 			}
 		});
+
+		// 17 No subject join when object is Root (no path to root...)
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			protected boolean when(Node n, InterpretationOfBGP p) {
+				// Object is root
+				if(p.getInterpretation(n).getTerm().equals(FX.Root)){
+					for (Triple t : p.getOpBGP().getPattern().getList()) {
+						// If it is not the same node
+						if (t.getObject().equals(n) ){
+							Node subject = t.getSubject();
+							for (Triple t2 : p.getOpBGP().getPattern().getList()) {
+								if(t2.getObject().equals(subject)){
+									setFailure();
+									return true;
+								}
+							}
+						}
+					}
+				}
+				return false;
+			}
+		});
+
+		// 19 Matching-path constraint when node is Object and (Container or Root)
+		addInferenceRule(new NodeInterpretationRule() {
+
+			@Override
+			protected boolean when(Node node, InterpretationOfBGP previous) {
+
+				// Only if node is a container or root
+				if(!previous.getInterpretation(node).getTerm().equals(FX.Container)
+					&& !previous.getInterpretation(node).getTerm().equals(FX.Root)){
+					return false;
+				}
+
+				// Collect triples with this node as object
+				Set<Triple> withNodeAsObject = new HashSet<>();
+				for (Triple t: previous.getOpBGP().getPattern().getList()){
+					if (t.getObject().equals(node)) {
+						withNodeAsObject.add(t);
+					}
+				}
+				// Make unique pairs
+				Set<Set<Triple>> sets = new HashSet<>();
+				for (Triple t1: withNodeAsObject){
+					for (Triple t2: withNodeAsObject){
+						if(!t1.equals(t2)){
+							sets.add(new HashSet<>(Arrays.asList(t1,t2)));
+						}
+					}
+				}
+				List<Pair<Triple, Triple>> paris = new ArrayList<>();
+				for(Set<Triple> set: sets){
+					Triple left = null;
+					Triple right = null;
+					for(Triple t: set){
+						if(left == null){
+							left = t;
+						}else if(right == null){
+							right = t;
+						}else{
+							// This should never happen
+							throw new RuntimeException("This should never happen");
+						}
+					}
+					paris.add(Pair.of(left, right));
+				}
+				// TODO: Avoid duplicates!
+//				List<Pair<Triple, Triple>> paris = new ArrayList<>();
+//				for (Triple left: previous.getOpBGP().getPattern().getList()){
+//					if (left.getObject().equals(node)) {
+//						for (Triple right: previous.getOpBGP().getPattern().getList()){
+//							if(!left.equals(right) && left.getObject().equals(right.getObject())){
+//								paris.add(Pair.of(left, right));
+//							}
+//						}
+//					}
+//				}
+
+				// Make backward paths out of triples...
+				List<Pair<List<Node>, List<Node>>> london = new ArrayList<>();
+				for(Pair<Triple,Triple> pair : paris){
+					london.add(Pair.of(this.asList(pair.getLeft(), previous.getOpBGP().getPattern()),this.asList(pair.getRight(), previous.getOpBGP().getPattern())));
+				}
+
+				// Verify the terms can match on each path pair
+				for(Pair<List<Node>, List<Node>> pair : london){
+					List<Node> left = pair.getLeft();
+					List<Node> right = pair.getRight();
+
+					// If one of the two is shorter, its origin cannot be root
+					if(left.size() != right.size()){
+						List<Node> shorter = left.size() < right.size() ? left : right;
+						if(previous.getInterpretation(shorter.get(shorter.size()-1)).getTerm().equals(FX.Root)){
+							// FAIL
+							setFailure();
+							// The rule resolves
+							return true;
+						}
+					}
+					// Check if terms are compatible
+					for(int x = 0; x < left.size(); x++){
+						Node ln = left.get(x);
+						if(right.get(x) == null){
+							// exit
+							break;
+						}
+						Node rn = right.get(x);
+						boolean ok = false;
+						if(ln.equals(rn)){
+							// OK
+							ok = true;
+						}
+						if(!ok && (ln.isBlank() || rn.isBlank())){
+							// OK
+							ok = true;
+						}
+						if(!ok && (ln.isVariable() || rn.isVariable())){
+							// OK
+							ok = true;
+						}
+						// If not OK, FAIL
+						if(!ok){
+							setFailure();
+							return true;
+						}
+					}
+				}
+
+				return false;
+			}
+
+			List<Node> asList(Triple triple, BasicPattern pattern){
+				List<Node> list = new ArrayList<>();
+				list.add(triple.getObject());
+				list.add(triple.getPredicate());
+				list.add(triple.getSubject());
+				// Search for subject-object join
+				for(Triple t: pattern.getList()){
+					if(!t.equals(triple) && t.getObject().equals(triple.getSubject())){
+						list.addAll(asList(t, pattern));
+					}
+				}
+				return list;
+			}
+
+		});
 	}
 
 	/**
@@ -409,6 +609,34 @@ public class FXModel {
 	 */
 	public boolean isGrounded(FX element){
 		return getSpecialisedBy(element).isEmpty();
+	}
+
+	public static final boolean hasCycle(OpBGP bgp){
+		// For each node, follow the paths, if we find a node in the stack, return false
+		for (Triple t: bgp.getPattern().getList()){
+			List<Node> start = new ArrayList<>();
+			start.add(t.getSubject());
+			if(detectCycle(bgp, start)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static final boolean detectCycle(OpBGP bgp, List<Node> visited){
+		Node last = visited.get(visited.size() - 1);
+		for (Triple t : bgp.getPattern().getList()) {
+			if (t.getSubject().equals(last)) {
+				Node o = t.getObject();
+				if (visited.contains(o)) {
+					return true;
+				} else {
+					visited.add(o);
+					return detectCycle(bgp, visited);
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -455,6 +683,10 @@ public class FXModel {
 				// For each rule that resolves, check if interpretation is consistent
 				boolean resolves = rule.when(focus, nibgp);
 				if(resolves){
+					// Rule says a constraint hasn't been satisfied
+					if(rule.failure()){
+						return false;
+					}
 					InterpretationOfNode nni = rule.infer();
 					// Is it redundant?
 					InterpretationOfNode prev = nibgp.getInterpretation(focus);

@@ -43,6 +43,12 @@ public class AnalyserAsSearch implements Analyser {
 				return Collections.emptySet();
 			}
 		}
+
+		// No cycles are allowed
+		if(FXM.hasCycle(bgp)){
+			return Collections.emptySet();
+		}
+
 		iteration = 0;
 		Set<InterpretationOfBGP> interpretations = interpret(start, new HashSet<>());
 		L.info("{} iterations",iteration);
