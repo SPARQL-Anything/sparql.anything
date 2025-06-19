@@ -249,7 +249,7 @@ public class FXModel {
 		});
 
 
-		// 5. If Object not Var and not fx:Root but Predicate rdf:type, then Type
+		// 5. If Object not Var/Bnode and not fx:Root but Predicate rdf:type, then Type
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			protected boolean when(Node n, InterpretationOfBGP p) {
@@ -391,7 +391,7 @@ public class FXModel {
 			}
 		});
 
-		// 13. Object cannot be IRI != Root and Root
+		// 13. Object cannot be IRI, != Root, and Root
 		addInferenceRule(new NodeInterpretationRule() {
 
 			@Override
@@ -455,7 +455,7 @@ public class FXModel {
 			}
 		});
 
-		// 17 No subject join when object is Root (no path to root...)
+		// 17. No subject join when object is Root (no path to root...)
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			protected boolean when(Node n, InterpretationOfBGP p) {
@@ -478,7 +478,7 @@ public class FXModel {
 			}
 		});
 
-		// 19 Matching-path constraint when node is Object and (Container or Root)
+		// 18. Matching-path constraint when node is Object and (Container or Root)
 		addInferenceRule(new NodeInterpretationRule() {
 
 			@Override
