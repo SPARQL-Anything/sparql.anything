@@ -513,7 +513,9 @@ public class SPARQLAnything {
 					return;
 				}
 				Query q = QueryFactory.create(query);
-				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()), configurations);
+				try(PrintStream ps = getPrintWriter(outputFileName, cli.getOutputAppend())) {
+					executeQuery(cli.getFormat(q), kb, q, ps, configurations);
+				}
 			} else {
 				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);
 			}
@@ -560,12 +562,12 @@ public class SPARQLAnything {
 			}
 			// #528 Check no-clobber if output file already exists.
 			if(outputFile != null && cli.getOutputNoClobber() && new File(outputFile).exists()){
-				logger.info("skipping: no-clobber is on and file exists");
+				logger.info("Skipping: `no-clobber` is on and file exists (iteration "+ parameters.getRowNumber() + ")");
 				continue;
 			}
-			try {
+			try (PrintStream ps = getPrintWriter(outputFile, cli.getOutputAppend())) {
 				logger.trace("Executing Query: {}", q);
-				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()), configurations);
+				executeQuery(cli.getFormat(q), kb, q, ps, configurations);
 			} catch (Exception e1) {
 				logger.error(
 						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
