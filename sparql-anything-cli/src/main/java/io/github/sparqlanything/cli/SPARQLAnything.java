@@ -186,7 +186,7 @@ public class SPARQLAnything {
 		}
 	}
 
-	private static PrintStream getPrintWriter(String fileName, boolean append) throws FileNotFoundException {
+	private static PrintStream getPrintStream(String fileName, boolean append) throws FileNotFoundException {
 
 		if (fileName != null) {
 			return new PrintStream(new FileOutputStream(fileName, append));
@@ -518,7 +518,7 @@ public class SPARQLAnything {
 					return;
 				}
 				Query q = QueryFactory.create(query);
-				try(PrintStream ps = getPrintWriter(outputFileName, cli.getOutputAppend())) {
+				try(PrintStream ps = getPrintStream(outputFileName, cli.getOutputAppend())) {
 					executeQuery(cli.getFormat(q), kb, q, ps, configurations);
 				}
 			} else {
@@ -570,7 +570,7 @@ public class SPARQLAnything {
 				logger.info("Skipping: `no-clobber` is on and file exists (iteration "+ parameters.getRowNumber() + ")");
 				continue;
 			}
-			try (PrintStream ps = getPrintWriter(outputFile, cli.getOutputAppend())) {
+			try (PrintStream ps = getPrintStream(outputFile, cli.getOutputAppend())) {
 				logger.trace("Executing Query: {}", q);
 				executeQuery(cli.getFormat(q), kb, q, ps, configurations);
 			} catch (Exception e1) {
