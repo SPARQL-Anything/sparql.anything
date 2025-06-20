@@ -103,77 +103,82 @@ public class SPARQLAnything {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Before executeQuery: {}", System.currentTimeMillis() - duration);
 		}
-		if (query.isSelectType()) {
-			switch (outputFormat) {
-				case "JSON":
-					ResultSetFormatter.outputAsJSON(pw, createQueryExecution(query, kb, configurations).execSelect());
-					break;
-				case "XML":
-					ResultSetFormatter.outputAsXML(pw, createQueryExecution(query, kb, configurations).execSelect());
-					break;
-				case "CSV":
-					ResultSetFormatter.outputAsCSV(pw, createQueryExecution(query, kb, configurations).execSelect());
-					break;
-				case "TEXT":
-					pw.println(ResultSetFormatter.asText(createQueryExecution(query, kb, configurations).execSelect()));
-					break;
-				default:
+		try(QueryExecution qe = createQueryExecution(query, kb, configurations)) {
+			if (query.isSelectType()) {
+				ResultSet rs = qe.execSelect();
+				switch (outputFormat) {
+					case "JSON":
+						ResultSetFormatter.outputAsJSON(pw, rs);
+						break;
+					case "XML":
+						ResultSetFormatter.outputAsXML(pw, rs);
+						break;
+					case "CSV":
+						ResultSetFormatter.outputAsCSV(pw, rs);
+						break;
+					case "TEXT":
+						pw.println(ResultSetFormatter.asText(rs));
+						break;
+					default:
+						throw new RuntimeException("Unsupported format: " + outputFormat);
+				}
+
+			} else if (query.isAskType()) {
+				Boolean ask = qe.execAsk();
+				switch (outputFormat) {
+					case "JSON":
+						ResultSetFormatter.outputAsJSON(pw, ask);
+						break;
+					case "XML":
+						ResultSetFormatter.outputAsXML(pw, ask);
+						break;
+					case "CSV":
+						ResultSetFormatter.outputAsCSV(pw, ask);
+						break;
+					case "TEXT":
+						pw.print(ask);
+						break;
+					default:
+						throw new RuntimeException("Unsupported format: " + outputFormat);
+				}
+			} else if (query.isDescribeType() || query.isConstructType()) {
+				Model m;
+				Dataset d = null;
+				if (query.isConstructType()) {
+					d = qe.execConstructDataset();
+					// .execConstructDataset (instead of .execConstruct) so we can construct quads too
+					// as described here: https://jena.apache.org/documentation/query/construct-quad.html
+					m = d.getDefaultModel();
+				} else {
+					m = qe.execDescribe();
+					// d = new DatasetImpl(m);
+				}
+				if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName())) {
+					// JSON-LD format.equals(Lang.JSONLD11.getName())
+					RDFDataMgr.write(pw, m, Lang.JSONLD);
+				} else if (outputFormat.equals(Lang.JSONLD11.getName())) {
+					RDFDataMgr.write(pw, m, Lang.JSONLD11);
+				} else if (outputFormat.equals("XML")) {
+					// RDF/XML
+					RDFDataMgr.write(pw, m, Lang.RDFXML);
+				} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
+					// TURTLE
+					RDFDataMgr.write(pw, m, Lang.TTL);
+				} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
+					// N-Triples
+					RDFDataMgr.write(pw, m, Lang.NT);
+				} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
+					// NQ
+					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
+				} else if (outputFormat.equals(Lang.TRIG.getName())) {
+					// TRIG
+					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
+				} else if (outputFormat.equals(Lang.TRIX.getName())) {
+					// TRIG
+					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
+				} else {
 					throw new RuntimeException("Unsupported format: " + outputFormat);
-			}
-		} else if (query.isAskType()) {
-			switch (outputFormat) {
-				case "JSON":
-					ResultSetFormatter.outputAsJSON(pw, createQueryExecution(query, kb, configurations).execAsk());
-					break;
-				case "XML":
-					ResultSetFormatter.outputAsXML(pw, createQueryExecution(query, kb, configurations).execAsk());
-					break;
-				case "CSV":
-					ResultSetFormatter.outputAsCSV(pw, createQueryExecution(query, kb, configurations).execAsk());
-					break;
-				case "TEXT":
-					pw.print(createQueryExecution(query, kb, configurations).execAsk());
-					break;
-				default:
-					throw new RuntimeException("Unsupported format: " + outputFormat);
-			}
-		} else if (query.isDescribeType() || query.isConstructType()) {
-			Model m;
-			Dataset d = null;
-			if (query.isConstructType()) {
-				d = createQueryExecution(query, kb, configurations).execConstructDataset();
-				// .execConstructDataset (instead of .execConstruct) so we can construct quads too
-				// as described here: https://jena.apache.org/documentation/query/construct-quad.html
-				m = d.getDefaultModel();
-			} else {
-				m = createQueryExecution(query, kb, configurations).execDescribe();
-				// d = new DatasetImpl(m);
-			}
-			if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName()) ) {
-				// JSON-LD format.equals(Lang.JSONLD11.getName())
-				RDFDataMgr.write(pw, m, Lang.JSONLD);
-			} else if ( outputFormat.equals(Lang.JSONLD11.getName()) ) {
-				RDFDataMgr.write(pw, m, Lang.JSONLD11);
-			} else if (outputFormat.equals("XML")) {
-				// RDF/XML
-				RDFDataMgr.write(pw, m, Lang.RDFXML);
-			} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
-				// TURTLE
-				RDFDataMgr.write(pw, m, Lang.TTL);
-			} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
-				// N-Triples
-				RDFDataMgr.write(pw, m, Lang.NT);
-			} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
-				// NQ
-				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
-			} else if (outputFormat.equals(Lang.TRIG.getName())) {
-				// TRIG
-				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
-			} else if (outputFormat.equals(Lang.TRIX.getName())) {
-				// TRIG
-				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
-			} else {
-				throw new RuntimeException("Unsupported format: " + outputFormat);
+				}
 			}
 		}
 		if(logger.isTraceEnabled()) {
