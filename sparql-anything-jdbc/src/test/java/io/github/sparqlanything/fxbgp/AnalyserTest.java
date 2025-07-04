@@ -1,5 +1,8 @@
 package io.github.sparqlanything.fxbgp;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.vocabulary.RDF;
@@ -13,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AnalyserTest extends BGPTestAbstract {
@@ -144,6 +148,13 @@ public class AnalyserTest extends BGPTestAbstract {
 		Assert.assertEquals(0, interpretations().size());
 	}
 
+	@Test
+	public void NS14() throws IOException {
+		readBGP(name.getMethodName());
+		System.out.println(interpretations());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
 
 	@Test
 	public void BGP_1_allGrounded() throws IOException {
@@ -182,12 +193,21 @@ public class AnalyserTest extends BGPTestAbstract {
 		Assert.assertTrue(interpretations().contains(i2));
 	}
 
-	@Ignore // This is for development only
+	//@Ignore // This is for development only
 	@Test
 	public void BGP_X() throws IOException {
-		readBGP(name.getMethodName());
-		L.info("size: {}",interpretations().size());
-		System.out.println(interpretations());
+//		readBGP(name.getMethodName());
+//		L.info("size: {}",interpretations().size());
+//		System.out.println(interpretations());
+
+		Set product = Sets.cartesianProduct(ImmutableList.of(ImmutableSet.of("a","b"), ImmutableSet.of("a", "b")));
+		System.out.println(product);
+		for(Object lo:product){
+			List<String> ls = (List<String>) lo;
+			String l = ls.get(0);
+			String r = ls.get(1);
+			System.out.println(l.equals(r));
+		}
 	}
 
 	@Test

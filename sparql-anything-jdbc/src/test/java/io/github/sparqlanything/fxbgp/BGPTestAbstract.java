@@ -149,7 +149,7 @@ public abstract class BGPTestAbstract {
 					nodes.add(b(tr[c].trim().substring(2)));
 				}else
 				if(tr[c].trim().startsWith("\"")){
-					nodes.add(v(tr[c].trim().substring(1,tr[c].trim().length()-1)));
+					nodes.add(l(tr[c].trim().substring(1,tr[c].trim().length()-1)));
 				}else
 				if(tr[c].trim().equals("a")){
 					nodes.add(u(RDF.type.getURI()));

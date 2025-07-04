@@ -1,5 +1,8 @@
 package io.github.sparqlanything.fxbgp;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.graph.Node;
@@ -455,7 +458,45 @@ public class FXModel {
 			}
 		});
 
-		// 17. No subject join when object is Root (no path to root...)
+		// 17. If node is predicate, and it is a slot, and is in two triples that have the same subject, they also need to have the same object
+		addInferenceRule(new NodeInterpretationRule() {
+			@Override
+			protected boolean when(Node n, InterpretationOfBGP p) {
+				FX term = p.getInterpretation(n).getTerm();
+				Set<FX> spec = getSpecialisedBy(FX.Slot);
+				if(term.equals(FX.Slot) || spec.contains(term)) {
+					List<Triple> havingNodeAsP = new ArrayList<>();
+					for (Triple t : p.getOpBGP().getPattern().getList()) {
+						if (t.getPredicate().equals(n)) {
+							havingNodeAsP.add(t);
+						}
+					}
+					if (havingNodeAsP.size() > 1) {
+						//
+						Set product = Sets.cartesianProduct(ImmutableList.of(ImmutableSet.copyOf(havingNodeAsP), ImmutableSet.copyOf(havingNodeAsP)));
+						for (Object lo: product) {
+							List<Triple> ls = (List<Triple>) lo;
+							Triple l = ls.get(0);
+							Triple r = ls.get(1);
+							// If equals, OK
+							if (l.getSubject().equals(r.getSubject())) {
+								if(!l.getObject().isConcrete() ||
+								!r.getObject().isConcrete()){
+									// If either is not concrete, this is fine
+								}else{
+									if (!l.getObject().equals(r.getObject())) {
+										setFailure();
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+				return false;
+			}
+		});
+		// 18. No subject join when object is Root (no path to root...)
 		addInferenceRule(new NodeInterpretationRule() {
 			@Override
 			protected boolean when(Node n, InterpretationOfBGP p) {
@@ -478,7 +519,7 @@ public class FXModel {
 			}
 		});
 
-		// 18. Matching-path constraint when node is Object and (Container or Root)
+		// 19. Matching-path constraint when node is Object and (Container or Root)
 		addInferenceRule(new NodeInterpretationRule() {
 
 			@Override
@@ -548,6 +589,7 @@ public class FXModel {
 					// If one of the two is shorter, its origin cannot be root
 					if(left.size() != right.size()){
 						List<Node> shorter = left.size() < right.size() ? left : right;
+						// FIXME Change to check that shorter cannot be a subject of a triple where object is FX.Root!
 						if(previous.getInterpretation(shorter.get(shorter.size()-1)).getTerm().equals(FX.Root)){
 							// FAIL
 							setFailure();
