@@ -1,0 +1,9 @@
+?a ?b <http://sparql.xyz/facade-x/ns/root>
+?a ?b2 ?c
+?c <slot> <container>
+?v ?w ?x
+?x ?y ?z
+?z <slot> <container>
+
+
+

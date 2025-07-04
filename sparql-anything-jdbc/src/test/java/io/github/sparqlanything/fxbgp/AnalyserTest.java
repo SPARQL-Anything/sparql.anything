@@ -157,6 +157,22 @@ public class AnalyserTest extends BGPTestAbstract {
 
 
 	@Test
+	public void NS15() throws IOException {
+		readBGP(name.getMethodName());
+		System.out.println(interpretations());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+
+	@Test
+	public void NS16() throws IOException {
+		readBGP(name.getMethodName());
+		System.out.println(interpretations());
+		Assert.assertEquals(0, interpretations().size());
+	}
+
+
+	@Test
 	public void BGP_1_allGrounded() throws IOException {
 		readBGP("BGP_1");
 		L.info("size: {}",interpretations().size());

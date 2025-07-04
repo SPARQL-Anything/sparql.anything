@@ -563,17 +563,7 @@ public class FXModel {
 					}
 					paris.add(Pair.of(left, right));
 				}
-				// TODO: Avoid duplicates!
-//				List<Pair<Triple, Triple>> paris = new ArrayList<>();
-//				for (Triple left: previous.getOpBGP().getPattern().getList()){
-//					if (left.getObject().equals(node)) {
-//						for (Triple right: previous.getOpBGP().getPattern().getList()){
-//							if(!left.equals(right) && left.getObject().equals(right.getObject())){
-//								paris.add(Pair.of(left, right));
-//							}
-//						}
-//					}
-//				}
+				// TODO: Avoid duplicates?
 
 				// Make backward paths out of triples...
 				List<Pair<List<Node>, List<Node>>> london = new ArrayList<>();
@@ -589,12 +579,15 @@ public class FXModel {
 					// If one of the two is shorter, its origin cannot be root
 					if(left.size() != right.size()){
 						List<Node> shorter = left.size() < right.size() ? left : right;
-						// FIXME Change to check that shorter cannot be a subject of a triple where object is FX.Root!
-						if(previous.getInterpretation(shorter.get(shorter.size()-1)).getTerm().equals(FX.Root)){
-							// FAIL
-							setFailure();
-							// The rule resolves
-							return true;
+						Node shorterStart = shorter.get(shorter.size()-1);
+						// Check that shorter cannot be a subject of a triple where object is FX.Root!
+						for(Triple t: previous.getOpBGP().getPattern().getList()){
+							if (t.getSubject().equals(shorterStart) &&
+								previous.getInterpretation(t.getObject()).getTerm().equals(FX.Root)
+							) {
+								setFailure();
+								return true;
+							}
 						}
 					}
 					// Check if terms are compatible
