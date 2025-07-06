@@ -31,8 +31,7 @@ public class AnalyserGrounder implements Analyser {
 		this.properties = properties;
 	}
 
-	@Override
-	public Set<InterpretationOfBGP> interpret(OpBGP bgp) {
+	public Set<InterpretationOfBGP> interpret(OpBGP bgp, boolean complete) {
 		// Precondition...
 
 		// No cycles are allowed
@@ -116,6 +115,9 @@ public class AnalyserGrounder implements Analyser {
 			}else{
 				L.trace(" -- fail > {} -- ",  nibgp);
 				// discard hypothesis
+			}
+			if(!complete && results.size()>0){
+				return results;
 			}
 			// End for each hypothesised specialisation
 		}

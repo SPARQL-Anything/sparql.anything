@@ -120,7 +120,7 @@ public class AnalyserTest extends BGPTestAbstract {
 	public void NS9() throws IOException {
 		// Unique fx:root in BGP
 		readBGP(name.getMethodName());
-		System.err.println(interpretations());
+		//System.err.println(interpretations());
 		Assert.assertEquals(0, interpretations().size());
 	}
 
@@ -151,7 +151,7 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void NS14() throws IOException {
 		readBGP(name.getMethodName());
-		System.out.println(interpretations());
+		//System.out.println(interpretations());
 		Assert.assertEquals(0, interpretations().size());
 	}
 
@@ -159,7 +159,7 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void NS15() throws IOException {
 		readBGP(name.getMethodName());
-		System.out.println(interpretations());
+		//System.out.println(interpretations());
 		Assert.assertEquals(0, interpretations().size());
 	}
 
@@ -167,7 +167,7 @@ public class AnalyserTest extends BGPTestAbstract {
 	@Test
 	public void NS16() throws IOException {
 		readBGP(name.getMethodName());
-		System.out.println(interpretations());
+		//System.out.println(interpretations());
 		Assert.assertEquals(0, interpretations().size());
 	}
 
@@ -217,12 +217,12 @@ public class AnalyserTest extends BGPTestAbstract {
 //		System.out.println(interpretations());
 
 		Set product = Sets.cartesianProduct(ImmutableList.of(ImmutableSet.of("a","b"), ImmutableSet.of("a", "b")));
-		System.out.println(product);
+		//System.out.println(product);
 		for(Object lo:product){
 			List<String> ls = (List<String>) lo;
 			String l = ls.get(0);
 			String r = ls.get(1);
-			System.out.println(l.equals(r));
+			//System.out.println(l.equals(r));
 		}
 	}
 

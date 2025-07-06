@@ -27,7 +27,7 @@ public class AnalyserAsSearch implements Analyser {
 
 
 	@Override
-	public Set<InterpretationOfBGP> interpret(OpBGP bgp){
+	public Set<InterpretationOfBGP> interpret(OpBGP bgp, boolean complete){
 
 		// To collect the solutions
 		Set<InterpretationOfBGP> finalStates = new HashSet<>();
@@ -50,13 +50,13 @@ public class AnalyserAsSearch implements Analyser {
 		}
 
 		iteration = 0;
-		Set<InterpretationOfBGP> interpretations = interpret(start, new HashSet<>());
+		Set<InterpretationOfBGP> interpretations = interpret(start, new HashSet<>(), complete);
 		L.info("{} iterations",iteration);
 		return interpretations;
 	}
 
 	private int iteration = 0;
-	private Set<InterpretationOfBGP> interpret(InterpretationOfBGP ibgp, Set<InterpretationOfBGP> results){
+	private Set<InterpretationOfBGP> interpret(InterpretationOfBGP ibgp, Set<InterpretationOfBGP> results, boolean complete){
 		iteration += 1;
 		// The incoming interpretation is always consistent
 
@@ -120,7 +120,10 @@ public class AnalyserAsSearch implements Analyser {
 					results.add(nibgp);
 				}else{
 					// if not, keep interpreting it
-					results.addAll(interpret(nibgp, results));
+					results.addAll(interpret(nibgp, results, complete));
+				}
+				if(!complete && results.size()>0){
+					return results;
 				}
 			}
 			// End for each hypothesised specialisation

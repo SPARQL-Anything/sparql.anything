@@ -11,5 +11,16 @@ public interface Analyser {
 	 * @param bgp
 	 * @return
 	 */
-	Set<InterpretationOfBGP> interpret(OpBGP bgp);
+
+
+	default boolean isSatisfiable(OpBGP bgp) {
+		return interpret(bgp, false).size()>0;
+	}
+
+	default Set<InterpretationOfBGP> interpret(OpBGP bgp){
+		return interpret(bgp, true);
+	}
+
+	Set<InterpretationOfBGP> interpret(OpBGP bgp, boolean complete);
+
 }
