@@ -415,7 +415,7 @@
             <dependency>
                 <groupId>io.github.basilapi</groupId>
                 <artifactId>sparql</artifactId>
-                <version>0.8.3</version>
+                <version>1.0.0-RC1</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.jena</groupId>
