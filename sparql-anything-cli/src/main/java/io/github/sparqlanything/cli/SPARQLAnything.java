@@ -267,7 +267,7 @@ public class SPARQLAnything {
 			this.model = ModelFactory.createDefaultModel();
 			row = 0;
 			// Populate
-			HashMap<String, Set<Pair>> var_val_map = new HashMap<>();
+			HashMap<String, Set<Pair<String,String>>> var_val_map = new HashMap<>();
 			for (String value : values) {
 				String var = value.substring(0, value.indexOf('='));
 				String val = value.substring(value.indexOf('=') + 1);
@@ -296,7 +296,7 @@ public class SPARQLAnything {
 			} else {
 				sets = new HashSet<>();
 
-				for (Pair p : var_val_map.entrySet().iterator().next().getValue()) {
+				for (Pair<String,String> p : var_val_map.entrySet().iterator().next().getValue()) {
 					Set<Object> singleton = new HashSet<>();
 					singleton.add(p);
 					sets.add(singleton);
@@ -305,9 +305,9 @@ public class SPARQLAnything {
 			for (Set<Object> s : sets) {
 				final Map<Var, Node> bins = new HashMap<>();
 				for (Object j : s) {
-					Pair p = (Pair) j;
-					String var = (String) p.getLeft();
-					String val = (String) p.getRight();
+					Pair<String,String> p = (Pair<String,String>) j;
+					String var = p.getLeft();
+					String val = p.getRight();
 					bins.put(Var.alloc(var), NodeFactory.createLiteralDT(val, XSDDatatype.XSDstring));
 				}
 
@@ -535,7 +535,7 @@ public class SPARQLAnything {
 	}
 
 	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException {
-		ResultSet parameters = null;
+		ResultSet parameters;
 		if(values.length == 1 && new File(values[0]).exists()){
 			logger.debug("Input file name given");
 			parameters = ResultSetFactory.load(values[0]);
@@ -570,6 +570,11 @@ public class SPARQLAnything {
 				logger.info("Skipping: `no-clobber` is on and file exists (iteration "+ parameters.getRowNumber() + ")");
 				continue;
 			}
+			// Remember if we are calling OS for a new file
+			boolean newFile = false;
+			if(outputFile != null && !new File(outputFile).exists()){
+				newFile = true;
+			}
 			try (PrintStream ps = getPrintStream(outputFile, cli.getOutputAppend())) {
 				logger.trace("Executing Query: {}", q);
 				executeQuery(cli.getFormat(q), kb, q, ps, configurations);
@@ -578,6 +583,13 @@ public class SPARQLAnything {
 						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
 				if (logger.isDebugEnabled()) {
 					logger.error("Details:", e1);
+				}
+				// If an error occurred and the file is empty, delete the file.
+				if(outputFile != null){
+					File f = new File(outputFile);
+					if(newFile && f.exists() && f.length() == 0){
+						f.delete();
+					}
 				}
 			}
 		}
