@@ -83,9 +83,10 @@ public class HTTPHelper {
     public static final String HTTPPAUTHUSER = "http.auth.user";
     public static final String HTTPPAUTHPASSWORD = "http.auth.password";
     public static final String HTTPFOLLOWREDIRECT = "http.redirect";
+	public static final String HTTPSLEEP = "http.sleep";
 
     public static final String[] RELEVANT_PROPERTIES = new String[]{
-            HTTPCLIENT_PREFIX,   HTTPHEADER_PREFIX, HTTPQUERY_PREFIX, HTTPFORM_PREFIX, HTTPMETHOD, HTTPPAYLOAD, HTTPPROTOCOL, HTTPFOLLOWREDIRECT
+            HTTPCLIENT_PREFIX,   HTTPHEADER_PREFIX, HTTPQUERY_PREFIX, HTTPFORM_PREFIX, HTTPMETHOD, HTTPPAYLOAD, HTTPPROTOCOL, HTTPFOLLOWREDIRECT, HTTPSLEEP
     };
 
     public static boolean isProperty(String prefix, String key) {
@@ -332,6 +333,18 @@ public class HTTPHelper {
                 }
             }
         }
+
+		// Check if there is a sleep time to add and use it here
+		long sleep = 0;
+		if (properties.containsKey(HTTPSLEEP)) {
+			log.debug("Sleeping for '{}ms'", properties.getProperty(HTTPSLEEP));
+			sleep = Long.parseLong((String)properties.get(HTTPSLEEP));
+			try {
+				Thread.sleep(sleep);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
 
         return request;
     }
