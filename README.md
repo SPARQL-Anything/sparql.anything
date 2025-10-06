@@ -16,7 +16,7 @@ Here is how that can be done.
 
 ```bash
 # have java and curl installed
-$ curl -L -O 'https://github.com/SPARQL-Anything/sparql.anything/releases/download/0.9.0/sparql-anything-0.9.0.jar'
+$ curl -L -O 'https://github.com/SPARQL-Anything/sparql.anything/releases/download/v1.0.0/sparql-anything-v1.0.0.jar'
 ```
 
 ```csv
@@ -44,7 +44,7 @@ WHERE
 ```
 
 ```turtle
-$ java -jar sparql-anything-0.9.0.jar --query some.rq 
+$ java -jar sparql-anything-v1.0.0.jar --query some.rq 
 [main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
@@ -101,7 +101,7 @@ WHERE
 ```
 
 ```turtle
-$ java -jar sparql-anything-0.9.0.jar --query some.rq
+$ java -jar sparql-anything-v1.0.0.jar --query some.rq
 @prefix ex:   <http://example.com/> .
 @prefix fx:   <http://sparql.xyz/facade-x/ns/> .
 @prefix gist: <https://w3id.org/semanticarts/ns/ontology/gist/> .
