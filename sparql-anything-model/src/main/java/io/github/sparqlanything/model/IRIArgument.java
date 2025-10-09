@@ -43,6 +43,13 @@ public class IRIArgument {
     public static final IRIArgument  READ_FROM_STD_IN =  new IRIArgument("read-from-std-in", "false");
     public static final IRIArgument  AUDIT =  new IRIArgument("audit", "false");
 
+	// Options for S3 storage
+	public static final IRIArgument  S3_ENDPOINT =  new IRIArgument("s3.endpoint", "false");
+	public static final IRIArgument  S3_BUCKET_NAME =  new IRIArgument("s3.bucket-name");
+	public static final IRIArgument  S3_KEY =  new IRIArgument("s3.key");
+	public static final IRIArgument  S3_ACCESS_KEY =  new IRIArgument("s3.access-key");
+	public static final IRIArgument  S3_SECRET_KEY =  new IRIArgument("s3.secret-key");
+
     private final String name;
 	private final String defaultValue;
 
