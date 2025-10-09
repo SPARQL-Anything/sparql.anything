@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -44,15 +45,18 @@ public class Location {
 		return url.getProtocol().equalsIgnoreCase("file");
 	}
 
-	public static InputStream getInputStreamFromS3Bucket(URL url, Properties properties)  {
+	public static InputStream getInputStreamFromS3Bucket(URL url, Properties properties) {
 
 		AwsBasicCredentials credentials = AwsBasicCredentials.create(PropertyUtils.getStringProperty(properties, IRIArgument.S3_ACCESS_KEY), PropertyUtils.getStringProperty(properties, IRIArgument.S3_SECRET_KEY));
+		Region region = Region.of(PropertyUtils.getStringProperty(properties, IRIArgument.S3_REGION));
 
 		try (S3Client s3 = S3Client.builder()
 			.endpointOverride(url.toURI())
 			.credentialsProvider(StaticCredentialsProvider.create(credentials))
+			.region(region)
 			.serviceConfiguration(
 				S3Configuration.builder()
+
 					.pathStyleAccessEnabled(true)
 					.build())
 			.build()) {

@@ -49,6 +49,7 @@ public class IRIArgument {
 	public static final IRIArgument  S3_KEY =  new IRIArgument("s3.key");
 	public static final IRIArgument  S3_ACCESS_KEY =  new IRIArgument("s3.access-key");
 	public static final IRIArgument  S3_SECRET_KEY =  new IRIArgument("s3.secret-key");
+	public static final IRIArgument  S3_REGION =  new IRIArgument("s3.region");
 
     private final String name;
 	private final String defaultValue;

@@ -727,6 +727,13 @@
             <!-- END: OWLAPI -->
             <!-- END Any23 Dependencies-->
 
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers</artifactId>
+                <version>1.20.2</version>
+                <scope>test</scope>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
