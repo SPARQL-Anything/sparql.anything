@@ -103,77 +103,82 @@ public class SPARQLAnything {
 		if(logger.isTraceEnabled()) {
 			logger.trace("[time] Before executeQuery: {}", System.currentTimeMillis() - duration);
 		}
-		if (query.isSelectType()) {
-			switch (outputFormat) {
-				case "JSON":
-					ResultSetFormatter.outputAsJSON(pw, createQueryExecution(query, kb, configurations).execSelect());
-					break;
-				case "XML":
-					ResultSetFormatter.outputAsXML(pw, createQueryExecution(query, kb, configurations).execSelect());
-					break;
-				case "CSV":
-					ResultSetFormatter.outputAsCSV(pw, createQueryExecution(query, kb, configurations).execSelect());
-					break;
-				case "TEXT":
-					pw.println(ResultSetFormatter.asText(createQueryExecution(query, kb, configurations).execSelect()));
-					break;
-				default:
+		try(QueryExecution qe = createQueryExecution(query, kb, configurations)) {
+			if (query.isSelectType()) {
+				ResultSet rs = qe.execSelect();
+				switch (outputFormat) {
+					case "JSON":
+						ResultSetFormatter.outputAsJSON(pw, rs);
+						break;
+					case "XML":
+						ResultSetFormatter.outputAsXML(pw, rs);
+						break;
+					case "CSV":
+						ResultSetFormatter.outputAsCSV(pw, rs);
+						break;
+					case "TEXT":
+						pw.println(ResultSetFormatter.asText(rs));
+						break;
+					default:
+						throw new RuntimeException("Unsupported format: " + outputFormat);
+				}
+
+			} else if (query.isAskType()) {
+				Boolean ask = qe.execAsk();
+				switch (outputFormat) {
+					case "JSON":
+						ResultSetFormatter.outputAsJSON(pw, ask);
+						break;
+					case "XML":
+						ResultSetFormatter.outputAsXML(pw, ask);
+						break;
+					case "CSV":
+						ResultSetFormatter.outputAsCSV(pw, ask);
+						break;
+					case "TEXT":
+						pw.print(ask);
+						break;
+					default:
+						throw new RuntimeException("Unsupported format: " + outputFormat);
+				}
+			} else if (query.isDescribeType() || query.isConstructType()) {
+				Model m;
+				Dataset d = null;
+				if (query.isConstructType()) {
+					d = qe.execConstructDataset();
+					// .execConstructDataset (instead of .execConstruct) so we can construct quads too
+					// as described here: https://jena.apache.org/documentation/query/construct-quad.html
+					m = d.getDefaultModel();
+				} else {
+					m = qe.execDescribe();
+					// d = new DatasetImpl(m);
+				}
+				if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName())) {
+					// JSON-LD format.equals(Lang.JSONLD11.getName())
+					RDFDataMgr.write(pw, m, Lang.JSONLD);
+				} else if (outputFormat.equals(Lang.JSONLD11.getName())) {
+					RDFDataMgr.write(pw, m, Lang.JSONLD11);
+				} else if (outputFormat.equals("XML")) {
+					// RDF/XML
+					RDFDataMgr.write(pw, m, Lang.RDFXML);
+				} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
+					// TURTLE
+					RDFDataMgr.write(pw, m, Lang.TTL);
+				} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
+					// N-Triples
+					RDFDataMgr.write(pw, m, Lang.NT);
+				} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
+					// NQ
+					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
+				} else if (outputFormat.equals(Lang.TRIG.getName())) {
+					// TRIG
+					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
+				} else if (outputFormat.equals(Lang.TRIX.getName())) {
+					// TRIG
+					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
+				} else {
 					throw new RuntimeException("Unsupported format: " + outputFormat);
-			}
-		} else if (query.isAskType()) {
-			switch (outputFormat) {
-				case "JSON":
-					ResultSetFormatter.outputAsJSON(pw, createQueryExecution(query, kb, configurations).execAsk());
-					break;
-				case "XML":
-					ResultSetFormatter.outputAsXML(pw, createQueryExecution(query, kb, configurations).execAsk());
-					break;
-				case "CSV":
-					ResultSetFormatter.outputAsCSV(pw, createQueryExecution(query, kb, configurations).execAsk());
-					break;
-				case "TEXT":
-					pw.print(createQueryExecution(query, kb, configurations).execAsk());
-					break;
-				default:
-					throw new RuntimeException("Unsupported format: " + outputFormat);
-			}
-		} else if (query.isDescribeType() || query.isConstructType()) {
-			Model m;
-			Dataset d = null;
-			if (query.isConstructType()) {
-				d = createQueryExecution(query, kb, configurations).execConstructDataset();
-				// .execConstructDataset (instead of .execConstruct) so we can construct quads too
-				// as described here: https://jena.apache.org/documentation/query/construct-quad.html
-				m = d.getDefaultModel();
-			} else {
-				m = createQueryExecution(query, kb, configurations).execDescribe();
-				// d = new DatasetImpl(m);
-			}
-			if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName()) ) {
-				// JSON-LD format.equals(Lang.JSONLD11.getName())
-				RDFDataMgr.write(pw, m, Lang.JSONLD);
-			} else if ( outputFormat.equals(Lang.JSONLD11.getName()) ) {
-				RDFDataMgr.write(pw, m, Lang.JSONLD11);
-			} else if (outputFormat.equals("XML")) {
-				// RDF/XML
-				RDFDataMgr.write(pw, m, Lang.RDFXML);
-			} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
-				// TURTLE
-				RDFDataMgr.write(pw, m, Lang.TTL);
-			} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
-				// N-Triples
-				RDFDataMgr.write(pw, m, Lang.NT);
-			} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
-				// NQ
-				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
-			} else if (outputFormat.equals(Lang.TRIG.getName())) {
-				// TRIG
-				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
-			} else if (outputFormat.equals(Lang.TRIX.getName())) {
-				// TRIG
-				RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
-			} else {
-				throw new RuntimeException("Unsupported format: " + outputFormat);
+				}
 			}
 		}
 		if(logger.isTraceEnabled()) {
@@ -181,7 +186,7 @@ public class SPARQLAnything {
 		}
 	}
 
-	private static PrintStream getPrintWriter(String fileName, boolean append) throws FileNotFoundException {
+	private static PrintStream getPrintStream(String fileName, boolean append) throws FileNotFoundException {
 
 		if (fileName != null) {
 			return new PrintStream(new FileOutputStream(fileName, append));
@@ -262,7 +267,7 @@ public class SPARQLAnything {
 			this.model = ModelFactory.createDefaultModel();
 			row = 0;
 			// Populate
-			HashMap<String, Set<Pair>> var_val_map = new HashMap<>();
+			HashMap<String, Set<Pair<String,String>>> var_val_map = new HashMap<>();
 			for (String value : values) {
 				String var = value.substring(0, value.indexOf('='));
 				String val = value.substring(value.indexOf('=') + 1);
@@ -291,7 +296,7 @@ public class SPARQLAnything {
 			} else {
 				sets = new HashSet<>();
 
-				for (Pair p : var_val_map.entrySet().iterator().next().getValue()) {
+				for (Pair<String,String> p : var_val_map.entrySet().iterator().next().getValue()) {
 					Set<Object> singleton = new HashSet<>();
 					singleton.add(p);
 					sets.add(singleton);
@@ -300,9 +305,9 @@ public class SPARQLAnything {
 			for (Set<Object> s : sets) {
 				final Map<Var, Node> bins = new HashMap<>();
 				for (Object j : s) {
-					Pair p = (Pair) j;
-					String var = (String) p.getLeft();
-					String val = (String) p.getRight();
+					Pair<String,String> p = (Pair<String,String>) j;
+					String var = p.getLeft();
+					String val = p.getRight();
 					bins.put(Var.alloc(var), NodeFactory.createLiteralDT(val, XSDDatatype.XSDstring));
 				}
 
@@ -513,7 +518,9 @@ public class SPARQLAnything {
 					return;
 				}
 				Query q = QueryFactory.create(query);
-				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFileName, cli.getOutputAppend()), configurations);
+				try(PrintStream ps = getPrintStream(outputFileName, cli.getOutputAppend())) {
+					executeQuery(cli.getFormat(q), kb, q, ps, configurations);
+				}
 			} else {
 				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);
 			}
@@ -528,7 +535,7 @@ public class SPARQLAnything {
 	}
 
 	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException {
-		ResultSet parameters = null;
+		ResultSet parameters;
 		if(values.length == 1 && new File(values[0]).exists()){
 			logger.debug("Input file name given");
 			parameters = ResultSetFactory.load(values[0]);
@@ -560,17 +567,29 @@ public class SPARQLAnything {
 			}
 			// #528 Check no-clobber if output file already exists.
 			if(outputFile != null && cli.getOutputNoClobber() && new File(outputFile).exists()){
-				logger.info("skipping: no-clobber is on and file exists");
+				logger.info("Skipping: `no-clobber` is on and file exists (iteration "+ parameters.getRowNumber() + ")");
 				continue;
 			}
-			try {
+			// Remember if we are calling OS for a new file
+			boolean newFile = false;
+			if(outputFile != null && !new File(outputFile).exists()){
+				newFile = true;
+			}
+			try (PrintStream ps = getPrintStream(outputFile, cli.getOutputAppend())) {
 				logger.trace("Executing Query: {}", q);
-				executeQuery(cli.getFormat(q), kb, q, getPrintWriter(outputFile, cli.getOutputAppend()), configurations);
+				executeQuery(cli.getFormat(q), kb, q, ps, configurations);
 			} catch (Exception e1) {
 				logger.error(
 						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
 				if (logger.isDebugEnabled()) {
 					logger.error("Details:", e1);
+				}
+				// If an error occurred and the file is empty, delete the file.
+				if(outputFile != null){
+					File f = new File(outputFile);
+					if(newFile && f.exists() && f.length() == 0){
+						f.delete();
+					}
 				}
 			}
 		}

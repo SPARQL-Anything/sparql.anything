@@ -395,7 +395,8 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
   rdf:_2            [ rdf:type                      <http://www.example.org#someThingElse>;
                       <http://www.example.org#key>  "0.1"
                     ];
-  xhtml:xmlns:xx    "http://www.example.org";
+  <http://www.w3.org/1999/xhtml#xmlns%3Axx>
+          "http://www.example.org";
   whatwg:innerHTML  "\n\t<xx:someThing>Hallo world</xx:someThing>\n\t<xx:someThingElse xx:key=\"0.1\" />\n";
   whatwg:innerText  "Hallo world"
 ] .
