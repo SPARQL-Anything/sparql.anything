@@ -168,7 +168,7 @@ public interface Triplifier {
 		// Handle archives differently
 		URL urlArchive = Utils.instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
 		try {
-			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset);
+			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset, properties.getProperty(IRIArgument.ARCHIVE_FORMAT.toString()));
 		} catch (ArchiveException e) {
 			throw new IOException(e); // TODO i think we should throw a TriplifierHTTPException instead
 			// to allow the silent keyword to be respected

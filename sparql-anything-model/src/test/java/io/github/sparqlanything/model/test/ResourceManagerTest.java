@@ -37,7 +37,7 @@ public class ResourceManagerTest {
 		URL urlArchive;
 		try {
 			urlArchive = getClass().getClassLoader().getResource("test.tar").toURI().toURL();
-			InputStream is = rm.getInputStreamFromArchive(urlArchive, "test/test.csv", Charset.defaultCharset());
+			InputStream is = rm.getInputStreamFromArchive(urlArchive, "test/test.csv", Charset.defaultCharset(), null);
 			String expected = "Year,Make,Model,Description,Price\n" + "1997,Ford,E350,\"ac, abs, moon\",3000.00\n"
 					+ "1999,Chevy,\"Venture \"\"Extended Edition\"\"\",\"\",4900.00\n"
 					+ "1999,Chevy,\"Venture \"\"Extended Edition, Very Large\"\"\",,5000.00\n"

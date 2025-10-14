@@ -48,7 +48,17 @@ public class ResourceManager {
 		return instance;
 	}
 
-	public InputStream getInputStreamFromArchive(URL archiveLocation, String entryName, Charset charset) throws ArchiveException, IOException {
+	private String getArchiverNameFromArchiverFormat(String location, String archiverFormat){
+		String extension = FilenameUtils.getExtension(location);
+
+		if(extension != null && !extension.isEmpty())
+			return extension;
+
+
+		return archiverFormat;
+	}
+
+	public InputStream getInputStreamFromArchive(URL archiveLocation, String entryName, Charset charset, String archiverFormat) throws ArchiveException, IOException {
 
 		logger.trace("Archive location {} entry {}", archiveLocation.toString(), entryName);
 
@@ -62,12 +72,20 @@ public class ResourceManager {
 
 		if (!fileToRead.exists()) {
 
-			logger.trace("Extracting content from {}", archiveLocation);
+			logger.trace("File to read doesn't exist, extracting it from {}", archiveLocation);
 			// extract
 			File destinationDir = new File(folder);
 			new File(folder).mkdir();
 
-			ArchiveInputStream i = new ArchiveStreamFactory().createArchiveInputStream(FilenameUtils.getExtension(archiveLocation.toString()), archiveLocation.openStream(), charset.toString());
+
+			String archiverName = getArchiverNameFromArchiverFormat(archiveLocation.toString(), archiverFormat);
+			ArchiveInputStream i;
+			if (archiverName == null || archiverName.isEmpty()) {
+				i = new ArchiveStreamFactory().createArchiveInputStream(archiveLocation.openStream());
+			} else {
+				i = new ArchiveStreamFactory().createArchiveInputStream(archiverName, archiveLocation.openStream(), charset.toString());
+			}
+
 			ArchiveEntry entry = null;
 			while ((entry = i.getNextEntry()) != null) {
 
@@ -101,7 +119,7 @@ public class ResourceManager {
 //			return new ByteArrayInputStream(new byte[]{});
 //			// throw new RuntimeException(fileToRead.getAbsolutePath() + " does not exist!");
 //		}
-
+		logger.trace("Creating input stream of {}", fileToRead.getAbsolutePath());
 		return new FileInputStream(fileToRead);
 	}
 

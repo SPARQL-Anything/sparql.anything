@@ -28,6 +28,7 @@ public class IRIArgument {
 	public static final IRIArgument METADATA = new IRIArgument("metadata", "false");
 	public static final IRIArgument CONTENT = new IRIArgument("content");
 	public static final IRIArgument FROM_ARCHIVE = new IRIArgument("from-archive");
+	public static final IRIArgument ARCHIVE_FORMAT = new IRIArgument("archive-format");
 	public static final IRIArgument TRIM_STRINGS = new IRIArgument("trim-strings", "false");
 	public static final IRIArgument NULL_STRING = new IRIArgument("null-string");
 	public static final IRIArgument STRATEGY = new IRIArgument("strategy", "1");

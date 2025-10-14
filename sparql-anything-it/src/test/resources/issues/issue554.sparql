@@ -1,0 +1,29 @@
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+
+#CONSTRUCT {
+#    ?s1 ?p1 ?o1 .
+#}
+SELECT *
+WHERE {
+  SERVICE <x-sparql-anything:> {
+
+    fx:properties
+    fx:location     "%%%LOCATION%%%" ;
+    fx:media-type "application/x-tar" ;
+    fx:archive.matches "[^.]*.json" .
+
+    ?s fx:anySlot ?file .
+
+ SERVICE <x-sparql-anything:> {
+
+      fx:properties
+        fx:location  ?file ;
+        fx:from-archive "%%%LOCATION%%%" ;
+        fx:archive-format "tar" .
+       ?s1 ?p1 ?o1
+    }
+  }
+}
