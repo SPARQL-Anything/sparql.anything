@@ -111,8 +111,8 @@ https://sparql-anything.cc/examples/example.tar
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
 CONSTRUCT 
   { 
