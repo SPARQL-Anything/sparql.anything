@@ -737,10 +737,22 @@ Article No.: 6, Pages 1 - 31 (2023). https://doi.org/10.1145/3555312
 
 ### Scientific Publications
 
+Luigi Asprino, Enrico Daga, Justin Dowdy, Aldo Gangemi, and Paul Mulholland. ["Materialisation approaches for Façade-based data access with SPARQL"](https://www.semantic-web-journal.net/content/materialisation-approaches-fa%C3%A7ade-based-data-access-sparql-0). In:  Semantic Web (to appear)
+
+```bibtex
+@article{Asprino2025,
+  title={Materialisation approaches for Fa\c{c}ade-based data access with SPARQL},
+  author={Asprino, Luigi and Daga, Enrico and Dowdy, Justin and Gangemi, Aldo and Mulholland, Paul},
+  journal={Semantic Web},
+  year={{to appear}},
+  publisher={IOS Press}
+}
+```
+
 Paul Warren, Paul Mulholland, Enrico Daga, and Luigi Asprino. "Path-based and triplification approaches to mapping data into RDF: user behaviours and recommendations". In:  Semantic Web, vol. 15, no. 6, pp. 2479-2505 (2024) http://doi.org/10.3233/SW-243585
 
 ```bibtex
-@article{Warren2024,
+@article{Warren2025,
   title={Path-based and triplification approaches to mapping data into RDF: User behaviours and recommendations},
   author={Warren, Paul and Mulholland, Paul and Daga, Enrico and Asprino, Luigi},
   journal={Semantic Web},
