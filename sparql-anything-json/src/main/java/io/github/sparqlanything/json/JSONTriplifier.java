@@ -53,15 +53,22 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 	@Example(resource = "https://sparql-anything.cc/example1.json", description = " Retrieving the language of the TV series named \"Friends\".", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?language WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . _:b0 xyz:language ?language } }")
 	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Constructing a Facade-X RDF Graph selecting only containers that match the Json Path `$[?(@.name==\"Friends\")]`.", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . ?s ?p ?o } }")
 	@Option(description = """
-			One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option.\s
-			    It will pre-process the JSON before the execution of the query.\s
-			    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).""", validValues = "Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))")
+		One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option.\s
+		    It will pre-process the JSON before the execution of the query.\s
+		    In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example).""", validValues = "Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer)))")
 	public static final IRIArgument PROPERTY_JSONPATH = new IRIArgument("json.path");
 	@Option(description = """
 		One or more key values as filters. E.g. `json.literalize=key` or `json.literalize.1`, `json.literalize.2`, `...` to add multiple expressions.\s
 		The `json.literalize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON.""",
 		validValues = "Any key values present in the JSON file")
 	public static final IRIArgument PROPERTY_JSONLITERALIZE = new IRIArgument("json.literalize");
+
+	@Option(description = """
+		
+		""",
+		validValues = "")
+	public static final IRIArgument PROPERTY_JSONINCLUDENULLVALUES = new IRIArgument("json.include-null-values", "false");
+
 	private static final Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
 
 	private Set<String> literalKeys = new HashSet<>();
@@ -73,43 +80,47 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 		try (InputStream us = Triplifier.getInputStream(properties)) {
 			JsonParser parser = factory.createParser(us);
 			// Only 1 data source expected
-			transformJSON(parser, builder);
+			transformJSON(parser, builder, PropertyUtils.getBooleanProperty(properties, PROPERTY_JSONINCLUDENULLVALUES));
 		}
 	}
 
-	private void transformJSON(JsonParser parser, FacadeXGraphBuilder builder) throws IOException {
+	private void transformJSON(JsonParser parser, FacadeXGraphBuilder builder, boolean includeNullValues) throws IOException {
 
 		builder.addRoot(SPARQLAnythingConstants.DATA_SOURCE_ID);
 		logger.trace("Transforming json (dataSourceId {} rootId {})", SPARQLAnythingConstants.DATA_SOURCE_ID, SPARQLAnythingConstants.ROOT_ID);
 		JsonToken token = parser.nextToken();
 		if (token == JsonToken.START_OBJECT) {
 			logger.trace("Transforming object");
-			transformObject(parser, SPARQLAnythingConstants.DATA_SOURCE_ID, SPARQLAnythingConstants.ROOT_ID, builder);
+			transformObject(parser, SPARQLAnythingConstants.DATA_SOURCE_ID, SPARQLAnythingConstants.ROOT_ID, builder, includeNullValues);
 		} else if (token == JsonToken.START_ARRAY) {
 			logger.trace("Transforming array");
-			transformArray(parser, SPARQLAnythingConstants.DATA_SOURCE_ID, SPARQLAnythingConstants.ROOT_ID, builder);
+			transformArray(parser, SPARQLAnythingConstants.DATA_SOURCE_ID, SPARQLAnythingConstants.ROOT_ID, builder, includeNullValues);
 		}
 
 	}
 
-	private void transformArrayItem(int i, JsonToken token, JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder) throws IOException {
+	private void transformArrayItem(int i, JsonToken token, JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder, boolean includeNullValues) throws IOException {
 		switch (token) {
 			case START_ARRAY -> {
 				String childContainerIdArray = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
 				builder.addContainer(dataSourceId, containerId, i + 1, childContainerIdArray);
-				transformArray(parser, dataSourceId, childContainerIdArray, builder);
+				transformArray(parser, dataSourceId, childContainerIdArray, builder, includeNullValues);
 			}
 			case START_OBJECT -> {
 				String childContainerId = StringUtils.join(containerId, "/_", String.valueOf(i + 1));
 				builder.addContainer(dataSourceId, containerId, i + 1, childContainerId);
-				transformObject(parser, dataSourceId, childContainerId, builder);
+				transformObject(parser, dataSourceId, childContainerId, builder, includeNullValues);
 			}
 			case VALUE_FALSE, VALUE_TRUE ->
-					builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsBoolean());
+				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsBoolean());
 			case VALUE_NUMBER_FLOAT -> builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsDouble());
 			case VALUE_NUMBER_INT -> builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsInt());
 			case VALUE_STRING -> builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsString());
-			case VALUE_NULL, END_ARRAY, END_OBJECT, FIELD_NAME, VALUE_EMBEDDED_OBJECT, NOT_AVAILABLE -> {
+			case VALUE_NULL -> {
+				if(includeNullValues)
+					builder.addValue(dataSourceId, containerId, i + 1, XYZ_NULL_NODE);
+			}
+			case END_ARRAY, END_OBJECT, FIELD_NAME, VALUE_EMBEDDED_OBJECT, NOT_AVAILABLE -> {
 			}
 			// NOP
 		}
@@ -154,17 +165,17 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 		}
 	}
 
-	private void transformArray(JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder) throws IOException {
+	private void transformArray(JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder, boolean includeNullValues) throws IOException {
 		int i = 0;
 		JsonToken token;
 
 		while ((token = parser.nextToken()) != END_ARRAY) {
-			transformArrayItem(i, token, parser, dataSourceId, containerId, builder);
+			transformArrayItem(i, token, parser, dataSourceId, containerId, builder, includeNullValues);
 			i++;
 		}
 	}
 
-	private void transformObject(JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder) throws IOException {
+	private void transformObject(JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder, boolean includeNullValues) throws IOException {
 
 		JsonToken token;
 		Integer coercedInt;
@@ -183,12 +194,12 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 					case START_ARRAY -> {
 						String childContainerIdArr = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
 						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerIdArr);
-						transformArray(parser, dataSourceId, childContainerIdArr, builder);
+						transformArray(parser, dataSourceId, childContainerIdArr, builder, includeNullValues);
 					}
 					case START_OBJECT -> {
 						String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
 						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
-						transformObject(parser, dataSourceId, childContainerId, builder);
+						transformObject(parser, dataSourceId, childContainerId, builder, includeNullValues);
 					}
 					case VALUE_NUMBER_FLOAT -> {
 						logger.trace("{} float", k);
@@ -211,8 +222,13 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 					}
 					case VALUE_STRING -> builder.addValue(dataSourceId, containerId, k, parser.getValueAsString());
 					case VALUE_FALSE, VALUE_TRUE ->
-							builder.addValue(dataSourceId, containerId, k, parser.getValueAsBoolean());
-					case END_ARRAY, END_OBJECT, FIELD_NAME, VALUE_EMBEDDED_OBJECT, NOT_AVAILABLE, VALUE_NULL -> {
+						builder.addValue(dataSourceId, containerId, k, parser.getValueAsBoolean());
+					case VALUE_NULL -> {
+						if(includeNullValues){
+							builder.addValue(dataSourceId, containerId, k, XYZ_NULL_NODE);
+						}
+					}
+					case END_ARRAY, END_OBJECT, FIELD_NAME, VALUE_EMBEDDED_OBJECT, NOT_AVAILABLE -> {
 					}
 				}
 			} else {
@@ -502,7 +518,7 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 		try {
 			if (slice instanceof JSONTokenSlice jslice) {
 				// Method is 0-indexed
-				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(), SPARQLAnythingConstants.ROOT_ID, builder);
+				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getParser(), jslice.getDatasourceId(), SPARQLAnythingConstants.ROOT_ID, builder, PropertyUtils.getBooleanProperty(p,PROPERTY_JSONINCLUDENULLVALUES));
 			} else if (slice instanceof JSONPathSlice jslice) {
 				// Method is 0-indexed
 				transformArrayItem(jslice.iteration() - 1, jslice.get(), jslice.getDatasourceId(), SPARQLAnythingConstants.ROOT_ID, builder);

@@ -22,6 +22,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +44,7 @@ public interface Triplifier {
 	String XYZ_NS = "http://sparql.xyz/facade-x/data/";
 	String METADATA_GRAPH_IRI = XYZ_NS + "metadata";
 	String AUDIT_GRAPH_IRI = XYZ_NS + "audit";
+	String XYZ_NULL = XYZ_NS + "null";
 	String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
 	String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
 	String FACADE_X_SLOT_KEY = FACADE_X_CONST_NAMESPACE_IRI + "slot-key";
@@ -49,6 +52,7 @@ public interface Triplifier {
 	String FACADE_X_CACHED_GRAPH = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraph";
 	String FACADE_X_CACHED_GRAPH_CREATION = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraphCreation";
 	String FACADE_X_SPARQL_ALGEBRA = FACADE_X_CONST_NAMESPACE_IRI + "sparqlAlgebra";
+	Node XYZ_NULL_NODE = NodeFactory.createURI(XYZ_NULL);
 
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
