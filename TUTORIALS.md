@@ -1,7 +1,7 @@
 # Tutorials
 Here is a list of step-by-step tutorials covering several features of SPARQL Anything:
 
-- [Universal Data Façade (Part 1)](https://www.linkandth.ink/p/universal-data-facade-part-1) a great article about using containment as a knowledge representation primitive for data integration.
+- [Universal Data Façade (Part 1)](https://www.linkandth.ink/p/universal-data-facade-part-1) [(Part 2)](https://www.linkandth.ink/p/universal-data-facade-part-2) a great series of articles about using containment as a knowledge representation primitive for data integration.
 - [A Gentle introduction to SPARQL Anything](A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md): this tutorial presents the Facade-X model and shows basic transformations of JSON, CSV and XML. [Video](https://www.dropbox.com/s/bc31v0klg68op0z/SPARQLAnythingTutorial-highres.mp4?dl=0) 
 - [The PySPARQL-Anything Showacase](https://bit.ly/pysa-demo): this tutorial shows how to install and execute SPARQL Anything from Python, getting both a readily available CLI as well as leveraging SPARQL Anything output as Pandas or RDFLib objects in your scripts.
 - [SPARQL Anything showcase: open data from the Tate Gallery](https://github.com/SPARQL-Anything/showcase-tate): this tutorial covers formats such as CSV and JSON and features such as the function `fx:anySlot` and the chaining of multiple `SERVICE` clauses. It is based on the SPARQL Anything [CLI](README.md#Usage).

@@ -26,8 +26,7 @@ description = "The JavaScript Object Notation is specified by [ECMA](https://www
 		"- Arrays are represented by the ordered sequence component.\n" +
 		"- Values are expressed as *rdf:Literal*, selecting relevant XSD datatypes from the RDFS specification: *xsd:string*, *xsd:boolean*, *xsd:int*, *xsd:float*\n" +
 		"\n" +
-		"Currently, fields with the 'null' value are ignored.\n" +
-		"<!-- However, we may decide to represent it as blank node or to create a primitive entity to express it, for example, similar to \\tt{rdf:nil}.}.  -->\n",
+		"By default, fields with the 'null' value are ignored, but this behaviour can be controlled via `json.include-null-values` option.\n",
 resourceExample = "https://sparql-anything.cc/examples/simple.json")
 package io.github.sparqlanything.json;
 

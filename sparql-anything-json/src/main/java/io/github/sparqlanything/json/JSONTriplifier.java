@@ -63,10 +63,13 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 		validValues = "Any key values present in the JSON file")
 	public static final IRIArgument PROPERTY_JSONLITERALIZE = new IRIArgument("json.literalize");
 
+	@Example(resource = "https://sparql-anything.cc/examples/simple.json", description = "Selecting properties having null value.", query = "PREFIX xyz:  <http://sparql.xyz/facade-x/data/> SELECT ?p WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.json,json.include-null-values=true> { ?s ?p xyz:null } }")
 	@Option(description = """
-		
+		It tells the JSON triplifier to produce triples for null values in the JSON Object/Array.
+		By default the triplifier uses xyz:null as null value.
+		See Issue [#564](https://github.com/SPARQL-Anything/sparql.anything/issues/564).
 		""",
-		validValues = "")
+		validValues = "true/false")
 	public static final IRIArgument PROPERTY_JSONINCLUDENULLVALUES = new IRIArgument("json.include-null-values", "false");
 
 	private static final Logger logger = LoggerFactory.getLogger(JSONTriplifier.class);
