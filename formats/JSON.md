@@ -13,8 +13,7 @@ According to Facade-X model, SPARQL Anything interprets objects and arrays as co
 - Arrays are represented by the ordered sequence component.
 - Values are expressed as *rdf:Literal*, selecting relevant XSD datatypes from the RDFS specification: *xsd:string*, *xsd:boolean*, *xsd:int*, *xsd:float*
 
-Currently, fields with the &#39;null&#39; value are ignored.
-&lt;!-- However, we may decide to represent it as blank node or to create a primitive entity to express it, for example, similar to \tt{rdf:nil}.}.  --&gt;
+By default, fields with the &#39;null&#39; value are ignored, but this behaviour can be controlled via `json.include-null-values` option.
 
 
 ## Extensions
@@ -478,7 +477,7 @@ PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 
 SELECT  ?p
 WHERE
-  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.json>
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.json,json.include-null-values=true>
       { ?s  ?p  xyz:null }
   }
 
@@ -487,10 +486,11 @@ WHERE
 ###### Result
 
 ```turtle
------
-| p |
-=====
------
+---------------------------------------------
+| p                                         |
+=============================================
+| <http://sparql.xyz/facade-x/data/nullArg> |
+---------------------------------------------
 
 ```
 
