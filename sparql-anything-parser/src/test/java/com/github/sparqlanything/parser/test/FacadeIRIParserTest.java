@@ -23,6 +23,7 @@ import io.github.sparqlanything.facadeiri.FacadeIRIParser;
 import io.github.sparqlanything.model.IRIArgument;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class FacadeIRIParserTest {
 		Properties p = new FacadeIRIParser(uri).getProperties();
 		Assert.assertTrue(((Properties) p).containsKey("location"));
 		Assert.assertFalse(((Properties) p).containsKey("foo"));
-		Assert.assertEquals(p.get("location"), "http://myfile.json?foo=bar");
+		Assert.assertEquals("http://myfile.json?foo=bar", p.get("location"));
 	}
 
 	@Test
@@ -55,15 +56,15 @@ public class FacadeIRIParserTest {
 		Properties p = new FacadeIRIParser(uri).getProperties();
 		Assert.assertFalse(((Properties) p).containsKey("foo"));
 		Assert.assertFalse(((Properties) p).containsKey("tab"));
-		Assert.assertEquals(p.get("location"), "http://myfile.json?foo=bar&tab=goal");
+		Assert.assertEquals("http://myfile.json?foo=bar&tab=goal", p.get("location"));
 	}
 
 	@Test
 	public void testArgsInLocation3() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=http://myfile.json?foo=bar&tab=goal,same=other";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertEquals(p.get("same"), "other");
-		Assert.assertEquals(p.get("location"), "http://myfile.json?foo=bar&tab=goal");
+		Assert.assertEquals("other", p.get("same"));
+		Assert.assertEquals("http://myfile.json?foo=bar&tab=goal", p.get("location"));
 	}
 
 	@Test
@@ -84,22 +85,22 @@ public class FacadeIRIParserTest {
 	public void testArgsInLocation6() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=https://myfile.json?foo=bar&tab=goal#hack,same=other";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertEquals(p.get("same"), "other");
+		Assert.assertEquals("other", p.get("same"));
 	}
 
 	@Test
 	public void testArgsInLocation7() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=https://myfile.json?foo=bar&tab=goal#hack,same=other";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertTrue(p.size() == 3);
+		Assert.assertEquals(3, p.size());
 	}
 
 	@Test
 	public void testArgsInLocation8() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=https://myfile.json?fo\\,o=bar&tab=goal#hack,same=other";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertTrue(p.size() == 3);
-		Assert.assertEquals(p.get("location"), "https://myfile.json?fo,o=bar&tab=goal#hack");
+		Assert.assertEquals(3, p.size());
+		Assert.assertEquals("https://myfile.json?fo,o=bar&tab=goal#hack", p.get("location"));
 	}
 
 	@Test
@@ -124,5 +125,27 @@ public class FacadeIRIParserTest {
 		String uri = "x-sparql-anything:example.json";
 		Properties p = new FacadeIRIParser(uri).getProperties();
 		Assert.assertEquals("example.json", p.get(IRIArgument.LOCATION.toString()));
+	}
+
+	@Test
+	public void testTilde() {
+		String uri = "x-sparql-anything:location=~/a.csv";
+		Properties p = new FacadeIRIParser(uri).getProperties();
+		Assert.assertEquals("~/a.csv", p.get(IRIArgument.LOCATION.toString()));
+	}
+
+
+	@Test
+	public void testTilde2() {
+		String uri = "x-sparql-anything:file:///~/a.csv";
+		Properties p = new FacadeIRIParser(uri).getProperties();
+		Assert.assertEquals("file:///~/a.csv", p.get(IRIArgument.LOCATION.toString()));
+	}
+
+	@Test
+	public void testTilde3() {
+		String uri = "x-sparql-anything:~/a.csv";
+		Properties p = new FacadeIRIParser(uri).getProperties();
+		Assert.assertEquals("~/a.csv", p.get(IRIArgument.LOCATION.toString()));
 	}
 }

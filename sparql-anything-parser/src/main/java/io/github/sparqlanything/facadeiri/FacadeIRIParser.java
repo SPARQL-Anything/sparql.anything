@@ -35,7 +35,7 @@ public class FacadeIRIParser {
 
 	private String tupleURL;
 	public final static String SPARQL_ANYTHING_URI_SCHEMA = "x-sparql-anything:";
-	private final static Pattern key = Pattern.compile("^[a-zA-Z0-9-]+");
+	private final static Pattern KEY = Pattern.compile("^[a-zA-Z0-9-~/]+");
 	private static final Logger log = LoggerFactory.getLogger(FacadeIRIParser.class);
 
 	public FacadeIRIParser(String tupleURL) {
@@ -65,11 +65,11 @@ public class FacadeIRIParser {
 	}
 
 	private String escape(String s) {
-		Matcher m = key.matcher(s);
+		Matcher m = KEY.matcher(s);
 		log.trace("Input escape {}",s);
 		if (m.find() && m.end() < s.length() && s.charAt(m.end()) != '=') {
 			log.trace("Unescape");
-			// it is an URI => unescape
+			// it is a URI => unescape
 			return s;
 		}
 		boolean lookingForEqual = false;
