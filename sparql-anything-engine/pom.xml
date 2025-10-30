@@ -24,6 +24,7 @@
 		<artifactId>sparql-anything-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
+	<name>SPARQL Anything - Engine module</name>
 	<properties>
 		<revision>1.1.0-SNAPSHOT</revision>
 	</properties>

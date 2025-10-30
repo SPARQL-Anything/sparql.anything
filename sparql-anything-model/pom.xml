@@ -27,7 +27,7 @@
 		<revision>1.1.0-SNAPSHOT</revision>
 	</properties>
     <artifactId>sparql-anything-model</artifactId>
-
+    <name>SPARQL Anything - Model module</name>
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>

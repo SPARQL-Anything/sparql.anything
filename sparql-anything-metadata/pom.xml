@@ -28,6 +28,7 @@
 	<properties>
 		<revision>1.1.0-SNAPSHOT</revision>
 	</properties>
+	<name>SPARQL Anything - Metadata module</name>
 	<artifactId>sparql-anything-metadata</artifactId>
 	<dependencies>
 		<dependency>

@@ -222,6 +222,8 @@
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <excludeArtifacts>sparql-anything-documentation-generator</excludeArtifacts>
                         </configuration>
                     </plugin>
                     <plugin>
