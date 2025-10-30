@@ -5,9 +5,9 @@ name: Java 17 on Windows
 
 on:
   push:
-    branches: [ v1.0-DEV ]
+    branches: [ v1.1-DEV ]
   pull_request:
-    branches: [ v1.0-DEV ]
+    branches: [ v1.1-DEV ]
 
 jobs:
   build:
