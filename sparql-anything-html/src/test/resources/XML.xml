@@ -1,4 +1,23 @@
 <?xml version="1.0" ?>
+<!--
+  ~ Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--
+  -->
+
 <gml:FeatureCollection xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" xmlns:base2="http://inspire.ec.europa.eu/schemas/base2/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:plu="http://inspire.ec.europa.eu/schemas/plu/4.0" xmlns:lunom="http://inspire.ec.europa.eu/schemas/lunom/4.0" xmlns:base="http://inspire.ec.europa.eu/schemas/base/3.3" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:ns1="http://www.w3.org/1999/xhtml" xmlns:gss="http://www.isotc211.org/2005/gss" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:ad="http://inspire.ec.europa.eu/schemas/ad/4.0" xmlns:au="http://inspire.ec.europa.eu/schemas/au/4.0" xmlns:gn="http://inspire.ec.europa.eu/schemas/gn/4.0" xmlns:bu-base="http://inspire.ec.europa.eu/schemas/bu-base/4.0" xmlns:tn="http://inspire.ec.europa.eu/schemas/tn/4.0" xmlns:cp="http://inspire.ec.europa.eu/schemas/cp/4.0" xmlns:net="http://inspire.ec.europa.eu/schemas/net/4.0" xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0" xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:hfp="http://www.w3.org/2001/XMLSchema-hasFacetAndProperty" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/plu/4.0 https://inspire.ec.europa.eu/schemas/plu/4.0/PlannedLandUse.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/deprecatedTypes.xsd">
     <gml:featureMember>
         <plu:SupplementaryRegulation gml:id="_bp_ueberbaubaregrundstuecksflaeche.3">
