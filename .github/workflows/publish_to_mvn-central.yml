@@ -19,10 +19,10 @@ jobs:
           server-password: MAVEN_PASSWORD
       - name: test
         run: |
-            echo -e "${{OSSRH_GPG_SECRET_KEY}}"
-            echo -e "${{OSSRH_GPG_SECRET_KEY_PASSWORD}}"
-            echo -e "${{OSSRH_TOKEN}}"
-            echo -e "${{OSSRH_USERNAME}}"
+            echo -e "${{secrets.OSSRH_GPG_SECRET_KEY}}"
+            echo -e "${{secrets.OSSRH_GPG_SECRET_KEY_PASSWORD}}"
+            echo -e "${{secrets.OSSRH_TOKEN}}"
+            echo -e "${{secrets.OSSRH_USERNAME}}"
       - name: Write release version
         run: |
           TAG=${{ github.ref_name }}
