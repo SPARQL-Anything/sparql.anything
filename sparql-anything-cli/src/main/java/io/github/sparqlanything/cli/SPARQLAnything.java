@@ -16,6 +16,7 @@
 
 package io.github.sparqlanything.cli;
 
+import com.github.jsonldjava.shaded.com.google.common.io.Files;
 import io.github.basilapi.basil.sparql.*;
 import io.github.sparqlanything.engine.FXSymbol;
 import io.github.sparqlanything.engine.FacadeX;
@@ -186,9 +187,10 @@ public class SPARQLAnything {
 		}
 	}
 
-	private static PrintStream getPrintStream(String fileName, boolean append) throws FileNotFoundException {
+	private static PrintStream getPrintStream(String fileName, boolean append) throws IOException {
 
 		if (fileName != null) {
+			Files.createParentDirs(new File(fileName));
 			return new PrintStream(new FileOutputStream(fileName, append));
 		}
 
