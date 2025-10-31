@@ -1,17 +1,20 @@
 /*
- * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
  */
 
 @Format(name = "JSON",
@@ -26,8 +29,7 @@ description = "The JavaScript Object Notation is specified by [ECMA](https://www
 		"- Arrays are represented by the ordered sequence component.\n" +
 		"- Values are expressed as *rdf:Literal*, selecting relevant XSD datatypes from the RDFS specification: *xsd:string*, *xsd:boolean*, *xsd:int*, *xsd:float*\n" +
 		"\n" +
-		"Currently, fields with the 'null' value are ignored.\n" +
-		"<!-- However, we may decide to represent it as blank node or to create a primitive entity to express it, for example, similar to \\tt{rdf:nil}.}.  -->\n",
+		"By default, fields with the 'null' value are ignored, but this behaviour can be controlled via `json.include-null-values` option.\n",
 resourceExample = "https://sparql-anything.cc/examples/simple.json")
 package io.github.sparqlanything.json;
 

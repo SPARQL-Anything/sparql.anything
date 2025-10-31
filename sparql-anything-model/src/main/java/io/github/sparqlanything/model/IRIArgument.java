@@ -1,17 +1,20 @@
 /*
- * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
  */
 
 package io.github.sparqlanything.model;
@@ -28,6 +31,7 @@ public class IRIArgument {
 	public static final IRIArgument METADATA = new IRIArgument("metadata", "false");
 	public static final IRIArgument CONTENT = new IRIArgument("content");
 	public static final IRIArgument FROM_ARCHIVE = new IRIArgument("from-archive");
+	public static final IRIArgument ARCHIVE_FORMAT = new IRIArgument("archive-format");
 	public static final IRIArgument TRIM_STRINGS = new IRIArgument("trim-strings", "false");
 	public static final IRIArgument NULL_STRING = new IRIArgument("null-string");
 	public static final IRIArgument STRATEGY = new IRIArgument("strategy", "1");
@@ -42,6 +46,14 @@ public class IRIArgument {
 	public static final IRIArgument GENERATE_PREDICATE_LABELS = new IRIArgument("generate-predicate-labels", "false");
     public static final IRIArgument  READ_FROM_STD_IN =  new IRIArgument("read-from-std-in", "false");
     public static final IRIArgument  AUDIT =  new IRIArgument("audit", "false");
+
+	// Options for S3 storage
+	public static final IRIArgument  S3_ENDPOINT =  new IRIArgument("s3.endpoint", "false");
+	public static final IRIArgument  S3_BUCKET_NAME =  new IRIArgument("s3.bucket-name");
+	public static final IRIArgument  S3_KEY =  new IRIArgument("s3.key");
+	public static final IRIArgument  S3_ACCESS_KEY =  new IRIArgument("s3.access-key");
+	public static final IRIArgument  S3_SECRET_KEY =  new IRIArgument("s3.secret-key");
+	public static final IRIArgument  S3_REGION =  new IRIArgument("s3.region");
 
     private final String name;
 	private final String defaultValue;

@@ -1,17 +1,20 @@
 /*
- * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
  */
 
 package io.github.sparqlanything.model;
@@ -22,6 +25,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +47,7 @@ public interface Triplifier {
 	String XYZ_NS = "http://sparql.xyz/facade-x/data/";
 	String METADATA_GRAPH_IRI = XYZ_NS + "metadata";
 	String AUDIT_GRAPH_IRI = XYZ_NS + "audit";
+	String XYZ_NULL = XYZ_NS + "null";
 	String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
 	String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
 	String FACADE_X_SLOT_KEY = FACADE_X_CONST_NAMESPACE_IRI + "slot-key";
@@ -49,6 +55,7 @@ public interface Triplifier {
 	String FACADE_X_CACHED_GRAPH = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraph";
 	String FACADE_X_CACHED_GRAPH_CREATION = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraphCreation";
 	String FACADE_X_SPARQL_ALGEBRA = FACADE_X_CONST_NAMESPACE_IRI + "sparqlAlgebra";
+	Node XYZ_NULL_NODE = NodeFactory.createURI(XYZ_NULL);
 
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
@@ -168,7 +175,7 @@ public interface Triplifier {
 		// Handle archives differently
 		URL urlArchive = Utils.instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
 		try {
-			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset);
+			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset, properties.getProperty(IRIArgument.ARCHIVE_FORMAT.toString()));
 		} catch (ArchiveException e) {
 			throw new IOException(e); // TODO i think we should throw a TriplifierHTTPException instead
 			// to allow the silent keyword to be respected

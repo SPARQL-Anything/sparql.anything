@@ -13,8 +13,7 @@ According to Facade-X model, SPARQL Anything interprets objects and arrays as co
 - Arrays are represented by the ordered sequence component.
 - Values are expressed as *rdf:Literal*, selecting relevant XSD datatypes from the RDFS specification: *xsd:string*, *xsd:boolean*, *xsd:int*, *xsd:float*
 
-Currently, fields with the &#39;null&#39; value are ignored.
-&lt;!-- However, we may decide to represent it as blank node or to create a primitive entity to express it, for example, similar to \tt{rdf:nil}.}.  --&gt;
+By default, fields with the &#39;null&#39; value are ignored, but this behaviour can be controlled via `json.include-null-values` option.
 
 
 ## Extensions
@@ -102,6 +101,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 |-------------|-------------|--------------|---------------|
 | [json.path](#jsonpath) | One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option.      It will pre-process the JSON before the execution of the query.      In most cases, it is easier to query the JSON using a triple pattern, as in the [example described before](#Example). | Any valid JsonPath (see [JsonSurfer implementation](https://github.com/jsurfer/JsonSurfer))) | Not set |
 | [json.literalize](#jsonliteralize) | One or more key values as filters. E.g. `json.literalize=key` or `json.literalize.1`, `json.literalize.2`, `...` to add multiple expressions.  The `json.literalize` option is only recommended if users need to treat certain JSON elements as opaque string literals, for example, when using GeoJSON. | Any key values present in the JSON file | Not set |
+| [json.include-null-values](#jsoninclude-null-values) | It tells the JSON triplifier to produce triples for null values in the JSON Object/Array. By default the triplifier uses xyz:null as null value. See Issue [[#564](https://github.com/SPARQL-Anything/sparql.anything/issues/564)](https://github.com/SPARQL-Anything/sparql.anything/issues/564).  | true/false | `false` |
 
 ---
 ### `json.path`
@@ -175,8 +175,8 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
 CONSTRUCT 
   { 
@@ -283,8 +283,8 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
 SELECT  ?language
 WHERE
@@ -363,8 +363,8 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
 
 CONSTRUCT 
   { 
@@ -433,6 +433,66 @@ Any key values present in the JSON file
 
 Not set
 
+
+---
+### `json.include-null-values`
+
+#### Description
+
+It tells the JSON triplifier to produce triples for null values in the JSON Object/Array. By default the triplifier uses xyz:null as null value. See Issue [[#564](https://github.com/SPARQL-Anything/sparql.anything/issues/564)](https://github.com/SPARQL-Anything/sparql.anything/issues/564). 
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+`false`
+
+#### Examples
+
+##### Example 1
+
+Selecting properties having null value.
+
+###### Input
+
+```JSON
+{
+    "stringArg": "stringValue",
+    "intArg": 1,
+    "booleanArg": true,
+    "nullArg": null,
+    "arr": [ 0, 1 ]
+}
+
+```
+
+https://sparql-anything.cc/examples/simple.json
+
+###### Query
+
+```
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+
+SELECT  ?p
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.json,json.include-null-values=true>
+      { ?s  ?p  xyz:null }
+  }
+
+```
+
+###### Result
+
+```turtle
+---------------------------------------------
+| p                                         |
+=============================================
+| <http://sparql.xyz/facade-x/data/nullArg> |
+---------------------------------------------
+
+```
 
 
 

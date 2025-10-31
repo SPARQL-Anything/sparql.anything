@@ -1,17 +1,20 @@
 /*
- * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
  */
 
 package io.github.sparqlanything.it;
@@ -172,7 +175,7 @@ public class IssuesTest {
 		log.debug("Location {}", location);
 		Query query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      " + "SERVICE <x-sparql-anything:> { " + " fx:properties fx:csv.headers true . fx:properties fx:location \"" + location + "\" . " + " ?s rdf:_1 ?o . ?o xyz:A ?a }}");
 
-		Query query2 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      " + "SERVICE <x-sparql-anything:> { " + "" + " fx:properties fx:location \"" + location + "\";" + " fx:csv.headers true " + "." + " ?s rdf:_1 ?o . ?o xyz:A ?a }}");
+		Query query2 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  {      " + "SERVICE <x-sparql-anything:> { " + " fx:properties fx:location \"" + location + "\";" + " fx:csv.headers true " + "." + " ?s rdf:_1 ?o . ?o xyz:A ?a }}");
 
 		Dataset ds = DatasetFactory.createGeneral();
 
@@ -211,7 +214,7 @@ public class IssuesTest {
 		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("test1.csv")).toURI().toString();
 		log.debug("Location {}", location);
 
-		Query query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { " + "SERVICE <x-sparql-anything:csv.headers=true> { " + "" + " fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "." + " ?s rdf:_1 ?o . ?o xyz:A ?r  VALUES (?location) {(\"" + location + "\")} }}");
+		Query query1 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { " + "SERVICE <x-sparql-anything:csv.headers=true> { " + " fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "." + " ?s rdf:_1 ?o . ?o xyz:A ?r  VALUES (?location) {(\"" + location + "\")} }}");
 
 		Dataset ds = DatasetFactory.createGeneral();
 
@@ -227,7 +230,7 @@ public class IssuesTest {
 		}
 		assertEquals(Sets.newHashSet("A1"), results);
 
-		Query query2 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { " + "SERVICE <x-sparql-anything:csv.headers=true> { " + "" + " BIND (\"" + location + "\" AS ?location ) fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "." + " ?s rdf:_1 ?o . ?o xyz:A ?r  }}");
+		Query query2 = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  " + "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " + "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT *  { " + "SERVICE <x-sparql-anything:csv.headers=true> { "  + " BIND (\"" + location + "\" AS ?location ) fx:properties fx:location ?location ; " + " fx:csv.null-string \"\"" + "." + " ?s rdf:_1 ?o . ?o xyz:A ?r  }}");
 
 //		System.out.println(query2.toString(Syntax.syntaxSPARQL_11));
 		ResultSet rs2 = QueryExecutionFactory.create(query2, ds).execSelect();
@@ -295,7 +298,7 @@ public class IssuesTest {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		// XXX This process never ends!
 		Model rs = QueryExecutionFactory.create(query, ds).execConstruct();
-		Assert.assertTrue(rs.size() > 0);
+		assertFalse(rs.isEmpty());
 	}
 
 	/**
@@ -943,7 +946,7 @@ public class IssuesTest {
 		c.setTime(new Date(1716933600000L));
 		ResultSet rs = qExec.execSelect();
 		assertTrue(rs.hasNext());
-		assertEquals(DatatypeConverter.printDateTime(c),rs.next().get("o").asLiteral().getString());
+		assertEquals(DatatypeConverter.printDateTime(c), rs.next().get("o").asLiteral().getString());
 		assertFalse(rs.hasNext());
 	}
 
@@ -953,7 +956,7 @@ public class IssuesTest {
 		ResultSet rs = qExec.execSelect();
 		Set<Integer> slideNumbers = new HashSet<>();
 		assertTrue(rs.hasNext());
-		while(rs.hasNext()){
+		while (rs.hasNext()) {
 			QuerySolution qs = rs.next();
 			slideNumbers.add(qs.get("slideNumber").asLiteral().getInt());
 		}
@@ -975,16 +978,27 @@ public class IssuesTest {
 		assertTrue(rs.hasNext());
 	}
 
+	@Test
+	public void testIssue554() throws URISyntaxException, IOException {
+		QueryExecution qExec = executeTest("issues/issue554.sparql", "issues/test", false, false, false, false);
+		ResultSet rs = qExec.execSelect();
+		assertTrue(rs.hasNext());
+	}
+
 
 	private QueryExecution executeTest(String queryPath, String resourcePath, boolean printQueryString, boolean printFormattedQuery, boolean printResults, boolean constructResource) throws IOException, URISyntaxException {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
-		if(constructResource)
+		if (constructResource)
 			queryPath = "constructResource.sparql";
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(queryPath)).toURI(), StandardCharsets.UTF_8);
-		String loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(resourcePath)).toURI()).toUri().toString();
-		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+
+		if (resourcePath != null) {
+			String loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(resourcePath)).toURI()).toUri().toString();
+			queryStr = queryStr.replace("%%%LOCATION%%%", loc);
+		}
+
 		if (printQueryString) {
 			System.out.println(queryStr);
 		}
@@ -998,7 +1012,6 @@ public class IssuesTest {
 		if (printResults) {
 			if (query.isSelectType()) {
 				ResultSet rs = qExec1.execSelect();
-				Assert.assertTrue(rs.hasNext());
 				System.out.println(ResultSetFormatter.asText(rs));
 			} else {
 				qExec1.execConstruct().write(System.out, "TTL");

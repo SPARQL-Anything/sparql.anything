@@ -1,17 +1,20 @@
 /*
- * Copyright (c) 2024 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/*
  */
 
 package io.github.sparqlanything.facadeiri;
@@ -32,7 +35,7 @@ public class FacadeIRIParser {
 
 	private String tupleURL;
 	public final static String SPARQL_ANYTHING_URI_SCHEMA = "x-sparql-anything:";
-	private final static Pattern key = Pattern.compile("^[a-zA-Z0-9-]+");
+	private final static Pattern KEY = Pattern.compile("^[a-zA-Z0-9-~/]+");
 	private static final Logger log = LoggerFactory.getLogger(FacadeIRIParser.class);
 
 	public FacadeIRIParser(String tupleURL) {
@@ -62,11 +65,11 @@ public class FacadeIRIParser {
 	}
 
 	private String escape(String s) {
-		Matcher m = key.matcher(s);
+		Matcher m = KEY.matcher(s);
 		log.trace("Input escape {}",s);
 		if (m.find() && m.end() < s.length() && s.charAt(m.end()) != '=') {
 			log.trace("Unescape");
-			// it is an URI => unescape
+			// it is a URI => unescape
 			return s;
 		}
 		boolean lookingForEqual = false;
