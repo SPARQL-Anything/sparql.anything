@@ -488,6 +488,9 @@ The value of `?_starName` can be passed via the CLI as follows:
 ```bash
 java -jar sparql-anything-<version>.jar -q query.sparql -v starName="Courteney Cox"
 ```
+### Check optional variable bindings in the query
+
+Variable substitution happens before the query is evaluated, thus, they are injected into the query string, not the algebra. You can verify if the parametric optional variable was passed in this way: `BIND(?__var as ?var ). FILTER( BOUND(?var) )`
 
 ## Functions and magic properties
 
