@@ -651,6 +651,8 @@ To enable the default logger for SPARQL anything only:
 -Dorg.slf4j.simpleLogger.log.io.github.sparqlanything=trace
 ```
 
+Extended documentation can be found [here](CLI.md)
+
 
 ### Fuseki
 

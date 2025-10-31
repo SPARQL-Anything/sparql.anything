@@ -27,6 +27,8 @@ OPTIONAL - Explain query execution
 ### -l,--load <load>                      
 OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.
 
+    ! NOTE: This is useful to combine existing RDF with newly incoming data to be converted, and build small workflows with subsequent queries. See examples in [IMMA # step-3-generate-the-list-of-artworks](https://github.com/SPARQL-Anything/showcase-imma#step-3-generate-the-list-of-artworks)
+
 ### -f,--format <string>                  
 OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]
 
@@ -34,7 +36,7 @@ OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, T
 OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.
 
 ### -p,--output-pattern <outputPattern>   
-OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.
+OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables should start with '?' and refer to bindings from the input file (`-v`). This option can only be used in combination with 'values' (`-v` or `--values`) and is ignored otherwise. This option overrides 'output'.
 
 ### -v,--values <values>
 OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The argument
