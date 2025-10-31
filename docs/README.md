@@ -146,8 +146,8 @@ $ java -jar sparql-anything-v1.0.0.jar --query some.rq
   supported)
 - [Functions library](#functions-and-magic-properties) for RDF sequences, strings, hashes, easy entity building, ...
 - Combine multiple SERVICE clauses into complex data integration queries (thanks to SPARQL)
-- Query templates (using [BASIL variables](#query-templates-and-variable-bindings))
-- Save and reuse SPARQL `Results Sets` as input for [parametric queries](#query-templates-and-variable-bindings)
+- Query templates (using [BASIL variables](#query-templates-and-variable-bindings-cli-only))
+- Save and reuse SPARQL `Results Sets` as input for [parametric queries](#query-templates-and-variable-bindings-cli-only)
 - Slice large CSV, JSON and XML files with an iterator-like execution style (
   see [#202](https://github.com/SPARQL-Anything/sparql.anything/issues/202)
   and [#203](https://github.com/SPARQL-Anything/sparql.anything/issues/203))
@@ -488,6 +488,9 @@ The value of `?_starName` can be passed via the CLI as follows:
 ```bash
 java -jar sparql-anything-<version>.jar -q query.sparql -v starName="Courteney Cox"
 ```
+### Check optional variable bindings in the query
+
+Variable substitution happens before the query is evaluated, thus, they are injected into the query string, not the algebra. You can verify if the parametric optional variable was passed in this way: `BIND(?__var as ?var ). FILTER( BOUND(?var) )`
 
 ## Functions and magic properties
 
