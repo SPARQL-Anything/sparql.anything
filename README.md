@@ -146,7 +146,7 @@ $ java -jar sparql-anything-v1.0.0.jar --query some.rq
   supported)
 - [Functions library](#functions-and-magic-properties) for RDF sequences, strings, hashes, easy entity building, ...
 - Combine multiple SERVICE clauses into complex data integration queries (thanks to SPARQL)
-- Query templates (using [BASIL variables](#query-templates-and-variable-bindings))
+- Query templates (using [BASIL variables](#query-templates-and-variable-bindings-cli-only))
 - Save and reuse SPARQL `Results Sets` as input for [parametric queries](#query-templates-and-variable-bindings)
 - Slice large CSV, JSON and XML files with an iterator-like execution style (
   see [#202](https://github.com/SPARQL-Anything/sparql.anything/issues/202)
