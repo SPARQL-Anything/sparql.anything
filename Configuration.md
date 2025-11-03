@@ -112,6 +112,7 @@ WHERE {
 ### location
 
 `location` tells the SPARQL Anything engine the URL of the input resource.
+**Note that** paths beginning with '~' are resolved as the home directory of the current user.
 
 #### Valid Values
 
