@@ -985,6 +985,16 @@ public class IssuesTest {
 		assertTrue(rs.hasNext());
 	}
 
+	@Test
+	public void testIssue565() throws URISyntaxException, IOException {
+		String currentUserHome = System.getProperty("user.home");
+		System.setProperty("user.home","issues");
+		QueryExecution qExec = executeTest("issues/issue565.sparql", "issues/issue565.txt", false, false, true, false);
+		ResultSet rs = qExec.execSelect();
+		assertTrue(rs.hasNext());
+		System.setProperty("user.home", currentUserHome);
+	}
+
 
 	private QueryExecution executeTest(String queryPath, String resourcePath, boolean printQueryString, boolean printFormattedQuery, boolean printResults, boolean constructResource) throws IOException, URISyntaxException {
 		Dataset ds = DatasetFactory.createGeneral();

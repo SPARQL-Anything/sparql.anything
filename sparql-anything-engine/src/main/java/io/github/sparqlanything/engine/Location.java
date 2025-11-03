@@ -77,30 +77,5 @@ public class Location {
 
 	}
 
-	public static InputStream getInputStream(URL url, Properties properties) throws IllegalArgumentException, IOException {
 
-		// If local throw exception
-		if (url.getProtocol().equals("file")) {
-			log.debug("Getting input stream from file");
-			return url.openStream();
-		}
-
-		// If HTTP
-		if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
-
-			if (PropertyUtils.getBooleanProperty(properties, IRIArgument.S3_ENDPOINT)) {
-				return getInputStreamFromS3Bucket(url, properties);
-			}
-
-			CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
-			if (!HTTPHelper.isSuccessful(response)) {
-				throw new IOException(response.getStatusLine().toString());
-			}
-			return response.getEntity().getContent();
-		}
-
-		// If other protocol, try URL and Connection
-		log.debug("Other protocol: {}", url.getProtocol());
-		return url.openStream();
-	}
 }

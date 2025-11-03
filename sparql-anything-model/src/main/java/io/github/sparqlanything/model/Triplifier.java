@@ -106,7 +106,7 @@ public interface Triplifier {
 		return basicEscaper.escape(s);
 	}
 
-	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
+	public static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
 		return getInputStream(properties, getCharsetArgument(properties));
 	}
 
@@ -122,16 +122,16 @@ public interface Triplifier {
 			} else { // WINDOWS
 				// Credit: https://stackoverflow.com/a/18893443/1035608
 				commands = command.split("(?x)   " + "\\s          " + // Split on space
-						"(?=        " + // Followed by
-						"  (?:      " + // Start a non-capture group
-						"    [^\"]* " + // 0 or more non-quote characters
-						"    \"     " + // 1 quote
-						"    [^\"]* " + // 0 or more non-quote characters
-						"    \"     " + // 1 quote
-						"  )*       " + // 0 or more repetition of non-capture group (multiple of 2 quotes will be even)
-						"  [^\"]*   " + // Finally 0 or more non-quotes
-						"  $        " + // Till the end (This is necessary, else every space will satisfy the condition)
-						")          " // End look-ahead
+					"(?=        " + // Followed by
+					"  (?:      " + // Start a non-capture group
+					"    [^\"]* " + // 0 or more non-quote characters
+					"    \"     " + // 1 quote
+					"    [^\"]* " + // 0 or more non-quote characters
+					"    \"     " + // 1 quote
+					"  )*       " + // 0 or more repetition of non-capture group (multiple of 2 quotes will be even)
+					"  [^\"]*   " + // Finally 0 or more non-quotes
+					"  $        " + // Till the end (This is necessary, else every space will satisfy the condition)
+					")          " // End look-ahead
 				);
 			}
 			log.info("Running command: {}", String.join(" ", commands));
@@ -153,7 +153,7 @@ public interface Triplifier {
 			if (url.getProtocol().equals("file")) {
 				log.debug("Getting input stream from file");
 				return url.openStream();
-			} else
+			} else {
 
 				// If HTTP
 				if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
@@ -166,6 +166,7 @@ public interface Triplifier {
 					}
 					return response.getEntity().getContent();
 				}
+			}
 
 			// If other protocol, try URL and Connection
 			log.debug("Other protocol: {}", url.getProtocol());

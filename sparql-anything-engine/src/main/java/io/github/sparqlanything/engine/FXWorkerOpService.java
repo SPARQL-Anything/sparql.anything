@@ -21,6 +21,7 @@ package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.facadeiri.FacadeIRIParser;
 import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierRegister;
 import org.apache.jena.sparql.algebra.Algebra;
@@ -52,6 +53,7 @@ public class FXWorkerOpService extends FXWorker<OpService> {
 	@Override
 	public void extractProperties(Properties properties, OpService opService) throws UnboundVariableException {
 		String url = opService.getService().getURI();
+
 		// Parse IRI only if contains properties
 		if (!url.equals(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
 			FacadeIRIParser p = new FacadeIRIParser(url);

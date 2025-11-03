@@ -20,7 +20,8 @@
 package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.engine.Location;
-import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.*;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.BeforeClass;
@@ -41,6 +42,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
@@ -120,8 +122,35 @@ public class LocationTest {
 		assertEquals(FILE_CONTENT, content);
 	}
 
+
+
+	private static InputStream getInputStream(URL url, Properties properties) throws IllegalArgumentException, IOException {
+
+		// If local throw exception
+		if (url.getProtocol().equals("file")) {
+			return url.openStream();
+		}
+
+		// If HTTP
+		if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
+
+			if (PropertyUtils.getBooleanProperty(properties, IRIArgument.S3_ENDPOINT)) {
+				return Location.getInputStreamFromS3Bucket(url, properties);
+			}
+
+			CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
+			if (!HTTPHelper.isSuccessful(response)) {
+				throw new IOException(response.getStatusLine().toString());
+			}
+			return response.getEntity().getContent();
+		}
+
+		// If other protocol, try URL and Connection
+		return url.openStream();
+	}
+
 	@Test
-	public void testS3Location() throws IOException {
+	public void testS3Location() throws IOException, TriplifierHTTPException {
 
 		Assume.assumeTrue("Docker not available", dockerAvailable);
 
@@ -134,7 +163,7 @@ public class LocationTest {
 		properties.setProperty(IRIArgument.S3_SECRET_KEY.toString(), SECRET_KEY);
 		properties.setProperty(IRIArgument.S3_REGION.toString(), REGION);
 
-		InputStream is = Location.getInputStream(endpoint.toURL(), properties);
+		InputStream is = getInputStream(endpoint.toURL(), properties);
 		String content = IOUtils.toString(is, Charset.defaultCharset());
 
 		assertEquals(FILE_CONTENT, content);
