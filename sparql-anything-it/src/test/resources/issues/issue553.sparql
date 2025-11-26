@@ -1,0 +1,31 @@
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+
+# Test GeoSPARQL spatial relationships without UOM namespace
+# This query tests contains, intersects, and within relationships
+SELECT ?relation ?geometry1_label ?geometry2_label ?result WHERE {
+
+  # Define test geometries
+  VALUES (?geometry1_label ?geometry1 ?geometry2_label ?geometry2 ?relation) {
+    # Point within polygon test
+    ("City Center" "POINT(4.9041 52.3676)"^^geo:wktLiteral "Amsterdam Bounds" "POLYGON((4.8 52.3, 5.0 52.3, 5.0 52.4, 4.8 52.4, 4.8 52.3))"^^geo:wktLiteral "within")
+
+    # Line intersects polygon test
+    ("Highway" "LINESTRING(4.85 52.32, 4.95 52.38)"^^geo:wktLiteral "Amsterdam Bounds" "POLYGON((4.8 52.3, 5.0 52.3, 5.0 52.4, 4.8 52.4, 4.8 52.3))"^^geo:wktLiteral "intersects")
+
+    # Polygon contains point test
+    ("Large Area" "POLYGON((4.7 52.2, 5.1 52.2, 5.1 52.5, 4.7 52.5, 4.7 52.2))"^^geo:wktLiteral "Small Point" "POINT(4.9 52.35)"^^geo:wktLiteral "contains")
+
+    # Buffer test (point with buffer intersects line)
+    ("Station" "POINT(4.9 52.37)"^^geo:wktLiteral "Train Line" "LINESTRING(4.88 52.36, 4.92 52.38)"^^geo:wktLiteral "intersects")
+  }
+
+  # Test the spatial relationship based on the relation type
+  BIND(
+    IF(?relation = "within", geof:sfWithin(?geometry1, ?geometry2),
+    IF(?relation = "intersects", geof:sfIntersects(?geometry1, ?geometry2),
+    IF(?relation = "contains", geof:sfContains(?geometry1, ?geometry2),
+    false))) AS ?result
+  )
+}
+ORDER BY ?relation ?geometry1_label

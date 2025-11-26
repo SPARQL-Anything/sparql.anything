@@ -43,7 +43,7 @@ public class Utils {
 		if (operSys.contains("win")) {
 			platform = OS.WINDOWS;
 		} else if (operSys.contains("nix") || operSys.contains("nux")
-				|| operSys.contains("aix")) {
+			|| operSys.contains("aix")) {
 			platform = OS.LINUX;
 		} else if (operSys.contains("mac")) {
 			platform = OS.MAC;
@@ -54,14 +54,21 @@ public class Utils {
 		// logger.info("OS is: " + platform);
 	}
 
+	private static String resolveTilde(String urlLocation) {
+		if (urlLocation.startsWith("~"))
+			return urlLocation.replaceFirst("^~", System.getProperty("user.home"));
+		return urlLocation;
+	}
+
 	public static URL instantiateURL(String urlLocation) throws MalformedURLException {
 		log.trace("URL Location {}", urlLocation);
+		String urlString = resolveTilde(urlLocation);
 		URL url;
 		try {
-			url = new URL(urlLocation);
+			url = new URL(urlString);
 		} catch (MalformedURLException u) {
 			log.trace("Malformed url interpreting as file");
-			url = new File(urlLocation).toURI().toURL();
+			url = new File(urlString).toURI().toURL();
 		}
 		log.trace("Result {}", url);
 		return url;
@@ -83,7 +90,7 @@ public class Utils {
 			for (String className : classNames) {
 				try {
 					Class<?> k = child.loadClass(className);
-					if(Arrays.stream(k.getInterfaces()).anyMatch(iFaceClass -> iFaceClass == PluginInitializer.class)){
+					if (Arrays.stream(k.getInterfaces()).anyMatch(iFaceClass -> iFaceClass == PluginInitializer.class)) {
 						PluginInitializer p = (PluginInitializer) k.getConstructor().newInstance();
 						p.run();
 					}

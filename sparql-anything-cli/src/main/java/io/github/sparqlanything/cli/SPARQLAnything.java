@@ -81,7 +81,7 @@ public class SPARQLAnything {
 			Method m = k.getMethod("setupMemoryIndex");
 			m.invoke(null);
 		} catch (ClassNotFoundException e) {
-			logger.warn("jena-geosparql dependency not available");
+			//logger.warn("jena-geosparql dependency not available");
 		} catch (NoSuchMethodException e) {
 			logger.warn("NoSuchMethodException");
 		} catch (InvocationTargetException e) {

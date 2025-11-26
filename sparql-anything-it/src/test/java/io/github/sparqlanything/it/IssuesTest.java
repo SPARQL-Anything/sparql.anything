@@ -40,8 +40,7 @@ import org.junit.Assume;
 import io.github.sparqlanything.model.HTTPHelper;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
@@ -983,6 +982,29 @@ public class IssuesTest {
 		QueryExecution qExec = executeTest("issues/issue554.sparql", "issues/test", false, false, false, false);
 		ResultSet rs = qExec.execSelect();
 		assertTrue(rs.hasNext());
+	}
+
+	@Ignore
+	@Test
+	public void testIssue545() throws URISyntaxException, IOException {
+		PrintStream old = System.out;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(baos));
+		QueryExecution qExec = executeTest("issues/issue545.sparql", null, false, false, true, false);
+		System.setOut(old);
+		String out = baos.toString();
+		assertFalse(out.contains("ERROR Log4j API could not find a logging provider."));
+
+	}
+
+	@Test
+	public void testIssue565() throws URISyntaxException, IOException {
+		String currentUserHome = System.getProperty("user.home");
+		System.setProperty("user.home","issues");
+		QueryExecution qExec = executeTest("issues/issue565.sparql", "issues/issue565.txt", false, false, false, false);
+		ResultSet rs = qExec.execSelect();
+		assertTrue(rs.hasNext());
+		System.setProperty("user.home", currentUserHome);
 	}
 
 

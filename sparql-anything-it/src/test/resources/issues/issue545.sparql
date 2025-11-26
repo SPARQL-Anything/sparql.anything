@@ -1,0 +1,1 @@
+select ?o where { service <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.html> {?s ?p ?o}}
