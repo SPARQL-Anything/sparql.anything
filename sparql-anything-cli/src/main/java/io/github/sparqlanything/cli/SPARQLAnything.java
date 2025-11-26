@@ -31,6 +31,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.*;
@@ -180,6 +181,10 @@ public class SPARQLAnything {
 				} else if (outputFormat.equals(Lang.TRIX.getName())) {
 					// TRIG
 					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
+				} else if (outputFormat.equals(Lang.CSV.getName())) {
+					// CSV
+					ResultSet rs = RiotUtils.asResultSet(Objects.requireNonNull(d.asDatasetGraph()));
+					ResultSetFormatter.outputAsCSV(pw, rs);
 				} else {
 					throw new RuntimeException("Unsupported format: " + outputFormat);
 				}
