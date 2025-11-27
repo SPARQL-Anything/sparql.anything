@@ -34,5 +34,12 @@ sticky_navigation: true
 markdown_extensions:
   - tables
   - admonition
+  - nl2br
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+plugins:
+  - search
   - callouts
 
