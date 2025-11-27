@@ -34,3 +34,5 @@ sticky_navigation: true
 markdown_extensions:
   - tables
   - admonition
+  - callouts
+
