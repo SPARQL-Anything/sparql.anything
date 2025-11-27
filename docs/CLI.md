@@ -19,7 +19,8 @@ OPTIONAL - The path to the output file. [Default: STDOUT]
 ### -a,--append
 OPTIONAL - Should output to file be appended? 
 
-    ! WARNING: this option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using blank nodes)
+> [!WARNING] 
+> This option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using blank nodes)
 
 ### -e,--explain                          
 OPTIONAL - Explain query execution

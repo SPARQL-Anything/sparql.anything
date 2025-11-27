@@ -497,7 +497,8 @@ Variable substitution happens before the query is evaluated, thus, they are inje
 SPARQL Anything provides a number of magical functions and properties to facilitate the users in querying the sources
 and constructing knowledge graphs.
 
-**NOTE**: SPARQL Anything is built on Apache Jena, see a list of supported functions on
+> [!NOTE]
+> SPARQL Anything is built on Apache Jena, see a list of supported functions on
 the [Apache Jena documentation](https://jena.apache.org/documentation/query/library-function.html).
 
 Moreover, if you run the geosparql distribution of the CLI or the server, you can also use the [GeoSPARQL functions provided by Apache Jena](https://jena.apache.org/documentation/geosparql/index.html). 
