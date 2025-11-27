@@ -52,7 +52,10 @@ OPTIONAL - Values passed as input parameter to a query template. When present, t
 The argument can be used in two ways:
 
 - (1) Provide a single SPARQL ResultSet file (in [CSV, TSV](https://www.w3.org/TR/2013/REC-sparql11-results-csv-tsv-20130321), [JSON](https://www.w3.org/TR/2013/REC-sparql11-results-json-20130321) or [XML](https://www.w3.org/TR/2013/REC-rdf-sparql-XMLres-20130321) format. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed.
-- (2) Named variable bindings: the argument value must follow the syntax: `var_name=var_value`. The argument can be passed multiple times and the query repeated for each set of values. WARNING: the var name given on the command-line must not include the prefix and suffix. Eg to pass the IRI mentioned as example above, use `-v my=https://example.org/`
+- (2) Named variable bindings: the argument value must follow the syntax: `var_name=var_value`. The argument can be passed multiple times and the query repeated for each set of values. 
+
+> [!WARNING] 
+> The var name given on the command-line must not include the prefix and suffix. Eg to pass the IRI mentioned as example above, use `-v my=https://example.org/`
 
 ### -c,--configuration <option=value>     
 OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be
