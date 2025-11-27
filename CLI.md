@@ -48,7 +48,7 @@ OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables s
 
 ### -v,--values <values>
 
-OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. Variable names must use prefix `_` and follow the Basil convention, [see README for details](README.md#query-templates-and-variable-bindings-cli-only). You should also use `$` instead of `?` to indicate that the variable is an external parameter. In particular, you can pass IRIs if the var has suffix `_iri` (e.g. `$_my_iri`) , and you can use relative IRIs if the query specifies `BASE`.
+OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. Variable names must start with `_` and follow the Basil convention, [see README for details](README.md#query-templates-and-variable-bindings-cli-only). You can pass IRIs if the var has suffix `_iri` (e.g. `?_my_iri` or `$_my_iri`) , and you can use relative IRIs if the query specifies `BASE`.
 The argument can be used in two ways:
 
 - (1) Provide a single SPARQL ResultSet file (in [CSV, TSV](https://www.w3.org/TR/2013/REC-sparql11-results-csv-tsv-20130321), [JSON](https://www.w3.org/TR/2013/REC-sparql11-results-json-20130321) or [XML](https://www.w3.org/TR/2013/REC-rdf-sparql-XMLres-20130321) format. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed.
