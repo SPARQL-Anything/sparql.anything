@@ -27,7 +27,8 @@ OPTIONAL - Explain query execution
 ### -l,--load <load>                      
 OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.
 
-    ! NOTE: This is useful to combine existing RDF with newly incoming data to be converted, and build small workflows with subsequent queries. See examples in [IMMA # step-3-generate-the-list-of-artworks](https://github.com/SPARQL-Anything/showcase-imma#step-3-generate-the-list-of-artworks)
+> [!NOTE]  
+> This is useful to combine existing RDF with newly incoming data to be converted, and build small workflows with subsequent queries. See examples in [IMMA # step-3-generate-the-list-of-artworks](https://github.com/SPARQL-Anything/showcase-imma#step-3-generate-the-list-of-artworks)
 
 ### -f,--format <string>                  
 OPTIONAL -  Format of the output file. 

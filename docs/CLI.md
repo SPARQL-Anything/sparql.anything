@@ -27,10 +27,17 @@ OPTIONAL - Explain query execution
 ### -l,--load <load>                      
 OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.
 
-    ! NOTE: This is useful to combine existing RDF with newly incoming data to be converted, and build small workflows with subsequent queries. See examples in [IMMA # step-3-generate-the-list-of-artworks](https://github.com/SPARQL-Anything/showcase-imma#step-3-generate-the-list-of-artworks)
+> [!NOTE]  
+> This is useful to combine existing RDF with newly incoming data to be converted, and build small workflows with subsequent queries. See examples in [IMMA # step-3-generate-the-list-of-artworks](https://github.com/SPARQL-Anything/showcase-imma#step-3-generate-the-list-of-artworks)
 
 ### -f,--format <string>                  
-OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]
+OPTIONAL -  Format of the output file. 
+Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]
+
+| Query type               | Default |                                                                              Supported |
+|:-------------------------|:-------:|---------------------------------------------------------------------------------------:|
+| SELECT / ASK             |   CSV   |                                                                        JSON, XML, TEXT |
+| CONSTRUCT / DESCRIBE     |   TTL   | JSON, JSONLD, JSONLD11, XML, TTL / TURTLE, NT / NTRIPLES, NQ / NQUADS, TRIG, TRIX, CSV |
 
 ### -s,--strategy <strategy>              
 OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.
