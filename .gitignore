@@ -16,3 +16,4 @@ sparql.anything.experiment/src/main/java/com/github/spiceh2020/sparql/anything/e
 *swo
 */tmp/
 **/.flattened-pom.xml
+.vscode/
