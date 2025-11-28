@@ -37,13 +37,13 @@ public class CacheTest {
 		// System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query,ds).execSelect()));
 		ResultSet rs1 = QueryExecutionFactory.create(query,ds).execSelect();
 		Assert.assertTrue(rs1.hasNext());
+        // first query execution should not hit the cache
 		Assert.assertFalse(rs1.next().getLiteral("o").asLiteral().getBoolean());
 
 		ResultSet rs2 = QueryExecutionFactory.create(query,ds).execSelect();
 		Assert.assertTrue(rs2.hasNext());
-		Assert.assertTrue(rs2.next().getLiteral("o").asLiteral().getBoolean());
-
-
+        // second query execution should not hit the cache either by default
+		Assert.assertFalse(rs2.next().getLiteral("o").asLiteral().getBoolean());
 	}
 
 
@@ -57,12 +57,12 @@ public class CacheTest {
 		// System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query,ds).execSelect()));
 		ResultSet rs1 = QueryExecutionFactory.create(query,ds).execSelect();
 		Assert.assertTrue(rs1.hasNext());
+        // first query execution should not hit the cache
 		Assert.assertFalse(rs1.next().getLiteral("o").asLiteral().getBoolean());
 
 		ResultSet rs2 = QueryExecutionFactory.create(query,ds).execSelect();
 		Assert.assertTrue(rs2.hasNext());
-		Assert.assertFalse(rs2.next().getLiteral("o").asLiteral().getBoolean());
-
-
+        // second query execution should hit the cache
+		Assert.assertTrue(rs2.next().getLiteral("o").asLiteral().getBoolean());
 	}
 }
