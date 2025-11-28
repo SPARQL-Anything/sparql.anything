@@ -57,7 +57,7 @@ public class DatasetGraphCreator {
 		DatasetGraph dg;
 		if (t == null) return DatasetGraphFactory.create();
 
-		boolean useCache = !PropertyUtils.getBooleanProperty(p, IRIArgument.USE_CACHE);
+		boolean useCache = PropertyUtils.getBooleanProperty(p, IRIArgument.USE_CACHE);
 
 		if (useCache && FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
 			dg = FacadeX.executedFacadeXIris.get(getInMemoryCacheKey(p, op));
