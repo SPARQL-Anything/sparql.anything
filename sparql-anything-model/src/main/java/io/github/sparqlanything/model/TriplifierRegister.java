@@ -56,7 +56,7 @@ public final class TriplifierRegister {
 						"A triplifier for " + ext + " extension has been already registered!");
 			}
 			log.trace("Registering triplifier for extension {} : {}", ext, t);
-			extension.put(ext, t);
+			extension.put(ext.toLowerCase(), t);
 		}
 
 		for (String mimeType : mimeTypes) {
@@ -101,7 +101,7 @@ public final class TriplifierRegister {
 	}
 
 	public String getTriplifierForExtension(String f) {
-		return this.extension.get(f);
+		return this.extension.get(f.toLowerCase());
 	}
 
 	public void printMediaTypes() {
