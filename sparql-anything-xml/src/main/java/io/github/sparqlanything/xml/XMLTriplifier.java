@@ -172,9 +172,7 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 				String name = vn.toString(result);
 				String value = vn.toString(result + 1);
 				log.trace("Attribute {} = {}", name, value);
-				String attrChildId = String.join("", parentId, "/", Integer.toString(child), ":", name);
-				builder.addContainer(dataSourceId, parentId, child, attrChildId);
-				builder.addValue(dataSourceId, attrChildId, name, value);
+				builder.addValue(dataSourceId, parentId, name, value);
 				return result + 1;
 			}
 			case VTDNav.TOKEN_ATTR_VAL -> {
