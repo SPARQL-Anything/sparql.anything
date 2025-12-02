@@ -1298,8 +1298,21 @@ Result
 
 ### use-cache
 
-When set to true, the result of the triplification is cached in memory and used to answer the same query again. (see issue [#371](https://github.com/SPARQL-Anything/sparql.anything/issues/371) and [#372](https://github.com/SPARQL-Anything/sparql.anything/issues/372)).
+When set to true, the result of the triplification is cached in memory and persists across multiple query executions until the process terminates. This is the **user-level cache**. (see issue [#371](https://github.com/SPARQL-Anything/sparql.anything/issues/371), [#372](https://github.com/SPARQL-Anything/sparql.anything/issues/372), and [#585](https://github.com/SPARQL-Anything/sparql.anything/issues/585)).
+
+**Note:** Even when `use-cache=false` (default), SPARQL Anything uses an **internal query cache** that is automatically enabled for each query execution. This internal cache prevents redundant triplification when the same source is accessed multiple times within a single query (e.g., nested SERVICE clauses). The internal cache is automatically cleared after each query completes.
+
 You can check out whether a query has been evaluated over a cached graph via the `fx:cachedGraph` assertion of the [audit graph](#audit).
+
+**When to use `use-cache=true`:**
+- When executing multiple queries against the same data sources
+- When the data sources are large and expensive to triplify
+- When data sources don't change frequently
+
+**When to keep `use-cache=false` (default):**
+- When data sources change between queries
+- When memory is limited
+- For one-off queries
 
 #### Valid Values
 

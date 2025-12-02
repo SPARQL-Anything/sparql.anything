@@ -58,13 +58,31 @@ public class DatasetGraphCreator {
 		if (t == null) return DatasetGraphFactory.create();
 
 		boolean useCache = PropertyUtils.getBooleanProperty(p, IRIArgument.USE_CACHE);
+		String cacheKey = getInMemoryCacheKey(p, op);
+		
+		// Get internal query-scoped cache
+		InternalQueryCache internalCache = InternalQueryCache.get(execCxt.getContext());
 
-		if (useCache && FacadeX.executedFacadeXIris.containsKey(getInMemoryCacheKey(p, op))) {
-			dg = FacadeX.executedFacadeXIris.get(getInMemoryCacheKey(p, op));
+		// Check internal cache first (always enabled for nested queries)
+		if (internalCache.containsKey(cacheKey)) {
+			logger.debug("Retrieved from INTERNAL cache");
+			dg = internalCache.get(cacheKey);
 			createAuditGraph(dg, p, true, op);
 			return dg;
 		}
+		
+		// Check user-level cache (only if use-cache=true)
+		if (useCache && FacadeX.executedFacadeXIris.containsKey(cacheKey)) {
+			logger.debug("Retrieved from USER cache");
+			dg = FacadeX.executedFacadeXIris.get(cacheKey);
+			createAuditGraph(dg, p, true, op);
+			// Also store in internal cache for this query execution
+			internalCache.put(cacheKey, dg);
+			return dg;
+		}
 
+		// Not in any cache, perform triplification
+		logger.debug("Performing triplification (cache miss)");
 		dg = triplify(op, p, t);
 		createAuditGraph(dg, p, false, op);
 		createMetadataGraph(dg, p);
@@ -72,7 +90,10 @@ public class DatasetGraphCreator {
 		dg.commit();
 		dg.end();
 
-		// Remember the triplified data
+		// Store in internal cache (always)
+		internalCache.put(cacheKey, dg);
+		
+		// Store in user-level cache (only if use-cache=true)
 		persistDatasetGraphInCache(p, op, dg, useCache);
 
 		return dg;
