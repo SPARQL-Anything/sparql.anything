@@ -19,13 +19,38 @@
 
 package io.github.sparqlanything.it;
 
+import io.github.sparqlanything.cli.RiotUtils;
 import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.html.org.semarglproject.vocab.RDF;
 import org.apache.commons.io.IOUtils;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Node_Triple;
 import org.apache.jena.query.*;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFFormat;
+import org.apache.jena.riot.RIOT;
+import org.apache.jena.riot.lang.RiotParsers;
+import org.apache.jena.riot.system.ParserProfile;
+import org.apache.jena.riot.system.ParserProfileStd;
+import org.apache.jena.riot.system.ParserProfileWrapper;
+import org.apache.jena.riot.system.RiotLib;
+import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.sparql.graph.GraphFactory;
+import org.apache.jena.sparql.util.Context;
+import org.apache.jena.sparql.util.IsoMatcher;
+import org.apache.jena.sys.JenaSystem;
+import org.apache.jena.system.RDFStar;
+import org.eclipse.rdf4j.rio.helpers.RDFStarUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.semanticweb.owlapi.rio.RioTurtleParserFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -58,21 +83,47 @@ public class Sandbox {
 	@Test
 	public void generatePredicateLabels() throws IOException, URISyntaxException {
 		executeQuery("PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>\n" +
-				"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
-				"PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-				"\n" +
-				"CONSTRUCT \n" +
-				"  { \n" +
-				"    ?s ?p ?o .\n" +
-				"  }\n" +
-				"WHERE\n" +
-				"  { SERVICE <x-sparql-anything:>\n" +
-				"      { fx:properties\n" +
-				"                  fx:content            \"<Element1 attr=\\\"value\\\"/> \" ;\n" +
-				"                  fx:generate-predicate-labels  true ;\n" +
-				"                  fx:media-type         \"application/xml\" .\n" +
-				"        ?s        ?p                    ?o\n" +
-				"      }\n" +
-				"  }");
+			"PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+			"PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+			"\n" +
+			"CONSTRUCT \n" +
+			"  { \n" +
+			"    ?s ?p ?o .\n" +
+			"  }\n" +
+			"WHERE\n" +
+			"  { SERVICE <x-sparql-anything:>\n" +
+			"      { fx:properties\n" +
+			"                  fx:content            \"<Element1 attr=\\\"value\\\"/> \" ;\n" +
+			"                  fx:generate-predicate-labels  true ;\n" +
+			"                  fx:media-type         \"application/xml\" .\n" +
+			"        ?s        ?p                    ?o\n" +
+			"      }\n" +
+			"  }");
+	}
+
+	@Test
+	public void loadReifiedDataset() {
+
+		System.out.println("G1");
+		String g1string = "<< <https://example.org/a> <https://example.org/b> <https://example.org/c> >> <https://example.org/p>  <https://example.org/o> ";
+		ByteArrayInputStream bais = new ByteArrayInputStream(g1string.getBytes());
+		Graph g1 = GraphFactory.createGraphMem();
+		RDFDataMgr.read(g1, bais, Lang.TTL);
+		RDFDataMgr.write(System.out, g1, RDFFormat.TTL);
+		System.out.println("Size g1: "+ g1.size());
+
+		String ns = "https://example.org/";
+		System.out.println("G2");
+		Graph g2 = GraphFactory.createGraphMem();
+		Node r = NodeFactory.createTripleTerm(NodeFactory.createURI(ns + "a"), NodeFactory.createURI(ns + "b"), NodeFactory.createURI(ns + "c"));
+		g2.add(r, NodeFactory.createURI(ns + "p"), NodeFactory.createURI(ns + "o"));
+		RDFDataMgr.write(System.out, g2, RDFFormat.TTL);
+		System.out.println("Size g2: "+ g2.size());
+
+		System.out.println("Is g1 isomorphic with g2? " + g1.isIsomorphicWith(g2));
+		System.out.println("Is g1 isomorphic with g2? " + IsoMatcher.isomorphic(g1, g2));
+
+
+
 	}
 }

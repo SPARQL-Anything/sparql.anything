@@ -196,7 +196,7 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 				String colstring = columns.next();
 				String colname = colstring.strip();
 
-				if (colname.length() == 0) {
+				if (colname.isEmpty()) {
 					continue;
 				}
 

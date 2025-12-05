@@ -124,10 +124,11 @@ public class QueryIterSlicer extends QueryIter {
 				/*
 				 * Input iterator can be closed
 				 */
-				input.cancel();
+				input.close();
+				//input.cancel();
 				// Make sure the original Op is executed
 				// XXX Maybe there is a better way of doing it?
-				ExecutionContext exc = new ExecutionContext(DatasetGraphFactory.create());
+				ExecutionContext exc = ExecutionContext.create(DatasetGraphFactory.create());
 				QC.execute(op, QueryIterNullIterator.create(exc), exc);
 				try {
 					this.it.close();

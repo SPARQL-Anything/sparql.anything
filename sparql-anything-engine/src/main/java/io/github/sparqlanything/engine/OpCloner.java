@@ -155,13 +155,19 @@ public class OpCloner implements OpVisitor {
 	}
 
 	@Override
+	public void visit(OpUnfold opUnfold) {
+		 opUnfold.getSubOp().visit(this);
+		 Op subOb = copy;
+		 copy = opUnfold.copy(subOb);
+	}
+
+	@Override
 	public void visit(OpJoin opJoin) {
 		opJoin.getLeft().visit(this);
 		Op left = copy;
 		opJoin.getRight().visit(this);
 		Op right = copy;
-		OpJoin op = (OpJoin) opJoin.copy(left, right);
-		copy = op;
+		copy = (OpJoin) opJoin.copy(left, right);
 	}
 
 	@Override
@@ -184,15 +190,15 @@ public class OpCloner implements OpVisitor {
 		copy = op;
 	}
 
-	@Override
-	public void visit(OpDiff opDiff) {
-		opDiff.getLeft().visit(this);
-		Op left = copy;
-		opDiff.getRight().visit(this);
-		Op right = copy;
-		OpDiff op = (OpDiff) opDiff.copy(left, right);
-		copy = op;
-	}
+//	@Override
+//	public void visit(OpDiff opDiff) {
+//		opDiff.getLeft().visit(this);
+//		Op left = copy;
+//		opDiff.getRight().visit(this);
+//		Op right = copy;
+//		OpDiff op = (OpDiff) opDiff.copy(left, right);
+//		copy = op;
+//	}
 
 	@Override
 	public void visit(OpMinus opMinus) {
@@ -200,8 +206,7 @@ public class OpCloner implements OpVisitor {
 		Op left = copy;
 		opMinus.getRight().visit(this);
 		Op right = copy;
-		OpMinus op = (OpMinus) opMinus.copy(left, right);
-		copy = op;
+		copy = (OpMinus) opMinus.copy(left, right);
 	}
 
 	@Override
@@ -210,8 +215,25 @@ public class OpCloner implements OpVisitor {
 		Op left = copy;
 		opLateral.getRight().visit(this);
 		Op right = copy;
-		OpDiff op = (OpDiff) opLateral.copy(left, right);
-		copy = op;
+		copy = opLateral.copy(left, right);
+	}
+
+	public void visitOp2(Op2 op2){
+		op2.getLeft().visit(this);
+		Op left = copy;
+		op2.getRight().visit(this);
+		Op right = copy;
+		copy = op2.copy(left, right);
+	}
+
+	@Override
+	public void visit(OpSemiJoin opSemiJoin) {
+		visitOp2(opSemiJoin);
+	}
+
+	@Override
+	public void visit(OpAntiJoin opAntiJoin) {
+		visitOp2(opAntiJoin);
 	}
 
 	@Override

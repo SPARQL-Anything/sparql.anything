@@ -353,6 +353,11 @@ public class SPARQLAnything {
 					}
 
 					@Override
+					public Binding detach() {
+						throw new UnsupportedOperationException();
+					}
+
+					@Override
 					public void forEach(BiConsumer<Var, Node> action) {
 						// TODO Auto-generated method stub
 						for (Var v : bins.keySet()) {

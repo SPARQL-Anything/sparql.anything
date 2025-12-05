@@ -60,24 +60,18 @@ public class TriplifierRegistryTest {
 		DatasetGraph dg = DatasetGraphFactory.create();
 		Graph g = dg.getDefaultGraph();
 		g.add(Triple.create(NodeFactory.createURI(PREFIX + "s"), NodeFactory.createURI(PREFIX + "p"),
-				NodeFactory.createURI(PREFIX + "o")));
+			NodeFactory.createURI(PREFIX + "o")));
 		dg.addGraph(NodeFactory.createURI(PREFIX + "g"), g);
 		return dg;
 	}
 
 	;
+
 	@Test
 	public void testConstructAndSelect() throws IOException {
-//		System.out.println(new TestTriplifier().getClass().getName());
-//		Triplifier t = new TestTriplifier();
 		try {
 
-			OpExecutorFactory customExecutorFactory = new OpExecutorFactory() {
-				@Override
-				public OpExecutor create(ExecutionContext execCxt) {
-					return new FacadeXOpExecutor(execCxt);
-				}
-			};
+			OpExecutorFactory customExecutorFactory = FacadeXOpExecutor::new;
 
 			JenaSystem.init();
 			QC.setFactory(ARQ.getContext(), customExecutorFactory);
@@ -85,8 +79,7 @@ public class TriplifierRegistryTest {
 			TriplifierRegister.getInstance().registerTriplifier("io.github.sparqlanything.engine.test.TestTriplifier", new String[]{"test"}, new String[]{"test-mime"});
 
 			Dataset kb = DatasetFactory.createGeneral();
-			Query q = QueryFactory
-					.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE<x-sparql-anything:http://example.org/file.test>{?s ?p ?o}}");
+			Query q = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE<x-sparql-anything:http://example.org/file.test>{?s ?p ?o}}");
 
 			Model m = ModelFactory.createDefaultModel();
 			m.add(m.createResource(PREFIX + "s"), m.createProperty(PREFIX + "p"), m.createResource(PREFIX + "o"));
@@ -94,7 +87,7 @@ public class TriplifierRegistryTest {
 			assertTrue(QueryExecutionFactory.create(q, kb).execConstruct().isIsomorphicWith(m));
 
 			Query select = QueryFactory.create(
-					"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:http://example.org/file.test>{GRAPH ?g {?s ?p ?o}}}");
+				"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:http://example.org/file.test>{GRAPH ?g {?s ?p ?o}}}");
 			ResultSet rs = QueryExecutionFactory.create(select, kb).execSelect();
 			QuerySolution qs = rs.next();
 
@@ -109,7 +102,7 @@ public class TriplifierRegistryTest {
 		}
 	}
 
-	;
+
 	@Test
 	public void testRelativePath() throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		Class.forName("io.github.sparqlanything.engine.test.TestTriplifier2").getConstructor().newInstance();
@@ -131,13 +124,13 @@ public class TriplifierRegistryTest {
 
 			String location = getClass().getClassLoader().getResource("./test.json").toString();
 			Query select = QueryFactory.create(
-					"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:media-type=test-mime2,location=" + location + "> {GRAPH ?g {?s ?p ?o}}}");
+				"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:media-type=test-mime2,location=" + location + "> {GRAPH ?g {?s ?p ?o}}}");
 
 			ResultSet rs = QueryExecutionFactory.create(select, kb).execSelect();
 			QuerySolution qs = rs.next();
 
 			String content = IOUtils.toString(new URI(location),
-					Charset.defaultCharset());
+				Charset.defaultCharset());
 
 			assertTrue(qs.getResource("g").getURI().equals(PREFIX + "g"));
 			assertTrue(qs.getResource("s").getURI().equals(PREFIX + "s"));

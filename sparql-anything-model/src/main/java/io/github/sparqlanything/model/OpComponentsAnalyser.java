@@ -342,6 +342,11 @@ public class OpComponentsAnalyser implements OpVisitor {
 	}
 
 	@Override
+	public void visit(OpUnfold opUnfold) {
+		opUnfold.getSubOp().visit(this);
+	}
+
+	@Override
 	public void visit(OpJoin opJoin) {
 		opJoin.getLeft().visit(this);
 		opJoin.getRight().visit(this);
@@ -360,12 +365,6 @@ public class OpComponentsAnalyser implements OpVisitor {
 	}
 
 	@Override
-	public void visit(OpDiff opDiff) {
-		opDiff.getLeft().visit(this);
-		opDiff.getRight().visit(this);
-	}
-
-	@Override
 	public void visit(OpMinus opMinus) {
 		opMinus.getLeft().visit(this);
 		opMinus.getRight().visit(this);
@@ -375,6 +374,20 @@ public class OpComponentsAnalyser implements OpVisitor {
 	public void visit(OpLateral opLateral) {
 		opLateral.getLeft().visit(this);
 		opLateral.getRight().visit(this);
+	}
+
+
+
+	@Override
+	public void visit(OpSemiJoin opSemiJoin) {
+		opSemiJoin.getLeft().visit(this);
+		opSemiJoin.getRight().visit(this);
+	}
+
+	@Override
+	public void visit(OpAntiJoin opAntiJoin) {
+		opAntiJoin.getLeft().visit(this);
+		opAntiJoin.getRight().visit(this);
 	}
 
 	@Override

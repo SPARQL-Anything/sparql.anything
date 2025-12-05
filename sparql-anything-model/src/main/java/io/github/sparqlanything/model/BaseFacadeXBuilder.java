@@ -93,7 +93,9 @@ public abstract class BaseFacadeXBuilder extends FacadeXAbstractNodeBuilder impl
 		Node p = createIntegerKeyNode(slotKey);
 		Node o = createObjectNode(dataSourceId, object, isObjectContainer);
 		if (p_reify_slot_statements) {
-			add(g, NodeFactory.createTripleNode(s, p, o), NodeFactory.createURI(Triplifier.FACADE_X_SLOT_KEY), NodeFactory.createLiteral(slotKey.toString(), XSDDatatype.XSDinteger));
+			Node r = NodeFactory.createBlankNode();
+			add(g, r, RDF.reifies.asNode(), NodeFactory.createTripleTerm(s, p, o));
+			add(g, r, NodeFactory.createURI(Triplifier.FACADE_X_SLOT_KEY), NodeFactory.createLiteralDT(slotKey.toString(), XSDDatatype.XSDinteger));
 		}
 		return add(g, s, p, o);
 	}

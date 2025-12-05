@@ -83,11 +83,11 @@ public class OpVisitorSkip extends OpVisitorBase {
 		opUnion.getRight().visit(this);
 	}
 
-	@Override
-	public void visit(OpDiff opDiff) {
-		opDiff.getLeft().visit(this);
-		opDiff.getRight().visit(this);
-	}
+//	@Override
+//	public void visit(OpDiff opDiff) {
+//		opDiff.getLeft().visit(this);
+//		opDiff.getRight().visit(this);
+//	}
 
 	@Override
 	public void visit(OpMinus opMinus) {

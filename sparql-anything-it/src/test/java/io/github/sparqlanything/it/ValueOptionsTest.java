@@ -22,6 +22,7 @@ package io.github.sparqlanything.it;
 import java.util.Properties;
 
 import io.github.sparqlanything.model.IRIArgument;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import io.github.sparqlanything.csv.CSVTriplifier;

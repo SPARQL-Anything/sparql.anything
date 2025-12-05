@@ -24,13 +24,13 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.shacl.ShaclValidator;
 import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.sparql.graph.GraphFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
@@ -111,7 +111,7 @@ public class AbstractTriplifierTester {
 
 		if (loadExpectedResult) {
 			if (!useDatasetGraph) {
-				expected = RDFDataMgr.loadModel(Objects.requireNonNull(getClass().getClassLoader().getResource(rdfFileName)).toURI().toString()).getGraph();
+				expected = RDFDataMgr.loadGraph(Objects.requireNonNull(getClass().getClassLoader().getResource(rdfFileName)).toURI().toString());
 			} else {
 				expectedDatasetGraph = replaceLocation(RDFDataMgr.loadDatasetGraph(Objects.requireNonNull(getClass().getClassLoader().getResource(rdfFileName)).toURI().toString()));
 			}

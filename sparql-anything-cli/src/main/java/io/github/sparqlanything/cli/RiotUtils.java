@@ -25,11 +25,7 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.LangBuilder;
 import org.apache.jena.riot.ReaderRIOT;
@@ -126,6 +122,11 @@ public class RiotUtils {
 					}
 
 					@Override
+					public StatementTerm getStatementTerm(String s) {
+						throw new UnsupportedOperationException();
+					}
+
+					@Override
 					public boolean contains(String s) {
 						return varnames.contains(s);
 					}
@@ -187,6 +188,11 @@ public class RiotUtils {
 					@Override
 					public boolean isEmpty() {
 						return false;
+					}
+
+					@Override
+					public Binding detach() {
+						throw new UnsupportedOperationException();
 					}
 				};
 			}

@@ -20,7 +20,9 @@
 package io.github.sparqlanything.it;
 
 import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSetFormatter;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SlicingTest extends AbstractExecutionTester {
@@ -29,8 +31,7 @@ public class SlicingTest extends AbstractExecutionTester {
 	public void testSliceSelect() {
 		Assert.assertTrue(result.getResultVars().contains("X"));
 
-		QuerySolution qs;
-		qs = result.next();
+		QuerySolution qs = result.next();
 //		ex = expected.next();
 //		System.out.println(qs);
 		Assert.assertEquals("a1", qs.getLiteral("X").getString());
