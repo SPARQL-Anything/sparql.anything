@@ -1307,10 +1307,10 @@ You can check out whether a query has been evaluated over a cached graph via the
 **When to use `use-cache=true`:**
 - When executing multiple queries against the same data sources
 - When the data sources are large and expensive to triplify
-- When data sources don't change frequently
+- When the data in the source doesn't change
 
 **When to keep `use-cache=false` (default):**
-- When data sources change between queries
+- When source data might chang between query executions
 - When memory is limited
 - For one-off queries
 
