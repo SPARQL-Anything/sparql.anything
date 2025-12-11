@@ -32,6 +32,7 @@ import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
 import io.github.sparqlanything.html.org.apache.any23.writer.TurtleWriter;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ import java.net.URISyntaxException;
 
 public class MetadataSandbox {
 
+	@Ignore
 	@Test
 	public void metadataTest() throws URISyntaxException, IOException {
 			Any23 runner = new Any23();

@@ -75,7 +75,7 @@ public class AbstractTriplifierTester {
 		this.properties = p;
 		this.extension = extension;
 		this.expectedExtension = expectedExtension;
-		if (expectedExtension.equals("nq")||expectedExtension.equals("trig")) {
+		if (expectedExtension.equals("nq") || expectedExtension.equals("trig")) {
 			useDatasetGraph = true;
 		}
 	}
@@ -184,7 +184,7 @@ public class AbstractTriplifierTester {
 
 	protected void assertResultIsIsomorphicWithExpected() {
 		if (!useDatasetGraph) {
-			assertTrue(this.result.isIsomorphicWith(expected));
+			assertTrue(TestUtils.testIsomorphicGraphs(this.result, expected));
 		} else {
 			TestUtils.assertIsomorphic(this.expectedDatasetGraph, this.resultDatasetGraph);
 		}
@@ -210,13 +210,13 @@ public class AbstractTriplifierTester {
 
 	}
 
-	protected void assertConformanceToFxShapes(){
+	protected void assertConformanceToFxShapes() {
 		Graph shapesGraph = RDFDataMgr.loadGraph(Objects.requireNonNull(getClass().getClassLoader().getResource("Facade-X-shapes.ttl")).toString());
 		if (!useDatasetGraph) {
 			ValidationReport report = ShaclValidator.get().validate(shapesGraph, this.result);
 			assertTrue(report.conforms());
 		} else {
-			this.resultDatasetGraph.listGraphNodes().forEachRemaining(graphNode->{
+			this.resultDatasetGraph.listGraphNodes().forEachRemaining(graphNode -> {
 				logger.trace("Validating graph {}", graphNode.getURI());
 				ValidationReport report = ShaclValidator.get().validate(shapesGraph, this.resultDatasetGraph.getGraph(graphNode));
 				assertTrue(report.conforms());
@@ -227,7 +227,6 @@ public class AbstractTriplifierTester {
 		}
 
 	}
-
 
 
 	protected DatasetGraph replaceLocation(DatasetGraph g) {

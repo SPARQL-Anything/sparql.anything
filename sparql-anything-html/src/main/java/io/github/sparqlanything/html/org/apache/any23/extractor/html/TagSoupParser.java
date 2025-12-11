@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -99,7 +100,9 @@ public class TagSoupParser {
             long startTime = System.currentTimeMillis();
             try {
                 result = config.parse(input, documentIRI, encoding);
-            } finally {
+            } catch (ParserConfigurationException e) {
+				throw new RuntimeException(e);
+			} finally {
                 long elapsed = System.currentTimeMillis() - startTime;
                 logger.debug("Parsed " + documentIRI + " with " + config.name() + ", " + elapsed + "ms");
             }

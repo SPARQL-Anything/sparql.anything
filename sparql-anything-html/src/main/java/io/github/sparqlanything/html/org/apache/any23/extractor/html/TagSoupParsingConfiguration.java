@@ -26,6 +26,8 @@ import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Text;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -40,7 +42,7 @@ abstract class TagSoupParsingConfiguration {
         return getClass().getSimpleName();
     }
 
-    abstract Document parse(InputStream input, String documentIRI, String encoding) throws IOException;
+    abstract Document parse(InputStream input, String documentIRI, String encoding) throws IOException, ParserConfigurationException;
 
     static TagSoupParsingConfiguration getDefault() {
         return JsoupConfig.instance;
@@ -51,15 +53,16 @@ abstract class TagSoupParsingConfiguration {
         private static final JsoupConfig instance = new JsoupConfig();
 
         @Override
-        Document parse(InputStream input, String documentIRI, String encoding) throws IOException {
+        Document parse(InputStream input, String documentIRI, String encoding) throws IOException, ParserConfigurationException {
 
             org.jsoup.nodes.Document document = JsoupUtils.parse(input, documentIRI, encoding);
 
             return convert(document);
         }
 
-        private static Document convert(org.jsoup.nodes.Document document) {
-            Document w3cDoc = new org.apache.html.dom.HTMLDocumentImpl();
+        private static Document convert(org.jsoup.nodes.Document document) throws ParserConfigurationException {
+            //Document w3cDoc = new org.apache.html.dom.HTMLDocumentImpl();
+			Document w3cDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 
             org.jsoup.nodes.Element rootEl = document.children().first();
             if (rootEl != null) {

@@ -22,12 +22,14 @@ package io.github.sparqlanything.testutils;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,6 +108,14 @@ public class TestUtils {
 		logger.warn("Whole files\n\nExpected\n\n{}\n\n--------\n\nObtained\n\n{}", baosExpected, baosResult);
 	}
 
+	public static boolean testIsomorphicGraphs(Graph g1, Graph g2){
+//		g1.remove(null, NodeFactory.createURI("https://html.spec.whatwg.org/#innerHTML"), null);
+//		g2.remove(null, NodeFactory.createURI("https://html.spec.whatwg.org/#innerHTML"), null);
+//		g1.remove(null, NodeFactory.createURI("https://html.spec.whatwg.org/#innerText"), null);
+//		g2.remove(null, NodeFactory.createURI("https://html.spec.whatwg.org/#innerText"), null);
+		return g1.isIsomorphicWith(g2);
+	}
+
 	public static void assertIsomorphic(DatasetGraph expected, DatasetGraph got) {
 
 		Iterator<Node> it = expected.listGraphNodes();
@@ -121,14 +131,14 @@ public class TestUtils {
 			resultGraphUris.add(it.next().getURI());
 		}
 
-		assertTrue((expected.getDefaultGraph().isIsomorphicWith(got.getDefaultGraph())));
+		assertTrue(testIsomorphicGraphs(expected.getDefaultGraph(), got.getDefaultGraph()));
 		assertEquals(expectedGraphUris, resultGraphUris);
 
 		it = expected.listGraphNodes();
 		while (it.hasNext()) {
 			Node g = it.next();
 			assertTrue(got.containsGraph(g));
-			assertTrue(expected.getGraph(g).isIsomorphicWith(got.getGraph(g)));
+			assertTrue(testIsomorphicGraphs(expected.getGraph(g), got.getGraph(g)));
 		}
 	}
 }

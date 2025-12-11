@@ -99,8 +99,9 @@ public class HTMLTriplifier implements Triplifier {
 
 	@Option(description = "When using a browser to navigate, it tells the browser if it spends longer than this amount of time (in milliseconds) until a load event is emitted then the operation will timeout -- See [justin2004's blogpost](https://github.com/justin2004/weblog/tree/master/scraping_with_sparql).", validValues = "Any integer")
 	public static final IRIArgument PROPERTY_BROWSER_TIMEOUT = new IRIArgument("html.browser.timeout", "30000");
-	private static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
-	private static final String DOM_NS = "https://html.spec.whatwg.org/#";
+
+	public static final String HTML_NS = "http://www.w3.org/1999/xhtml#";
+	public static final String DOM_NS = "https://html.spec.whatwg.org/#";
 
 	static {
 		ExtractorRegistryImpl.getInstance().register(new RDFa11ExtractorFactory());

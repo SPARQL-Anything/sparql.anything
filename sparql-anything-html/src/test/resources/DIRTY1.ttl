@@ -38,7 +38,7 @@
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 <http://www.example.org/document/html/body/p/uid\u007C>;
         <https://html.spec.whatwg.org/#innerHTML>
-                "<uid: 16472722 | name: article name kind: topic stage: posted>\n</uid:>" .
+                "<uid: 16472722 | name: article name kind: topic stage: posted> </uid:>" .
 
 <http://www.example.org/document/html/body/h3>
         a       <http://www.w3.org/1999/xhtml#h3>;
@@ -56,7 +56,7 @@
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
                 <http://www.example.org/document/html/body/p>;
         <https://html.spec.whatwg.org/#innerHTML>
-                "<h3>About Us</h3>\n<p><uid: 16472722 | name: article name kind: topic stage: posted>\n </uid:></p>";
+                "<h3>About Us</h3>\n<p><uid: 16472722 | name: article name kind: topic stage: posted> </uid:></p>";
         <https://html.spec.whatwg.org/#innerText>
                 "About Us" .
 
@@ -70,6 +70,6 @@
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
                 <http://www.example.org/document/html/body>;
         <https://html.spec.whatwg.org/#innerHTML>
-                "<head></head>\n<body>\n <h3>About Us</h3>\n <p><uid: 16472722 | name: article name kind: topic stage: posted>\n  </uid:></p>\n</body>";
+                "<head></head>\n<body>\n <h3>About Us</h3>\n <p><uid: 16472722 | name: article name kind: topic stage: posted> </uid:></p>\n</body>" ;
         <https://html.spec.whatwg.org/#innerText>
                 "About Us" .

@@ -42,7 +42,7 @@
         <gpg.keyname>lgu.spree</gpg.keyname>
         <owlapi.version>5.1.20</owlapi.version>
         <rdf4j.version>3.7.4</rdf4j.version>
-        <tika.version>2.4.0</tika.version>
+        <tika.version>3.2.2</tika.version>
         <jackson.version>2.13.4.2</jackson.version>
         <apachepoi.version>5.5.1</apachepoi.version>
     </properties>
@@ -346,7 +346,7 @@
                 <artifactId>jsoup</artifactId>
                 <!--				<version>1.14.2</version>-->
                 <!--                <version>1.15.3</version>-->
-                <version>1.17.2</version>
+                <version>1.20.1</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
@@ -501,6 +501,12 @@
                 <artifactId>tika-parsers-standard-package</artifactId>
                 <version>${tika.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-parser-html-module</artifactId>
+                <version>${tika.version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-parser-zip-commons -->
             <dependency>
                 <groupId>org.apache.tika</groupId>

@@ -24,11 +24,11 @@
     <parent>
         <groupId>io.github.sparql-anything</groupId>
         <artifactId>sparql-anything-parent</artifactId>
-		<version>${revision}</version>
-	</parent>
-	<properties>
-		<revision>1.1.0-SNAPSHOT</revision>
-	</properties>
+        <version>${revision}</version>
+    </parent>
+    <properties>
+        <revision>1.1.0-SNAPSHOT</revision>
+    </properties>
     <artifactId>sparql-anything-model</artifactId>
     <name>SPARQL Anything - Model module</name>
     <dependencies>
@@ -63,6 +63,10 @@
                 <exclusion>
                     <groupId>commons-codec</groupId>
                     <artifactId>commons-codec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
