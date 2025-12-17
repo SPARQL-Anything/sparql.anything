@@ -29,7 +29,7 @@
 	</parent>
     <name>SPARQL Anything - CSV module</name>
 	<properties>
-		<revision>1.1.0-SNAPSHOT</revision>
+		<revision>1.1.0</revision>
 	</properties>
     <artifactId>sparql-anything-csv</artifactId>
     <dependencies>
