@@ -29,7 +29,7 @@
 	</parent>
 	<name>SPARQL Anything - Engine module</name>
 	<properties>
-		<revision>1.1.0</revision>
+		<revision>1.2.0-SNAPSHOT</revision>
 	</properties>
 	<artifactId>sparql-anything-engine</artifactId>
 	<dependencies>

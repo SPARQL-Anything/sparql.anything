@@ -37,7 +37,7 @@
     </description>
 
     <properties>
-        <revision>1.1.0</revision>
+        <revision>1.2.0-SNAPSHOT</revision>
     </properties>
 
     <dependencies>

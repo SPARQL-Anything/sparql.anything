@@ -38,7 +38,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <jena.version>5.6.0</jena.version>
-        <revision>1.1.0</revision>
+        <revision>1.2.0-SNAPSHOT</revision>
         <gpg.keyname>lgu.spree</gpg.keyname>
         <owlapi.version>5.1.20</owlapi.version>
         <rdf4j.version>3.7.4</rdf4j.version>
