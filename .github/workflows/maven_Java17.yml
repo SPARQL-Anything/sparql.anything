@@ -5,9 +5,9 @@ name: Java 17
 
 on:
   push:
-    branches: [ v1.1-DEV ]
+    branches: [ v1.2-DEV ]
   pull_request:
-    branches: [ v1.1-DEV ]
+    branches: [ v1.2-DEV ]
 
 jobs:
   build:
