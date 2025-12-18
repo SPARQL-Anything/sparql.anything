@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Java 17](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v1.0-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
-[![CodeQL](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml/badge.svg?branch=v1.0-DEV)](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml)
+[![Java 17](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v1.2-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
+[![CodeQL](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml/badge.svg?branch=v1.2-DEV)](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml)
 [![How to](https://img.shields.io/badge/How%20to-use-green.svg)](#usage)
 [![How to](https://img.shields.io/badge/How%20to-join-blue.svg)](https://forms.gle/t1paTLz7jVu3RYnu8)
 
@@ -16,7 +16,7 @@ Here is how that can be done.
 
 ```bash
 # have java and curl installed
-$ curl -L -O 'https://github.com/SPARQL-Anything/sparql.anything/releases/download/v1.0.0/sparql-anything-v1.0.0.jar'
+$ curl -L -O 'https://github.com/SPARQL-Anything/sparql.anything/releases/download/v1.1.0/sparql-anything-v1.1.0.jar'
 ```
 
 ```csv
@@ -44,7 +44,7 @@ WHERE
 ```
 
 ```turtle
-$ java -jar sparql-anything-v1.0.0.jar --query some.rq 
+$ java -jar sparql-anything-v1.1.0.jar --query some.rq 
 [main] INFO com.github.sparqlanything.cli.SPARQLAnything - SPARQL anything
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
@@ -101,7 +101,7 @@ WHERE
 ```
 
 ```turtle
-$ java -jar sparql-anything-v1.0.0.jar --query some.rq
+$ java -jar sparql-anything-v1.1.0.jar --query some.rq
 @prefix ex:   <http://example.com/> .
 @prefix fx:   <http://sparql.xyz/facade-x/ns/> .
 @prefix gist: <https://w3id.org/semanticarts/ns/ontology/gist/> .
