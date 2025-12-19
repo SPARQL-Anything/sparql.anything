@@ -82,10 +82,13 @@ public class CLI {
 	public static final String NO_CLOBBER = "nc";
 	public static final String NO_CLOBBER_LONG = "no-clobber";
 
+	public static final String PROFILE = "t";
+	public static final String PROFILE_LONG = "profile";
+
 	private Options options;
 	private CommandLine commandLine = null;
 
-	public CLI(){
+	public CLI() {
 		init();
 	}
 
@@ -98,85 +101,86 @@ public class CLI {
 	public String getQuery() throws IOException {
 		String queryArgument = commandLine.getOptionValue(CLI.QUERY);
 		logger.trace("Parsing query argument {}", queryArgument);
-		try{
+		try {
 			logger.trace("Trying interpreting as a URL...");
 			return IOUtils.toString(new URL(queryArgument).toURI(), Charset.defaultCharset());
 		} catch (MalformedURLException | URISyntaxException e) {
 			logger.trace("Trying interpreting as a file path...");
-			if(new File(queryArgument).exists())
+			if (new File(queryArgument).exists())
 				return IOUtils.toString(new File(queryArgument).toURI(), Charset.defaultCharset());
 		}
 		logger.trace("Trying interpreting as a inline query...");
 		return queryArgument;
 	}
-	void init(){
+
+	void init() {
 		this.options = new Options();
 
 		options.addOption(Option.builder(QUERY).argName("query or URL or filepath").hasArg().required(true)
-				.desc("The path or the URL to the file storing the query to execute or the query itself.").longOpt(QUERY_LONG)
-				.build());
+			.desc("The path or the URL to the file storing the query to execute or the query itself.").longOpt(QUERY_LONG)
+			.build());
 
 		options.addOption(Option.builder(OUTPUT).argName("filepath").hasArg()
-				.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
+			.desc("OPTIONAL - The path to the output file. [Default: STDOUT]").longOpt(OUTPUT_LONG).build());
 
 		options.addOption(Option.builder(OUTPUT_APPEND).hasArg(false)
-				.desc("OPTIONAL - Should output to file be appended? WARNING: this option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using blank nodes)").longOpt(OUTPUT_APPEND_LONG).build());
+			.desc("OPTIONAL - Should output to file be appended? WARNING: this option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using blank nodes)").longOpt(OUTPUT_APPEND_LONG).build());
 
 		options.addOption(Option.builder(EXPLAIN).argName("explain").hasArg(false)
-				.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
+			.desc("OPTIONAL - Explain query execution").longOpt(EXPLAIN_LONG).build());
 
 		options.addOption(Option.builder(LOAD).argName("URL or filepath").hasArg().desc(
-						"OPTIONAL - The path or the URL to one RDF file or a filepath to a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
-				.longOpt(LOAD_LONG).build());
+				"OPTIONAL - The path or the URL to one RDF file or a filepath to a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.")
+			.longOpt(LOAD_LONG).build());
 
 		options.addOption(Option.builder(FORMAT).argName("string").hasArg().desc(
-						"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: CSV (for SELECT queries) or TEXT (for ASK queries) or TTL (for CONSTRUCT queries)]")
-				.longOpt(FORMAT_LONG).build());
+				"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: CSV (for SELECT queries) or TEXT (for ASK queries) or TTL (for CONSTRUCT queries)]")
+			.longOpt(FORMAT_LONG).build());
 
 		options.addOption(Option.builder(STRATEGY).argName("strategy").hasArg().optionalArg(true).desc(
-						"OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.")
-				.longOpt(STRATEGY_LONG).build());
+				"OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.")
+			.longOpt(STRATEGY_LONG).build());
 
 		options.addOption(Option.builder(OUTPUT_PATTERN).argName("outputPattern").hasArg().desc(
-						"OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
-				.longOpt(OUTPUT_PATTERN_LONG).build());
+				"OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
+			.longOpt(OUTPUT_PATTERN_LONG).build());
 
 		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true).desc(
-						"OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The argument can be used in two ways. (1) Providing a single SPARQL ResultSet file. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed. (2) Named variable bindings: the argument value must follow the syntax: var_name=var_value. The argument can be passed multiple times and the query repeated for each set of values.")
-				.longOpt(VALUES_LONG).build());
+				"OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The argument can be used in two ways. (1) Providing a single SPARQL ResultSet file. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed. (2) Named variable bindings: the argument value must follow the syntax: var_name=var_value. The argument can be passed multiple times and the query repeated for each set of values.")
+			.longOpt(VALUES_LONG).build());
 
 		options.addOption(Option.builder(CONFIGURATION).argName("option=value").hasArg(true).optionalArg(true).desc(
-						"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set).")
-				.longOpt(CONFIGURATION_LONG).build());
+				"OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be set).")
+			.longOpt(CONFIGURATION_LONG).build());
 
 		options.addOption(Option.builder(LOAD_JAR).argName("filepath").hasArg(true).optionalArg(true).desc(
-						"OPTIONAL - Filepath to an executable JAR to be dynamically loaded. The argument can be passed multiple times (one for each JAR file to be loaded).")
-				.longOpt(LOAD_JAR_LONG).build());
+				"OPTIONAL - Filepath to an executable JAR to be dynamically loaded. The argument can be passed multiple times (one for each JAR file to be loaded).")
+			.longOpt(LOAD_JAR_LONG).build());
 
 		options.addOption(Option.builder(NO_CLOBBER).argName("no clobber").hasArg(false).optionalArg(true).desc(
 				"OPTIONAL - Do not execute if the specified output file already exists.")
 			.longOpt(NO_CLOBBER_LONG).build());
 
-//		options.addOption(Option.builder(INPUT).argName("input").hasArg().desc(
-//						"[Deprecated] OPTIONAL - The path to a SPARQL result set file to be used as input. When present, the query is pre-processed by substituting variable names with values from the bindings provided. The query is repeated for each set of bindings in the input result set.")
-//				.longOpt(INPUT_LONG).build());
+		options.addOption(Option.builder(PROFILE_LONG).argName("filepath").hasArg(true).optionalArg(true).desc(
+				"OPTIONAL - It runs the execution through a profiler. It saves the results to [filepath] (by default profile.tsv) in TSV format. The traced event is reported in the first column. The second column contains the timestamp in milliseconds from Unix epoch. The third column contains the amount of milliseconds from the first event (LOAD_MAIN_CLASS). the  Warning: This may increase execution time.")
+			.build());
 
 	}
 
-	public void printHelp(){
+	public void printHelp() {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setOptionComparator(null); // XXX See issue #286
 		String version = SPARQLAnything.class.getPackage().getImplementationVersion();
-		if(version == null)
+		if (version == null)
 			version = "<version>";
 		formatter.printHelp(
-				"java -jar sparql.anything-" + version + "  -q query [-f <output format>] [-v <filepath | name=value> ... ] [-c option=value] [-l filepath] [-o filepath] [-j filepath]",
-				options);
+			"java -jar sparql.anything-" + version + "  -q query [-f <output format>] [-v <filepath | name=value> ... ] [-c option=value] [-l filepath] [-o filepath] [-j filepath]",
+			options);
 	}
 
 	public Integer getStrategy() {
 		return (commandLine.hasOption(CLI.STRATEGY) ? Integer.valueOf(commandLine.getOptionValue(CLI.STRATEGY))
-				: null);
+			: null);
 	}
 
 	public String getLoad() {
@@ -194,9 +198,18 @@ public class CLI {
 	public boolean getOutputAppend() {
 		return commandLine.hasOption(CLI.OUTPUT_APPEND);
 	}
+
 	public boolean getOutputNoClobber() {
 		return commandLine.hasOption(CLI.NO_CLOBBER);
 	}
+
+	public String getProfile() {
+		if (commandLine.hasOption(CLI.PROFILE)) {
+			return commandLine.getOptionValue(CLI.PROFILE) == null ? "" : commandLine.getOptionValue(CLI.PROFILE);
+		}
+		return null;
+	}
+
 	public String getOutputPattern() {
 		return commandLine.getOptionValue(CLI.OUTPUT_PATTERN);
 	}
@@ -238,6 +251,7 @@ public class CLI {
 				return suffix.equals("owl") ? Lang.RDFXML.getName() : null;
 		}
 	}
+
 	public String getFormat(Query q) {
 		if (commandLine.hasOption(CLI.FORMAT)) {
 			return commandLine.getOptionValue(CLI.FORMAT).toUpperCase();
@@ -250,7 +264,7 @@ public class CLI {
 			format = guessLang(commandLine.getOptionValue(CLI.OUTPUT));
 		}
 
-		if(format == null){
+		if (format == null) {
 			if (q.isAskType() || q.isSelectType()) {
 				return Lang.CSV.getName();
 			} else if (q.isConstructType() || q.isDescribeType()) {
@@ -262,7 +276,7 @@ public class CLI {
 		return format;
 	}
 
-	public boolean explain() {
+	public boolean isExplain() {
 		return commandLine.hasOption(CLI.EXPLAIN);
 	}
 }

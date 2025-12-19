@@ -640,6 +640,23 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
                                          loaded. The argument can be
                                          passed multiple times (one for
                                          each JAR file to be loaded).
+ -nc,--no-clobber                        OPTIONAL - Do not execute if the
+                                         specified output file already
+                                         exists.
+ -t,--profile <filepath>                 OPTIONAL - It runs the execution
+                                         through a profiler. It saves the
+                                         results to [filepath] (by default
+                                         profile.tsv) in TSV format. The
+                                         traced event is reported in the
+                                         first column. The second column
+                                         contains the timestamp in
+                                         milliseconds from Unix epoch. The
+                                         third column contains the amount
+                                         of milliseconds from the first
+                                         event (LOAD_MAIN_CLASS). the
+                                         Warning: This may increase
+                                         execution time.
+
 ```
 
 Logging can be configured adding the following option (SLF4J).

@@ -83,7 +83,9 @@ public class DatasetGraphCreator {
 
 		// Not in any cache, perform triplification
 		logger.debug("Performing triplification (cache miss)");
+		io.github.sparqlanything.model.Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_TRIPLIFICATION);
 		dg = triplify(op, p, t);
+		io.github.sparqlanything.model.Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_TRIPLIFICATION);
 		createAuditGraph(dg, p, false, op);
 		createMetadataGraph(dg, p);
 

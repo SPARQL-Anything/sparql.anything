@@ -19,17 +19,22 @@
 
 package io.github.sparqlanything.model;
 
+import org.apache.jena.query.ARQ;
+import org.apache.jena.sparql.ARQConstants;
+import org.apache.jena.sparql.engine.ExecutionContext;
+import org.apache.jena.sparql.util.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -128,6 +133,28 @@ public class Utils {
 
 	public enum OS {
 		WINDOWS, LINUX, MAC, SOLARIS
+	}
+
+	public static void profile(SPARQLAnythingConstants.PROFILE_EVENT event) {
+		long t = System.currentTimeMillis();
+		Map<SPARQLAnythingConstants.PROFILE_EVENT, Long> profile = SPARQLAnythingContext.getInstance().get(SPARQLAnythingConstants.PROFILE);
+		profile.put(event, t);
+	}
+
+	public static void printProfile(String outfile) throws FileNotFoundException {
+		FileOutputStream profileOut = new FileOutputStream(outfile);
+		PrintWriter pw = new PrintWriter(profileOut);
+		Map<SPARQLAnythingConstants.PROFILE_EVENT, Long> profile = SPARQLAnythingContext.getInstance().get(SPARQLAnythingConstants.PROFILE);
+		final long processStarts = profile.get(SPARQLAnythingConstants.PROFILE_EVENT.LOAD_MAIN_CLASS);
+
+		profile.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(e -> {
+			pw.println(e.getKey() + "\t" + e.getValue() + "\t" + (e.getValue() - processStarts));
+			if (log.isTraceEnabled()) {
+				log.trace("[time] {}: {}", e.getKey(), e.getValue());
+			}
+		});
+		pw.flush();
+		pw.close();
 	}
 
 }

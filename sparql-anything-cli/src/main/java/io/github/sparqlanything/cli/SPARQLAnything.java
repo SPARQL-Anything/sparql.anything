@@ -31,7 +31,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.*;
@@ -91,24 +90,22 @@ public class SPARQLAnything {
 		}
 
 		// Register the JSON-LD parser factory for extension  .json
-		ReaderRIOTFactory parserFactoryJsonLD    = new RiotUtils.ReaderRIOTFactoryJSONLD();
+		ReaderRIOTFactory parserFactoryJsonLD = new RiotUtils.ReaderRIOTFactoryJSONLD();
 		RDFParserRegistry.registerLangTriples(RiotUtils.JSON, parserFactoryJsonLD);
 		// Setup FX executor
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 	}
 
-	private static QueryExecution createQueryExecution(Query query, Dataset kb,  String[] configurations){
-		QueryExecution qExec = QueryExecutionFactory.create(query,kb);
+	private static QueryExecution createQueryExecution(Query query, Dataset kb, String[] configurations) {
+		QueryExecution qExec = QueryExecutionFactory.create(query, kb);
 		setConfigurationsToContext(configurations, qExec);
 		return qExec;
 	}
 
 	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw, String[] configurations)
-			throws FileNotFoundException {
-		if(logger.isTraceEnabled()) {
-			logger.trace("[time] Before executeQuery: {}", System.currentTimeMillis() - duration);
-		}
-		try(QueryExecution qe = createQueryExecution(query, kb, configurations)) {
+		throws FileNotFoundException {
+		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_QUERY_EXECUTION);
+		try (QueryExecution qe = createQueryExecution(query, kb, configurations)) {
 			if (query.isSelectType()) {
 				ResultSet rs = qe.execSelect();
 				switch (outputFormat) {
@@ -190,9 +187,7 @@ public class SPARQLAnything {
 				}
 			}
 		}
-		if(logger.isTraceEnabled()) {
-			logger.trace("[time] After executeQuery: {}", System.currentTimeMillis() - duration);
-		}
+		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_QUERY_EXECUTION);
 	}
 
 	private static PrintStream getPrintStream(String fileName, boolean append) throws IOException {
@@ -246,7 +241,7 @@ public class SPARQLAnything {
 			String var = vars.next();
 
 			Pattern p = Pattern.compile("[\\?|\\$]" + var + "([^0-9a-z_])",
-					Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
+				Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
 			template = p.matcher(template).replaceAll(qs.get(var).toString() + "$1");
 			if (logger.isTraceEnabled()) {
 				logger.trace(" - var: {}", var);
@@ -277,7 +272,7 @@ public class SPARQLAnything {
 			this.model = ModelFactory.createDefaultModel();
 			row = 0;
 			// Populate
-			HashMap<String, Set<Pair<String,String>>> var_val_map = new HashMap<>();
+			HashMap<String, Set<Pair<String, String>>> var_val_map = new HashMap<>();
 			for (String value : values) {
 				String var = value.substring(0, value.indexOf('='));
 				String val = value.substring(value.indexOf('=') + 1);
@@ -306,7 +301,7 @@ public class SPARQLAnything {
 			} else {
 				sets = new HashSet<>();
 
-				for (Pair<String,String> p : var_val_map.entrySet().iterator().next().getValue()) {
+				for (Pair<String, String> p : var_val_map.entrySet().iterator().next().getValue()) {
 					Set<Object> singleton = new HashSet<>();
 					singleton.add(p);
 					sets.add(singleton);
@@ -315,7 +310,7 @@ public class SPARQLAnything {
 			for (Set<Object> s : sets) {
 				final Map<Var, Node> bins = new HashMap<>();
 				for (Object j : s) {
-					Pair<String,String> p = (Pair<String,String>) j;
+					Pair<String, String> p = (Pair<String, String>) j;
 					String var = p.getLeft();
 					String val = p.getRight();
 					bins.put(Var.alloc(var), NodeFactory.createLiteralDT(val, XSDDatatype.XSDstring));
@@ -425,7 +420,7 @@ public class SPARQLAnything {
 		public static Set<Set<Object>> cartesianProduct(Set<?>... sets) {
 			if (sets.length < 2)
 				throw new IllegalArgumentException(
-						"Can't have a product of fewer than two sets (got " + sets.length + ")");
+					"Can't have a product of fewer than two sets (got " + sets.length + ")");
 
 			return _cartesianProduct(0, sets);
 		}
@@ -451,10 +446,7 @@ public class SPARQLAnything {
 	}
 
 	static {
-		if(logger.isTraceEnabled()){
-			duration = System.currentTimeMillis();
-			logger.trace("[time] Load main class: {}",duration);
-		}
+		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.LOAD_MAIN_CLASS);
 	}
 
 	private static void setConfigurationsToContext(String[] configurations, QueryExecution qExec) {
@@ -464,7 +456,7 @@ public class SPARQLAnything {
 			Algebra.compile(qExec.getQuery()).visit(sf);
 
 
-			if (!sf.hasFxService()){
+			if (!sf.hasFxService()) {
 				qExec.getContext().setTrue(SPARQLAnythingConstants.NO_SERVICE_MODE);
 			} else {
 				logger.warn("Options passed with -c may be overwritten by options of the SERVICE IRI or in BGP of the query.");
@@ -478,83 +470,37 @@ public class SPARQLAnything {
 	}
 
 
-
-	public static void main(String[] args) throws Exception {
-
-		if(logger.isTraceEnabled()){
-			logger.trace("[time] Process starts: {}", System.currentTimeMillis() - duration);
+	private static String getOutputPattern(CLI cli, String outputFileName) {
+		String outputPattern = cli.getOutputPattern();
+		if (outputPattern != null && outputFileName != null) {
+			logger.warn("Option 'output' is ignored: 'output-pattern' given.");
 		}
+		return outputPattern;
+	}
 
-		logger.debug("SPARQL anything");
-
-		CLI cli = new CLI();
-		if(args.length == 0){
-			cli.printHelp();
-			return;
-		}
-		try {
-			cli.parse(args);
-			Utils.loadJARs(cli.getLoadJar());
-			String query = cli.getQuery();
-			Integer strategy = cli.getStrategy();
-			if(cli.explain()) {
-				ARQ.setExecutionLogging(Explain.InfoLevel.ALL);
-			}
-			if (strategy != null) {
-				if (strategy == 1 || strategy == 0 || strategy == 2) {
-					ARQ.getContext().set(FacadeXOpExecutor.strategy, strategy);
-				} else {
-					logger.error("Invalid value for parameter 'strategy': {}", strategy);
-				}
-			}
-			if(logger.isTraceEnabled()) {
-				logger.trace("[time] Before init: {}", System.currentTimeMillis() - duration);
-			}
-			initSPARQLAnythingEngine();
-			if(logger.isTraceEnabled()) {
-				logger.trace("[time] After init: {}", System.currentTimeMillis() - duration);
-			}
-
-			Dataset kb = createDataset(cli.getLoad());
-
-			String outputFileName = cli.getOutputFile();
-			String outputPattern = cli.getOutputPattern();
-			String[] values = cli.getValues();
-			String[] configurations = cli.getConfigurations();
-			if (outputPattern != null && outputFileName != null) {
-				logger.warn("Option 'output' is ignored: 'output-pattern' given.");
-			}
-			if (values == null) {
-				logger.debug("No input file");
-
-				// #528 Check no-clobber if output file already exists.
-				if(outputFileName != null && cli.getOutputNoClobber() && new File(outputFileName).exists()){
-					logger.info("skipping: no-clobber is on and file exists");
-					return;
-				}
-				Query q = QueryFactory.create(query);
-				try(PrintStream ps = getPrintStream(outputFileName, cli.getOutputAppend())) {
-					executeQuery(cli.getFormat(q), kb, q, ps, configurations);
-				}
+	private static void strategy(CLI cli) {
+		Integer strategy = cli.getStrategy();
+		if (strategy != null) {
+			if (strategy == 1 || strategy == 0 || strategy == 2) {
+				ARQ.getContext().set(FacadeXOpExecutor.strategy, strategy);
 			} else {
-				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);
+				logger.error("Invalid value for parameter 'strategy': {}", strategy);
 			}
-		} catch (FileNotFoundException e) {
-			logger.error("File not found: {}", e.getMessage());
-		} catch(QueryParseException | ParseException e1){
-			logger.error("SPARQL syntax error (or query file does not exists): {}",e1.getMessage());
 		}
-		if(logger.isTraceEnabled()) {
-			logger.trace("[time] Process ends: {}", System.currentTimeMillis() - duration);
+	}
+
+	private static void explain(CLI cli) {
+		if (cli.isExplain()) {
+			ARQ.setExecutionLogging(Explain.InfoLevel.ALL);
 		}
 	}
 
 	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException {
 		ResultSet parameters;
-		if(values.length == 1 && new File(values[0]).exists()){
+		if (values.length == 1 && new File(values[0]).exists()) {
 			logger.debug("Input file name given");
 			parameters = ResultSetFactory.load(values[0]);
-		}else {
+		} else {
 			parameters = new ArgValuesAsResultSet(values);
 		}
 		// Specifications
@@ -568,7 +514,7 @@ public class SPARQLAnything {
 			} catch (Exception e1) {
 				logger.error("An exception occurred while evaluating the input parameters", e1);
 				logger.error(
-						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+					"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
 				continue;
 			}
 			String outputFile = null;
@@ -576,18 +522,18 @@ public class SPARQLAnything {
 				outputFile = prepareOutputFromPattern(outputPattern, qs);
 			} else {
 				if (outputFileName != null) {
-					outputFile = FilenameUtils.removeExtension(outputFileName) + (parameters.getRowNumber()==1 && parameters.hasNext()? "-" + parameters.getRowNumber():"") + "." + FilenameUtils.getExtension(outputFileName);
+					outputFile = FilenameUtils.removeExtension(outputFileName) + (parameters.getRowNumber() == 1 && parameters.hasNext() ? "-" + parameters.getRowNumber() : "") + "." + FilenameUtils.getExtension(outputFileName);
 				}
 				// else stays null and output goes to STDOUT
 			}
 			// #528 Check no-clobber if output file already exists.
-			if(outputFile != null && cli.getOutputNoClobber() && new File(outputFile).exists()){
-				logger.info("Skipping: `no-clobber` is on and file exists (iteration "+ parameters.getRowNumber() + ")");
+			if (outputFile != null && cli.getOutputNoClobber() && new File(outputFile).exists()) {
+				logger.info("Skipping: `no-clobber` is on and file exists (iteration " + parameters.getRowNumber() + ")");
 				continue;
 			}
 			// Remember if we are calling OS for a new file
 			boolean newFile = false;
-			if(outputFile != null && !new File(outputFile).exists()){
+			if (outputFile != null && !new File(outputFile).exists()) {
 				newFile = true;
 			}
 			try (PrintStream ps = getPrintStream(outputFile, cli.getOutputAppend())) {
@@ -595,14 +541,14 @@ public class SPARQLAnything {
 				executeQuery(cli.getFormat(q), kb, q, ps, configurations);
 			} catch (Exception e1) {
 				logger.error(
-						"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
+					"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
 				if (logger.isDebugEnabled()) {
 					logger.error("Details:", e1);
 				}
 				// If an error occurred and the file is empty, delete the file.
-				if(outputFile != null){
+				if (outputFile != null) {
 					File f = new File(outputFile);
-					if(newFile && f.exists() && f.length() == 0){
+					if (newFile && f.exists() && f.length() == 0) {
 						f.delete();
 					}
 				}
@@ -615,9 +561,7 @@ public class SPARQLAnything {
 		if (load != null) {
 
 			logger.info("Loading data from: {}", load);
-			if (logger.isTraceEnabled()) {
-				logger.trace("[time] Before load: {}", System.currentTimeMillis() - duration);
-			}
+			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_LOAD);
 			// XXX Check if load is a URI first
 			File loadSource;
 			try {
@@ -674,9 +618,7 @@ public class SPARQLAnything {
 				}
 				return kb;
 			}
-			if (logger.isTraceEnabled()) {
-				logger.trace("[time] After load: {}", System.currentTimeMillis() - duration);
-			}
+			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_LOAD);
 		}
 
 		return kb;
@@ -699,4 +641,71 @@ public class SPARQLAnything {
 		// Show what happened
 		return baos.toString();
 	}
+
+	private static void printProfileIfEnabled(CLI cli) throws FileNotFoundException {
+		if(cli.getProfile()!=null){
+			String outFile = cli.getProfile();
+			if(outFile.isEmpty()){
+				outFile = "profile.tsv";
+			}
+			Utils.printProfile(outFile);
+		}
+	}
+
+
+	public static void main(String[] args) throws Exception {
+
+		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.PROCESS_STARTS);
+
+		logger.debug("SPARQL anything");
+
+		CLI cli = new CLI();
+		if (args.length == 0) {
+			cli.printHelp();
+			return;
+		}
+		try {
+			cli.parse(args);
+			Utils.loadJARs(cli.getLoadJar());
+			String query = cli.getQuery();
+			explain(cli);
+			strategy(cli);
+			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_INIT);
+			initSPARQLAnythingEngine();
+			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_INIT);
+
+			Dataset kb = createDataset(cli.getLoad());
+
+			String outputFileName = cli.getOutputFile();
+			String[] values = cli.getValues();
+			String[] configurations = cli.getConfigurations();
+			String outputPattern = getOutputPattern(cli, outputFileName);
+			if (values == null) {
+				logger.debug("No input file");
+
+				// #528 Check no-clobber if output file already exists.
+				if (outputFileName != null && cli.getOutputNoClobber() && new File(outputFileName).exists()) {
+					logger.info("skipping: no-clobber is on and file exists");
+					return;
+				}
+				Query q = QueryFactory.create(query);
+				try (PrintStream ps = getPrintStream(outputFileName, cli.getOutputAppend())) {
+					executeQuery(cli.getFormat(q), kb, q, ps, configurations);
+				}
+			} else {
+				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);
+			}
+
+			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.PROCESS_ENDS);
+			printProfileIfEnabled(cli);
+
+		} catch (FileNotFoundException e) {
+			logger.error("File not found: {}", e.getMessage());
+		} catch (QueryParseException | ParseException e1) {
+			logger.error("SPARQL syntax error (or query file does not exists): {}", e1.getMessage());
+		}
+
+	}
+
+
 }

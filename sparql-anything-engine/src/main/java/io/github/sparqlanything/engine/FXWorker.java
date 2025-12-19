@@ -35,7 +35,7 @@ import java.util.Scanner;
 
 public abstract class FXWorker<T extends Op> {
 
-	private static final Logger logger = LoggerFactory.getLogger(FXWorkerOpService.class);
+	private static final Logger logger = LoggerFactory.getLogger(FXWorker.class);
 	private final TriplifierRegister tr;
 	private final DatasetGraphCreator dgc;
 

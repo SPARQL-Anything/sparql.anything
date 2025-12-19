@@ -45,7 +45,7 @@ public class CLITest {
 		query(new String[]{"-q", q, "-c", "location=" + f, "-f", "CSV"});
 	}
 
-	private static String query(String[] args) throws Exception {
+	private static void query(String[] args) throws Exception {
 		String out = SPARQLAnything.callMain(args);
 		CSVParser parser = new CSVParser(new StringReader(out), CSVFormat.DEFAULT);
 		Set<String> actualSet = new HashSet<>();
@@ -63,7 +63,6 @@ public class CLITest {
 		expectedSet.add("http://sparql.xyz/facade-x/data/genre");
 		expectedSet.add("http://sparql.xyz/facade-x/data/publish_date");
 		Assert.assertEquals(expectedSet, actualSet);
-		return out;
 	}
 
 	@Test
@@ -106,4 +105,6 @@ public class CLITest {
 		});
 		Assert.assertTrue(out.contains("10"));
 	}
+
+
 }
