@@ -290,13 +290,13 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
                                                             ];
                                           xhtml:itemscope   "";
                                           xhtml:itemtype    "https://schema.org/Movie";
-                                          whatwg:innerHTML  "<h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>";
+                                          whatwg:innerHTML  "<h1 itemprop=\"name\">Avatar</h1>\n<span>Director: James Cameron (born August 16, 1954)</span>";
                                           whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
                                         ];
-                      whatwg:innerHTML  "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n</div>";
+                      whatwg:innerHTML  "<div itemscope itemtype=\"https://schema.org/Movie\">\n <h1 itemprop=\"name\">Avatar</h1>\n <span>Director: James Cameron (born August 16, 1954)</span>\n</div>";
                       whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
                     ];
-  whatwg:innerHTML  "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1><span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>";
+  whatwg:innerHTML  "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1>\n  <span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>";
   whatwg:innerText  "Avatar Director: James Cameron (born August 16, 1954)"
 ] .
 
