@@ -10,7 +10,7 @@ public class CLISandbox {
 	public void profile() throws Exception {
 		String f = Objects.requireNonNull(getClass().getClassLoader().getResource("books.xml")).toURI().toString();
 		String q = "SELECT * {  ?s ?p ?o OPTIONAL {?s a ?c} }";
-		String[] args = new String[]{"-q", q, "-c", "location=" + f, "-f", "CSV", "-profile"};
+		String[] args = new String[]{"-q", q, "-c", "location=" + f, "-f", "CSV", "-profile", "pp.tsv"};
 		SPARQLAnything.callMain(args);
 	}
 }

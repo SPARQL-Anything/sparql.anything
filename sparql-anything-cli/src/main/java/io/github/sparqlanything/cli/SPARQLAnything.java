@@ -643,9 +643,9 @@ public class SPARQLAnything {
 	}
 
 	private static void printProfileIfEnabled(CLI cli) throws FileNotFoundException {
-		if(cli.getProfile()!=null){
+		if (cli.getProfile() != null) {
 			String outFile = cli.getProfile();
-			if(outFile.isEmpty()){
+			if (outFile.isEmpty()) {
 				outFile = "profile.tsv";
 			}
 			Utils.printProfile(outFile);
