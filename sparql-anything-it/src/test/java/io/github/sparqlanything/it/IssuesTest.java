@@ -992,7 +992,6 @@ public class IssuesTest {
 		executeTest("issues/issue545.sparql", null, false, false, true, false);
 		System.setOut(old);
 		String out = baos.toString();
-		System.out.println(out);
 		assertFalse(out.contains("ERROR Log4j API could not find a logging provider."));
 	}
 
