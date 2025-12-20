@@ -98,6 +98,7 @@ public class Endpoint {
 		logger.info("The server will be listening on http://localhost:{}{}", port, path);
 		logger.info("The server will be available on http://localhost:{}{}", port, guipath);
 //		builder.staticFileBase("src/main/resources/static/");
+		builder.enableCors(true);
 		builder.addServlet(this.guipath, new YASGUIServlet(Triplifier.XYZ_NS, path));
 		server = builder.add(path, ds).build();
 		server.start();
