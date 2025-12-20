@@ -56,7 +56,7 @@ jobs:
 
       - name: Install gpg key and publish package
         run: |
-          echo -e "Releasing ${VERSION}"
+          echo -e "Releasing ${SNAPSHOT_VERSION}"
           echo -e "$(tty)"
           gpg --version
           mvn -version
