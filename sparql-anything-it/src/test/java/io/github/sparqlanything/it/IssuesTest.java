@@ -984,7 +984,6 @@ public class IssuesTest {
 		assertTrue(rs.hasNext());
 	}
 
-	@Ignore
 	@Test
 	public void testIssue545() throws URISyntaxException, IOException {
 		PrintStream old = System.out;
@@ -993,6 +992,7 @@ public class IssuesTest {
 		executeTest("issues/issue545.sparql", null, false, false, true, false);
 		System.setOut(old);
 		String out = baos.toString();
+		System.out.println(out);
 		assertFalse(out.contains("ERROR Log4j API could not find a logging provider."));
 	}
 

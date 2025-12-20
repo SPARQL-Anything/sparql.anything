@@ -21,7 +21,6 @@ package io.github.sparqlanything.it;
 
 import io.github.sparqlanything.cli.RiotUtils;
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.html.org.semarglproject.vocab.RDF;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;

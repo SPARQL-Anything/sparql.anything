@@ -49,7 +49,16 @@
 					<groupId>org.apache.commons</groupId>
 					<artifactId>commons-collections4</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-to-slf4j</artifactId>
 		</dependency>
 
 		<dependency>
