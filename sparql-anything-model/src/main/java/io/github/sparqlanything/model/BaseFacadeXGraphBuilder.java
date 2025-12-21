@@ -29,10 +29,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.system.Txn;
-import org.apache.jena.tdb1.TDB1Factory;
-import org.apache.jena.tdb1.sys.TDBMaker;
 import org.apache.jena.tdb2.DatabaseMgr;
-import org.apache.jena.tdb2.TDB2;
 import org.apache.jena.tdb2.TDB2Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +63,7 @@ public class BaseFacadeXGraphBuilder extends BaseFacadeXBuilder implements Facad
 				try {
 					FileUtils.deleteDirectory(ondiskFile);
 				} catch (IOException e) {
-					if (TDB1Factory.inUseLocation(ondiskPath)) {
+					if (new File(ondiskPath).isDirectory()) {
 						DatasetGraph dg = TDB2Factory.connectDataset(ondiskPath).asDatasetGraph();
 						dg.end();
 						Txn.executeWrite(dg, dg::clear);

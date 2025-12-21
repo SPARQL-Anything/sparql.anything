@@ -19,13 +19,9 @@
 
 package io.github.sparqlanything.cli;
 
-import io.github.sparqlanything.model.IRIArgument;
-import org.apache.jena.sys.JenaSystem;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Objects;
 
 public class LoadJARTest {
@@ -33,10 +29,10 @@ public class LoadJARTest {
 	@Test
 	public void testWithMagicProperties() throws Exception {
 		String jarFile = Objects.requireNonNull(getClass().getClassLoader().getResource("test-jar-0.0.1-shaded.jar")).toString();
-		System.out.println(jarFile);
+		//System.out.println(jarFile);
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?vv {  ?s  fx:anySlot ?v  . BIND( <http://example.org/theAnswer>(?v) AS ?vv)  } ";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc", "-j", jarFile});
-		System.out.println(out);
+		//System.out.println(out);
 		Assert.assertTrue(out.contains("42"));
 	}
 }
