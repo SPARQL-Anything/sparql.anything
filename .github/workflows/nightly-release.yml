@@ -60,7 +60,7 @@ jobs:
       - name: Find JAR file
         id: find-server-jar
         run: |
-          JAR_PATH=$(find sparql-anything-server/target -name "sparql-anything-server-${{ steps.version.outputs.snapshot_version }}.jar" | head -n 1)
+          JAR_PATH=$(find sparql-anything-fuseki/target -name "sparql-anything-server-${{ steps.version.outputs.snapshot_version }}.jar" | head -n 1)
           JAR_NAME=$(basename "$JAR_PATH")
           echo "jar_path=${JAR_PATH}" >> $GITHUB_OUTPUT
           echo "jar_name=${JAR_NAME}" >> $GITHUB_OUTPUT
