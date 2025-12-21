@@ -63,8 +63,8 @@ public class MultipleAttributesXPathTest {
 		
 		// Print the generated triples for debugging
 		Model model = ModelFactory.createModelForGraph(dg.getDefaultGraph());
-		log.info("Generated RDF:");
-		model.write(System.out, "TTL");
+		//log.info("Generated RDF:");
+		//model.write(System.out, "TTL");
 		
 		// Find the 'name' element node
 		Node nameType = NodeFactory.createURI("http://sparql.xyz/facade-x/data/name");
@@ -126,8 +126,8 @@ public class MultipleAttributesXPathTest {
 		
 		// Print the generated triples for debugging
 		Model model = ModelFactory.createModelForGraph(dg.getDefaultGraph());
-		log.info("Generated RDF (blank-nodes=false):");
-		model.write(System.out, "TTL");
+		//log.info("Generated RDF (blank-nodes=false):");
+		//model.write(System.out, "TTL");
 		
 		// Find the 'name' element node
 		Node nameType = NodeFactory.createURI("http://sparql.xyz/facade-x/data/name");
