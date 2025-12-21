@@ -1,4 +1,4 @@
-name: Nightly Snapshot Build
+name: Maven Nightly Snapshot Build
 
 on:
   # Run nightly at 2 AM UTC
