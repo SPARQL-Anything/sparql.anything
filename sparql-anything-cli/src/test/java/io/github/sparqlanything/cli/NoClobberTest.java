@@ -22,27 +22,21 @@ package io.github.sparqlanything.cli;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.util.Objects;
 
 /**
  * See issue #528
- *
  * Queries don't do anything, some of them result in incomplete service clauses... it doesn't matter, we only need to check if the output file was touched.
  */
 public class NoClobberTest {
-	Logger L = LoggerFactory.getLogger(NoClobberTest.class);
+	//Logger L = LoggerFactory.getLogger(NoClobberTest.class);
 	private File tempFile = null;
 	private Long before = null;
-	private String queryFile = getClass().getClassLoader().getResource("NoClobber.sparql").getFile();
-	private String paramFile = getClass().getClassLoader().getResource("NoClobberParams.csv").getFile();
-	private String csvFile = getClass().getClassLoader().getResource("NoClobberTest.csv").getFile();
+	private final String queryFile = Objects.requireNonNull(getClass().getClassLoader().getResource("NoClobber.sparql")).getFile();
+	private final String paramFile = Objects.requireNonNull(getClass().getClassLoader().getResource("NoClobberParams.csv")).getFile();
+	private final String csvFile = Objects.requireNonNull(getClass().getClassLoader().getResource("NoClobberTest.csv")).getFile();
 	@Before
 	public void before() throws Exception {
 		tempFile = File.createTempFile("no-clobber-test",".ttl");
@@ -180,7 +174,7 @@ public class NoClobberTest {
 		overwritten(false);
 	}
 
-	private void overwritten(boolean expect) throws IOException {
+	private void overwritten(boolean expect)  {
 		Long after = tempFile.lastModified();
 		//L.info("before {} and after {}", (Object) before, (Object) after);
 		// If overwrite, show content
