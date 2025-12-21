@@ -1,0 +1,122 @@
+name: Nightly Snapshot Build
+
+on:
+  # Run nightly at 2 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Get the default development branch (can change based on the milestone as needed)
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Get current date for snapshot naming
+        id: date
+        run: echo "date=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+
+      - name: Get branch name
+        id: branch
+        run: |
+          BRANCH=${GITHUB_REF#refs/heads/}
+          echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
+          echo "branch_safe=${BRANCH//\//-}" >> $GITHUB_OUTPUT
+
+      - name: Get base version from pom
+        id: version
+        run: |
+          BASE_VERSION=$(mvn help:evaluate -Dexpression=revision -q -DforceStdout)
+          # Strip -SNAPSHOT if it exists and add -NIGHTLY-SNAPSHOT for stable reference
+          CLEAN_VERSION=${BASE_VERSION%-SNAPSHOT}
+          SNAPSHOT_VERSION="${CLEAN_VERSION}-NIGHTLY-SNAPSHOT"
+          echo "snapshot_version=${SNAPSHOT_VERSION}" >> $GITHUB_OUTPUT
+          echo "Maven snapshot version: ${SNAPSHOT_VERSION}"
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests -Drevision=${{ steps.version.outputs.snapshot_version }} -Dgenerate-cli-jar=true -Dgenerate-server-jar=true
+
+      - name: Find JAR file
+        id: find-jar
+        run: |
+          JAR_PATH=$(find sparql-anything-cli/target -name "sparql-anything-${{ steps.version.outputs.snapshot_version }}.jar" | head -n 1)
+          JAR_NAME=$(basename "$JAR_PATH")
+          echo "jar_path=${JAR_PATH}" >> $GITHUB_OUTPUT
+          echo "jar_name=${JAR_NAME}" >> $GITHUB_OUTPUT
+          echo "Found JAR: ${JAR_PATH}"
+
+      - name: Create snapshot release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: snapshot-${{ steps.date.outputs.date }}
+          name: Nightly Snapshot (${{ steps.branch.outputs.branch }}) - ${{ steps.date.outputs.date }}
+          body: |
+            ## 🌙 Nightly Snapshot Build
+            
+            **Branch:** `${{ steps.branch.outputs.branch }}`
+            **Commit:** ${{ github.sha }}
+            **Build Date:** ${{ steps.date.outputs.date }}
+            **Maven Version:** `${{ steps.version.outputs.snapshot_version }}`
+            
+            This is an automated snapshot build for testing purposes.
+            
+            ⚠️ **Warning:** This is a development snapshot and may be unstable. Use at your own risk.
+            
+            ### Installation
+            
+            **Option 1: Download JAR**
+            Download the JAR file and run:
+            ```bash
+            java -jar ${{ steps.find-jar.outputs.jar_name }}
+            ```
+            
+            **Option 2: Maven Dependency (Stable Reference)**
+            Add to your `pom.xml`:
+            ```xml
+            <dependency>
+                <groupId>io.github.sparql-anything</groupId>
+                <artifactId>sparql-anything-cli</artifactId>
+                <version>${{ steps.version.outputs.snapshot_version }}</version>
+            </dependency>
+            ```
+            
+            And add the snapshot repository:
+            ```xml
+            <repositories>
+                <repository>
+                    <id>ossrh-snapshots</id>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            ```
+            
+            ### Latest Changes
+            See [commit history](https://github.com/${{ github.repository }}/commits/${{ steps.branch.outputs.branch }}) for details.
+          files: ${{ steps.find-jar.outputs.jar_path }}
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clean up old snapshots
+        uses: dev-drprasad/delete-older-releases@v0.3.2
+        with:
+          keep_latest: 7
+          delete_tag_pattern: snapshot-
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
