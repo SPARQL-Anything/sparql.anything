@@ -56,6 +56,11 @@ jobs:
           echo "jar_path=${JAR_PATH}" >> $GITHUB_OUTPUT
           echo "jar_name=${JAR_NAME}" >> $GITHUB_OUTPUT
           echo "Found JAR: ${JAR_PATH}"
+          FUSEKI_JAR_PATH=$(find sparql-anything-fuseki/target -name "sparql-anything-server-${{ steps.version.outputs.snapshot_version }}.jar" | head -n 1)
+          FUSEKI_JAR_NAME=$(basename "$FUSEKI_JAR_PATH")
+          echo "jar_path=${FUSEKI_JAR_NAME}" >> $GITHUB_OUTPUT
+          echo "jar_name=${FUSEKI_JAR_NAME}" >> $GITHUB_OUTPUT
+          echo "Found Fuseki JAR: ${FUSEKI_JAR_NAME}"
 
       - name: Create snapshot release
         uses: softprops/action-gh-release@v1
@@ -87,7 +92,7 @@ jobs:
             ```xml
             <dependency>
                 <groupId>io.github.sparql-anything</groupId>
-                <artifactId>sparql-anything-cli</artifactId>
+                <artifactId>sparql-anything-libs</artifactId>
                 <version>${{ steps.version.outputs.snapshot_version }}</version>
             </dependency>
             ```
@@ -96,8 +101,8 @@ jobs:
             ```xml
             <repositories>
                 <repository>
-                    <id>ossrh-snapshots</id>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                    <id>central</id>
+                    <url>https://central.sonatype.com/repository/maven-snapshots/</url>
                     <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
@@ -107,7 +112,9 @@ jobs:
             
             ### Latest Changes
             See [commit history](https://github.com/${{ github.repository }}/commits/${{ steps.branch.outputs.branch }}) for details.
-          files: ${{ steps.find-jar.outputs.jar_path }}
+          files: |
+            ${{ steps.find-jar.outputs.jar_path }}
+            ${{ steps.find-jar.outputs.fuseki_jar_path }}
           draft: false
           prerelease: true
         env:
