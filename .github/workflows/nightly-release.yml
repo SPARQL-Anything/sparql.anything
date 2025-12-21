@@ -91,7 +91,13 @@ jobs:
             java -jar ${{ steps.find-jar.outputs.jar_name }}
             ```
             
-            **Option 2: Maven Dependency (Stable Reference)**
+            or run the server version
+            
+            ```bash
+            java -jar ${{ steps.find-server-jar.outputs.jar_name }}
+            ```
+            
+            **Option 2: Maven Dependency**
             Add to your `pom.xml`:
             ```xml
             <dependency>
