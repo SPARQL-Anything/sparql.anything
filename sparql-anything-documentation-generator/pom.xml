@@ -27,6 +27,7 @@
         <artifactId>sparql-anything-parent</artifactId>
         <version>${revision}</version>
     </parent>
+    <name>SPARQL Anything - Documentation generator</name>
     <artifactId>sparql-anything-documentation-generator</artifactId>
     <properties>
         <revision>1.2.0-SNAPSHOT</revision>
