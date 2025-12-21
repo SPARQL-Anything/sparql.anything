@@ -22,14 +22,10 @@ import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,14 +40,14 @@ import static org.junit.Assert.*;
  * not as separate containers with rdf:_1, rdf:_2, etc.
  */
 public class MultipleAttributesXPathTest {
-	private static final Logger log = LoggerFactory.getLogger(MultipleAttributesXPathTest.class);
-	private XMLTriplifier triplifier = new XMLTriplifier();
+	private final XMLTriplifier triplifier = new XMLTriplifier();
 
 	@Test
 	public void testMultipleAttributesWithXPath() throws IOException, TriplifierHTTPException {
 		URL xmlContent = getClass().getClassLoader().getResource("./MultiAttribute.xml");
 
 		Properties properties = new Properties();
+		assertNotNull(xmlContent);
 		properties.setProperty(IRIArgument.LOCATION.toString(), xmlContent.toString());
 		properties.setProperty(IRIArgument.MEDIA_TYPE.toString(), "application/xml");
 		properties.setProperty("xml.path", "//switchIS");
@@ -62,7 +58,7 @@ public class MultipleAttributesXPathTest {
 		DatasetGraph dg = builder.getDatasetGraph();
 		
 		// Print the generated triples for debugging
-		Model model = ModelFactory.createModelForGraph(dg.getDefaultGraph());
+		//Model model = ModelFactory.createModelForGraph(dg.getDefaultGraph());
 		//log.info("Generated RDF:");
 		//model.write(System.out, "TTL");
 		
@@ -108,11 +104,12 @@ public class MultipleAttributesXPathTest {
 
 	@Test
 	public void testMultipleAttributesWithXPathBlankNodesFalse() throws IOException, TriplifierHTTPException {
-		String xmlContent = "<switchesIS>\n" +
-				"    <switchIS id=\"1\">\n" +
-				"     <name label=\"A\" language=\"en\" description=\"My first switch\"/>\n" +
-				"    </switchIS>\n" +
-				"</switchesIS>";
+		String xmlContent = """
+			<switchesIS>
+			    <switchIS id="1">
+			     <name label="A" language="en" description="My first switch"/>
+			    </switchIS>
+			</switchesIS>""";
 		
 		Properties properties = new Properties();
 		properties.setProperty(IRIArgument.CONTENT.toString(), xmlContent);
@@ -125,7 +122,7 @@ public class MultipleAttributesXPathTest {
 		DatasetGraph dg = builder.getDatasetGraph();
 		
 		// Print the generated triples for debugging
-		Model model = ModelFactory.createModelForGraph(dg.getDefaultGraph());
+		//Model model = ModelFactory.createModelForGraph(dg.getDefaultGraph());
 		//log.info("Generated RDF (blank-nodes=false):");
 		//model.write(System.out, "TTL");
 		
