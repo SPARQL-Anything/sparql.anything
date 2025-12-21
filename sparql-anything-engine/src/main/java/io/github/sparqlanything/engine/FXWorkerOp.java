@@ -41,6 +41,6 @@ public class FXWorkerOp extends FXWorker<Op> {
 
 	@Override
 	public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext, DatasetGraph dg, Properties p) {
-		return QC.execute(op, input, new ExecutionContext(dg));
+		return QC.execute(op, input, ExecutionContext.create(dg));
 	}
 }
