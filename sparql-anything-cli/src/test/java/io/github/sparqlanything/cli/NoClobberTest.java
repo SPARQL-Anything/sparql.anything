@@ -182,12 +182,12 @@ public class NoClobberTest {
 
 	private void overwritten(boolean expect) throws IOException {
 		Long after = tempFile.lastModified();
-		L.info("before {} and after {}", (Object) before, (Object) after);
+		//L.info("before {} and after {}", (Object) before, (Object) after);
 		// If overwrite, show content
-		if(expect){
-			L.info("file overwritten: {}", tempFile.getAbsolutePath());
-			L.info("content: {}", Files.readString(tempFile.toPath(), StandardCharsets.UTF_8));
-		}
+		//if(expect){
+		//	L.info("file overwritten: {}", tempFile.getAbsolutePath());
+		//	L.info("content: {}", Files.readString(tempFile.toPath(), StandardCharsets.UTF_8));
+		//}
 		Assert.assertTrue(
 			(expect) ? after > before : after.equals(before)
 		);
