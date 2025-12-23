@@ -10,8 +10,8 @@ WHERE
                       fx:command     "echo 4,5,6" ;
                       fx:media-type  "text/csv" .
             ?s        ?p             ?num .
-            #BIND(bnode() AS ?bob)           # breaks
-            BIND(struuid() AS ?bob)         # breaks
+            BIND(bnode() AS ?bob)           # breaks
+            # BIND(struuid() AS ?bob)         # breaks
             # BIND(concat("a","b") AS ?bob)   # works
             # BIND("lala" AS ?bob)            # works
           }
