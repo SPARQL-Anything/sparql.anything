@@ -30,7 +30,6 @@ public class RDFaTest extends AbstractTriplifierTester {
 
 	public RDFaTest() {
 		super(new HTMLTriplifier(), new Properties(), "html", "nq");
-		this.printWholeGraph = true;
 	}
 
 	@Test

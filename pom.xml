@@ -405,7 +405,7 @@
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.21.0-GA</version>
+                <version>3.30.2-GA</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
             <dependency>
