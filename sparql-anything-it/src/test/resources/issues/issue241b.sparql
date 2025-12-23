@@ -7,7 +7,7 @@ WHERE
   { SERVICE <x-sparql-anything:>
       { SERVICE <x-sparql-anything:>
           { fx:properties
-                      fx:command     "echo 4,5,6" ;
+                      fx:content     "4,5,6" ;
                       fx:media-type  "text/csv" .
             ?s        ?p             ?num .
             BIND(bnode() AS ?bob)           # breaks
