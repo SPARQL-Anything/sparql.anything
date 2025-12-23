@@ -86,7 +86,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			} else {
 				// execute BGP by excluding FX properties
 				logger.trace("Execute BGP by excluding FX properties");
-				return QC.execute(Utils.excludeFXProperties(opBGP), input, new ExecutionContext(ARQ.getContext(), execCxt.getActiveGraph(), execCxt.getDataset(), execCxt.getExecutor()));
+				return QC.execute(Utils.excludeFXProperties(opBGP), input, ExecutionContext.create(execCxt.getDataset(), execCxt.getActiveGraph(), ARQ.getContext()));
 			}
 		}
 
