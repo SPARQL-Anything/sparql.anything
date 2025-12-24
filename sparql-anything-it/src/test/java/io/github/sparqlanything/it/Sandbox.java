@@ -125,4 +125,25 @@ public class Sandbox {
 
 
 	}
+
+
+	@Test
+	public void test() {
+
+		String queryStr = "PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
+			"\n" +
+			"SELECT  (COUNT(?o) AS ?nOfItems)\n" +
+			"WHERE\n" +
+			"  { SERVICE <x-sparql-anything:query=construct.rq> { ?s fx:anySlot ?o }\n" +
+			"  }";
+
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		Dataset ds = DatasetFactory.createGeneral();
+		Query query = QueryFactory.create(queryStr);
+		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
+		ResultSet rs = qExec1.execSelect();
+		System.out.println(ResultSetFormatter.asText(rs));
+
+
+	}
 }

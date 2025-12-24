@@ -1,0 +1,13 @@
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+
+CONSTRUCT  {
+    ?s ?p ?o
+}
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
+                  fx:media-type  "application/json" .
+        ?s        ?p    ?o
+      }
+  }
