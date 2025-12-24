@@ -65,7 +65,6 @@ class PropertyExtractor {
 
 		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString()) && !p.containsKey(IRIArgument.COMMAND.toString())) {
 			logger.error("Neither location nor content provided");
-//			throw new RuntimeException("Neither location nor content provided");
 			return null;
 		}
 

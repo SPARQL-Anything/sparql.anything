@@ -63,7 +63,7 @@ public interface Triplifier {
 
 	static String getRootArgument(Properties properties) {
 		String root = PropertyUtils.getStringProperty(properties, IRIArgument.ROOT, null);
-		if (root != null && !root.trim().equals("")) return root;
+		if (root != null && !root.trim().isEmpty()) return root;
 
 		String location = getNormalisedLocation(properties);
 		if (location != null) return location + "#";

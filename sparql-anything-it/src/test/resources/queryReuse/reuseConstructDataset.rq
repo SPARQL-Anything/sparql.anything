@@ -1,0 +1,7 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+SELECT * {
+    SERVICE<x-sparql-anything:query=queryReuse/subQueryConstructDataset.rq> {
+        GRAPH ?g { ?s rdf:_1 ?o }
+     }
+}

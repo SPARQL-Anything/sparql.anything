@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class FacadeXOpExecutor extends OpExecutor {
@@ -64,7 +65,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 				this.execCxt.getContext().setFalse(SPARQLAnythingConstants.NO_SERVICE_MODE);
 				return fxWorkerOp.execute(op, input, this.execCxt);
 			} catch (ClassNotFoundException | NoSuchMethodException | TriplifierHTTPException |
-					 InvocationTargetException | InstantiationException | IllegalAccessException | IOException |
+					 InvocationTargetException | InstantiationException | URISyntaxException |IllegalAccessException | IOException |
 					 UnboundVariableException e) {
 				throw new RuntimeException(e);
 			}
@@ -113,11 +114,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 				try {
 					// go with the FacadeX default execution
-//				return executeDefaultFacadeX(opService, input);
 					return fxWorkerOpService.execute(opService, input, execCxt);
 				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
 						 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
-						 ClassNotFoundException | TriplifierHTTPException e) {
+						 ClassNotFoundException | URISyntaxException | TriplifierHTTPException e) {
 					logger.error("An error occurred: {}", e.getMessage());
 					throw new RuntimeException(e);
 				} catch (UnboundVariableException e) {

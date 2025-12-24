@@ -46,6 +46,7 @@ public class IRIArgument {
 	public static final IRIArgument GENERATE_PREDICATE_LABELS = new IRIArgument("generate-predicate-labels", "false");
     public static final IRIArgument  READ_FROM_STD_IN =  new IRIArgument("read-from-std-in", "false");
     public static final IRIArgument  AUDIT =  new IRIArgument("audit", "false");
+    public static final IRIArgument  QUERY =  new IRIArgument("query");
 
 	// Options for S3 storage
 	public static final IRIArgument  S3_ENDPOINT =  new IRIArgument("s3.endpoint", "false");

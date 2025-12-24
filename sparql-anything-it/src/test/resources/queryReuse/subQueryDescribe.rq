@@ -1,0 +1,12 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+
+#SELECT * {
+DESCRIBE ?r WHERE {
+    SERVICE<x-sparql-anything:> {
+        fx:properties fx:content "abc,def" .
+        fx:properties fx:media-type "text/csv" .
+        fx:properties fx:root "http://example.org/root" .
+        fx:properties fx:blank-nodes false .
+        ?r a fx:root .
+    }
+}

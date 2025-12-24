@@ -24,12 +24,13 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
+import org.apache.jena.sparql.engine.iterator.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -44,7 +45,7 @@ public abstract class FXWorker<T extends Op> {
 		this.dgc = dgc;
 	}
 
-	public QueryIterator execute(T op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException {
+	public QueryIterator execute(T op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
 
 		// extract properties from service URI
 		Properties p = new Properties();
@@ -54,6 +55,10 @@ public abstract class FXWorker<T extends Op> {
 
 		//then, from opservice (so that can be overwritten)
 		extractProperties(p, op);
+
+		// Possibly execute reused queries
+		if(PropertyUtils.hasProperty(p, IRIArgument.QUERY))
+			return executeReusedQuery(op, p, input, executionContext);
 
 		// Possibly read from STD in
 		readFromStdIn(p);
@@ -98,4 +103,6 @@ public abstract class FXWorker<T extends Op> {
 	}
 
 	public abstract QueryIterator execute(T op, QueryIterator input, ExecutionContext executionContext, DatasetGraph dg, Properties p);
+
+	public abstract QueryIterator executeReusedQuery(T opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException;
 }

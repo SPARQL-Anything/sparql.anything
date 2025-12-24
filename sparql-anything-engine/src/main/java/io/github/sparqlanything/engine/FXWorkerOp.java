@@ -26,6 +26,8 @@ import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.main.QC;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 public class FXWorkerOp extends FXWorker<Op> {
@@ -42,5 +44,10 @@ public class FXWorkerOp extends FXWorker<Op> {
 	@Override
 	public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext, DatasetGraph dg, Properties p) {
 		return QC.execute(op, input, ExecutionContext.create(dg));
+	}
+
+	@Override
+	public QueryIterator executeReusedQuery(Op opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {
+		return null;
 	}
 }

@@ -24,25 +24,62 @@ import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierRegister;
+import org.apache.commons.io.IOUtils;
+import org.apache.jena.graph.compose.Union;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
+import org.apache.jena.sparql.core.Substitute;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
+import org.apache.jena.sparql.engine.iterator.*;
+import org.apache.jena.sparql.engine.join.Join;
+import org.apache.jena.sparql.engine.join.QueryIterNestedLoopJoin;
 import org.apache.jena.sparql.engine.main.QC;
+import org.apache.jena.sparql.engine.main.iterator.QueryIterUnion;
+import org.apache.jena.sparql.graph.GraphFactory;
+import org.apache.jena.tdb2.solver.QC2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 public class FXWorkerOpService extends FXWorker<OpService> {
 
 	private static final Logger logger = LoggerFactory.getLogger(FXWorkerOpService.class);
 
-	public FXWorkerOpService(TriplifierRegister tr, DatasetGraphCreator dgc){
+	public FXWorkerOpService(TriplifierRegister tr, DatasetGraphCreator dgc) {
 		super(tr, dgc);
+	}
+
+	public QueryIterator executeReusedQuery(OpService opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY))).toURI(), StandardCharsets.UTF_8);
+		Query query = QueryFactory.create(queryStr);
+		Op op = Algebra.optimize(Algebra.compile(query));
+		if (query.isSelectType()) {
+			return QC.execute(op, input, executionContext);
+		} else if (query.isConstructQuad()){
+			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
+			Dataset dataset = queryExecution.execConstructDataset();
+			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.create(dataset.asDatasetGraph()));
+		} else if (query.isConstructType()) {
+			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
+			Model result = queryExecution.execConstruct();
+			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.createForGraph(result.getGraph()));
+		}
+		return QueryIterNullIterator.create(executionContext);
 	}
 
 	@Override

@@ -1,0 +1,7 @@
+CONSTRUCT {
+    ?s ?p ?o
+} WHERE {
+    SERVICE<x-sparql-anything:content=abc> {
+        ?s ?p ?o .
+    }
+}

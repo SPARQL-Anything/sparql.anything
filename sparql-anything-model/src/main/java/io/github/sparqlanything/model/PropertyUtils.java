@@ -24,6 +24,11 @@ import java.util.List;
 import java.util.Properties;
 
 public class PropertyUtils {
+
+	public static boolean hasProperty(Properties p, IRIArgument argument) {
+		return p.containsKey(argument.toString());
+	}
+
 	public static boolean getBooleanProperty(Properties p, String key, boolean defaultValue) {
 		if (p.containsKey(key)) {
 			return Boolean.parseBoolean(p.getProperty(key));
