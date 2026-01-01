@@ -228,9 +228,8 @@ public class ExtractionParameters {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof ExtractionParameters) {
-            ExtractionParameters other = (ExtractionParameters) obj;
-            return extractionMode == other.extractionMode && extractionFlags.equals(other.extractionFlags)
+        if (obj instanceof ExtractionParameters other) {
+			return extractionMode == other.extractionMode && extractionFlags.equals(other.extractionFlags)
                     && extractionProperties.equals(other.extractionProperties);
         }
         return false;

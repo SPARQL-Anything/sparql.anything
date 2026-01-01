@@ -20,7 +20,6 @@ package io.github.sparqlanything.model;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.io.FilenameUtils;
@@ -60,7 +59,7 @@ public class ResourceManager {
 		return archiverFormat;
 	}
 
-	public InputStream getInputStreamFromArchive(URL archiveLocation, String entryName, Charset charset, String archiverFormat) throws ArchiveException, IOException {
+	public InputStream getInputStreamFromArchive(URL archiveLocation, String entryName, Charset charset, String archiverFormat) throws IOException {
 
 		logger.trace("Archive location {} entry {}", archiveLocation.toString(), entryName);
 

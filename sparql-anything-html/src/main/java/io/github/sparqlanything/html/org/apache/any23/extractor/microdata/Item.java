@@ -68,9 +68,8 @@ public abstract class Item {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof Item) {
-            final Item other = (Item) obj;
-            return xpath.equals(other.xpath);
+        if (obj instanceof Item other) {
+			return xpath.equals(other.xpath);
         }
         return false;
     }

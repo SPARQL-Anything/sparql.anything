@@ -17,7 +17,6 @@
 
 package io.github.sparqlanything.html.org.semarglproject.rdf;
 
-import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.sink.CharSink;
 import io.github.sparqlanything.html.org.semarglproject.sink.Pipe;
 import io.github.sparqlanything.html.org.semarglproject.sink.TripleSink;
@@ -161,7 +160,7 @@ public class NTriplesSerializer extends Pipe<CharSink> implements TripleSink {
             return str;
         }
         StringBuilder result = new StringBuilder(limit);
-        result.append(str.substring(0, pos));
+        result.append(str, 0, pos);
         for (; pos < limit; pos++) {
             char ch = str.charAt(pos);
             if (ch < 0x80) {
@@ -210,7 +209,7 @@ public class NTriplesSerializer extends Pipe<CharSink> implements TripleSink {
             return str;
         }
         StringBuilder result = new StringBuilder(limit);
-        result.append(str.substring(0, pos));
+        result.append(str, 0, pos);
         for (; pos < limit; pos++) {
             char ch = str.charAt(pos);
             if (ESCAPABLE_URI_CHARS.get(ch)) {

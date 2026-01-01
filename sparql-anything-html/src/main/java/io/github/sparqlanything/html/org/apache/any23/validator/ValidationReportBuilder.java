@@ -18,9 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.Fix;
-import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
 import org.w3c.dom.Node;
 
 /**

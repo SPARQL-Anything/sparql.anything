@@ -19,14 +19,8 @@
 package io.github.sparqlanything.xml;
 
 import com.google.common.collect.Sets;
+import com.ximpleware.*;
 import io.github.sparqlanything.model.*;
-import com.ximpleware.AutoPilot;
-import com.ximpleware.NavException;
-import com.ximpleware.ParseException;
-import com.ximpleware.VTDGen;
-import com.ximpleware.VTDNav;
-import com.ximpleware.XPathEvalException;
-import com.ximpleware.XPathParseException;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.io.IOUtils;
@@ -46,14 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 @io.github.sparqlanything.model.annotations.Triplifier
 public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {

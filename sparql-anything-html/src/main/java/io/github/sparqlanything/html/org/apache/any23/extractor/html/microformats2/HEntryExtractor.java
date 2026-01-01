@@ -27,9 +27,9 @@ import io.github.sparqlanything.html.org.apache.any23.vocab.HEntry;
 import io.github.sparqlanything.html.org.apache.any23.vocab.VCard;
 import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
-import org.eclipse.rdf4j.model.Resource;
 
 import java.util.List;
 

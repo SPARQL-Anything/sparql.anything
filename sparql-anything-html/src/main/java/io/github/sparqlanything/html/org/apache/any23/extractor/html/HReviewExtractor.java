@@ -106,7 +106,7 @@ public class HReviewExtractor extends EntityBasedMicroformatExtractor {
         conditionallyAddStringProperty(val.source(), blank, vVCARD.fn, val.value());
         final TextField url = item.getSingularUrlField("url");
         conditionallyAddResourceProperty(blank, vVCARD.url, getHTMLDocument().resolveIRI(url.value()));
-        TextField pics[] = item.getPluralUrlField("photo");
+        TextField[] pics = item.getPluralUrlField("photo");
         for (TextField pic : pics) {
             addIRIProperty(blank, vVCARD.photo, getHTMLDocument().resolveIRI(pic.value()));
         }

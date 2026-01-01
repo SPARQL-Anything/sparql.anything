@@ -19,9 +19,7 @@
 package io.github.sparqlanything.it;
 
 import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSetFormatter;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class SlicingTest extends AbstractExecutionTester {

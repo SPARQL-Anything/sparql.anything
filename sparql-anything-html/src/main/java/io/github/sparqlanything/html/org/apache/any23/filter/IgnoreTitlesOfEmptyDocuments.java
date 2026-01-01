@@ -21,11 +21,10 @@ package io.github.sparqlanything.html.org.apache.any23.filter;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.TitleExtractor;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.TitleExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.filter.ExtractionContextBlocker;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 
 /**

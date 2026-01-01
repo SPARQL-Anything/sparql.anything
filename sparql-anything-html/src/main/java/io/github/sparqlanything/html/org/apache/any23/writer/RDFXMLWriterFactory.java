@@ -18,13 +18,9 @@
 
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
-import java.io.OutputStream;
-
 import io.github.sparqlanything.html.org.apache.any23.configuration.Settings;
-import io.github.sparqlanything.html.org.apache.any23.writer.RDFXMLWriter;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleFormat;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleWriterFactory;
+
+import java.io.OutputStream;
 
 /**
  * @author Peter Ansell (p_ansell@yahoo.com)

@@ -18,13 +18,12 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdf;
 
-import java.util.Arrays;
-
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.SimpleExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.TriXExtractor;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
+
+import java.util.List;
 
 /**
  * @author Peter Ansell p_ansell@yahoo.com
@@ -40,7 +39,7 @@ public class TriXExtractorFactory extends SimpleExtractorFactory<TriXExtractor>
     private static final ExtractorDescription descriptionInstance = new TriXExtractorFactory();
 
     public TriXExtractorFactory() {
-        super(TriXExtractorFactory.NAME, TriXExtractorFactory.PREFIXES, Arrays.asList("application/trix"),
+        super(TriXExtractorFactory.NAME, TriXExtractorFactory.PREFIXES, List.of("application/trix"),
                 "example-trix.trx");
     }
 

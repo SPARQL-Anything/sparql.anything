@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.mime.MIMEType;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
 
@@ -38,7 +36,7 @@ public abstract class SimpleExtractorFactory<T extends Extractor<?>> implements 
 
     private final Prefixes prefixes;
 
-    private Collection<MIMEType> supportedMIMETypes = new ArrayList<>();
+    private final Collection<MIMEType> supportedMIMETypes = new ArrayList<>();
 
     private String exampleInput;
 

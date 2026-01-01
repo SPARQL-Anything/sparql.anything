@@ -20,20 +20,10 @@ package io.github.sparqlanything.html.org.apache.any23.rdf;
 
 import io.github.sparqlanything.html.org.apache.any23.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.RDFParserRegistry;
-import org.eclipse.rdf4j.rio.RDFWriter;
-import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.*;
 import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
 import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 import org.slf4j.Logger;
@@ -42,21 +32,12 @@ import org.slf4j.LoggerFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Basic class providing a set of utility methods when dealing with <i>RDF</i>.
@@ -711,13 +692,13 @@ public class RDFUtils {
 
         String iriString;
         if (docIRI.toString().endsWith("/") || docIRI.toString().endsWith("#")) {
-            iriString = docIRI.toString() + newType;
+            iriString = docIRI + newType;
         } else {
-            iriString = docIRI.toString() + "#" + newType;
+            iriString = docIRI + "#" + newType;
         }
 
         if (addId) {
-            iriString = iriString + "_" + Integer.toString(nodeId);
+            iriString = iriString + "_" + nodeId;
         }
 
         Resource node = RDFUtils.iri(iriString);

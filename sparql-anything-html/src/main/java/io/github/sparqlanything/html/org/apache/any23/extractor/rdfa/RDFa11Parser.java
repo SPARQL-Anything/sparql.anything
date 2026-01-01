@@ -18,21 +18,9 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdfa;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Stack;
-import javax.xml.transform.TransformerException;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
 import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.DomUtils;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFa11ParserException;
 import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
@@ -45,6 +33,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * This parser is able to extract <a href="http://www.w3.org/TR/rdfa-syntax/">RDFa 1.0</a> and
@@ -865,11 +860,8 @@ public class RDFa11Parser {
         }
 
         literal = getAsPlainLiteral(node, currentEvaluationContext.language);
-        if (literal != null)
-            return literal;
-
-        return null;
-    }
+		return literal;
+	}
 
     private static String getNodeContent(Node node) {
         final String candidateContent = DomUtils.readAttribute(node, CONTENT_ATTRIBUTE, null);
@@ -938,7 +930,7 @@ public class RDFa11Parser {
                 final IRI currentVocabulary = getVocabulary();
                 // Mapping is a TERM.
                 if (currentVocabulary != null) {
-                    return resolveIRI(currentVocabulary.toString() + mapping);
+                    return resolveIRI(currentVocabulary + mapping);
                 }
             }
             return resolveIRI(documentBase.toString() + mapping);
@@ -949,7 +941,7 @@ public class RDFa11Parser {
         if (curieMapping == null) {
             throw new IllegalArgumentException(String.format(Locale.ROOT, "Cannot map prefix '%s'", prefix));
         }
-        final String candidateCURIEStr = curieMapping.toString() + mapping.substring(prefixSeparatorIndex + 1);
+        final String candidateCURIEStr = curieMapping + mapping.substring(prefixSeparatorIndex + 1);
         final java.net.URI candidateCURIE;
         try {
             candidateCURIE = new java.net.URI(candidateCURIEStr);
@@ -957,7 +949,7 @@ public class RDFa11Parser {
             throw new IllegalArgumentException(String.format(Locale.ROOT, "Invalid CURIE '%s'", candidateCURIEStr));
         }
         return resolveIRI(candidateCURIE.isAbsolute() ? candidateCURIE.toString()
-                : documentBase.toString() + candidateCURIE.toString());
+                : documentBase.toString() + candidateCURIE);
     }
 
     /**

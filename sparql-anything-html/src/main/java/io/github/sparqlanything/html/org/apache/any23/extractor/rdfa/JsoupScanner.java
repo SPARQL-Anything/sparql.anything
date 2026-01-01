@@ -18,14 +18,10 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdfa;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.jsoup.nodes.CDataNode;
-import org.jsoup.nodes.Comment;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.NodeVisitor;
 import io.github.sparqlanything.html.org.semarglproject.sink.XmlSink;
+import org.apache.commons.lang3.ArrayUtils;
+import org.jsoup.nodes.*;
+import org.jsoup.select.NodeVisitor;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.NamespaceSupport;

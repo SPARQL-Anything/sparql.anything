@@ -176,11 +176,10 @@ public abstract class Setting<V> implements Cloneable {
     public final boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof Setting))
+        if (!(o instanceof Setting<?> setting))
             return false;
 
-        Setting<?> setting = (Setting<?>) o;
-        return key == setting.key && Objects.equals(value, setting.value);
+		return key == setting.key && Objects.equals(value, setting.value);
     }
 
     @Override
@@ -359,7 +358,7 @@ public abstract class Setting<V> implements Cloneable {
         S s = (S) setting.clone();
 
         assert ((Setting<V>) s).key == ((Setting<V>) setting).key;
-        assert ((Setting<V>) s).getClass().equals(setting.getClass());
+        assert s.getClass().equals(setting.getClass());
 
         ((Setting<V>) s).value = newValue;
         return s;

@@ -21,15 +21,11 @@ package io.github.sparqlanything.html.org.apache.any23.filter;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A wrapper around a {@link TripleHandler} that can block and unblock calls to the handler, either for the entire
@@ -41,9 +37,9 @@ import java.util.Map;
  */
 public class ExtractionContextBlocker implements TripleHandler {
 
-    private TripleHandler wrapped;
+    private final TripleHandler wrapped;
 
-    private Map<String, ValvedTriplePipe> contextQueues = new HashMap<String, ValvedTriplePipe>();
+    private final Map<String, ValvedTriplePipe> contextQueues = new HashMap<String, ValvedTriplePipe>();
 
     private boolean documentBlocked;
 

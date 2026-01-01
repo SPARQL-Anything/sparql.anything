@@ -19,9 +19,6 @@
 package io.github.sparqlanything.xml;
 
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

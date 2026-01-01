@@ -18,9 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.microdata;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.Item;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.ItemPropValue;
-
 import java.util.Locale;
 
 /**
@@ -111,9 +108,8 @@ public class ItemProp extends Item {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof ItemProp) {
-            final ItemProp other = (ItemProp) obj;
-            return name.equals(other.name) && value.equals(other.value);
+        if (obj instanceof ItemProp other) {
+			return name.equals(other.name) && value.equals(other.value);
         }
         return false;
     }

@@ -17,10 +17,10 @@
 
 package io.github.sparqlanything.html;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleWriterHandler;
+import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;

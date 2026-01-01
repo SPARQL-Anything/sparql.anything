@@ -19,10 +19,8 @@
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 
 import java.util.HashMap;
@@ -38,7 +36,7 @@ public class BenchmarkTripleHandler implements TripleHandler {
     /**
      * Decorated.
      */
-    private TripleHandler underlyingHandler;
+    private final TripleHandler underlyingHandler;
 
     /**
      * Collected statistics.

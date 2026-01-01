@@ -19,8 +19,6 @@
 package io.github.sparqlanything.yaml;
 
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
 
 import java.util.Properties;

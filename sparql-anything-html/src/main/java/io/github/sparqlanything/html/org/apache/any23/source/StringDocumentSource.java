@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.source;
 
-import io.github.sparqlanything.html.org.apache.any23.source.DocumentSource;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

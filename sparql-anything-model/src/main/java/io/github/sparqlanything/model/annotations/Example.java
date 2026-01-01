@@ -25,7 +25,7 @@ import java.lang.annotation.*;
 @Repeatable(Examples.class)
 public @interface Example {
 
-	public static final String INLINE_CONTENT = "Inline content";
+	String INLINE_CONTENT = "Inline content";
 
 	String resource() default INLINE_CONTENT;
 

@@ -18,17 +18,13 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
-import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
-import io.github.sparqlanything.html.org.apache.any23.extractor.TagSoupExtractionResult;
+import io.github.sparqlanything.html.org.apache.any23.extractor.*;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.annotations.Includes;
 import io.github.sparqlanything.html.org.apache.any23.vocab.VCard;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -49,7 +45,7 @@ public class HCardExtractor extends EntityBasedMicroformatExtractor {
 
     private static final VCard vCARD = VCard.getInstance();
 
-    private HCardName name = new HCardName();
+    private final HCardName name = new HCardName();
 
     private HTMLDocument fragment;
 

@@ -25,16 +25,12 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.TagSoupExtractio
 import io.github.sparqlanything.html.org.apache.any23.vocab.FOAF;
 import io.github.sparqlanything.html.org.apache.any23.vocab.HListing;
 import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument.TextField;
 

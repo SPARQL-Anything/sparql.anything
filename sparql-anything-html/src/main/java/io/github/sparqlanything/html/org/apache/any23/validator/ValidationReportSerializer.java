@@ -18,9 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.SerializationException;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
-
 import java.io.OutputStream;
 
 /**

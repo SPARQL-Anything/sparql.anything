@@ -19,8 +19,6 @@ package io.github.sparqlanything.html.org.semarglproject.source;
 
 import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.sink.XmlSink;
-import io.github.sparqlanything.html.org.semarglproject.source.AbstractSource;
-import io.github.sparqlanything.html.org.semarglproject.source.BaseStreamProcessor;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -30,7 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 final class XmlSource extends AbstractSource<XmlSink> {
 
@@ -66,7 +64,7 @@ final class XmlSource extends AbstractSource<XmlSink> {
 
     @Override
     public void process(InputStream inputStream, String mimeType, String baseUri) throws ParseException {
-        Reader reader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+        Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         try {
             process(reader, mimeType, baseUri);
         } finally {

@@ -17,32 +17,24 @@
 
 package io.github.sparqlanything.html.org.semarglproject.rdf4j.rdf.rdfa;
 
-import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.rio.ParseErrorListener;
-import org.eclipse.rdf4j.rio.ParseLocationListener;
-import org.eclipse.rdf4j.rio.ParserConfig;
-import org.eclipse.rdf4j.rio.RioSetting;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFHandler;
-import org.eclipse.rdf4j.rio.RDFHandlerException;
-import org.eclipse.rdf4j.rio.RDFParseException;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
-import org.eclipse.rdf4j.rio.helpers.RDFaParserSettings;
-import org.eclipse.rdf4j.rio.helpers.RDFaVersion;
-import io.github.sparqlanything.html.org.semarglproject.source.StreamProcessor;
 import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.rdf.ProcessorGraphHandler;
 import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.RdfaParser;
 import io.github.sparqlanything.html.org.semarglproject.rdf4j.core.sink.RDF4JSink;
+import io.github.sparqlanything.html.org.semarglproject.source.StreamProcessor;
 import io.github.sparqlanything.html.org.semarglproject.vocab.RDFa;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.rio.*;
+import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
+import org.eclipse.rdf4j.rio.helpers.RDFaParserSettings;
+import org.eclipse.rdf4j.rio.helpers.RDFaVersion;
 import org.xml.sax.XMLReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -92,7 +84,7 @@ public final class RDF4JRDFaParser implements RDFParser, ProcessorGraphHandler {
 
     @Override
     public void parse(InputStream in, String baseURI) throws RDFParseException, RDFHandlerException {
-        InputStreamReader reader = new InputStreamReader(in, Charset.forName("UTF-8"));
+        InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
         try {
             parse(reader, baseURI);
         } finally {

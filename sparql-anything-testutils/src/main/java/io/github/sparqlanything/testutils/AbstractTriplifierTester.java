@@ -29,7 +29,6 @@ import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
-import org.apache.jena.sparql.graph.GraphFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;

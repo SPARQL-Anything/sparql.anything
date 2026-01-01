@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdfa;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.XSLTStylesheet;
-
 /**
  * Defines an exception raised by the {@link io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.XSLTStylesheet} class.
  *

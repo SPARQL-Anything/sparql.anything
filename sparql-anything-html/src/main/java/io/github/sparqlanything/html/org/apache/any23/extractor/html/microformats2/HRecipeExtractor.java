@@ -21,13 +21,13 @@ package io.github.sparqlanything.html.org.apache.any23.extractor.html.microforma
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.EntityBasedMicroformatExtractor;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 import io.github.sparqlanything.html.org.apache.any23.vocab.HRecipe;
 import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.EntityBasedMicroformatExtractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 
 /**
  * Extractor for the <a href="http://microformats.org/wiki/hrecipe">hRecipe</a> microformat.

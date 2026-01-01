@@ -18,9 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.http;
 
-import io.github.sparqlanything.html.org.apache.any23.http.DefaultHTTPClientConfiguration;
-import io.github.sparqlanything.html.org.apache.any23.http.HTTPClient;
-import io.github.sparqlanything.html.org.apache.any23.http.HTTPClientConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;

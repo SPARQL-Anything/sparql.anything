@@ -25,8 +25,8 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.html.EntityBased
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 import io.github.sparqlanything.html.org.apache.any23.vocab.HProduct;
 import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
 

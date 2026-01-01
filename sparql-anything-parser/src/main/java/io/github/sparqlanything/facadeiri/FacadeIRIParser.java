@@ -93,7 +93,7 @@ public class FacadeIRIParser {
 				sb.append(s.charAt(i));
 			}
 		}
-		log.trace("Escaped {}", sb.toString());
+		log.trace("Escaped {}", sb);
 		return sb.toString();
 	}
 

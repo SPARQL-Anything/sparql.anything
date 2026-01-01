@@ -20,8 +20,8 @@ package io.github.sparqlanything.documentationgenerator;
 
 public class TriplifierSection {
 
-	private String className;
-	private Class<?> klazz;
+	private final String className;
+	private final Class<?> klazz;
 
 	public TriplifierSection(String className, Class<?> klazz) {
 		this.className = className;

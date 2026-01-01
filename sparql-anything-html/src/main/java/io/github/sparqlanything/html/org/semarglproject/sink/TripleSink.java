@@ -17,8 +17,6 @@
 
 package io.github.sparqlanything.html.org.semarglproject.sink;
 
-import io.github.sparqlanything.html.org.semarglproject.sink.DataSink;
-
 /**
  * Interface for triple consuming.
  */

@@ -21,12 +21,8 @@ package io.github.sparqlanything.html.org.apache.any23.rdf;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * A mapping from prefixes to namespace IRIs. Supports "volatile mappings", which will be overwritten without notice
@@ -56,7 +52,7 @@ public class Prefixes {
         return result;
     }
 
-    public static Prefixes EMPTY = new Prefixes(Collections.<String, String> emptyMap());
+    public static Prefixes EMPTY = new Prefixes(Collections.emptyMap());
 
     private final Map<String, String> mappings;
     private final Set<String> volatilePrefixes = new HashSet<String>();

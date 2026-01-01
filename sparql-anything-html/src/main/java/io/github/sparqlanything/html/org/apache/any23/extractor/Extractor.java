@@ -36,13 +36,13 @@ public interface Extractor<Input> {
      * This interface specializes an {@link Extractor} able to handle {@link java.net.URI} as input format. Use it if
      * you need to fetch a document before the extraction
      */
-    public interface BlindExtractor extends Extractor<IRI> {
+	interface BlindExtractor extends Extractor<IRI> {
     }
 
     /**
      * This interface specializes an {@link Extractor} able to handle {@link InputStream} as input format.
      */
-    public interface ContentExtractor extends Extractor<InputStream> {
+	interface ContentExtractor extends Extractor<InputStream> {
 
         /**
          * If <code>true</code>, the extractor will stop at first parsing error, if<code>false</code> the extractor will
@@ -58,7 +58,7 @@ public interface Extractor<Input> {
     /**
      * This interface specializes an {@link Extractor} able to handle {@link Document} as input format.
      */
-    public interface TagSoupDOMExtractor extends Extractor<Document> {
+	interface TagSoupDOMExtractor extends Extractor<Document> {
     }
 
     /**

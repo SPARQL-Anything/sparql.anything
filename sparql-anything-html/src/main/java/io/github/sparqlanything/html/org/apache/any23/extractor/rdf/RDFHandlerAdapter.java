@@ -19,9 +19,9 @@
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdf;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.rio.RDFHandler;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 
@@ -33,7 +33,7 @@ import org.eclipse.rdf4j.rio.RDFHandlerException;
  */
 public class RDFHandlerAdapter implements RDFHandler {
 
-    private ExtractionResult target;
+    private final ExtractionResult target;
 
     public RDFHandlerAdapter(ExtractionResult target) {
         this.target = target;

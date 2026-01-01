@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.Validator;
-
 /**
  * Models any exception raised by the {@link io.github.sparqlanything.html.org.apache.any23.validator.Validator}.
  *

@@ -30,8 +30,8 @@ import org.w3c.dom.Document;
  */
 public class DocumentReport {
 
-    private ValidationReport validationReport;
-    private Document document;
+    private final ValidationReport validationReport;
+    private final Document document;
 
     public DocumentReport(ValidationReport validationReport, Document document) {
         this.validationReport = validationReport;

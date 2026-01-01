@@ -17,14 +17,14 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator.rule;
 
-import java.util.List;
-
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.DomUtils;
 import io.github.sparqlanything.html.org.apache.any23.validator.DOMDocument;
 import io.github.sparqlanything.html.org.apache.any23.validator.Fix;
 import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
 import io.github.sparqlanything.html.org.apache.any23.validator.RuleContext;
 import org.w3c.dom.Node;
+
+import java.util.List;
 
 /**
  * Fix for the issue described within {@link io.github.sparqlanything.html.org.apache.any23.validator.rule.MissingItemscopeAttributeValueRule}

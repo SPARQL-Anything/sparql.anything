@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReportSerializer;
-
 /**
  * Defines an error raised from the {@link ValidationReportSerializer}.
  *

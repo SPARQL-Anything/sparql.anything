@@ -18,25 +18,17 @@
 
 package io.github.sparqlanything.html.org.apache.any23.rdf;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
-
 import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
-import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
 
 /**
  * Any23 specialization of the {@link ValueFactory}. It provides a wrapper to instantiate RDF
@@ -51,7 +43,7 @@ public class Any23ValueFactoryWrapper implements ValueFactory {
 
     private IssueReport issueReport;
 
-    private String defaultLiteralLanguage;
+    private final String defaultLiteralLanguage;
 
     /**
      * Constructor with error reporter.

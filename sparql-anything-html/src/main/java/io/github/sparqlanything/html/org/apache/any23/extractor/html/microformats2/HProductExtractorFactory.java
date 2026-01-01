@@ -23,6 +23,7 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory
 import io.github.sparqlanything.html.org.apache.any23.extractor.SimpleExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.rdf.PopularPrefixes;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
+
 import java.util.Arrays;
 
 /**

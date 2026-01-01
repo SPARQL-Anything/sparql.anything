@@ -25,11 +25,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
+import org.w3c.dom.*;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -51,7 +47,7 @@ public class HTMLDocument {
     private final static XPath xPathEngine = XPathFactory.newInstance().newXPath();
     private final static Logger log = LoggerFactory.getLogger(HTMLDocument.class);
 
-    private Node document;
+    private final Node document;
     private java.net.URI baseIRI;
 
     private final Any23ValueFactoryWrapper valueFactory = new Any23ValueFactoryWrapper(
@@ -481,8 +477,8 @@ public class HTMLDocument {
      * retrieved.
      */
     public static class TextField {
-        private String value;
-        private Node source;
+        private final String value;
+        private final Node source;
 
         public TextField(String value, Node source) {
             this.value = value;

@@ -20,7 +20,7 @@ package io.github.sparqlanything.cli;
 
 import io.github.sparqlanything.engine.OpVisitorSkip;
 import io.github.sparqlanything.engine.Utils;
-import org.apache.jena.sparql.algebra.op.*;
+import org.apache.jena.sparql.algebra.op.OpService;
 
 public class ServiceFinder extends OpVisitorSkip {
 

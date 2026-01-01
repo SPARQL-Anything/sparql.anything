@@ -20,11 +20,7 @@ package io.github.sparqlanything.html.org.apache.any23.extractor.html.microforma
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.MicroformatExtractor;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * This annotation could be used to decorate a {@link MicroformatExtractor} to represent which of the other

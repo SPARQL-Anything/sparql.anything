@@ -155,7 +155,7 @@ import org.apache.jena.sys.JenaSystem;
 
 public class SPARQLAnythingClientViaSPARQL {
 
-    public static void main(String[] args) throws TriplifierRegisterException, TriplifierRegisterException {
+    public static void main(String[] args) throws TriplifierRegisterException {
 
         System.out.println(PropertyFunctionRegistry.chooseRegistry(ARQ.getContext()));
 

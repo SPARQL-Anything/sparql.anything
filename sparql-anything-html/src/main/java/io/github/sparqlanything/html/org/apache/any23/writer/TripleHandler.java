@@ -19,8 +19,8 @@
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 
 /**

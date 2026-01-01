@@ -19,10 +19,8 @@
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 
 import java.util.Collection;
@@ -41,8 +39,8 @@ public class ReportingTripleHandler implements TripleHandler {
     private final TripleHandler wrapped;
 
     private final Collection<String> extractorNames = new HashSet<>();
-    private AtomicInteger totalTriples = new AtomicInteger(0);
-    private AtomicInteger totalDocuments = new AtomicInteger(0);
+    private final AtomicInteger totalTriples = new AtomicInteger(0);
+    private final AtomicInteger totalDocuments = new AtomicInteger(0);
 
     public ReportingTripleHandler(TripleHandler wrapped) {
         if (wrapped == null) {

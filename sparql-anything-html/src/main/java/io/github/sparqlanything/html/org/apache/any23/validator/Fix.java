@@ -18,10 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.DOMDocument;
-import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
-import io.github.sparqlanything.html.org.apache.any23.validator.RuleContext;
-
 /**
  * This interface models a fix for an issue.
  *

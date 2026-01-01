@@ -22,13 +22,13 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionExcept
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
 import io.github.sparqlanything.html.org.apache.any23.extractor.TagSoupExtractionResult;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.EntityBasedMicroformatExtractor;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 import io.github.sparqlanything.html.org.apache.any23.vocab.HItem;
 import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.EntityBasedMicroformatExtractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 
 /**
  * Extractor for the <a href="http://microformats.org/wiki/h-item">h-item</a> microformat.

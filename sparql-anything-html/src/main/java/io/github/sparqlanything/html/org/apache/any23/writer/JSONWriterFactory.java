@@ -19,11 +19,6 @@
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.configuration.Settings;
-import io.github.sparqlanything.html.org.apache.any23.writer.JSONLDWriterFactory;
-import io.github.sparqlanything.html.org.apache.any23.writer.JSONWriter;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleFormat;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleWriterFactory;
 
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;

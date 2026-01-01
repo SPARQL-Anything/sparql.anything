@@ -19,7 +19,6 @@
 package io.github.sparqlanything.html;
 
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Properties;

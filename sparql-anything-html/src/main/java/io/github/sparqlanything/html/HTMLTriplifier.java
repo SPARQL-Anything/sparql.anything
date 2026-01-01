@@ -18,26 +18,20 @@
 
 package io.github.sparqlanything.html;
 
-import com.adobe.internal.xmp.impl.Base64;
 import com.microsoft.playwright.*;
+import io.github.sparqlanything.html.org.apache.any23.Any23;
+import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorRegistryImpl;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.*;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.HRecipeExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.*;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.HCardExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2.HResumeExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFa11ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFaExtractorFactory;
-import io.github.sparqlanything.model.*;
-import io.github.sparqlanything.model.annotations.Example;
-import io.github.sparqlanything.model.annotations.Option;
-import io.github.sparqlanything.html.org.apache.any23.Any23;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
 import io.github.sparqlanything.html.org.apache.any23.source.DocumentSource;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
-import org.apache.http.client.utils.URIUtils;
+import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Example;
+import io.github.sparqlanything.model.annotations.Option;
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Attribute;
@@ -82,7 +76,7 @@ public class HTMLTriplifier implements Triplifier {
 	public static final IRIArgument PROPERTY_PARSER = new IRIArgument("html.parser", "html");
 	private enum ParamParser {
 		HTML("html"), XML("xml");
-		private String str;
+		private final String str;
 		ParamParser(String str){
 			this.str = str;
 		}

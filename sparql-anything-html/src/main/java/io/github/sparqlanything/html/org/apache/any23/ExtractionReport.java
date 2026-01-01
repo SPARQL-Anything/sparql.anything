@@ -18,9 +18,8 @@
 
 package io.github.sparqlanything.html.org.apache.any23;
 
-import io.github.sparqlanything.html.org.apache.any23.Any23;
-import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
 import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor;
+import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
 import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
 
 import java.util.Collection;
@@ -108,7 +107,7 @@ public class ExtractionReport {
      */
     public Collection<IssueReport.Issue> getExtractorIssues(String extractorName) {
         final Collection<IssueReport.Issue> errors = extractorIssues.get(extractorName);
-        return errors == null ? Collections.<IssueReport.Issue> emptyList()
+        return errors == null ? Collections.emptyList()
                 : Collections.unmodifiableCollection(errors);
     }
 

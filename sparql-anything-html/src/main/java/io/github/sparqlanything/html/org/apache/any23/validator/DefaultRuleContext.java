@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.RuleContext;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +29,7 @@ import java.util.Map;
  */
 public class DefaultRuleContext implements RuleContext<Object> {
 
-    private Map<String, Object> data = new HashMap<String, Object>();
+    private final Map<String, Object> data = new HashMap<String, Object>();
 
     public void putData(String name, Object value) {
         data.put(name, value);

@@ -19,7 +19,6 @@
 package io.github.sparqlanything.html.org.apache.any23.source;
 
 import io.github.sparqlanything.html.org.apache.any23.http.HTTPClient;
-import io.github.sparqlanything.html.org.apache.any23.source.DocumentSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

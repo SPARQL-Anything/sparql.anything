@@ -18,9 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.Fix;
-import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
-
 /**
  * This context is used to pass data from a {@link io.github.sparqlanything.html.org.apache.any23.validator.Rule} to a {@link Fix}.
  *

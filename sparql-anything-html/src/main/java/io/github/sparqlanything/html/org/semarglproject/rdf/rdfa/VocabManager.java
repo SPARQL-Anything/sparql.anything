@@ -17,8 +17,6 @@
 
 package io.github.sparqlanything.html.org.semarglproject.rdf.rdfa;
 
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.Vocabulary;
-
 import java.util.HashMap;
 import java.util.Map;
 

@@ -18,13 +18,12 @@
 
 package io.github.sparqlanything.engine.test;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.Triplifier;
-import com.google.common.collect.Sets;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;

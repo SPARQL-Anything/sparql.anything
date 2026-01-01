@@ -18,12 +18,12 @@
 
 package io.github.sparqlanything.rdf;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.protocol.HTTP;
-import com.google.common.collect.Sets;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.riot.Lang;

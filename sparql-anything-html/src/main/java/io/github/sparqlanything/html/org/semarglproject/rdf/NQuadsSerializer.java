@@ -17,8 +17,6 @@
 
 package io.github.sparqlanything.html.org.semarglproject.rdf;
 
-import io.github.sparqlanything.html.org.semarglproject.rdf.NTriplesSerializer;
-import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.sink.CharSink;
 import io.github.sparqlanything.html.org.semarglproject.sink.QuadSink;
 

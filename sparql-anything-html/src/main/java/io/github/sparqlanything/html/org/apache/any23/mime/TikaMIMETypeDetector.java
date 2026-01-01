@@ -22,7 +22,6 @@ import io.github.sparqlanything.html.org.apache.any23.mime.purifier.Purifier;
 import io.github.sparqlanything.html.org.apache.any23.mime.purifier.WhiteSpacesPurifier;
 import org.apache.tika.Tika;
 import org.apache.tika.config.TikaConfig;
-import org.apache.tika.detect.zip.DefaultZipContainerDetector;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TikaCoreProperties;
 import org.apache.tika.mime.MimeType;
@@ -33,11 +32,7 @@ import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
@@ -49,7 +44,7 @@ import java.util.regex.Pattern;
  */
 public class TikaMIMETypeDetector implements MIMETypeDetector {
 
-    private Purifier purifier;
+    private final Purifier purifier;
 
     public static final String CSV_MIMETYPE = "text/csv";
 

@@ -82,9 +82,9 @@ public interface TagSoupExtractionResult extends ExtractionResult {
      * Defines a property root object.
      */
     class ResourceRoot {
-        private String[] path;
-        private Resource root;
-        private Class<? extends MicroformatExtractor> extractor;
+        private final String[] path;
+        private final Resource root;
+        private final Class<? extends MicroformatExtractor> extractor;
 
         public ResourceRoot(String[] path, Resource root, Class<? extends MicroformatExtractor> extractor) {
             if (path == null || path.length == 0) {
@@ -126,11 +126,11 @@ public interface TagSoupExtractionResult extends ExtractionResult {
      */
     class PropertyPath {
 
-        private Class<? extends MicroformatExtractor> extractor;
-        private String[] path;
-        private Resource subject;
-        private Resource property;
-        private BNode object;
+        private final Class<? extends MicroformatExtractor> extractor;
+        private final String[] path;
+        private final Resource subject;
+        private final Resource property;
+        private final BNode object;
 
         public PropertyPath(String[] path, Resource subject, Resource property, BNode object,
                 Class<? extends MicroformatExtractor> extractor) {

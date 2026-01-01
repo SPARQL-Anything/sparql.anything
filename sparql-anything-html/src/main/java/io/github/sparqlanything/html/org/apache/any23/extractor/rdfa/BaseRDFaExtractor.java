@@ -18,26 +18,19 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdfa;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionParameters;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
-import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
+import io.github.sparqlanything.html.org.apache.any23.extractor.*;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.BaseRDFExtractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.JsoupScanner;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.SemarglSink;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Any23ValueFactoryWrapper;
+import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.RdfaParser;
 import io.github.sparqlanything.html.org.semarglproject.rdf4j.rdf.rdfa.SemarglParserSettings;
+import io.github.sparqlanything.html.org.semarglproject.sink.XmlSink;
+import io.github.sparqlanything.html.org.semarglproject.source.StreamProcessor;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.helpers.RDFaParserSettings;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.ParseSettings;
 import org.jsoup.parser.Parser;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.RdfaParser;
-//import io.github.sparqlanything.html.org.semarglproject.rdf4j.rdf.rdfa.SemarglParserSettings;
-import io.github.sparqlanything.html.org.semarglproject.sink.XmlSink;
-import io.github.sparqlanything.html.org.semarglproject.source.StreamProcessor;
 
 import java.io.IOException;
 import java.io.InputStream;

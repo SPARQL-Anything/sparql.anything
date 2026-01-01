@@ -19,10 +19,6 @@
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.configuration.Settings;
-import io.github.sparqlanything.html.org.apache.any23.writer.RDFWriterTripleHandler;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleFormat;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleWriter;
-import io.github.sparqlanything.html.org.apache.any23.writer.WriterSettings;
 import org.eclipse.rdf4j.rio.WriterConfig;
 import org.eclipse.rdf4j.rio.helpers.NTriplesWriterSettings;
 

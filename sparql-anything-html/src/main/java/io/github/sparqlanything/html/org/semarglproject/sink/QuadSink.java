@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.semarglproject.sink;
 
-import io.github.sparqlanything.html.org.semarglproject.sink.TripleSink;
-
 /**
  * Interface for quad consuming
  */

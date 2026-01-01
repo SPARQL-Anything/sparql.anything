@@ -19,8 +19,7 @@
   -->
 
 <metadata xmlns:dct="http://purl.org/dc/terms/"
-          xmlns:xs="http://www.w3.org/2001/XMLSchema/"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance/">
+>
     THIS_TEXT_IS_OUTSIDE_SUBJECT<dct:subject>THIS_TEXT_IS_INSIDE_SUBJECT</dct:subject>
     ​
 </metadata>

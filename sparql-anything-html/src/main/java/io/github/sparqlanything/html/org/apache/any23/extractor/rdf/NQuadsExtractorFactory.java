@@ -18,14 +18,13 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdf;
 
-import java.util.Arrays;
-
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.SimpleExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.NQuadsExtractor;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
 import org.eclipse.rdf4j.rio.RDFFormat;
+
+import java.util.Arrays;
 
 /**
  * @author Peter Ansell p_ansell@yahoo.com

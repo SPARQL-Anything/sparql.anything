@@ -22,10 +22,8 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContex
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.RDFParserFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.BaseRDFaExtractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFaExtractorFactory;
-import org.eclipse.rdf4j.rio.RDFParser;
 import io.github.sparqlanything.html.org.semarglproject.vocab.RDFa;
+import org.eclipse.rdf4j.rio.RDFParser;
 
 /**
  * {@link io.github.sparqlanything.html.org.apache.any23.extractor.Extractor} implementation for <a href="http://www.w3.org/TR/rdfa-syntax/">RDFa

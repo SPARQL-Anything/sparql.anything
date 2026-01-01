@@ -20,16 +20,11 @@ package io.github.sparqlanything.html.org.apache.any23.writer;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import org.eclipse.rdf4j.model.*;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Optional;
-
-import io.github.sparqlanything.html.org.apache.any23.writer.*;
-import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.Value;
 
 /**
  * Implementation of <i>JSON</i> {@link TripleWriter}.

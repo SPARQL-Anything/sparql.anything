@@ -19,7 +19,6 @@
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.DomUtils;
-import io.github.sparqlanything.html.org.apache.any23.validator.DOMDocument;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -37,9 +36,9 @@ import java.util.Locale;
  */
 public class DefaultDOMDocument implements DOMDocument {
 
-    private URI documentIRI;
+    private final URI documentIRI;
 
-    private Document document;
+    private final Document document;
 
     public DefaultDOMDocument(URI documentIRI, Document document) {
         if (documentIRI == null) {

@@ -20,8 +20,6 @@ package io.github.sparqlanything.json.test;
 
 import io.github.sparqlanything.json.JSONTriplifier;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

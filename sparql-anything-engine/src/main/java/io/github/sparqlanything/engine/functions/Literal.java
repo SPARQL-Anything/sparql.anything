@@ -19,7 +19,6 @@
 package io.github.sparqlanything.engine.functions;
 
 import org.apache.jena.datatypes.BaseDatatype;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.sparql.expr.ExprEvalTypeException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -27,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Literal extends FunctionBase2 {
-	private static Logger L = LoggerFactory.getLogger(Literal.class);
+	private static final Logger L = LoggerFactory.getLogger(Literal.class);
 	@Override
 	public NodeValue exec(NodeValue v1, NodeValue v2) {
 		if(v2.isIRI()){

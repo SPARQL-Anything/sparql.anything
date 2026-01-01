@@ -19,10 +19,6 @@
 package io.github.sparqlanything.html.org.apache.any23.extractor;
 
 import io.github.sparqlanything.html.org.apache.any23.configuration.DefaultConfiguration;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorGroup;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorRegistry;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLMetaExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFa11ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFaExtractorFactory;

@@ -105,7 +105,7 @@ public interface Triplifier {
 		return basicEscaper.escape(s);
 	}
 
-	public static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
+	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
 		return getInputStream(properties, getCharsetArgument(properties));
 	}
 

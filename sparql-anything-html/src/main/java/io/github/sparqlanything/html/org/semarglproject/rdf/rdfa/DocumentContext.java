@@ -17,10 +17,8 @@
 
 package io.github.sparqlanything.html.org.semarglproject.rdf.rdfa;
 
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.RdfaParser;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.Vocabulary;
-import io.github.sparqlanything.html.org.semarglproject.ri.RIUtils;
 import io.github.sparqlanything.html.org.semarglproject.ri.MalformedIriException;
+import io.github.sparqlanything.html.org.semarglproject.ri.RIUtils;
 import io.github.sparqlanything.html.org.semarglproject.vocab.RDF;
 import io.github.sparqlanything.html.org.semarglproject.vocab.RDFa;
 

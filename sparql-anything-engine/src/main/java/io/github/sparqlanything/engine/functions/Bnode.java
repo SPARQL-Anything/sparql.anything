@@ -19,10 +19,8 @@
 package io.github.sparqlanything.engine.functions;
 
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
-import org.apache.jena.sparql.util.FmtUtils;
 
 public class Bnode extends FunctionBase1 implements FXFunction {
 

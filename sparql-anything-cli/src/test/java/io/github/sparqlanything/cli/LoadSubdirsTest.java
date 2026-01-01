@@ -18,14 +18,11 @@
 
 package io.github.sparqlanything.cli;
 
+import io.github.sparqlanything.model.HTTPHelper;
 import org.apache.jena.sys.JenaSystem;
 import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.junit.Assume;
-import io.github.sparqlanything.model.HTTPHelper;
+import org.junit.Test;
 
 import java.util.Objects;
 

@@ -18,8 +18,8 @@
 
 package io.github.sparqlanything.xml;
 
-import io.github.sparqlanything.model.Slice;
 import com.ximpleware.VTDNav;
+import io.github.sparqlanything.model.Slice;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class XPathSlice implements Slice<Pair<VTDNav,Integer>> {

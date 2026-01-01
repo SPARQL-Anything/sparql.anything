@@ -18,11 +18,10 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.microdata;
 
-import java.util.Locale;
-
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.DomUtils;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataParser;
 import org.w3c.dom.Node;
+
+import java.util.Locale;
 
 /**
  * Defines an exception occurring while parsing <i>Microdata</i>.

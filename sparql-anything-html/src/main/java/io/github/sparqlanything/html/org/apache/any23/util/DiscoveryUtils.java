@@ -18,13 +18,11 @@
 
 package io.github.sparqlanything.html.org.apache.any23.util;
 
-import io.github.sparqlanything.html.org.apache.any23.util.StringUtils;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -65,12 +63,8 @@ public class DiscoveryUtils {
             final URL resource = resources.nextElement();
             final String fileName = resource.getFile();
             final String fileNameDecoded;
-            try {
-                fileNameDecoded = URLDecoder.decode(fileName, "UTF-8");
-            } catch (UnsupportedEncodingException uee) {
-                throw new IllegalStateException("Error while decoding class file name.", uee);
-            }
-            dirs.add(new File(fileNameDecoded));
+			fileNameDecoded = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
+			dirs.add(new File(fileNameDecoded));
         }
         @SuppressWarnings("rawtypes")
         final ArrayList<Class> classes = new ArrayList<Class>();

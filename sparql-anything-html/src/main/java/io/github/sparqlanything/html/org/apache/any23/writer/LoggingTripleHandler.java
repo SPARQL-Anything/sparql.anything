@@ -19,10 +19,9 @@
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
-import org.eclipse.rdf4j.model.Resource;
+import io.github.sparqlanything.html.org.apache.any23.util.StringUtils;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 
 import java.io.PrintWriter;
@@ -31,7 +30,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-import io.github.sparqlanything.html.org.apache.any23.util.StringUtils;
 
 /**
  * Triple handler decorator useful for logging purposes.
@@ -109,7 +107,7 @@ public class LoggingTripleHandler implements TripleHandler {
         sb.append(StringUtils.join(", ", parsers));
         sb.append(" ]");
         destination.println(
-                documentIRI + "\t" + contentLength + "\t" + elapsedTime + "\t" + success.get() + "\t" + sb.toString());
+                documentIRI + "\t" + contentLength + "\t" + elapsedTime + "\t" + success.get() + "\t" + sb);
         contextTripleMap.clear();
     }
 

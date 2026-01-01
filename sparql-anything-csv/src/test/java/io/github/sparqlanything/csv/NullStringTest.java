@@ -37,7 +37,7 @@ import static org.junit.Assert.fail;
 
 public class NullStringTest {
 
-	private CSVTriplifier triplifier = new CSVTriplifier();
+	private final CSVTriplifier triplifier = new CSVTriplifier();
 	
 	@Test
 	public void testCsvNullStrings() throws IOException, TriplifierHTTPException {

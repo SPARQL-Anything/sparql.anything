@@ -17,7 +17,6 @@
 package io.github.sparqlanything.it;
 
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.engine.InternalQueryCache;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;

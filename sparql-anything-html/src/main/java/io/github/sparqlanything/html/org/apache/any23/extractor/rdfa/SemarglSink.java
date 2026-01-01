@@ -51,17 +51,17 @@ final class SemarglSink implements io.github.sparqlanything.html.org.semarglproj
     }
 
     @Override
-    public final void addNonLiteral(String s, String p, String o) {
+    public void addNonLiteral(String s, String p, String o) {
         writeTriple(s, p, createResource(o));
     }
 
     @Override
-    public final void addPlainLiteral(String s, String p, String o, String lang) {
+    public void addPlainLiteral(String s, String p, String o, String lang) {
         writeTriple(s, p, lang == null ? valueFactory.createLiteral(o) : valueFactory.createLiteral(o, lang));
     }
 
     @Override
-    public final void addTypedLiteral(String s, String p, String o, String type) {
+    public void addTypedLiteral(String s, String p, String o, String type) {
         writeTriple(s, p, valueFactory.createLiteral(o, valueFactory.createIRI(type)));
     }
 

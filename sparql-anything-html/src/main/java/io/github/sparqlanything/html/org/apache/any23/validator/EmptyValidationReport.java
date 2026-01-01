@@ -18,10 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReportBuilder;
-import io.github.sparqlanything.html.org.apache.any23.validator.XMLValidationReportSerializer;
-
 import java.util.Collections;
 import java.util.List;
 

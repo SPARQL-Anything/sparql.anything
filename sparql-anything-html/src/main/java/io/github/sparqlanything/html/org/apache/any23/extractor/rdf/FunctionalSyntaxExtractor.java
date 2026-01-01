@@ -21,9 +21,6 @@ package io.github.sparqlanything.html.org.apache.any23.extractor.rdf;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.BaseRDFExtractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.FunctionalSyntaxExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.RDFParserFactory;
 import org.eclipse.rdf4j.rio.RDFParser;
 
 /**

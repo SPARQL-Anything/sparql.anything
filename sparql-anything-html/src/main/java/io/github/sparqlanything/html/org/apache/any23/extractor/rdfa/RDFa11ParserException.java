@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdfa;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFa11Parser;
-
 /**
  * Exception class raised by {@link RDFa11Parser}.
  *

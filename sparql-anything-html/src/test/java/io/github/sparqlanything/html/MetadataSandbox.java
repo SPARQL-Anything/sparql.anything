@@ -20,17 +20,10 @@ package io.github.sparqlanything.html;
 
 import io.github.sparqlanything.html.org.apache.any23.Any23;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorRegistry;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorRegistryImpl;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFa11ExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.RDFaExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.source.DocumentSource;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
 import io.github.sparqlanything.html.org.apache.any23.writer.TurtleWriter;
-
 import org.junit.Ignore;
 import org.junit.Test;
 

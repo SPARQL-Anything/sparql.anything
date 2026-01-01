@@ -18,12 +18,7 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionParameters;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
+import io.github.sparqlanything.html.org.apache.any23.extractor.*;
 import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
 import io.github.sparqlanything.html.org.apache.any23.vocab.SINDICE;
 import org.eclipse.rdf4j.model.IRI;
@@ -33,11 +28,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This extractor represents the <i>HTML META</i> tag values according the
@@ -51,7 +42,7 @@ public class HTMLMetaExtractor implements Extractor.TagSoupDOMExtractor {
 
     private IRI profile;
 
-    private Map<String, IRI> prefixes = new HashMap<>();
+    private final Map<String, IRI> prefixes = new HashMap<>();
 
     private String documentLang;
 
@@ -65,7 +56,7 @@ public class HTMLMetaExtractor implements Extractor.TagSoupDOMExtractor {
         documentLang = getDocumentLanguage(in);
         extractLinkDefinedPrefixes(in);
 
-        String baseProfile = vSINDICE.NS;
+        String baseProfile = SINDICE.NS;
         if (profile != null) {
             baseProfile = profile.toString();
         }
@@ -155,7 +146,7 @@ public class HTMLMetaExtractor implements Extractor.TagSoupDOMExtractor {
                     continue;
                 }
             }
-            boolean isPragmaDirective = (httpEquivAttribute != null) ? true : false;
+            boolean isPragmaDirective = httpEquivAttribute != null;
             if (isPragmaDirective) {
                 String httpEquiv = httpEquivAttribute.getTextContent();
                 String content = contentAttribute.getTextContent();
@@ -196,7 +187,7 @@ public class HTMLMetaExtractor implements Extractor.TagSoupDOMExtractor {
 
     private static class Meta {
 
-        private String xpath;
+        private final String xpath;
 
         private IRI name;
 
@@ -204,7 +195,7 @@ public class HTMLMetaExtractor implements Extractor.TagSoupDOMExtractor {
 
         private String lang;
 
-        private String content;
+        private final String content;
 
         private boolean isPragmaDirective;
 
@@ -262,11 +253,8 @@ public class HTMLMetaExtractor implements Extractor.TagSoupDOMExtractor {
 
             Meta meta = (Meta) o;
 
-            if (xpath != null ? !xpath.equals(meta.xpath) : meta.xpath != null)
-                return false;
-
-            return true;
-        }
+			return Objects.equals(xpath, meta.xpath);
+		}
 
         @Override
         public int hashCode() {

@@ -21,17 +21,8 @@ import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.sink.CharSink;
 import io.github.sparqlanything.html.org.semarglproject.sink.DataSink;
 import io.github.sparqlanything.html.org.semarglproject.sink.XmlSink;
-import io.github.sparqlanything.html.org.semarglproject.source.AbstractSource;
-import io.github.sparqlanything.html.org.semarglproject.source.CharSource;
-import io.github.sparqlanything.html.org.semarglproject.source.XmlSource;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;

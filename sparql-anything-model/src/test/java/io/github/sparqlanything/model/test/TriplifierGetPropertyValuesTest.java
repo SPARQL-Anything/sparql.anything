@@ -46,7 +46,7 @@ public class TriplifierGetPropertyValuesTest {
 			Assert.assertTrue(values.contains(en.getValue()));
 		}
 
-		Assert.assertTrue(values.size() == 4);
+		Assert.assertEquals(4, values.size());
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class TriplifierGetPropertyValuesTest {
 			Assert.assertTrue(values.contains(en.getValue()));
 		}
 
-		Assert.assertTrue(values.size() == 4);
+		Assert.assertEquals(4, values.size());
 	}
 
 	@Test
@@ -86,6 +86,6 @@ public class TriplifierGetPropertyValuesTest {
 			Assert.assertTrue(values.contains(en.getValue()));
 		}
 
-		Assert.assertTrue(values.size() == 3);
+		Assert.assertEquals(3, values.size());
 	}
 }

@@ -19,7 +19,6 @@
 package io.github.sparqlanything.model.test;
 
 import io.github.sparqlanything.model.ResourceManager;
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.junit.Test;
 
 import java.io.IOException;

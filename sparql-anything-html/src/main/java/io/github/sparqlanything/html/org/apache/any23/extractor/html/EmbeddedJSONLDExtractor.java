@@ -18,12 +18,7 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionParameters;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
+import io.github.sparqlanything.html.org.apache.any23.extractor.*;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.JSONLDExtractor;
 import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.JSONLDExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
@@ -37,11 +32,7 @@ import org.w3c.dom.Node;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This extractor represents the HTML script tags used to embed blocks of data in documents. This way, JSON-LD content
@@ -55,7 +46,7 @@ public class EmbeddedJSONLDExtractor implements Extractor.TagSoupDOMExtractor {
 
     private IRI profile;
 
-    private Map<String, IRI> prefixes = new HashMap<>();
+    private final Map<String, IRI> prefixes = new HashMap<>();
 
     private String documentLang;
 
@@ -71,7 +62,7 @@ public class EmbeddedJSONLDExtractor implements Extractor.TagSoupDOMExtractor {
         documentLang = getDocumentLanguage(in);
         extractLinkDefinedPrefixes(in);
 
-        String baseProfile = vSINDICE.NS;
+        String baseProfile = SINDICE.NS;
         if (profile != null) {
             baseProfile = profile.toString();
         }
@@ -179,7 +170,7 @@ public class EmbeddedJSONLDExtractor implements Extractor.TagSoupDOMExtractor {
 
     private static class JSONLDScript {
 
-        private String xpath;
+        private final String xpath;
 
         public JSONLDScript(String xpath, IRI name, String content) {
             this.xpath = xpath;
@@ -193,18 +184,12 @@ public class EmbeddedJSONLDExtractor implements Extractor.TagSoupDOMExtractor {
             if (o == null) {
                 return false;
             }
-            if (!(o instanceof JSONLDScript)) {
+            if (!(o instanceof JSONLDScript meta)) {
                 return false;
             }
 
-            JSONLDScript meta = (JSONLDScript) o;
-
-            if (xpath != null ? !xpath.equals(meta.xpath) : meta.xpath != null) {
-                return false;
-            }
-
-            return true;
-        }
+			return Objects.equals(xpath, meta.xpath);
+		}
 
         @Override
         public int hashCode() {

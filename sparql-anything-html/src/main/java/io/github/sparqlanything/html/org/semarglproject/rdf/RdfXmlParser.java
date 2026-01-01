@@ -17,13 +17,11 @@
 
 package io.github.sparqlanything.html.org.semarglproject.rdf;
 
-import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
-import io.github.sparqlanything.html.org.semarglproject.rdf.ProcessorGraphHandler;
 import io.github.sparqlanything.html.org.semarglproject.ri.MalformedIriException;
 import io.github.sparqlanything.html.org.semarglproject.ri.RIUtils;
 import io.github.sparqlanything.html.org.semarglproject.sink.Pipe;
-import io.github.sparqlanything.html.org.semarglproject.sink.XmlSink;
 import io.github.sparqlanything.html.org.semarglproject.sink.TripleSink;
+import io.github.sparqlanything.html.org.semarglproject.sink.XmlSink;
 import io.github.sparqlanything.html.org.semarglproject.source.StreamProcessor;
 import io.github.sparqlanything.html.org.semarglproject.vocab.RDF;
 import io.github.sparqlanything.html.org.semarglproject.xml.XmlUtils;
@@ -105,7 +103,7 @@ public final class RdfXmlParser extends Pipe<TripleSink> implements XmlSink {
     private boolean ignoreErrors = false;
 
     // holds data for triples which addition depends on XML node contents (blank or not)
-    private List<String> pendingTriples = new ArrayList<String>();
+    private final List<String> pendingTriples = new ArrayList<String>();
 
     private RdfXmlParser(TripleSink sink) {
         super(sink);

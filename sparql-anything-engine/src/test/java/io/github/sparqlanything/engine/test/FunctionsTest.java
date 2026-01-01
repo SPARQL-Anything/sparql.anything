@@ -18,10 +18,10 @@
 
 package io.github.sparqlanything.engine.test;
 
+import com.google.common.collect.Lists;
 import io.github.sparqlanything.engine.FacadeX;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
-import com.google.common.collect.Lists;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
@@ -338,7 +338,7 @@ public class FunctionsTest {
 	public void serial_4() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "PREFIX ex: <http://example.org/>\n"
-				+ "" + "SELECT ?one ?two ?three WHERE {" + "VALUES(?v1 ?v2){ ( ex:1_1 ex:1_2 ) ( ex:2_1 ex:2_2 ) }"
+				+ "SELECT ?one ?two ?three WHERE {" + "VALUES(?v1 ?v2){ ( ex:1_1 ex:1_2 ) ( ex:2_1 ex:2_2 ) }"
 				+ "BIND(fx:serial(?v1, ?v2) as ?one)" + "}";
 		ResultSet result = execute(q);
 		Assert.assertTrue(result.hasNext());
@@ -356,7 +356,7 @@ public class FunctionsTest {
 	public void serial_5() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "PREFIX ex: <http://example.org/>\n"
-				+ "" + "SELECT ?c WHERE {"
+				+ "SELECT ?c WHERE {"
 				+ "VALUES (?v1 ?v2) { ( ex:1_1 ex:1_2 ) ( ex:1_1 ex:1_2 ) ( ex:1_1 ex:1_2 )  ( ex:1_1 ex:1_2 ) }"
 				+ "BIND(fx:serial(?v1, ?v2) as ?c)" + "}";
 		ResultSet result = execute(q);
@@ -382,7 +382,7 @@ public class FunctionsTest {
 	public void serial_6() {
 		String q = "PREFIX fx:  <http://sparql.xyz/facade-x/ns/>\n"
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "PREFIX ex: <http://example.org/>\n"
-				+ "" + "SELECT ?c WHERE {"
+				+ "SELECT ?c WHERE {"
 				+ "VALUES (?v1 ?v2) { ( ex:1_1 ex:1_2 ) ( ex:1_1 ex:1_2 ) ( ex:XXXX ex:YYYY )  ( ex:1_1 ex:1_2 ) }"
 				+ "BIND(fx:serial(?v1, ?v2) as ?c)" + "}";
 		ResultSet result = execute(q);
@@ -466,8 +466,7 @@ public class FunctionsTest {
 
 	public void execTestEntityFunction(String expectedResult, String... str) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("" +
-				"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+		sb.append("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
 				"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
 				"PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
 				"SELECT ?result WHERE {" + "BIND( fx:entity ( ");

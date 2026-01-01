@@ -18,14 +18,7 @@
 
 package io.github.sparqlanything.html.org.apache.any23.configuration;
 
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class represents an <i>immutable</i> {@link Set} of {@link Setting} objects, with the additional property that

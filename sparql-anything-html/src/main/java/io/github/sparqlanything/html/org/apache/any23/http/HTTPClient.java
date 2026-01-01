@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.http;
 
-import io.github.sparqlanything.html.org.apache.any23.http.HTTPClientConfiguration;
-
 import java.io.IOException;
 import java.io.InputStream;
 

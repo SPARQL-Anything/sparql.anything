@@ -18,7 +18,6 @@
 package io.github.sparqlanything.html.org.semarglproject.sink;
 
 import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
-import io.github.sparqlanything.html.org.semarglproject.sink.DataSink;
 
 /**
  * Base class for pipeline procecessing blocks with one source and one sink.

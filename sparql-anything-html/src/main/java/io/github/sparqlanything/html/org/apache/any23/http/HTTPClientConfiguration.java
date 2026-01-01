@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.http;
 
-import io.github.sparqlanything.html.org.apache.any23.http.HTTPClient;
-
 /**
  * Defines the {@link HTTPClient} configuration.
  *

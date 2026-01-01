@@ -22,7 +22,6 @@ import io.github.sparqlanything.html.org.apache.any23.validator.DOMDocument;
 import io.github.sparqlanything.html.org.apache.any23.validator.Fix;
 import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
 import io.github.sparqlanything.html.org.apache.any23.validator.RuleContext;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.MissingOpenGraphNamespaceRule;
 import io.github.sparqlanything.html.org.apache.any23.vocab.OGP;
 
 /**

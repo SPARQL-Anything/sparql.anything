@@ -18,27 +18,11 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.*;
-import io.github.sparqlanything.html.org.apache.any23.validator.DOMDocument;
-import io.github.sparqlanything.html.org.apache.any23.validator.Fix;
-import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
-import io.github.sparqlanything.html.org.apache.any23.validator.RuleContext;
-import io.github.sparqlanything.html.org.apache.any23.validator.Validator;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.AboutNotURIRule;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.MetaNameMisuseFix;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.MetaNameMisuseRule;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.MissingItemscopeAttributeValueFix;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.MissingItemscopeAttributeValueRule;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.MissingOpenGraphNamespaceRule;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.OpenGraphNamespaceFix;
+import io.github.sparqlanything.html.org.apache.any23.validator.rule.*;
 import org.w3c.dom.Document;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Default implementation of {@link io.github.sparqlanything.html.org.apache.any23.validator.Validator}.
@@ -48,9 +32,9 @@ import java.util.Map;
  */
 public class DefaultValidator implements Validator {
 
-    private Map<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Rule>, List<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Fix>>> rulesToFixes;
+    private final Map<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Rule>, List<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Fix>>> rulesToFixes;
 
-    private List<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Rule>> rulesOrder;
+    private final List<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Rule>> rulesOrder;
 
     public DefaultValidator() {
         rulesToFixes = new HashMap<>();
@@ -125,7 +109,7 @@ public class DefaultValidator implements Validator {
     @Override
     public List<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Fix>> getFixes(Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Rule> rule) {
         List<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Fix>> fixes = rulesToFixes.get(rule);
-        return fixes == null ? Collections.<Class<? extends io.github.sparqlanything.html.org.apache.any23.validator.Fix>> emptyList()
+        return fixes == null ? Collections.emptyList()
                 : Collections.unmodifiableList(rulesToFixes.get(rule));
     }
 

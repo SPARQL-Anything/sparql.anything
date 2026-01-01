@@ -35,7 +35,7 @@ public class LocalCache {
 
     private static final Logger log = LoggerFactory.getLogger(LocalCache.class);
     public final static String DIRNAME = ".fx";
-    private File location;
+    private final File location;
 
     public LocalCache(){
         this(System.getProperty("user.home"));

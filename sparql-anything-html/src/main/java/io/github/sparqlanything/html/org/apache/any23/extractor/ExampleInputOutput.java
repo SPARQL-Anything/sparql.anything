@@ -18,7 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.*;
 import io.github.sparqlanything.html.org.apache.any23.source.MemCopyFactory;
 import io.github.sparqlanything.html.org.apache.any23.source.StringDocumentSource;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
@@ -28,6 +27,7 @@ import io.github.sparqlanything.html.org.apache.any23.writer.TurtleWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A reporter for example input and output of an extractor. Example input is part of every extractor's metadata; example
@@ -59,7 +59,7 @@ public class ExampleInputOutput {
             throw new IllegalArgumentException("Example input resource not found for extractor "
                     + factory.getExtractorName() + ": " + factory.getExampleInput());
         }
-        return new String(MemCopyFactory.toByteArray(in), "utf-8");
+        return new String(MemCopyFactory.toByteArray(in), StandardCharsets.UTF_8);
     }
 
     public String getExampleIRI() {
@@ -85,7 +85,7 @@ public class ExampleInputOutput {
         } catch (TripleHandlerException e) {
             throw new ExtractionException("Error while closing the triple handler", e);
         }
-        return out.toString("utf-8");
+        return out.toString(StandardCharsets.UTF_8);
     }
 
     private boolean isBlindExtractor() {

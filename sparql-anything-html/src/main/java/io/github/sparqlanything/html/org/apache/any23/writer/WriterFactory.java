@@ -18,10 +18,10 @@
 
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
-import java.io.OutputStream;
-
 import io.github.sparqlanything.html.org.apache.any23.configuration.Settings;
 import org.eclipse.rdf4j.rio.RDFFormat;
+
+import java.io.OutputStream;
 
 /**
  * The superinterface of all {@link TripleHandler} factory interfaces. Do not implement this interface directly.

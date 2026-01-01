@@ -58,9 +58,9 @@ public class YAMLTest {
 		while(graphs.hasNext()){
 			logger.debug("{}", graphs.next());
 		}
-		Assert.assertTrue(ds.size() == 1);
+		Assert.assertEquals(1, ds.size());
 		int s = ds.getDefaultGraph().size();
-		Assert.assertTrue(ds.getDefaultGraph().size() == 16);
+		Assert.assertEquals(16, ds.getDefaultGraph().size());
 	}
 
 }

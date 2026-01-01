@@ -22,14 +22,14 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionExcept
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.EntityBasedMicroformatExtractor;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 import io.github.sparqlanything.html.org.apache.any23.vocab.HEvent;
 import io.github.sparqlanything.html.org.apache.any23.vocab.VCard;
 import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class HEventExtractor extends EntityBasedMicroformatExtractor {
     private static final HEvent vEvent = HEvent.getInstance();
     private static final VCard vVCARD = VCard.getInstance();
 
-    private String[] eventFields = { "name", "summary", "start", "end", "duration", "description", "url", "category",
+    private final String[] eventFields = { "name", "summary", "start", "end", "duration", "description", "url", "category",
             "location", "attendee" };
 
     private static final String[] geoFields = { "latitude", "longitude", "altitude" };

@@ -20,5 +20,5 @@ package io.github.sparqlanything.model;
 
 public interface PluginInitializer {
 
-	public void run();
+	void run();
 }

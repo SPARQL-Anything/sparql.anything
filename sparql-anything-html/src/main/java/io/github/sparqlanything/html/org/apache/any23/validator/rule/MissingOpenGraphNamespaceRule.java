@@ -18,12 +18,7 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator.rule;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.DOMDocument;
-import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
-import io.github.sparqlanything.html.org.apache.any23.validator.RuleContext;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReportBuilder;
-import io.github.sparqlanything.html.org.apache.any23.validator.rule.OpenGraphNamespaceFix;
+import io.github.sparqlanything.html.org.apache.any23.validator.*;
 import org.w3c.dom.Node;
 
 import java.util.List;

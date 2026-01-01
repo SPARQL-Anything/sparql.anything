@@ -18,7 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdfa;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdfa.XSLTStylesheetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;

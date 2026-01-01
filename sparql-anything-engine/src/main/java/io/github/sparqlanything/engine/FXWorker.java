@@ -23,7 +23,7 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.iterator.*;
+import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

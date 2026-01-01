@@ -18,27 +18,17 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.TagSoupExtractionResult;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.MicroformatExtractor;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
 import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -75,7 +65,7 @@ public class ExtractionResultImpl implements TagSoupExtractionResult {
 
     private boolean isInitialized = false;
 
-    private List<Issue> issues;
+    private final List<Issue> issues;
 
     private List<ResourceRoot> resourceRoots;
 
@@ -124,7 +114,7 @@ public class ExtractionResultImpl implements TagSoupExtractionResult {
 
     @Override
     public void printReport(PrintStream ps) {
-        ps.print(String.format(Locale.ROOT, "Context: %s [errors: %d] {\n", context, getIssuesCount()));
+        ps.printf(Locale.ROOT, "Context: %s [errors: %d] {\n", context, getIssuesCount());
         for (Issue issue : issues) {
             ps.print(issue.toString());
             ps.print("\n");
@@ -138,7 +128,7 @@ public class ExtractionResultImpl implements TagSoupExtractionResult {
 
     @Override
     public Collection<Issue> getIssues() {
-        return issues.isEmpty() ? Collections.<Issue> emptyList() : Collections.unmodifiableList(issues);
+        return issues.isEmpty() ? Collections.emptyList() : Collections.unmodifiableList(issues);
     }
 
     @Override

@@ -19,7 +19,10 @@
 package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.engine.Location;
-import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.HTTPHelper;
+import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.PropertyUtils;
+import io.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.junit.AfterClass;
 import org.junit.Assume;

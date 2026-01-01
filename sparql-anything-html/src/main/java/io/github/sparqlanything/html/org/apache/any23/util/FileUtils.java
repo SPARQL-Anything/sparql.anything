@@ -18,21 +18,7 @@
 
 package io.github.sparqlanything.html.org.apache.any23.util;
 
-import io.github.sparqlanything.html.org.apache.any23.util.StreamUtils;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,7 +148,7 @@ public class FileUtils {
         final PrintWriter pw = new PrintWriter(new OutputStreamWriter(baos, StandardCharsets.UTF_8), true);
         t.printStackTrace(pw);
         pw.close();
-        dumpContent(f, baos.toString("UTF-8"));
+        dumpContent(f, baos.toString(StandardCharsets.UTF_8));
     }
 
     /**

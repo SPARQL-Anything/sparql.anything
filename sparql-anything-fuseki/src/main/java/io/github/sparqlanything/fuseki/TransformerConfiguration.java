@@ -26,7 +26,7 @@ import java.io.IOException;
 public class TransformerConfiguration {
 
 	private static TransformerConfiguration instance;
-	private Configuration freemarkerCfg;
+	private final Configuration freemarkerCfg;
 
 	private TransformerConfiguration() throws IOException {
 		// Create your Configuration instance, and specify if up to what FreeMarker

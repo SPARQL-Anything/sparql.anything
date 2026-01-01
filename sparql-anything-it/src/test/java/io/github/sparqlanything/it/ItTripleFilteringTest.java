@@ -78,7 +78,6 @@ public class ItTripleFilteringTest {
 						"} UNION {" +
 						"SERVICE <x-sparql-anything:namespace=http://www.example.org#,audit=true,location="
 						+ location + "> { graph ?g {[] a [] } . graph xyz:audit { ?g void:triples ?triples } } " +
-						"" +
 						"}}");
 
 		ResultSet rs = QueryExecutionFactory.create(query, kb).execSelect();

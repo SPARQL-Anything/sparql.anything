@@ -17,8 +17,6 @@
 
 package io.github.sparqlanything.html.org.semarglproject.ri;
 
-import io.github.sparqlanything.html.org.semarglproject.ri.MalformedIriException;
-
 public final class MalformedCurieException extends MalformedIriException {
 
     private static final long serialVersionUID = -1077691754818847298L;

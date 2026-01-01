@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public class ExampleSection {
 
-	private Example example;
+	private final Example example;
 
 	public ExampleSection(Example example) {
 		this.example = example;

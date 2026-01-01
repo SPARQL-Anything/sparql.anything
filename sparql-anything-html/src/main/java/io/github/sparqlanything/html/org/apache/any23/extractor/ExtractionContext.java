@@ -40,7 +40,7 @@ public class ExtractionContext {
     /**
      * The document default language.
      */
-    private String defaultLanguage;
+    private final String defaultLanguage;
 
     /**
      * ID identifying the document.

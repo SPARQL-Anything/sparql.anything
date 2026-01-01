@@ -20,7 +20,7 @@ package io.github.sparqlanything.engine.functions.reflection;
 
 public class NoConverterException extends Exception {
 
-	private Class<?> forType;
+	private final Class<?> forType;
 	public NoConverterException(Class<?> forType){
 		super("No converter for type: " + forType.getCanonicalName());
 		this.forType = forType;

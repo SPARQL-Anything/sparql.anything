@@ -19,11 +19,7 @@
 package io.github.sparqlanything.json.test;
 
 import io.github.sparqlanything.json.JSONTriplifier;
-import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -44,9 +40,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import static org.junit.Assert.assertTrue;
 

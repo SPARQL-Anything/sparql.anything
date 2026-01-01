@@ -18,13 +18,9 @@
 
 package io.github.sparqlanything.cli;
 
-import com.google.common.collect.Sets;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sys.JenaSystem;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -32,7 +28,6 @@ import org.junit.Test;
 
 import java.io.StringReader;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 

@@ -18,11 +18,11 @@
 
 package io.github.sparqlanything.zip;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
-import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ import static io.github.sparqlanything.zip.ZipTriplifier.MATCHES;
 @io.github.sparqlanything.model.annotations.Triplifier
 public class FolderTriplifier implements Triplifier {
 
-	private static Logger logger = LoggerFactory.getLogger(FolderTriplifier.class);
+	private static final Logger logger = LoggerFactory.getLogger(FolderTriplifier.class);
 
 
 	@Override
@@ -62,7 +62,7 @@ public class FolderTriplifier implements Triplifier {
 			Path path = Paths.get(url.toURI());
 			AtomicInteger i = new AtomicInteger(1);
 			Files.walk(path).forEach(p -> {
-				logger.trace("{} matches? {}", p.toString(), path.toString().matches(matches));
+				logger.trace("{} matches? {}", p, path.toString().matches(matches));
 				if (p.toString().matches(matches)) {
 					builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, i.getAndIncrement(), p.toUri().toString());
 				}

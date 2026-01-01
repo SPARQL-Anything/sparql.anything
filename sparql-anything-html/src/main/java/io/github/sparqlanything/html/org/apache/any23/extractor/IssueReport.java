@@ -67,11 +67,12 @@ public interface IssueReport {
     /**
      * This class defines a generic issue traced by this extraction result.
      */
-    public class Issue {
+	class Issue {
 
-        private IssueLevel level;
-        private String message;
-        private long row, col;
+        private final IssueLevel level;
+        private final String message;
+        private final long row;
+		private final long col;
 
         Issue(IssueLevel l, String msg, long r, long c) {
             level = l;

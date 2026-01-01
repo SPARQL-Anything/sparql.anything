@@ -17,8 +17,6 @@
 
 package io.github.sparqlanything.html.org.semarglproject.ri;
 
-import io.github.sparqlanything.html.org.semarglproject.ri.MalformedIriException;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;

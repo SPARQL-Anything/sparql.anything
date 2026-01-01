@@ -19,7 +19,10 @@
 package io.github.sparqlanything.engine;
 
 import org.apache.jena.graph.Triple;
-import org.apache.jena.sparql.algebra.op.*;
+import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpExtend;
+import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.algebra.op.OpTable;
 
 public class FXBGPFinder extends OpVisitorSkip {
 

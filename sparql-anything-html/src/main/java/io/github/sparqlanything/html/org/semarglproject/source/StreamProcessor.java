@@ -19,9 +19,6 @@ package io.github.sparqlanything.html.org.semarglproject.source;
 
 import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.sink.DataSink;
-import io.github.sparqlanything.html.org.semarglproject.source.AbstractSource;
-import io.github.sparqlanything.html.org.semarglproject.source.BaseStreamProcessor;
-import io.github.sparqlanything.html.org.semarglproject.source.XmlSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 

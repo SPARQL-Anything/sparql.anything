@@ -18,10 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.microdata;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.ItemScope;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataParser;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataParserException;
-
 /**
  * This class describes the report of the {@link MicrodataParser}. Such report contains the detected {@link io.github.sparqlanything.html.org.apache.any23.extractor.microdata.ItemScope}s
  * and errors.

@@ -18,7 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.rdf;
 
-import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

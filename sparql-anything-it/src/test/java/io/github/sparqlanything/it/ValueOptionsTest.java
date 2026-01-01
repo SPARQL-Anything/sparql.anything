@@ -18,14 +18,12 @@
 
 package io.github.sparqlanything.it;
 
-import java.util.Properties;
-
+import io.github.sparqlanything.csv.CSVTriplifier;
 import io.github.sparqlanything.model.IRIArgument;
-import org.junit.Ignore;
+import io.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.junit.Test;
 
-import io.github.sparqlanything.csv.CSVTriplifier;
-import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import java.util.Properties;
 
 public class ValueOptionsTest extends AbstractTriplifierTester {
 

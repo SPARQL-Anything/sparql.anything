@@ -21,11 +21,11 @@ package io.github.sparqlanything.json;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.lang3.StringUtils;
-import com.google.common.collect.Sets;
 import org.jsfr.json.Collector;
 import org.jsfr.json.JacksonParser;
 import org.jsfr.json.JsonSurfer;
@@ -36,14 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import static com.fasterxml.jackson.core.JsonToken.*;
 

@@ -19,7 +19,6 @@
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.configuration.Setting;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleWriter;
 
 /**
  *

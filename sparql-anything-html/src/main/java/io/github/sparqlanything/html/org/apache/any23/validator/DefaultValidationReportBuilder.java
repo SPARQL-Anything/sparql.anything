@@ -18,11 +18,6 @@
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.DefaultValidationReport;
-import io.github.sparqlanything.html.org.apache.any23.validator.Fix;
-import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReportBuilder;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
@@ -46,9 +41,9 @@ public class DefaultValidationReportBuilder implements ValidationReportBuilder {
     }
 
     public io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport getReport() {
-        return new DefaultValidationReport(issues == null ? Collections.<io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport.Issue> emptyList() : issues,
-                ruleActivations == null ? Collections.<io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport.RuleActivation> emptyList() : ruleActivations,
-                errors == null ? Collections.<io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport.Error> emptyList() : errors);
+        return new DefaultValidationReport(issues == null ? Collections.emptyList() : issues,
+                ruleActivations == null ? Collections.emptyList() : ruleActivations,
+                errors == null ? Collections.emptyList() : errors);
     }
 
     public void reportIssue(io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport.IssueLevel issueLevel, String message, Node n) {

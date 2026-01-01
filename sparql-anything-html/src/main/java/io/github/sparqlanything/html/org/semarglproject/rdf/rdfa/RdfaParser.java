@@ -20,10 +20,6 @@ package io.github.sparqlanything.html.org.semarglproject.rdf.rdfa;
 import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.rdf.ProcessorGraphHandler;
 import io.github.sparqlanything.html.org.semarglproject.rdf.RdfXmlParser;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.DocumentContext;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.EvalContext;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.VocabManager;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.Vocabulary;
 import io.github.sparqlanything.html.org.semarglproject.ri.MalformedCurieException;
 import io.github.sparqlanything.html.org.semarglproject.ri.MalformedIriException;
 import io.github.sparqlanything.html.org.semarglproject.ri.RIUtils;
@@ -40,15 +36,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.DatatypeConverter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * Implementation of streaming RDFa (<a href="http://www.w3.org/TR/2008/REC-rdfa-syntax-20081014/">1.0</a> and
@@ -156,8 +144,8 @@ public final class RdfaParser extends Pipe<TripleSink> implements XmlSink, Tripl
     private boolean rdfXmlInline = false;
     private XmlSink rdfXmlParser = null;
 
-    private Map<String, List<String>> patternProps = new HashMap<String, List<String>>();
-    private List<String> copyingPairs = new ArrayList<String>();
+    private final Map<String, List<String>> patternProps = new HashMap<String, List<String>>();
+    private final List<String> copyingPairs = new ArrayList<String>();
 
     private final Map<String, String> overwriteMappings = new HashMap<String, String>();
 

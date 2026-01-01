@@ -40,7 +40,7 @@ public class HTTPHelperTest {
             return HTTPHelper.setupClientBuilder(url, p);
         } catch(Exception e){
             e.printStackTrace();
-            Assert.assertTrue(false);
+			Assert.fail();
             return null;
         }
     }

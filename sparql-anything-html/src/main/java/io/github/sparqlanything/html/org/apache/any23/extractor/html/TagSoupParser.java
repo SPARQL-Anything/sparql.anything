@@ -142,10 +142,10 @@ public class TagSoupParser {
      */
     public static class ElementLocation {
 
-        private int beginLineNumber;
-        private int beginColumnNumber;
-        private int endLineNumber;
-        private int endColumnNumber;
+        private final int beginLineNumber;
+        private final int beginColumnNumber;
+        private final int endLineNumber;
+        private final int endColumnNumber;
 
         private ElementLocation(int beginLineNumber, int beginColumnNumber, int endLineNumber, int endColumnNumber) {
             this.beginLineNumber = beginLineNumber;

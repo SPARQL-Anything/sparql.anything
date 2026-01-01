@@ -22,8 +22,9 @@ import io.github.sparqlanything.html.org.apache.any23.configuration.Configuratio
 import io.github.sparqlanything.html.org.apache.any23.configuration.DefaultConfiguration;
 import io.github.sparqlanything.html.org.apache.any23.encoding.EncodingDetector;
 import io.github.sparqlanything.html.org.apache.any23.encoding.TikaEncodingDetector;
-import io.github.sparqlanything.html.org.apache.any23.extractor.*;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResultImpl;
+import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.BlindExtractor;
+import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.ContentExtractor;
+import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.TagSoupDOMExtractor;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.DocumentReport;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.MicroformatExtractor;
@@ -42,9 +43,6 @@ import io.github.sparqlanything.html.org.apache.any23.writer.CompositeTripleHand
 import io.github.sparqlanything.html.org.apache.any23.writer.CountingTripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.BlindExtractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.ContentExtractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.TagSoupDOMExtractor;
 import org.apache.tika.mime.MimeTypes;
 import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
@@ -52,22 +50,10 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.github.sparqlanything.html.org.apache.any23.extractor.TagSoupExtractionResult.PropertyPath;
@@ -154,7 +140,7 @@ public class SingleDocumentExtraction {
      */
     public SingleDocumentExtraction(Configuration configuration, DocumentSource in, ExtractorFactory<?> factory,
             TripleHandler output) {
-        this(configuration, in, new ExtractorGroup(Collections.<ExtractorFactory<?>> singletonList(factory)), output);
+        this(configuration, in, new ExtractorGroup(Collections.singletonList(factory)), output);
         this.setMIMETypeDetector(null);
     }
 
@@ -171,7 +157,7 @@ public class SingleDocumentExtraction {
      */
     public SingleDocumentExtraction(DocumentSource in, ExtractorFactory<?> factory, TripleHandler output) {
         this(DefaultConfiguration.singleton(), in,
-                new ExtractorGroup(Collections.<ExtractorFactory<?>> singletonList(factory)), output);
+                new ExtractorGroup(Collections.singletonList(factory)), output);
         this.setMIMETypeDetector(null);
     }
 
@@ -518,17 +504,14 @@ public class SingleDocumentExtraction {
                 documentIRI, documentLanguage);
         final io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResultImpl extractionResult = new ExtractionResultImpl(extractionContext, extractor, output);
         try {
-            if (extractor instanceof BlindExtractor) {
-                final BlindExtractor blindExtractor = (BlindExtractor) extractor;
-                blindExtractor.run(extractionParameters, extractionContext, documentIRI, extractionResult);
-            } else if (extractor instanceof ContentExtractor) {
+            if (extractor instanceof BlindExtractor blindExtractor) {
+				blindExtractor.run(extractionParameters, extractionContext, documentIRI, extractionResult);
+            } else if (extractor instanceof ContentExtractor contentExtractor) {
                 ensureHasLocalCopy();
-                final ContentExtractor contentExtractor = (ContentExtractor) extractor;
-                contentExtractor.run(extractionParameters, extractionContext, localDocumentSource.openInputStream(),
+				contentExtractor.run(extractionParameters, extractionContext, localDocumentSource.openInputStream(),
                         extractionResult);
-            } else if (extractor instanceof TagSoupDOMExtractor) {
-                final TagSoupDOMExtractor tagSoupDOMExtractor = (TagSoupDOMExtractor) extractor;
-                final DocumentReport documentReport = getTagSoupDOM(extractionParameters);
+            } else if (extractor instanceof TagSoupDOMExtractor tagSoupDOMExtractor) {
+				final DocumentReport documentReport = getTagSoupDOM(extractionParameters);
                 tagSoupDOMExtractor.run(extractionParameters, extractionContext, documentReport.getDocument(),
                         extractionResult);
             } else {
@@ -546,8 +529,8 @@ public class SingleDocumentExtraction {
             // Logging result error report.
             if (log.isDebugEnabled() && extractionResult.hasIssues()) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                extractionResult.printReport(new PrintStream(baos, true, "UTF-8"));
-                log.debug(baos.toString("UTF-8"));
+                extractionResult.printReport(new PrintStream(baos, true, StandardCharsets.UTF_8));
+                log.debug(baos.toString(StandardCharsets.UTF_8));
             }
             extractionResult.close();
 

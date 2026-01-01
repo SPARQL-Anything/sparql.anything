@@ -30,7 +30,7 @@ import java.util.Properties;
 
 public class ParameterListener extends FacadeIRIBaseListener {
 
-	private Properties properties = new Properties();
+	private final Properties properties = new Properties();
 	public static final char ESCAPE = '\\';
 	public static final char[] ESCAPED = { '=', ',' };
 	private static final Logger logger = LoggerFactory.getLogger(ParameterListener.class);

@@ -18,20 +18,14 @@
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionParameters;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
-import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
-import io.github.sparqlanything.html.org.apache.any23.extractor.TagSoupExtractionResult;
+import io.github.sparqlanything.html.org.apache.any23.extractor.*;
+import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.TagSoupDOMExtractor;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.annotations.Includes;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Any23ValueFactoryWrapper;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.TagSoupDOMExtractor;
 import org.eclipse.rdf4j.model.BNode;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -267,7 +261,7 @@ public abstract class MicroformatExtractor implements TagSoupDOMExtractor {
         Includes includes = including.getAnnotation(Includes.class);
         if (includes != null) {
             Class<? extends MicroformatExtractor>[] extractors = includes.extractors();
-            if (extractors != null && extractors.length > 0) {
+            if (extractors != null) {
                 for (Class<? extends MicroformatExtractor> extractor : extractors) {
                     if (extractor.equals(included)) {
                         return true;

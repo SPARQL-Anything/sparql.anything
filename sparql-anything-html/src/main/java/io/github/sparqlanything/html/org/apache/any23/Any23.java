@@ -18,16 +18,9 @@
 
 package io.github.sparqlanything.html.org.apache.any23;
 
-import io.github.sparqlanything.html.org.apache.any23.ExtractionReport;
 import io.github.sparqlanything.html.org.apache.any23.configuration.Configuration;
 import io.github.sparqlanything.html.org.apache.any23.configuration.DefaultConfiguration;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionParameters;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorGroup;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorRegistryImpl;
-import io.github.sparqlanything.html.org.apache.any23.extractor.SingleDocumentExtraction;
-import io.github.sparqlanything.html.org.apache.any23.extractor.SingleDocumentExtractionReport;
+import io.github.sparqlanything.html.org.apache.any23.extractor.*;
 import io.github.sparqlanything.html.org.apache.any23.http.AcceptHeaderBuilder;
 import io.github.sparqlanything.html.org.apache.any23.http.DefaultHTTPClient;
 import io.github.sparqlanything.html.org.apache.any23.http.DefaultHTTPClientConfiguration;
@@ -36,12 +29,7 @@ import io.github.sparqlanything.html.org.apache.any23.mime.MIMEType;
 import io.github.sparqlanything.html.org.apache.any23.mime.MIMETypeDetector;
 import io.github.sparqlanything.html.org.apache.any23.mime.TikaMIMETypeDetector;
 import io.github.sparqlanything.html.org.apache.any23.mime.purifier.WhiteSpacesPurifier;
-import io.github.sparqlanything.html.org.apache.any23.source.DocumentSource;
-import io.github.sparqlanything.html.org.apache.any23.source.FileDocumentSource;
-import io.github.sparqlanything.html.org.apache.any23.source.HTTPDocumentSource;
-import io.github.sparqlanything.html.org.apache.any23.source.LocalCopyFactory;
-import io.github.sparqlanything.html.org.apache.any23.source.MemCopyFactory;
-import io.github.sparqlanything.html.org.apache.any23.source.StringDocumentSource;
+import io.github.sparqlanything.html.org.apache.any23.source.*;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
