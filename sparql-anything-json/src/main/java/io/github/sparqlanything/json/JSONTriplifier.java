@@ -45,8 +45,8 @@ import static com.fasterxml.jackson.core.JsonToken.*;
 public class JSONTriplifier implements Triplifier, Slicer<Object> {
 
 	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Retrieving the lists of stars of the TV Series named \"Friends\" and \"Cougar Town\".", query = " PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path.1 \"$[?(@.name==\\\"Friends\\\")].stars\" ; fx:json.path.2 \"$[?(@.name==\\\"Cougar Town\\\")].stars\" . ?s ?p ?o } } ")
-	@Example(resource = "https://sparql-anything.cc/example1.json", description = " Retrieving the language of the TV series named \"Friends\".", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?language WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . _:b0 xyz:language ?language } }")
-	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Constructing a Facade-X RDF Graph selecting only containers that match the Json Path `$[?(@.name==\"Friends\")]`.", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . ?s ?p ?o } }")
+	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Retrieving the language of the TV series named \"Friends\".", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT ?language WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . _:b0 xyz:language ?language } }")
+	@Example(resource = "https://sparql-anything.cc/example1.json", description = "Constructing a Facade-X RDF Graph selecting only containers that match the Json Path '$[?(@.name==\"Friends\")]'.", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json> { fx:properties fx:json.path \"$[?(@.name==\\\"Friends\\\")]\" . ?s ?p ?o } }")
 	@Option(description = """
 		One or more JsonPath expressions as filters. E.g. `json.path=value` or `json.path.1`, `json.path.2`, `...` to add multiple expressions. The `json.path` option is only recommended if users need to filter a large JSON file, for example, in combination with the `slice` option.\s
 		    It will pre-process the JSON before the execution of the query.\s
@@ -62,7 +62,7 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 	@Option(description = """
 		It tells the JSON triplifier to produce triples for null values in the JSON Object/Array.
 		By default the triplifier uses xyz:null as null value.
-		See Issue [#564](https://github.com/SPARQL-Anything/sparql.anything/issues/564).
+		See Issue #564.
 		""",
 		validValues = "true/false")
 	public static final IRIArgument PROPERTY_JSONINCLUDENULLVALUES = new IRIArgument("json.include-null-values", "false");
