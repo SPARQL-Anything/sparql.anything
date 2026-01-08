@@ -25,7 +25,7 @@ nav:
       - Binary: 'formats/Binary.md'
       - Archive: 'formats/Archive.md'
       - Text: 'formats/Text.md'
-      - RDF: 'formats/RDF_Files.md'
+      - RDF: 'formats/RDF.md'
       - Spreadsheet: 'formats/Spreadsheet.md'
       - Word: 'formats/Word_Processing_Document.md'
       - Slides: 'formats/Slides.md'
