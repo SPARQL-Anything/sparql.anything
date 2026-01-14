@@ -4,7 +4,6 @@ import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.function.FunctionFactory;
-import org.apache.jena.sparql.function.FunctionFactoryAuto;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.Triplifier;
 
@@ -22,14 +21,13 @@ public class DebugFunctionRegistry {
         System.out.println("Factory object: " + factory);
         System.out.println("Factory class: " + factory.getClass().getName());
         
-        // Try to extract the function class from FunctionFactoryAuto
-        if (factory instanceof FunctionFactoryAuto) {
-            FunctionFactoryAuto autoFactory = (FunctionFactoryAuto) factory;
-            
+        // Try to extract the function class from FunctionFactoryAuto using reflection
+        // FunctionFactoryAuto is package-private in Jena, so we check by class name
+        if (factory.getClass().getSimpleName().equals("FunctionFactoryAuto")) {
             // Use reflection to get the function class field
-            Field fnClassField = FunctionFactoryAuto.class.getDeclaredField("fnClass");
+            Field fnClassField = factory.getClass().getDeclaredField("fnClass");
             fnClassField.setAccessible(true);
-            Class<?> functionClass = (Class<?>) fnClassField.get(autoFactory);
+            Class<?> functionClass = (Class<?>) fnClassField.get(factory);
             
             System.out.println("Extracted function class: " + functionClass.getName());
             System.out.println("Has FXFunctionDoc? " + (functionClass.getAnnotation(io.github.sparqlanything.model.annotations.FXFunctionDoc.class) != null));
