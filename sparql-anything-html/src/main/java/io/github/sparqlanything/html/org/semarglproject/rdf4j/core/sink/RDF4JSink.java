@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-/*
- */
+
 package io.github.sparqlanything.html.org.semarglproject.rdf4j.core.sink;
 
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.rio.RDFHandler;
-import org.eclipse.rdf4j.rio.RDFHandlerException;
 import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.sink.QuadSink;
 import io.github.sparqlanything.html.org.semarglproject.sink.TripleSink;
 import io.github.sparqlanything.html.org.semarglproject.vocab.RDF;
+import org.eclipse.rdf4j.model.*;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
 
 /**
  * Implementation if {@link TripleSink} which feeds triples from Semargl's pipeline to Sesame's {@link RDFHandler}.

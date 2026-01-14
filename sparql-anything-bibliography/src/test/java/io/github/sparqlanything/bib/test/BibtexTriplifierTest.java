@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.bib.test;
 
@@ -31,7 +30,6 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

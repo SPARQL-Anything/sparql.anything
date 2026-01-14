@@ -116,7 +116,7 @@ WHERE
             <http://sparql.xyz/facade-x/data/F-Number>
                     "f/7.1";
             <http://sparql.xyz/facade-x/data/File%20Modified%20Date>
-                    "Fri Dec 19 13:58:59 +01:00 2025";
+                    "Thu Jan 08 16:08:34 +01:00 2026";
             <http://sparql.xyz/facade-x/data/File%20Name>
                     "Canon_40D.jpg";
             <http://sparql.xyz/facade-x/data/File%20Size>

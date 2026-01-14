@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.configuration;
 
@@ -177,11 +176,10 @@ public abstract class Setting<V> implements Cloneable {
     public final boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof Setting))
+        if (!(o instanceof Setting<?> setting))
             return false;
 
-        Setting<?> setting = (Setting<?>) o;
-        return key == setting.key && Objects.equals(value, setting.value);
+		return key == setting.key && Objects.equals(value, setting.value);
     }
 
     @Override
@@ -360,7 +358,7 @@ public abstract class Setting<V> implements Cloneable {
         S s = (S) setting.clone();
 
         assert ((Setting<V>) s).key == ((Setting<V>) setting).key;
-        assert ((Setting<V>) s).getClass().equals(setting.getClass());
+        assert s.getClass().equals(setting.getClass());
 
         ((Setting<V>) s).value = newValue;
         return s;

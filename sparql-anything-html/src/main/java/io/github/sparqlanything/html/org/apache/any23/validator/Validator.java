@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.DOMDocument;
-import io.github.sparqlanything.html.org.apache.any23.validator.Fix;
-import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidatorException;
 import org.w3c.dom.Document;
 
 import java.net.URI;

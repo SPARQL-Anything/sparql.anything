@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.json.test;
 
@@ -40,7 +39,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class JSONTripleFilteringTest {
 	public static final Logger log = LoggerFactory.getLogger(JSONTripleFilteringTest.class);
@@ -67,10 +66,10 @@ public class JSONTripleFilteringTest {
 		log.debug("Size is: {}", g1.getDefaultGraph().size());
 		Iterator<Quad> quads = g1.find();
 		while (quads.hasNext()) {
-			Quad q = (Quad) quads.next();
+			Quad q = quads.next();
 			log.debug("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
 		}
-		assertTrue(g1.getDefaultGraph().size() == 2);
+		assertEquals(2, g1.getDefaultGraph().size());
 	}
 
 	@Test
@@ -94,10 +93,10 @@ public class JSONTripleFilteringTest {
 		log.debug("Size is: {}", g1.getDefaultGraph().size());
 		Iterator<Quad> quads = g1.find();
 		while (quads.hasNext()) {
-			Quad q = (Quad) quads.next();
+			Quad q = quads.next();
 			log.debug("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
 		}
-		assertTrue(g1.getDefaultGraph().size() == 4);
+		assertEquals(4, g1.getDefaultGraph().size());
 	}
 
 	@Test

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdf;
-
-import java.util.Arrays;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.SimpleExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.JSONLDExtractor;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
+
+import java.util.List;
 
 /**
  *
@@ -40,7 +38,7 @@ public class JSONLDExtractorFactory extends SimpleExtractorFactory<JSONLDExtract
     private static final ExtractorDescription descriptionInstance = new JSONLDExtractorFactory();
 
     public JSONLDExtractorFactory() {
-        super(JSONLDExtractorFactory.NAME, JSONLDExtractorFactory.PREFIXES, Arrays.asList("application/ld+json;q=0.1"),
+        super(JSONLDExtractorFactory.NAME, JSONLDExtractorFactory.PREFIXES, List.of("application/ld+json;q=0.1"),
                 "example-jsonld.jsonld");
     }
 

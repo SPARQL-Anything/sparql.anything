@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
-  - Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+  - Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
   -
   - Licensed under the Apache License, Version 2.0 (the "License");
   - you may not use this file except in compliance with the License.
@@ -19,24 +19,23 @@
   -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="Livello_1"
-   x="0px"
-   y="0px"
-   width="532"
-   height="494"
-   viewBox="0 0 531.99997 493.99999"
-   enable-background="new 0 0 595.28 841.89"
-   xml:space="preserve"
-   sodipodi:docname="logo.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"><metadata
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:cc="http://creativecommons.org/ns#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        version="1.1"
+        id="Livello_1"
+        x="0px"
+        y="0px"
+        width="532"
+        height="494"
+        viewBox="0 0 531.99997 493.99999"
+        enable-background="new 0 0 595.28 841.89"
+        xml:space="preserve"
+        sodipodi:docname="logo.svg"
+        inkscape:version="1.0.1 (c497b03c, 2020-09-10)"><metadata
    id="metadata59"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><sodipodi:namedview

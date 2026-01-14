@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine.functions.reflection;
 
 import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.expr.nodevalue.NodeValueBoolean;
-import org.apache.jena.sparql.expr.nodevalue.NodeValueDecimal;
-import org.apache.jena.sparql.expr.nodevalue.NodeValueDouble;
-import org.apache.jena.sparql.expr.nodevalue.NodeValueFloat;
-import org.apache.jena.sparql.expr.nodevalue.NodeValueInteger;
-import org.apache.jena.sparql.expr.nodevalue.NodeValueString;
+import org.apache.jena.sparql.expr.nodevalue.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -232,10 +226,7 @@ public class Converters {
 		@Override
 		public boolean compatibleWith(NodeValue nodeValue) {
 			// Not entirely sure about this one.
-			if(nodeValue.getDateTime() != null){
-				return true;
-			}
-			return false;
+			return nodeValue.getDateTime() != null;
 		}
 	}
 }

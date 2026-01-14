@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.xml;
 
@@ -85,7 +84,7 @@ public class XPathSandbox {
 		int result = -1;
 		int count = 0;
 		while ((result = ap.evalXPath()) != -1) {
-			System.out.print("" + result + "[" + vn.getTokenType(result) + "] ");
+			System.out.print(result + "[" + vn.getTokenType(result) + "] ");
 			switch(vn.getTokenType(result)){
 				case VTDNav.TOKEN_STARTING_TAG:
 					System.out.println("Tag "+vn.toString(result));

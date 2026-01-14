@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-/*
- */
+
 package io.github.sparqlanything.html.org.apache.any23.extractor.microdata;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.DomUtils;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.ItemProp;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.ItemPropValue;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.ItemScope;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataParserException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.MicrodataParserReport;
 import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.rdf4j.model.IRI;
@@ -31,26 +25,13 @@ import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
 import org.eclipse.rdf4j.model.vocabulary.XSD;
 import org.jsoup.parser.Tag;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.w3c.dom.traversal.DocumentTraversal;
 import org.w3c.dom.traversal.NodeFilter;
 import org.w3c.dom.traversal.TreeWalker;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

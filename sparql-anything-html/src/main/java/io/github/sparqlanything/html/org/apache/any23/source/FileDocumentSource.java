@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.source;
 
-import io.github.sparqlanything.html.org.apache.any23.source.DocumentSource;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -79,6 +71,6 @@ public class FileDocumentSource implements DocumentSource {
         } finally {
             is.close();
         }
-        return new String(baos.toByteArray(), StandardCharsets.UTF_8);
+        return baos.toString(StandardCharsets.UTF_8);
     }
 }

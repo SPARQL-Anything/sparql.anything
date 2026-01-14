@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.binary;
+
+import com.google.common.collect.Sets;
+import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.annotations.Option;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.graph.NodeFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,15 +33,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 import java.util.Set;
-
-import io.github.sparqlanything.model.*;
-import io.github.sparqlanything.model.annotations.Option;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
-import com.google.common.collect.Sets;
-import org.apache.jena.graph.NodeFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @io.github.sparqlanything.model.annotations.Triplifier
 public class BinaryTriplifier implements Triplifier {

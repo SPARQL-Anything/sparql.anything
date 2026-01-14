@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
-
-import io.github.sparqlanything.html.org.apache.any23.validator.RuleContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +29,7 @@ import java.util.Map;
  */
 public class DefaultRuleContext implements RuleContext<Object> {
 
-    private Map<String, Object> data = new HashMap<String, Object>();
+    private final Map<String, Object> data = new HashMap<String, Object>();
 
     public void putData(String name, Object value) {
         data.put(name, value);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.microdata;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.Item;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.ItemProp;
 import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.rdf4j.common.net.ParsedIRI;
@@ -28,14 +25,7 @@ import org.eclipse.rdf4j.model.IRI;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -104,7 +94,7 @@ public class ItemScope extends Item {
                 } else {
                     String path = iri.getPath();
                     if (path != null && looksLikeStartsWithHost.matcher(path).matches()) {
-                        iri = ParsedIRI.create("http://" + iri.toString());
+                        iri = ParsedIRI.create("http://" + iri);
                     }
                 }
             }
@@ -220,7 +210,7 @@ public class ItemScope extends Item {
                 + "\"xpath\" : \"%s\", \"id\" : %s, \"refs\" : %s, \"type\" : %s, \"itemid\" : %s, \"properties\" : [ %s ]"
                 + " }", getXpath(), id == null ? null : "\"" + id + "\"", refs == null ? null : toJSON(refs),
                 type.isEmpty() ? null : "\"" + type.get(0) + "\"", itemId == null ? null : "\"" + itemId + "\"",
-                sb.toString());
+			sb);
     }
 
     @Override
@@ -246,14 +236,13 @@ public class ItemScope extends Item {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof ItemScope) {
-            final ItemScope other = (ItemScope) obj;
-            return super.getXpath().equals(other.getXpath())
-                    && (properties == null ? other.properties == null : properties.equals(other.properties))
-                    && (id == null ? other.id == null : id.equals(other.id))
+        if (obj instanceof ItemScope other) {
+			return super.getXpath().equals(other.getXpath())
+                    && (Objects.equals(properties, other.properties))
+                    && (Objects.equals(id, other.id))
                     && (refs == null ? other.refs == null : Arrays.equals(refs, other.refs))
-                    && (type == null ? other.type == null : type.equals(other.type))
-                    && (itemId == null ? other.itemId == null : itemId.equals(other.itemId));
+                    && (Objects.equals(type, other.type))
+                    && (Objects.equals(itemId, other.itemId));
         }
         return false;
     }

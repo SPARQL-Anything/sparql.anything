@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-/*
- */
-package io.github.sparqlanything.html.org.apache.any23.validator.rule;
 
-import java.util.List;
+package io.github.sparqlanything.html.org.apache.any23.validator.rule;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.DomUtils;
 import io.github.sparqlanything.html.org.apache.any23.validator.DOMDocument;
@@ -26,6 +23,8 @@ import io.github.sparqlanything.html.org.apache.any23.validator.Fix;
 import io.github.sparqlanything.html.org.apache.any23.validator.Rule;
 import io.github.sparqlanything.html.org.apache.any23.validator.RuleContext;
 import org.w3c.dom.Node;
+
+import java.util.List;
 
 /**
  * Fix for the issue described within {@link io.github.sparqlanything.html.org.apache.any23.validator.rule.MissingItemscopeAttributeValueRule}

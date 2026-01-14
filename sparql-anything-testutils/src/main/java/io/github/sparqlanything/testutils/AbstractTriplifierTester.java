@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.testutils;
 
@@ -30,7 +29,6 @@ import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.core.Quad;
-import org.apache.jena.sparql.graph.GraphFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;

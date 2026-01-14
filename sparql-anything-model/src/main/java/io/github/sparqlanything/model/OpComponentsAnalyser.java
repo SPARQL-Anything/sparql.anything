@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.model;
 
@@ -191,9 +190,9 @@ public class OpComponentsAnalyser implements OpVisitor {
 
 	@Override
 	public void visit(OpFilter opFilter) {
-		log.trace("Sub Op Filter - {}", opFilter.getSubOp().getClass().toString());
+		log.trace("Sub Op Filter - {}", opFilter.getSubOp().getClass());
 		opFilter.getExprs().getList().forEach(e -> {
-			log.trace("Exp - {} - {}", e.toString(), e.getClass().toString());
+			log.trace("Exp - {} - {}", e.toString(), e.getClass());
 			extractFromExpression(e);
 		});
 		opFilter.getSubOp().visit(this);
@@ -244,7 +243,7 @@ public class OpComponentsAnalyser implements OpVisitor {
 					funcOp.getGraphPattern().visit(oca);
 				}
 				funcOp.getArgs().forEach(e -> {
-					log.trace("Arg - {}", e.getClass().toString());
+					log.trace("Arg - {}", e.getClass());
 					e.visit(this);
 				});
 
@@ -455,21 +454,18 @@ public class OpComponentsAnalyser implements OpVisitor {
 			return true;
 
 		for (Object o : opComponents) {
-			if (o instanceof Quad) {
-				Quad q = (Quad) o;
+			if (o instanceof Quad q) {
 				if (matchQuad(q, graph, subject, predicate, object)) {
 					return true;
 				}
-			} else if (o instanceof Triple) {
-				Triple t = (Triple) o;
+			} else if (o instanceof Triple t) {
 				if ((!t.getSubject().isConcrete() || t.getSubject().matches(subject))
 						&& predicateMatch(t.getPredicate(), predicate) // (!t.getPredicate().isConcrete() ||
 						// t.getPredicate().matches(predicate))
 						&& (!t.getObject().isConcrete() || t.getObject().matches(object))) {
 					return true;
 				}
-			} else if (o instanceof OpPropFunc) {
-				OpPropFunc op = (OpPropFunc) o;
+			} else if (o instanceof OpPropFunc op) {
 				if ((!op.getSubjectArgs().getArg().isConcrete() || op.getSubjectArgs().getArg().matches(subject))
 						&& predicateMatch(op.getProperty(), predicate) // (!t.getPredicate().isConcrete() ||
 						// t.getPredicate().matches(predicate))
@@ -483,25 +479,18 @@ public class OpComponentsAnalyser implements OpVisitor {
 	}
 
 	protected boolean matchQuad(Quad q, Node graph, Node subject, Node predicate, Node object) {
-		if ((!q.getGraph().isConcrete() || q.getGraph().matches(graph) || q.getGraph().matches(unionGraph))
-				&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
-				&& predicateMatch(q.getPredicate(), predicate) // (!q.getPredicate().isConcrete() ||
-				// q.getPredicate().matches(predicate))
-				&& (!q.getObject().isConcrete() || q.getObject().matches(object))) {
-			return true;
-		}
-		return false;
+		return (!q.getGraph().isConcrete() || q.getGraph().matches(graph) || q.getGraph().matches(unionGraph))
+			&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
+			&& predicateMatch(q.getPredicate(), predicate) // (!q.getPredicate().isConcrete() ||
+			// q.getPredicate().matches(predicate))
+			&& (!q.getObject().isConcrete() || q.getObject().matches(object));
 	}
 
 	private boolean predicateMatch(Node queryPredicate, Node dataPredicate) {
 		// If queryPredicate is fx:anySLot match any container membership property
 		if (queryPredicate.isConcrete()
 				&& queryPredicate.getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")) {
-			if (dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")) {
-				return true;
-			} else {
-				return false;
-			}
+			return dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_");
 		}
 		return (!queryPredicate.isConcrete() || queryPredicate.matches(dataPredicate));
 	}

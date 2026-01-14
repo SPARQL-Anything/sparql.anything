@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
@@ -25,8 +24,8 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.TagSoupExtractio
 import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
 import io.github.sparqlanything.html.org.apache.any23.vocab.ICAL;
 import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
 
@@ -49,9 +48,9 @@ public class HCalendarExtractor extends MicroformatExtractor {
 
     private static final String DATE_FORMAT = "yyyyMMdd'T'HHmm'Z'";
 
-    private String[] textSingularProps = { "summary", "class", "transp", "description", "status", "location" };
+    private final String[] textSingularProps = { "summary", "class", "transp", "description", "status", "location" };
 
-    private String[] textDateProps = { "dtstart", "dtstamp", "dtend", };
+    private final String[] textDateProps = { "dtstart", "dtstamp", "dtend", };
 
     @Override
     public ExtractorDescription getDescription() {

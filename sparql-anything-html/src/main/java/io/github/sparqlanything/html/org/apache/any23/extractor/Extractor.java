@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor;
 
@@ -37,13 +36,13 @@ public interface Extractor<Input> {
      * This interface specializes an {@link Extractor} able to handle {@link java.net.URI} as input format. Use it if
      * you need to fetch a document before the extraction
      */
-    public interface BlindExtractor extends Extractor<IRI> {
+	interface BlindExtractor extends Extractor<IRI> {
     }
 
     /**
      * This interface specializes an {@link Extractor} able to handle {@link InputStream} as input format.
      */
-    public interface ContentExtractor extends Extractor<InputStream> {
+	interface ContentExtractor extends Extractor<InputStream> {
 
         /**
          * If <code>true</code>, the extractor will stop at first parsing error, if<code>false</code> the extractor will
@@ -59,7 +58,7 @@ public interface Extractor<Input> {
     /**
      * This interface specializes an {@link Extractor} able to handle {@link Document} as input format.
      */
-    public interface TagSoupDOMExtractor extends Extractor<Document> {
+	interface TagSoupDOMExtractor extends Extractor<Document> {
     }
 
     /**

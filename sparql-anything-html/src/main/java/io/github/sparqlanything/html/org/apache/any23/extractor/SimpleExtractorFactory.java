@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.mime.MIMEType;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
 
@@ -39,7 +36,7 @@ public abstract class SimpleExtractorFactory<T extends Extractor<?>> implements 
 
     private final Prefixes prefixes;
 
-    private Collection<MIMEType> supportedMIMETypes = new ArrayList<>();
+    private final Collection<MIMEType> supportedMIMETypes = new ArrayList<>();
 
     private String exampleInput;
 

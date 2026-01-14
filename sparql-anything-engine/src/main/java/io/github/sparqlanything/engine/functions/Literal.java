@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine.functions;
 
 import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.datatypes.BaseDatatype;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.sparql.expr.ExprEvalTypeException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -35,7 +33,7 @@ import org.slf4j.LoggerFactory;
 	label = "fx:literal"
 )
 public class Literal extends FunctionBase2 {
-	private static Logger L = LoggerFactory.getLogger(Literal.class);
+	private static final Logger L = LoggerFactory.getLogger(Literal.class);
 	@Override
 	public NodeValue exec(NodeValue v1, NodeValue v2) {
 		if(v2.isIRI()){

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.it;
 
+import com.google.common.collect.Lists;
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.IOUtils;
-import com.google.common.collect.Lists;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.vocabulary.RDF;
@@ -33,7 +32,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.transform.Result;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -194,13 +192,12 @@ public class ItTest {
 	@Test
 	public void NestedTest1() throws URISyntaxException {
 		String location = getClass().getClassLoader().getResource("tate-gallery/artwork_data.csv").toURI().toString();
-		String queryStr = "" + "prefix ex: <http://www.example.org#> "
+		String queryStr = "prefix ex: <http://www.example.org#> "
 				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + "SELECT ?accession ?thumbnail ?image {"
 				+ "BIND (IRI(CONCAT(\"x-sparql-anything:\", ?thumbnail )) AS ?embed ) . "
 				+ "SERVICE <x-sparql-anything:csv.headers=true,namespace=http://www.example.org#,location=" + location
 				+ "> {" + "FILTER (?accession = \"A01009\") . "
-				+ "[] ex:accession ?accession ; ex:thumbnailUrl ?thumbnail " + "}" + ""
-				+ "SERVICE ?embed { [] rdf:_1 ?image } . " + "} LIMIT 1";
+				+ "[] ex:accession ?accession ; ex:thumbnailUrl ?thumbnail " + "}" + "SERVICE ?embed { [] rdf:_1 ?image } . " + "} LIMIT 1";
 //		log.debug("\n{}\n", queryStr);
 
 		Dataset kb = DatasetFactory.createGeneral();
@@ -443,7 +440,7 @@ public class ItTest {
 		List<List<String>> actual = new ArrayList<>();
 
 		while (rs.hasNext()) {
-			QuerySolution qs = (QuerySolution) rs.next();
+			QuerySolution qs = rs.next();
 			if (qs.get("o1").isLiteral())
 				actual.add(Lists.newArrayList(qs.get("file").asLiteral().getValue().toString(),
 						qs.get("o1").asLiteral().getValue().toString()));
@@ -486,7 +483,7 @@ public class ItTest {
 		List<List<String>> actual = new ArrayList<>();
 
 		while (rs.hasNext()) {
-			QuerySolution qs = (QuerySolution) rs.next();
+			QuerySolution qs = rs.next();
 			if (qs.get("o1").isLiteral())
 				actual.add(Lists.newArrayList(qs.get("file").asLiteral().getValue().toString(),
 						qs.get("o1").asLiteral().getValue().toString()));
@@ -515,7 +512,7 @@ public class ItTest {
 		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
 		Set<String> slots = new HashSet<>();
 		while (rs.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs.next();
+			QuerySolution querySolution = rs.next();
 			slots.add(querySolution.get("slot").asLiteral().getValue().toString());
 		}
 
@@ -564,7 +561,7 @@ public class ItTest {
 		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
 		Set<String> slots = new HashSet<>();
 		while (rs.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs.next();
+			QuerySolution querySolution = rs.next();
 			if (querySolution.get("slot").isLiteral()) {
 				slots.add(querySolution.get("slot").asLiteral().getValue().toString());
 			}
@@ -612,7 +609,7 @@ public class ItTest {
 		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
 		Set<String> slots = new HashSet<>();
 		while (rs.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) rs.next();
+			QuerySolution querySolution = rs.next();
 			if (querySolution.get("placeId").isLiteral()) {
 				slots.add(querySolution.get("placeId").asLiteral().getValue().toString());
 			}

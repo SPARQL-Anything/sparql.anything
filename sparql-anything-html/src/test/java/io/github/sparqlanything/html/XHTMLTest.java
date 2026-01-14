@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html;
 
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Properties;

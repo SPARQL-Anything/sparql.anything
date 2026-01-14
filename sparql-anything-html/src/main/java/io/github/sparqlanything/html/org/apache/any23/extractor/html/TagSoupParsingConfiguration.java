@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
@@ -83,10 +82,9 @@ abstract class TagSoupParsingConfiguration {
 
             @Override
             public void head(org.jsoup.nodes.Node source, int depth) {
-                if (source instanceof org.jsoup.nodes.Element) {
-                    org.jsoup.nodes.Element sourceEl = (org.jsoup.nodes.Element) source;
+                if (source instanceof org.jsoup.nodes.Element sourceEl) {
 
-                    org.w3c.dom.Element el = doc.createElement(sourceEl.tagName());
+					org.w3c.dom.Element el = doc.createElement(sourceEl.tagName());
                     copyAttributes(sourceEl, el);
                     if (dest == null) {
                         doc.appendChild(el);
@@ -94,17 +92,14 @@ abstract class TagSoupParsingConfiguration {
                         dest.appendChild(el);
                     }
                     dest = el;
-                } else if (source instanceof org.jsoup.nodes.TextNode) {
-                    org.jsoup.nodes.TextNode sourceText = (org.jsoup.nodes.TextNode) source;
-                    Text text = doc.createTextNode(sourceText.getWholeText());
+                } else if (source instanceof org.jsoup.nodes.TextNode sourceText) {
+					Text text = doc.createTextNode(sourceText.getWholeText());
                     dest.appendChild(text);
-                } else if (source instanceof org.jsoup.nodes.Comment) {
-                    org.jsoup.nodes.Comment sourceComment = (org.jsoup.nodes.Comment) source;
-                    Comment comment = doc.createComment(sourceComment.getData());
+                } else if (source instanceof org.jsoup.nodes.Comment sourceComment) {
+					Comment comment = doc.createComment(sourceComment.getData());
                     dest.appendChild(comment);
-                } else if (source instanceof org.jsoup.nodes.DataNode) {
-                    org.jsoup.nodes.DataNode sourceData = (org.jsoup.nodes.DataNode) source;
-                    Text node = doc.createTextNode(stripCDATA(sourceData.getWholeData()));
+                } else if (source instanceof org.jsoup.nodes.DataNode sourceData) {
+					Text node = doc.createTextNode(stripCDATA(sourceData.getWholeData()));
                     dest.appendChild(node);
                 }
             }

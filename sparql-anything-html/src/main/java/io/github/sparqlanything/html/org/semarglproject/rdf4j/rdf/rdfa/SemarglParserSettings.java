@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 package io.github.sparqlanything.html.org.semarglproject.rdf4j.rdf.rdfa;
 
-import org.eclipse.rdf4j.rio.RioSetting;
-import org.eclipse.rdf4j.rio.helpers.RDFaParserSettings;
-import org.eclipse.rdf4j.rio.helpers.RioSettingImpl;
 import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.RdfaParser;
 import io.github.sparqlanything.html.org.semarglproject.source.StreamProcessor;
-import io.github.sparqlanything.html.org.semarglproject.vocab.RDFa;
+import org.eclipse.rdf4j.rio.RioSetting;
+import org.eclipse.rdf4j.rio.helpers.RioSettingImpl;
 import org.xml.sax.XMLReader;
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.validator;
 
-import io.github.sparqlanything.html.org.apache.any23.validator.SerializationException;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
-import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReportSerializer;
 import org.w3c.dom.Element;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,12 +42,8 @@ public class XMLValidationReportSerializer implements ValidationReportSerializer
     @Override
     public void serialize(ValidationReport vr, OutputStream os) throws io.github.sparqlanything.html.org.apache.any23.validator.SerializationException {
         PrintStream ps;
-        try {
-            ps = new PrintStream(os, true, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Error serializing the OuputStream as UTF-8 encoding.", e);
-        }
-        try {
+		ps = new PrintStream(os, true, StandardCharsets.UTF_8);
+		try {
             serializeObject(vr, ps);
         } finally {
             ps.flush();
@@ -71,7 +59,7 @@ public class XMLValidationReportSerializer implements ValidationReportSerializer
         ps.printf(Locale.ROOT, "<%s>%n", oClassName);
         List<Method> getters = filterGetters(o.getClass());
         if (getters.isEmpty()) {
-            ps.print(o.toString());
+            ps.print(o);
             return;
         }
         for (Method getter : getters) {
@@ -140,22 +128,18 @@ public class XMLValidationReportSerializer implements ValidationReportSerializer
             return;
         }
         if (o instanceof Element) {
-            ps.print(o.toString());
+            ps.print(o);
             return;
         }
         if (o instanceof Array) {
             Object[] array = (Object[]) o;
-            if (array.length == 0) {
-                return;
-            }
-            for (Object a : array) {
+			for (Object a : array) {
                 serializeObject(a, ps);
             }
             return;
         }
-        if (o instanceof Collection) {
-            Collection<?> collection = (Collection<?>) o;
-            if (collection.isEmpty()) {
+        if (o instanceof Collection<?> collection) {
+			if (collection.isEmpty()) {
                 return;
             }
             for (Object e : collection) {
@@ -163,7 +147,7 @@ public class XMLValidationReportSerializer implements ValidationReportSerializer
             }
             return;
         }
-        ps.print(o.toString());
+        ps.print(o);
     }
 
     private boolean isManaged(Object o) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
-
-import java.util.List;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
@@ -33,6 +30,8 @@ import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
+
+import java.util.List;
 
 /**
  * Extractor for the <a href="http://microformats.org/wiki/hreview-aggregate">hReview-aggregate</a> microformat.
@@ -99,7 +98,7 @@ public class HReviewAggregateExtractor extends EntityBasedMicroformatExtractor {
         conditionallyAddStringProperty(val.source(), blank, vVCARD.fn, val.value());
         final TextField url = item.getSingularUrlField("url");
         conditionallyAddResourceProperty(blank, vVCARD.url, getHTMLDocument().resolveIRI(url.value()));
-        TextField pics[] = item.getPluralUrlField("photo");
+        TextField[] pics = item.getPluralUrlField("photo");
         for (TextField pic : pics) {
             addIRIProperty(blank, vVCARD.photo, getHTMLDocument().resolveIRI(pic.value()));
         }

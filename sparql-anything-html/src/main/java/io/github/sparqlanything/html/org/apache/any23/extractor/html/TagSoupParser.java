@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
@@ -143,10 +142,10 @@ public class TagSoupParser {
      */
     public static class ElementLocation {
 
-        private int beginLineNumber;
-        private int beginColumnNumber;
-        private int endLineNumber;
-        private int endColumnNumber;
+        private final int beginLineNumber;
+        private final int beginColumnNumber;
+        private final int endLineNumber;
+        private final int endColumnNumber;
 
         private ElementLocation(int beginLineNumber, int beginColumnNumber, int endLineNumber, int endColumnNumber) {
             this.beginLineNumber = beginLineNumber;

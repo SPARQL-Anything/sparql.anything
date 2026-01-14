@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.yaml;
 
@@ -59,9 +58,9 @@ public class YAMLTest {
 		while(graphs.hasNext()){
 			logger.debug("{}", graphs.next());
 		}
-		Assert.assertTrue(ds.size() == 1);
+		Assert.assertEquals(1, ds.size());
 		int s = ds.getDefaultGraph().size();
-		Assert.assertTrue(ds.getDefaultGraph().size() == 16);
+		Assert.assertEquals(16, ds.getDefaultGraph().size());
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine;
 
@@ -167,7 +166,7 @@ public class OpCloner implements OpVisitor {
 		Op left = copy;
 		opJoin.getRight().visit(this);
 		Op right = copy;
-		copy = (OpJoin) opJoin.copy(left, right);
+		copy = opJoin.copy(left, right);
 	}
 
 	@Override
@@ -206,7 +205,7 @@ public class OpCloner implements OpVisitor {
 		Op left = copy;
 		opMinus.getRight().visit(this);
 		Op right = copy;
-		copy = (OpMinus) opMinus.copy(left, right);
+		copy = opMinus.copy(left, right);
 	}
 
 	@Override

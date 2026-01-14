@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.http;
 
 import io.github.sparqlanything.html.org.apache.any23.mime.MIMEType;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Concatenates a collection of MIME specs in "type/subtype;q=x.x" notation into an HTTP Accept header value, and
@@ -38,13 +31,13 @@ import java.util.Map;
  */
 public class AcceptHeaderBuilder {
 
-    private Collection<MIMEType> mimeTypes;
+    private final Collection<MIMEType> mimeTypes;
 
     private MIMEType highestAnyType = null;
 
-    private Map<String, MIMEType> highestAnySubtype = new HashMap<String, MIMEType>();
+    private final Map<String, MIMEType> highestAnySubtype = new HashMap<String, MIMEType>();
 
-    private Map<String, MIMEType> highestSpecificType = new HashMap<String, MIMEType>();
+    private final Map<String, MIMEType> highestSpecificType = new HashMap<String, MIMEType>();
 
     public static AcceptHeaderBuilder fromStrings(Collection<String> typesAsStrings) {
         Collection<MIMEType> types = new ArrayList<MIMEType>(typesAsStrings.size());

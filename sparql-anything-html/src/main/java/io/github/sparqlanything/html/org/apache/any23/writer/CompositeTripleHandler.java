@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandler;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 
 import java.util.ArrayList;
@@ -38,13 +35,13 @@ import java.util.Collections;
  */
 public class CompositeTripleHandler implements TripleHandler {
 
-    private Collection<TripleHandler> children = new ArrayList<TripleHandler>();
+    private final Collection<TripleHandler> children = new ArrayList<TripleHandler>();
 
     /**
      * Constructor with empty decorated list.
      */
     public CompositeTripleHandler() {
-        this(Collections.<TripleHandler> emptyList());
+        this(Collections.emptyList());
     }
 
     /**

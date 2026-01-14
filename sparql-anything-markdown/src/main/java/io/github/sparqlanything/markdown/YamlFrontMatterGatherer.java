@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.markdown;
 
 import org.apache.commons.lang3.StringUtils;
 import org.commonmark.internal.DocumentBlockParser;
 import org.commonmark.node.Block;
-import org.commonmark.parser.block.AbstractBlockParser;
-import org.commonmark.parser.block.AbstractBlockParserFactory;
-import org.commonmark.parser.block.BlockContinue;
-import org.commonmark.parser.block.BlockParser;
-import org.commonmark.parser.block.BlockStart;
-import org.commonmark.parser.block.MatchedBlockParser;
-import org.commonmark.parser.block.ParserState;
+import org.commonmark.parser.block.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +33,8 @@ import java.util.regex.Pattern;
 public class YamlFrontMatterGatherer extends AbstractBlockParser {
 	private static final Pattern REGEX_BEGIN = Pattern.compile("^-{3}(\\s.*)?");
 	private static final Pattern REGEX_END = Pattern.compile("^(-{3}|\\.{3})(\\s.*)?");
-	private YamlFrontMatter block;
-	private List<CharSequence> lines;
+	private final YamlFrontMatter block;
+	private final List<CharSequence> lines;
 
 	public YamlFrontMatterGatherer(){
 		block = new YamlFrontMatter();

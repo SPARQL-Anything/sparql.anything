@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-/*
- */
+
 package io.github.sparqlanything.html.org.semarglproject.sink;
 
 import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
-import io.github.sparqlanything.html.org.semarglproject.sink.CharSink;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 
 /**

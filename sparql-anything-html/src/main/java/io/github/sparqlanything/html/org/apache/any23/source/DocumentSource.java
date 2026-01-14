@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.source;
 
@@ -43,17 +42,17 @@ public interface DocumentSource {
     /**
      * @return a string describing the content type of the provided document.
      */
-    public String getContentType();
+	String getContentType();
 
     /**
      * @return the size of the content length in bytes.
      */
-    public long getContentLength();
+	long getContentLength();
 
     /**
      * @return the actual, final, canonical IRI if redirects occur.
      */
-    public String getDocumentIRI();
+	String getDocumentIRI();
 
     /**
      * A value of <i>false</i> indicates that the document resides remotely, and that multiple successive accesses to it
@@ -62,5 +61,5 @@ public interface DocumentSource {
      *
      * @return true if the {@link io.github.sparqlanything.html.org.apache.any23.source.DocumentSource} is cached locally.
      */
-    public boolean isLocal();
+	boolean isLocal();
 }

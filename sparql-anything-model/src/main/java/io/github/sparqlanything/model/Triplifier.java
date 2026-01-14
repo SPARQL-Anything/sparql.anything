@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.model;
 
@@ -106,7 +105,7 @@ public interface Triplifier {
 		return basicEscaper.escape(s);
 	}
 
-	public static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
+	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
 		return getInputStream(properties, getCharsetArgument(properties));
 	}
 

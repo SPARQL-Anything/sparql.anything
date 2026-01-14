@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdf;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.RDFHandlerAdapter;
+import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Any23ValueFactoryWrapper;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.rio.ParseErrorListener;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFHandlerException;
-import org.eclipse.rdf4j.rio.RDFParseException;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.*;
 import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
 import org.eclipse.rdf4j.rio.helpers.RDFaParserSettings;
 import org.eclipse.rdf4j.rio.helpers.RDFaVersion;

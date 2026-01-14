@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.mime;
 
@@ -38,6 +37,6 @@ public interface MIMETypeDetector {
      *
      * @return the supposed mime type or <code>null</code> if nothing appropriate found.
      */
-    public MIMEType guessMIMEType(String fileName, InputStream input, MIMEType mimeTypeFromMetadata);
+	MIMEType guessMIMEType(String fileName, InputStream input, MIMEType mimeTypeFromMetadata);
 
 }

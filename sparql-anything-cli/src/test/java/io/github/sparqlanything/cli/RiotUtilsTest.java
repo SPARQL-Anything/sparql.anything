@@ -1,11 +1,8 @@
 package io.github.sparqlanything.cli;
 
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.vocabulary.RDF;
@@ -35,7 +32,7 @@ public class RiotUtilsTest {
 		String data = baos.toString(utf8);
 		int count = data.length() - data.replace(",", "").length();
 		// There must be 12 commas
-		Assert.assertTrue(count == 12);
+		Assert.assertEquals(12, count);
 	}
 
 }

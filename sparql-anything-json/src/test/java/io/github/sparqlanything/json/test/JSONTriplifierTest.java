@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.json.test;
 
 import io.github.sparqlanything.json.JSONTriplifier;
-import io.github.sparqlanything.model.BaseFacadeXGraphBuilder;
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
-import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.Triplifier;
-import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.model.*;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -46,8 +41,8 @@ import static org.junit.Assert.assertTrue;
 
 public class JSONTriplifierTest {
 
-	private String ontologyPrefix = "https://w3id.org/resource/ontology/";
-	private Logger log = LoggerFactory.getLogger(JSONTriplifierTest.class);
+	private final String ontologyPrefix = "https://w3id.org/resource/ontology/";
+	private final Logger log = LoggerFactory.getLogger(JSONTriplifierTest.class);
 
 	@Test
 	public void testEmptyAndNull() throws TriplifierHTTPException {
@@ -449,7 +444,7 @@ public class JSONTriplifierTest {
 			Iterator<Quad> i = ds.find(null);
 			while (i.hasNext()) {
 				Quad q = i.next();
-				log.info("{} {} {} {}", new Object[] { q.getGraph(), q.getSubject(), q.getPredicate(), q.getObject() });
+				log.info("{} {} {} {}", q.getGraph(), q.getSubject(), q.getPredicate(), q.getObject());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

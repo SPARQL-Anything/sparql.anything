@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine;
 
@@ -25,34 +24,23 @@ import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierRegister;
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.graph.compose.Union;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetGraphFactory;
-import org.apache.jena.sparql.core.Substitute;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.iterator.*;
-import org.apache.jena.sparql.engine.join.Join;
-import org.apache.jena.sparql.engine.join.QueryIterNestedLoopJoin;
+import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.sparql.engine.main.iterator.QueryIterUnion;
-import org.apache.jena.sparql.graph.GraphFactory;
-import org.apache.jena.tdb2.solver.QC2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.yaml;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.*;
 import io.github.sparqlanything.model.annotations.Option;
-import com.google.common.collect.Sets;
 import org.snakeyaml.engine.v2.api.Load;
 import org.snakeyaml.engine.v2.api.LoadSettings;
 
@@ -61,18 +60,17 @@ public class YAMLTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId);
 		for (Object value : iter) {
 			if (value instanceof String) {
-				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, (Integer) 1, value);
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, 1, value);
 			} else if (value instanceof Integer) {
-				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, (Integer) 1, value);
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, 1, value);
 			} else if (value instanceof Boolean) {
-				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, (Integer) 1, value);
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, 1, value);
 			} else if (value instanceof Double) {
-				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, (Integer) 1, value);
+				builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, 1, value);
 			} else if (value instanceof Map) {
 				// Directly link to the map
 				transformMap((Map) value, dataSourceId, SPARQLAnythingConstants.ROOT_ID, builder);
-			} else if (value instanceof List) {
-				List list = (List) value;
+			} else if (value instanceof List list) {
 				for (int x = 0; x < list.size(); x++) {
 					transformIntKeyValue(x + 1, list.get(x), dataSourceId, SPARQLAnythingConstants.ROOT_ID, builder);
 				}
@@ -102,21 +100,20 @@ public class YAMLTriplifier implements Triplifier {
 		}
 //		key = Triplifier.toSafeURIString(key);
 			if(value instanceof String){
-				builder.addValue(dataSourceId, containerId, (String) key, value);
+				builder.addValue(dataSourceId, containerId, key, value);
 			} else if(value instanceof Integer){
-				builder.addValue(dataSourceId, containerId, (String) key, value);
+				builder.addValue(dataSourceId, containerId, key, value);
 			} else if(value instanceof Boolean){
-				builder.addValue(dataSourceId, containerId, (String) key, value);
+				builder.addValue(dataSourceId, containerId, key, value);
 			} else if(value instanceof Double){
-				builder.addValue(dataSourceId, containerId, (String) key, value);
+				builder.addValue(dataSourceId, containerId, key, value);
 			} else if(value instanceof Map){
 				String childId = containerId + "/" + key;
-				builder.addContainer(dataSourceId, containerId,(String) key, childId);
+				builder.addContainer(dataSourceId, containerId, key, childId);
 				transformMap((Map) value, dataSourceId, childId, builder);
-			} else if(value instanceof List){
+			} else if(value instanceof List list){
 				String childId = containerId + "/" + key;
-				List list = (List) value;
-				builder.addContainer(dataSourceId, containerId, (String) key, childId);
+				builder.addContainer(dataSourceId, containerId, key, childId);
 				for(int x=0; x<list.size(); x++){
 					transformIntKeyValue(x+1, list.get(x), dataSourceId, childId, builder);
 				}
@@ -131,21 +128,20 @@ public class YAMLTriplifier implements Triplifier {
 			return;
 		}
 		if(value instanceof String){
-			builder.addValue(dataSourceId, containerId, (Integer) key, value);
+			builder.addValue(dataSourceId, containerId, key, value);
 		} else if(value instanceof Integer){
-			builder.addValue(dataSourceId, containerId, (Integer) key, value);
+			builder.addValue(dataSourceId, containerId, key, value);
 		} else if(value instanceof Boolean){
-			builder.addValue(dataSourceId, containerId, (Integer) key, value);
+			builder.addValue(dataSourceId, containerId, key, value);
 		} else if(value instanceof Double){
-			builder.addValue(dataSourceId, containerId, (Integer) key, value);
+			builder.addValue(dataSourceId, containerId, key, value);
 		} else if(value instanceof Map){
 			String childId = containerId + "/" + key;
-			builder.addContainer(dataSourceId, containerId,(Integer) key, childId);
+			builder.addContainer(dataSourceId, containerId, key, childId);
 			transformMap((Map) value, dataSourceId, childId, builder);
-		} else if(value instanceof List){
+		} else if(value instanceof List list){
 			String childId = containerId + "/" + key;
-			builder.addContainer(dataSourceId, containerId,(Integer) key, childId);
-			List list = (List) value;
+			builder.addContainer(dataSourceId, containerId, key, childId);
 			for(int x=0; x<list.size(); x++){
 				transformIntKeyValue(x+1, list.get(x), dataSourceId, childId, builder);
 			}

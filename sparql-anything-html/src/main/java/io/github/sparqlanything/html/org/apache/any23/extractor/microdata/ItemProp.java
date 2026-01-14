@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.microdata;
-
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.Item;
-import io.github.sparqlanything.html.org.apache.any23.extractor.microdata.ItemPropValue;
 
 import java.util.Locale;
 
@@ -112,9 +108,8 @@ public class ItemProp extends Item {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof ItemProp) {
-            final ItemProp other = (ItemProp) obj;
-            return name.equals(other.name) && value.equals(other.value);
+        if (obj instanceof ItemProp other) {
+			return name.equals(other.name) && value.equals(other.value);
         }
         return false;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.it;
 
-import java.util.Properties;
-
+import io.github.sparqlanything.csv.CSVTriplifier;
 import io.github.sparqlanything.model.IRIArgument;
-import org.junit.Ignore;
+import io.github.sparqlanything.testutils.AbstractTriplifierTester;
 import org.junit.Test;
 
-import io.github.sparqlanything.csv.CSVTriplifier;
-import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import java.util.Properties;
 
 public class ValueOptionsTest extends AbstractTriplifierTester {
 

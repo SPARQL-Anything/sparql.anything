@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.documentationgenerator;
 
-import io.github.sparqlanything.model.TriplifierRegister;
 import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.TriplifierRegister;
 import io.github.sparqlanything.model.annotations.Example;
 import io.github.sparqlanything.model.annotations.Examples;
 import io.github.sparqlanything.model.annotations.Format;
 import io.github.sparqlanything.model.annotations.Option;
-import org.apache.jena.query.*;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.Syntax;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

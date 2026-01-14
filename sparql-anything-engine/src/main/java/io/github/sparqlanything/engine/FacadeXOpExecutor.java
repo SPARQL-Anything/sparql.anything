@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine;
 
@@ -25,7 +24,8 @@ import io.github.sparqlanything.model.TriplifierRegister;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.*;
+import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.algebra.optimize.TransformPropertyFunction;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;

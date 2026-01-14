@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.zip;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
@@ -27,7 +27,6 @@ import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +41,7 @@ import static io.github.sparqlanything.zip.ZipTriplifier.MATCHES;
 @io.github.sparqlanything.model.annotations.Triplifier
 public class TarTriplifier implements Triplifier {
 
-	private static Logger logger = LoggerFactory.getLogger(TarTriplifier.class);
+	private static final Logger logger = LoggerFactory.getLogger(TarTriplifier.class);
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException {
@@ -60,11 +59,11 @@ public class TarTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId);
 
 		try {
-			TarArchiveInputStream debInputStream = (TarArchiveInputStream) new ArchiveStreamFactory()
+			TarArchiveInputStream debInputStream = new ArchiveStreamFactory()
 					.createArchiveInputStream("tar", location.openStream(), charset.toString());
 			int i = 1;
 			TarArchiveEntry entry = null;
-			while ((entry = (TarArchiveEntry) debInputStream.getNextEntry()) != null) {
+			while ((entry = debInputStream.getNextEntry()) != null) {
 
 				if (entry.getName().matches(matches)) {
 					builder.addValue(dataSourceId, SPARQLAnythingConstants.ROOT_ID, i, entry.getName());

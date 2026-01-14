@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine.test;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.Triplifier;
-import com.google.common.collect.Sets;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;

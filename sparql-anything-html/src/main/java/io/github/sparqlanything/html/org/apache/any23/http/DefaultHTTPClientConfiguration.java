@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.http;
 
 import io.github.sparqlanything.html.org.apache.any23.configuration.DefaultConfiguration;
-import io.github.sparqlanything.html.org.apache.any23.http.HTTPClientConfiguration;
 
 /**
  * Default implementation of {@link io.github.sparqlanything.html.org.apache.any23.http.HTTPClientConfiguration}.
@@ -38,10 +36,10 @@ public class DefaultHTTPClientConfiguration implements HTTPClientConfiguration {
         return instance;
     }
 
-    private String userAgent;
-    private int defaultTimeout;
-    private int maxConnections;
-    private String acceptHeader;
+    private final String userAgent;
+    private final int defaultTimeout;
+    private final int maxConnections;
+    private final String acceptHeader;
 
     /**
      * Constructor.

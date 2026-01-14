@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23;
 
-import io.github.sparqlanything.html.org.apache.any23.Any23;
-import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
 import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor;
+import io.github.sparqlanything.html.org.apache.any23.extractor.IssueReport;
 import io.github.sparqlanything.html.org.apache.any23.validator.ValidationReport;
 
 import java.util.Collection;
@@ -109,7 +107,7 @@ public class ExtractionReport {
      */
     public Collection<IssueReport.Issue> getExtractorIssues(String extractorName) {
         final Collection<IssueReport.Issue> errors = extractorIssues.get(extractorName);
-        return errors == null ? Collections.<IssueReport.Issue> emptyList()
+        return errors == null ? Collections.emptyList()
                 : Collections.unmodifiableCollection(errors);
     }
 

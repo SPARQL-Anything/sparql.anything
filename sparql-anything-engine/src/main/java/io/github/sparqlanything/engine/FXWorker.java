@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine;
 
@@ -24,7 +23,7 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.iterator.*;
+import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

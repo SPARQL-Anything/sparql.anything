@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,47 +14,18 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.markdown;
 
+import com.google.common.collect.Sets;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierHTTPException;
-import com.google.common.collect.Sets;
 import org.commonmark.Extension;
-import org.commonmark.ext.gfm.tables.TableBody;
-import org.commonmark.ext.gfm.tables.TableCell;
-import org.commonmark.ext.gfm.tables.TableHead;
-import org.commonmark.ext.gfm.tables.TableRow;
-import org.commonmark.ext.gfm.tables.TablesExtension;
-import org.commonmark.node.AbstractVisitor;
-import org.commonmark.node.BlockQuote;
-import org.commonmark.node.BulletList;
-import org.commonmark.node.Code;
-import org.commonmark.node.CustomBlock;
-import org.commonmark.node.CustomNode;
-import org.commonmark.node.Document;
-import org.commonmark.node.Emphasis;
-import org.commonmark.node.FencedCodeBlock;
-import org.commonmark.node.HardLineBreak;
-import org.commonmark.node.Heading;
-import org.commonmark.node.HtmlBlock;
-import org.commonmark.node.HtmlInline;
-import org.commonmark.node.Image;
-import org.commonmark.node.IndentedCodeBlock;
-import org.commonmark.node.Link;
-import org.commonmark.node.LinkReferenceDefinition;
-import org.commonmark.node.ListItem;
-import org.commonmark.node.Node;
-import org.commonmark.node.OrderedList;
-import org.commonmark.node.Paragraph;
-import org.commonmark.node.SoftLineBreak;
-import org.commonmark.node.StrongEmphasis;
-import org.commonmark.node.Text;
-import org.commonmark.node.ThematicBreak;
+import org.commonmark.ext.gfm.tables.*;
+import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,12 +36,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 @io.github.sparqlanything.model.annotations.Triplifier
 public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
@@ -282,7 +248,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(Link node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[toString {}] {}", node.getClass(), node.toString());
+		logger.trace("[toString {}] {}", node.getClass(), node);
 		if(logger.isTraceEnabled() && node.getFirstChild()!=null) {
 			logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
 		}
@@ -395,7 +361,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(LinkReferenceDefinition node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[toString {}] {}", node.getClass(), node.toString());
+		logger.trace("[toString {}] {}", node.getClass(), node);
 		//logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		handleContainer(node);
@@ -411,7 +377,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 	@Override
 	public void visit(StrongEmphasis node) {
 		logger.trace("[Visiting {}] {}", node.getClass(), node);
-		logger.trace("[toString {}] {}", node.getClass(), node.toString());
+		logger.trace("[toString {}] {}", node.getClass(), node);
 		//logger.trace("[First child {}] {}", node.getFirstChild().getClass(), node.getFirstChild());
 		logger.trace("[Parent {}] {}", node.getParent().getClass(), node.getParent());
 		handleContainer(node);
@@ -442,7 +408,7 @@ public class MARKDOWNTriplifier extends AbstractVisitor implements Triplifier {
 		}else if(node instanceof TableBody){
 			visit((TableBody) node);
 		}else {
-			logger.trace("[ignoring] {}", node.toString());
+			logger.trace("[ignoring] {}", node);
 		}
 //		super.visit(node);
 	}

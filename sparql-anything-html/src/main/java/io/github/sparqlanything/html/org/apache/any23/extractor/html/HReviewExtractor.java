@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
@@ -107,7 +106,7 @@ public class HReviewExtractor extends EntityBasedMicroformatExtractor {
         conditionallyAddStringProperty(val.source(), blank, vVCARD.fn, val.value());
         final TextField url = item.getSingularUrlField("url");
         conditionallyAddResourceProperty(blank, vVCARD.url, getHTMLDocument().resolveIRI(url.value()));
-        TextField pics[] = item.getPluralUrlField("photo");
+        TextField[] pics = item.getPluralUrlField("photo");
         for (TextField pic : pics) {
             addIRIProperty(blank, vVCARD.photo, getHTMLDocument().resolveIRI(pic.value()));
         }

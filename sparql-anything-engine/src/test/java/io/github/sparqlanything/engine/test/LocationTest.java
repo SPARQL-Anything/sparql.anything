@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.engine.Location;
-import io.github.sparqlanything.model.*;
+import io.github.sparqlanything.model.HTTPHelper;
+import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.PropertyUtils;
+import io.github.sparqlanything.model.TriplifierHTTPException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.junit.AfterClass;
 import org.junit.Assume;

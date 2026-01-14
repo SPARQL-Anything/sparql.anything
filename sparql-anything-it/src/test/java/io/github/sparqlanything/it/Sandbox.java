@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,47 +14,27 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.it;
 
-import io.github.sparqlanything.cli.RiotUtils;
 import io.github.sparqlanything.engine.FacadeX;
-import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Node_Triple;
 import org.apache.jena.query.*;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
-import org.apache.jena.riot.RIOT;
-import org.apache.jena.riot.lang.RiotParsers;
-import org.apache.jena.riot.system.ParserProfile;
-import org.apache.jena.riot.system.ParserProfileStd;
-import org.apache.jena.riot.system.ParserProfileWrapper;
-import org.apache.jena.riot.system.RiotLib;
-import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.graph.GraphFactory;
-import org.apache.jena.sparql.util.Context;
 import org.apache.jena.sparql.util.IsoMatcher;
-import org.apache.jena.sys.JenaSystem;
-import org.apache.jena.system.RDFStar;
-import org.eclipse.rdf4j.rio.helpers.RDFStarUtil;
 import org.junit.Assert;
 import org.junit.Test;
-import org.semanticweb.owlapi.rio.RioTurtleParserFactory;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-import java.util.Objects;
 
 public class Sandbox {
 

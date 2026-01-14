@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.model.test;
 
@@ -47,7 +46,7 @@ public class TriplifierGetPropertyValuesTest {
 			Assert.assertTrue(values.contains(en.getValue()));
 		}
 
-		Assert.assertTrue(values.size() == 4);
+		Assert.assertEquals(4, values.size());
 	}
 
 	@Test
@@ -67,7 +66,7 @@ public class TriplifierGetPropertyValuesTest {
 			Assert.assertTrue(values.contains(en.getValue()));
 		}
 
-		Assert.assertTrue(values.size() == 4);
+		Assert.assertEquals(4, values.size());
 	}
 
 	@Test
@@ -87,6 +86,6 @@ public class TriplifierGetPropertyValuesTest {
 			Assert.assertTrue(values.contains(en.getValue()));
 		}
 
-		Assert.assertTrue(values.size() == 3);
+		Assert.assertEquals(3, values.size());
 	}
 }

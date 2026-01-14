@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,38 +14,20 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.model;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpVersion;
-import org.apache.http.NameValuePair;
-import org.apache.http.ProtocolVersion;
+import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.client.methods.HttpOptions;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpTrace;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.apache.http.impl.client.*;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
@@ -55,11 +37,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,11 +71,7 @@ public class HTTPHelper {
     };
 
     public static boolean isProperty(String prefix, String key) {
-        if (key.startsWith(prefix)) {
-            return true;
-        } else {
-            return false;
-        }
+		return key.startsWith(prefix);
     }
 
     public static String getProperty(String prefix, Object property) {
@@ -108,7 +82,7 @@ public class HTTPHelper {
         Properties relevant = new Properties();
         for(Map.Entry<Object,Object> entry : properties.entrySet()){
             for(String property: RELEVANT_PROPERTIES){
-                if( (((String)entry.getKey()).equals(property))
+                if( (entry.getKey().equals(property))
                     || (property.endsWith(".") && ((String)entry.getKey()).startsWith(property))){
                     relevant.put(entry.getKey(), entry.getValue());
                 }
@@ -233,10 +207,10 @@ public class HTTPHelper {
         for (Object key : properties.keySet()) {
             // Headers
             if (isProperty(HTTPHEADER_PREFIX, (String) key)) {
-                headers.add(new BasicHeader(getProperty(HTTPHEADER_PREFIX, (String) key), (String) properties.get(key)));
+                headers.add(new BasicHeader(getProperty(HTTPHEADER_PREFIX, key), (String) properties.get(key)));
             } else if (isProperty(HTTPQUERY_PREFIX, (String) key)){
                 // Querystring
-                String p = getProperty(HTTPQUERY_PREFIX, (String) key);
+                String p = getProperty(HTTPQUERY_PREFIX, key);
                 if(p.matches("\\.[0-9]+$")){
                     // There are many of these, remove number
                     p = p.substring(0, p.indexOf('.') + 1);
@@ -244,7 +218,7 @@ public class HTTPHelper {
                 query.add(new BasicNameValuePair(p, (String) properties.get(key)));
             }else if (isProperty(HTTPFORM_PREFIX, (String) key)){
                 // Querystring
-                String p = getProperty(HTTPFORM_PREFIX, (String) key);
+                String p = getProperty(HTTPFORM_PREFIX, key);
                 if(p.matches("\\.[0-9]+$")){
                     // There are many of these, remove number
                     p = p.substring(0, p.indexOf('.') + 1);
@@ -311,12 +285,10 @@ public class HTTPHelper {
             String payload = ((String) properties.get(HTTPPAYLOAD));
             BasicHttpEntity entity = new BasicHttpEntity();
             entity.setContent(IOUtils.toInputStream(payload, StandardCharsets.UTF_8)); // TODO get charset from config?
-            if(request instanceof HttpPost){
-                HttpPost post = (HttpPost) request;
-                post.setEntity(entity);
-            }else if(request instanceof HttpPut){
-                HttpPut put = (HttpPut) request;
-                put.setEntity(entity);
+            if(request instanceof HttpPost post){
+				post.setEntity(entity);
+            }else if(request instanceof HttpPut put){
+				put.setEntity(entity);
             }
         } else {
             // Only if Method is POST, forces content-type to be form urlencoded

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.cli;
 
@@ -68,7 +67,7 @@ public class SPARQLAnything {
 
 
 	private static final Logger logger = LoggerFactory.getLogger(SPARQLAnything.class);
-	private static Long duration = null;
+	private static final Long duration = null;
 
 	// TODO This should be moved to the engine module
 	private static void initSPARQLAnythingEngine() {
@@ -296,8 +295,8 @@ public class SPARQLAnything {
 			}
 			// Generate bindings
 			Set<Set<Object>> sets;
-			if (var_val_map.values().size() > 1) {
-				sets = cartesianProduct(var_val_map.values().toArray(new HashSet[var_val_map.values().size()]));
+			if (var_val_map.size() > 1) {
+				sets = cartesianProduct(var_val_map.values().toArray(new HashSet[var_val_map.size()]));
 			} else {
 				sets = new HashSet<>();
 
@@ -532,10 +531,7 @@ public class SPARQLAnything {
 				continue;
 			}
 			// Remember if we are calling OS for a new file
-			boolean newFile = false;
-			if (outputFile != null && !new File(outputFile).exists()) {
-				newFile = true;
-			}
+			boolean newFile = outputFile != null && !new File(outputFile).exists();
 			try (PrintStream ps = getPrintStream(outputFile, cli.getOutputAppend())) {
 				logger.trace("Executing Query: {}", q);
 				executeQuery(cli.getFormat(q), kb, q, ps, configurations);

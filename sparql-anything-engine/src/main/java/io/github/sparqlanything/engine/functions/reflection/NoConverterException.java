@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine.functions.reflection;
 
 public class NoConverterException extends Exception {
 
-	private Class<?> forType;
+	private final Class<?> forType;
 	public NoConverterException(Class<?> forType){
 		super("No converter for type: " + forType.getCanonicalName());
 		this.forType = forType;

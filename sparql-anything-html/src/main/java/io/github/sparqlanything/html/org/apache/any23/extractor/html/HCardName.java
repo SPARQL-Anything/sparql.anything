@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
 import org.w3c.dom.Node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument.TextField;
 
@@ -52,7 +45,7 @@ public class HCardName {
     private static final String[] NAME_COMPONENTS = { HONORIFIC_PREFIX, GIVEN_NAME, ADDITIONAL_NAME, FAMILY_NAME,
             HONORIFIC_SUFFIX };
 
-    private Map<String, FieldValue> fields = new HashMap<String, FieldValue>();
+    private final Map<String, FieldValue> fields = new HashMap<String, FieldValue>();
     private TextField[] fullName = null;
     private TextField organization = null;
     private TextField unit = null;
@@ -140,7 +133,7 @@ public class HCardName {
 
     public Collection<TextField> getFields(String fieldName) {
         FieldValue v = fields.get(fieldName);
-        return v == null ? Collections.<TextField> emptyList() : v.getValues();
+        return v == null ? Collections.emptyList() : v.getValues();
     }
 
     private TextField getFullNamePart(String fieldName, int index) {
@@ -252,7 +245,7 @@ public class HCardName {
         }
 
         Collection<TextField> getValues() {
-            return value != null ? Arrays.asList(value) : multiValue;
+            return value != null ? List.of(value) : multiValue;
         }
     }
 

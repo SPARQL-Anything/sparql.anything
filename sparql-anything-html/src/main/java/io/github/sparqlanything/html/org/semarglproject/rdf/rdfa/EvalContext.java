@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-/*
- */
+
 package io.github.sparqlanything.html.org.semarglproject.rdf.rdfa;
 
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.DocumentContext;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.RdfaParser;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.Vocabulary;
-import io.github.sparqlanything.html.org.semarglproject.ri.RIUtils;
 import io.github.sparqlanything.html.org.semarglproject.ri.MalformedCurieException;
 import io.github.sparqlanything.html.org.semarglproject.ri.MalformedIriException;
+import io.github.sparqlanything.html.org.semarglproject.ri.RIUtils;
 import io.github.sparqlanything.html.org.semarglproject.vocab.RDFa;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Pattern;
 
 final class EvalContext {

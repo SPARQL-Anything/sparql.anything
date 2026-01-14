@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-/*
- */
+
 package io.github.sparqlanything.html.org.semarglproject.rdf.rdfa;
 
 import io.github.sparqlanything.html.org.semarglproject.rdf.ParseException;
 import io.github.sparqlanything.html.org.semarglproject.rdf.RdfXmlParser;
-import io.github.sparqlanything.html.org.semarglproject.rdf.rdfa.RdfaParser;
 import io.github.sparqlanything.html.org.semarglproject.ri.RIUtils;
 import io.github.sparqlanything.html.org.semarglproject.sink.TripleSink;
 import io.github.sparqlanything.html.org.semarglproject.source.StreamProcessor;
@@ -33,11 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 final class Vocabulary {
 

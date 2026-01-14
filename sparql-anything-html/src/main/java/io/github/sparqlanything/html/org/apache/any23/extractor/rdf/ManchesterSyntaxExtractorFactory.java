@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdf;
-
-import java.util.Arrays;
 
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorFactory;
 import io.github.sparqlanything.html.org.apache.any23.extractor.SimpleExtractorFactory;
-import io.github.sparqlanything.html.org.apache.any23.extractor.rdf.ManchesterSyntaxExtractor;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Prefixes;
 import org.semanticweb.owlapi.rio.OWLAPIRDFFormat;
+
+import java.util.Collections;
 
 /**
  * @author Peter Ansell p_ansell@yahoo.com
@@ -43,7 +41,7 @@ public class ManchesterSyntaxExtractorFactory extends SimpleExtractorFactory<Man
 
     public ManchesterSyntaxExtractorFactory() {
         super(ManchesterSyntaxExtractorFactory.NAME, ManchesterSyntaxExtractorFactory.PREFIXES,
-                Arrays.asList(OWLAPIRDFFormat.MANCHESTER_OWL.getDefaultMIMEType()), "example-manchestersyntax.omn");
+			Collections.singletonList(OWLAPIRDFFormat.MANCHESTER_OWL.getDefaultMIMEType()), "example-manchestersyntax.omn");
     }
 
     @Override

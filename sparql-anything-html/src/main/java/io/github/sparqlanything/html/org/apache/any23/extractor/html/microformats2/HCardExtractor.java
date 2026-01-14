@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html.microformats2;
 
@@ -23,15 +22,15 @@ import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionExcept
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
 import io.github.sparqlanything.html.org.apache.any23.extractor.TagSoupExtractionResult;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.DomUtils;
+import io.github.sparqlanything.html.org.apache.any23.extractor.html.EntityBasedMicroformatExtractor;
 import io.github.sparqlanything.html.org.apache.any23.extractor.html.HTMLDocument;
 import io.github.sparqlanything.html.org.apache.any23.vocab.HCard;
 import org.eclipse.rdf4j.model.BNode;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.w3c.dom.Node;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.EntityBasedMicroformatExtractor;
-import io.github.sparqlanything.html.org.apache.any23.extractor.html.DomUtils;
 
 import java.util.List;
 

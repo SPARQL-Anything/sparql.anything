@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,22 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.writer;
 
 import io.github.sparqlanything.html.org.apache.any23.configuration.Settings;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
 import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
-import io.github.sparqlanything.html.org.apache.any23.writer.*;
-import io.github.sparqlanything.html.org.apache.any23.writer.TripleWriterHandler;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.RDFWriterFactory;
 import org.eclipse.rdf4j.rio.WriterConfig;
 
-import java.io.BufferedWriter;
-import java.io.Flushable;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.Optional;

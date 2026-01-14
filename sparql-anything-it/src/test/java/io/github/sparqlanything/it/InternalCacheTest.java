@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package io.github.sparqlanything.it;
 
 import io.github.sparqlanything.engine.FacadeX;
-import io.github.sparqlanything.engine.InternalQueryCache;
 import org.apache.jena.query.*;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;

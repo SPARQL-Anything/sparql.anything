@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.microdata;
+
+import io.github.sparqlanything.html.org.apache.any23.util.StringUtils;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.vocabulary.XSD;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,10 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-
-import io.github.sparqlanything.html.org.apache.any23.util.StringUtils;
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.vocabulary.XSD;
 
 /**
  * Describes a possible value for a <b>Microdata item property</b>.
@@ -288,9 +287,8 @@ public class ItemPropValue {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof ItemPropValue) {
-            final ItemPropValue other = (ItemPropValue) obj;
-            return content.equals(other.content) && type.equals(other.type);
+        if (obj instanceof ItemPropValue other) {
+			return content.equals(other.content) && type.equals(other.type);
         }
         return false;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.html;
 
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionException;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionParameters;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionResult;
-import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractorDescription;
+import io.github.sparqlanything.html.org.apache.any23.extractor.*;
+import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.TagSoupDOMExtractor;
 import io.github.sparqlanything.html.org.apache.any23.rdf.Any23ValueFactoryWrapper;
 import io.github.sparqlanything.html.org.apache.any23.vocab.FOAF;
 import io.github.sparqlanything.html.org.apache.any23.vocab.XFN;
-import io.github.sparqlanything.html.org.apache.any23.extractor.Extractor.TagSoupDOMExtractor;
 import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;

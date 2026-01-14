@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.extractor.rdfa;
 
@@ -52,17 +51,17 @@ final class SemarglSink implements io.github.sparqlanything.html.org.semarglproj
     }
 
     @Override
-    public final void addNonLiteral(String s, String p, String o) {
+    public void addNonLiteral(String s, String p, String o) {
         writeTriple(s, p, createResource(o));
     }
 
     @Override
-    public final void addPlainLiteral(String s, String p, String o, String lang) {
+    public void addPlainLiteral(String s, String p, String o, String lang) {
         writeTriple(s, p, lang == null ? valueFactory.createLiteral(o) : valueFactory.createLiteral(o, lang));
     }
 
     @Override
-    public final void addTypedLiteral(String s, String p, String o, String type) {
+    public void addTypedLiteral(String s, String p, String o, String type) {
         writeTriple(s, p, valueFactory.createLiteral(o, valueFactory.createIRI(type)));
     }
 

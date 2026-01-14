@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine;
 
@@ -36,7 +35,7 @@ public class LocalCache {
 
     private static final Logger log = LoggerFactory.getLogger(LocalCache.class);
     public final static String DIRNAME = ".fx";
-    private File location;
+    private final File location;
 
     public LocalCache(){
         this(System.getProperty("user.home"));

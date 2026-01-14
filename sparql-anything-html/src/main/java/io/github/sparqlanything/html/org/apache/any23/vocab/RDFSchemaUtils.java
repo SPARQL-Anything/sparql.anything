@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.html.org.apache.any23.vocab;
 
 import io.github.sparqlanything.html.org.apache.any23.rdf.RDFUtils;
 import io.github.sparqlanything.html.org.apache.any23.util.DiscoveryUtils;
 import io.github.sparqlanything.html.org.apache.any23.util.StringUtils;
-import io.github.sparqlanything.html.org.apache.any23.vocab.Vocabulary;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
@@ -33,8 +31,8 @@ import org.eclipse.rdf4j.rio.Rio;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -150,19 +148,11 @@ public class RDFSchemaUtils {
     public static String serializeVocabulary(Vocabulary vocabulary, RDFFormat format) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps;
-        try {
-            ps = new PrintStream(baos, true, "UTF-8");
-        } catch (UnsupportedEncodingException e1) {
-            throw new RuntimeException("UTF-8 encoding error when serializing the vocabulary to NQuads.", e1);
-        }
-        serializeVocabulary(vocabulary, format, false, ps);
+		ps = new PrintStream(baos, true, StandardCharsets.UTF_8);
+		serializeVocabulary(vocabulary, format, false, ps);
         ps.close();
-        try {
-            return baos.toString("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Error writing ByteArrayOutputStream to String with \"UTF-8\" encoding!");
-        }
-    }
+		return baos.toString(StandardCharsets.UTF_8);
+	}
 
     /**
      * Serializes all the vocabularies to <i>NQuads</i> over the given output stream.

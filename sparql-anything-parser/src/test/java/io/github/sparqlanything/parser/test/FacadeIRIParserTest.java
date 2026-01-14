@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.parser.test;
 
@@ -23,7 +22,6 @@ import io.github.sparqlanything.facadeiri.FacadeIRIParser;
 import io.github.sparqlanything.model.IRIArgument;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -37,16 +35,16 @@ public class FacadeIRIParserTest {
 	public void test1() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=file://myfile.json";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertTrue(((Properties) p).containsKey("mimeType"));
-		Assert.assertTrue(((Properties) p).containsKey("location"));
+		Assert.assertTrue(p.containsKey("mimeType"));
+		Assert.assertTrue(p.containsKey("location"));
 	}
 
 	@Test
 	public void testArgsInLocation1() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=http://myfile.json?foo=bar";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertTrue(((Properties) p).containsKey("location"));
-		Assert.assertFalse(((Properties) p).containsKey("foo"));
+		Assert.assertTrue(p.containsKey("location"));
+		Assert.assertFalse(p.containsKey("foo"));
 		Assert.assertEquals("http://myfile.json?foo=bar", p.get("location"));
 	}
 
@@ -54,8 +52,8 @@ public class FacadeIRIParserTest {
 	public void testArgsInLocation2() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=http://myfile.json?foo=bar&tab=goal";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertFalse(((Properties) p).containsKey("foo"));
-		Assert.assertFalse(((Properties) p).containsKey("tab"));
+		Assert.assertFalse(p.containsKey("foo"));
+		Assert.assertFalse(p.containsKey("tab"));
 		Assert.assertEquals("http://myfile.json?foo=bar&tab=goal", p.get("location"));
 	}
 
@@ -71,14 +69,14 @@ public class FacadeIRIParserTest {
 	public void testArgsInLocation4() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=https://myfile.json?foo=bar&tab=goal#hack,same=other";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertFalse(((Properties) p).containsKey("foo"));
+		Assert.assertFalse(p.containsKey("foo"));
 	}
 
 	@Test
 	public void testArgsInLocation5() {
 		String uri = "x-sparql-anything:mimeType=application/json,location=https://myfile.json?foo=bar&tab=goal#hack,same=other";
 		Properties p = new FacadeIRIParser(uri).getProperties();
-		Assert.assertFalse(((Properties) p).containsKey("tab"));
+		Assert.assertFalse(p.containsKey("tab"));
 	}
 
 	@Test

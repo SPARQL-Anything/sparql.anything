@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-/*
- */
+
 package io.github.sparqlanything.html;
 
-import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.html.org.apache.any23.extractor.ExtractionContext;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleHandlerException;
 import io.github.sparqlanything.html.org.apache.any23.writer.TripleWriterHandler;
+import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;

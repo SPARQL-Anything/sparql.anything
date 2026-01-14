@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 SPARQL Anything Contributors @ http://github.com/sparql-anything
+ * Copyright (c) 2026 SPARQL Anything Contributors @ http://github.com/sparql-anything
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-/*
- */
+
 
 package io.github.sparqlanything.engine.test;
 
@@ -26,14 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.query.ARQ;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.core.DatasetGraph;
@@ -51,6 +43,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TriplifierRegistryTest {
@@ -64,8 +57,6 @@ public class TriplifierRegistryTest {
 		dg.addGraph(NodeFactory.createURI(PREFIX + "g"), g);
 		return dg;
 	}
-
-	;
 
 	@Test
 	public void testConstructAndSelect() throws IOException {
@@ -91,10 +82,10 @@ public class TriplifierRegistryTest {
 			ResultSet rs = QueryExecutionFactory.create(select, kb).execSelect();
 			QuerySolution qs = rs.next();
 
-			assertTrue(qs.getResource("g").getURI().equals(PREFIX + "g"));
-			assertTrue(qs.getResource("s").getURI().equals(PREFIX + "s"));
-			assertTrue(qs.getResource("p").getURI().equals(PREFIX + "p"));
-			assertTrue(qs.getResource("o").getURI().equals(PREFIX + "o"));
+			assertEquals(qs.getResource("g").getURI(), PREFIX + "g");
+			assertEquals(qs.getResource("s").getURI(), PREFIX + "s");
+			assertEquals(qs.getResource("p").getURI(), PREFIX + "p");
+			assertEquals(qs.getResource("o").getURI(), PREFIX + "o");
 
 			TriplifierRegister.getInstance().removeTriplifier("io.github.sparqlanything.engine.test.TestTriplifier");
 		} catch (TriplifierRegisterException e) {
@@ -132,10 +123,10 @@ public class TriplifierRegistryTest {
 			String content = IOUtils.toString(new URI(location),
 				Charset.defaultCharset());
 
-			assertTrue(qs.getResource("g").getURI().equals(PREFIX + "g"));
-			assertTrue(qs.getResource("s").getURI().equals(PREFIX + "s"));
-			assertTrue(qs.getResource("p").getURI().equals(PREFIX + "p"));
-			assertTrue(qs.get("o").toString().replace("\\", "").equals(content));
+			assertEquals(qs.getResource("g").getURI(), PREFIX + "g");
+			assertEquals(qs.getResource("s").getURI(), PREFIX + "s");
+			assertEquals(qs.getResource("p").getURI(), PREFIX + "p");
+			assertEquals(qs.get("o").toString().replace("\\", ""), content);
 
 			TriplifierRegister.getInstance().removeTriplifier("io.github.sparqlanything.engine.test.TestTriplifier2");
 
