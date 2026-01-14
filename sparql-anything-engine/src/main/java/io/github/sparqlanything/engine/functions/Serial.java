@@ -19,6 +19,7 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase;
@@ -29,6 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@FXFunctionDoc(
+	description = "The function fx:serial (?a ... ?n) generates an incremental number using the arguments as reference counters. For example, calling fx:serial(\"x\") two times will generate 1 and then 2. Instead, calling fx:serial(?x) multiple times will generate sequential numbers for each value of ?x.",
+	example = "BIND(fx:serial(?value) AS ?id)",
+	group = "FUNCTIONS",
+	label = "fx:serial"
+)
 public class Serial extends FunctionBase {
 	private static final Symbol SYMBOL = Symbol.create("io.github.sparqlanything.engine.functions.Serial_SYMBOL");
 	private Map<Object,Integer> counters = null;

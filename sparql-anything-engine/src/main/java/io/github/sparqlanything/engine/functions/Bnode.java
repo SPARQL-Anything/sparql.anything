@@ -19,12 +19,19 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.apache.jena.sparql.util.FmtUtils;
 
+@FXFunctionDoc(
+	description = "The function fx:bnode( ?a) builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph.",
+	example = "BIND(fx:bnode(?id) AS ?blankNode)",
+	group = "FUNCTIONS",
+	label = "fx:bnode"
+)
 public class Bnode extends FunctionBase1 implements FXFunction {
 
 	@Override

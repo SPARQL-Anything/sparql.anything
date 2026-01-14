@@ -19,11 +19,18 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
 import org.apache.jena.sparql.util.FmtUtils;
 
+@FXFunctionDoc(
+	description = "fx:after(?a, ?b) returns true if ?a and ?b are container membership properties and ?a is higher than ?b, false otherwise",
+	example = "FILTER(fx:after(?slot1, ?slot2))",
+	group = "FUNCTIONS",
+	label = "fx:after"
+)
 public class After extends FunctionBase2 implements FXFunction {
 
 	@Override

@@ -19,6 +19,7 @@
 
 package io.github.sparqlanything.engine;
 
+import io.github.sparqlanything.model.annotations.MagicPropertyDoc;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.Var;
@@ -35,6 +36,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+@MagicPropertyDoc(
+	description = "This property matches the RDF container membership properties (e.g. rdf:_1, rdf:_2 ...).",
+	example = "?s fx:anySlot ?slot .",
+	group = "MAGIC PROPERTIES",
+	label = "fx:anySlot"
+)
 public class AnySlot extends PFuncSimple {
 	private static final Logger logger = LoggerFactory.getLogger(AnySlot.class);
 

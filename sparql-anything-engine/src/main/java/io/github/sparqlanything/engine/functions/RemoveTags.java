@@ -19,13 +19,20 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.safety.Safelist;
 
-public class RemoveTags extends FunctionBase1 {
+@FXFunctionDoc(
+	description = "fx:String.removeTags removes the XML tags from the input string",
+	example = "BIND(fx:String.removeTags(?htmlContent) AS ?plainText)",
+	group = "STRING FUNCTIONS",
+	label = "fx:String.removeTags"
+)
+public class RemoveTags extends FunctionBase1 implements FXFunction {
 	@Override
 	public NodeValue exec(NodeValue v) {
 		return NodeValue.makeString(Jsoup.clean(v.asString(), "", Safelist.none(), new Document.OutputSettings().prettyPrint(false)));

@@ -19,9 +19,16 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 
+@FXFunctionDoc(
+	description = "fx:isContainerMembershipProperty(?p) returns true if the node passed as parameter is a container membership property (rdf:_24 -> true)",
+	example = "FILTER(fx:isContainerMembershipProperty(?slot))",
+	group = "FUNCTIONS",
+	label = "fx:isContainerMembershipProperty"
+)
 public class IsContainerMembershipProperty extends FunctionBase1 implements FXFunction {
 
 	@Override

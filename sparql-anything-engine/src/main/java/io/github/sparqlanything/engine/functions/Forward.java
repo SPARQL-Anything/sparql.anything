@@ -19,11 +19,18 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
 import org.apache.jena.sparql.util.FmtUtils;
 
+@FXFunctionDoc(
+	description = "fx:forward(?a, ?b) returns the container membership property that follows ?a of ?b steps (rdf:_2, 5 -> rdf:_7)",
+	example = "BIND(fx:forward(?slot, 3) AS ?forward)",
+	group = "FUNCTIONS",
+	label = "fx:forward"
+)
 public class Forward extends FunctionBase2 implements FXFunction {
 	@Override
 	public NodeValue exec(NodeValue nodeValue, NodeValue nodeValue1) {

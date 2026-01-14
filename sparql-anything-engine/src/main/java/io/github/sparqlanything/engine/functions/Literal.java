@@ -19,6 +19,7 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.sparql.expr.ExprEvalTypeException;
@@ -27,6 +28,12 @@ import org.apache.jena.sparql.function.FunctionBase2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@FXFunctionDoc(
+	description = "The function fx:literal( ?a , ?b ) builds a literal from the string representation of ?a, using ?b either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).",
+	example = "BIND(fx:literal(?string, xsd:int) AS ?result)",
+	group = "FUNCTIONS",
+	label = "fx:literal"
+)
 public class Literal extends FunctionBase2 {
 	private static Logger L = LoggerFactory.getLogger(Literal.class);
 	@Override

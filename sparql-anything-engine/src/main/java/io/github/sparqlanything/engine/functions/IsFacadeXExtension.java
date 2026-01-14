@@ -20,13 +20,20 @@
 package io.github.sparqlanything.engine.functions;
 
 import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IsFacadeXExtension extends FunctionBase1 {
+@FXFunctionDoc(
+	description = "fx:isFacadeXExtension(?extension) returns true if the file extension is registered with FacadeX",
+	example = "FILTER(fx:isFacadeXExtension(?fileExtension))",
+	group = "FUNCTIONS",
+	label = "fx:isFacadeXExtension"
+)
+public class IsFacadeXExtension extends FunctionBase1 implements FXFunction {
 	
 	private static final Logger logger = LoggerFactory.getLogger(IsFacadeXExtension.class);
 
