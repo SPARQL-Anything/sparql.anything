@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Serial;
 import java.util.HashMap;
@@ -41,10 +42,32 @@ public class YASGUIServlet extends HttpServlet {
 
 	private final String fxPrefix;
 	private final String endpointPath;
+	private String generatedSnippetsJs = null;
 
 	public YASGUIServlet(String fxPrefix, String endpointPath) {
 		this.fxPrefix = fxPrefix;
 		this.endpointPath = endpointPath;
+		loadGeneratedSnippets();
+	}
+
+	/**
+	 * Loads generated snippets from the generated JavaScript file.
+	 * Falls back to empty array if file doesn't exist.
+	 */
+	private void loadGeneratedSnippets() {
+		try {
+			InputStream is = getClass().getResourceAsStream("/io/github/sparqlanything/fuseki/generated-snippets.js");
+			if (is != null) {
+				generatedSnippetsJs = new String(is.readAllBytes());
+				logger.info("Loaded generated snippets");
+			} else {
+				logger.warn("Generated snippets file not found, using empty array");
+				generatedSnippetsJs = "[]";
+			}
+		} catch (IOException e) {
+			logger.error("Failed to load generated snippets", e);
+			generatedSnippetsJs = "[]";
+		}
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -57,6 +80,7 @@ public class YASGUIServlet extends HttpServlet {
 		Map<String, Object> var = new HashMap<>();
 		var.put("sparqlPath", this.endpointPath);
 		var.put("fxPrefix", this.fxPrefix);
+		var.put("generatedSnippets", generatedSnippetsJs);
 
 		PrintWriter pw = res.getWriter();
 //		StringWriter sw = new StringWriter();

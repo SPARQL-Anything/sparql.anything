@@ -18,6 +18,7 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -25,6 +26,12 @@ import org.apache.jena.sparql.function.FunctionBase;
 
 import java.util.List;
 
+@FXFunctionDoc(
+	description = "The function fx:entity (?a ... ?n) accepts a list of arguments and performs concatenation and automatic casting to string. Container membership properties (rdf:_1,rdf:_2,...) are cast to numbers and then to strings (\\\"1\\\",\\\"2\\\").",
+	example = "BIND(fx:entity(\\\"http://example.org/\\\", ?name, ?id) AS ?uri)",
+	group = "FUNCTIONS",
+	label = "fx:entity"
+)
 public class Entity extends FunctionBase implements FXFunction {
 
 	@Override

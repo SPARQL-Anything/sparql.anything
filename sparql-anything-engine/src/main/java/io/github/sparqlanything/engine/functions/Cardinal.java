@@ -18,11 +18,18 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.apache.jena.sparql.util.FmtUtils;
 
+@FXFunctionDoc(
+	description = "fx:cardinal(?a) returns the corresponding cardinal integer from ?a (rdf:_24 -> 24)",
+	example = "BIND(fx:cardinal(?slot) AS ?index)",
+	group = "FUNCTIONS",
+	label = "fx:cardinal"
+)
 public class Cardinal extends FunctionBase1 implements FXFunction {
 
 	@Override

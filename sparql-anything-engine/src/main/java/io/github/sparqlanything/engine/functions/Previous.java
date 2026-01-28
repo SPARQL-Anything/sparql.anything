@@ -18,11 +18,18 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.apache.jena.sparql.util.FmtUtils;
 
+@FXFunctionDoc(
+	description = "fx:previous(?a) returns the container membership property that preceeds ?a (rdf:_2 -> rdf:_1)",
+	example = "BIND(fx:previous(?slot) AS ?previousSlot)",
+	group = "FUNCTIONS",
+	label = "fx:previous"
+)
 public class Previous extends FunctionBase1 implements FXFunction {
 
 	@Override

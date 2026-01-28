@@ -129,6 +129,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- Will generate the yasgui code snippets -->
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-documentation-generator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
 
 
         <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
@@ -139,6 +146,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -279,6 +293,30 @@
                     <source>17</source>
                     <target>17</target>
                 </configuration>
+            </plugin>
+
+            <!-- Generate YASGUI snippets from annotations -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-snippets</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>io.github.sparqlanything.fuseki.SnippetGenerator</mainClass>
+                            <arguments>
+                                <argument>${project.build.outputDirectory}/io/github/sparqlanything/fuseki/generated-snippets.js</argument>
+                            </arguments>
+                            <includePluginDependencies>false</includePluginDependencies>
+                            <classpathScope>compile</classpathScope>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
 

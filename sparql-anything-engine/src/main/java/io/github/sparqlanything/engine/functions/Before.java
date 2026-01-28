@@ -18,11 +18,18 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
 import org.apache.jena.sparql.util.FmtUtils;
 
+@FXFunctionDoc(
+	description = "fx:before(?a, ?b) returns true if ?a and ?b are container membership properties and ?a is lower than ?b, false otherwise",
+	example = "FILTER(fx:before(?slot1, ?slot2))",
+	group = "FUNCTIONS",
+	label = "fx:before"
+)
 public class Before extends FunctionBase2 implements FXFunction {
 	@Override
 	public NodeValue exec(NodeValue nodeValue, NodeValue nodeValue1) {

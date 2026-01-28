@@ -18,11 +18,18 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.apache.jena.sparql.util.FmtUtils;
 
+@FXFunctionDoc(
+	description = "fx:next(?b) returns the container membership property that succeedes ?b (rdf:_1 -> rdf:_2)",
+	example = "BIND(fx:next(?slot) AS ?nextSlot)",
+	group = "FUNCTIONS",
+	label = "fx:next"
+)
 public class Next extends FunctionBase1 implements FXFunction {
 
 	@Override

@@ -18,11 +18,18 @@
 
 package io.github.sparqlanything.engine.functions;
 
+import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
 import org.apache.jena.sparql.util.FmtUtils;
 
+@FXFunctionDoc(
+	description = "fx:backward(?a, ?b) returns the container membership property that preceeds ?a of ?b steps (rdf:_24, 4 -> rdf:_20)",
+	example = "BIND(fx:backward(?slot, 2) AS ?backward)",
+	group = "FUNCTIONS",
+	label = "fx:backward"
+)
 public class Backward extends FunctionBase2 implements FXFunction {
 	@Override
 	public NodeValue exec(NodeValue nodeValue, NodeValue nodeValue1) {
