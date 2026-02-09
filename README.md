@@ -159,7 +159,7 @@ SPARQL Anything uses a single generic abstraction for all data source formats ca
 
 ### Facade-X
 
-Facade-X is a simplistic meta-model used by SPARQL Anything transformers to generate RDF data from diverse data sources.
+Facade-X is a minimalistic meta-model used by SPARQL Anything transformers to generate RDF data from diverse data sources.
 Intuitively, Facade-X uses a subset of RDF as a general approach to represent the source content *as-it-is* but in RDF.
 The model combines two types of elements: containers and literals.
 Facade-X always has a single root container.
