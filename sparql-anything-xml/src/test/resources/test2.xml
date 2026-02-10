@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<test>
+    Floating string before (first)
+    <second attribute="1977">Value in second</second>
+    <third>Value in third</third>
+    Floating string after (fourth)
+</test>

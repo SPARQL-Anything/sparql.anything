@@ -21,6 +21,8 @@ package io.github.sparqlanything.xml;
 
 import io.github.sparqlanything.model.*;
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.vocabulary.RDF;
@@ -72,6 +74,22 @@ public class XMLTriplifierTest {
 			Assert.assertFalse(q.getSubject().isBlank());
 			Assert.assertFalse(q.getObject().isBlank());
 		}
-
 	}
+
+	@Test
+	public void test2() throws IOException, TriplifierHTTPException {
+		Properties properties = new Properties();
+		//properties.setProperty("baseNamespace", "http://www.example.org#");
+
+		URL xml2 = getClass().getClassLoader().getResource("./test2.xml");
+		properties.setProperty(IRIArgument.LOCATION.toString(), xml2.toString());
+		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(properties);
+		triplifier.triplify(properties, builder);
+		DatasetGraph graph = builder.getDatasetGraph();
+//		Iterator<Quad> iter = graph.find(null, null, RDF.type.asNode(),
+//			NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
+		//Assert.assertTrue(iter.hasNext());
+		RDFDataMgr.write(System.out, graph.getDefaultGraph(), Lang.TTL);
+	}
+
 }
