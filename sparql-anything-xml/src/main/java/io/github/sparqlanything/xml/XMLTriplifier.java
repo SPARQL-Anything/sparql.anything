@@ -252,6 +252,7 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 						}
 						int member = members.get(resourceId) + 1;
 						builder.addValue(dataSourceId, resourceId, member, value);
+						members.put(resourceId, member);
 					}
 					charBuilder = null;
 				}

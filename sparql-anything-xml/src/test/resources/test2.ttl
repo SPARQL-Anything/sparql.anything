@@ -1,0 +1,18 @@
+[ a       <http://sparql.xyz/facade-x/ns/root> , <http://sparql.xyz/facade-x/data/test>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+          "Floating string before (first)";
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+          [ a       <http://sparql.xyz/facade-x/data/second>;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                    "Value in second";
+            <http://sparql.xyz/facade-x/data/attribute>
+                    "1977"
+          ];
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+          [ a       <http://sparql.xyz/facade-x/data/third>;
+            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                    "Value in third"
+          ];
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
+          "Floating string after (fourth)"
+] .
