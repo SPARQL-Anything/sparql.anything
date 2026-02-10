@@ -652,14 +652,17 @@ public class SPARQLAnything {
 	public static void main(String[] args) throws Exception {
 
 		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.PROCESS_STARTS);
-
-		logger.debug("SPARQL anything");
+		if(logger.isDebugEnabled()){
+			logger.debug("SPARQL anything");
+			logger.debug("args: {}", Arrays.toString(args));
+		}
 
 		CLI cli = new CLI();
 		if (args.length == 0) {
 			cli.printHelp();
 			return;
 		}
+
 		try {
 			cli.parse(args);
 			Utils.loadJARs(cli.getLoadJar());
