@@ -41,10 +41,35 @@ public class OptionsViaCommandLineTest {
 
 	@Test
 	public void noServiceModeWithOptional() throws Exception {
-		String f = Objects.requireNonNull(getClass().getClassLoader().getResource("books.xml")).toURI().toString();
+		noServiceModeWithOptional(null);
+	}
+
+
+	@Test
+	public void noServiceModeWithSubtype() throws Exception {
+		noServiceModeWithOptional("application/xml");
+		noServiceModeWithOptional("application/bob+xml");
+		noServiceModeWithOptional("whatever/bob+xml");
+	}
+
+	public void noServiceModeWithOptional(String mimeType) throws Exception {
+		String books;
+		if(Objects.isNull(mimeType)){
+			books = "books.xml";
+		}else{
+			books = "books.xyz";
+		}
+		String f = Objects.requireNonNull(getClass().getClassLoader().getResource(books)).toURI().toString();
 		String q = "SELECT * {  ?s ?p ?o OPTIONAL {?s a ?c} } ";
 //		System.out.println(Algebra.compile(QueryFactory.create(q)));
-		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "location="+f});
+		String[] args;
+		if(mimeType == null){
+			args = new String[]{"-q", q, "-c", "location="+f};
+		}else{
+			args = new String[]{"-q", q, "-c", "location="+f, "-c", "media-type="+mimeType};
+		}
+
+		String out = SPARQLAnything.callMain(args);
 //		System.out.println(out);
 		CSVParser parser = new CSVParser(new StringReader(out), CSVFormat.DEFAULT);
 		Set<String> actualSet = new HashSet<>();
@@ -62,8 +87,6 @@ public class OptionsViaCommandLineTest {
 		expectedSet.add("http://sparql.xyz/facade-x/data/genre");
 		expectedSet.add("http://sparql.xyz/facade-x/data/publish_date");
 		Assert.assertEquals(expectedSet, actualSet);
-
-
 	}
 
 	@Ignore

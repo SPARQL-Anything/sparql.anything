@@ -33,6 +33,7 @@ public final class TriplifierRegister {
 
 	private final Map<String, String> mimeType = new HashMap<>();
 	private final Map<String, String> extension = new HashMap<>();
+	private final Map<String, String> subtypes = new HashMap<>();
 
 	private TriplifierRegister() {
 
@@ -46,7 +47,11 @@ public final class TriplifierRegister {
 		return instance;
 	}
 
-	public void registerTriplifier(String t, String[] extensions, String[] mimeTypes)
+	public void registerTriplifier(String t, String[] extensions, String[] mimeTypes) throws TriplifierRegisterException {
+		registerTriplifier(t, extensions,mimeTypes, null);
+	}
+
+	public void registerTriplifier(String t, String[] extensions, String[] mimeTypes, String subType)
 			throws TriplifierRegisterException {
 		log.trace("Registering {}", t);
 		for (String ext : extensions) {
@@ -65,6 +70,9 @@ public final class TriplifierRegister {
 			}
 			log.trace("Registering triplifier for mime-type {} : {}", mimeType, t);
 			this.mimeType.put(mimeType, t);
+		}
+		if(subType != null) {
+			this.subtypes.put(subType, t);
 		}
 	}
 
@@ -96,7 +104,20 @@ public final class TriplifierRegister {
 	}
 
 	public String getTriplifierForMimeType(String f) {
-		return this.mimeType.get(f);
+		String t = this.mimeType.get(f);
+		if(t == null && f.contains("/")) {
+			// Check if subtype is
+			String part = f.split("/")[1].trim();
+			if(part.contains("+")){
+				part = part.substring(part.indexOf("+") + 1).trim();
+			}
+			if(subtypes.containsKey(part)){
+				t = this.subtypes.get(part);
+				log.warn("Fallback on mime subtype {} for {}", part, f);
+				return t;
+			}
+		}
+		return t;
 	}
 
 	public String getTriplifierForExtension(String f) {

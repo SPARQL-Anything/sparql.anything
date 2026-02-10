@@ -105,5 +105,12 @@ public class CLITest {
 		Assert.assertTrue(out.contains("10"));
 	}
 
+	@Test
+	public void issue_609() throws Exception {
+		
+
+
+	}
+
 
 }
