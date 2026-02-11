@@ -119,7 +119,7 @@ public class TarTriplifierTest {
 //			ModelFactory.createModelForGraph(dg.getDefaultGraph()).write(System.out, "TTL");
 
 			Graph expectedGraph = GraphFactory.createGraphMem();
-			Node n = NodeFactory.createURI(Path.of(url.toURI()).toUri() + "#");
+			Node n = NodeFactory.createURI(Path.of(url.toURI()).toUri().toString());
 			expectedGraph.add(Triple.create(n, RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT)));
 			expectedGraph.add(Triple.create(n, RDF.li(2).asNode(), NodeFactory.createLiteralString("test/test.csv")));
 			expectedGraph.add(Triple.create(n, RDF.li(3).asNode(), NodeFactory.createLiteralString("test/test.json")));

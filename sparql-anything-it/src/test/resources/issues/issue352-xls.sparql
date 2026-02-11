@@ -4,9 +4,9 @@ SELECT DISTINCT ?fred ?sally
 WHERE {
    SERVICE <x-sparql-anything:location=%%%LOCATION%%%>
    {
-      # GRAPH <%%%LOCATION%%%#Sheet1> {
+      # GRAPH <%%%LOCATION%%%Sheet1> {
       fx:properties fx:spreadsheet.headers true .
-      GRAPH <%%%LOCATION%%%#Sheet1> {
+      GRAPH <%%%LOCATION%%%Sheet1> {
           ?root a fx:root ;
             rdf:_1 [rdf:_1 ?fred] ;
             rdf:_2 [rdf:_1 ?sally] .

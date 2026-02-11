@@ -149,7 +149,7 @@ public class FolderTriplifierTest {
 			expected.add("test.txt");
 
 			Set<String> actual = new HashSet<>();
-			dg.find(null, NodeFactory.createURI(Path.of(url.toURI()).toUri() + "#"), null, null).forEachRemaining(q -> {
+			dg.find(null, NodeFactory.createURI(Path.of(url.toURI()).toUri().toString()), null, null).forEachRemaining(q -> {
 				if (q.getObject().isLiteral()) {
 					try {
 						actual.add(q.getObject().getLiteralLexicalForm()

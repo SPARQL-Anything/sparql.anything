@@ -65,13 +65,13 @@ public interface Triplifier {
 		if (root != null && !root.trim().isEmpty()) return root;
 
 		String location = getNormalisedLocation(properties);
-		if (location != null) return location + "#";
+		if (location != null) return location ;//+ "#";
 
 		String content = PropertyUtils.getStringProperty(properties, IRIArgument.CONTENT, null);
-		if (content != null) return XYZ_NS + DigestUtils.md5Hex(content) + "#";
+		if (content != null) return XYZ_NS + DigestUtils.md5Hex(content) ;//+ "#";
 
 		String command = PropertyUtils.getStringProperty(properties, IRIArgument.COMMAND, null);
-		if (command != null) return XYZ_NS + DigestUtils.md5Hex(command) + "#";
+		if (command != null) return XYZ_NS + DigestUtils.md5Hex(command) ;//+ "#";
 
 		throw new RuntimeException("No location nor content nor command provided!");
 	}

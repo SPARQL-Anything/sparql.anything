@@ -31,7 +31,7 @@ public class TriplifierTest {
 	public void instantiateURLTest() {
 		Properties p = new Properties();
 		p.setProperty(IRIArgument.LOCATION.toString(), "http://a/b.c");
-		Assert.assertEquals("http://a/b.c#", Triplifier.getRootArgument(p));
+		Assert.assertEquals("http://a/b.c", Triplifier.getRootArgument(p));
 	}
 
 }
