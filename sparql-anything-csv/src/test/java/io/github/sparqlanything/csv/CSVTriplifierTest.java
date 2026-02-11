@@ -27,14 +27,13 @@ public class CSVTriplifierTest extends AbstractTriplifierTester {
 
 	public CSVTriplifierTest() {
 		super(new CSVTriplifier(), new Properties(), "csv", "nq");
+		this.printWholeGraph = false;
 	}
+
 
 	@Test
 	public void test1() {
 		this.assertResultIsIsomorphicWithExpected();
 		this.assertNotBlankNode();
-
 	}
-
-
 }

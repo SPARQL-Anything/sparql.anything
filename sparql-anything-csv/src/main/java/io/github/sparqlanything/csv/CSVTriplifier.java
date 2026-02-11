@@ -146,9 +146,12 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 		}
 		return makeHeadersMapFromOpenIterator(properties, headersRow, iterator);
 	}
-
+	private String rowPrefix = null;
 	private void processRow(int rown, String dataSourceId, String rootId, CSVRecord record, LinkedHashMap<Integer, String> headers_map, FacadeXGraphBuilder builder, boolean ignoreColumnsWithNoHeaders) {
-		String rowContainerId = StringUtils.join(rootId, "#row", rown);
+		if(rowPrefix == null) {
+			rowPrefix = (rootId.endsWith("#") || rootId.endsWith("/")) ?  "row": "#row";
+		}
+		String rowContainerId = StringUtils.join(rootId, rowPrefix, rown);
 		builder.addContainer(dataSourceId, rootId, rown, rowContainerId);
 		Iterator<String> cells = record.iterator();
 		int cellid = 0;
