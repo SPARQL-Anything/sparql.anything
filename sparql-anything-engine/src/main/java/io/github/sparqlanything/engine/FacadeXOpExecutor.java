@@ -46,16 +46,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 	public final static Symbol strategy = Symbol.create("facade-x-strategy");
 	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
-	private final FXWorkerOpService fxWorkerOpService;
-
-	private final FXWorkerOp fxWorkerOp;
-
+	private FXWorker worker;
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
-		TriplifierRegister triplifierRegister = TriplifierRegister.getInstance();
-		DatasetGraphCreator dgc = new DatasetGraphCreator(execCxt);
-		fxWorkerOpService = new FXWorkerOpService(triplifierRegister, dgc);
-		fxWorkerOp = new FXWorkerOp(triplifierRegister, dgc);
+		worker = new FXWorker();
 	}
 
 
@@ -63,7 +57,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 		if (this.execCxt.getContext().isDefined(SPARQLAnythingConstants.NO_SERVICE_MODE) && this.execCxt.getContext().getTrueOrFalse(SPARQLAnythingConstants.NO_SERVICE_MODE)) {
 			try {
 				this.execCxt.getContext().setFalse(SPARQLAnythingConstants.NO_SERVICE_MODE);
-				return fxWorkerOp.execute(op, input, this.execCxt);
+				return worker.execute(op, input, this.execCxt);
 			} catch (ClassNotFoundException | NoSuchMethodException | TriplifierHTTPException |
 					 InvocationTargetException | InstantiationException | URISyntaxException |IllegalAccessException | IOException |
 					 UnboundVariableException e) {
@@ -114,7 +108,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 				try {
 					// go with the FacadeX default execution
-					return fxWorkerOpService.execute(opService, input, execCxt);
+					return worker.execute(opService, input, execCxt);
 				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
 						 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
 						 ClassNotFoundException | URISyntaxException | TriplifierHTTPException e) {

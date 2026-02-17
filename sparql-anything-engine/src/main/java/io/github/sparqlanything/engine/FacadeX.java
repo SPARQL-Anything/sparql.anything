@@ -54,7 +54,7 @@ public final class FacadeX {
 	static {
 		try {
 			log.trace("Registering isFacadeXExtension function");
-
+			
 			FunctionRegistry.get().put(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "isFacadeXExtension", IsFacadeXExtension.class);
 			enablingMagicProperties();
 			enablingFunctions();

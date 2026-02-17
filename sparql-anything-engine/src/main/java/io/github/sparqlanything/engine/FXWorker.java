@@ -18,33 +18,40 @@
 
 package io.github.sparqlanything.engine;
 
+import io.github.sparqlanything.facadeiri.FacadeIRIParser;
 import io.github.sparqlanything.model.*;
+import org.apache.commons.io.IOUtils;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
+import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
+import org.apache.jena.sparql.engine.main.QC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Scanner;
 
-public abstract class FXWorker<T extends Op> {
+public class FXWorker {
 
 	private static final Logger logger = LoggerFactory.getLogger(FXWorker.class);
-	private final TriplifierRegister tr;
-	private final DatasetGraphCreator dgc;
 
-	public FXWorker(TriplifierRegister tr, DatasetGraphCreator dgc) {
-		this.tr = tr;
-		this.dgc = dgc;
-	}
-
-	public QueryIterator execute(T op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
+	public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
 
 		// extract properties from service URI
 		Properties p = new Properties();
@@ -52,43 +59,77 @@ public abstract class FXWorker<T extends Op> {
 		// first extract from execution context
 		PropertyExtractor.extractPropertiesFromExecutionContext(executionContext, p);
 
-		//then, from opservice (so that can be overwritten)
-		extractProperties(p, op);
+		if(op instanceof OpService){
+			extractProperties(p, (OpService) op);
+			// Possibly execute reused queries
+			if(PropertyUtils.hasProperty(p, IRIArgument.QUERY))
+				return executeReusedQuery((OpService) op, p, input, executionContext);
+		}
 
-		// Possibly execute reused queries
-		if(PropertyUtils.hasProperty(p, IRIArgument.QUERY))
-			return executeReusedQuery(op, p, input, executionContext);
 
 		// Possibly read from STD in
 		readFromStdIn(p);
 
-		// guess triplifier
-		Triplifier t = PropertyExtractor.getTriplifier(p, tr);
-
-		if (t == null) {
-			logger.warn("No triplifier found");
-			return QueryIterNullIterator.create(executionContext);
-		}
-
-		// check execution with slicing
-		if (PropertyUtils.getBooleanProperty(p, IRIArgument.SLICE)) {
-			if (t instanceof Slicer) {
-				logger.trace("Execute with slicing");
-				return new QueryIterSlicer(executionContext, input, t, p, op);
-			} else {
-				logger.warn("Slicing is not supported by triplifier: {}", t.getClass().getName());
-			}
-		}
-
-		// Execute with default, bulk method
-		DatasetGraph dg = dgc.getDatasetGraph(t, p, op);
-		Utils.ensureReadingTxn(dg);
-
-		return execute(op, input, executionContext, dg, p);
+		FXExecutionStrategy s = new FXStrategySelector().getStrategy(p, executionContext);
+		return s.execute(op, input);
 	}
 
-	public abstract void extractProperties(Properties p, T op) throws UnboundVariableException;
+	public void extractProperties(Properties properties, OpService opService) throws UnboundVariableException {
+		String url = opService.getService().getURI();
 
+		// Parse IRI only if contains properties
+		if (!url.equals(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
+			FacadeIRIParser p = new FacadeIRIParser(url);
+			properties.putAll(p.getProperties());
+		}
+
+		// Setting defaults
+		if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
+			logger.trace("Setting default value for namespace: {}", Triplifier.XYZ_NS);
+			properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
+		}
+		// Setting silent
+		if (opService.getSilent()) {
+			// we can only see if silent was specified at the OpService so we need to stash
+			// a boolean
+			// at this point so we can use it when we triplify further down the Op tree
+			properties.setProperty(IRIArgument.OP_SERVICE_SILENT.toString(), "true");
+		}
+
+		Op next = opService.getSubOp();
+		FXBGPFinder vis = new FXBGPFinder();
+		next.visit(vis);
+		logger.trace("Has Table {}", vis.hasTable());
+
+		if (vis.getBGP() != null) {
+			try {
+				PropertyExtractor.extractPropertiesFromBGP(properties, vis.getBGP());
+			} catch (UnboundVariableException e) {
+				if (vis.hasTable()) {
+					logger.trace(vis.getOpTable().toString());
+					logger.trace("BGP {}", vis.getBGP());
+					logger.trace("Contains variable names {}", vis.getOpTable().getTable().getVarNames().contains(e.getVariableName()));
+					if (vis.getOpTable().getTable().getVarNames().contains(e.getVariableName())) {
+						e.setOpTable(vis.getOpTable());
+					}
+				}
+
+				if (vis.getOpExtend() != null) {
+					logger.trace("OpExtend {}", vis.getOpExtend());
+					for (Var var : vis.getOpExtend().getVarExprList().getVars()) {
+						if (var.getName().equals(e.getVariableName())) {
+							e.setOpExtend(vis.getOpExtend());
+						}
+					}
+				}
+
+				throw e;
+			}
+			logger.trace("Number of properties {}: {}", properties.size(), properties);
+		} else {
+			logger.trace("Couldn't find OpGraph");
+		}
+	}
 	private void readFromStdIn(Properties p) {
 		if (p.containsKey(IRIArgument.READ_FROM_STD_IN.toString())) {
 			Scanner sc = new Scanner(System.in);
@@ -101,7 +142,21 @@ public abstract class FXWorker<T extends Op> {
 		}
 	}
 
-	public abstract QueryIterator execute(T op, QueryIterator input, ExecutionContext executionContext, DatasetGraph dg, Properties p);
-
-	public abstract QueryIterator executeReusedQuery(T opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException;
+	public QueryIterator executeReusedQuery(OpService opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY))).toURI(), StandardCharsets.UTF_8);
+		Query query = QueryFactory.create(queryStr);
+		Op op = Algebra.optimize(Algebra.compile(query));
+		if (query.isSelectType()) {
+			return QC.execute(op, input, executionContext);
+		} else if (query.isConstructQuad()){
+			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
+			Dataset dataset = queryExecution.execConstructDataset();
+			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.create(dataset.asDatasetGraph()));
+		} else if (query.isConstructType()) {
+			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
+			Model result = queryExecution.execConstruct();
+			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.createForGraph(result.getGraph()));
+		}
+		return QueryIterNullIterator.create(executionContext);
+	}
 }
