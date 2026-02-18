@@ -138,7 +138,7 @@ WHERE
 ###### Result
 
 ```turtle
-<https://sparql-anything.cc/examples/Book1.xlsx#Sheet1> {
+<https://sparql-anything.cc/examples/Book1.xlsxSheet1> {
     _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
@@ -160,7 +160,7 @@ WHERE
                     "C2" .
 }
 
-<https://sparql-anything.cc/examples/Book1.xlsx#Sheet2> {
+<https://sparql-anything.cc/examples/Book1.xlsxSheet2> {
     _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
@@ -230,7 +230,7 @@ WHERE
 ###### Result
 
 ```turtle
-<https://sparql-anything.cc/examples/Book2.xlsx#Sheet1> {
+<https://sparql-anything.cc/examples/Book2.xlsxSheet1> {
     [ a       <http://sparql.xyz/facade-x/ns/root>;
       <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
               [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
@@ -307,7 +307,7 @@ WHERE
 ###### Result
 
 ```turtle
-<https://sparql-anything.cc/examples/Book3.xlsx#Sheet1> {
+<https://sparql-anything.cc/examples/Book3.xlsxSheet1> {
     _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
@@ -374,7 +374,7 @@ WHERE
                     "C2" .
 }
 
-<https://sparql-anything.cc/examples/Book3.xlsx#Sheet2> {
+<https://sparql-anything.cc/examples/Book3.xlsxSheet2> {
     _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
@@ -497,7 +497,7 @@ WHERE
 ###### Result
 
 ```turtle
-<https://sparql-anything.cc/examples/Book1.xlsx#Sheet1> {
+<https://sparql-anything.cc/examples/Book1.xlsxSheet1> {
     _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
@@ -519,7 +519,7 @@ WHERE
                     "C2" .
 }
 
-<https://sparql-anything.cc/examples/Book1.xlsx#Sheet2> {
+<https://sparql-anything.cc/examples/Book1.xlsxSheet2> {
     _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
