@@ -459,17 +459,17 @@ public class OpComponentsAnalyser implements OpVisitor {
 					return true;
 				}
 			} else if (o instanceof Triple t) {
-				if ((!t.getSubject().isConcrete() || t.getSubject().matches(subject))
+				if ((!t.getSubject().isConcrete() || t.getSubject().equals(subject))
 						&& predicateMatch(t.getPredicate(), predicate) // (!t.getPredicate().isConcrete() ||
-						// t.getPredicate().matches(predicate))
-						&& (!t.getObject().isConcrete() || t.getObject().matches(object))) {
+						// t.getPredicate().equals(predicate))
+						&& (!t.getObject().isConcrete() || t.getObject().equals(object))) {
 					return true;
 				}
 			} else if (o instanceof OpPropFunc op) {
-				if ((!op.getSubjectArgs().getArg().isConcrete() || op.getSubjectArgs().getArg().matches(subject))
+				if ((!op.getSubjectArgs().getArg().isConcrete() || op.getSubjectArgs().getArg().equals(subject))
 						&& predicateMatch(op.getProperty(), predicate) // (!t.getPredicate().isConcrete() ||
-						// t.getPredicate().matches(predicate))
-						&& (!op.getObjectArgs().getArg().isConcrete() || op.getObjectArgs().getArg().matches(object))) {
+						// t.getPredicate().equals(predicate))
+						&& (!op.getObjectArgs().getArg().isConcrete() || op.getObjectArgs().getArg().equals(object))) {
 					return true;
 				}
 
@@ -479,11 +479,11 @@ public class OpComponentsAnalyser implements OpVisitor {
 	}
 
 	protected boolean matchQuad(Quad q, Node graph, Node subject, Node predicate, Node object) {
-		return (!q.getGraph().isConcrete() || q.getGraph().matches(graph) || q.getGraph().matches(unionGraph))
-			&& (!q.getSubject().isConcrete() || q.getSubject().matches(subject))
+		return (!q.getGraph().isConcrete() || q.getGraph().equals(graph) || q.getGraph().equals(unionGraph))
+			&& (!q.getSubject().isConcrete() || q.getSubject().equals(subject))
 			&& predicateMatch(q.getPredicate(), predicate) // (!q.getPredicate().isConcrete() ||
-			// q.getPredicate().matches(predicate))
-			&& (!q.getObject().isConcrete() || q.getObject().matches(object));
+			// q.getPredicate().equals(predicate))
+			&& (!q.getObject().isConcrete() || q.getObject().equals(object));
 	}
 
 	private boolean predicateMatch(Node queryPredicate, Node dataPredicate) {
@@ -492,7 +492,7 @@ public class OpComponentsAnalyser implements OpVisitor {
 				&& queryPredicate.getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")) {
 			return dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_");
 		}
-		return (!queryPredicate.isConcrete() || queryPredicate.matches(dataPredicate));
+		return (!queryPredicate.isConcrete() || queryPredicate.equals(dataPredicate));
 	}
 
 }

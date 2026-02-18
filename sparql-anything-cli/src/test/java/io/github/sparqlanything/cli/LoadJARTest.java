@@ -18,7 +18,10 @@
 
 package io.github.sparqlanything.cli;
 
+import io.github.sparqlanything.engine.AnySlot;
+import org.apache.jena.sparql.function.FunctionRegistry;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -27,7 +30,7 @@ public class LoadJARTest {
 
 	@Test
 	public void testWithMagicProperties() throws Exception {
-		String jarFile = Objects.requireNonNull(getClass().getClassLoader().getResource("test-jar-0.0.1-shaded.jar")).toString();
+		String jarFile = Objects.requireNonNull(getClass().getClassLoader().getResource("plugin-0.0.1-shaded.jar")).toString();
 		//System.out.println(jarFile);
 		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?vv {  ?s  fx:anySlot ?v  . BIND( <http://example.org/theAnswer>(?v) AS ?vv)  } ";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc", "-j", jarFile});
