@@ -184,56 +184,56 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/2:food/4:calories>
+<https://sparql-anything.cc/examples/simple-menu.xml/2:food/4:calories>
         rdf:type  xyz:calories;
         rdf:_1    "900" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/2:food/3:desc>
+<https://sparql-anything.cc/examples/simple-menu.xml/2:food/3:desc>
         rdf:type  xyz:desc;
         rdf:_1    "Light Belgian waffles covered with strawberries and whipped cream" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/2:food/2:price>
+<https://sparql-anything.cc/examples/simple-menu.xml/2:food/2:price>
         rdf:type  xyz:price;
         rdf:_1    "$7.95" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/2:food/1:name>
+<https://sparql-anything.cc/examples/simple-menu.xml/2:food/1:name>
         rdf:type  xyz:name;
         rdf:_1    "Strawberry Belgian Waffles" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/2:food>
+<https://sparql-anything.cc/examples/simple-menu.xml/2:food>
         rdf:type  xyz:food;
-        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/1:name>;
-        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/2:price>;
-        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/3:desc>;
-        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food/4:calories> .
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml/2:food/1:name>;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml/2:food/2:price>;
+        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml/2:food/3:desc>;
+        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml/2:food/4:calories> .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/4:calories>
+<https://sparql-anything.cc/examples/simple-menu.xml/1:food/4:calories>
         rdf:type  xyz:calories;
         rdf:_1    "650" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/3:desc>
+<https://sparql-anything.cc/examples/simple-menu.xml/1:food/3:desc>
         rdf:type  xyz:desc;
         rdf:_1    "Two of our famous Belgian Waffles with plenty of real maple syrup" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/2:price>
+<https://sparql-anything.cc/examples/simple-menu.xml/1:food/2:price>
         rdf:type  xyz:price;
         rdf:_1    "$5.95" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/1:food/1:name>
+<https://sparql-anything.cc/examples/simple-menu.xml/1:food/1:name>
         rdf:type  xyz:name;
         rdf:_1    "Belgian Waffles" .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#/1:food>
+<https://sparql-anything.cc/examples/simple-menu.xml/1:food>
         rdf:type  xyz:food;
-        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/1:name>;
-        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/2:price>;
-        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/3:desc>;
-        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food/4:calories> .
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml/1:food/1:name>;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml/1:food/2:price>;
+        rdf:_3    <https://sparql-anything.cc/examples/simple-menu.xml/1:food/3:desc>;
+        rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml/1:food/4:calories> .
 
-<https://sparql-anything.cc/examples/simple-menu.xml#>
+<https://sparql-anything.cc/examples/simple-menu.xml>
         rdf:type  fx:root;
-        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml#/1:food>;
-        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml#/2:food> .
+        rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml/1:food>;
+        rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml/2:food> .
 
 ```
 
