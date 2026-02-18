@@ -58,7 +58,6 @@ class PropertyExtractor {
 		return strategy;
 	}
 
-
 	static Triplifier getTriplifier(Properties p, TriplifierRegister triplifierRegister) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		Triplifier t;
 

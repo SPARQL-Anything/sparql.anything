@@ -19,6 +19,7 @@
 package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.facadeiri.FacadeIRIParser;
+import io.github.sparqlanything.fxbgp.stream.NotATreeException;
 import io.github.sparqlanything.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.Dataset;
@@ -50,7 +51,7 @@ import java.util.Scanner;
 public class FXWorker {
 
 	private static final Logger logger = LoggerFactory.getLogger(FXWorker.class);
-
+	private boolean strategySelected = false;
 	public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
 
 		// extract properties from service URI
@@ -70,8 +71,9 @@ public class FXWorker {
 		// Possibly read from STD in
 		readFromStdIn(p);
 
-		FXExecutionStrategy s = new FXStrategySelector().getStrategy(p, executionContext);
-		return s.execute(op, input);
+//		FXExecutionStrategy s = new FXStrategySelector().getStrategy(p, op, executionContext);
+//		return s.execute(op, input);
+		return new FXGraphMaterialisationStrategy(p,executionContext).execute(op,input);
 	}
 
 	public void extractProperties(Properties properties, OpService opService) throws UnboundVariableException {

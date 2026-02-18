@@ -31,37 +31,54 @@
 	<properties>
 		<revision>1.2.0-SNAPSHOT</revision>
 	</properties>
+    <version>${revision}-STREAM</version>
 	<artifactId>sparql-anything-engine</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-model</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-metadata</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-parser</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 		</dependency>
+
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-fxbgp</artifactId>
+            <version>${revision}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 		<dependency>
 			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-archive</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>io.github.sparql-anything</groupId>
 			<artifactId>sparql-anything-testutils</artifactId>
-			<version>${project.version}</version>
+			<version>${revision}</version>
 			<scope>test</scope>
 		</dependency>
 
