@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Java 17](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml/badge.svg?branch=v1.2-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/maven_Java17.yml)
+[![Java 21](https://github.com/sparql-anything/sparql.anything/actions/workflows/build_on_maven_java21.yml/badge.svg?branch=v1.2-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/build_on_maven_java21.yml)
 [![CodeQL](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml/badge.svg?branch=v1.2-DEV)](https://github.com/SPARQL-Anything/sparql.anything/actions/workflows/codeql-analysis.yml)
 [![How to](https://img.shields.io/badge/How%20to-use-green.svg)](#usage)
 [![How to](https://img.shields.io/badge/How%20to-join-blue.svg)](https://forms.gle/t1paTLz7jVu3RYnu8)
@@ -261,7 +261,7 @@ and get this result without caring of transforming JSON to RDF.
 
 ### Using the Command Line Interface
 
-SPARQL Anything requires `Java >= 17` to be installed in your operating system.
+SPARQL Anything requires `Java >= 21` to be installed in your operating system.
 Download the latest version of the SPARQL Anything command line from
 the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
 The command line is a file named `sparql-anything-<version>.jar`.
@@ -277,7 +277,7 @@ See the [usage section](#Usage) for details on the command line interface.
 ### Using the server
 
 SPARQL Anything is also released as a server, embedded into an instance of the Apache Jena Fuseki server.
-The server requires `Java >= 17` to be installed in your operating system.
+The server requires `Java >= 21` to be installed in your operating system.
 Download the latest version of the SPARQL Anything server from
 the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases).
 The command line is a file named `sparql-anything-server-<version>.jar`.
@@ -556,7 +556,7 @@ Moreover, if you run the geosparql distribution of the CLI or the server, you ca
 
 SPARQL Anything is available as Java Library, Command Line Interface, Web Application Server, and also Python library.
 
-*Note*: as of version 1.0.0, SPARQL Anything requires Java 17+.
+*Note*: as of version 1.0.0, SPARQL Anything requires Java 21+.
 
 ### Command Line Interface (CLI)
 
