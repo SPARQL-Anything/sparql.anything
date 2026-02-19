@@ -71,9 +71,9 @@ public class FXWorker {
 		// Possibly read from STD in
 		readFromStdIn(p);
 
-//		FXExecutionStrategy s = new FXStrategySelector().getStrategy(p, op, executionContext);
-//		return s.execute(op, input);
-		return new FXGraphMaterialisationStrategy(p,executionContext).execute(op,input);
+		FXExecutionStrategy s = new FXStrategySelector().getStrategy(p, op, executionContext);
+		return s.execute(op, input);
+		//return new FXGraphMaterialisationStrategy(p,executionContext).execute(op,input);
 	}
 
 	public void extractProperties(Properties properties, OpService opService) throws UnboundVariableException {

@@ -144,7 +144,7 @@ public class Utils {
 		return new OpPropFunc(NodeFactory.createURI(FacadeX.ANY_SLOT_URI), new PropFuncArg(t.getSubject()), new PropFuncArg(t.getObject()), OpTable.create(new TableUnit()));
 	}
 
-	static OpBGP excludeFXProperties(OpBGP bgp) {
+	public static OpBGP excludeFXProperties(OpBGP bgp) {
 		BasicPattern result = new BasicPattern();
 		for (Triple t : bgp.getPattern().getList()) {
 			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) continue;

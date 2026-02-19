@@ -18,9 +18,15 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 public class FXStrategySelector {
-	private static final Logger L = LoggerFactory.getLogger(FXStrategySelector.class);
+	public static final Logger L = LoggerFactory.getLogger(FXStrategySelector.class);
 	public FXExecutionStrategy getStrategy(Properties p, Op op, ExecutionContext execCxt){
 		L.info("Getting strategy for {}", op);
+
+		// TODO Add support for `s` configuration property
+		// 1 - Materialisation
+		// 2 - Materialisation + Slicing
+		// 3 - Streaming
+
 		// If Op is supported
 		Op testOp = op;
 		if(op instanceof OpService){
@@ -50,7 +56,7 @@ public class FXStrategySelector {
 			}
 
 			if(fxparser != null){
-				L.info("Select stream materialisation strategy");
+				L.info("Select stream execution strategy");
 				return new FXStreamExecutionStrategy(fxparser, p, execCxt);
 			}
 		}

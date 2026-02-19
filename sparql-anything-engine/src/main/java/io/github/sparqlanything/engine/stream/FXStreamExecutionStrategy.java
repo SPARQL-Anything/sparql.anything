@@ -2,44 +2,99 @@ package io.github.sparqlanything.engine.stream;
 
 import io.github.sparqlanything.engine.FXExecutionStrategy;
 import io.github.sparqlanything.engine.FXGraphMaterialisationStrategy;
+import io.github.sparqlanything.engine.FXStrategySelector;
+import io.github.sparqlanything.engine.Utils;
+import io.github.sparqlanything.fxbgp.AnalyserGrounder;
+import io.github.sparqlanything.fxbgp.FXBGPAnnotation;
+import io.github.sparqlanything.fxbgp.FXModel;
+import io.github.sparqlanything.fxbgp.stream.FXParserQueryIterator;
+import io.github.sparqlanything.fxbgp.stream.FXProxyEventListener;
+import io.github.sparqlanything.fxbgp.stream.FXQuerySolutionBuilder;
 import io.github.sparqlanything.fxbgp.stream.FXStreamExecutor;
 import io.github.sparqlanything.fxbgp.stream.FXStreamParser;
+import io.github.sparqlanything.fxbgp.stream.FXStreamParserRegistry;
+import io.github.sparqlanything.fxbgp.stream.FXTreePattern;
 import io.github.sparqlanything.fxbgp.stream.NotATreeException;
+import io.github.sparqlanything.fxbgp.stream.StreamEventsHandler;
 import io.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.algebra.op.OpGraph;
+import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
+import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.main.QC;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 	private FXStreamParser parser;
-	private FXStreamExecutor executor;
+	//private FXStreamExecutor executor;
 	private ExecutionContext context;
 	private Properties properties;
 	public FXStreamExecutionStrategy(FXStreamParser parser, Properties p, ExecutionContext ctx) {
 		this.parser = parser;
-		this.executor = new FXStreamExecutor();
+		//this.executor = new FXStreamExecutor();
 		this.context = ctx;
 		this.properties = p;
 	}
 
 	@Override
 	public QueryIterator execute(Op op, QueryIterator input) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException {
-		if(op instanceof OpBGP || op instanceof OpGraph){
-			try{
-				return executor.exec(op, properties);
-			}catch(NotATreeException e){
-				// TODO Find a way to avoid this to happen
-				return new FXGraphMaterialisationStrategy(properties,
-					context).execute(op, input);
-			}
+		Op playOp = op;
+		if(op instanceof OpService){
+			playOp = ((OpService) op).getSubOp();
 		}
-		return QC.execute(op,input,context);
+		if(!((playOp instanceof OpBGP)||(playOp instanceof OpGraph))){
+			// If we've done our checks properly before, this should not happen
+			throw new RuntimeException("Not a BGP or GraphBGP");
+		}
+
+		try{
+			Node graphNode = null;
+			OpBGP opBGP = null;
+			if (op instanceof OpGraph) {
+				try {
+					graphNode = ((OpGraph) op).getNode();
+					opBGP = (OpBGP) ((OpGraph) op).getSubOp();
+				} catch (Exception e) {
+				}
+			} else if (op instanceof OpBGP) {
+				opBGP = (OpBGP) op;
+			}
+			opBGP = Utils.excludeFXProperties((OpBGP) playOp);
+			if (opBGP == null) {
+				throw new RuntimeException("Only Basic Graph Patterns are supported");
+			}
+			AnalyserGrounder ag = new AnalyserGrounder(properties, FXModel.getFXModel());
+			Set<FXBGPAnnotation> annotations = ag.annotate(opBGP, true);
+			final Set<Binding> bindings = new HashSet<>();
+			final Set<FXQuerySolutionBuilder> patterns = new HashSet<>();
+			for (FXBGPAnnotation annotation : annotations) {
+				FXTreePattern tp;
+				if (graphNode == null) {
+					// Play with default graph
+					tp = FXTreePattern.make(annotation);
+				} else {
+					// Play with named graph
+					tp = FXTreePattern.make(annotation, graphNode);
+				}
+				patterns.add(new FXQuerySolutionBuilder(tp, bindings));
+			}
+			StreamEventsHandler handler = new StreamEventsHandler(properties,
+				FXProxyEventListener.make(patterns));
+			return new FXParserQueryIterator(parser, handler, bindings);
+		}catch(NotATreeException e){
+			FXStrategySelector.L.warn("Not a tree BGP (fallback on in-memory graph materialisation)", e);
+			// TODO Find a way to avoid this to happen
+			return new FXGraphMaterialisationStrategy(properties,
+				context).execute(op, input);
+		}
 	}
 }
