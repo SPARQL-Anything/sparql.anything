@@ -61,7 +61,7 @@ public class FXWorker {
 		PropertyExtractor.extractPropertiesFromExecutionContext(executionContext, p);
 
 		if(op instanceof OpService){
-			extractProperties(p, (OpService) op);
+			PropertyExtractor.extractProperties(p, (OpService) op);
 			// Possibly execute reused queries
 			if(PropertyUtils.hasProperty(p, IRIArgument.QUERY))
 				return executeReusedQuery((OpService) op, p, input, executionContext);
@@ -69,79 +69,11 @@ public class FXWorker {
 
 
 		// Possibly read from STD in
-		readFromStdIn(p);
+		PropertyExtractor.readFromStdIn(p);
 
 		FXExecutionStrategy s = new FXStrategySelector().getStrategy(p, op, executionContext);
 		return s.execute(op, input);
 		//return new FXGraphMaterialisationStrategy(p,executionContext).execute(op,input);
-	}
-
-	public void extractProperties(Properties properties, OpService opService) throws UnboundVariableException {
-		String url = opService.getService().getURI();
-
-		// Parse IRI only if contains properties
-		if (!url.equals(FacadeIRIParser.SPARQL_ANYTHING_URI_SCHEMA)) {
-			FacadeIRIParser p = new FacadeIRIParser(url);
-			properties.putAll(p.getProperties());
-		}
-
-		// Setting defaults
-		if (!properties.containsKey(IRIArgument.NAMESPACE.toString())) {
-			logger.trace("Setting default value for namespace: {}", Triplifier.XYZ_NS);
-			properties.setProperty(IRIArgument.NAMESPACE.toString(), Triplifier.XYZ_NS);
-		}
-		// Setting silent
-		if (opService.getSilent()) {
-			// we can only see if silent was specified at the OpService so we need to stash
-			// a boolean
-			// at this point so we can use it when we triplify further down the Op tree
-			properties.setProperty(IRIArgument.OP_SERVICE_SILENT.toString(), "true");
-		}
-
-		Op next = opService.getSubOp();
-		FXBGPFinder vis = new FXBGPFinder();
-		next.visit(vis);
-		logger.trace("Has Table {}", vis.hasTable());
-
-		if (vis.getBGP() != null) {
-			try {
-				PropertyExtractor.extractPropertiesFromBGP(properties, vis.getBGP());
-			} catch (UnboundVariableException e) {
-				if (vis.hasTable()) {
-					logger.trace(vis.getOpTable().toString());
-					logger.trace("BGP {}", vis.getBGP());
-					logger.trace("Contains variable names {}", vis.getOpTable().getTable().getVarNames().contains(e.getVariableName()));
-					if (vis.getOpTable().getTable().getVarNames().contains(e.getVariableName())) {
-						e.setOpTable(vis.getOpTable());
-					}
-				}
-
-				if (vis.getOpExtend() != null) {
-					logger.trace("OpExtend {}", vis.getOpExtend());
-					for (Var var : vis.getOpExtend().getVarExprList().getVars()) {
-						if (var.getName().equals(e.getVariableName())) {
-							e.setOpExtend(vis.getOpExtend());
-						}
-					}
-				}
-
-				throw e;
-			}
-			logger.trace("Number of properties {}: {}", properties.size(), properties);
-		} else {
-			logger.trace("Couldn't find OpGraph");
-		}
-	}
-	private void readFromStdIn(Properties p) {
-		if (p.containsKey(IRIArgument.READ_FROM_STD_IN.toString())) {
-			Scanner sc = new Scanner(System.in);
-			StringBuilder sb = new StringBuilder();
-			while (sc.hasNextLine()) {
-				sb.append(sc.nextLine());
-				sb.append('\n');
-			}
-			p.setProperty(IRIArgument.CONTENT.toString(), sb.substring(0, sb.length()-1));
-		}
 	}
 
 	public QueryIterator executeReusedQuery(OpService opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {

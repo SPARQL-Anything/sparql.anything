@@ -20,12 +20,15 @@ package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.facadeiri.FacadeIRIParser;
 import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.query.Query;
 import org.apache.jena.query.TxnType;
 import org.apache.jena.sparql.algebra.Op;
+import org.apache.jena.sparql.algebra.OpVisitorBase;
 import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.algebra.table.TableUnit;
 import org.apache.jena.sparql.core.BasicPattern;
@@ -43,9 +46,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 public class Utils {
 
@@ -177,5 +182,18 @@ public class Utils {
 			//return new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 			return new FacadeXExecutionContext(ExecutionContext.create(dg, dg.getDefaultGraph(), execCxt.getContext()));
 		}
+	}
+
+	public static Set<OpService> findFXOpServices(Op op){
+		Set<OpService> services = new HashSet<>();
+		OpVisitorBase visitor = new OpVisitorBase() {
+			public void visit(OpService op) {
+				if(op.getService().getURI().startsWith("x-sparql-anything:")) {
+					services.add(op);
+				}
+			}
+		};
+		op.visit(visitor);
+		return services;
 	}
 }
