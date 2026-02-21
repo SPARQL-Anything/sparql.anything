@@ -1014,15 +1014,15 @@ Note: the result doesn't change, but no new ondisk graph is created.
 
 ### strategy
 
-The execution strategy. 0 = in memory, all triples; 1 = in memory, only triples matching any of the triple patterns in the where clause.
+The execution strategy. 0 = in memory, all triples; 1 = in memory, only triples matching any of the triple patterns in the where clause; 2 = stream execution (low memory footprint, fully connected BGPs only).
 
 #### Valid Values
 
-0, 1
+0, 1, 2
 
 #### Default Value
 
-1
+2 (json, xml, csv + fallback to 1 if BGP is not supported), 1 (anything else)
 
 #### Examples
 
@@ -1037,7 +1037,7 @@ WHERE {
     SERVICE <x-sparql-anything:relative/path/to/example1.json,strategy=0> {
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
-        ?star fx:anySlot "Courteney Cox" .
+        ?star ?item "Courteney Cox" .
     }
 }
 ```
@@ -1049,7 +1049,11 @@ Result
 | "Cougar Town" |
 | "Friends"     |
 
-**Note:** the strategy option does not affect the result.
+> [!NOTE]
+> - Strategy 2 is only supported with resources of type CSV, XML, or JSON
+> - Strategy 2 only supports queries with a single fully connected BGP
+> - When strategy is not specified, the system attempts to use strategy 2 the system falls back to full graph materialisation gracefully
+> - Strategy option does not affect the result.
 
 ### slice 
 
