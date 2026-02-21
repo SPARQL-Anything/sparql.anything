@@ -8,6 +8,7 @@ import io.github.sparqlanything.engine.Utils;
 import io.github.sparqlanything.fxbgp.AnalyserGrounder;
 import io.github.sparqlanything.fxbgp.FXBGPAnnotation;
 import io.github.sparqlanything.fxbgp.FXModel;
+import io.github.sparqlanything.fxbgp.stream.CSVStreamParser;
 import io.github.sparqlanything.fxbgp.stream.FXParserQueryIterator;
 import io.github.sparqlanything.fxbgp.stream.FXProxyEventListener;
 import io.github.sparqlanything.fxbgp.stream.FXQuerySolutionBuilder;
@@ -15,9 +16,13 @@ import io.github.sparqlanything.fxbgp.stream.FXStreamExecutor;
 import io.github.sparqlanything.fxbgp.stream.FXStreamParser;
 import io.github.sparqlanything.fxbgp.stream.FXStreamParserRegistry;
 import io.github.sparqlanything.fxbgp.stream.FXTreePattern;
+import io.github.sparqlanything.fxbgp.stream.JSONStreamParser;
 import io.github.sparqlanything.fxbgp.stream.NotATreeException;
 import io.github.sparqlanything.fxbgp.stream.StreamEventsHandler;
+import io.github.sparqlanything.fxbgp.stream.XMLStreamParser;
+import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.TriplifierHTTPException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
@@ -95,5 +100,54 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 			// TODO Find a way to avoid this to happen
 			return FXGraphMaterialisationStrategy.make(properties, context).execute(op, input);
 		}
+	}
+
+	public static final FXStreamExecutionStrategy make(Op op, Properties p, ExecutionContext execCxt) throws CantExecException {
+		// If Op is supported
+		Op testOp = op;
+		if(op instanceof OpService){
+			testOp = ((OpService) op).getSubOp();
+		}
+
+		if((testOp instanceof OpBGP || testOp instanceof OpGraph)) {
+
+			String media = p.getProperty(IRIArgument.MEDIA_TYPE.toString());
+			String location = p.getProperty(IRIArgument.LOCATION.toString());
+			String type = null;
+			if (media != null) {
+				if (media.contains("/")) {
+					type = media.split("/")[1];
+				} else {
+					// We can't determine the subtype
+				}
+			} else if (location != null) {
+				type = FilenameUtils.getExtension(location);
+			}
+			FXStreamParser fxparser = null;
+			if (type != null) {
+				switch (type) {
+					case "json":
+						fxparser = new JSONStreamParser(p);
+						break;
+					case "xml":
+						fxparser = new XMLStreamParser(p);
+						break;
+					case "csv":
+						fxparser = new CSVStreamParser(p);
+				}
+			}
+
+			if (fxparser != null) {
+				if (!(execCxt instanceof FacadeXExecutionContext)) {
+					execCxt = new FacadeXExecutionContext(execCxt);
+				}
+				return new FXStreamExecutionStrategy(fxparser, p, (FacadeXExecutionContext) execCxt);
+			}
+		}
+		throw new CantExecException();
+	}
+
+	public static class CantExecException extends Exception{
+		private static final long serialVersionUID = 1L;
 	}
 }

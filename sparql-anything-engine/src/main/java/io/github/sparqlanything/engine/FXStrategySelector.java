@@ -22,53 +22,30 @@ public class FXStrategySelector {
 	public FXExecutionStrategy getStrategy(Properties p, Op op, ExecutionContext execCxt){
 		L.info("Getting strategy for {}", op);
 
-		// Add support for `s` configuration property
-		// 1 - Materialisation
-		// 2 - Materialisation + Slicing
-		// 3 - Streaming
-
-		// If Op is supported
-		Op testOp = op;
-		if(op instanceof OpService){
-			testOp = ((OpService) op).getSubOp();
-		}
-		// If it does have a mime type, use that
-
-		if((testOp instanceof OpBGP || testOp instanceof OpGraph)){
-			String media = p.getProperty(IRIArgument.MEDIA_TYPE.toString());
-			String location = p.getProperty(IRIArgument.LOCATION.toString());
-			String type = null;
-			if(media != null){
-				if(media.contains("/")) {
-					type = media.split("/")[1];
-				}else{
-					// We can't determine the subtype
-				}
-			}else if(location != null){
-				type = FilenameUtils.getExtension(location);
-			}
-			FXStreamParser fxparser = null;
-			if(type != null){
-				switch (type) {
-					case "json":
-						fxparser = new JSONStreamParser(p);
-						break;
-					case "xml":
-						fxparser = new XMLStreamParser(p);
-						break;
-					case "csv":
-						fxparser = new CSVStreamParser(p);
-				}
-			}
-
-			if(fxparser != null){
-				L.info("Select stream execution strategy");
-				if(!(execCxt instanceof FacadeXExecutionContext)){
-					execCxt = new FacadeXExecutionContext(execCxt);
-				}
-				return new FXStreamExecutionStrategy(fxparser, p,(FacadeXExecutionContext) execCxt);
+		// Support for `s` configuration property
+		if(p.containsKey(IRIArgument.STRATEGY.toString())) {
+			String strategy = p.getProperty(IRIArgument.STRATEGY.toString());
+			switch (strategy) {
+				case "2":
+					try {
+						return FXStreamExecutionStrategy.make(op, p, execCxt);
+					} catch (FXStreamExecutionStrategy.CantExecException e) {
+						// The user specifically asked for this strategy, we throw an exception
+						throw new RuntimeException(e);
+					}
+				case "0":
+				case "1":
+					// 0 - Materialisation
+					// 1 - Materialisation + Only matching triples
+					return FXGraphMaterialisationStrategy.make(p, execCxt);
 			}
 		}
+			try{
+				return FXStreamExecutionStrategy.make(op, p, execCxt);
+			}catch(Exception e){
+				// Always pass
+			}
+
 		L.info("Fallback to graph materialisation strategy");
 		return FXGraphMaterialisationStrategy.make(p, execCxt);
 	}
