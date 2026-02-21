@@ -18,8 +18,6 @@
 
 package io.github.sparqlanything.engine;
 
-import io.github.sparqlanything.facadeiri.FacadeIRIParser;
-import io.github.sparqlanything.fxbgp.stream.NotATreeException;
 import io.github.sparqlanything.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.query.Dataset;
@@ -31,8 +29,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
@@ -66,7 +62,6 @@ public class FXWorker {
 			if(PropertyUtils.hasProperty(p, IRIArgument.QUERY))
 				return executeReusedQuery((OpService) op, p, input, executionContext);
 		}
-
 
 		// Possibly read from STD in
 		PropertyExtractor.readFromStdIn(p);

@@ -22,7 +22,7 @@ public class FXStrategySelector {
 	public FXExecutionStrategy getStrategy(Properties p, Op op, ExecutionContext execCxt){
 		L.info("Getting strategy for {}", op);
 
-		// TODO Add support for `s` configuration property
+		// Add support for `s` configuration property
 		// 1 - Materialisation
 		// 2 - Materialisation + Slicing
 		// 3 - Streaming
@@ -32,12 +32,18 @@ public class FXStrategySelector {
 		if(op instanceof OpService){
 			testOp = ((OpService) op).getSubOp();
 		}
-		if(testOp instanceof OpBGP || testOp instanceof OpGraph){
+		// If it does have a mime type, use that
+
+		if((testOp instanceof OpBGP || testOp instanceof OpGraph)){
 			String media = p.getProperty(IRIArgument.MEDIA_TYPE.toString());
 			String location = p.getProperty(IRIArgument.LOCATION.toString());
 			String type = null;
 			if(media != null){
-				type = media.split("/")[1];
+				if(media.contains("/")) {
+					type = media.split("/")[1];
+				}else{
+					// We can't determine the subtype
+				}
 			}else if(location != null){
 				type = FilenameUtils.getExtension(location);
 			}
@@ -57,7 +63,10 @@ public class FXStrategySelector {
 
 			if(fxparser != null){
 				L.info("Select stream execution strategy");
-				return new FXStreamExecutionStrategy(fxparser, p, execCxt);
+				if(!(execCxt instanceof FacadeXExecutionContext)){
+					execCxt = new FacadeXExecutionContext(execCxt);
+				}
+				return new FXStreamExecutionStrategy(fxparser, p,(FacadeXExecutionContext) execCxt);
 			}
 		}
 		L.info("Fallback to graph materialisation strategy");

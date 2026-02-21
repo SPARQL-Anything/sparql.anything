@@ -3,6 +3,7 @@ package io.github.sparqlanything.engine.stream;
 import io.github.sparqlanything.engine.FXExecutionStrategy;
 import io.github.sparqlanything.engine.FXGraphMaterialisationStrategy;
 import io.github.sparqlanything.engine.FXStrategySelector;
+import io.github.sparqlanything.engine.FacadeXExecutionContext;
 import io.github.sparqlanything.engine.Utils;
 import io.github.sparqlanything.fxbgp.AnalyserGrounder;
 import io.github.sparqlanything.fxbgp.FXBGPAnnotation;
@@ -35,12 +36,10 @@ import java.util.Set;
 
 public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 	private FXStreamParser parser;
-	//private FXStreamExecutor executor;
-	private ExecutionContext context;
+	private FacadeXExecutionContext context;
 	private Properties properties;
-	public FXStreamExecutionStrategy(FXStreamParser parser, Properties p, ExecutionContext ctx) {
+	public FXStreamExecutionStrategy(FXStreamParser parser, Properties p, FacadeXExecutionContext ctx) {
 		this.parser = parser;
-		//this.executor = new FXStreamExecutor();
 		this.context = ctx;
 		this.properties = p;
 	}
@@ -59,16 +58,17 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 		try{
 			Node graphNode = null;
 			OpBGP opBGP = null;
-			if (op instanceof OpGraph) {
+			if (playOp instanceof OpGraph) {
 				try {
-					graphNode = ((OpGraph) op).getNode();
-					opBGP = (OpBGP) ((OpGraph) op).getSubOp();
+					graphNode = ((OpGraph) playOp).getNode();
+					opBGP = (OpBGP) ((OpGraph) playOp).getSubOp();
 				} catch (Exception e) {
+					throw new RuntimeException(e);
 				}
-			} else if (op instanceof OpBGP) {
-				opBGP = (OpBGP) op;
+			} else if (playOp instanceof OpBGP) {
+				opBGP = (OpBGP) playOp;
 			}
-			opBGP = Utils.excludeFXProperties((OpBGP) playOp);
+			opBGP = Utils.excludeFXProperties((OpBGP) opBGP);
 			if (opBGP == null) {
 				throw new RuntimeException("Only Basic Graph Patterns are supported");
 			}
@@ -93,8 +93,7 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 		}catch(NotATreeException e){
 			FXStrategySelector.L.warn("Not a tree BGP (fallback on in-memory graph materialisation)", e);
 			// TODO Find a way to avoid this to happen
-			return new FXGraphMaterialisationStrategy(properties,
-				context).execute(op, input);
+			return FXGraphMaterialisationStrategy.make(properties, context).execute(op, input);
 		}
 	}
 }
