@@ -42,12 +42,11 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.Scanner;
 
 public class FXWorker {
 
 	private static final Logger logger = LoggerFactory.getLogger(FXWorker.class);
-	private boolean strategySelected = false;
+
 	public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
 
 		// extract properties from service URI

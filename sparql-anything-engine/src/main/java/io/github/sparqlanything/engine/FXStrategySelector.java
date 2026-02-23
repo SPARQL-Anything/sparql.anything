@@ -20,7 +20,7 @@ import java.util.Properties;
 public class FXStrategySelector {
 	public static final Logger L = LoggerFactory.getLogger(FXStrategySelector.class);
 	public FXExecutionStrategy getStrategy(Properties p, Op op, ExecutionContext execCxt){
-		L.info("Getting strategy for {}", op);
+		L.debug("Getting strategy for {}", op);
 
 		// Support for `s` configuration property
 		if(p.containsKey(IRIArgument.STRATEGY.toString())) {
