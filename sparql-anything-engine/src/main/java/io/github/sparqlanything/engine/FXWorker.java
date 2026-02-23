@@ -36,7 +36,10 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -45,10 +48,10 @@ import java.util.Properties;
 
 public class FXWorker {
 
-	private static final Logger logger = LoggerFactory.getLogger(FXWorker.class);
+	private static final Logger L = LoggerFactory.getLogger(FXWorker.class);
 
 	public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
-
+		L.debug("execute", op);
 		// extract properties from service URI
 		Properties p = new Properties();
 
@@ -64,13 +67,19 @@ public class FXWorker {
 
 		// Possibly read from STD in
 		PropertyExtractor.readFromStdIn(p);
-
+		if(L.isDebugEnabled()){
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			p.list(pw);
+			L.debug("Properties: \n{}", sw.toString());
+		}
 		FXExecutionStrategy s = new FXStrategySelector().getStrategy(p, op, executionContext);
 		return s.execute(op, input);
 		//return new FXGraphMaterialisationStrategy(p,executionContext).execute(op,input);
 	}
 
 	public QueryIterator executeReusedQuery(OpService opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {
+		L.debug("executeReusedQuery");
 		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY))).toURI(), StandardCharsets.UTF_8);
 		Query query = QueryFactory.create(queryStr);
 		Op op = Algebra.optimize(Algebra.compile(query));
