@@ -8,12 +8,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.Set;
 
 public class FXStrategySelector {
 	public static final Logger L = LoggerFactory.getLogger(FXStrategySelector.class);
 
+	private static final Set<String> unsupportedOptions = Set.of("json.path");
+
+	private static boolean hasUnsupportedOptions(Properties properties) {
+		for (Object option : properties.keySet()) {
+			if (unsupportedOptions.contains(option.toString())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public FXExecutionStrategy getStrategy(Properties p, Op op, ExecutionContext execCxt) {
 		L.debug("Getting strategy for {}", op);
+
+		if (hasUnsupportedOptions(p)) {
+			L.info("Fallback to graph materialisation strategy");
+			return FXGraphMaterialisationStrategy.make(p, execCxt);
+		}
 
 		// Support for `s` configuration property
 		if (p.containsKey(IRIArgument.STRATEGY.toString())) {

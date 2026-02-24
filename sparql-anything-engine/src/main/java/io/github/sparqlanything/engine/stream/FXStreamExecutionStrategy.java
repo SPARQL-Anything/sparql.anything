@@ -101,20 +101,8 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 		}
 	}
 
-	private static final Set<String> unsupportedOptions = Set.of("json.path");
-
-	private static void checkUnsupportedOptions(Properties properties) throws CantExecException {
-		for(Object option: properties.keySet()){
-			if(unsupportedOptions.contains(option.toString())){
-				throw new CantExecException(option.toString() + " unsupported with strategy 2 (streamed execution).");
-			}
-		}
-	}
-
 
 	public static final FXStreamExecutionStrategy make(Op op, Properties p, ExecutionContext execCxt) throws CantExecException {
-
-		checkUnsupportedOptions(p);
 
 		// If Op is supported
 		Op testOp = op;
@@ -163,7 +151,7 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 	public static class CantExecException extends Exception {
 		private static final long serialVersionUID = 1L;
 
-		public CantExecException(){
+		public CantExecException() {
 			super();
 		}
 
