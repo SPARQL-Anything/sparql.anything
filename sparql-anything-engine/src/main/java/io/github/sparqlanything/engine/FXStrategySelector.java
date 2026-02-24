@@ -15,17 +15,50 @@ import java.util.Set;
 public class FXStrategySelector {
 	public static final Logger L = LoggerFactory.getLogger(FXStrategySelector.class);
 
-	private static final Set<String> streamSupportedOptions;
+	private static final Set<String> streamSupportedOptions = new HashSet<>();
 
 	static {
-		streamSupportedOptions = new HashSet<>();
-		for (IRIArgument option : IRIArgument.getOptions()) {
-			if(!option.toString().startsWith("json") && ! option.toString().startsWith("xml"))
-				streamSupportedOptions.add(option.toString());
-		}
 
-		streamSupportedOptions.remove(IRIArgument.ONDISK.toString());
-		streamSupportedOptions.remove(IRIArgument.ONDISK_REUSE.toString());
+		// General
+		streamSupportedOptions.add("charset");
+		streamSupportedOptions.add("s3.region");
+		streamSupportedOptions.add("metadata");
+		streamSupportedOptions.add("read-from-std-in");
+		streamSupportedOptions.add("blank-nodes");
+		streamSupportedOptions.add("from-archive");
+		streamSupportedOptions.add("generate-predicate-labels");
+		streamSupportedOptions.add("triplifier");
+		streamSupportedOptions.add("s3.bucket-name");
+		streamSupportedOptions.add("content");
+		streamSupportedOptions.add("use-cache");
+		streamSupportedOptions.add("s3.secret-key");
+		streamSupportedOptions.add("trim-strings");
+		streamSupportedOptions.add("s3.endpoint");
+		streamSupportedOptions.add("opservice.silent");
+		streamSupportedOptions.add("slice");
+		streamSupportedOptions.add("null-string");
+		streamSupportedOptions.add("audit");
+		streamSupportedOptions.add("root");
+		streamSupportedOptions.add("media-type");
+		streamSupportedOptions.add("use-rdfs-member");
+		streamSupportedOptions.add("query");
+		streamSupportedOptions.add("command");
+		streamSupportedOptions.add("s3.access-key");
+		streamSupportedOptions.add("annotate-triples-with-slot-keys");
+		streamSupportedOptions.add("s3.key");
+		streamSupportedOptions.add("archive-format");
+		streamSupportedOptions.add("namespace");
+		streamSupportedOptions.add("location");
+		streamSupportedOptions.add("strategy");
+
+		// CSV
+		streamSupportedOptions.add("csv.headers");
+		streamSupportedOptions.add("csv.headers-row");
+		streamSupportedOptions.add("csv.format");
+		streamSupportedOptions.add("csv.delimiter");
+		streamSupportedOptions.add("csv.quote-char");
+		streamSupportedOptions.add("csv.null-string");
+
 	}
 
 	private static boolean hasUnsupportedOptions(Properties properties) {
