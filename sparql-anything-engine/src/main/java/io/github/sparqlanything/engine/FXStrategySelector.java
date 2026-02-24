@@ -13,7 +13,7 @@ import java.util.Set;
 public class FXStrategySelector {
 	public static final Logger L = LoggerFactory.getLogger(FXStrategySelector.class);
 
-	private static final Set<String> unsupportedOptions = Set.of("json.path");
+	private static final Set<String> unsupportedOptions = Set.of("json.path", "csv.ignore-columns-with-no-header");
 
 	private static boolean hasUnsupportedOptions(Properties properties) {
 		for (Object option : properties.keySet()) {
