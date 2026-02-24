@@ -44,7 +44,7 @@
         <dependency>
             <groupId>io.github.sparql-anything</groupId>
             <artifactId>sparql-anything-engine</artifactId>
-            <version>${project.version}</version>
+            <version>${project.version}-STREAM</version>
         </dependency>
 
         <dependency>
