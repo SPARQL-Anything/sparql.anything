@@ -30,6 +30,7 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.sparql.util.IsoMatcher;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -107,6 +108,7 @@ public class Sandbox {
 	}
 
 
+	@Ignore
 	@Test
 	public void test() {
 

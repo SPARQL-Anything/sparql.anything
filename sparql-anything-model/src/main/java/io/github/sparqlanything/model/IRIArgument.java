@@ -15,10 +15,20 @@
  */
 
 
-
 package io.github.sparqlanything.model;
 
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class IRIArgument {
+
+	private static final Set<IRIArgument> options;
+
+	static {
+		options = new HashSet<>();
+	}
+
 	public static final IRIArgument LOCATION = new IRIArgument("location");
 	public static final IRIArgument MEDIA_TYPE = new IRIArgument("media-type");
 	public static final IRIArgument NAMESPACE = new IRIArgument("namespace", Triplifier.XYZ_NS);
@@ -43,21 +53,21 @@ public class IRIArgument {
 	public static final IRIArgument ANNOTATE_TRIPLES_WITH_SLOT_KEYS = new IRIArgument("annotate-triples-with-slot-keys", "false");
 
 	public static final IRIArgument GENERATE_PREDICATE_LABELS = new IRIArgument("generate-predicate-labels", "false");
-    public static final IRIArgument  READ_FROM_STD_IN =  new IRIArgument("read-from-std-in", "false");
-    public static final IRIArgument  AUDIT =  new IRIArgument("audit", "false");
-    public static final IRIArgument  QUERY =  new IRIArgument("query");
+	public static final IRIArgument READ_FROM_STD_IN = new IRIArgument("read-from-std-in", "false");
+	public static final IRIArgument AUDIT = new IRIArgument("audit", "false");
+	public static final IRIArgument QUERY = new IRIArgument("query");
 
 	// Options for S3 storage
-	public static final IRIArgument  S3_ENDPOINT =  new IRIArgument("s3.endpoint", "false");
-	public static final IRIArgument  S3_BUCKET_NAME =  new IRIArgument("s3.bucket-name");
-	public static final IRIArgument  S3_KEY =  new IRIArgument("s3.key");
-	public static final IRIArgument  S3_ACCESS_KEY =  new IRIArgument("s3.access-key");
-	public static final IRIArgument  S3_SECRET_KEY =  new IRIArgument("s3.secret-key");
-	public static final IRIArgument  S3_REGION =  new IRIArgument("s3.region");
+	public static final IRIArgument S3_ENDPOINT = new IRIArgument("s3.endpoint", "false");
+	public static final IRIArgument S3_BUCKET_NAME = new IRIArgument("s3.bucket-name");
+	public static final IRIArgument S3_KEY = new IRIArgument("s3.key");
+	public static final IRIArgument S3_ACCESS_KEY = new IRIArgument("s3.access-key");
+	public static final IRIArgument S3_SECRET_KEY = new IRIArgument("s3.secret-key");
+	public static final IRIArgument S3_REGION = new IRIArgument("s3.region");
 
-    private final String name;
+	private final String name;
 	private final String defaultValue;
-
+	
 	public IRIArgument(String s) {
 		this(s, null);
 	}
@@ -65,6 +75,7 @@ public class IRIArgument {
 	public IRIArgument(String s, String defaultValue) {
 		this.name = s;
 		this.defaultValue = defaultValue;
+		addOption(this);
 	}
 
 	@Override
@@ -74,6 +85,14 @@ public class IRIArgument {
 
 	public String getDefaultValue() {
 		return defaultValue;
+	}
+
+	public static Set<IRIArgument> getOptions() {
+		return options;
+	}
+
+	private static void addOption(IRIArgument option) {
+		options.add(option);
 	}
 
 }

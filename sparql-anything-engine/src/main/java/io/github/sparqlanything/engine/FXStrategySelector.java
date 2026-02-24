@@ -2,26 +2,40 @@ package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.engine.stream.FXStreamExecutionStrategy;
 import io.github.sparqlanything.model.IRIArgument;
+import io.github.sparqlanything.model.PropertyUtils;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
 public class FXStrategySelector {
 	public static final Logger L = LoggerFactory.getLogger(FXStrategySelector.class);
 
-	private static final Set<String> unsupportedOptions = Set.of("json.path", "csv.ignore-columns-with-no-header");
+	private static final Set<String> streamSupportedOptions;
+
+	static {
+		streamSupportedOptions = new HashSet<>();
+		for (IRIArgument option : IRIArgument.getOptions()) {
+			if(!option.toString().startsWith("json") && ! option.toString().startsWith("xml"))
+				streamSupportedOptions.add(option.toString());
+		}
+
+		streamSupportedOptions.remove(IRIArgument.ONDISK.toString());
+		streamSupportedOptions.remove(IRIArgument.ONDISK_REUSE.toString());
+	}
 
 	private static boolean hasUnsupportedOptions(Properties properties) {
+		boolean allContained = true;
 		for (Object option : properties.keySet()) {
-			if (unsupportedOptions.contains(option.toString())) {
-				return true;
+			if (!streamSupportedOptions.contains(option.toString())) {
+				allContained = false;
 			}
 		}
-		return false;
+		return !allContained;
 	}
 
 	public FXExecutionStrategy getStrategy(Properties p, Op op, ExecutionContext execCxt) {
