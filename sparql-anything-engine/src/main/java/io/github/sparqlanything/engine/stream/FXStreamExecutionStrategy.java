@@ -30,6 +30,12 @@ import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
+import org.apache.jena.sparql.engine.iterator.QueryIter2;
+import org.apache.jena.sparql.engine.iterator.QueryIter2LoopOnLeft;
+import org.apache.jena.sparql.engine.iterator.QueryIterSub;
+import org.apache.jena.sparql.engine.iterator.QueryIteratorWrapper;
+import org.apache.jena.sparql.engine.join.QueryIterNestedLoopJoin;
+import org.apache.jena.sparql.engine.join.QueryIterNestedLoopLeftJoin;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -93,13 +99,15 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 			}
 			StreamEventsHandler handler = new StreamEventsHandler(properties,
 				FXProxyEventListener.make(patterns));
-			return new FXParserQueryIterator(parser, handler, bindings){
-				@Override
-				public void close() {
-					input.close();
-					super.close();
-				}
-			};
+
+			return new QueryIterNestedLoopJoin(input, new FXParserQueryIterator(parser, handler, bindings), context);
+//			{
+//				@Override
+//				public void close() {
+//					input.close();
+//					super.close();
+//				}
+//			};
 		} catch (NotATreeException e) {
 			FXStrategySelector.L.warn("Not a tree BGP (fallback on in-memory graph materialisation)", e);
 			// TODO Find a way to avoid this to happen
