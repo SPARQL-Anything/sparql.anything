@@ -139,7 +139,7 @@ public class PropertyExtractor {
 		}
 
 		Op next = opService.getSubOp();
-		FXBGPFinder vis = new FXBGPFinder();
+		FXConfBGPFinder vis = new FXConfBGPFinder();
 		next.visit(vis);
 		logger.trace("Has Table {}", vis.hasTable());
 

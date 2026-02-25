@@ -2,8 +2,9 @@ package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.engine.stream.FXStreamExecutionStrategy;
 import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.PropertyUtils;
+import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
+import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +31,17 @@ public class FXStrategySelector {
 		streamSupportedOptions.add("triplifier");
 		streamSupportedOptions.add("s3.bucket-name");
 		streamSupportedOptions.add("content");
-		streamSupportedOptions.add("use-cache");
+//		streamSupportedOptions.add("use-cache");
 		streamSupportedOptions.add("s3.secret-key");
 		streamSupportedOptions.add("trim-strings");
 		streamSupportedOptions.add("s3.endpoint");
 		streamSupportedOptions.add("opservice.silent");
 		streamSupportedOptions.add("slice");
-		streamSupportedOptions.add("null-string");
-		streamSupportedOptions.add("audit");
+//		streamSupportedOptions.add("null-string"); TODO
+//		streamSupportedOptions.add("audit");
 		streamSupportedOptions.add("root");
 		streamSupportedOptions.add("media-type");
-		streamSupportedOptions.add("use-rdfs-member");
+//		streamSupportedOptions.add("use-rdfs-member"); TODO
 		streamSupportedOptions.add("query");
 		streamSupportedOptions.add("command");
 		streamSupportedOptions.add("s3.access-key");
@@ -57,8 +58,28 @@ public class FXStrategySelector {
 		streamSupportedOptions.add("csv.format");
 		streamSupportedOptions.add("csv.delimiter");
 		streamSupportedOptions.add("csv.quote-char");
-		streamSupportedOptions.add("csv.null-string");
+//		streamSupportedOptions.add("csv.null-string"); // TODO
 
+	}
+
+	private static boolean isUnsupportedBGP(Op op){
+		final OpBGP[] bgp = {null};
+		OpVisitorSkip finder = new OpVisitorSkip(){
+			@Override
+			public void visit(OpBGP opBGP) {
+				bgp[0] = opBGP;
+			}
+		};
+		op.visit(finder);
+		if(bgp[0] == null){
+			return false;
+		}
+		for(Triple t: bgp[0].getPattern()){
+			if(t.getPredicate().isURI() && t.getPredicate().getURI().equals(FacadeX.ANY_SLOT_URI)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static boolean hasUnsupportedOptions(Properties properties) {
@@ -74,7 +95,7 @@ public class FXStrategySelector {
 	public FXExecutionStrategy getStrategy(Properties p, Op op, ExecutionContext execCxt) {
 		L.debug("Getting strategy for {}", op);
 
-		if (hasUnsupportedOptions(p)) {
+		if (hasUnsupportedOptions(p) ||isUnsupportedBGP(op)) {
 			L.info("Fallback to graph materialisation strategy");
 			return FXGraphMaterialisationStrategy.make(p, execCxt);
 		}

@@ -24,7 +24,7 @@ import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.algebra.op.OpTable;
 
-public class FXBGPFinder extends OpVisitorSkip {
+public class FXConfBGPFinder extends OpVisitorSkip {
 
 	private OpBGP serviceBGP;
 	private OpTable opTable;

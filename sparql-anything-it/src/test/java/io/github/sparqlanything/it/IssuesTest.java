@@ -24,9 +24,11 @@ import io.github.sparqlanything.model.HTTPHelper;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.engine.main.QC;
 import org.junit.Assert;
@@ -324,9 +326,11 @@ public class IssuesTest {
 		}
 
 //		System.out.println(actualResult);
-
-		assertEquals(expectedResult, actualResult);
-
+		try {
+			assertEquals(expectedResult, actualResult);
+		}finally{
+			rs.close();
+		}
 	}
 
 	/**
@@ -1030,5 +1034,8 @@ public class IssuesTest {
 
 	}
 
-
+	@Test
+	public void termTest(){
+		ResourceFactory.createTypedLiteral(Boolean.TRUE).asNode().sameTermAs(NodeFactory.createLiteralByValue(Boolean.TRUE));
+	}
 }
