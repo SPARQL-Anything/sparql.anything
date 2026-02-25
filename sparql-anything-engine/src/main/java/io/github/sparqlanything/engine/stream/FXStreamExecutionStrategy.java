@@ -49,7 +49,7 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 	}
 
 	@Override
-	public QueryIterator execute(Op op, QueryIterator input) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException {
+	public QueryIterator execute(Op op, final QueryIterator input) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException {
 		Op playOp = op;
 		if (op instanceof OpService) {
 			playOp = ((OpService) op).getSubOp();
@@ -93,7 +93,13 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 			}
 			StreamEventsHandler handler = new StreamEventsHandler(properties,
 				FXProxyEventListener.make(patterns));
-			return new FXParserQueryIterator(parser, handler, bindings);
+			return new FXParserQueryIterator(parser, handler, bindings){
+				@Override
+				public void close() {
+					input.close();
+					super.close();
+				}
+			};
 		} catch (NotATreeException e) {
 			FXStrategySelector.L.warn("Not a tree BGP (fallback on in-memory graph materialisation)", e);
 			// TODO Find a way to avoid this to happen

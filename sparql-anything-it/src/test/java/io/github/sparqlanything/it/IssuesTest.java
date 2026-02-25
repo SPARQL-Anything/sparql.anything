@@ -766,19 +766,20 @@ public class IssuesTest {
 		Assert.assertEquals("fred", qs.getLiteral("fred").getString());
 		Assert.assertEquals("sally", qs.getLiteral("sally").getString());
 
-
 		queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue352-csv.sparql")).toURI(), StandardCharsets.UTF_8);
 		loc = Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue352.csv")).toURI()).toUri().toString();
 		queryStr = queryStr.replace("%%%LOCATION%%%", loc);
 
 		query = QueryFactory.create(queryStr);
 		qExec = QueryExecutionFactory.create(query, ds);
+		rs.close();
 		rs = qExec.execSelect();
 
 		assertTrue(rs.hasNext());
 		qs = rs.next();
 		Assert.assertEquals("fred", qs.getLiteral("fred").getString());
 		Assert.assertEquals("sally", qs.getLiteral("sally").getString());
+		rs.close();
 	}
 
 	/**
