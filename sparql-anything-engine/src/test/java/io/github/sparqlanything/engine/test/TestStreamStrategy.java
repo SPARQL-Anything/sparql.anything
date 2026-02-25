@@ -1,6 +1,5 @@
 package io.github.sparqlanything.engine.test;
 
-import io.github.sparqlanything.engine.FXBGPFinder;
 import io.github.sparqlanything.engine.FXExecutionStrategy;
 import io.github.sparqlanything.engine.FXGraphMaterialisationStrategy;
 import io.github.sparqlanything.engine.FXStrategySelector;
@@ -18,7 +17,6 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.algebra.Algebra;
-import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.main.QC;
