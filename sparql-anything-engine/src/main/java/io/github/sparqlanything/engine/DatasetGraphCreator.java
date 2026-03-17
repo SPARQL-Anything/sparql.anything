@@ -45,13 +45,8 @@ public class DatasetGraphCreator {
 
 	private static final Logger logger = LoggerFactory.getLogger(DatasetGraphCreator.class);
 	private final MetadataTriplifier metadataTriplifier = new MetadataTriplifier();
-	private final ExecutionContext execCxt;
 
-	public DatasetGraphCreator(ExecutionContext execCxt) {
-		this.execCxt = execCxt;
-	}
-
-	public DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op) throws IOException {
+	public DatasetGraph getDatasetGraph(Triplifier t, Properties p, Op op, ExecutionContext execCxt) throws IOException {
 		DatasetGraph dg;
 		if (t == null) return DatasetGraphFactory.create();
 
@@ -82,7 +77,7 @@ public class DatasetGraphCreator {
 		// Not in any cache, perform triplification
 		logger.debug("Performing triplification (cache miss)");
 		io.github.sparqlanything.model.Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_TRIPLIFICATION);
-		dg = triplify(op, p, t);
+		dg = triplify(op, p, t, execCxt);
 		io.github.sparqlanything.model.Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_TRIPLIFICATION);
 		createAuditGraph(dg, p, false, op);
 		createMetadataGraph(dg, p);
@@ -143,7 +138,7 @@ public class DatasetGraphCreator {
 		}
 	}
 
-	private DatasetGraph triplify(final Op op, Properties p, Triplifier t) throws IOException {
+	private DatasetGraph triplify(final Op op, Properties p, Triplifier t, ExecutionContext execCxt) throws IOException {
 		DatasetGraph dg;
 
 		Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);

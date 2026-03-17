@@ -1,11 +1,6 @@
 package io.github.sparqlanything.engine.stream;
 
-import com.github.andrewoma.dexx.collection.Sets;
-import io.github.sparqlanything.engine.FXExecutionStrategy;
-import io.github.sparqlanything.engine.FXGraphMaterialisationStrategy;
-import io.github.sparqlanything.engine.FXStrategySelector;
-import io.github.sparqlanything.engine.FacadeXExecutionContext;
-import io.github.sparqlanything.engine.Utils;
+import io.github.sparqlanything.engine.*;
 import io.github.sparqlanything.fxbgp.AnalyserGrounder;
 import io.github.sparqlanything.fxbgp.FXBGPAnnotation;
 import io.github.sparqlanything.fxbgp.FXModel;
@@ -30,12 +25,7 @@ import org.apache.jena.sparql.algebra.op.OpService;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.iterator.QueryIter2;
-import org.apache.jena.sparql.engine.iterator.QueryIter2LoopOnLeft;
-import org.apache.jena.sparql.engine.iterator.QueryIterSub;
-import org.apache.jena.sparql.engine.iterator.QueryIteratorWrapper;
 import org.apache.jena.sparql.engine.join.QueryIterNestedLoopJoin;
-import org.apache.jena.sparql.engine.join.QueryIterNestedLoopLeftJoin;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -45,25 +35,24 @@ import java.util.Set;
 
 public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 	private final FXStreamParser parser;
-	private final FacadeXExecutionContext context;
 	private final Properties properties;
 
-	public FXStreamExecutionStrategy(FXStreamParser parser, Properties p, FacadeXExecutionContext ctx) {
+	public FXStreamExecutionStrategy(FXStreamParser parser, Properties p) {
 		this.parser = parser;
-		this.context = ctx;
 		this.properties = p;
 	}
 
 	@Override
-	public QueryIterator execute(Op op, final QueryIterator input) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException {
+	public QueryIterator execute(Op op, final QueryIterator input, ExecutionContext execCxt) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException {
 		Op playOp = op;
 		if (op instanceof OpService) {
 			playOp = ((OpService) op).getSubOp();
 		}
-		if (!((playOp instanceof OpBGP) || (playOp instanceof OpGraph))) {
-			// If we've done our checks properly before, this should not happen
-			throw new RuntimeException("Not a BGP or GraphBGP");
-		}
+//		if (!((playOp instanceof OpBGP) || (playOp instanceof OpGraph))) {
+//			// If we've done our checks properly before, this should not happen
+//			throw new RuntimeException("Not a BGP or GraphBGP");
+//		}
+
 
 		try {
 			Node graphNode = null;
@@ -97,21 +86,13 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 				}
 				patterns.add(new FXQuerySolutionBuilder(tp, bindings));
 			}
-			StreamEventsHandler handler = new StreamEventsHandler(properties,
-				FXProxyEventListener.make(patterns));
+			StreamEventsHandler handler = new StreamEventsHandler(properties, FXProxyEventListener.make(patterns));
+			return new QueryIterNestedLoopJoin(input, new FXParserQueryIterator(parser, handler, bindings), execCxt);
 
-			return new QueryIterNestedLoopJoin(input, new FXParserQueryIterator(parser, handler, bindings), context);
-//			{
-//				@Override
-//				public void close() {
-//					input.close();
-//					super.close();
-//				}
-//			};
 		} catch (NotATreeException e) {
 			FXStrategySelector.L.warn("Not a tree BGP (fallback on in-memory graph materialisation)", e);
 			// TODO Find a way to avoid this to happen
-			return FXGraphMaterialisationStrategy.make(properties, context).execute(op, input);
+			return FXGraphMaterialisationStrategy.make(properties).execute(op, input, execCxt);
 		}
 	}
 
@@ -119,12 +100,16 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 	public static final FXStreamExecutionStrategy make(Op op, Properties p, ExecutionContext execCxt) throws CantExecException {
 
 		// If Op is supported
-		Op testOp = op;
+		final Op[] testOp = {op};
 		if (op instanceof OpService) {
-			testOp = ((OpService) op).getSubOp();
+			op.visit(new OpVisitorSkip(){
+				public void visit(OpBGP opBGP) {
+					testOp[0] = opBGP;
+				}
+			});
 		}
 
-		if ((testOp instanceof OpBGP || testOp instanceof OpGraph)) {
+		if ((testOp[0] instanceof OpBGP || testOp[0] instanceof OpGraph)) {
 
 			String media = p.getProperty(IRIArgument.MEDIA_TYPE.toString());
 			String location = p.getProperty(IRIArgument.LOCATION.toString());
@@ -153,10 +138,7 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 			}
 
 			if (fxparser != null) {
-				if (!(execCxt instanceof FacadeXExecutionContext)) {
-					execCxt = new FacadeXExecutionContext(execCxt);
-				}
-				return new FXStreamExecutionStrategy(fxparser, p, (FacadeXExecutionContext) execCxt);
+				return new FXStreamExecutionStrategy(fxparser, p);
 			}
 		}
 		throw new CantExecException();

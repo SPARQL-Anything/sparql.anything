@@ -20,12 +20,10 @@ package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.facadeiri.FacadeIRIParser;
 import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.SPARQLAnythingConstants;
 import io.github.sparqlanything.model.Triplifier;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.query.Query;
 import org.apache.jena.query.TxnType;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVisitorBase;
@@ -170,17 +168,15 @@ public class Utils {
 	}
 
 
-	public static  FacadeXExecutionContext getFacadeXExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
-		return new FacadeXExecutionContext(getNewExecutionContext(execCxt, p, dg));
+	public static  FacadeXExecutionContext getFacadeXExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg, FXExecutionStrategy executionStrategy) {
+		return new FacadeXExecutionContext(getNewExecutionContext(execCxt, p, dg, executionStrategy), p, executionStrategy);
 	}
 
-	public static  ExecutionContext getNewExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
+	public static  ExecutionContext getNewExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg, FXExecutionStrategy executionStrategy) {
 		if (p.containsKey(IRIArgument.ONDISK.toString())) {
-			//return new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor());
 			return ExecutionContext.createForGraph(dg.getUnionGraph());
 		} else {
-			//return new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-			return new FacadeXExecutionContext(ExecutionContext.create(dg, dg.getDefaultGraph(), execCxt.getContext()));
+			return new FacadeXExecutionContext(ExecutionContext.create(dg, dg.getDefaultGraph(), execCxt.getContext()), p, executionStrategy);
 		}
 	}
 

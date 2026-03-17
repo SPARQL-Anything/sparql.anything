@@ -4,16 +4,19 @@ import io.github.sparqlanything.engine.stream.FXStreamExecutionStrategy;
 import io.github.sparqlanything.model.IRIArgument;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.OpBGP;
+import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.engine.ExecutionContext;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FXStrategySelector {
+
 	public static final Logger L = LoggerFactory.getLogger(FXStrategySelector.class);
 
 	private static final Set<String> streamSupportedOptions = new HashSet<>();
@@ -62,20 +65,72 @@ public class FXStrategySelector {
 
 	}
 
-	private static boolean isUnsupportedBGP(Op op){
+	private boolean containUnsupportedOp(Op op){
+		AtomicBoolean result = new AtomicBoolean(false);
+		op.visit(new OpVisitorSkip(){
+
+			@Override
+			public void visit(OpJoin opJoin) {
+				result.set(true);
+			}
+
+			@Override
+			public void visit(OpAntiJoin op) {
+				result.set(true);
+			}
+
+			@Override
+			public void visit(OpConditional op) {
+				result.set(true);
+			}
+
+			@Override
+			public void visit(OpLateral op) {
+				result.set(true);
+			}
+
+			@Override
+			public void visit(OpLeftJoin op) {
+				result.set(true);
+			}
+
+			@Override
+			public void visit(OpMinus op) {
+				result.set(true);
+			}
+
+			@Override
+			public void visit(OpSemiJoin op) {
+				result.set(true);
+			}
+
+			@Override
+			public void visit(OpUnion op) {
+				result.set(true);
+			}
+
+			@Override
+			public void visit(OpPath op) {
+				result.set(true);
+			}
+		});
+		return result.get();
+	}
+
+	private static boolean isUnsupportedBGP(Op op) {
 		final OpBGP[] bgp = {null};
-		OpVisitorSkip finder = new OpVisitorSkip(){
+		OpVisitorSkip finder = new OpVisitorSkip() {
 			@Override
 			public void visit(OpBGP opBGP) {
 				bgp[0] = opBGP;
 			}
 		};
 		op.visit(finder);
-		if(bgp[0] == null){
+		if (bgp[0] == null) {
 			return false;
 		}
-		for(Triple t: bgp[0].getPattern()){
-			if(t.getPredicate().isURI() && t.getPredicate().getURI().equals(FacadeX.ANY_SLOT_URI)){
+		for (Triple t : bgp[0].getPattern()) {
+			if (t.getPredicate().isURI() && t.getPredicate().getURI().equals(FacadeX.ANY_SLOT_URI)) {
 				L.warn("Unsupported BGP for stream execution: {}", t.getPredicate().getURI());
 				return true;
 			}
@@ -97,9 +152,9 @@ public class FXStrategySelector {
 	public FXExecutionStrategy getStrategy(Properties p, Op op, ExecutionContext execCxt) {
 		L.debug("Getting strategy for {}", op);
 
-		if (hasUnsupportedOptions(p) ||isUnsupportedBGP(op)) {
+		if (hasUnsupportedOptions(p) || isUnsupportedBGP(op) || containUnsupportedOp(op)) {
 			L.warn("Fallback to graph materialisation strategy");
-			return FXGraphMaterialisationStrategy.make(p, execCxt);
+			return FXGraphMaterialisationStrategy.make(p);
 		}
 
 		// Support for `s` configuration property
@@ -117,7 +172,7 @@ public class FXStrategySelector {
 				case "1":
 					// 0 - Materialisation
 					// 1 - Materialisation + Only matching triples
-					return FXGraphMaterialisationStrategy.make(p, execCxt);
+					return FXGraphMaterialisationStrategy.make(p);
 			}
 		}
 		// If strategy is not provided, and there are no unsupported options,
@@ -127,9 +182,9 @@ public class FXStrategySelector {
 		try {
 			return FXStreamExecutionStrategy.make(op, p, execCxt);
 		} catch (FXStreamExecutionStrategy.CantExecException e) {
-			// If the sream is not available for the
-			return FXGraphMaterialisationStrategy.make(p, execCxt);
-		} catch(Exception e){
+			// If the stream is not available for the
+			return FXGraphMaterialisationStrategy.make(p);
+		} catch (Exception e) {
 			// Now we want to throw an exception if an error occurs
 			throw new RuntimeException(e);
 		}

@@ -19,6 +19,7 @@
 package io.github.sparqlanything.it;
 
 import io.github.sparqlanything.engine.FacadeX;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -26,6 +27,7 @@ import org.apache.jena.query.*;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
+import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.sparql.util.IsoMatcher;
@@ -34,8 +36,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 
 public class Sandbox {
 
@@ -110,18 +114,14 @@ public class Sandbox {
 
 	@Ignore
 	@Test
-	public void test() {
+	public void test() throws IOException {
 
-		String queryStr = "PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>\n" +
-			"\n" +
-			"SELECT  (COUNT(?o) AS ?nOfItems)\n" +
-			"WHERE\n" +
-			"  { SERVICE <x-sparql-anything:query=construct.rq> { ?s fx:anySlot ?o }\n" +
-			"  }";
+		String queryStr = IOUtils.toString(new File("/Users/lgu/workspace/SPARQL-Anything/experiments/gtfs-stream/q").toURI(), Charset.defaultCharset());
 
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Dataset ds = DatasetFactory.createGeneral();
 		Query query = QueryFactory.create(queryStr);
+		System.out.println(Algebra.compile(query));
 		QueryExecution qExec1 = QueryExecutionFactory.create(query, ds);
 		ResultSet rs = qExec1.execSelect();
 		System.out.println(ResultSetFormatter.asText(rs));

@@ -103,7 +103,7 @@ public class QueryIterSlicer extends QueryIter {
 				Utils.ensureReadingTxn(dg);
 				logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
 //				FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-				FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
+				FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg, null); //FIXME null
 				logger.trace("Op {}", op);
 				logger.trace("OpName {}", op.getName());
 				/*

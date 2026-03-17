@@ -23,15 +23,25 @@ import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.util.Symbol;
 
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 public class FacadeXExecutionContext extends ExecutionContext {
 
 	private boolean silent = false;
 	public static final Symbol processed = Symbol.create("processed");
+	private final Properties properties;
 
-	public FacadeXExecutionContext(ExecutionContext other) {
+	public FXExecutionStrategy getExecutionStrategy() {
+		return executionStrategy;
+	}
+
+	private final FXExecutionStrategy executionStrategy;
+
+	public FacadeXExecutionContext(ExecutionContext other, Properties properties1, FXExecutionStrategy executionStrategy) {
 		super(other);
+		this.properties = properties1;
+		this.executionStrategy = executionStrategy;
 	}
 
 	public static boolean isAlreadyProcessed(ExecutionContext ex, Op op){
@@ -50,9 +60,9 @@ public class FacadeXExecutionContext extends ExecutionContext {
 		executedOps.add(op);
 	}
 
-
-
-
+	public Properties getProperties() {
+		return properties;
+	}
 
 	public boolean isSilent() {
 		return silent;

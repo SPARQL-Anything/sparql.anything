@@ -10,5 +10,5 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 public interface FXExecutionStrategy {
-	QueryIterator execute(Op op, QueryIterator input) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException;
+	QueryIterator execute(Op op, QueryIterator input, ExecutionContext execCxt) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException;
 }

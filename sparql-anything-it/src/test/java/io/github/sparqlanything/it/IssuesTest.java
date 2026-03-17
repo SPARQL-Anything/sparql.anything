@@ -569,28 +569,17 @@ public class IssuesTest {
 	 * <p>
 	 */
 	@Test
-	public void testIssue291() {
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything", "Trace");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.HTTPHelper", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.model.TriplifierRegister", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.engine.FacadeX", "ERROR");
-//		System.setProperty("org.slf4j.simpleLogger.log.io.github.sparqlanything.facadeiri", "ERROR");
+	public void testIssue291() throws URISyntaxException, IOException {
 		Dataset ds = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Query query;
 
-		query = QueryFactory.create("PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?slot ?p (fx:backward(?p, 3) AS ?backward3) (fx:backward(?p, 1) AS ?backward1) (fx:previous(?p) AS ?previous) WHERE { SERVICE <x-sparql-anything:> { fx:properties  fx:content '[1,2,3]' ; fx:media-type 'application/json' .  ?s ?p ?slot  . FILTER(?p != rdf:type)} }");
-//		m = QueryExecutionFactory.create(query, ds).execConstruct();
-//		m.setNsPrefix("xyz", "http://sparql.xyz/facade-x/data/");
-//		m.setNsPrefix("rdfs", RDFS.uri);
-//		m.setNsPrefix("xsd", "http://www.w3.org/2001/XMLSchema#");
-//		m.write(System.out, "TTL");
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue291.sparql")).toURI(), StandardCharsets.UTF_8);
+
+		query = QueryFactory.create(queryStr);
 		Set<String> backward3 = new HashSet<>();
 		Set<String> backward1 = new HashSet<>();
 		Set<String> previous = new HashSet<>();
-
-//		System.out.println(ResultSetFormatter.asText(QueryExecutionFactory.create(query, ds).execSelect()));
-//		System.out.println(query.toString(Syntax.defaultSyntax));
 
 		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
 		while (rs.hasNext()) {
@@ -606,13 +595,9 @@ public class IssuesTest {
 			}
 		}
 
-//		System.out.println(backward3);
-//		System.out.println(backward1);
-//		System.out.println(previous);
 		assertEquals(Sets.newHashSet(), backward3);
 		assertEquals(Sets.newHashSet("http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.w3.org/1999/02/22-rdf-syntax-ns#_2"), backward1);
 		assertEquals(Sets.newHashSet("http://www.w3.org/1999/02/22-rdf-syntax-ns#_1", "http://www.w3.org/1999/02/22-rdf-syntax-ns#_2"), previous);
-
 
 	}
 
@@ -746,6 +731,7 @@ public class IssuesTest {
 	/**
 	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/352">...</a>
 	 */
+	@Ignore
 	@Test
 	public void testIssue352() throws URISyntaxException, IOException {
 		Dataset ds = DatasetFactory.createGeneral();

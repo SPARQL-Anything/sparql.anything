@@ -59,7 +59,7 @@ public class TriplifierRegistryTest {
 	}
 
 	@Test
-	public void testConstructAndSelect() throws IOException {
+	public void testConstruct() throws IOException {
 		try {
 
 			OpExecutorFactory customExecutorFactory = FacadeXOpExecutor::new;
@@ -67,7 +67,8 @@ public class TriplifierRegistryTest {
 			JenaSystem.init();
 			QC.setFactory(ARQ.getContext(), customExecutorFactory);
 
-			TriplifierRegister.getInstance().registerTriplifier("io.github.sparqlanything.engine.test.TestTriplifier", new String[]{"test"}, new String[]{"test-mime"});
+			if(!TriplifierRegister.getInstance().getTriplifiers().contains("io.github.sparqlanything.engine.test.TestTriplifier"))
+				TriplifierRegister.getInstance().registerTriplifier("io.github.sparqlanything.engine.test.TestTriplifier", new String[]{"test"}, new String[]{"test-mime"});
 
 			Dataset kb = DatasetFactory.createGeneral();
 			Query q = QueryFactory.create("CONSTRUCT {?s ?p ?o} WHERE { SERVICE<x-sparql-anything:http://example.org/file.test>{?s ?p ?o}}");
@@ -76,6 +77,26 @@ public class TriplifierRegistryTest {
 			m.add(m.createResource(PREFIX + "s"), m.createProperty(PREFIX + "p"), m.createResource(PREFIX + "o"));
 
 			assertTrue(QueryExecutionFactory.create(q, kb).execConstruct().isIsomorphicWith(m));
+
+			TriplifierRegister.getInstance().removeTriplifier("io.github.sparqlanything.engine.test.TestTriplifier");
+		} catch (TriplifierRegisterException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testSelect()  {
+		try {
+
+			OpExecutorFactory customExecutorFactory = FacadeXOpExecutor::new;
+
+			JenaSystem.init();
+			QC.setFactory(ARQ.getContext(), customExecutorFactory);
+
+			if(!TriplifierRegister.getInstance().getTriplifiers().contains("io.github.sparqlanything.engine.test.TestTriplifier"))
+				TriplifierRegister.getInstance().registerTriplifier("io.github.sparqlanything.engine.test.TestTriplifier", new String[]{"test"}, new String[]{"test-mime"});
+
+			Dataset kb = DatasetFactory.createGeneral();
 
 			Query select = QueryFactory.create(
 				"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:http://example.org/file.test>{GRAPH ?g {?s ?p ?o}}}");

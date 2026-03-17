@@ -1,0 +1,15 @@
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT  ?o ?p (fx:backward(?p, 3) AS ?backward3) (fx:backward(?p, 1) AS ?backward1) (fx:previous(?p) AS ?previous)
+WHERE
+  { SERVICE <x-sparql-anything:>
+      { fx:properties
+                  fx:content     "[1,2,3]" ;
+                  fx:media-type  "application/json" .
+        ?s        ?p             ?o
+        FILTER ( ?p != rdf:type )
+      }
+  }

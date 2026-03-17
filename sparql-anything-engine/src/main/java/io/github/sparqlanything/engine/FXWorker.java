@@ -15,7 +15,6 @@
  */
 
 
-
 package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.model.*;
@@ -29,6 +28,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
@@ -36,7 +36,6 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -48,52 +47,73 @@ import java.util.Properties;
 
 public class FXWorker {
 
-	private static final Logger L = LoggerFactory.getLogger(FXWorker.class);
+    private static final Logger L = LoggerFactory.getLogger(FXWorker.class);
 
-	public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
-		L.debug("execute", op);
-		// extract properties from service URI
-		Properties p = new Properties();
+    public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
 
-		// first extract from execution context
-		PropertyExtractor.extractPropertiesFromExecutionContext(executionContext, p);
+        L.debug("execute {}", op);
 
-		if(op instanceof OpService){
-			PropertyExtractor.extractProperties(p, (OpService) op);
-			// Possibly execute reused queries
-			if(PropertyUtils.hasProperty(p, IRIArgument.QUERY))
-				return executeReusedQuery((OpService) op, p, input, executionContext);
-		}
+        // extract properties from service URI
+        Properties p = new Properties();
 
-		// Possibly read from STD in
-		PropertyExtractor.readFromStdIn(p);
-		if(L.isDebugEnabled()){
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			p.list(pw);
-			L.debug("Properties: \n{}", sw.toString());
-		}
-		FXExecutionStrategy s = new FXStrategySelector().getStrategy(p, op, executionContext);
-		return s.execute(op, input);
-		//return new FXGraphMaterialisationStrategy(p,executionContext).execute(op,input);
-	}
+        // first extract from execution context
+        PropertyExtractor.extractPropertiesFromExecutionContext(executionContext, p);
 
-	public QueryIterator executeReusedQuery(OpService opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {
-		L.debug("executeReusedQuery");
-		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY))).toURI(), StandardCharsets.UTF_8);
-		Query query = QueryFactory.create(queryStr);
-		Op op = Algebra.optimize(Algebra.compile(query));
-		if (query.isSelectType()) {
-			return QC.execute(op, input, executionContext);
-		} else if (query.isConstructQuad()){
-			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
-			Dataset dataset = queryExecution.execConstructDataset();
-			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.create(dataset.asDatasetGraph()));
-		} else if (query.isConstructType()) {
-			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
-			Model result = queryExecution.execConstruct();
-			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.createForGraph(result.getGraph()));
-		}
-		return QueryIterNullIterator.create(executionContext);
-	}
+        if (op instanceof OpService) {
+
+            // extract properties
+            PropertyExtractor.extractProperties(p, (OpService) op);
+
+            // Possibly execute reused queries
+            if (PropertyUtils.hasProperty(p, IRIArgument.QUERY))
+                return executeReusedQuery((OpService) op, p, input, executionContext);
+        }
+
+        // Possibly read from STD in
+        PropertyExtractor.readFromStdIn(p);
+
+
+        if (L.isDebugEnabled()) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            p.list(pw);
+            L.debug("Properties: \n{}", sw);
+        }
+
+        Op opToExecute = op;
+        if (op instanceof OpService opService) {
+            opToExecute = opService.getSubOp();
+        }
+
+        // Select strategy
+        FXExecutionStrategy strategy = new FXStrategySelector().getStrategy(p, op, executionContext);
+        FacadeXExecutionContext facadeXExecutionContext = Utils.getFacadeXExecutionContext(executionContext, p, DatasetGraphFactory.createGeneral(), strategy);
+
+        // if is materialisation strategy, then create dataset graph and wrap into a fxExecutionContext
+        if (strategy instanceof FXGraphMaterialisationStrategy) {
+			return strategy.execute(opToExecute, input, facadeXExecutionContext);
+        }
+
+        // if is a stream strategy, postpone execution
+        return QC.execute(opToExecute, input, facadeXExecutionContext);
+    }
+
+    public QueryIterator executeReusedQuery(OpService opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {
+        L.debug("executeReusedQuery");
+        String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY))).toURI(), StandardCharsets.UTF_8);
+        Query query = QueryFactory.create(queryStr);
+        Op op = Algebra.optimize(Algebra.compile(query));
+        if (query.isSelectType()) {
+            return QC.execute(op, input, executionContext);
+        } else if (query.isConstructQuad()) {
+            QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
+            Dataset dataset = queryExecution.execConstructDataset();
+            return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.create(dataset.asDatasetGraph()));
+        } else if (query.isConstructType()) {
+            QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
+            Model result = queryExecution.execConstruct();
+            return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.createForGraph(result.getGraph()));
+        }
+        return QueryIterNullIterator.create(executionContext);
+    }
 }
