@@ -18,17 +18,20 @@
 package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.engine.stream.FXStreamExecutionStrategy;
-import io.github.sparqlanything.model.SPARQLAnythingConstants;
-import io.github.sparqlanything.model.TriplifierHTTPException;
-import io.github.sparqlanything.model.TriplifierRegister;
+import io.github.sparqlanything.model.*;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.query.ARQ;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.algebra.optimize.TransformPropertyFunction;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterAssign;
+import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.apache.jena.sparql.engine.join.Join;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.QC;
@@ -37,19 +40,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
 
 public class FacadeXOpExecutor extends OpExecutor {
 
 	public final static Symbol strategy = Symbol.create("facade-x-strategy");
-	private static final Logger logger = LoggerFactory.getLogger(FacadeXOpExecutor.class);
-	private final FXWorker worker;
+	private static final Logger L = LoggerFactory.getLogger(FacadeXOpExecutor.class);
 
 	public FacadeXOpExecutor(ExecutionContext execCxt) {
 		super(execCxt);
-		worker = new FXWorker();
 	}
 
 	protected QueryIterator exec(Op op, QueryIterator input) {
@@ -58,7 +64,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 			// Otherwise, proceed with Jena default
 			try {
 				this.execCxt.getContext().setFalse(SPARQLAnythingConstants.NO_SERVICE_MODE);
-				return worker.execute(op, input, this.execCxt);
+				return extractPropertiesAndSelectStrategy(op, input);
 			} catch (ClassNotFoundException | NoSuchMethodException | TriplifierHTTPException |
 					 InvocationTargetException | InstantiationException | URISyntaxException | IllegalAccessException |
 					 IOException |
@@ -96,7 +102,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
-		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
+		L.trace("Execute OpBGP {}", opBGP.getPattern().toString());
 
 		// check that the BGP is within a FacadeX context (either the BGP is in a FX Service clause or is in no-service-mode)
 		if (this.execCxt instanceof FacadeXExecutionContext fxExecutionContext) {
@@ -145,7 +151,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpService opService, QueryIterator input) {
-		logger.trace("Execute opService {}", opService.toString());
+		L.trace("Execute opService {}", opService.toString());
 
 		if (!this.execCxt.getContext().isDefined(SPARQLAnythingConstants.NO_SERVICE_MODE)) {
 
@@ -157,11 +163,11 @@ public class FacadeXOpExecutor extends OpExecutor {
 
 				try {
 					// go with the FacadeX default execution
-					return worker.execute(opService, input, execCxt);
+					return extractPropertiesAndSelectStrategy(opService, input);
 				} catch (IllegalArgumentException | SecurityException | IOException | InstantiationException |
 						 IllegalAccessException | InvocationTargetException | NoSuchMethodException |
 						 ClassNotFoundException | URISyntaxException | TriplifierHTTPException e) {
-					logger.error("An error occurred: {}", e.getMessage());
+					L.error("An error occurred: {}", e.getMessage());
 					throw new RuntimeException(e);
 				} catch (UnboundVariableException e) {
 					// manage the case of properties are passed via BGP and there are variables in it
@@ -178,17 +184,17 @@ public class FacadeXOpExecutor extends OpExecutor {
 		// Proceed with the next operation
 		OpBGP fakeBGP = Utils.extractFakePattern(opBGP);
 		if (e.getOpTable() != null) {
-			logger.trace("Executing table");
+			L.trace("Executing table");
 			QueryIterator qIterT = e.getOpTable().getTable().iterator(execCxt);
 			QueryIterator qIter = Join.join(input, qIterT, execCxt);
 			return Utils.postpone(op, qIter, execCxt);
 		} else if (e.getOpExtend() != null) {
-			logger.trace("Executing op extend");
+			L.trace("Executing op extend");
 			QueryIterator qIter = exec(e.getOpExtend().getSubOp(), input);
 			qIter = new QueryIterAssign(qIter, e.getOpExtend().getVarExprList(), execCxt, true);
 			return Utils.postpone(op, qIter, execCxt);
 		}
-		logger.trace("Executing fake pattern {}", fakeBGP);
+		L.trace("Executing fake pattern {}", fakeBGP);
 		return Utils.postpone(op, QC.execute(fakeBGP, input, execCxt), execCxt);
 	}
 
@@ -198,6 +204,75 @@ public class FacadeXOpExecutor extends OpExecutor {
 			input2 = QC.execute(Utils.getOpPropFuncAnySlot(t), input2, execCxt);
 		}
 		return input2;
+	}
+
+
+	public QueryIterator extractPropertiesAndSelectStrategy(Op op, QueryIterator input) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
+
+		L.debug("execute {}", op);
+
+		// extract properties from service URI
+		Properties p = new Properties();
+
+		// first extract from execution context
+		PropertyExtractor.extractPropertiesFromExecutionContext(this.execCxt, p);
+
+		if (op instanceof OpService) {
+
+			// extract properties
+			PropertyExtractor.extractProperties(p, (OpService) op);
+
+			// Possibly execute reused queries
+			if (PropertyUtils.hasProperty(p, IRIArgument.QUERY))
+				return executeReusedQuery((OpService) op, p, input, this.execCxt);
+		}
+
+		// Possibly read from STD in
+		PropertyExtractor.readFromStdIn(p);
+
+
+		if (L.isDebugEnabled()) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			p.list(pw);
+			L.debug("Properties: \n{}", sw);
+		}
+
+		Op opToExecute = op;
+		if (op instanceof OpService opService) {
+			opToExecute = opService.getSubOp();
+		}
+
+		// Select strategy
+		FXExecutionStrategy strategy = new FXStrategySelector().getStrategy(p, op, this.execCxt);
+		FacadeXExecutionContext facadeXExecutionContext = Utils.getFacadeXExecutionContext(this.execCxt, p, DatasetGraphFactory.createGeneral(), strategy);
+
+		// if is materialisation strategy, then create dataset graph and wrap into a fxExecutionContext
+		if (strategy instanceof FXGraphMaterialisationStrategy) {
+			return strategy.execute(opToExecute, input, facadeXExecutionContext);
+		}
+
+		// if is a stream strategy, postpone execution
+		return QC.execute(opToExecute, input, facadeXExecutionContext);
+	}
+
+	public QueryIterator executeReusedQuery(OpService opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {
+		L.debug("executeReusedQuery");
+		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY))).toURI(), StandardCharsets.UTF_8);
+		Query query = QueryFactory.create(queryStr);
+		Op op = Algebra.optimize(Algebra.compile(query));
+		if (query.isSelectType()) {
+			return QC.execute(op, input, executionContext);
+		} else if (query.isConstructQuad()) {
+			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
+			Dataset dataset = queryExecution.execConstructDataset();
+			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.create(dataset.asDatasetGraph()));
+		} else if (query.isConstructType()) {
+			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
+			Model result = queryExecution.execConstruct();
+			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.createForGraph(result.getGraph()));
+		}
+		return QueryIterNullIterator.create(executionContext);
 	}
 
 }
