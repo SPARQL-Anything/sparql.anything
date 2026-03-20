@@ -74,7 +74,7 @@ public class XMLTriplifierTest {
 		Iterator<Quad> iter = graph.find(null, null, null, null);
 		while (iter.hasNext()) {
 			Quad q = iter.next();
-			L.debug("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
+			//L.debug("{} {} {}", q.getSubject(), q.getPredicate(), q.getObject());
 			Assert.assertFalse(q.getSubject().isBlank());
 			Assert.assertFalse(q.getObject().isBlank());
 		}
@@ -88,7 +88,7 @@ public class XMLTriplifierTest {
 		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(properties);
 		triplifier.triplify(properties, builder);
 		DatasetGraph graph = builder.getDatasetGraph();
-		RDFDataMgr.write(System.out, graph.getDefaultGraph(), Lang.TTL);
+		//RDFDataMgr.write(System.out, graph.getDefaultGraph(), Lang.TTL);
 		URL ttl2 = getClass().getClassLoader().getResource("./test2.ttl");
 		Graph g = RDFDataMgr.loadGraph(ttl2.toURI().toString(), Lang.TTL);
 		Assert.assertTrue(GraphMatcher.equals(g, graph.getDefaultGraph()));

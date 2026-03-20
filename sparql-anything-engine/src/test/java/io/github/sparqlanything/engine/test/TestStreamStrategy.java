@@ -68,7 +68,7 @@ public class TestStreamStrategy {
 
 	private void testStrategy(boolean stream){
 		strategy = selector.getStrategy(properties, services.iterator().next(), ExecutionContext.create(Context.create()));
-		L.info("Test strategy: {} -> {}", query, strategy.getClass().getName());
+		// L.info("Test strategy: {} -> {}", query, strategy.getClass().getName());
 		if(stream){
 			Assert.assertTrue(strategy instanceof FXStreamExecutionStrategy);
 		}else{
@@ -86,12 +86,12 @@ public class TestStreamStrategy {
 
 	@Test
 	public void select1_test1_csv(){
-		L.info("{}", query);
+		// L.info("{}", query);
 		testStrategy(true);
 		ResultSet rs = execAsSelect();
 		Assert.assertTrue(rs.hasNext());
-		while (rs.hasNext()){
-			L.info("{}", rs.next());
-		}
+//		while (rs.hasNext()){
+//			L.info("{}", rs.next());
+//		}
 	}
 }

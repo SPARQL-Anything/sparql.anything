@@ -17,12 +17,7 @@ import org.junit.rules.TestName;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class StrategiesTest {
 
@@ -44,7 +39,7 @@ public class StrategiesTest {
 		String[] parts = name.getMethodName().split("_");
 		fileName = parts[0] + "." + parts[1];
 		parts[0] = "location";
-		location = getClass().getClassLoader().getResource("test/" + fileName).getPath();
+		location = Objects.requireNonNull(getClass().getClassLoader().getResource("test/" + fileName)).getPath();
 		parts[1] = location;
 		String queryMethod = parts[2];
 		parts = ArrayUtils.remove(parts, 2);
@@ -61,11 +56,7 @@ public class StrategiesTest {
 			query_s0 = (String) method.invoke(this, properties_0);
 			query_s1 = (String) method.invoke(this, properties_1);
 			query_s2 = (String) method.invoke(this, properties_2);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
+		} catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -105,8 +96,8 @@ PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT * WHERE { 
-	SERVICE <x-sparql-anything:> { 
+SELECT * WHERE {\s
+	SERVICE <x-sparql-anything:> {\s
 		%s
 		?a ?b ?c
 	}
@@ -121,8 +112,8 @@ PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-CONSTRUCT{ ?a ?b ?c } WHERE { 
-	SERVICE <x-sparql-anything:> { 
+CONSTRUCT{ ?a ?b ?c } WHERE {\s
+	SERVICE <x-sparql-anything:> {\s
 		%s
 		?a ?b ?c
 	}
@@ -173,12 +164,12 @@ CONSTRUCT{ ?a ?b ?c } WHERE {
 	}
 
 	void equals(Set<QuerySolution> rs1, Set<QuerySolution> rs2, Set<QuerySolution> rs3){
-		System.out.println("--- 0 ---");
-		System.out.println(asStringSet(rs1));
-		System.out.println("--- 1 ---");
-		System.out.println(asStringSet(rs2));
-		System.out.println("--- 2 ---");
-		System.out.println(asStringSet(rs3));
+//		System.out.println("--- 0 ---");
+//		System.out.println(asStringSet(rs1));
+//		System.out.println("--- 1 ---");
+//		System.out.println(asStringSet(rs2));
+//		System.out.println("--- 2 ---");
+//		System.out.println(asStringSet(rs3));
 		Set<String> set1 = asStringSet(rs1);
 		Set<String> set2 = asStringSet(rs2);
 		Set<String> set3 = asStringSet(rs3);

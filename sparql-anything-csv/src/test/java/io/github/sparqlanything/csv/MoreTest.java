@@ -9,6 +9,7 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.DatasetGraph;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class MoreTest {
 		// with csv.null-string set to nullString we should not see any quads with nullString in the object position
 		Iterator<Triple> tripleIterator = graph.getDefaultGraph().find(Node.ANY, Node.ANY, Node.ANY);
 		while(tripleIterator.hasNext()) {
-			System.err.println(tripleIterator.next());
+			Assert.assertFalse(tripleIterator.next().getSubject().getURI().contains("##"));
 		}
 
 	}
