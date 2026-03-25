@@ -10,6 +10,7 @@ import io.github.sparqlanything.fxbgp.stream.FXProxyEventListener;
 import io.github.sparqlanything.fxbgp.stream.FXQuerySolutionBuilder;
 import io.github.sparqlanything.fxbgp.stream.FXStreamParser;
 import io.github.sparqlanything.fxbgp.stream.FXTreePattern;
+import io.github.sparqlanything.fxbgp.stream.SharedPathAccessor;
 import io.github.sparqlanything.fxbgp.stream.JSONStreamParser;
 import io.github.sparqlanything.fxbgp.stream.NotATreeException;
 import io.github.sparqlanything.fxbgp.stream.StreamEventsHandler;
@@ -75,6 +76,10 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 			Set<FXBGPAnnotation> annotations = ag.annotate(opBGP, true);
 			final Set<Binding> bindings = new HashSet<>();
 			final Set<FXQuerySolutionBuilder> patterns = new HashSet<>();
+			SharedPathAccessor accessor = new SharedPathAccessor();
+			int threshold = Integer.parseInt(properties.getProperty(
+				FXProxyEventListener.PARALLEL_THRESHOLD_OPTION,
+				String.valueOf(FXProxyEventListener.DEFAULT_PARALLEL_THRESHOLD)));
 			for (FXBGPAnnotation annotation : annotations) {
 				FXTreePattern tp;
 				if (graphNode == null) {
@@ -84,11 +89,10 @@ public class FXStreamExecutionStrategy implements FXExecutionStrategy {
 					// Play with named graph
 					tp = FXTreePattern.make(annotation, graphNode);
 				}
-				patterns.add(new FXQuerySolutionBuilder(tp, bindings));
+				patterns.add(new FXQuerySolutionBuilder(tp, bindings, accessor));
 			}
-			StreamEventsHandler handler = new StreamEventsHandler(properties, FXProxyEventListener.make(patterns));
+			StreamEventsHandler handler = new StreamEventsHandler(properties, FXProxyEventListener.make(patterns, threshold, accessor));
 			return new QueryIterNestedLoopJoin(input, new FXParserQueryIterator(parser, handler, bindings), execCxt);
-
 		} catch (NotATreeException e) {
 			FXStrategySelector.L.warn("Not a tree BGP (fallback on in-memory graph materialisation)", e);
 			// TODO Find a way to avoid this to happen
