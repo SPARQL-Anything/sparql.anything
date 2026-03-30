@@ -18,6 +18,7 @@
 
 package io.github.sparqlanything.model;
 
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -50,5 +51,9 @@ public interface FacadeXNodeBuilder {
 		} else {
 			return ResourceFactory.createTypedLiteral(value).asNode();
 		}
+	}
+
+	default Node value2node(String value, XSDDatatype datatype) {
+		return ResourceFactory.createTypedLiteral((String)value, datatype).asNode();
 	}
 }

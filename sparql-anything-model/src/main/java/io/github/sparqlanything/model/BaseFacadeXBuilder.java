@@ -70,6 +70,7 @@ public abstract class BaseFacadeXBuilder extends FacadeXAbstractNodeBuilder impl
 		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), RDF.type.asNode(), NodeFactory.createURI(type.toString()));
 	}
 
+
 	public boolean addValue(String dataSourceId, String containerId, String slotKey, Object value) {
 		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), key2predicate(keepLabel(slotKey)), value2node(value));
 	}
@@ -82,6 +83,18 @@ public abstract class BaseFacadeXBuilder extends FacadeXAbstractNodeBuilder impl
 		return addSlotStatement(dataSourceId, containerId, slotKey, value, false);
 	}
 
+	public boolean addValue(String dataSourceId, String containerId, String slotKey, String surfaceForm, XSDDatatype datatype) {
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), key2predicate(keepLabel(slotKey)), value2node(surfaceForm, datatype));
+	}
+
+	public boolean addValue(String dataSourceId, String containerId, URI customKey, String surfaceForm, XSDDatatype datatype) {
+		return add(dataSourceId2node(dataSourceId), container2node(containerId, dataSourceId), NodeFactory.createURI(customKey.toString()), value2node(surfaceForm, datatype));
+	}
+
+	public boolean addValue(String dataSourceId, String containerId, Integer slotKey, String surfaceForm, XSDDatatype datatype) {
+		return addSlotStatement(dataSourceId, containerId, slotKey, surfaceForm, datatype);
+	}
+
 	public boolean addRoot(String dataSourceId) {
 		return add(dataSourceId2node(dataSourceId), container2node(SPARQLAnythingConstants.ROOT_ID, dataSourceId), RDF.type.asNode(), NodeFactory.createURI(Triplifier.FACADE_X_TYPE_ROOT));
 	}
@@ -91,6 +104,19 @@ public abstract class BaseFacadeXBuilder extends FacadeXAbstractNodeBuilder impl
 		Node s = container2node(containerId, dataSourceId);
 		Node p = createIntegerKeyNode(slotKey);
 		Node o = createObjectNode(dataSourceId, object, isObjectContainer);
+		if (p_reify_slot_statements) {
+			Node r = NodeFactory.createBlankNode();
+			add(g, r, RDF.reifies.asNode(), NodeFactory.createTripleTerm(s, p, o));
+			add(g, r, NodeFactory.createURI(Triplifier.FACADE_X_SLOT_KEY), NodeFactory.createLiteralDT(slotKey.toString(), XSDDatatype.XSDinteger));
+		}
+		return add(g, s, p, o);
+	}
+
+	private boolean addSlotStatement(String dataSourceId, String containerId, Integer slotKey, String surfaceForm, XSDDatatype dataype) {
+		Node g = dataSourceId2node(dataSourceId);
+		Node s = container2node(containerId, dataSourceId);
+		Node p = createIntegerKeyNode(slotKey);
+		Node o = value2node(surfaceForm, dataype);
 		if (p_reify_slot_statements) {
 			Node r = NodeFactory.createBlankNode();
 			add(g, r, RDF.reifies.asNode(), NodeFactory.createTripleTerm(s, p, o));

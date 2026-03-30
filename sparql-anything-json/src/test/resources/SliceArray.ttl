@@ -4,4 +4,4 @@
 @prefix xyz:  <http://sparql.xyz/facade-x/data/>.
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
 
-<http://www.example.org/document> a fx:root ; rdf:_1 "A" ; rdf:_2 "1"^^xsd:int ; rdf:_3 true .
+<http://www.example.org/document> a fx:root ; rdf:_1 "A" ; rdf:_2 "1"^^xsd:decimal ; rdf:_3 true .

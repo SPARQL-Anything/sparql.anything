@@ -1,5 +1,6 @@
 package io.github.sparqlanything.model;
 
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
@@ -51,6 +52,14 @@ public class FacadeXAbstractNodeBuilder implements FacadeXNodeBuilder {
 			value = ((String) value).trim();
 		}
 		return FacadeXNodeBuilder.super.value2node(value);
+	}
+
+	public Node value2node(String value, XSDDatatype datatype) {
+		// trims_strings == true and if object is string, trim it
+		if (p_trim_strings && value instanceof String) {
+			value = ((String) value).trim();
+		}
+		return FacadeXNodeBuilder.super.value2node(value, datatype);
 	}
 
 	public Node createIntegerKeyNode(int slotKey){
