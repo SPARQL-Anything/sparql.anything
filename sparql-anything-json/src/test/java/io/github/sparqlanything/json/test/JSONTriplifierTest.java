@@ -20,19 +20,27 @@ package io.github.sparqlanything.json.test;
 
 import io.github.sparqlanything.json.JSONTriplifier;
 import io.github.sparqlanything.model.*;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.query.ARQ;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.sys.JenaSystem;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.XSD;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -40,7 +48,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class JSONTriplifierTest {
-
 	private final String ontologyPrefix = "https://w3id.org/resource/ontology/";
 	private final Logger log = LoggerFactory.getLogger(JSONTriplifierTest.class);
 
@@ -104,11 +111,11 @@ public class JSONTriplifierTest {
 				Model m = ModelFactory.createDefaultModel();
 				Resource r = m.createResource();
 				m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-				m.add(r, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral(1));
+				m.add(r, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral(new BigDecimal(1)));
 				m.add(r, m.createProperty(ontologyPrefix + "string"), m.createTypedLiteral("string"));
 				m.add(r, m.createProperty(ontologyPrefix + "bool"), m.createTypedLiteral(true));
 				m.add(r, m.createProperty(ontologyPrefix + "boolf"), m.createTypedLiteral(false));
-				m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(0));
+				m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(new BigDecimal(0)));
 
 				DatasetGraph g1;
 				try {
@@ -134,11 +141,11 @@ public class JSONTriplifierTest {
 				Model mn = ModelFactory.createDefaultModel();
 				Resource rn = mn.createResource(root);
 				mn.add(rn, RDF.type, mn.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-				mn.add(rn, mn.createProperty(ontologyPrefix + "a"), mn.createTypedLiteral(1));
+				mn.add(rn, mn.createProperty(ontologyPrefix + "a"), mn.createTypedLiteral(new BigDecimal(1)));
 				mn.add(rn, mn.createProperty(ontologyPrefix + "string"), mn.createTypedLiteral("string"));
 				mn.add(rn, mn.createProperty(ontologyPrefix + "bool"), mn.createTypedLiteral(true));
 				mn.add(rn, mn.createProperty(ontologyPrefix + "boolf"), mn.createTypedLiteral(false));
-				mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(0));
+				mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(new BigDecimal(0)));
 
 				DatasetGraph g1;
 				try {
@@ -147,6 +154,8 @@ public class JSONTriplifierTest {
 					FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 					jt.triplify(properties, b);
 					g1 = b.getDatasetGraph();
+					//RDFDataMgr.write(System.out, g1.getDefaultGraph(), Lang.NQ);
+					//RDFDataMgr.write(System.out, mn, Lang.NQ);
 					assertTrue(mn.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -163,13 +172,14 @@ public class JSONTriplifierTest {
 		Model m = ModelFactory.createDefaultModel();
 		Resource r = m.createResource();
 		m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		m.add(r, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral(1));
+		m.add(r, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral(new BigDecimal(1)));
+		m.add(r, m.createProperty(ontologyPrefix + "enot"), m.createTypedLiteral("0.1e1", XSDDatatype.XSDdecimal));
 		m.add(r, m.createProperty(ontologyPrefix + "string"), m.createTypedLiteral("string"));
 		m.add(r, m.createProperty(ontologyPrefix + "bool"), m.createTypedLiteral(true));
 		m.add(r, m.createProperty(ontologyPrefix + "boolf"), m.createTypedLiteral(false));
-		m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(0));
-		m.add(r, m.createProperty(ontologyPrefix + "neg"), m.createTypedLiteral(-1));
-		m.add(r, m.createProperty(ontologyPrefix + "float"), m.createTypedLiteral(0.1));
+		m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(new BigDecimal(0)));
+		m.add(r, m.createProperty(ontologyPrefix + "neg"), m.createTypedLiteral(new BigDecimal(-1)));
+		m.add(r, m.createProperty(ontologyPrefix + "float"), m.createTypedLiteral("0.1", XSDDatatype.XSDdecimal));
 
 		DatasetGraph g1;
 		try {
@@ -178,7 +188,8 @@ public class JSONTriplifierTest {
 			FacadeXGraphBuilder b = new BaseFacadeXGraphBuilder(properties);
 			jt.triplify(properties, b);
 			g1 = b.getDatasetGraph();
-
+			RDFDataMgr.write(System.out, m.getGraph(), RDFFormat.TTL);
+			RDFDataMgr.write(System.out, g1.getDefaultGraph(), RDFFormat.TTL);
 			assertTrue(m.getGraph().isIsomorphicWith(g1.getDefaultGraph()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -223,11 +234,11 @@ public class JSONTriplifierTest {
 		Model m = ModelFactory.createDefaultModel();
 		Resource r = m.createResource();
 		m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		m.add(r, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral(1));
+		m.add(r, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral(new BigDecimal(1)));
 		m.add(r, m.createProperty(ontologyPrefix + "string"), m.createTypedLiteral("string"));
 		m.add(r, m.createProperty(ontologyPrefix + "bool"), m.createTypedLiteral(true));
 		m.add(r, m.createProperty(ontologyPrefix + "boolf"), m.createTypedLiteral(false));
-		m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(0));
+		m.add(r, m.createProperty(ontologyPrefix + "zero"), m.createTypedLiteral(new BigDecimal(0)));
 
 		DatasetGraph g1;
 		try {
@@ -255,11 +266,11 @@ public class JSONTriplifierTest {
 		Model mn = ModelFactory.createDefaultModel();
 		Resource rn = mn.createResource(root);
 		mn.add(rn, RDF.type, mn.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		mn.add(rn, mn.createProperty(ontologyPrefix + "a"), mn.createTypedLiteral(1));
+		mn.add(rn, mn.createProperty(ontologyPrefix + "a"), mn.createTypedLiteral(new BigDecimal(1)));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "string"), mn.createTypedLiteral("string"));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "bool"), mn.createTypedLiteral(true));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "boolf"), mn.createTypedLiteral(false));
-		mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(0));
+		mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(new BigDecimal(0)));
 
 		DatasetGraph g1;
 		try {
@@ -287,11 +298,11 @@ public class JSONTriplifierTest {
 		Model mn = ModelFactory.createDefaultModel();
 		Resource rn = mn.createResource(root);
 		mn.add(rn, RDF.type, mn.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-		mn.add(rn, mn.createProperty(ontologyPrefix + "a"), mn.createTypedLiteral(1));
+		mn.add(rn, mn.createProperty(ontologyPrefix + "a"), mn.createTypedLiteral(new BigDecimal(1)));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "string"), mn.createTypedLiteral("string"));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "bool"), mn.createTypedLiteral(true));
 		mn.add(rn, mn.createProperty(ontologyPrefix + "boolf"), mn.createTypedLiteral(false));
-		mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(0));
+		mn.add(rn, mn.createProperty(ontologyPrefix + "zero"), mn.createTypedLiteral(new BigDecimal(0)));
 
 		DatasetGraph g1;
 		try {
@@ -315,16 +326,16 @@ public class JSONTriplifierTest {
 				Model m = ModelFactory.createDefaultModel();
 				Resource r = m.createResource();
 				m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-				m.add(r, RDF.li(1), m.createTypedLiteral(1));
+				m.add(r, RDF.li(1), m.createTypedLiteral(new BigDecimal(1)));
 				m.add(r, RDF.li(2), m.createTypedLiteral("abcd"));
 				Resource o = m.createResource();
 				m.add(r, RDF.li(3), o);
 				m.add(o, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral("a"));
-				m.add(r, RDF.li(5), m.createTypedLiteral(4));
+				m.add(r, RDF.li(5), m.createTypedLiteral(new BigDecimal(4)));
 				Resource arr = m.createResource();
 				m.add(o, m.createProperty(ontologyPrefix + "arr"), arr);
-				m.add(arr, RDF.li(1), m.createTypedLiteral(0));
-				m.add(arr, RDF.li(2), m.createTypedLiteral(1));
+				m.add(arr, RDF.li(1), m.createTypedLiteral(new BigDecimal(0)));
+				m.add(arr, RDF.li(2), m.createTypedLiteral(new BigDecimal(1)));
 
 				Properties properties = new Properties();
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);
@@ -350,16 +361,16 @@ public class JSONTriplifierTest {
 				Model m = ModelFactory.createDefaultModel();
 				Resource r = m.createResource(root);
 				m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
-				m.add(r, RDF.li(1), m.createTypedLiteral(1));
+				m.add(r, RDF.li(1), m.createTypedLiteral(new BigDecimal(1)));
 				m.add(r, RDF.li(2), m.createTypedLiteral("abcd"));
 				Resource o = m.createResource(root + "/_3");
 				m.add(r, RDF.li(3), o);
 				m.add(o, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral("a"));
-				m.add(r, RDF.li(5), m.createTypedLiteral(4));
+				m.add(r, RDF.li(5), m.createTypedLiteral(new BigDecimal(4)));
 				Resource arr = m.createResource(root + "/_3/arr");
 				m.add(o, m.createProperty(ontologyPrefix + "arr"), arr);
-				m.add(arr, RDF.li(1), m.createTypedLiteral(0));
-				m.add(arr, RDF.li(2), m.createTypedLiteral(1));
+				m.add(arr, RDF.li(1), m.createTypedLiteral(new BigDecimal(0)));
+				m.add(arr, RDF.li(2), m.createTypedLiteral(new BigDecimal(1)));
 				Properties properties = new Properties();
 
 				properties.setProperty(IRIArgument.NAMESPACE.toString(), ontologyPrefix);

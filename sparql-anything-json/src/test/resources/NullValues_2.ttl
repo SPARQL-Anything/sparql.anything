@@ -6,12 +6,12 @@
 @prefix eg: <http://www.example.org/> .
 
 <http://www.example.org/document/_5>
-        xyz:a   "1"^^xsd:int;
+        xyz:a   "1"^^xsd:decimal;
         xyz:b   xyz:null .
 
 eg:document  rdf:type  fx:root;
         rdf:_1    "A";
-        rdf:_2    "1"^^xsd:int;
+        rdf:_2    "1"^^xsd:decimal;
         rdf:_3    true;
         rdf:_4 xyz:null ;
         rdf:_5    <http://www.example.org/document/_5> .

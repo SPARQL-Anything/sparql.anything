@@ -18,6 +18,8 @@
 
 package io.github.sparqlanything.model;
 
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+
 import java.net.URI;
 
 /**
@@ -104,6 +106,39 @@ public interface FacadeXComponentHandler {
 	 * @return true if the value is added to the model, false otherwise
 	 */
 	boolean addValue(String dataSourceId, String containerId, Integer slotKey, Object value);
+
+	/**
+	 * Adds to the FacadeX model a value as slot of the container of a given data source.
+	 * @param dataSourceId the identifier of the data source of the container
+	 * @param containerId the identifier of the parent container
+	 * @param slotKey the key of the slot of the containerId
+	 * @param surfaceForm the value of the container as it appears in the source
+	 * @param datatype the XSD datatype
+	 * @return true if the value is added to the model, false otherwise
+	 */
+	boolean addValue(String dataSourceId, String containerId, String slotKey, String surfaceForm, XSDDatatype datatype);
+
+	/**
+	 * Adds to the FacadeX model a value as slot of the container of a given data source. The relation between the parent and the value is identified by the customKey.
+	 * @param dataSourceId the identifier of the data source of the container
+	 * @param containerId the identifier of the parent container
+	 * @param customKey the key of the slot of the containerId
+	 * @param surfaceForm the value of the container as it appears in the source
+	 * @param datatype the XSD datatype
+	 * @return true if the value is added to the model, false otherwise
+	 */
+	boolean addValue(String dataSourceId, String containerId, URI customKey,String surfaceForm, XSDDatatype datatype);
+
+	/**
+	 * Adds to the FacadeX model a value as slot of the container of a given data source.
+	 * @param dataSourceId the identifier of the data source of the container
+	 * @param containerId the identifier of the parent container
+	 * @param slotKey the key of the slot of the containerId
+	 * @param surfaceForm the value of the container as it appears in the source
+	 * @param datatype the XSD datatype
+	 * @return true if the value is added to the model, false otherwise
+	 */
+	boolean addValue(String dataSourceId, String containerId, Integer slotKey, String surfaceForm, XSDDatatype datatype);
 
 	/**
 	 * Add the root container to the FacadeX model for the data source whose identifier is passed as argument.

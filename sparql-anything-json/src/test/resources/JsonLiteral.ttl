@@ -19,8 +19,8 @@
         .
 
 <http://www.example.org/document/child/non-literal>
-        xyz:a   "1"^^xsd:int ;
-        xyz:b   "2"^^xsd:int ;
+        xyz:a   "1"^^xsd:decimal ;
+        xyz:b   "2"^^xsd:decimal ;
         .
 
 <http://www.example.org/document/literal_string>
