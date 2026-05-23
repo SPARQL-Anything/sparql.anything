@@ -1,6 +1,6 @@
 [ a       <http://sparql.xyz/facade-x/ns/root> , <http://sparql.xyz/facade-x/data/test>;
   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-          "Floating string before (first)";
+          "\n    Floating string before (first)\n    ";
   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
           [ a       <http://sparql.xyz/facade-x/data/second>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
@@ -14,5 +14,5 @@
                     "Value in third"
           ];
   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
-          "Floating string after (fourth)"
+          "\n    Floating string after (fourth)\n"
 ] .

@@ -37,34 +37,31 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Properties;
 
-public class Issue325Test {
+public class Issue619Test {
 
-	final static Logger logger = LoggerFactory.getLogger(Issue325Test.class);
+	final static Logger logger = LoggerFactory.getLogger(Issue619Test.class);
 
 	@Test
-	public void test() throws TriplifierHTTPException, IOException {
+	public void newlinesAndWhitespacePreservedWhenTrimStringsIsFalse()
+		throws TriplifierHTTPException, IOException {
 		Properties properties = new Properties();
-		URL xml1 = getClass().getClassLoader().getResource("./Issue325.xml");
-		properties.setProperty(IRIArgument.LOCATION.toString(), Objects.requireNonNull(xml1).toString());
+		URL xml = getClass().getClassLoader().getResource("./Issue619.xml");
+		properties.setProperty(IRIArgument.LOCATION.toString(),
+			Objects.requireNonNull(xml).toString());
+		properties.setProperty(IRIArgument.TRIM_STRINGS.toString(), "false");
+
 		FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(properties);
 		XMLTriplifier triplifier = new XMLTriplifier();
 		triplifier.triplify(properties, builder);
+
 		DatasetGraph graph = builder.getDatasetGraph();
 		logger.debug("{}", graph);
 
-		graph.find().forEachRemaining(q -> System.out.println(
-			q.getPredicate() + "  -->  " +
-				(q.getObject().isLiteral()
-					? "\"" + q.getObject().getLiteralLexicalForm().replace("\n", "\\n") + "\"^^"
-					  + q.getObject().getLiteralDatatypeURI()
-					: q.getObject())
-		));
-
-		Iterator<Quad> iter = graph.find(null, null, RDF.li(1).asNode(),
-				NodeFactory.createLiteralString("THIS_TEXT_IS_INSIDE_SUBJECT"));
-		Assert.assertTrue(iter.hasNext());
-		Iterator<Quad> iter2 = graph.find(null, null, RDF.li(1).asNode(),
-			NodeFactory.createLiteralString("\n    THIS_TEXT_IS_OUTSIDE_SUBJECT"));
-		Assert.assertTrue(iter2.hasNext());
+		String expected = "Line 1\n        Line 2";
+		Iterator<Quad> it = graph.find(null, null, RDF.li(1).asNode(),
+			NodeFactory.createLiteralString(expected));
+		Assert.assertTrue(
+			"Expected literal preserving the newline and indentation between 'Line 1' and 'Line 2'",
+			it.hasNext());
 	}
 }

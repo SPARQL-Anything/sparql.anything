@@ -44,7 +44,7 @@
   xyz:isbn "928-3-16-148410-0" .
 
 <http://www.example.org/document/books/2:book/6:description> a xyz:description ;
-        rdf:_1 "A former architect battles corporate zombies,\n            an evil sorceress, and her own childhood to become queenof the world." .
+        rdf:_1 "A former architect battles corporate zombies,\n            an evil sorceress, and her own childhood to become queen\n            of the world." .
 
 <http://www.example.org/document/books/3:book/3:genre> a xyz:genre ;
         rdf:_1 "Fantasy" .
@@ -89,4 +89,4 @@
         rdf:_1 "Maeve Ascendant" .
 
 <http://www.example.org/document/books/3:book/6:description> a xyz:description ;
-        rdf:_1 "After the collapse of a nanotechnology\n            society in England, the young survivors lay thefoundation for a new society." .
+        rdf:_1 "After the collapse of a nanotechnology\n            society in England, the young survivors lay the\n            foundation for a new society." .

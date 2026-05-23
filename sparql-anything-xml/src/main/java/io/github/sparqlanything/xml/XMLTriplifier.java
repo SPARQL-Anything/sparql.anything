@@ -319,7 +319,7 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 				if (charBuilder == null) {
 					charBuilder = new StringBuilder();
 				}
-				charBuilder.append(event.asCharacters().getData().trim());
+				charBuilder.append(event.asCharacters().getData()); // .trim()); See #619
 			}
 		}
 	}

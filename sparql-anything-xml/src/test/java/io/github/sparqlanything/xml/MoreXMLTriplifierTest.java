@@ -19,6 +19,8 @@
 package io.github.sparqlanything.xml;
 
 import io.github.sparqlanything.testutils.AbstractTriplifierTester;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +71,7 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 	@Test
 	public void testBooks$1() {
 		L.debug("Test XML books (one go)");
-//		RDFDataMgr.write(System.err, result, Lang.TTL);
+		RDFDataMgr.write(System.err, result, Lang.TTL);
 		assertResultIsIsomorphicWithExpected();
 	}
 
