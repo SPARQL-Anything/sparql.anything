@@ -821,3 +821,18 @@ Asprino, Luigi, Enrico Daga, Justin Dowdy, Paul Mulholland, Aldo Gangemi, and Ma
   year={2023}
 }
 ```
+
+# Building the documentation
+
+```
+# Using `uv` for Python (https://docs.astral.sh/uv/)
+uv venv venv-for-mkdocs
+source venv-for-mkdocs/bin/activate
+uv pip install mkdocs
+
+git clone https://github.com/SPARQL-Anything/sparql.anything.git
+cd sparql.anything
+uv pip install -r docs/requirements.txt
+
+mkdocs serve
+```
