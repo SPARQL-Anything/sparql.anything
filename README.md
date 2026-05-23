@@ -715,7 +715,9 @@ You can extend SPARQL Anything by including new triplifiers, more details can be
 You can use SPARQL Anything as a Python library, see
 the [PySPARQL-Anything project](https://pypi.org/project/pysparql-anything/).
 
-### Compiling
+# Build
+
+## Compile executable jars
 
 You can generate executable files of the command line interface and server with maven
 
@@ -728,6 +730,22 @@ You can generate the executable files of the SPARQL Anything geosparql distribut
 ```
 mvn clean install -Dgenerate-cli-jar-geosparql=true -Dgenerate-server-jar-geosparql=true
 ```
+
+## Building the documentation
+
+```
+# Using `uv` for Python (https://docs.astral.sh/uv/)
+uv venv venv-for-mkdocs
+source venv-for-mkdocs/bin/activate
+uv pip install mkdocs
+
+git clone https://github.com/SPARQL-Anything/sparql.anything.git
+cd sparql.anything
+uv pip install -r docs/requirements.txt
+
+mkdocs serve
+```
+
 
 ## Licence
 
@@ -822,17 +840,3 @@ Asprino, Luigi, Enrico Daga, Justin Dowdy, Paul Mulholland, Aldo Gangemi, and Ma
 }
 ```
 
-# Building the documentation
-
-```
-# Using `uv` for Python (https://docs.astral.sh/uv/)
-uv venv venv-for-mkdocs
-source venv-for-mkdocs/bin/activate
-uv pip install mkdocs
-
-git clone https://github.com/SPARQL-Anything/sparql.anything.git
-cd sparql.anything
-uv pip install -r docs/requirements.txt
-
-mkdocs serve
-```
