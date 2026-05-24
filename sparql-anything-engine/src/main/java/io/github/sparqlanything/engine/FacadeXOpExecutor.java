@@ -68,7 +68,10 @@ public class FacadeXOpExecutor extends OpExecutor {
 	}
 
 	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
+//		System.err.println("[DEBUG] FacadeXOpExecutor.execute(OpBGP) pattern=" + opBGP.getPattern() + " ctxClass=" + this.execCxt.getClass().getSimpleName());
 		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
+//	protected QueryIterator execute(final OpBGP opBGP, QueryIterator input) {
+//		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
 
 		// check that the BGP is within a FacadeX-SERVICE clause
 		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {

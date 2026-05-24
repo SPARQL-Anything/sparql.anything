@@ -487,10 +487,12 @@ public class OpComponentsAnalyser implements OpVisitor {
 	}
 
 	private boolean predicateMatch(Node queryPredicate, Node dataPredicate) {
-		// If queryPredicate is fx:anySLot match any container membership property
+		// If queryPredicate is fx:anySlot or rdfs:member, match any container membership property
 		if (queryPredicate.isConcrete()
-				&& queryPredicate.getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")) {
-			return dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_");
+			&& (queryPredicate.getURI().equals(Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot")
+			|| queryPredicate.getURI().equals("http://www.w3.org/2000/01/rdf-schema#member"))) {
+			return dataPredicate.getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")
+				|| dataPredicate.getURI().equals("http://www.w3.org/2000/01/rdf-schema#member");
 		}
 		return (!queryPredicate.isConcrete() || queryPredicate.equals(dataPredicate));
 	}

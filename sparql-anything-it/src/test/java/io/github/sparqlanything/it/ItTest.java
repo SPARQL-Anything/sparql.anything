@@ -521,6 +521,64 @@ public class ItTest {
 	}
 
 	@Test
+	public void testRdfsMemberAsAnySlotAlias() throws IOException, URISyntaxException {
+		// Same query shape as testAnySlotMagicProperty but using rdfs:member.
+		// Default use-rdfs-member=false → graph contains rdf:_N triples,
+		// and rdfs:member must act as the magic alias and match them.
+		Query query = QueryFactory.create(
+			"PREFIX fx:   <http://sparql.xyz/facade-x/ns/> "
+				+ "PREFIX xyz:  <http://sparql.xyz/facade-x/data/> "
+				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+				+ "SELECT * { "
+				+ "  SERVICE <x-sparql-anything:content=abcd,txt.split=b> { ?r rdfs:member ?slot } "
+				+ "}");
+
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		Set<String> slots = new HashSet<>();
+		while (rs.hasNext()) {
+			slots.add(rs.next().get("slot").asLiteral().getValue().toString());
+		}
+
+		assertEquals(Sets.newHashSet("a", "cd"), slots);
+	}
+
+	@Test
+	public void testRdfsMemberWithMaterialisedRdfsMember() throws IOException, URISyntaxException {
+		// When use-rdfs-member=true the graph contains rdfs:member triples
+		// (no rdf:_N). The magic property must still return them when the
+		// query uses rdfs:member.
+		Query query = QueryFactory.create(
+			"PREFIX fx:   <http://sparql.xyz/facade-x/ns/> "
+				+ "PREFIX xyz:  <http://sparql.xyz/facade-x/data/> "
+				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+				+ "SELECT * { "
+				+ "  SERVICE <x-sparql-anything:> { "
+				+ "    fx:properties "
+				+ "      fx:content         \"abcd\" ; "
+				+ "      fx:media-type      \"text/plain\" ; "
+				+ "      fx:txt.split       \"b\" ; "
+				+ "      fx:use-rdfs-member true . "
+				+ "    ?r rdfs:member ?slot "
+				+ "  } "
+				+ "}");
+
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+
+		ResultSet rs = QueryExecutionFactory.create(query, ds).execSelect();
+		Set<String> slots = new HashSet<>();
+		while (rs.hasNext()) {
+			slots.add(rs.next().get("slot").asLiteral().getValue().toString());
+		}
+		System.out.println(slots);
+
+		assertEquals(Sets.newHashSet("a", "cd"), slots);
+	}
+
+	@Test
 	public void testBibtex() throws IOException, URISyntaxException {
 		Query query = QueryFactory.create("PREFIX fx: <http://sparql.xyz/facade-x/ns/>  "
 				+ "PREFIX xyz: <http://sparql.xyz/facade-x/data/> "

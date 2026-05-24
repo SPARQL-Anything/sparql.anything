@@ -101,7 +101,8 @@ public class AnySlot extends PFuncSimple {
 			private Triple fillNext() {
 				while (it.hasNext()) {
 					Triple t = it.next();
-					if (t.getPredicate().getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")) {
+					if (t.getPredicate().getURI().startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_")
+						|| t.getPredicate().getURI().equals(FacadeX.RDFS_MEMBER_URI)) {
 						return t;
 					}
 				}

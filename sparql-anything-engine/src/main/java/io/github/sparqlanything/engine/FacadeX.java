@@ -48,6 +48,7 @@ public final class FacadeX {
 	public final static OpExecutorFactory ExecutorFactory = FacadeXOpExecutor::new;
 	public final static TriplifierRegister Registry = TriplifierRegister.getInstance();
 	public static final String ANY_SLOT_URI = Triplifier.FACADE_X_CONST_NAMESPACE_IRI + "anySlot";
+	public static final String RDFS_MEMBER_URI = "http://www.w3.org/2000/01/rdf-schema#member";
 	private static final Logger log = LoggerFactory.getLogger(FacadeX.class);
 	static final Map<String, DatasetGraph> executedFacadeXIris = new HashMap<String, DatasetGraph>();
 
@@ -93,6 +94,7 @@ public final class FacadeX {
 		final PropertyFunctionRegistry reg = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
 		//log.trace("Registering {} magic property", ANY_SLOT_URI);
 		reg.put(ANY_SLOT_URI, p);
+		reg.put(RDFS_MEMBER_URI, p);
 		if (log.isTraceEnabled()) {
 			Iterator<String> i = reg.keys();
 			while (i.hasNext()) {

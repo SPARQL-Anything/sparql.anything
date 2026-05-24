@@ -84,8 +84,17 @@ public class Utils {
 		return sb.toString();
 	}
 
+//	static boolean isFacadeXMagicPropertyNode(Node node) {
+//		return node.isURI()
+//			&& (node.getURI().equals(FacadeX.ANY_SLOT_URI)
+//			|| node.getURI().equals(FacadeX.RDFS_MEMBER_URI));
+//	}
 	static boolean isFacadeXMagicPropertyNode(Node node) {
-		return node.isURI() && node.getURI().equals(FacadeX.ANY_SLOT_URI);
+		boolean r = node.isURI()
+			&& (node.getURI().equals(FacadeX.ANY_SLOT_URI)
+			|| node.getURI().equals(FacadeX.RDFS_MEMBER_URI));
+		//System.err.println("[DEBUG] isFacadeXMagicPropertyNode(" + node + ") = " + r);
+		return r;
 	}
 
 	static QueryIterator postpone(final Op op, QueryIterator input, ExecutionContext execCxt) {
