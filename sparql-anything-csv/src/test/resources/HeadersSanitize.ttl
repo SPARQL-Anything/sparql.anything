@@ -21,27 +21,32 @@ eg:document  rdf:type  fx:root ;
 <http://www.example.org/document#row3>
         xyz:Description  "" ;
         xyz:Make_en         "Chevy" ;
-        xyz:Model_        "Venture \"Extended Edition, Very Large\"" ;
+        xyz:meta_kritikalit%C3%A4t "y";
+        xyz:Model        "Venture \"Extended Edition, Very Large\"" ;
         xyz:Purchase_Price        "5000.00" ;
         xyz:Production_Year         "1999" .
+
 
 <http://www.example.org/document#row1>
         xyz:Description  "ac, abs, moon" ;
         xyz:Make_en         "Ford" ;
-        xyz:Model_        "E350" ;
+        xyz:meta_kritikalit%C3%A4t "y";
+        xyz:Model        "E350" ;
         xyz:Purchase_Price        "3000.00" ;
         xyz:Production_Year         "1997" .
 
 <http://www.example.org/document#row4>
         xyz:Description  "MUST SELL!\nair, moon roof, loaded" ;
         xyz:Make_en         "Jeep" ;
-        xyz:Model_        "Grand Cherokee" ;
+        xyz:meta_kritikalit%C3%A4t "n";
+        xyz:Model        "Grand Cherokee" ;
         xyz:Purchase_Price        "4799.00" ;
         xyz:Production_Year         "1996" .
 
 <http://www.example.org/document#row2>
         xyz:Description  "" ;
         xyz:Make_en         "Chevy" ;
-        xyz:Model_        "Venture \"Extended Edition\"" ;
+        xyz:meta_kritikalit%C3%A4t "y";
+        xyz:Model        "Venture \"Extended Edition\"" ;
         xyz:Purchase_Price        "4900.00" ;
         xyz:Production_Year         "1999" .

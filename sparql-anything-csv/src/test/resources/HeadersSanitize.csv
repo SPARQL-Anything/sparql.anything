@@ -1,6 +1,6 @@
-Production Year,Make@en,Model:,Description,Purchase $ Price
-1997,Ford,E350,"ac, abs, moon",3000.00
-1999,Chevy,"Venture ""Extended Edition""","",4900.00
-1999,Chevy,"Venture ""Extended Edition, Very Large""",,5000.00
+Production Year,Make@en,Model:,Description,Purchase $ Price,meta:kritikalität
+1997,Ford,E350,"ac, abs, moon",3000.00,y
+1999,Chevy,"Venture ""Extended Edition""","",4900.00,y
+1999,Chevy,"Venture ""Extended Edition, Very Large""",,5000.00,y
 1996,Jeep,Grand Cherokee,"MUST SELL!
-air, moon roof, loaded",4799.00
+air, moon roof, loaded",4799.00,n
