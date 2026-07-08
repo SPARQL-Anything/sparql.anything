@@ -19,9 +19,9 @@ import org.apache.jena.sparql.util.Context;
 import org.apache.jena.sparql.util.Symbol;
 
 @FXFunctionDoc(
-	description = "fx:expandPrefix(?p) returns expanded prefix defined in the query to its associated namespace IRI." +
-		"Originally developped within TARQL project and ported to SPARQL-Anything with minimal changes to maximise reuse.",
-	example = "BIND(STR(fx:expandPrefix(?px)) as ?expx)",
+	description = "fx:expandPrefix(?p) expands a prefix defined in the query to its associated namespace IRI." +
+		"Originally developed within TARQL project and ported to SPARQL-Anything with minimal changes to maximise reuse.",
+	example = "BIND(fx:expandPrefix(?p)) as ?namespaceIri)",
 	group = "FUNCTIONS",
 	label = "fx:expandPrefix"
 )

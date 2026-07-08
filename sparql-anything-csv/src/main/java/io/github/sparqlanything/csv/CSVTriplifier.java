@@ -71,6 +71,10 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 	public final static IRIArgument IGNORE_COLUMNS_WITH_NO_HEADERS = new IRIArgument("csv.ignore-columns-with-no-header", "false");
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
 
+	@Example(resource = "https://sparql-anything.cc/examples/simple.tsv", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (AVG(xsd:float(?petalLength)) AS ?avgPetalLength) WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true,csv.headers.sanitize=true,csv.format=TDF> { ?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength FILTER ( xsd:float(?length) > 4.9 ) } }", description = "Compute the average petal length of the species having sepal length greater than 4.9")
+	@Option(description = "It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples.", validValues = "true/false")
+	public final static IRIArgument PROPERTY_HEADERS_SANITIZE = new IRIArgument("csv.headers.sanitize", "false");
+
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
@@ -193,10 +197,14 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 
 			Iterator<String> columns = record.iterator();
 			int colid = 0;
+			boolean sanitizeHeaders = sanitizeHeaders(properties);
 			while (columns.hasNext()) {
 				colid++;
 				String colstring = columns.next();
 				String colname = colstring.strip();
+				if (sanitizeHeaders) {
+					colname = colname.replaceAll("[^a-zA-Z0-9]+", "_");
+				}
 
 				if (colname.isEmpty()) {
 					continue;
@@ -216,6 +224,10 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 
 	public static boolean hasHeaders(Properties properties) {
 		return PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS);
+	}
+
+	public static boolean sanitizeHeaders(Properties properties) {
+		return PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS_SANITIZE);
 	}
 
 	@Override
