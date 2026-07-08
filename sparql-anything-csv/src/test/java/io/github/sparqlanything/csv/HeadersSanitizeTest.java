@@ -31,7 +31,7 @@ public class HeadersSanitizeTest extends AbstractTriplifierTester {
 
 	public void properties(Properties properties) {
 		if (name.getMethodName().equals("testHeadersSanitize")) {
-			properties.setProperty(CSVTriplifier.PROPERTY_HEADERS_SANITIZE.toString(), "true");
+			properties.setProperty(CSVTriplifier.PROPERTY_HEADERS_SANITIZE.toString(), "-");
 			properties.setProperty(CSVTriplifier.PROPERTY_HEADERS.toString(), "true");
 		}
 	}
