@@ -21,7 +21,7 @@ eg:document  rdf:type  fx:root ;
 <http://www.example.org/document#row3>
         xyz:Description  "" ;
         xyz:Make-en         "Chevy" ;
-        xyz:meta-kritikalit%C3%A4t "y";
+        xyz:meta-kritikalität "y";
         xyz:Model        "Venture \"Extended Edition, Very Large\"" ;
         xyz:Purchase-Price        "5000.00" ;
         xyz:Production-Year         "1999" .
@@ -30,7 +30,7 @@ eg:document  rdf:type  fx:root ;
 <http://www.example.org/document#row1>
         xyz:Description  "ac, abs, moon" ;
         xyz:Make-en         "Ford" ;
-        xyz:meta-kritikalit%C3%A4t "y";
+        xyz:meta-kritikalität "y";
         xyz:Model        "E350" ;
         xyz:Purchase-Price        "3000.00" ;
         xyz:Production-Year         "1997" .
@@ -38,7 +38,7 @@ eg:document  rdf:type  fx:root ;
 <http://www.example.org/document#row4>
         xyz:Description  "MUST SELL!\nair, moon roof, loaded" ;
         xyz:Make-en         "Jeep" ;
-        xyz:meta-kritikalit%C3%A4t "n";
+        xyz:meta-kritikalität "n";
         xyz:Model        "Grand Cherokee" ;
         xyz:Purchase-Price        "4799.00" ;
         xyz:Production-Year         "1996" .
@@ -46,7 +46,7 @@ eg:document  rdf:type  fx:root ;
 <http://www.example.org/document#row2>
         xyz:Description  "" ;
         xyz:Make-en         "Chevy" ;
-        xyz:meta-kritikalit%C3%A4t "y";
+        xyz:meta-kritikalität "y";
         xyz:Model        "Venture \"Extended Edition\"" ;
         xyz:Purchase-Price        "4900.00" ;
         xyz:Production-Year         "1999" .

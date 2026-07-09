@@ -55,6 +55,7 @@ public interface Triplifier {
 	String FACADE_X_CACHED_GRAPH_CREATION = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraphCreation";
 	String FACADE_X_SPARQL_ALGEBRA = FACADE_X_CONST_NAMESPACE_IRI + "sparqlAlgebra";
 	Node XYZ_NULL_NODE = NodeFactory.createURI(XYZ_NULL);
+	String INVALID_URL_CHAR_REGEX = ".*[^\\p{L}\\p{N}\\-_.~:/?#\\[\\]@!$&'()*+,;=%].*";
 
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
@@ -101,8 +102,11 @@ public interface Triplifier {
 	}
 
 	static String toSafeURIString(String s) {
-		// s = s.replaceAll("\\s", "_");
-		return basicEscaper.escape(s);
+
+		if (s.matches(INVALID_URL_CHAR_REGEX)) {
+			s = basicEscaper.escape(s);
+		}
+		return s;
 	}
 
 	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
