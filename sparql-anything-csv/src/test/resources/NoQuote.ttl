@@ -1,0 +1,16 @@
+@prefix eg:  <http://www.example.org/> .
+@prefix fx:  <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+eg:document  rdf:type  fx:root ;
+        rdf:_1  <http://www.example.org/document#row1> ;
+        rdf:_2  <http://www.example.org/document#row2> .
+
+<http://www.example.org/document#row1>
+        xyz:id    "1" ;
+        xyz:name  "\"Kostas Tsianos\" Theatre" .
+
+<http://www.example.org/document#row2>
+        xyz:id    "2" ;
+        xyz:name  "Plain Name" .

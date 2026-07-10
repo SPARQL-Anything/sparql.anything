@@ -56,9 +56,9 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 	public final static IRIArgument PROPERTY_DELIMITER = new IRIArgument("csv.delimiter", ",");
 
 	@Example(resource = "https://sparql-anything.cc/examples/csv_with_commas.csv", description = "Constructing a Facade-X RDF graph out of the CSV available at https://sparql-anything.cc/examples/csv_with_commas.csv", query = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/csv_with_commas.csv,csv.headers=true,csv.quote-char='> { ?s ?p ?o } }")
-	@Option(description = "It sets the quoting character. Use \"true\" for the default quote character (\"), \"false\" or an empty string to disable quoting entirely, or provide any single character to use as the quote character.", validValues = "true, false, empty string, or any single character")
+	@Option(description = "It sets the quoting character. Use \"true\" for the default quote character (\"), \"false\" or an empty string to disable quoting entirely (for TSV/CSV sources with no quoting convention), or any single character to use as the quote character.", validValues = "true, false, empty string, or any single character")
 	public final static IRIArgument PROPERTY_QUOTE_CHAR = new IRIArgument("csv.quote-char", "\"");
-
+	
 	@Example(resource = "https://sparql-anything.cc/examples/simple_with_null.csv", description = "Retrieving name surname of who doesn't have an email address.", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?name ?surname WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple_with_null.csv,csv.headers=true> { fx:properties fx:csv.null-string \"\" . ?c xyz:name ?name ; xyz:surname ?surname FILTER NOT EXISTS { ?c xyz:email ?email } } }")
 	@Option(description = "It tells the CSV triplifier to not produce triples where the specified string would be in the object position of the triple", validValues = "Any String")
 	public final static IRIArgument PROPERTY_NULL_STRING = new IRIArgument("csv.null-string", null);
