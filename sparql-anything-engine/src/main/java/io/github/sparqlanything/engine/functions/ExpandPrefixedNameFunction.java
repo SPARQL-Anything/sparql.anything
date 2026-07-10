@@ -19,10 +19,10 @@ import org.apache.jena.sparql.function.FunctionEnv;
 import org.apache.jena.sparql.util.Context;
 
 @FXFunctionDoc(
-	description = "fx:expandPrefixName(?p) returns expands a prefixed name, such as dc:title, using any prefixes" +
-		" defined in the query. The result is an IRI. Originally developped within TARQL project and ported to " +
+	description = "fx:expandPrefixedName(?curie) expands a prefixed name, such as dc:title, using any prefixes" +
+		" defined in the query. The result is an IRI. Originally developed within TARQL project and ported to " +
 		"SPARQL-Anything with minimal changes to maximise reuse.",
-	example = "BIND(STR(fx:expandPrefixName(?px)) as ?expx)",
+	example = "BIND(fx:expandPrefixedName(?curie) as ?iri)",
 	group = "FUNCTIONS",
 	label = "fx:expandPrefixedName"
 )

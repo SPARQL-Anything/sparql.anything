@@ -34,10 +34,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 @io.github.sparqlanything.model.annotations.Triplifier
 public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
@@ -70,6 +67,10 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 	@Option(description = "It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see #180", validValues = "true/false")
 	public final static IRIArgument IGNORE_COLUMNS_WITH_NO_HEADERS = new IRIArgument("csv.ignore-columns-with-no-header", "false");
 	private static final Logger log = LoggerFactory.getLogger(CSVTriplifier.class);
+
+	@Example(resource = "https://sparql-anything.cc/examples/simple.tsv", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (AVG(xsd:float(?petalLength)) AS ?avgPetalLength) WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true,csv.headers.sanitize=true,csv.format=TDF> { ?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength FILTER ( xsd:float(?length) > 4.9 ) } }", description = "Compute the average petal length of the species having sepal length greater than 4.9")
+	@Option(description = "It tells the CSV triplifier to sanitize the headers of the CSV file for minting the properties of the generated triples. Anything other than letters and numbers is replaced with underscores or a character provided.", validValues = "Any String")
+	public final static IRIArgument PROPERTY_HEADERS_SANITIZE = new IRIArgument("csv.headers.sanitize", "false");
 
 	@Override
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
@@ -193,10 +194,16 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 
 			Iterator<String> columns = record.iterator();
 			int colid = 0;
+			HashMap<Boolean,String> sanitizeHeaders = sanitizeHeaders(properties);
 			while (columns.hasNext()) {
 				colid++;
 				String colstring = columns.next();
 				String colname = colstring.strip();
+				if (sanitizeHeaders.containsKey(true)) {
+					String replacement = sanitizeHeaders.get(true);
+					colname = colname.replaceAll("[^\\p{L}\\p{N}]+", replacement)
+						.replaceAll("^"+replacement+"+|"+replacement+"+$", "");;
+				}
 
 				if (colname.isEmpty()) {
 					continue;
@@ -216,6 +223,21 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 
 	public static boolean hasHeaders(Properties properties) {
 		return PropertyUtils.getBooleanProperty(properties, PROPERTY_HEADERS);
+	}
+
+	public static HashMap<Boolean,String> sanitizeHeaders(Properties properties) {
+		HashMap<Boolean,String> sanitizeMap = new HashMap<Boolean, String>();
+		String sanitizeOption = PropertyUtils.getStringProperty(properties, PROPERTY_HEADERS_SANITIZE);
+
+		if (!sanitizeOption.equalsIgnoreCase("false")) {
+			if (sanitizeOption.equalsIgnoreCase("true")) {
+				sanitizeMap.put(true, "_");
+			} else {
+				sanitizeMap.put(true, sanitizeOption);
+			}
+		}
+
+		return sanitizeMap;
 	}
 
 	@Override
