@@ -35,6 +35,7 @@ public class IRIArgument {
 	public static final IRIArgument NULL_STRING = new IRIArgument("null-string");
 	public static final IRIArgument STRATEGY = new IRIArgument("strategy", "1");
 	public static final IRIArgument SLICE = new IRIArgument("slice", "false");
+	public static final IRIArgument SLICE_SIZE = new IRIArgument("slice.size", "1");
 	public static final IRIArgument COMMAND = new IRIArgument("command");
 	public static final IRIArgument USE_RDFS_MEMBER = new IRIArgument("use-rdfs-member", "false");
 	public static final IRIArgument ONDISK_REUSE = new IRIArgument("ondisk.reuse", "true");

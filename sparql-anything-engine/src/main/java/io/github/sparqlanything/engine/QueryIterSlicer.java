@@ -51,6 +51,14 @@ public class QueryIterSlicer extends QueryIter {
 	private final QueryIterator input;
 	private QueryIterator current = null;
 	private final Properties p;
+	private final int sliceSize;
+	/*
+	 * Some Slicer implementations (e.g. CSVTriplifier) close their underlying stream as a
+	 * side effect of iterator.hasNext() returning false, without going through a mechanism
+	 * that makes subsequent hasNext() calls idempotent. So once hasNext() has returned false
+	 * once, we must never call it again.
+	 */
+	private boolean iteratorExhausted = false;
 
 	private final CloseableIterable<Slice> it;
 
@@ -60,6 +68,7 @@ public class QueryIterSlicer extends QueryIter {
 		this.p = properties;
 		this.it = slicer.slice(p);
 		this.input = input;
+		this.sliceSize = resolveSliceSize(properties);
 
 		elements = new ArrayList<>();
 		while (input.hasNext()) {
@@ -76,49 +85,51 @@ public class QueryIterSlicer extends QueryIter {
 		}
 	}
 
+	/**
+	 * Resolves fx:slice.size. Falls back to 1 (today's row/item-by-row behaviour) with a
+	 * warning if the value is missing, not an integer, or not positive.
+	 */
+	private static int resolveSliceSize(Properties p) {
+		String raw = PropertyUtils.getStringProperty(p, IRIArgument.SLICE_SIZE);
+		try {
+			int size = Integer.parseInt(raw);
+			if (size < 1) {
+				logger.warn("Invalid value for {}: '{}'. Expected a positive integer, falling back to 1 (row/item-by-row slicing).", IRIArgument.SLICE_SIZE, raw);
+				return 1;
+			}
+			return size;
+		} catch (NumberFormatException e) {
+			logger.warn("Invalid value for {}: '{}'. Expected a positive integer, falling back to 1 (row/item-by-row slicing).", IRIArgument.SLICE_SIZE, raw);
+			return 1;
+		}
+	}
+
+	/**
+	 * Pulls up to sliceSize slices off the underlying iterator. Calls iterator.hasNext() at
+	 * most once per slot, and never again once it has returned false (see iteratorExhausted).
+	 */
+	private List<Slice> nextBatch() {
+		List<Slice> batch = new ArrayList<>(sliceSize);
+		while (batch.size() < sliceSize) {
+			if (iteratorExhausted) {
+				break;
+			}
+			if (!iterator.hasNext()) {
+				iteratorExhausted = true;
+				break;
+			}
+			batch.add(iterator.next());
+		}
+		return batch;
+	}
+
 	@Override
 	protected boolean hasNextBinding() {
 		logger.trace("hasNextBinding? ");
 		logger.debug("current: {}", current != null ? current.hasNext() : "null");
 		while (current == null || !current.hasNext()) {
-			if (iterator.hasNext()) {
-				Slice slice = iterator.next();
-				logger.debug("Executing on slice: {}", slice.iteration());
-				// Execute and set current
-				FacadeXGraphBuilder builder;
-				Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
-				if (strategy == 1) {
-					logger.trace("Executing: {} [strategy={}]", p, strategy);
-					builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
-				} else {
-					logger.trace("Executing: {} [strategy={}]", p, strategy);
-					builder = new BaseFacadeXGraphBuilder(p);
-				}
-				//FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
-				slicer.triplify(slice, p, builder);
-				DatasetGraph dg = builder.getDatasetGraph();
-				dg.commit();
-				dg.end();
-
-				Utils.ensureReadingTxn(dg);
-				logger.debug("Executing on next slice: {} ({})", slice.iteration(), dg.size());
-//				FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-				FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
-				logger.trace("Op {}", op);
-				logger.trace("OpName {}", op.getName());
-				/*
-				 * input needs to be reset before each execution, otherwise the executor will skip subsequent executions
-				 * since input bindings have been flushed!
-				 */
-				QueryIterator cloned;
-				cloned = QueryIterPlainWrapper.create(elements.iterator());
-				current = QC.execute(op, cloned, ec);
-				logger.debug("Set current. hasNext? {}", current.hasNext());
-				if (current.hasNext()) {
-					logger.trace("Break.");
-					break;
-				}
-			} else {
+			List<Slice> batch = nextBatch();
+			if (batch.isEmpty()) {
 				logger.trace("Slices finished");
 				/*
 				 * Input iterator can be closed
@@ -135,6 +146,45 @@ public class QueryIterSlicer extends QueryIter {
 					throw new RuntimeException(e);
 				}
 				return false;
+			}
+
+			// Execute and set current
+			FacadeXGraphBuilder builder;
+			Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
+			if (strategy == 1) {
+				logger.trace("Executing: {} [strategy={}]", p, strategy);
+				builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
+			} else {
+				logger.trace("Executing: {} [strategy={}]", p, strategy);
+				builder = new BaseFacadeXGraphBuilder(p);
+			}
+			//FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
+
+			for (Slice slice : batch) {
+				logger.debug("Executing on slice: {}", slice.iteration());
+				slicer.triplify(slice, p, builder);
+			}
+			DatasetGraph dg = builder.getDatasetGraph();
+			dg.commit();
+			dg.end();
+
+			Utils.ensureReadingTxn(dg);
+			logger.debug("Executing on batch [{}-{}] ({} slice(s), {} triples)", batch.get(0).iteration(), batch.get(batch.size() - 1).iteration(), batch.size(), dg.size());
+//				FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
+			FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
+			logger.trace("Op {}", op);
+			logger.trace("OpName {}", op.getName());
+			/*
+			 * input needs to be reset before each execution, otherwise the executor will skip subsequent executions
+			 * since input bindings have been flushed!
+			 */
+			QueryIterator cloned;
+			cloned = QueryIterPlainWrapper.create(elements.iterator());
+			current = QC.execute(op, cloned, ec);
+			logger.debug("Set current. hasNext? {}", current.hasNext());
+			if (current.hasNext()) {
+				logger.trace("Break.");
+				break;
 			}
 		}
 		logger.trace("hasNextBinding? {}", current.hasNext());

@@ -60,4 +60,19 @@ public class SlicingTest extends AbstractExecutionTester {
 		Assert.assertEquals("c2", qs.getLiteral("Z").getString());
 
 	}
+
+	@Test
+	public void testSliceSelectSize() {
+		// 5 rows, slice.size=2 -> batches of [1,2],[3,4],[5]; result must equal the unbatched (slice.size=1) case.
+		Assert.assertTrue(result.getResultVars().contains("X"));
+
+		QuerySolution qs;
+		for (int i = 1; i <= 5; i++) {
+			qs = result.next();
+			Assert.assertEquals("a" + i, qs.getLiteral("X").getString());
+			Assert.assertEquals("b" + i, qs.getLiteral("Y").getString());
+			Assert.assertEquals("c" + i, qs.getLiteral("Z").getString());
+		}
+		Assert.assertFalse(result.hasNext());
+	}
 }
