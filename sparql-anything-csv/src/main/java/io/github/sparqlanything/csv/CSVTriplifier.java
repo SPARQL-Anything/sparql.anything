@@ -123,9 +123,16 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 		String nullString = PropertyUtils.getStringProperty(properties, PROPERTY_NULL_STRING);
 		if (nullString != null) format = format.withNullString(nullString);
 
+		// See https://github.com/SPARQL-Anything/sparql.anything/issues/625
 		String quoteChar = PropertyUtils.getStringProperty(properties, PROPERTY_QUOTE_CHAR);
-		ensureLength1(quoteChar, PROPERTY_QUOTE_CHAR);
-		format = format.withQuote(quoteChar.charAt(0));
+		if (quoteChar.equalsIgnoreCase("true")) {
+			format = format.withQuote(PROPERTY_QUOTE_CHAR.getDefaultValue().charAt(0));
+		} else if (quoteChar.isEmpty() || quoteChar.equalsIgnoreCase("false")) {
+			format = format.withQuote(null);
+		} else {
+			ensureLength1(quoteChar, PROPERTY_QUOTE_CHAR);
+			format = format.withQuote(quoteChar.charAt(0));
+		}
 
 		String delimiter = PropertyUtils.getStringProperty(properties, PROPERTY_DELIMITER);
 		ensureLength1(delimiter, PROPERTY_DELIMITER);
