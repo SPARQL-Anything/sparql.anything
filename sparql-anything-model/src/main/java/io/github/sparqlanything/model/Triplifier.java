@@ -15,21 +15,18 @@
  */
 
 
-
 package io.github.sparqlanything.model;
 
 import com.google.common.escape.UnicodeEscaper;
 import com.google.common.net.PercentEscaper;
+import io.github.sparqlanything.model.resources.ResourceService;
+import io.github.sparqlanything.model.resources.annotations.TargetOption;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.compress.archivers.ArchiveException;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -38,8 +35,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public interface Triplifier {
 
@@ -60,19 +56,18 @@ public interface Triplifier {
 	Logger log = LoggerFactory.getLogger(Triplifier.class);
 	UnicodeEscaper basicEscaper = new PercentEscaper("_.-~", false);
 
-
 	static String getRootArgument(Properties properties) {
 		String root = PropertyUtils.getStringProperty(properties, IRIArgument.ROOT, null);
 		if (root != null && !root.trim().isEmpty()) return root;
 
 		String location = getNormalisedLocation(properties);
-		if (location != null) return location ;//+ "#";
+		if (location != null) return location;//+ "#";
 
 		String content = PropertyUtils.getStringProperty(properties, IRIArgument.CONTENT, null);
-		if (content != null) return XYZ_NS + DigestUtils.md5Hex(content) ;//+ "#";
+		if (content != null) return XYZ_NS + DigestUtils.md5Hex(content);//+ "#";
 
 		String command = PropertyUtils.getStringProperty(properties, IRIArgument.COMMAND, null);
-		if (command != null) return XYZ_NS + DigestUtils.md5Hex(command) ;//+ "#";
+		if (command != null) return XYZ_NS + DigestUtils.md5Hex(command);//+ "#";
 
 		throw new RuntimeException("No location nor content nor command provided!");
 	}
@@ -109,81 +104,47 @@ public interface Triplifier {
 		return s;
 	}
 
-	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
-		return getInputStream(properties, getCharsetArgument(properties));
+	static Map<String, ResourceService> loadResourceServicesAll() {
+		Map<String, ResourceService> registry = new LinkedHashMap<>();
+
+		ServiceLoader<ResourceService> loader = ServiceLoader.load(ResourceService.class);
+
+		for (ServiceLoader.Provider<ResourceService> provider : loader.stream().toList()) {
+			Class<? extends ResourceService> implClass = provider.type();
+			TargetOption annotation = implClass.getAnnotation(TargetOption.class);
+
+			if (annotation == null) {
+				System.err.println("Skipping " + implClass.getName() + ": missing @TargetOption annotation");
+				continue;
+			}
+
+			String key = annotation.value();
+			ResourceService instance = provider.get();
+
+			ResourceService previous = registry.put(key, instance);
+			if (previous != null) {
+				throw new IllegalStateException(
+					"Duplicate @TargetOption(\"" + key + "\") found for "
+						+ previous.getClass().getName() + " and " + implClass.getName());
+			}
+		}
+
+		return registry;
 	}
 
-	static InputStream getInputStream(Properties properties, Charset charset) throws IOException, TriplifierHTTPException {
+	static InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
 
-		if (properties.containsKey(IRIArgument.COMMAND.toString())) {
-			String command = properties.getProperty(IRIArgument.COMMAND.toString());
-			Runtime rt = Runtime.getRuntime();
-			String[] commands;
-			if (Utils.platform != Utils.OS.WINDOWS) {
-				// allow shell pipelines and other useful shell functionality
-				commands = new String[]{"bash", "-c", command};
-			} else { // WINDOWS
-				// Credit: https://stackoverflow.com/a/18893443/1035608
-				commands = command.split("(?x)   " + "\\s          " + // Split on space
-					"(?=        " + // Followed by
-					"  (?:      " + // Start a non-capture group
-					"    [^\"]* " + // 0 or more non-quote characters
-					"    \"     " + // 1 quote
-					"    [^\"]* " + // 0 or more non-quote characters
-					"    \"     " + // 1 quote
-					"  )*       " + // 0 or more repetition of non-capture group (multiple of 2 quotes will be even)
-					"  [^\"]*   " + // Finally 0 or more non-quotes
-					"  $        " + // Till the end (This is necessary, else every space will satisfy the condition)
-					")          " // End look-ahead
-				);
+		Map<String, ResourceService> resourceServiceMap = loadResourceServicesAll();
+
+		IRIArgument[] options = {IRIArgument.S3_ENDPOINT, IRIArgument.COMMAND, IRIArgument.CONTENT, IRIArgument.LOCATION};
+		for (IRIArgument option : options) {
+			if (properties.containsKey(option.toString())) {
+				ResourceService service = resourceServiceMap.get(option.toString());
+				return service.getInputStream(properties);
 			}
-			log.info("Running command: {}", String.join(" ", commands));
-			Process proc = rt.exec(commands);
-			InputStream is = proc.getInputStream();
-			InputStream es = proc.getErrorStream();
-			log.info("Command stderr: " + IOUtils.toString(es));
-			return is;
 		}
 
-		if (properties.containsKey(IRIArgument.CONTENT.toString())) {
-			return new ByteArrayInputStream(properties.get(IRIArgument.CONTENT.toString()).toString().getBytes());
-		}
-
-		if (!properties.containsKey(IRIArgument.FROM_ARCHIVE.toString())) {
-
-			URL url = Triplifier.getLocation(properties);
-			// If local throw exception
-			if (url.getProtocol().equals("file")) {
-				log.debug("Getting input stream from file");
-				return url.openStream();
-			} else {
-
-				// If HTTP
-				if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
-					CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
-					if (!HTTPHelper.isSuccessful(response)) {
-						log.trace("Request unsuccesful: {}", response.getStatusLine().toString());
-						log.trace("Response: {}", response);
-						log.trace("Response body: {}", IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
-						throw new TriplifierHTTPException(url, response);
-					}
-					return response.getEntity().getContent();
-				}
-			}
-
-			// If other protocol, try URL and Connection
-			log.debug("Other protocol: {}", url.getProtocol());
-			return url.openStream();
-		}
-
-		// Handle archives differently
-		URL urlArchive = Utils.instantiateURL(properties.getProperty(IRIArgument.FROM_ARCHIVE.toString()));
-		try {
-			return ResourceManager.getInstance().getInputStreamFromArchive(urlArchive, properties.getProperty(IRIArgument.LOCATION.toString()), charset, properties.getProperty(IRIArgument.ARCHIVE_FORMAT.toString()));
-		} catch (ArchiveException e) {
-			throw new IOException(e); // TODO i think we should throw a TriplifierHTTPException instead
-			// to allow the silent keyword to be respected
-		}
+		throw new RuntimeException("No input defined! None of the following options are provided:" + Arrays.toString(options));
 	}
 
 	static Charset getCharsetArgument(Properties properties) {
@@ -196,6 +157,7 @@ public interface Triplifier {
 		}
 		return charset;
 	}
+
 
 	static String getResourceId(Properties properties) {
 		String resourceId = null;

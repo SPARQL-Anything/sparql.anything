@@ -15,7 +15,6 @@
  */
 
 
-
 package io.github.sparqlanything.engine.test;
 
 import io.github.sparqlanything.engine.FacadeXOpExecutor;
@@ -96,6 +95,7 @@ public class TriplifierRegistryTest {
 
 	@Test
 	public void testRelativePath() throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		JenaSystem.init();
 		Class.forName("io.github.sparqlanything.engine.test.TestTriplifier2").getConstructor().newInstance();
 		try {
 
@@ -114,14 +114,12 @@ public class TriplifierRegistryTest {
 			Dataset kb = DatasetFactory.createGeneral();
 
 			String location = getClass().getClassLoader().getResource("./test.json").toString();
-			Query select = QueryFactory.create(
-				"SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:media-type=test-mime2,location=" + location + "> {GRAPH ?g {?s ?p ?o}}}");
+			Query select = QueryFactory.create("SELECT DISTINCT ?g ?s ?p ?o WHERE { SERVICE<x-sparql-anything:media-type=test-mime2,location=" + location + "> {GRAPH ?g {?s ?p ?o}}}");
 
 			ResultSet rs = QueryExecutionFactory.create(select, kb).execSelect();
 			QuerySolution qs = rs.next();
 
-			String content = IOUtils.toString(new URI(location),
-				Charset.defaultCharset());
+			String content = IOUtils.toString(new URI(location), Charset.defaultCharset());
 
 			assertEquals(qs.getResource("g").getURI(), PREFIX + "g");
 			assertEquals(qs.getResource("s").getURI(), PREFIX + "s");

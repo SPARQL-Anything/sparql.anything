@@ -1,0 +1,3 @@
+io.github.sparqlanything.model.resources.LocationInputService
+io.github.sparqlanything.model.resources.CommandInputService
+io.github.sparqlanything.model.resources.ContentInputService

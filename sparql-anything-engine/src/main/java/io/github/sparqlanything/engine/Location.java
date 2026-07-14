@@ -15,7 +15,6 @@
  */
 
 
-
 package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.model.IRIArgument;
@@ -56,7 +55,6 @@ public class Location {
 			.region(region)
 			.serviceConfiguration(
 				S3Configuration.builder()
-
 					.pathStyleAccessEnabled(true)
 					.build())
 			.build()) {
