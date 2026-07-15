@@ -100,6 +100,7 @@
     <modules>
         <module>sparql-anything-engine</module>
         <module>sparql-anything-model</module>
+        <module>sparql-anything-s3-support</module>
         <module>sparql-anything-parser</module>
         <module>sparql-anything-json</module>
         <module>sparql-anything-yaml</module>

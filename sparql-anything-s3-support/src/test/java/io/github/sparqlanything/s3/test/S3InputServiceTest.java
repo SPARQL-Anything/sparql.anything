@@ -16,13 +16,13 @@
 
 
 
-package io.github.sparqlanything.engine.test;
+package io.github.sparqlanything.s3.test;
 
-import io.github.sparqlanything.engine.Location;
 import io.github.sparqlanything.model.HTTPHelper;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.TriplifierHTTPException;
+import io.github.sparqlanything.s3.S3InputService;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.junit.AfterClass;
 import org.junit.Assume;
@@ -51,7 +51,7 @@ import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
-public class LocationTest {
+public class S3InputServiceTest {
 
 
 	private static final String ACCESS_KEY = "minioadmin";
@@ -128,6 +128,8 @@ public class LocationTest {
 
 	private static InputStream getInputStream(URL url, Properties properties) throws IllegalArgumentException, IOException {
 
+		S3InputService s3InputService = new S3InputService();
+
 		// If local throw exception
 		if (url.getProtocol().equals("file")) {
 			return url.openStream();
@@ -137,7 +139,7 @@ public class LocationTest {
 		if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
 
 			if (PropertyUtils.getBooleanProperty(properties, IRIArgument.S3_ENDPOINT)) {
-				return Location.getInputStreamFromS3Bucket(url, properties);
+				return s3InputService.getInputStream(properties);
 			}
 
 			CloseableHttpResponse response = HTTPHelper.getInputStream(url, properties);
