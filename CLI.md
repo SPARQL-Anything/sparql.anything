@@ -64,7 +64,6 @@ The argument can be used in two ways:
 OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be
 set). Options passed in this way can be overwritten in the SERVICE IRI or in the Basic Graph Pattern.
 
-
 ### -nc,--no-clobber
 OPTIONAL - Do not execute if the specified output file already exists.
 

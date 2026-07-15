@@ -157,7 +157,7 @@ public class CLI {
 			.longOpt(NO_CLOBBER_LONG).build());
 
 		options.addOption(Option.builder(ALLOW_DUPLICATES).hasArg(false).desc(
-				"OPTIONAL - Allow duplicate triples in CONSTRUCT output. Streams the result triple-by-triple for line-based formats (NT, NQ) instead of building the whole result Model in memory, giving near-constant memory for bulk conversions at the cost of the de-duplication guarantee. Only affects CONSTRUCT queries with -f NT or NQ; ignored otherwise.")
+				"OPTIONAL - Allow duplicate triples in CONSTRUCT output. Streams the result triple-by-triple for line-based formats (NT, NQ, TTL, TriG) instead of building the whole result Model in memory, giving near-constant memory for bulk conversions at the cost of the de-duplication guarantee. Only affects CONSTRUCT queries with -f NT or NQ; ignored otherwise.")
 			.longOpt(ALLOW_DUPLICATES_LONG).build());
 
 		options.addOption(Option.builder(PROFILE).argName("filepath").hasArg(true).optionalArg(true).desc(

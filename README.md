@@ -644,6 +644,18 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
  -nc,--no-clobber                        OPTIONAL - Do not execute if the
                                          specified output file already
                                          exists.
+ -ad,--allow-duplicates                  OPTIONAL - Allow duplicate
+                                         triples in CONSTRUCT output.
+                                         Streams the result
+                                         triple-by-triple for line-based
+                                         formats (NT, NQ, TTL, TriG)
+                                         instead of building the whole
+                                         result Model in memory, giving
+                                         near-constant memory for bulk
+                                         conversions at the cost of the
+                                         de-duplication guarantee. Only
+                                         affects CONSTRUCT queries with -f
+                                         NT or NQ; ignored otherwise.
  -t,--profile <filepath>                 OPTIONAL - It runs the execution
                                          through a profiler. It saves the
                                          results to [filepath] (by default
