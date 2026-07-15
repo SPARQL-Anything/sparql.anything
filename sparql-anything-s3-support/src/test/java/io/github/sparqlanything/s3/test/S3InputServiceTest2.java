@@ -48,7 +48,7 @@ import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
-public class S3InputServiceTest {
+public class S3InputServiceTest2 {
 
 
 	private static final String ACCESS_KEY = "minioadmin";
