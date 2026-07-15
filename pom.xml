@@ -39,7 +39,7 @@
         <owlapi.version>5.1.20</owlapi.version>
         <rdf4j.version>3.7.4</rdf4j.version>
         <tika.version>3.2.2</tika.version>
-        <jackson.version>2.13.4.2</jackson.version>
+        <jackson.version>2.18.9</jackson.version>
         <apachepoi.version>5.5.1</apachepoi.version>
     </properties>
 
