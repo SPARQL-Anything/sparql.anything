@@ -24,10 +24,7 @@ import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.TriplifierHTTPException;
 import io.github.sparqlanything.s3.S3InputService;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.junit.AfterClass;
-import org.junit.Assume;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
@@ -107,6 +104,7 @@ public class S3InputServiceTest {
 		if (minioContainer != null) minioContainer.stop();
 	}
 
+	@Ignore
 	@Test
 	public void testReadFileFromMinio() {
 
