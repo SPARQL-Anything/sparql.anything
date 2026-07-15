@@ -19,22 +19,42 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
+import java.util.function.Function;
 
 @TargetOption(IRIArgument.S3_ENDPOINT_NAME)
 public class S3InputService implements ResourceService {
 
 	private static final Logger log = LoggerFactory.getLogger(S3InputService.class);
 
-	@Override
-	public InputStream getInputStream(Properties properties) throws IOException {
+	// How to build the S3Client from the given Properties. Extracted behind a
+	// Function so that tests can inject a fake client without needing to mock
+	// the static S3Client.builder() factory method (which requires bytecode
+	// instrumentation and is fragile across JDK/Mockito version combinations).
+	private final Function<Properties, S3Client> clientFactory;
+
+	public S3InputService() {
+		this(S3InputService::buildDefaultClient);
+	}
+
+	// Package-visible for testing: allows injecting a fake/mock S3Client
+	// factory, so unit tests don't need to mock the static
+	// S3Client.builder() factory method (which would require bytecode
+	// instrumentation and is fragile across JDK/Mockito version
+	// combinations). Public visibility is used only because the test class
+	// lives in a separate io.github.sparqlanything.s3.test sub-package, not
+	// because this is meant as a general-purpose public API.
+	public S3InputService(Function<Properties, S3Client> clientFactory) {
+		this.clientFactory = clientFactory;
+	}
+
+	private static S3Client buildDefaultClient(Properties properties) {
 		AwsBasicCredentials credentials = AwsBasicCredentials.create(
 			PropertyUtils.getStringProperty(properties, IRIArgument.S3_ACCESS_KEY),
 			PropertyUtils.getStringProperty(properties, IRIArgument.S3_SECRET_KEY));
 		Region region = Region.of(PropertyUtils.getStringProperty(properties, IRIArgument.S3_REGION));
 
-		S3Client s3;
 		try {
-			s3 = S3Client.builder()
+			return S3Client.builder()
 				.endpointOverride(new URI(PropertyUtils.getStringProperty(properties, IRIArgument.S3_ENDPOINT)))
 				.credentialsProvider(StaticCredentialsProvider.create(credentials))
 				.region(region)
@@ -46,6 +66,11 @@ public class S3InputService implements ResourceService {
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public InputStream getInputStream(Properties properties) throws IOException {
+		S3Client s3 = clientFactory.apply(properties);
 
 		// The client is NOT closed here: it must stay open until the caller
 		// has finished reading the stream. If something goes wrong after the
