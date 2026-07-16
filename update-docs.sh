@@ -29,6 +29,8 @@ git add README.md SystemOverview.md CLI.md EXTENSION_MECHANISMS.md JAVA_LIBRARY.
 git add formats/*
 git add imgs/*
 cp -f README.md docs/
+cp -f S3.md docs/
+cp -f DEVELOPER_GUIDE.md docs/
 cp -f SystemOverview.md docs/
 cp -f EXTENSION_MECHANISMS.md docs/
 cp -f CLI.md docs/

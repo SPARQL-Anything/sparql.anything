@@ -70,7 +70,17 @@ public interface Triplifier {
 		if (command != null) return XYZ_NS + DigestUtils.md5Hex(command);//+ "#";
 
 		String s3Endpoint = PropertyUtils.getStringProperty(properties, IRIArgument.S3_ENDPOINT, null);
-		if (s3Endpoint != null) return s3Endpoint;//+ "#";
+		if (s3Endpoint != null) {
+			String s3BucketName = PropertyUtils.getStringProperty(properties, IRIArgument.S3_BUCKET_NAME, "");
+			String s3Key = PropertyUtils.getStringProperty(properties, IRIArgument.S3_KEY, "");
+			// The root must uniquely identify the S3 object being read, not just
+			// the endpoint: two different objects on the same endpoint (different
+			// bucket and/or key) would otherwise be minted with the same root.
+			String rootS3 = s3Endpoint;
+			if (!rootS3.endsWith("/")) root += "/";
+			rootS3 += s3BucketName + "/" + s3Key;
+			return rootS3;
+		}
 
 		throw new RuntimeException("No location nor content nor command provided!");
 	}
