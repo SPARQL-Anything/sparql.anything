@@ -32,6 +32,7 @@ import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -155,5 +156,116 @@ public class S3InputServiceMockTest {
 		result.close(); // calling close() twice must not close the client twice
 
 		verify(clientMock, times(1)).close();
+	}
+
+	/**
+	 * When a required {@code s3.*} property is missing, {@code S3InputService}
+	 * must fail fast with a clear, SPARQL-Anything-specific
+	 * {@link IllegalArgumentException} naming the missing property, instead
+	 * of letting an unrelated, low-level AWS SDK exception (a
+	 * {@code NullPointerException} from {@code AwsBasicCredentials.create},
+	 * or an unqualified {@code IllegalArgumentException} from
+	 * {@code Region.of}) leak out and confuse the caller about what actually
+	 * went wrong.
+	 * <p>
+	 * These tests exercise the real {@code new S3InputService()} constructor
+	 * (not the test-only client-factory constructor used elsewhere in this
+	 * class) so that the default client-building code path
+	 * ({@code buildDefaultClient}) is actually reached.
+	 */
+	@Test
+	public void getInputStream_missingAccessKey_throwsClearError() {
+		Properties props = baseProperties();
+		props.remove(IRIArgument.S3_ACCESS_KEY.toString());
+
+		S3InputService service = new S3InputService();
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+			() -> service.getInputStream(props));
+		assertTrue(ex.getMessage().contains(IRIArgument.S3_ACCESS_KEY.toString()));
+	}
+
+	@Test
+	public void getInputStream_missingSecretKey_throwsClearError() {
+		Properties props = baseProperties();
+		props.remove(IRIArgument.S3_SECRET_KEY.toString());
+
+		S3InputService service = new S3InputService();
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+			() -> service.getInputStream(props));
+		assertTrue(ex.getMessage().contains(IRIArgument.S3_SECRET_KEY.toString()));
+	}
+
+	@Test
+	public void getInputStream_missingRegion_throwsClearError() {
+		Properties props = baseProperties();
+		props.remove(IRIArgument.S3_REGION.toString());
+
+		S3InputService service = new S3InputService();
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+			() -> service.getInputStream(props));
+		assertTrue(ex.getMessage().contains(IRIArgument.S3_REGION.toString()));
+	}
+
+	@Test
+	public void getInputStream_missingEndpoint_throwsClearError() {
+		Properties props = baseProperties();
+		props.remove(IRIArgument.S3_ENDPOINT.toString());
+
+		S3InputService service = new S3InputService();
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+			() -> service.getInputStream(props));
+		assertTrue(ex.getMessage().contains(IRIArgument.S3_ENDPOINT.toString()));
+	}
+
+	@Test
+	public void getInputStream_missingBucketName_throwsClearError() {
+		Properties props = baseProperties();
+		props.remove(IRIArgument.S3_BUCKET_NAME.toString());
+
+		// bucket-name is only validated once a real S3Client is available, so
+		// a mock client is enough here: the failure must happen before
+		// getObject() is ever called.
+		S3Client clientMock = mock(S3Client.class);
+		S3InputService service = new S3InputService(props2 -> clientMock);
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+			() -> service.getInputStream(props));
+		assertTrue(ex.getMessage().contains(IRIArgument.S3_BUCKET_NAME.toString()));
+		verify(clientMock, never()).getObject(any(GetObjectRequest.class));
+	}
+
+	@Test
+	public void getInputStream_missingKey_throwsClearError() {
+		Properties props = baseProperties();
+		props.remove(IRIArgument.S3_KEY.toString());
+
+		S3Client clientMock = mock(S3Client.class);
+		S3InputService service = new S3InputService(props2 -> clientMock);
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+			() -> service.getInputStream(props));
+		assertTrue(ex.getMessage().contains(IRIArgument.S3_KEY.toString()));
+		verify(clientMock, never()).getObject(any(GetObjectRequest.class));
+	}
+
+	/**
+	 * A malformed (non-URI) endpoint must also fail with a clear message
+	 * rather than an opaque {@code URISyntaxException} wrapped in a generic
+	 * {@code RuntimeException}.
+	 */
+	@Test
+	public void getInputStream_malformedEndpoint_throwsClearError() {
+		Properties props = baseProperties();
+		props.setProperty(IRIArgument.S3_ENDPOINT.toString(), "not a valid uri with spaces and no scheme");
+
+		S3InputService service = new S3InputService();
+
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+			() -> service.getInputStream(props));
+		assertTrue(ex.getMessage().contains(IRIArgument.S3_ENDPOINT.toString()));
 	}
 }

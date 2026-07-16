@@ -48,14 +48,17 @@ public class S3InputService implements ResourceService {
 	}
 
 	private static S3Client buildDefaultClient(Properties properties) {
-		AwsBasicCredentials credentials = AwsBasicCredentials.create(
-			PropertyUtils.getStringProperty(properties, IRIArgument.S3_ACCESS_KEY),
-			PropertyUtils.getStringProperty(properties, IRIArgument.S3_SECRET_KEY));
-		Region region = Region.of(PropertyUtils.getStringProperty(properties, IRIArgument.S3_REGION));
+		String accessKey = requireProperty(properties, IRIArgument.S3_ACCESS_KEY);
+		String secretKey = requireProperty(properties, IRIArgument.S3_SECRET_KEY);
+		String regionName = requireProperty(properties, IRIArgument.S3_REGION);
+		String endpoint = requireProperty(properties, IRIArgument.S3_ENDPOINT);
+
+		AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
+		Region region = Region.of(regionName);
 
 		try {
 			return S3Client.builder()
-				.endpointOverride(new URI(PropertyUtils.getStringProperty(properties, IRIArgument.S3_ENDPOINT)))
+				.endpointOverride(new URI(endpoint))
 				.credentialsProvider(StaticCredentialsProvider.create(credentials))
 				.region(region)
 				.serviceConfiguration(
@@ -64,8 +67,28 @@ public class S3InputService implements ResourceService {
 						.build())
 				.build();
 		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
+			throw new IllegalArgumentException(
+				"Invalid value for '" + IRIArgument.S3_ENDPOINT + "': '" + endpoint + "' is not a valid URI.", e);
 		}
+	}
+
+	/**
+	 * Returns the given required {@code s3.*} property, or throws a clear,
+	 * SPARQL-Anything-specific {@link IllegalArgumentException} naming the
+	 * missing property if it is absent or blank. Without this check, a
+	 * missing property surfaces later as an unclear, low-level AWS SDK
+	 * exception (e.g. a {@code NullPointerException} from
+	 * {@code AwsBasicCredentials.create} or an {@code IllegalArgumentException}
+	 * from {@code Region.of} that doesn't name the offending property).
+	 */
+	private static String requireProperty(Properties properties, IRIArgument argument) {
+		String value = PropertyUtils.getStringProperty(properties, argument, null);
+		if (value == null || value.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+				"Missing required property '" + argument + "': it must be set when '"
+					+ IRIArgument.S3_ENDPOINT + "' is used to read a resource from S3.");
+		}
+		return value;
 	}
 
 	@Override
@@ -76,9 +99,12 @@ public class S3InputService implements ResourceService {
 		// has finished reading the stream. If something goes wrong after the
 		// client is created, it must be closed explicitly to avoid a leak.
 		try {
+			String bucketName = requireProperty(properties, IRIArgument.S3_BUCKET_NAME);
+			String key = requireProperty(properties, IRIArgument.S3_KEY);
+
 			GetObjectRequest request = GetObjectRequest.builder()
-				.bucket(PropertyUtils.getStringProperty(properties, IRIArgument.S3_BUCKET_NAME))
-				.key(PropertyUtils.getStringProperty(properties, IRIArgument.S3_KEY))
+				.bucket(bucketName)
+				.key(key)
 				.build();
 
 			InputStream objectStream = s3.getObject(request);
