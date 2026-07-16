@@ -69,6 +69,9 @@ public interface Triplifier {
 		String command = PropertyUtils.getStringProperty(properties, IRIArgument.COMMAND, null);
 		if (command != null) return XYZ_NS + DigestUtils.md5Hex(command);//+ "#";
 
+		String s3Endpoint = PropertyUtils.getStringProperty(properties, IRIArgument.S3_ENDPOINT, null);
+		if (s3Endpoint != null) return s3Endpoint;//+ "#";
+
 		throw new RuntimeException("No location nor content nor command provided!");
 	}
 

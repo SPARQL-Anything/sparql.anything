@@ -15,7 +15,6 @@
  */
 
 
-
 package io.github.sparqlanything.engine;
 
 import io.github.sparqlanything.engine.functions.IsFacadeXExtension;
@@ -62,7 +61,7 @@ class PropertyExtractor {
 	static Triplifier getTriplifier(Properties p, TriplifierRegister triplifierRegister) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		Triplifier t;
 
-		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString()) && !p.containsKey(IRIArgument.COMMAND.toString())) {
+		if (!p.containsKey(IRIArgument.LOCATION.toString()) && !p.containsKey(IRIArgument.CONTENT.toString()) && !p.containsKey(IRIArgument.COMMAND.toString()) && !p.containsKey(IRIArgument.S3_ENDPOINT_NAME)) {
 			logger.error("Neither location nor content provided");
 			return null;
 		}
@@ -98,7 +97,7 @@ class PropertyExtractor {
 		return t;
 	}
 
-	 static void extractPropertiesFromBGP(Properties properties, OpBGP bgp) throws UnboundVariableException {
+	static void extractPropertiesFromBGP(Properties properties, OpBGP bgp) throws UnboundVariableException {
 		for (Triple t : bgp.getPattern().getList()) {
 			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
 				if (t.getObject().isURI()) {
@@ -177,8 +176,8 @@ class PropertyExtractor {
 
 
 	public static void extractPropertiesFromExecutionContext(ExecutionContext execCxt, Properties p) {
-		execCxt.getContext().keys().forEach(symbol ->{
-			if(symbol instanceof FXSymbol){
+		execCxt.getContext().keys().forEach(symbol -> {
+			if (symbol instanceof FXSymbol) {
 				p.setProperty(symbol.getSymbol(), execCxt.getContext().get(symbol));
 			}
 		});
