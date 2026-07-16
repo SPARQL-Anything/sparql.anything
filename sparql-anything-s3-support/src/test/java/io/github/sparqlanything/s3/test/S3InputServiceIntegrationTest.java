@@ -18,12 +18,9 @@
 
 package io.github.sparqlanything.s3.test;
 
-import io.github.sparqlanything.model.HTTPHelper;
 import io.github.sparqlanything.model.IRIArgument;
-import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.TriplifierHTTPException;
 import io.github.sparqlanything.s3.S3InputService;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.BeforeClass;
@@ -43,7 +40,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
@@ -52,14 +48,14 @@ import static org.junit.Assert.assertEquals;
 /**
  * End-to-end test for {@link S3InputService} against a real S3-compatible
  * service (MinIO), started via Testcontainers. Unlike the mock-based unit
- * tests in {@link S3InputServiceTest}, this exercises the real AWS SDK
+ * tests in {@link S3InputServiceMockTest}, this exercises the real AWS SDK
  * client, the real HTTP connection, and the real builder configuration
  * (endpoint override, path-style access, credentials), which a mock cannot
  * verify.
  * <p>
  * Skipped automatically if Docker is not available.
  */
-public class S3InputServiceTest2 {
+public class S3InputServiceIntegrationTest {
 
 	private static final String ACCESS_KEY = "minioadmin";
 	private static final String SECRET_KEY = "minioadmin";

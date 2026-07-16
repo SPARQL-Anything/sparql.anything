@@ -40,7 +40,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit tests for {@link S3InputService}.
+ * Unit tests for {@link S3InputService} using a mocked {@link S3Client}.
  * <p>
  * {@code S3Client} is built internally via {@code S3Client.builder()}, a
  * static factory method. Rather than mocking that static method (which
@@ -54,9 +54,9 @@ import static org.mockito.Mockito.when;
  * when the caller closes the stream or when {@code getObject()} fails.
  * <p>
  * For an end-to-end test against a real S3-compatible service, see
- * {@link S3InputServiceTest2}, which uses Testcontainers with MinIO.
+ * {@link S3InputServiceIntegrationTest}, which uses Testcontainers with MinIO.
  */
-public class S3InputServiceTest {
+public class S3InputServiceMockTest {
 
 	// Minimal set of Properties the service reads via PropertyUtils/IRIArgument;
 	// values are fake since no real S3 endpoint is ever contacted in this class.
