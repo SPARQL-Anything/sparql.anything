@@ -27,7 +27,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -40,7 +39,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
@@ -130,12 +129,12 @@ public class S3InputServiceIntegrationTest {
 		Assume.assumeTrue("Docker not available", dockerAvailable);
 
 		// Properties as they would be set by a SPARQL Anything location IRI
-		// pointing at an S3 object: S3_ENDPOINT=true signals that this
-		// location should be routed through S3InputService instead of a
-		// plain HTTP GET (see getInputStream(URL, Properties) above).
+		// pointing at an S3 object: S3InputService reads the real endpoint
+		// URL from IRIArgument.S3_ENDPOINT (not a boolean flag) to build the
+		// AWS SDK client's endpointOverride.
 		Properties properties = new Properties();
 
-		properties.setProperty(IRIArgument.S3_ENDPOINT.toString(), "true");
+		properties.setProperty(IRIArgument.S3_ENDPOINT.toString(), endpoint.toString());
 		properties.setProperty(IRIArgument.S3_BUCKET_NAME.toString(), BUCKET_NAME);
 		properties.setProperty(IRIArgument.S3_KEY.toString(), FILE_KEY);
 		properties.setProperty(IRIArgument.S3_ACCESS_KEY.toString(), ACCESS_KEY);
@@ -146,7 +145,7 @@ public class S3InputServiceIntegrationTest {
 		// client, real connection, real bytes off the wire from MinIO.
 		String content;
 		try (InputStream is = new S3InputService().getInputStream(properties)) {
-			content = IOUtils.toString(is, Charset.defaultCharset());
+			content = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 		}
 
 		assertEquals(FILE_CONTENT, content);
