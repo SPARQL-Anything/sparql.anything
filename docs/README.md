@@ -644,6 +644,18 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
  -nc,--no-clobber                        OPTIONAL - Do not execute if the
                                          specified output file already
                                          exists.
+ -ad,--allow-duplicates                  OPTIONAL - Allow duplicate
+                                         triples in CONSTRUCT output.
+                                         Streams the result
+                                         triple-by-triple for line-based
+                                         formats (NT, NQ, TTL, TriG)
+                                         instead of building the whole
+                                         result Model in memory, giving
+                                         near-constant memory for bulk
+                                         conversions at the cost of the
+                                         de-duplication guarantee. Only
+                                         affects CONSTRUCT queries with -f
+                                         NT or NQ; ignored otherwise.
  -t,--profile <filepath>                 OPTIONAL - It runs the execution
                                          through a profiler. It saves the
                                          results to [filepath] (by default
@@ -715,7 +727,9 @@ You can extend SPARQL Anything by including new triplifiers, more details can be
 You can use SPARQL Anything as a Python library, see
 the [PySPARQL-Anything project](https://pypi.org/project/pysparql-anything/).
 
-### Compiling
+# Build
+
+## Compile executable jars
 
 You can generate executable files of the command line interface and server with maven
 
@@ -728,6 +742,22 @@ You can generate the executable files of the SPARQL Anything geosparql distribut
 ```
 mvn clean install -Dgenerate-cli-jar-geosparql=true -Dgenerate-server-jar-geosparql=true
 ```
+
+## Building the documentation
+
+```
+# Using `uv` for Python (https://docs.astral.sh/uv/)
+uv venv venv-for-mkdocs
+source venv-for-mkdocs/bin/activate
+uv pip install mkdocs
+
+git clone https://github.com/SPARQL-Anything/sparql.anything.git
+cd sparql.anything
+uv pip install -r docs/requirements.txt
+
+mkdocs serve
+```
+
 
 ## Licence
 
@@ -821,3 +851,4 @@ Asprino, Luigi, Enrico Daga, Justin Dowdy, Paul Mulholland, Aldo Gangemi, and Ma
   year={2023}
 }
 ```
+

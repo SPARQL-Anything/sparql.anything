@@ -90,8 +90,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
   xyz:boolean       true;
   xyz:float         "0.1"^^xsd:double;
   xyz:key           "value";
-  xyz:nested-array  [ rdf:_1  [ xyz:nested-array  [ rdf:_1  [ <http://sparql.xyz/facade-x/data/nested%3Akey>
-                                                                      "Value with spaces" ]
+  xyz:nested-array  [ rdf:_1  [ xyz:nested-array  [ rdf:_1  [ xyz:nested:key  "Value with spaces" ]
                                                   ]
                               ]
                     ];

@@ -47,6 +47,13 @@ import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.mgt.Explain;
 import org.apache.jena.sys.JenaSystem;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.riot.system.StreamRDF;
+import org.apache.jena.riot.system.StreamRDFWriter;
+import org.apache.jena.sparql.core.Quad;
+import org.apache.jena.riot.RDFLanguages;
+import org.apache.jena.riot.system.StreamRDF;
+import org.apache.jena.riot.system.StreamRDFWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,7 +108,7 @@ public class SPARQLAnything {
 		return qExec;
 	}
 
-	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw, String[] configurations)
+	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw, String[] configurations, boolean allowDuplicates)
 		throws FileNotFoundException {
 		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_QUERY_EXECUTION);
 		try (QueryExecution qe = createQueryExecution(query, kb, configurations)) {
@@ -142,51 +149,78 @@ public class SPARQLAnything {
 					default:
 						throw new RuntimeException("Unsupported format: " + outputFormat);
 				}
-			} else if (query.isDescribeType() || query.isConstructType()) {
-				Model m;
-				Dataset d = null;
-				if (query.isConstructType()) {
-					d = qe.execConstructDataset();
-					// .execConstructDataset (instead of .execConstruct) so we can construct quads too
-					// as described here: https://jena.apache.org/documentation/query/construct-quad.html
-					m = d.getDefaultModel();
+			} else if (query.isConstructType() || query.isDescribeType()) {
+				Lang streamLang = allowDuplicates ? streamableLang(outputFormat) : null;
+				if (streamLang != null) {
+					// #635 Stream each triple/quad as it is produced — no in-memory Model,
+					// so memory is ~constant and duplicates are preserved.
+					StreamRDF out = StreamRDFWriter.getWriterStream(pw, streamLang);
+					out.start();
+					try {
+						if (RDFLanguages.isQuads(streamLang) && query.isConstructType()) {
+							qe.execConstructQuads().forEachRemaining(out::quad);
+						} else {
+							(query.isConstructType() ? qe.execConstructTriples() : qe.execDescribeTriples())
+								.forEachRemaining(out::triple);
+						}
+					} finally {
+						out.finish();
+					}
 				} else {
-					m = qe.execDescribe();
-					// d = new DatasetImpl(m);
-				}
-				if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName())) {
-					// JSON-LD format.equals(Lang.JSONLD11.getName())
-					RDFDataMgr.write(pw, m, Lang.JSONLD);
-				} else if (outputFormat.equals(Lang.JSONLD11.getName())) {
-					RDFDataMgr.write(pw, m, Lang.JSONLD11);
-				} else if (outputFormat.equals("XML")) {
-					// RDF/XML
-					RDFDataMgr.write(pw, m, Lang.RDFXML);
-				} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
-					// TURTLE
-					RDFDataMgr.write(pw, m, Lang.TTL);
-				} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
-					// N-Triples
-					RDFDataMgr.write(pw, m, Lang.NT);
-				} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
-					// NQ
-					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
-				} else if (outputFormat.equals(Lang.TRIG.getName())) {
-					// TRIG
-					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
-				} else if (outputFormat.equals(Lang.TRIX.getName())) {
-					// TRIG
-					RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
-				} else if (outputFormat.equals(Lang.CSV.getName())) {
-					// CSV
-					ResultSet rs = RiotUtils.asResultSet(Objects.requireNonNull(d.asDatasetGraph()));
-					ResultSetFormatter.outputAsCSV(pw, rs);
-				} else {
-					throw new RuntimeException("Unsupported format: " + outputFormat);
+					Model m;
+					Dataset d = null;
+					if (query.isConstructType()) {
+						d = qe.execConstructDataset();
+						// .execConstructDataset (instead of .execConstruct) so we can construct quads too
+						// as described here: https://jena.apache.org/documentation/query/construct-quad.html
+						m = d.getDefaultModel();
+					} else {
+						m = qe.execDescribe();
+						// d = new DatasetImpl(m);
+					}
+					if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName())) {
+						// JSON-LD format.equals(Lang.JSONLD11.getName())
+						RDFDataMgr.write(pw, m, Lang.JSONLD);
+					} else if (outputFormat.equals(Lang.JSONLD11.getName())) {
+						RDFDataMgr.write(pw, m, Lang.JSONLD11);
+					} else if (outputFormat.equals("XML")) {
+						// RDF/XML
+						RDFDataMgr.write(pw, m, Lang.RDFXML);
+					} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
+						// TURTLE
+						RDFDataMgr.write(pw, m, Lang.TTL);
+					} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
+						// N-Triples
+						RDFDataMgr.write(pw, m, Lang.NT);
+					} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
+						// NQ
+						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
+					} else if (outputFormat.equals(Lang.TRIG.getName())) {
+						// TRIG
+						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
+					} else if (outputFormat.equals(Lang.TRIX.getName())) {
+						// TRIG
+						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
+					} else if (outputFormat.equals(Lang.CSV.getName())) {
+						// CSV
+						ResultSet rs = RiotUtils.asResultSet(Objects.requireNonNull(d.asDatasetGraph()));
+						ResultSetFormatter.outputAsCSV(pw, rs);
+					} else {
+						throw new RuntimeException("Unsupported format: " + outputFormat);
+					}
 				}
 			}
 		}
 		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_QUERY_EXECUTION);
+	}
+
+	// #635 Line/block RDF formats that StreamRDFWriter can serialise incrementally.
+	private static Lang streamableLang(String outputFormat) {
+		if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) return Lang.NT;
+		if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) return Lang.NQ;
+		if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) return Lang.TTL;
+		if (outputFormat.equals(Lang.TRIG.getName())) return Lang.TRIG;
+		return null;
 	}
 
 	private static PrintStream getPrintStream(String fileName, boolean append) throws IOException {
@@ -534,7 +568,7 @@ public class SPARQLAnything {
 			boolean newFile = outputFile != null && !new File(outputFile).exists();
 			try (PrintStream ps = getPrintStream(outputFile, cli.getOutputAppend())) {
 				logger.trace("Executing Query: {}", q);
-				executeQuery(cli.getFormat(q), kb, q, ps, configurations);
+				executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getAllowDuplicates());
 			} catch (Exception e1) {
 				logger.error(
 					"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
@@ -689,7 +723,7 @@ public class SPARQLAnything {
 				}
 				Query q = QueryFactory.create(query);
 				try (PrintStream ps = getPrintStream(outputFileName, cli.getOutputAppend())) {
-					executeQuery(cli.getFormat(q), kb, q, ps, configurations);
+					executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getAllowDuplicates());
 				}
 			} else {
 				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);

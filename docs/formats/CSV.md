@@ -109,9 +109,10 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 | [csv.headers-row](#csvheaders-row) | It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see [#179](https://github.com/SPARQL-Anything/sparql.anything/issues/179) | Any integer | `1` |
 | [csv.format](#csvformat) | The format of the input CSV file. | Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache&#39;s commons CSV library. | `Default` |
 | [csv.delimiter](#csvdelimiter) | It sets the column delimiter, usually ,;\t etc. | Any single character | `,` |
-| [csv.quote-char](#csvquote-char) | It sets the quoting character | Any single character | `&quot;` |
+| [csv.quote-char](#csvquote-char) | It sets the quoting character. Use &quot;true&quot; for the default quote character (&quot;), &quot;false&quot; or an empty string to disable quoting entirely (for TSV/CSV sources with no quoting convention), or any single character to use as the quote character. | true, false, empty string, or any single character | `&quot;` |
 | [csv.null-string](#csvnull-string) | It tells the CSV triplifier to not produce triples where the specified string would be in the object position of the triple | Any String | Not set |
 | [csv.ignore-columns-with-no-header](#csvignore-columns-with-no-header) | It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see [#180](https://github.com/SPARQL-Anything/sparql.anything/issues/180) | true/false | `false` |
+| [csv.headers.sanitize](#csvheaderssanitize) | It tells the CSV triplifier to sanitize the headers of the CSV file for minting the properties of the generated triples. Anything other than letters and numbers is replaced with underscores or a character provided. | Any String | `false` |
 
 ---
 ### `csv.headers`
@@ -387,11 +388,11 @@ WHERE
 
 #### Description
 
-It sets the quoting character
+It sets the quoting character. Use &quot;true&quot; for the default quote character (&quot;), &quot;false&quot; or an empty string to disable quoting entirely (for TSV/CSV sources with no quoting convention), or any single character to use as the quote character.
 
 #### Valid Values
 
-Any single character
+true, false, empty string, or any single character
 
 #### Default Value
 
@@ -590,6 +591,69 @@ WHERE
 | fred | sally |
 ================
 ----------------
+
+```
+
+---
+### `csv.headers.sanitize`
+
+#### Description
+
+It tells the CSV triplifier to sanitize the headers of the CSV file for minting the properties of the generated triples. Anything other than letters and numbers is replaced with underscores or a character provided.
+
+#### Valid Values
+
+Any String
+
+#### Default Value
+
+`false`
+
+#### Examples
+
+##### Example 1
+
+Compute the average petal length of the species having sepal length greater than 4.9
+
+###### Input
+
+```CSV
+Sepal_length	Sepal_width	Petal_length	Petal_width	Species
+5.1	3.5	1.4	0.2	I. setosa
+4.9	3.0	1.4	0.2	I. setosa
+4.7	3.2	1.3	0.2	I. setosa
+4.6	3.1	1.5	0.2	I. setosa
+5.0	3.6	1.4	0.2	I. setosa
+
+```
+
+https://sparql-anything.cc/examples/simple.tsv
+
+###### Query
+
+```
+PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  (AVG(xsd:float(?petalLength)) AS ?avgPetalLength)
+WHERE
+  { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true,csv.headers.sanitize=true,csv.format=TDF>
+      { ?s  xyz:Sepal_length  ?length ;
+            xyz:Petal_length  ?petalLength
+        FILTER ( xsd:float(?length) > 4.9 )
+      }
+  }
+
+```
+
+###### Result
+
+```turtle
+------------------
+| avgPetalLength |
+==================
+| 0              |
+------------------
 
 ```
 

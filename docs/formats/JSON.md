@@ -84,11 +84,11 @@ PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 [ rdf:type        fx:root;
-  xyz:arr         [ rdf:_1  "0"^^xsd:int;
-                    rdf:_2  "1"^^xsd:int
+  xyz:arr         [ rdf:_1  "0"^^xsd:decimal;
+                    rdf:_2  "1"^^xsd:decimal
                   ];
   xyz:booleanArg  true;
-  xyz:intArg      "1"^^xsd:int;
+  xyz:intArg      "1"^^xsd:decimal;
   xyz:stringArg   "stringValue"
 ] .
 

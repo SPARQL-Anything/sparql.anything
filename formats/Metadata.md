@@ -77,12 +77,12 @@ WHERE
                     "Normal process";
             <http://sparql.xyz/facade-x/data/Data%20Precision>
                     "8 bits";
-            <http://sparql.xyz/facade-x/data/Date%2FTime>
-                    "2008:07:31 10:38:11";
             <http://sparql.xyz/facade-x/data/Date%2FTime%20Digitized>
                     "2008:05:30 15:56:01";
             <http://sparql.xyz/facade-x/data/Date%2FTime%20Original>
                     "2008:05:30 15:56:01";
+            <http://sparql.xyz/facade-x/data/Date/Time>
+                    "2008:07:31 10:38:11";
             <http://sparql.xyz/facade-x/data/Detected%20File%20Type%20Long%20Name>
                     "Joint Photographic Experts Group";
             <http://sparql.xyz/facade-x/data/Detected%20File%20Type%20Name>
@@ -116,7 +116,7 @@ WHERE
             <http://sparql.xyz/facade-x/data/F-Number>
                     "f/7.1";
             <http://sparql.xyz/facade-x/data/File%20Modified%20Date>
-                    "Wed Feb 18 14:22:42 +01:00 2026";
+                    "Wed Jul 15 12:31:23 +01:00 2026";
             <http://sparql.xyz/facade-x/data/File%20Name>
                     "Canon_40D.jpg";
             <http://sparql.xyz/facade-x/data/File%20Size>

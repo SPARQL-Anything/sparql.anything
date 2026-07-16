@@ -33,12 +33,15 @@ OPTIONAL - The path to one RDF file or a folder including a set of files to be l
 
 ### -f,--format <string>                  
 OPTIONAL -  Format of the output file. 
-Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: TEXT or TTL]
+Supported values: see below. [Default: CSV or TTL]
 
 | Query type               | Default |                                                                              Supported |
 |:-------------------------|:-------:|---------------------------------------------------------------------------------------:|
-| SELECT / ASK             |   CSV   |                                                                        JSON, XML, TEXT |
+| SELECT / ASK             |   CSV   |                                                                   JSON, XML, TEXT, CSV |
 | CONSTRUCT / DESCRIBE     |   TTL   | JSON, JSONLD, JSONLD11, XML, TTL / TURTLE, NT / NTRIPLES, NQ / NQUADS, TRIG, TRIX, CSV |
+
+> [!NOTE]
+> For CONSTRUCT, the line-based formats (NT, NQ, TTL, TriG) can be written incrementally with [`-ad,--allow-duplicates`](#-ad--allow-duplicates), keeping memory near-constant for large bulk conversions. The trade-off is that duplicate triples are no longer removed.
 
 ### -s,--strategy <strategy>              
 OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.
@@ -61,6 +64,11 @@ The argument can be used in two ways:
 OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be
 set). Options passed in this way can be overwritten in the SERVICE IRI or in the Basic Graph Pattern.
 
-
 ### -nc,--no-clobber
 OPTIONAL - Do not execute if the specified output file already exists.
+
+### -ad,--allow-duplicates
+OPTIONAL - Allow duplicate triples in CONSTRUCT output. Streams the result triple-by-triple for the line-based formats (NT, NQ, TTL, TriG) instead of building the whole result graph in memory, giving near-constant memory for bulk conversions at the cost of the de-duplication guarantee.
+
+> [!NOTE]
+> Only affects CONSTRUCT (and DESCRIBE over loaded data); other formats (RDF/XML, JSON-LD, TRIX, CSV) require the whole graph and are unaffected. See [#635](https://github.com/SPARQL-Anything/sparql.anything/issues/635).

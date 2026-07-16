@@ -75,6 +75,9 @@ public class CLI {
 	public static final String NO_CLOBBER = "nc";
 	public static final String NO_CLOBBER_LONG = "no-clobber";
 
+	public static final String ALLOW_DUPLICATES = "ad";
+	public static final String ALLOW_DUPLICATES_LONG = "allow-duplicates";
+
 	public static final String PROFILE = "profile";
 
 	private Options options;
@@ -153,6 +156,10 @@ public class CLI {
 				"OPTIONAL - Do not execute if the specified output file already exists.")
 			.longOpt(NO_CLOBBER_LONG).build());
 
+		options.addOption(Option.builder(ALLOW_DUPLICATES).hasArg(false).desc(
+				"OPTIONAL - Allow duplicate triples in CONSTRUCT output. Streams the result triple-by-triple for line-based formats (NT, NQ, TTL, TriG) instead of building the whole result Model in memory, giving near-constant memory for bulk conversions at the cost of the de-duplication guarantee. Only affects CONSTRUCT queries with -f NT or NQ; ignored otherwise.")
+			.longOpt(ALLOW_DUPLICATES_LONG).build());
+
 		options.addOption(Option.builder(PROFILE).argName("filepath").hasArg(true).optionalArg(true).desc(
 				"OPTIONAL - It runs the execution through a profiler. It saves the results to [filepath] (by default profile.tsv) in TSV format. The traced event is reported in the first column. The second column contains the timestamp in milliseconds from Unix epoch. The third column contains the amount of milliseconds from the first event (LOAD_MAIN_CLASS). the  Warning: This may increase execution time.")
 			.build());
@@ -208,6 +215,10 @@ public class CLI {
 
 	public String[] getValues() {
 		return commandLine.getOptionValues(CLI.VALUES);
+	}
+
+	public boolean getAllowDuplicates(){
+		return commandLine.hasOption(CLI.ALLOW_DUPLICATES);
 	}
 
 	public String[] getConfigurations() {
