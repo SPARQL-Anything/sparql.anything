@@ -195,10 +195,10 @@ public class SPARQLAnything {
 					} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
 						// NQ
 						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
-					} else if (outputFormat.equals(Lang.TRIG.getName())) {
+					} else if (outputFormat.equals("TRIG") || outputFormat.equals(Lang.TRIG.getName())) {
 						// TRIG
 						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
-					} else if (outputFormat.equals(Lang.TRIX.getName())) {
+					} else if (outputFormat.equals("TRIX") || outputFormat.equals(Lang.TRIX.getName())) {
 						// TRIG
 						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
 					} else if (outputFormat.equals(Lang.CSV.getName())) {
@@ -219,7 +219,7 @@ public class SPARQLAnything {
 		if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) return Lang.NT;
 		if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) return Lang.NQ;
 		if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) return Lang.TTL;
-		if (outputFormat.equals(Lang.TRIG.getName())) return Lang.TRIG;
+		if (outputFormat.equals("TRIG") || outputFormat.equals(Lang.TRIG.getName())) return Lang.TRIG;
 		return null;
 	}
 
