@@ -108,7 +108,7 @@ public class SPARQLAnything {
 		return qExec;
 	}
 
-	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw, String[] configurations, boolean allowDuplicates)
+	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw, String[] configurations, boolean stream)
 		throws FileNotFoundException {
 		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_QUERY_EXECUTION);
 		try (QueryExecution qe = createQueryExecution(query, kb, configurations)) {
@@ -150,7 +150,7 @@ public class SPARQLAnything {
 						throw new RuntimeException("Unsupported format: " + outputFormat);
 				}
 			} else if (query.isConstructType() || query.isDescribeType()) {
-				Lang streamLang = allowDuplicates ? streamableLang(outputFormat) : null;
+				Lang streamLang = stream ? streamableLang(outputFormat) : null;
 				if (streamLang != null) {
 					// #635 Stream each triple/quad as it is produced — no in-memory Model,
 					// so memory is ~constant and duplicates are preserved.
@@ -568,7 +568,7 @@ public class SPARQLAnything {
 			boolean newFile = outputFile != null && !new File(outputFile).exists();
 			try (PrintStream ps = getPrintStream(outputFile, cli.getOutputAppend())) {
 				logger.trace("Executing Query: {}", q);
-				executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getAllowDuplicates());
+				executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getStream());
 			} catch (Exception e1) {
 				logger.error(
 					"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
@@ -723,7 +723,7 @@ public class SPARQLAnything {
 				}
 				Query q = QueryFactory.create(query);
 				try (PrintStream ps = getPrintStream(outputFileName, cli.getOutputAppend())) {
-					executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getAllowDuplicates());
+					executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getStream());
 				}
 			} else {
 				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);

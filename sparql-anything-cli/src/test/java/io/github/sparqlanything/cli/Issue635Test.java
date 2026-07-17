@@ -24,10 +24,10 @@ import org.junit.Test;
 import java.util.Objects;
 
 /**
- * #635 - Streaming CONSTRUCT/DESCRIBE output with duplicates (-ad / --allow-duplicates).
+ * #635 - Streaming CONSTRUCT/DESCRIBE output with duplicates (-st / --stream).
  *
  * A CONSTRUCT that emits the same constant triple for every solution yields many identical
- * triples. On the default (Model) path these collapse to one; with -ad the output is streamed
+ * triples. On the default (Model) path these collapse to one; with -st the output is streamed
  * triple-by-triple and the duplicates are preserved.
  *
  * Note: DESCRIBE over a virtual FacadeX graph (NO_SERVICE mode) returns nothing because the
@@ -66,20 +66,20 @@ public class Issue635Test {
 
 	/** With -ad: output is streamed and duplicates are preserved (the constant triple repeats). */
 	@Test
-	public void allowDuplicatesKeepsDuplicates() throws Exception {
+	public void streamKeepsDuplicates() throws Exception {
 		String out = SPARQLAnything.callMain(new String[]{
-			"-q", CONSTRUCT_CONSTANT, "-c", "location=" + books(), "-f", "NT", "-ad"
+			"-q", CONSTRUCT_CONSTANT, "-c", "location=" + books(), "-f", "NT", "-st"
 		});
-		Assert.assertTrue("expected the constant triple to repeat under -ad", countConstantTriple(out) > 1);
+		Assert.assertTrue("expected the constant triple to repeat under -st", countConstantTriple(out) > 1);
 	}
 
 	/** -ad also applies to DESCRIBE for a streamable format; over loaded RDF it streams valid, non-empty N-Triples. */
 	@Test
-	public void allowDuplicatesDescribeStreams() throws Exception {
+	public void streamDescribeStreams() throws Exception {
 		String ttl = Objects.requireNonNull(
 			getClass().getClassLoader().getResource("load-subdirs/dir1/file1.ttl")).toURI().toString();
 		String out = SPARQLAnything.callMain(new String[]{
-			"-q", "DESCRIBE ?s WHERE { ?s a <http://schema.org/Person> }", "-l", ttl, "-f", "NT", "-ad"
+			"-q", "DESCRIBE ?s WHERE { ?s a <http://schema.org/Person> }", "-l", ttl, "-f", "NT", "-st"
 		});
 		Assert.assertFalse(out.trim().isEmpty());
 		Assert.assertTrue(out.contains("<http://schema.org/Person>"));
