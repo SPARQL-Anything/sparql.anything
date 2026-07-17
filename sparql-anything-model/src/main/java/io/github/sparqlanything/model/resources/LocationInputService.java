@@ -25,9 +25,9 @@ public class LocationInputService implements ResourceService {
 	private static final Logger log = LoggerFactory.getLogger(LocationInputService.class);
 	public static final String tmpFolder = "tmp";
 
-	public LocationInputService() {
-		new File(tmpFolder).mkdir();
-	}
+//	public LocationInputService() {
+//		new File(tmpFolder).mkdir();
+//	}
 
 	@Override
 	public InputStream getInputStream(Properties properties) throws IOException, TriplifierHTTPException {
@@ -100,7 +100,7 @@ public class LocationInputService implements ResourceService {
 			log.trace("File to read doesn't exist, extracting it from {}", archiveLocation);
 			// extract
 			File destinationDir = new File(folder);
-			new File(folder).mkdir();
+			new File(folder).mkdirs();
 
 
 			String archiverName = getArchiverNameFromArchiverFormat(archiveLocation.toString(), archiverFormat);
