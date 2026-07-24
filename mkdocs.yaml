@@ -2,7 +2,7 @@ site_name: SPARQL Anything
 site_url: http://sparql-anything.cc
 repo_url: https://github.com/SPARQL-Anything/sparql.anything
 repo_name: GitHub
-edit_uri: null
+edit_uri: edit/v1.2-DEV/docs/
 site_description: SPARQL Anything online documentation
 theme:
   name: readthedocs
