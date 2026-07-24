@@ -13,6 +13,7 @@ nav:
     - Functions: 'FUNCTIONS_AND_MAGIC_PROPERTIES.md'
     - Command line interface: 'CLI.md'
     - Docker: 'BROWSER.md'
+    - S3: 'S3.md'
     - Tutorials: 'TUTORIALS.md'
   - 'Guide on formats':
       - CSV: 'formats/CSV.md'
