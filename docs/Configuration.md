@@ -1503,9 +1503,17 @@ SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
 | http.redirect                   | Follow redirect?                                                                                                                                           | true,false   | true          |
 | http.sleep                      | Wait the given milliseconds before sending the request                                                                                                     |              |           |
 
+
 ## S3
 
-SPARQL Anything supports access to files stored in S3 buckets (see [issue #560](https://github.com/SPARQL-Anything/sparql.anything/issues/560)).
-In order to access such resources, some options must be configured in SPARQL Anything, such as s3.endpoint (a boolean value; if true, the location is interpreted as a URI for the S3 endpoint), s3.bucket-name, s3.key (the file to retrieve from the bucket), s3.access-key (user), s3.secret-key (password) and s3.region.
+SPARQL Anything can read a resource stored in an [Amazon S3](https://aws.amazon.com/s3/) bucket, or in any S3-compatible object storage service (e.g. [MinIO](https://min.io/)), as the input of a query (see [issue #560](https://github.com/SPARQL-Anything/sparql.anything/issues/560)). S3 support is provided by the separate `sparql-anything-s3-support` module; see the [S3 page](S3.md) for setup, examples, and caveats.
 
+| Option name | Description | Required |
+|---|---|---|
+| `s3.endpoint` | The URL of the S3-compatible endpoint (e.g. `https://s3.amazonaws.com`, or a MinIO instance URL). Setting this property routes the request through the S3 service instead of a plain HTTP(S) request. | Yes |
+| `s3.bucket-name` | The name of the bucket containing the object to read. | Yes |
+| `s3.key` | The key (path) of the object within the bucket. | Yes |
+| `s3.access-key` | The access key used to authenticate against the S3-compatible service. | Yes |
+| `s3.secret-key` | The secret key used to authenticate against the S3-compatible service. | Yes |
+| `s3.region` | The AWS region to use (e.g. `us-east-1`). Required by the AWS SDK even against non-AWS services such as MinIO. | Yes |
 
