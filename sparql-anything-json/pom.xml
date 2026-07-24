@@ -29,7 +29,7 @@
 	</parent>
 	<name>SPARQL Anything - JSON module</name>
 	<properties>
-		<revision>1.2.0-SNAPSHOT</revision>
+		<revision>1.3.0-SNAPSHOT</revision>
 	</properties>
 	<artifactId>sparql-anything-json</artifactId>
 	<dependencies>

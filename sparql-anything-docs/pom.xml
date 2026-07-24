@@ -29,7 +29,7 @@
 		<version>${revision}</version>
 	</parent>
 	<properties>
-		<revision>1.2.0-SNAPSHOT</revision>
+		<revision>1.3.0-SNAPSHOT</revision>
 	</properties>
 	<name>SPARQL Anything - Docs module</name>
 	<artifactId>sparql-anything-docs</artifactId>

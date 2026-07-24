@@ -1,0 +1,1379 @@
+## main...origin/main
+A  .editorconfig
+A  .gitattributes
+A  .github/FUNDING.yml
+R  .github/workflows/maven.yml -> .github/workflows/build_on_maven_java21.yml
+A  .github/workflows/build_on_maven_java21_windows.yml
+A  .github/workflows/codeql-analysis.yml
+A  .github/workflows/docker-image.yml
+A  .github/workflows/draft-release.yml
+A  .github/workflows/mvn-nightly-release.yml
+A  .github/workflows/nightly-release.yml
+A  .github/workflows/publish_to_mvn-central.yml
+M  .gitignore
+A  .readthedocs.yaml
+A  A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md
+A  BROWSER.md
+A  CLI.md
+A  Configuration.md
+A  DEVELOPER_GUIDE.md
+A  Dockerfile
+A  Dockerfile.development
+A  EXTENSION_MECHANISMS.md
+A  FUNCTIONS_AND_MAGIC_PROPERTIES.md
+A  Facade-X.md
+A  Grammar.jpg
+A  JAVA_LIBRARY.md
+M  LICENSE
+UU README.md
+A  S3.md
+A  SystemOverview.md
+A  TUTORIALS.md
+A  docs/A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md
+A  docs/BROWSER.md
+A  docs/CLI.md
+A  docs/Configuration.md
+A  docs/DEVELOPER_GUIDE.md
+A  docs/EXTENSION_MECHANISMS.md
+A  docs/FUNCTIONS_AND_MAGIC_PROPERTIES.md
+A  docs/Facade-X.md
+A  docs/Grammar.jpg
+A  docs/JAVA_LIBRARY.md
+R  sparql.anything.engine/LICENSE -> docs/LICENSE
+A  docs/README.md
+A  docs/S3.md
+A  docs/SystemOverview.md
+A  docs/TUTORIALS.md
+A  docs/YASGUI-SNIPPET-GENERATION.md
+A  docs/conf.py
+A  docs/facade-x-ER.png
+A  docs/formats/Archive.md
+A  docs/formats/Bibliography.md
+A  docs/formats/Bibtex.md
+A  docs/formats/Binary.md
+A  docs/formats/CSV.md
+A  docs/formats/Docs.md
+A  docs/formats/HTML.md
+A  docs/formats/JSON.md
+A  docs/formats/Markdown.md
+A  docs/formats/Metadata.md
+A  docs/formats/RDF.md
+A  docs/formats/Slides.md
+A  docs/formats/Spreadsheet.md
+A  docs/formats/Text.md
+A  docs/formats/XML.md
+A  docs/formats/YAML.md
+A  docs/imgs/workflow1.png
+A  docs/imgs/workflow2.png
+A  docs/logo.png
+A  docs/requirements.txt
+A  docs/styles.css
+D  examples/example1.json
+D  experiment/README.md
+D  experiment/count_number_of_triples.sh
+D  experiment/data/COLLEZIONI_FONDO_GABINIO_MARZO_2017.json
+D  experiment/data/COLLEZIONI_GAM.json
+D  experiment/data/COLLEZIONI_MAO.json
+D  experiment/data/COLLEZIONI_PALAZZO_MADAMA_marzo2017.json
+D  experiment/img/chart.png
+D  experiment/img/execution_time_increasing_input.png
+D  experiment/img/execution_time_queries.png
+D  experiment/img/number_of_tokens.png
+D  experiment/rml-mappings/m1.ttl
+D  experiment/rml-mappings/m2.ttl
+D  experiment/rml-mappings/m3.ttl
+D  experiment/rml-mappings/m4.ttl
+D  experiment/rml-mappings/m4_10.ttl
+D  experiment/rml-mappings/m4_100.ttl
+D  experiment/rml-mappings/m4_1000.ttl
+D  experiment/rml-mappings/m4_10000.ttl
+D  experiment/rml-mappings/m4_100000.ttl
+D  experiment/rml-mappings/m4_1000000.ttl
+D  experiment/run.sh
+D  experiment/run_cog_experiment.sh
+D  experiment/run_increasing_input_experiment.sh
+D  experiment/run_performance_experiment.sh
+D  experiment/sparql-anything-queries/q1.rqg
+D  experiment/sparql-anything-queries/q10.rqg
+D  experiment/sparql-anything-queries/q11.rqg
+D  experiment/sparql-anything-queries/q12.rqg
+D  experiment/sparql-anything-queries/q12_10.rqg
+D  experiment/sparql-anything-queries/q12_100.rqg
+D  experiment/sparql-anything-queries/q12_1000.rqg
+D  experiment/sparql-anything-queries/q12_10000.rqg
+D  experiment/sparql-anything-queries/q12_100000.rqg
+D  experiment/sparql-anything-queries/q12_1000000.rqg
+D  experiment/sparql-anything-queries/q2.rqg
+D  experiment/sparql-anything-queries/q3.rqg
+D  experiment/sparql-anything-queries/q4.rqg
+D  experiment/sparql-anything-queries/q5.rqg
+D  experiment/sparql-anything-queries/q6.rqg
+D  experiment/sparql-anything-queries/q7.rqg
+D  experiment/sparql-anything-queries/q8.rqg
+D  experiment/sparql-anything-queries/q9.rqg
+D  experiment/sparql-generate-queries/q1.rqg
+D  experiment/sparql-generate-queries/q10.rqg
+D  experiment/sparql-generate-queries/q11.rqg
+D  experiment/sparql-generate-queries/q12.rqg
+D  experiment/sparql-generate-queries/q12_10.rqg
+D  experiment/sparql-generate-queries/q12_100.rqg
+D  experiment/sparql-generate-queries/q12_1000.rqg
+D  experiment/sparql-generate-queries/q12_10000.rqg
+D  experiment/sparql-generate-queries/q12_100000.rqg
+D  experiment/sparql-generate-queries/q12_1000000.rqg
+D  experiment/sparql-generate-queries/q2.rqg
+D  experiment/sparql-generate-queries/q3.rqg
+D  experiment/sparql-generate-queries/q4.rqg
+D  experiment/sparql-generate-queries/q5.rqg
+D  experiment/sparql-generate-queries/q6.rqg
+D  experiment/sparql-generate-queries/q7.rqg
+D  experiment/sparql-generate-queries/q8.rqg
+D  experiment/sparql-generate-queries/q87.rqg
+D  experiment/sparql-generate-queries/q9.rqg
+A  facade-x-ER.png
+A  formats/Archive.md
+A  formats/Bibliography.md
+A  formats/Binary.md
+A  formats/CSV.md
+A  formats/Docs.md
+A  formats/HTML.md
+A  formats/JSON.md
+A  formats/Markdown.md
+A  formats/Metadata.md
+A  formats/RDF.md
+A  formats/Slides.md
+A  formats/Spreadsheet.md
+A  formats/Text.md
+A  formats/XML.md
+A  formats/YAML.md
+A  imgs/workflow1.png
+A  imgs/workflow2.png
+M  logo.svg
+A  mkdocs.yaml
+UU pom.xml
+A  sparql-anything-archive/pom.xml
+A  sparql-anything-archive/src/main/java/io/github/sparqlanything/zip/FolderTriplifier.java
+A  sparql-anything-archive/src/main/java/io/github/sparqlanything/zip/TarTriplifier.java
+A  sparql-anything-archive/src/main/java/io/github/sparqlanything/zip/ZipTriplifier.java
+A  sparql-anything-archive/src/main/java/io/github/sparqlanything/zip/package-info.java
+R  sparql.anything.binary/src/main/resources/testfile -> sparql-anything-archive/src/main/resources/testfile
+A  sparql-anything-archive/src/test/java/io/github/sparqlanything/zip/test/FolderTriplifierTest.java
+A  sparql-anything-archive/src/test/java/io/github/sparqlanything/zip/test/TarTriplifierTest.java
+A  sparql-anything-archive/src/test/java/io/github/sparqlanything/zip/test/ZipTriplifierTest.java
+A  sparql-anything-archive/src/test/resources/test.tar
+A  sparql-anything-archive/src/test/resources/test.zip
+R  sparql.anything.csv/src/test/resources/test1.csv -> sparql-anything-archive/src/test/resources/test/test.csv
+A  sparql-anything-archive/src/test/resources/test/test.json
+R  sparql.anything.text/src/main/resources/testfile -> sparql-anything-archive/src/test/resources/test/test.txt
+A  sparql-anything-archive/src/test/resources/test/test.xml
+A  sparql-anything-bibliography/pom.xml
+A  sparql-anything-bibliography/src/main/java/io/github/sparqlanything/bib/BibtexTriplifier.java
+A  sparql-anything-bibliography/src/main/java/io/github/sparqlanything/bib/package-info.java
+A  sparql-anything-bibliography/src/test/java/io/github/sparqlanything/bib/test/BaseTest.java
+A  sparql-anything-bibliography/src/test/java/io/github/sparqlanything/bib/test/BibtexTriplifierTest.java
+A  sparql-anything-bibliography/src/test/resources/test1.bib
+A  sparql-anything-binary/pom.xml
+A  sparql-anything-binary/src/main/java/io/github/sparqlanything/binary/BinaryTriplifier.java
+A  sparql-anything-binary/src/main/java/io/github/sparqlanything/binary/package-info.java
+A  sparql-anything-binary/src/main/resources/testfile
+A  sparql-anything-binary/src/test/java/io/github/sparqlanything/binary/test/BinaryTriplifierTest.java
+A  sparql-anything-cli/pom.xml
+A  sparql-anything-cli/src/main/java/io/github/sparqlanything/cli/CLI.java
+A  sparql-anything-cli/src/main/java/io/github/sparqlanything/cli/RiotUtils.java
+A  sparql-anything-cli/src/main/java/io/github/sparqlanything/cli/SPARQLAnything.java
+A  sparql-anything-cli/src/main/java/io/github/sparqlanything/cli/ServiceFinder.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/CLISandbox.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/CLITest.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/Issue331Test.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/Issue339Test.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/Issue526Test.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/Issue635Test.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/Issue642Test.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/LoadJARTest.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/LoadSubdirsTest.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/NoClobberTest.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/OptionsViaCommandLineTest.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/ProfileTest.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/RiotUtilsTest.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/StandardInTest.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/TestIssue320.java
+A  sparql-anything-cli/src/test/java/io/github/sparqlanything/cli/TestParameterSubstitution.java
+A  sparql-anything-cli/src/test/resources/CLITestOnFileQuery.sparql
+A  sparql-anything-cli/src/test/resources/CLITestOnFileQuery1.sparql
+A  sparql-anything-cli/src/test/resources/JsonldTest.json
+A  sparql-anything-cli/src/test/resources/JsonldTest.sparql
+A  sparql-anything-cli/src/test/resources/NoClobber.sparql
+A  sparql-anything-cli/src/test/resources/NoClobberParams.csv
+A  sparql-anything-cli/src/test/resources/NoClobberTest.csv
+A  sparql-anything-cli/src/test/resources/ask.sparql
+A  sparql-anything-cli/src/test/resources/books.xml
+A  sparql-anything-cli/src/test/resources/books.xyz
+A  sparql-anything-cli/src/test/resources/count-triples.sparql
+A  sparql-anything-cli/src/test/resources/issue526-1.rq
+A  sparql-anything-cli/src/test/resources/issue526-2.rq
+A  sparql-anything-cli/src/test/resources/issue526-3.rq
+A  sparql-anything-cli/src/test/resources/issue526.csv
+A  sparql-anything-cli/src/test/resources/issue526.rq
+A  sparql-anything-cli/src/test/resources/load-subdirs/dir1/dir2/fil2.nt
+A  sparql-anything-cli/src/test/resources/load-subdirs/dir1/dir2/file3.jsonld11
+A  sparql-anything-cli/src/test/resources/load-subdirs/dir1/file1.ttl
+A  sparql-anything-cli/src/test/resources/load-subdirs/dir1/file2.json
+A  sparql-anything-cli/src/test/resources/plugin-0.0.1-shaded.jar
+A  sparql-anything-cli/src/test/resources/queryWithParameter.sparql
+A  sparql-anything-csv/pom.xml
+A  sparql-anything-csv/src/main/java/io/github/sparqlanything/csv/CSVSlice.java
+A  sparql-anything-csv/src/main/java/io/github/sparqlanything/csv/CSVTriplifier.java
+A  sparql-anything-csv/src/main/java/io/github/sparqlanything/csv/package-info.java
+A  sparql-anything-csv/src/test/java/io/github/sparqlanything/csv/CSVTriplifierTest.java
+A  sparql-anything-csv/src/test/java/io/github/sparqlanything/csv/HeadersRowTest.java
+A  sparql-anything-csv/src/test/java/io/github/sparqlanything/csv/HeadersSanitizeTest.java
+A  sparql-anything-csv/src/test/java/io/github/sparqlanything/csv/MoreTest.java
+A  sparql-anything-csv/src/test/java/io/github/sparqlanything/csv/NullStringTest.java
+A  sparql-anything-csv/src/test/java/io/github/sparqlanything/csv/OnDiskTest.java
+A  sparql-anything-csv/src/test/java/io/github/sparqlanything/csv/QuoteCharTest.java
+A  sparql-anything-csv/src/test/java/io/github/sparqlanything/csv/TSVTest.java
+A  sparql-anything-csv/src/test/resources/1.csv
+A  sparql-anything-csv/src/test/resources/1.nq
+A  sparql-anything-csv/src/test/resources/HeadersRow.csv
+A  sparql-anything-csv/src/test/resources/HeadersRow.ttl
+A  sparql-anything-csv/src/test/resources/HeadersSanitize.csv
+A  sparql-anything-csv/src/test/resources/HeadersSanitize.ttl
+A  sparql-anything-csv/src/test/resources/NoQuote.csv
+A  sparql-anything-csv/src/test/resources/NoQuote.ttl
+A  sparql-anything-csv/src/test/resources/QuoteCharTrue.csv
+A  sparql-anything-csv/src/test/resources/QuoteCharTrue.ttl
+A  sparql-anything-csv/src/test/resources/Tsv.tsv
+A  sparql-anything-csv/src/test/resources/Tsv.ttl
+A  sparql-anything-csv/src/test/resources/other.csv
+R  sparql.anything.json/src/test/resources/emptyfile -> sparql-anything-csv/src/test/resources/other.ttl
+A  sparql-anything-csv/src/test/resources/test2.csv
+A  sparql-anything-csv/src/test/resources/test3.csv
+A  sparql-anything-docs/pom.xml
+A  sparql-anything-docs/src/main/java/io/github/sparqlanything/docs/DocxTriplifier.java
+A  sparql-anything-docs/src/main/java/io/github/sparqlanything/docs/package-info.java
+A  sparql-anything-docs/src/test/java/io/github/sparqlanything/docs/test/DocxTriplifierTest.java
+A  sparql-anything-docs/src/test/java/io/github/sparqlanything/docs/test/TestTriplifier.java
+A  sparql-anything-docs/src/test/resources/Doc1.docx
+A  sparql-anything-docs/src/test/resources/Doc1.ttl
+A  sparql-anything-docs/src/test/resources/Doc2.docx
+A  sparql-anything-docs/src/test/resources/Doc2.ttl
+A  sparql-anything-docs/src/test/resources/Doc3.docx
+A  sparql-anything-docs/src/test/resources/Doc3.ttl
+A  sparql-anything-docs/src/test/resources/Doc4.docx
+A  sparql-anything-docs/src/test/resources/Doc4.ttl
+A  sparql-anything-docs/src/test/resources/Doc5.docx
+A  sparql-anything-docs/src/test/resources/Doc5.ttl
+A  sparql-anything-documentation-generator/pom.xml
+A  sparql-anything-documentation-generator/src/main/java/io/github/sparqlanything/documentationgenerator/DocumentationGenerator.java
+A  sparql-anything-documentation-generator/src/main/java/io/github/sparqlanything/documentationgenerator/ExampleSection.java
+A  sparql-anything-documentation-generator/src/main/java/io/github/sparqlanything/documentationgenerator/FormatSection.java
+A  sparql-anything-documentation-generator/src/main/java/io/github/sparqlanything/documentationgenerator/OptionSection.java
+A  sparql-anything-documentation-generator/src/main/java/io/github/sparqlanything/documentationgenerator/TriplifierSection.java
+A  sparql-anything-documentation-generator/src/main/java/io/github/sparqlanything/documentationgenerator/Utils.java
+A  sparql-anything-documentation-generator/src/main/resources/io/github/sparqlanything/documentationgenerator/format.ftlh
+A  sparql-anything-engine/pom.xml
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/AnySlot.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/DatasetGraphCreator.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FXBGPFinder.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FXExecutionStrategy.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FXGraphMaterialisationStrategy.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FXStrategySelector.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FXSymbol.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FXWorker.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FacadeX.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FacadeXExecutionContext.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/FacadeXOpExecutor.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/InternalQueryCache.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/LocalCache.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/OpCloner.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/OpVisitorSkip.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/PropertyExtractor.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/QueryIterSlicer.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/UnboundVariableException.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/Utils.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/After.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Backward.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Before.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Bnode.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Cardinal.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Entity.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/ExpandPrefixFunction.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/ExpandPrefixedNameFunction.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/FXFunction.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Forward.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/IsContainerMembershipProperty.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/IsFacadeXExtension.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Literal.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Next.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Previous.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/RemoveTags.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/Serial.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/reflection/Converters.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/reflection/IncompatibleObjectException.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/reflection/NoConverterException.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/reflection/NodeValueConverter.java
+A  sparql-anything-engine/src/main/java/io/github/sparqlanything/engine/functions/reflection/ReflectionFunctionFactory.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/DocumentFunctions.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/ExpandPrefixTest.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/ExpandPrefixedNameTest.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/FunctionsTest.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/PrefixFunctionsTest.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/TestSilent.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/TestStrSplitInService.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/TestTriplifier.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/TestTriplifier2.java
+A  sparql-anything-engine/src/test/java/io/github/sparqlanything/engine/test/TriplifierRegistryTest.java
+A  sparql-anything-engine/src/test/resources/strSplit.csv
+A  sparql-anything-engine/src/test/resources/strSplit.sparql
+R  sparql.anything.engine/src/main/resources/test.json -> sparql-anything-engine/src/test/resources/test.json
+A  sparql-anything-fuseki/pom.xml
+R  sparql.anything.fuseki/src/main/java/com/github/spiceh2020/sparql/anything/fuseki/Endpoint.java -> sparql-anything-fuseki/src/main/java/io/github/sparqlanything/fuseki/Endpoint.java
+A  sparql-anything-fuseki/src/main/java/io/github/sparqlanything/fuseki/FunctionMetadata.java
+A  sparql-anything-fuseki/src/main/java/io/github/sparqlanything/fuseki/MagicPropertyMetadata.java
+A  sparql-anything-fuseki/src/main/java/io/github/sparqlanything/fuseki/ReflectionFunctionDocRegistry.java
+A  sparql-anything-fuseki/src/main/java/io/github/sparqlanything/fuseki/SnippetGenerator.java
+A  sparql-anything-fuseki/src/main/java/io/github/sparqlanything/fuseki/SnippetSection.java
+R  sparql.anything.fuseki/src/main/java/com/github/spiceh2020/sparql/anything/fuseki/TransformerConfiguration.java -> sparql-anything-fuseki/src/main/java/io/github/sparqlanything/fuseki/TransformerConfiguration.java
+A  sparql-anything-fuseki/src/main/java/io/github/sparqlanything/fuseki/YASGUIServlet.java
+A  sparql-anything-fuseki/src/main/resources/io/github/sparqlanything/fuseki/snippets.ftlh
+A  sparql-anything-fuseki/src/main/resources/io/github/sparqlanything/fuseki/yasgui.ftlh
+A  sparql-anything-fuseki/src/test/java/io/github/sparqlanything/fuseki/DebugFunctionRegistry.java
+A  sparql-anything-fuseki/src/test/java/io/github/sparqlanything/fuseki/ReflectionFunctionDocRegistryTest.java
+A  sparql-anything-fuseki/src/test/java/io/github/sparqlanything/fuseki/SnippetGeneratorTest.java
+A  sparql-anything-html/pom.xml
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/HTMLTriplifier.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/MetadataWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/Any23.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/ExtractionReport.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/cli/Tool.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/configuration/Configuration.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/configuration/DefaultConfiguration.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/configuration/DefaultModifiableConfiguration.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/configuration/ModifiableConfiguration.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/configuration/Setting.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/configuration/Settings.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/configuration/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/encoding/EncodingDetector.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/encoding/EncodingUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/encoding/TikaEncodingDetector.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/encoding/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExampleInputOutput.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractionContext.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractionException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractionParameters.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractionResult.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractionResultImpl.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/Extractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractorDescription.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractorGroup.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractorRegistry.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/ExtractorRegistryImpl.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/IssueReport.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/SimpleExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/SingleDocumentExtraction.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/SingleDocumentExtractionReport.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/TagSoupExtractionResult.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/AdrExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/AdrExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/DocumentReport.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/DomUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/EmbeddedJSONLDExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/EmbeddedJSONLDExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/EntityBasedMicroformatExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/GeoExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/GeoExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HCalendarExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HCalendarExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HCardExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HCardExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HCardName.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HListingExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HListingExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HRecipeExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HRecipeExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HResumeExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HResumeExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HReviewAggregateExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HReviewAggregateExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HReviewExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HReviewExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HTMLDocument.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HTMLMetaExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HTMLMetaExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HeadLinkExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/HeadLinkExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/ICBMExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/ICBMExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/JsoupUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/LicenseExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/LicenseExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/MicroformatExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/SpanCloserInputStream.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/SpeciesExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/SpeciesExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/TagSoupParser.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/TagSoupParsingConfiguration.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/TitleExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/TitleExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/TurtleHTMLExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/TurtleHTMLExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/XFNExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/XFNExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/annotations/Includes.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/annotations/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HAdrExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HAdrExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HCardExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HCardExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HEntryExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HEntryExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HEventExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HEventExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HGeoExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HGeoExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HItemExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HItemExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HProductExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HProductExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HRecipeExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HRecipeExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HResumeExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/HResumeExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/Microformats2Prefixes.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/annotations/Includes.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/annotations/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/microformats2/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/html/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/Item.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/ItemProp.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/ItemPropValue.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/ItemScope.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/MicrodataExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/MicrodataExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/MicrodataParser.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/MicrodataParserException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/MicrodataParserReport.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/microdata/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/BaseRDFExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/FunctionalSyntaxExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/FunctionalSyntaxExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/JSONLDExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/JSONLDExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/JSONLDJavaSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/JsonCleaningInputStream.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/ManchesterSyntaxExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/ManchesterSyntaxExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/NQuadsExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/NQuadsExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/NTriplesExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/NTriplesExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/RDFHandlerAdapter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/RDFParserFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/RDFXMLExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/RDFXMLExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/TriXExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/TriXExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/TurtleExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/TurtleExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdf/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/BaseRDFaExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/JsoupScanner.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/RDFa11Extractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/RDFa11ExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/RDFa11Parser.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/RDFa11ParserException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/RDFaExtractor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/RDFaExtractorFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/SemarglSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/XSLTStylesheet.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/XSLTStylesheetException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/extractor/rdfa/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/filter/ExtractionContextBlocker.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/filter/IgnoreAccidentalRDFa.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/filter/IgnoreTitlesOfEmptyDocuments.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/filter/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/http/AcceptHeaderBuilder.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/http/DefaultHTTPClient.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/http/DefaultHTTPClientConfiguration.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/http/HTTPClient.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/http/HTTPClientConfiguration.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/http/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/mime/MIMEType.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/mime/MIMETypeDetector.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/mime/NaiveMIMETypeDetector.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/mime/TikaMIMETypeDetector.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/mime/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/mime/purifier/Purifier.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/mime/purifier/WhiteSpacesPurifier.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/mime/purifier/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/plugin/Any23PluginManager.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/plugin/Author.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/plugin/ExtractorPlugin.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/plugin/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/rdf/Any23ValueFactoryWrapper.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/rdf/PopularPrefixes.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/rdf/Prefixes.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/rdf/RDFUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/rdf/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/source/ByteArrayDocumentSource.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/source/DocumentSource.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/source/FileDocumentSource.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/source/HTTPDocumentSource.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/source/LocalCopyFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/source/MemCopyFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/source/StringDocumentSource.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/source/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/util/DiscoveryUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/util/FileUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/util/LogUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/util/ReaderInputStream.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/util/StreamUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/util/StringUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/util/URLUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/util/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/DOMDocument.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/DefaultDOMDocument.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/DefaultRuleContext.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/DefaultValidationReport.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/DefaultValidationReportBuilder.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/DefaultValidator.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/EmptyValidationReport.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/Fix.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/Rule.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/RuleContext.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/SerializationException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/ValidationReport.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/ValidationReportBuilder.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/ValidationReportSerializer.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/Validator.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/ValidatorException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/XMLValidationReportSerializer.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/rule/AboutNotURIRule.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/rule/MetaNameMisuseFix.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/rule/MetaNameMisuseRule.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/rule/MissingItemscopeAttributeValueFix.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/rule/MissingItemscopeAttributeValueRule.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/rule/MissingOpenGraphNamespaceRule.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/rule/OpenGraphNamespaceFix.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/validator/rule/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/CSV.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/DCTerms.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/DOAC.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/DOAP.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/FOAF.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/GeoNames.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/HCard.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/HEntry.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/HEvent.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/HItem.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/HListing.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/HProduct.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/HRecipe.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/HResume.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/ICAL.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreAction.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreExpression.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreLegalAction.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreLegalRole.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreMereology.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreNorm.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreProcess.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreRelativePlaces.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreRole.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreRules.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreTime.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreTimeModification.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/LKIFCoreTop.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/OGP.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/OGPArticle.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/OGPBook.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/OGPMusic.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/OGPProfile.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/OGPVideo.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/Programme.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/RDFSchemaUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/Review.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/ReviewAggregate.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/SINDICE.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/SchemaOrg.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/VCard.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/Vocabulary.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/WO.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/XFN.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/XHTML.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/YAML.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/vocab/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/BenchmarkTripleHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/CompositeTripleHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/CountingTripleHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/DecoratingWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/FormatWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/JSONLDWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/JSONLDWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/JSONWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/JSONWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/LoggingTripleHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/NQuadsWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/NQuadsWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/NTriplesWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/NTriplesWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/RDFWriterTripleHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/RDFXMLWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/RDFXMLWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/ReportingTripleHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/RepositoryWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TriXWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TriXWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TripleFormat.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TripleHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TripleHandlerException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TripleWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TripleWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TripleWriterHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TurtleWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/TurtleWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/URIListWriter.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/URIListWriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/WriterFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/WriterFactoryRegistry.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/WriterSettings.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/apache/any23/writer/package-info.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/NQuadsParser.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/NQuadsSerializer.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/NTriplesParser.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/NTriplesSerializer.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/ParseException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/ProcessorGraphHandler.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/RdfXmlParser.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/TurtleSerializer.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/rdfa/DocumentContext.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/rdfa/EvalContext.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/rdfa/RdfaParser.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/rdfa/VocabManager.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf/rdfa/Vocabulary.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf4j/core/sink/RDF4JSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf4j/rdf/rdfa/RDF4JRDFaParser.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf4j/rdf/rdfa/RDF4JRDFaParserFactory.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/rdf4j/rdf/rdfa/SemarglParserSettings.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/ri/MalformedCurieException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/ri/MalformedIriException.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/ri/RIUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/sink/CharOutputSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/sink/CharSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/sink/DataSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/sink/Pipe.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/sink/QuadSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/sink/TripleSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/sink/XmlSink.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/source/AbstractSource.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/source/BaseStreamProcessor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/source/CharSource.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/source/StreamProcessor.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/source/XmlSource.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/vocab/OWL.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/vocab/RDF.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/vocab/RDFS.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/vocab/RDFa.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/vocab/XSD.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/org/semarglproject/xml/XmlUtils.java
+A  sparql-anything-html/src/main/java/io/github/sparqlanything/html/package-info.java
+A  sparql-anything-html/src/main/resources/default-configuration.properties
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/csv/example-csv.csv
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-embedded-jsonld.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-head-link.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-icbm.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-meta.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-adr.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-geo.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-hcalendar.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-hcard.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-hlisting.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-hrecipe.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-hresume.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-hreview-aggregate.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-hreview.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-license.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-species.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-mf-xfn.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-script-turtle.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/example-title.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/microformats2/example-mf2-h-adr.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/html/microformats2/example-mf2-h-geo.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/microdata/example-microdata.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdf/example-functionalsyntax.ofn
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdf/example-jsonld.jsonld
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdf/example-manchestersyntax.omn
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdf/example-nquads.nq
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdf/example-ntriples.nt
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdf/example-rdfxml.rdf
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdf/example-trix.trx
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdf/example-turtle.ttl
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdfa/example-rdfa11.html
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/rdfa/rdfa.xslt
+A  sparql-anything-html/src/main/resources/org/apache/any23/extractor/yaml/example.yaml
+A  sparql-anything-html/src/main/resources/org/apache/any23/mime/mimetypes.xml
+A  sparql-anything-html/src/main/resources/org/apache/any23/mime/tika-config.xml
+A  sparql-anything-html/src/main/resources/org/apache/any23/prefixes/prefixes.properties
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/BlankNodesTest.java
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/HTMLBaseTest.java
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/HTMLMicrodataTest.java
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/HTMLTriplifierTest.java
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/MetadataSandbox.java
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/MicroformatTest.java
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/RDFaTest.java
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/XHTMLTest.java
+A  sparql-anything-html/src/test/java/io/github/sparqlanything/html/XMLTest.java
+A  sparql-anything-html/src/test/resources/BN.html
+A  sparql-anything-html/src/test/resources/BN.nq
+A  sparql-anything-html/src/test/resources/Base.html
+A  sparql-anything-html/src/test/resources/Base.ttl
+A  sparql-anything-html/src/test/resources/DIRTY1.html
+A  sparql-anything-html/src/test/resources/DIRTY1.ttl
+A  sparql-anything-html/src/test/resources/HTML1.html
+A  sparql-anything-html/src/test/resources/HTML1.ttl
+A  sparql-anything-html/src/test/resources/HTML2.html
+A  sparql-anything-html/src/test/resources/HTML2.ttl
+A  sparql-anything-html/src/test/resources/Microdata1.html
+A  sparql-anything-html/src/test/resources/Microdata1.nq
+A  sparql-anything-html/src/test/resources/Microformat1.html
+A  sparql-anything-html/src/test/resources/Microformat1.nq
+A  sparql-anything-html/src/test/resources/RDFa.html
+A  sparql-anything-html/src/test/resources/RDFa.nq
+A  sparql-anything-html/src/test/resources/XHTML.ttl
+A  sparql-anything-html/src/test/resources/XHTML.xhtml
+A  sparql-anything-html/src/test/resources/XML.ttl
+A  sparql-anything-html/src/test/resources/XML.xml
+A  sparql-anything-it/pom.xml
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/AbstractExecutionTester.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/CacheTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/CommandTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentFunctions.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/ExecutionsTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/InternalCacheTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/IssuesTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/ItTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/ItTripleFilteringTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/ReuseQueryTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/S3InputTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/Sandbox.java
+R  sparql.anything.it/src/test/java/com/github/spiceh2020/sparql/anything/it/SandboxTest.java -> sparql-anything-it/src/test/java/io/github/sparqlanything/it/SandboxTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/SlicingTest.java
+A  sparql-anything-it/src/test/java/io/github/sparqlanything/it/ValueOptionsTest.java
+R  sparql.anything.it/src/test/resources/Book1.xls -> sparql-anything-it/src/test/resources/Book1.xls
+A  sparql-anything-it/src/test/resources/DocExamples/extract.sparql
+A  sparql-anything-it/src/test/resources/DocExamples/json.json
+R  sparql.anything.json/src/test/resources/friends.json -> sparql-anything-it/src/test/resources/DocExamples/json2.json
+A  sparql-anything-it/src/test/resources/DocExamples/simple.csv
+A  sparql-anything-it/src/test/resources/DocExamples/simple.html
+A  sparql-anything-it/src/test/resources/Document.docx
+A  sparql-anything-it/src/test/resources/ExecutionSelect.csv
+A  sparql-anything-it/src/test/resources/ExecutionSelect.sparql
+A  sparql-anything-it/src/test/resources/ExecutionSelectInput.csv
+A  sparql-anything-it/src/test/resources/MemberFalse.csv
+A  sparql-anything-it/src/test/resources/MemberFalse.ttl
+A  sparql-anything-it/src/test/resources/MemberTrue.csv
+A  sparql-anything-it/src/test/resources/MemberTrue.ttl
+A  sparql-anything-it/src/test/resources/NullStringsFalse.csv
+A  sparql-anything-it/src/test/resources/NullStringsFalse.ttl
+A  sparql-anything-it/src/test/resources/NullStringsTrue.csv
+A  sparql-anything-it/src/test/resources/NullStringsTrue.ttl
+A  sparql-anything-it/src/test/resources/PlainSelect.csv
+A  sparql-anything-it/src/test/resources/PlainSelect.sparql
+A  sparql-anything-it/src/test/resources/Presentation1.pptx
+A  sparql-anything-it/src/test/resources/ReifySlotStatements.csv
+A  sparql-anything-it/src/test/resources/ReifySlotStatements.ttl
+A  sparql-anything-it/src/test/resources/SliceSelect.csv
+A  sparql-anything-it/src/test/resources/SliceSelect.sparql
+A  sparql-anything-it/src/test/resources/SliceSelect2.csv
+A  sparql-anything-it/src/test/resources/SliceSelect2.sparql
+A  sparql-anything-it/src/test/resources/SliceSelect2Input.csv
+A  sparql-anything-it/src/test/resources/SliceSelectInput.csv
+A  sparql-anything-it/src/test/resources/SliceSelectSize.csv
+A  sparql-anything-it/src/test/resources/SliceSelectSize.sparql
+A  sparql-anything-it/src/test/resources/SliceSelectSizeInput.csv
+A  sparql-anything-it/src/test/resources/TrimStringsFalse.csv
+A  sparql-anything-it/src/test/resources/TrimStringsFalse.ttl
+A  sparql-anything-it/src/test/resources/TrimStringsTrue.csv
+A  sparql-anything-it/src/test/resources/TrimStringsTrue.ttl
+A  sparql-anything-it/src/test/resources/anySlotPath.json
+A  sparql-anything-it/src/test/resources/commands/echo.sparql
+A  sparql-anything-it/src/test/resources/commands/logs.sparql
+A  sparql-anything-it/src/test/resources/commands/shell_pipeline.sparql
+A  sparql-anything-it/src/test/resources/construct.rq
+A  sparql-anything-it/src/test/resources/constructResource.sparql
+A  sparql-anything-it/src/test/resources/issue93.html
+A  sparql-anything-it/src/test/resources/issue93.sparql
+A  sparql-anything-it/src/test/resources/issues/a00002-1036.xml
+A  sparql-anything-it/src/test/resources/issues/e.sparql
+A  "sparql-anything-it/src/test/resources/issues/issue 478.xls"
+A  sparql-anything-it/src/test/resources/issues/issue154.sparql
+A  sparql-anything-it/src/test/resources/issues/issue154.xml
+A  sparql-anything-it/src/test/resources/issues/issue173-1.sparql
+A  sparql-anything-it/src/test/resources/issues/issue173-2.sparql
+A  sparql-anything-it/src/test/resources/issues/issue175-2.sparql
+A  sparql-anything-it/src/test/resources/issues/issue175.sparql
+A  sparql-anything-it/src/test/resources/issues/issue180-csv.sparql
+A  sparql-anything-it/src/test/resources/issues/issue180-xls.sparql
+A  sparql-anything-it/src/test/resources/issues/issue180.csv
+A  sparql-anything-it/src/test/resources/issues/issue180.xls
+A  sparql-anything-it/src/test/resources/issues/issue194.sparql
+A  sparql-anything-it/src/test/resources/issues/issue197.sparql
+A  sparql-anything-it/src/test/resources/issues/issue241.sparql
+A  sparql-anything-it/src/test/resources/issues/issue241b.sparql
+A  sparql-anything-it/src/test/resources/issues/issue255.json
+A  sparql-anything-it/src/test/resources/issues/issue255.sparql
+A  sparql-anything-it/src/test/resources/issues/issue256.json
+A  sparql-anything-it/src/test/resources/issues/issue256.sparql
+A  sparql-anything-it/src/test/resources/issues/issue256.ttl
+A  sparql-anything-it/src/test/resources/issues/issue260.csv
+A  sparql-anything-it/src/test/resources/issues/issue260.sparql
+A  sparql-anything-it/src/test/resources/issues/issue264.txt
+A  sparql-anything-it/src/test/resources/issues/issue280.json
+A  sparql-anything-it/src/test/resources/issues/issue284.json
+A  sparql-anything-it/src/test/resources/issues/issue284.ttl
+A  sparql-anything-it/src/test/resources/issues/issue295.json
+A  sparql-anything-it/src/test/resources/issues/issue295.sparql
+A  sparql-anything-it/src/test/resources/issues/issue330.sparql
+A  sparql-anything-it/src/test/resources/issues/issue334.sparql
+A  sparql-anything-it/src/test/resources/issues/issue334.tar
+A  sparql-anything-it/src/test/resources/issues/issue351.sparql
+A  sparql-anything-it/src/test/resources/issues/issue351.xls
+A  sparql-anything-it/src/test/resources/issues/issue352-csv.sparql
+A  sparql-anything-it/src/test/resources/issues/issue352-xls.sparql
+A  sparql-anything-it/src/test/resources/issues/issue352.csv
+A  sparql-anything-it/src/test/resources/issues/issue352.xls
+A  sparql-anything-it/src/test/resources/issues/issue356.sparql
+A  sparql-anything-it/src/test/resources/issues/issue371.sparql
+A  sparql-anything-it/src/test/resources/issues/issue371.xls
+A  sparql-anything-it/src/test/resources/issues/issue386.sparql
+A  sparql-anything-it/src/test/resources/issues/issue421.sparql
+A  sparql-anything-it/src/test/resources/issues/issue429.pptx
+A  sparql-anything-it/src/test/resources/issues/issue429.sparql
+A  sparql-anything-it/src/test/resources/issues/issue478-2.sparql
+A  sparql-anything-it/src/test/resources/issues/issue478.sparql
+A  sparql-anything-it/src/test/resources/issues/issue482.sparql
+A  sparql-anything-it/src/test/resources/issues/issue482.xlsx
+A  sparql-anything-it/src/test/resources/issues/issue515.something
+A  sparql-anything-it/src/test/resources/issues/issue515.sparql
+A  sparql-anything-it/src/test/resources/issues/issue545.sparql
+A  sparql-anything-it/src/test/resources/issues/issue553.sparql
+A  sparql-anything-it/src/test/resources/issues/issue554.sparql
+A  sparql-anything-it/src/test/resources/issues/issue565.sparql
+A  sparql-anything-it/src/test/resources/issues/issue565.txt
+A  sparql-anything-it/src/test/resources/issues/test
+A  sparql-anything-it/src/test/resources/issues/test.tar
+R  sparql.anything.it/src/test/resources/nquads.nq -> sparql-anything-it/src/test/resources/nquads.nq
+A  sparql-anything-it/src/test/resources/propertypath.json
+A  sparql-anything-it/src/test/resources/query3.sparql
+A  sparql-anything-it/src/test/resources/queryReuse/reuseConstruct.rq
+A  sparql-anything-it/src/test/resources/queryReuse/reuseConstructDataset.rq
+A  sparql-anything-it/src/test/resources/queryReuse/reuseDescribe.rq
+A  sparql-anything-it/src/test/resources/queryReuse/reuseSelect.rq
+A  sparql-anything-it/src/test/resources/queryReuse/reuseSelectBGP.rq
+A  sparql-anything-it/src/test/resources/queryReuse/subQueryConstruct.rq
+A  sparql-anything-it/src/test/resources/queryReuse/subQueryConstructDataset.rq
+A  sparql-anything-it/src/test/resources/queryReuse/subQueryDescribe.rq
+A  sparql-anything-it/src/test/resources/queryReuse/subQuerySelect.rq
+A  sparql-anything-it/src/test/resources/select.rq
+R  sparql.anything.it/src/test/resources/tate-gallery.sparql -> sparql-anything-it/src/test/resources/tate-gallery.sparql
+R  sparql.anything.it/src/test/resources/tate-gallery/A01009_8.jpg -> sparql-anything-it/src/test/resources/tate-gallery/A01009_8.jpg
+R  sparql.anything.it/src/test/resources/tate-gallery/a01000-14700.json -> sparql-anything-it/src/test/resources/tate-gallery/a01000-14700.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01001-14701.json -> sparql-anything-it/src/test/resources/tate-gallery/a01001-14701.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01002-14702.json -> sparql-anything-it/src/test/resources/tate-gallery/a01002-14702.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01003-14703.json -> sparql-anything-it/src/test/resources/tate-gallery/a01003-14703.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01004-14704.json -> sparql-anything-it/src/test/resources/tate-gallery/a01004-14704.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01005-14705.json -> sparql-anything-it/src/test/resources/tate-gallery/a01005-14705.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01006-14706.json -> sparql-anything-it/src/test/resources/tate-gallery/a01006-14706.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01007-14707.json -> sparql-anything-it/src/test/resources/tate-gallery/a01007-14707.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01008-14708.json -> sparql-anything-it/src/test/resources/tate-gallery/a01008-14708.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01009-14709.json -> sparql-anything-it/src/test/resources/tate-gallery/a01009-14709.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01010-14710.json -> sparql-anything-it/src/test/resources/tate-gallery/a01010-14710.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01011-14711.json -> sparql-anything-it/src/test/resources/tate-gallery/a01011-14711.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01012-14712.json -> sparql-anything-it/src/test/resources/tate-gallery/a01012-14712.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01013-14713.json -> sparql-anything-it/src/test/resources/tate-gallery/a01013-14713.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01014-14714.json -> sparql-anything-it/src/test/resources/tate-gallery/a01014-14714.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01015-14715.json -> sparql-anything-it/src/test/resources/tate-gallery/a01015-14715.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01016-16041.json -> sparql-anything-it/src/test/resources/tate-gallery/a01016-16041.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01017-16042.json -> sparql-anything-it/src/test/resources/tate-gallery/a01017-16042.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01018-16043.json -> sparql-anything-it/src/test/resources/tate-gallery/a01018-16043.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01019-16044.json -> sparql-anything-it/src/test/resources/tate-gallery/a01019-16044.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01020-16166.json -> sparql-anything-it/src/test/resources/tate-gallery/a01020-16166.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01021-16171.json -> sparql-anything-it/src/test/resources/tate-gallery/a01021-16171.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01022-16167.json -> sparql-anything-it/src/test/resources/tate-gallery/a01022-16167.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01023-16168.json -> sparql-anything-it/src/test/resources/tate-gallery/a01023-16168.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01024-16169.json -> sparql-anything-it/src/test/resources/tate-gallery/a01024-16169.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01025-16170.json -> sparql-anything-it/src/test/resources/tate-gallery/a01025-16170.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01026-16393.json -> sparql-anything-it/src/test/resources/tate-gallery/a01026-16393.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01027-16394.json -> sparql-anything-it/src/test/resources/tate-gallery/a01027-16394.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01028-16395.json -> sparql-anything-it/src/test/resources/tate-gallery/a01028-16395.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01029-550.json -> sparql-anything-it/src/test/resources/tate-gallery/a01029-550.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01030-551.json -> sparql-anything-it/src/test/resources/tate-gallery/a01030-551.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01031-552.json -> sparql-anything-it/src/test/resources/tate-gallery/a01031-552.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01032-553.json -> sparql-anything-it/src/test/resources/tate-gallery/a01032-553.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01033-554.json -> sparql-anything-it/src/test/resources/tate-gallery/a01033-554.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01034-622.json -> sparql-anything-it/src/test/resources/tate-gallery/a01034-622.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01035-623.json -> sparql-anything-it/src/test/resources/tate-gallery/a01035-623.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01036-624.json -> sparql-anything-it/src/test/resources/tate-gallery/a01036-624.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01037-625.json -> sparql-anything-it/src/test/resources/tate-gallery/a01037-625.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01038-850.json -> sparql-anything-it/src/test/resources/tate-gallery/a01038-850.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01039-851.json -> sparql-anything-it/src/test/resources/tate-gallery/a01039-851.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01040-852.json -> sparql-anything-it/src/test/resources/tate-gallery/a01040-852.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01041-853.json -> sparql-anything-it/src/test/resources/tate-gallery/a01041-853.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01042-854.json -> sparql-anything-it/src/test/resources/tate-gallery/a01042-854.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01043-855.json -> sparql-anything-it/src/test/resources/tate-gallery/a01043-855.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01044-856.json -> sparql-anything-it/src/test/resources/tate-gallery/a01044-856.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01045-857.json -> sparql-anything-it/src/test/resources/tate-gallery/a01045-857.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01046-858.json -> sparql-anything-it/src/test/resources/tate-gallery/a01046-858.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01047-859.json -> sparql-anything-it/src/test/resources/tate-gallery/a01047-859.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01048-860.json -> sparql-anything-it/src/test/resources/tate-gallery/a01048-860.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01049-861.json -> sparql-anything-it/src/test/resources/tate-gallery/a01049-861.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01050-862.json -> sparql-anything-it/src/test/resources/tate-gallery/a01050-862.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01051-863.json -> sparql-anything-it/src/test/resources/tate-gallery/a01051-863.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01052-864.json -> sparql-anything-it/src/test/resources/tate-gallery/a01052-864.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01053-865.json -> sparql-anything-it/src/test/resources/tate-gallery/a01053-865.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01054-866.json -> sparql-anything-it/src/test/resources/tate-gallery/a01054-866.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01055-867.json -> sparql-anything-it/src/test/resources/tate-gallery/a01055-867.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01056-868.json -> sparql-anything-it/src/test/resources/tate-gallery/a01056-868.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01057-869.json -> sparql-anything-it/src/test/resources/tate-gallery/a01057-869.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01058-870.json -> sparql-anything-it/src/test/resources/tate-gallery/a01058-870.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01059-871.json -> sparql-anything-it/src/test/resources/tate-gallery/a01059-871.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01060-872.json -> sparql-anything-it/src/test/resources/tate-gallery/a01060-872.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01061-1870.json -> sparql-anything-it/src/test/resources/tate-gallery/a01061-1870.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01062-1871.json -> sparql-anything-it/src/test/resources/tate-gallery/a01062-1871.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01063-1872.json -> sparql-anything-it/src/test/resources/tate-gallery/a01063-1872.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01064-2249.json -> sparql-anything-it/src/test/resources/tate-gallery/a01064-2249.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01065-2250.json -> sparql-anything-it/src/test/resources/tate-gallery/a01065-2250.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01066-2251.json -> sparql-anything-it/src/test/resources/tate-gallery/a01066-2251.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01067-2252.json -> sparql-anything-it/src/test/resources/tate-gallery/a01067-2252.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01068-2253.json -> sparql-anything-it/src/test/resources/tate-gallery/a01068-2253.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01069-2254.json -> sparql-anything-it/src/test/resources/tate-gallery/a01069-2254.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01070-2255.json -> sparql-anything-it/src/test/resources/tate-gallery/a01070-2255.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01071-2256.json -> sparql-anything-it/src/test/resources/tate-gallery/a01071-2256.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01072-2257.json -> sparql-anything-it/src/test/resources/tate-gallery/a01072-2257.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01073-2258.json -> sparql-anything-it/src/test/resources/tate-gallery/a01073-2258.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01074-5627.json -> sparql-anything-it/src/test/resources/tate-gallery/a01074-5627.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01075-5628.json -> sparql-anything-it/src/test/resources/tate-gallery/a01075-5628.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01076-5629.json -> sparql-anything-it/src/test/resources/tate-gallery/a01076-5629.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01077-5630.json -> sparql-anything-it/src/test/resources/tate-gallery/a01077-5630.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01078-5631.json -> sparql-anything-it/src/test/resources/tate-gallery/a01078-5631.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01079-5632.json -> sparql-anything-it/src/test/resources/tate-gallery/a01079-5632.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01080-5633.json -> sparql-anything-it/src/test/resources/tate-gallery/a01080-5633.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01081-5634.json -> sparql-anything-it/src/test/resources/tate-gallery/a01081-5634.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01082-7073.json -> sparql-anything-it/src/test/resources/tate-gallery/a01082-7073.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01083-7074.json -> sparql-anything-it/src/test/resources/tate-gallery/a01083-7074.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01084-7075.json -> sparql-anything-it/src/test/resources/tate-gallery/a01084-7075.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01085-7076.json -> sparql-anything-it/src/test/resources/tate-gallery/a01085-7076.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01086-7077.json -> sparql-anything-it/src/test/resources/tate-gallery/a01086-7077.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01087-7078.json -> sparql-anything-it/src/test/resources/tate-gallery/a01087-7078.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01088-7079.json -> sparql-anything-it/src/test/resources/tate-gallery/a01088-7079.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01089-12180.json -> sparql-anything-it/src/test/resources/tate-gallery/a01089-12180.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01090-12181.json -> sparql-anything-it/src/test/resources/tate-gallery/a01090-12181.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01091-12182.json -> sparql-anything-it/src/test/resources/tate-gallery/a01091-12182.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01092-12183.json -> sparql-anything-it/src/test/resources/tate-gallery/a01092-12183.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01093-12184.json -> sparql-anything-it/src/test/resources/tate-gallery/a01093-12184.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01094-12185.json -> sparql-anything-it/src/test/resources/tate-gallery/a01094-12185.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01095-12186.json -> sparql-anything-it/src/test/resources/tate-gallery/a01095-12186.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01096-12187.json -> sparql-anything-it/src/test/resources/tate-gallery/a01096-12187.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01097-12188.json -> sparql-anything-it/src/test/resources/tate-gallery/a01097-12188.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01098-12189.json -> sparql-anything-it/src/test/resources/tate-gallery/a01098-12189.json
+R  sparql.anything.it/src/test/resources/tate-gallery/a01099-12190.json -> sparql-anything-it/src/test/resources/tate-gallery/a01099-12190.json
+R  sparql.anything.it/src/test/resources/tate-gallery/artwork_data.csv -> sparql-anything-it/src/test/resources/tate-gallery/artwork_data.csv
+R  sparql.anything.it/src/test/resources/tate-gallery1.sparql -> sparql-anything-it/src/test/resources/tate-gallery1.sparql
+R  sparql.anything.it/src/test/resources/tate-gallery2.sparql -> sparql-anything-it/src/test/resources/tate-gallery2.sparql
+A  sparql-anything-it/src/test/resources/test-propbank.xml
+A  sparql-anything-it/src/test/resources/test.tar
+A  sparql-anything-it/src/test/resources/test/test.csv
+A  sparql-anything-it/src/test/resources/test/test.json
+A  sparql-anything-it/src/test/resources/test/test.txt
+A  sparql-anything-it/src/test/resources/test/test.xml
+R  sparql.anything.it/src/test/resources/test1.csv -> sparql-anything-it/src/test/resources/test1.csv
+A  sparql-anything-json/pom.xml
+A  sparql-anything-json/src/main/java/io/github/sparqlanything/json/JSONPathSlice.java
+A  sparql-anything-json/src/main/java/io/github/sparqlanything/json/JSONSlice.java
+A  sparql-anything-json/src/main/java/io/github/sparqlanything/json/JSONTokenSlice.java
+A  sparql-anything-json/src/main/java/io/github/sparqlanything/json/JSONTriplifier.java
+A  sparql-anything-json/src/main/java/io/github/sparqlanything/json/package-info.java
+A  sparql-anything-json/src/test/java/io/github/sparqlanything/json/test/BaseTest.java
+A  sparql-anything-json/src/test/java/io/github/sparqlanything/json/test/JSONNullValuesTest.java
+A  sparql-anything-json/src/test/java/io/github/sparqlanything/json/test/JSONTripleFilteringTest.java
+R  sparql.anything.json/src/test/java/com/github/spiceh2020/sparql/anything/json/test/JSON2RDFTransformerTest.java -> sparql-anything-json/src/test/java/io/github/sparqlanything/json/test/JSONTriplifierTest.java
+A  sparql-anything-json/src/test/java/io/github/sparqlanything/json/test/MoreJSONTriplifierTest.java
+A  sparql-anything-json/src/test/resources/JsonLiteral.json
+A  sparql-anything-json/src/test/resources/JsonLiteral.ttl
+A  sparql-anything-json/src/test/resources/MultiJsonPath.json
+A  sparql-anything-json/src/test/resources/MultiJsonPath.ttl
+A  sparql-anything-json/src/test/resources/NullValues.json
+A  sparql-anything-json/src/test/resources/NullValues.ttl
+A  sparql-anything-json/src/test/resources/NullValues_2.json
+A  sparql-anything-json/src/test/resources/NullValues_2.ttl
+A  sparql-anything-json/src/test/resources/Object.json
+A  sparql-anything-json/src/test/resources/Object.ttl
+A  sparql-anything-json/src/test/resources/SliceArray.json
+A  sparql-anything-json/src/test/resources/SliceArray.ttl
+A  sparql-anything-json/src/test/resources/SliceArray_2.json
+A  sparql-anything-json/src/test/resources/SliceArray_2.ttl
+A  sparql-anything-json/src/test/resources/SliceObject.json
+A  sparql-anything-json/src/test/resources/SliceObject.ttl
+A  sparql-anything-json/src/test/resources/ValueTypes_1.json
+A  sparql-anything-json/src/test/resources/ValueTypes_1.ttl
+R  sparql.anything.json/src/test/resources/emptyarray.json -> sparql-anything-json/src/test/resources/emptyarray.json
+A  sparql-anything-json/src/test/resources/emptyfile
+R  sparql.anything.json/src/test/resources/emptyobject.json -> sparql-anything-json/src/test/resources/emptyobject.json
+A  sparql-anything-json/src/test/resources/friends.json
+R  sparql.anything.json/src/test/resources/p05259-15628.json -> sparql-anything-json/src/test/resources/p05259-15628.json
+A  sparql-anything-json/src/test/resources/t09122-23226.json
+A  sparql-anything-json/src/test/resources/test.json
+R  sparql.anything.json/src/test/resources/testarray.json -> sparql-anything-json/src/test/resources/testarray.json
+R  sparql.anything.json/src/test/resources/testduplicatekey.json -> sparql-anything-json/src/test/resources/testduplicatekey.json
+R  sparql.anything.json/src/test/resources/testnumbers.json -> sparql-anything-json/src/test/resources/testnumbers.json
+R  sparql.anything.json/src/test/resources/testprimitive.json -> sparql-anything-json/src/test/resources/testprimitive.json
+R  sparql.anything.json/src/test/resources/whitespaceKeys.json -> sparql-anything-json/src/test/resources/whitespaceKeys.json
+A  sparql-anything-libs/pom.xml
+A  sparql-anything-markdown/pom.xml
+A  sparql-anything-markdown/src/main/java/io/github/sparqlanything/markdown/MARKDOWNTriplifier.java
+A  sparql-anything-markdown/src/main/java/io/github/sparqlanything/markdown/YamlFrontMatter.java
+A  sparql-anything-markdown/src/main/java/io/github/sparqlanything/markdown/YamlFrontMatterGatherer.java
+A  sparql-anything-markdown/src/main/java/io/github/sparqlanything/markdown/YamlFrontMatterGathererExtension.java
+A  sparql-anything-markdown/src/main/java/io/github/sparqlanything/markdown/package-info.java
+A  sparql-anything-markdown/src/test/java/io/github/sparqlanything/markdown/MARKDOWNTriplifierTest.java
+A  sparql-anything-markdown/src/test/resources/BlockQuote.md
+A  sparql-anything-markdown/src/test/resources/BlockQuote.ttl
+A  sparql-anything-markdown/src/test/resources/BulletList.md
+A  sparql-anything-markdown/src/test/resources/BulletList.ttl
+A  sparql-anything-markdown/src/test/resources/Code.md
+A  sparql-anything-markdown/src/test/resources/Code.ttl
+A  sparql-anything-markdown/src/test/resources/Document.md
+A  sparql-anything-markdown/src/test/resources/Document.ttl
+A  sparql-anything-markdown/src/test/resources/Document_2.md
+A  sparql-anything-markdown/src/test/resources/Document_2.ttl
+A  sparql-anything-markdown/src/test/resources/DocumentationExample.md
+A  sparql-anything-markdown/src/test/resources/DocumentationExample.ttl
+A  sparql-anything-markdown/src/test/resources/Emphasis.md
+A  sparql-anything-markdown/src/test/resources/Emphasis.ttl
+A  sparql-anything-markdown/src/test/resources/FencedCodeBlock.md
+A  sparql-anything-markdown/src/test/resources/FencedCodeBlock.ttl
+A  sparql-anything-markdown/src/test/resources/HardLineBreak.md
+A  sparql-anything-markdown/src/test/resources/HardLineBreak.ttl
+A  sparql-anything-markdown/src/test/resources/Heading.md
+A  sparql-anything-markdown/src/test/resources/Heading.ttl
+A  sparql-anything-markdown/src/test/resources/HtmlBlock.md
+A  sparql-anything-markdown/src/test/resources/HtmlBlock.ttl
+A  sparql-anything-markdown/src/test/resources/HtmlInline.md
+A  sparql-anything-markdown/src/test/resources/HtmlInline.ttl
+A  sparql-anything-markdown/src/test/resources/Image.md
+A  sparql-anything-markdown/src/test/resources/Image.ttl
+A  sparql-anything-markdown/src/test/resources/IndentedCodeBlock.md
+A  sparql-anything-markdown/src/test/resources/IndentedCodeBlock.ttl
+A  sparql-anything-markdown/src/test/resources/Link.md
+A  sparql-anything-markdown/src/test/resources/Link.ttl
+A  sparql-anything-markdown/src/test/resources/LinkReferenceDefinition.md
+A  sparql-anything-markdown/src/test/resources/LinkReferenceDefinition.ttl
+A  sparql-anything-markdown/src/test/resources/Link_2.md
+A  sparql-anything-markdown/src/test/resources/Link_2.ttl
+A  sparql-anything-markdown/src/test/resources/ListItem.md
+A  sparql-anything-markdown/src/test/resources/ListItem.ttl
+A  sparql-anything-markdown/src/test/resources/OrderedList.md
+A  sparql-anything-markdown/src/test/resources/OrderedList.ttl
+A  sparql-anything-markdown/src/test/resources/OrderedList_2.md
+A  sparql-anything-markdown/src/test/resources/OrderedList_2.ttl
+A  sparql-anything-markdown/src/test/resources/Paragraph.md
+A  sparql-anything-markdown/src/test/resources/Paragraph.ttl
+A  sparql-anything-markdown/src/test/resources/SoftLineBreak.md
+A  sparql-anything-markdown/src/test/resources/SoftLineBreak.ttl
+A  sparql-anything-markdown/src/test/resources/StrongEmphasis.md
+A  sparql-anything-markdown/src/test/resources/StrongEmphasis.ttl
+A  sparql-anything-markdown/src/test/resources/Table.md
+A  sparql-anything-markdown/src/test/resources/Table.ttl
+A  sparql-anything-markdown/src/test/resources/Table_2.md
+A  sparql-anything-markdown/src/test/resources/Table_2.ttl
+A  sparql-anything-markdown/src/test/resources/Text.md
+A  sparql-anything-markdown/src/test/resources/Text.ttl
+A  sparql-anything-markdown/src/test/resources/ThematicBreak.md
+A  sparql-anything-markdown/src/test/resources/ThematicBreak.ttl
+A  sparql-anything-markdown/src/test/resources/YamlFrontMatter.md
+A  sparql-anything-markdown/src/test/resources/YamlFrontMatter.ttl
+A  sparql-anything-markdown/src/test/resources/simple.md
+A  sparql-anything-metadata/pom.xml
+A  sparql-anything-metadata/src/main/java/io/github/sparqlanything/metadata/MetadataTriplifier.java
+A  sparql-anything-metadata/src/main/java/io/github/sparqlanything/metadata/package-info.java
+A  sparql-anything-metadata/src/test/java/io/github/sparqlanything/metadata/test/MetadataTriplifierTest.java
+A  sparql-anything-model/pom.xml
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/BaseFacadeXBuilder.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/BaseFacadeXGraphBuilder.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/CloseableIterable.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/FacadeXAbstractNodeBuilder.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/FacadeXComponentHandler.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/FacadeXGraphBuilder.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/FacadeXNodeBuilder.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/FacadeXQuadHandler.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/HTTPHelper.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/IRIArgument.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/OpComponentsAnalyser.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/PluginInitializer.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/PropertyUtils.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/SPARQLAnythingConstants.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/SPARQLAnythingContext.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/Slice.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/Slicer.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/TripleFilteringFacadeXGraphBuilder.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/Triplifier.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/TriplifierHTTPException.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/TriplifierRegister.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/TriplifierRegisterException.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/Utils.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/annotations/Example.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/annotations/Examples.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/annotations/FXFunctionDoc.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/annotations/Format.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/annotations/MagicPropertyDoc.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/annotations/Option.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/annotations/Triplifier.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/resources/CommandInputService.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/resources/ContentInputService.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/resources/LocationInputService.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/resources/ResourceService.java
+A  sparql-anything-model/src/main/java/io/github/sparqlanything/model/resources/annotations/TargetOption.java
+A  sparql-anything-model/src/main/resources/META-INF/services/io.github.sparqlanything.model.resources.ResourceService
+A  sparql-anything-model/src/test/java/io/github/sparqlanything/model/test/BaseFacadeXGraphBuilderTest.java
+A  sparql-anything-model/src/test/java/io/github/sparqlanything/model/test/HTTPHelperTest.java
+A  sparql-anything-model/src/test/java/io/github/sparqlanything/model/test/ResourceManagerTest.java
+A  sparql-anything-model/src/test/java/io/github/sparqlanything/model/test/StreamWithMemorySandbox.java
+A  sparql-anything-model/src/test/java/io/github/sparqlanything/model/test/TestTriplifierEscaper.java
+A  sparql-anything-model/src/test/java/io/github/sparqlanything/model/test/TripleFilteringFacadeXBuilderTest.java
+A  sparql-anything-model/src/test/java/io/github/sparqlanything/model/test/TriplifierGetPropertyValuesTest.java
+A  sparql-anything-model/src/test/java/io/github/sparqlanything/model/test/TriplifierTest.java
+A  sparql-anything-model/src/test/resources/test.tar
+A  sparql-anything-parser/pom.xml
+R  sparql.anything.parser/src/main/antlr4/FacadeIRI.g4 -> sparql-anything-parser/src/main/antlr4/io/github/sparqlanything/facadeiri/antlr/FacadeIRI.g4
+R  sparql.anything.parser/src/main/java/com/github/spiceh2020/sparql/anything/facadeiri/FacadeIRIParser.java -> sparql-anything-parser/src/main/java/io/github/sparqlanything/facadeiri/FacadeIRIParser.java
+A  sparql-anything-parser/src/main/java/io/github/sparqlanything/facadeiri/ParameterListener.java
+A  sparql-anything-parser/src/main/resources/config.properties
+A  sparql-anything-parser/src/test/java/io/github/sparqlanything/parser/test/FacadeIRIParserTest.java
+A  sparql-anything-parser/src/test/resources/exampleIRI.txt
+A  sparql-anything-parser/src/test/resources/expected.txt
+A  sparql-anything-rdf/pom.xml
+A  sparql-anything-rdf/src/main/java/io/github/sparqlanything/rdf/RDFTriplifier.java
+A  sparql-anything-rdf/src/main/java/io/github/sparqlanything/rdf/package-info.java
+R  sparql.anything.rdf/src/main/resources/jsonld.jsonld -> sparql-anything-rdf/src/main/resources/jsonld.jsonld
+R  sparql.anything.rdf/src/main/resources/nquads.nq -> sparql-anything-rdf/src/main/resources/nquads.nq
+R  sparql.anything.rdf/src/main/resources/ntriples.nt -> sparql-anything-rdf/src/main/resources/ntriples.nt
+R  sparql.anything.rdf/src/main/resources/owl.owl -> sparql-anything-rdf/src/main/resources/owl.owl
+R  sparql.anything.rdf/src/main/resources/rdf.rdf -> sparql-anything-rdf/src/main/resources/rdf.rdf
+R  sparql.anything.rdf/src/main/resources/trdf.trdf -> sparql-anything-rdf/src/main/resources/trdf.trdf
+R  sparql.anything.rdf/src/main/resources/trig.trig -> sparql-anything-rdf/src/main/resources/trig.trig
+R  sparql.anything.rdf/src/main/resources/trix.trix -> sparql-anything-rdf/src/main/resources/trix.trix
+R  sparql.anything.rdf/src/main/resources/turtle.ttl -> sparql-anything-rdf/src/main/resources/turtle.ttl
+R  sparql.anything.rdf/src/test/java/com/github/spiceh2020/sparql/anything/rdf/test/TestTriplifier.java -> sparql-anything-rdf/src/test/java/io/github/sparqlanything/rdf/test/TestTriplifier.java
+A  sparql-anything-s3-support/pom.xml
+A  sparql-anything-s3-support/src/main/java/io/github/sparqlanything/s3/S3InputService.java
+A  sparql-anything-s3-support/src/main/resources/META-INF/services/io.github.sparqlanything.model.resources.ResourceService
+A  sparql-anything-s3-support/src/test/java/io/github/sparqlanything/s3/test/S3InputServiceIntegrationTest.java
+A  sparql-anything-s3-support/src/test/java/io/github/sparqlanything/s3/test/S3InputServiceMockTest.java
+A  sparql-anything-s3-support/src/test/resources/testcontainers.properties
+A  sparql-anything-slides/pom.xml
+A  sparql-anything-slides/src/main/java/io/github/sparqlanything/slides/PptxTriplifier.java
+A  sparql-anything-slides/src/main/java/io/github/sparqlanything/slides/package-info.java
+A  sparql-anything-slides/src/test/java/io/github/sparqlanything/slides/test/PptxTest.java
+A  sparql-anything-slides/src/test/resources/Issue429.pptx
+A  sparql-anything-slides/src/test/resources/Issue429.ttl
+A  sparql-anything-slides/src/test/resources/Presentation1.pptx
+A  sparql-anything-slides/src/test/resources/Presentation1.ttl
+A  sparql-anything-slides/src/test/resources/Presentation2.pptx
+A  sparql-anything-slides/src/test/resources/Presentation2.ttl
+A  sparql-anything-slides/src/test/resources/Presentation3.pptx
+A  sparql-anything-slides/src/test/resources/Presentation3.ttl
+A  sparql-anything-spreadsheet/pom.xml
+A  sparql-anything-spreadsheet/src/main/java/io/github/sparqlanything/spreadsheet/SpreadsheetTriplifier.java
+A  sparql-anything-spreadsheet/src/main/java/io/github/sparqlanything/spreadsheet/package-info.java
+A  sparql-anything-spreadsheet/src/test/java/io/github/sparqlanything/spreadsheet/test/HeadersRowTest.java
+A  sparql-anything-spreadsheet/src/test/java/io/github/sparqlanything/spreadsheet/test/SpreadsheetTriplifierTest.java
+A  sparql-anything-spreadsheet/src/test/java/io/github/sparqlanything/spreadsheet/test/TestTriplifier.java
+A  sparql-anything-spreadsheet/src/test/java/io/github/sparqlanything/spreadsheet/test/XLSXTriplifierTest.java
+A  sparql-anything-spreadsheet/src/test/resources/1.nq
+A  sparql-anything-spreadsheet/src/test/resources/1.xls
+A  sparql-anything-spreadsheet/src/test/resources/2.nq
+A  sparql-anything-spreadsheet/src/test/resources/2.xls
+A  sparql-anything-spreadsheet/src/test/resources/Book1.nq
+R  sparql.anything.spreadsheet/src/main/resources/testResources/Book1.xlsx -> sparql-anything-spreadsheet/src/test/resources/Book1.xlsx
+A  sparql-anything-spreadsheet/src/test/resources/FormulaEvaluator.nq
+A  sparql-anything-spreadsheet/src/test/resources/FormulaEvaluator.xls
+A  sparql-anything-spreadsheet/src/test/resources/HeaderRow.trig
+A  sparql-anything-spreadsheet/src/test/resources/HeaderRow.xls
+A  sparql-anything-spreadsheet/src/test/resources/NoNullString.nq
+A  sparql-anything-spreadsheet/src/test/resources/NoNullString.xls
+A  sparql-anything-spreadsheet/src/test/resources/NullString.nq
+A  sparql-anything-spreadsheet/src/test/resources/NullString.xls
+R  sparql.anything.spreadsheet/src/main/resources/testResources/Book1.xls -> sparql-anything-spreadsheet/src/test/resources/testResources/Book1.xls
+A  sparql-anything-spreadsheet/src/test/resources/testResources/Book1.xlsx
+A  sparql-anything-spreadsheet/src/test/resources/testResources/Book2.xlsx
+A  sparql-anything-testutils/pom.xml
+A  sparql-anything-testutils/src/main/java/io/github/sparqlanything/testutils/AbstractTriplifierTester.java
+A  sparql-anything-testutils/src/main/java/io/github/sparqlanything/testutils/TestUtils.java
+A  sparql-anything-testutils/src/main/resources/Facade-X-shapes.ttl
+A  sparql-anything-text/pom.xml
+A  sparql-anything-text/src/main/java/io/github/sparqlanything/text/TextTriplifier.java
+A  sparql-anything-text/src/main/java/io/github/sparqlanything/text/package-info.java
+A  sparql-anything-text/src/test/java/io/github/sparqlanything/text/test/TextTriplifierTest.java
+A  sparql-anything-text/src/test/resources/testfile
+A  sparql-anything-xml/pom.xml
+A  sparql-anything-xml/src/main/java/io/github/sparqlanything/xml/XMLTriplifier.java
+A  sparql-anything-xml/src/main/java/io/github/sparqlanything/xml/XPathSlice.java
+A  sparql-anything-xml/src/main/java/io/github/sparqlanything/xml/package-info.java
+A  sparql-anything-xml/src/test/java/io/github/sparqlanything/xml/Issue325Test.java
+A  sparql-anything-xml/src/test/java/io/github/sparqlanything/xml/Issue619Test.java
+A  sparql-anything-xml/src/test/java/io/github/sparqlanything/xml/MoreXMLTriplifierTest.java
+A  sparql-anything-xml/src/test/java/io/github/sparqlanything/xml/MultipleAttributesXPathTest.java
+A  sparql-anything-xml/src/test/java/io/github/sparqlanything/xml/XMLTriplifierTest.java
+A  sparql-anything-xml/src/test/java/io/github/sparqlanything/xml/XPathSandbox.java
+A  sparql-anything-xml/src/test/resources/Books.ttl
+A  sparql-anything-xml/src/test/resources/Books.xml
+A  sparql-anything-xml/src/test/resources/Books_1.ttl
+A  sparql-anything-xml/src/test/resources/Books_1.xml
+A  sparql-anything-xml/src/test/resources/Books_2.ttl
+A  sparql-anything-xml/src/test/resources/Books_2.xml
+A  sparql-anything-xml/src/test/resources/Issue325.xml
+A  sparql-anything-xml/src/test/resources/Issue619.xml
+A  sparql-anything-xml/src/test/resources/MultiAttribute.xml
+A  sparql-anything-xml/src/test/resources/Simple.ttl
+A  sparql-anything-xml/src/test/resources/Simple.xml
+A  sparql-anything-xml/src/test/resources/SliceBooks.ttl
+A  sparql-anything-xml/src/test/resources/SliceBooks.xml
+A  sparql-anything-xml/src/test/resources/XPathAndSlice.ttl
+A  sparql-anything-xml/src/test/resources/XPathAndSlice.xml
+A  sparql-anything-xml/src/test/resources/XPathAndSliceIssue531.ttl
+A  sparql-anything-xml/src/test/resources/XPathAndSliceIssue531.xml
+A  sparql-anything-xml/src/test/resources/XPathAndSliceIssue531_2.ttl
+A  sparql-anything-xml/src/test/resources/XPathAndSliceIssue531_2.xml
+A  sparql-anything-xml/src/test/resources/test-xpaths.xml
+R  sparql.anything.xml/src/test/resources/test1.xml -> sparql-anything-xml/src/test/resources/test1.xml
+A  sparql-anything-xml/src/test/resources/test2.ttl
+A  sparql-anything-xml/src/test/resources/test2.xml
+A  sparql-anything-yaml/pom.xml
+A  sparql-anything-yaml/src/main/java/io/github/sparqlanything/yaml/YAMLTriplifier.java
+A  sparql-anything-yaml/src/main/java/io/github/sparqlanything/yaml/package-info.java
+A  sparql-anything-yaml/src/test/java/io/github/sparqlanything/yaml/YAMLTest.java
+A  sparql-anything-yaml/src/test/java/io/github/sparqlanything/yaml/YAMLTriplifierTest.java
+A  sparql-anything-yaml/src/test/resources/DuplicateKeys.ttl
+A  sparql-anything-yaml/src/test/resources/DuplicateKeys.yaml
+A  sparql-anything-yaml/src/test/resources/Foo.ttl
+A  sparql-anything-yaml/src/test/resources/Foo.yaml
+A  sparql-anything-yaml/src/test/resources/Map.ttl
+A  sparql-anything-yaml/src/test/resources/Map.yaml
+A  sparql-anything-yaml/src/test/resources/test-change-name.yaml
+A  sparql-anything-yaml/src/test/resources/test.yaml
+UD sparql.anything.binary/pom.xml
+D  sparql.anything.binary/src/main/java/com/github/spiceh2020/sparql/anything/binary/BinaryTriplifier.java
+D  sparql.anything.binary/src/main/resources/log4j.properties
+D  sparql.anything.binary/src/test/java/com/github/spiceh2020/sparql/anything/binary/test/BinaryTriplifierTest.java
+UD sparql.anything.cli/pom.xml
+D  sparql.anything.cli/src/main/java/com/github/spiceh2020/sparql/anything/cli/SPARQLAnything.java
+D  sparql.anything.cli/src/main/resources/config.properties
+D  sparql.anything.cli/src/main/resources/log4j.properties
+UD sparql.anything.csv/pom.xml
+UD sparql.anything.csv/src/main/java/com/github/spiceh2020/sparql/anything/csv/CSVTriplifier.java
+D  sparql.anything.csv/src/main/resources/config.properties
+D  sparql.anything.csv/src/main/resources/log4j.properties
+D  sparql.anything.csv/src/test/java/com/github/spiceh2020/sparql/anything/csv/CSVTriplifierTest.java
+D  sparql.anything.engine/README.md
+UD sparql.anything.engine/pom.xml
+D  sparql.anything.engine/src/main/java/com/github/spiceh2020/sparql/anything/engine/FacadeX.java
+D  sparql.anything.engine/src/main/java/com/github/spiceh2020/sparql/anything/engine/FacadeXOpExecutor.java
+D  sparql.anything.engine/src/main/java/com/github/spiceh2020/sparql/anything/engine/TriplifierRegister.java
+D  sparql.anything.engine/src/main/java/com/github/spiceh2020/sparql/anything/engine/TriplifierRegisterException.java
+D  sparql.anything.engine/src/main/resources/config.properties
+D  sparql.anything.engine/src/main/resources/log4j.properties
+D  sparql.anything.engine/src/test/java/com/github/spiceh2020/sparql/anything/test/AppTest.java
+D  sparql.anything.engine/src/test/java/com/github/spiceh2020/sparql/anything/test/TestTriplifier.java
+D  sparql.anything.engine/src/test/java/com/github/spiceh2020/sparql/anything/test/TestTriplifier2.java
+D  sparql.anything.experiment/README.md
+UD sparql.anything.experiment/pom.xml
+D  sparql.anything.experiment/src/main/java/com/github/spiceh2020/sparql/anything/experiment/ComputeStats.java
+D  sparql.anything.experiment/src/main/java/com/github/spiceh2020/sparql/anything/experiment/CountNumberOfTriples.java
+D  sparql.anything.experiment/src/main/java/com/github/spiceh2020/sparql/anything/experiment/TestDataCreator.java
+D  sparql.anything.experiment/src/main/java/com/github/spiceh2020/sparql/anything/experiment/TestDataCreatorForISWC2021.java
+D  sparql.anything.experiment/src/main/resources/config.properties
+D  sparql.anything.experiment/src/main/resources/log4j.properties
+UD sparql.anything.fuseki/pom.xml
+D  sparql.anything.fuseki/src/main/java/com/github/spiceh2020/sparql/anything/fuseki/YASGUIServlet.java
+D  sparql.anything.fuseki/src/main/resources/log4j.properties
+D  sparql.anything.fuseki/src/main/resources/yasgui.ftlh
+UD sparql.anything.html/pom.xml
+D  sparql.anything.html/src/main/java/com/github/spiceh2020/sparql/anything/html/HTMLTriplifier.java
+D  sparql.anything.html/src/test/java/com/github/spiceh2020/sparql/anything/html/HTMLTriplifierTest.java
+D  sparql.anything.html/src/test/resources/test1.html
+D  sparql.anything.html/src/test/resources/test2.html
+D  sparql.anything.html/src/test/resources/testBN.html
+UD sparql.anything.it/pom.xml
+D  sparql.anything.it/src/test/java/com/github/spiceh2020/sparql/anything/it/ItTest.java
+D  sparql.anything.it/src/test/java/com/github/spiceh2020/sparql/anything/it/ItTripleFilteringTest.java
+UD sparql.anything.json/pom.xml
+D  sparql.anything.json/src/main/java/com/github/spiceh2020/sparql/anything/json/JSONTriplifier.java
+D  sparql.anything.json/src/main/java/com/github/spiceh2020/sparql/anything/json/old/JSONTriplifier.java
+D  sparql.anything.json/src/main/resources/config.properties
+D  sparql.anything.json/src/main/resources/log4j.properties
+D  sparql.anything.json/src/test/java/com/github/spiceh2020/sparql/anything/json/test/JSONTripleFilteringTest.java
+UD sparql.anything.metadata/pom.xml
+D  sparql.anything.metadata/src/main/java/com/github/spiceh2020/sparql/anything/metadata/MetadataTriplifier.java
+D  sparql.anything.metadata/src/main/resources/log4j.properties
+D  sparql.anything.metadata/src/test/java/com/github/spiceh2020/sparql/anything/metadata/test/MetadataTriplifierTest.java
+UD sparql.anything.model/pom.xml
+D  sparql.anything.model/src/main/java/com/github/spiceh2020/sparql/anything/model/FacadeXGraphBuilder.java
+D  sparql.anything.model/src/main/java/com/github/spiceh2020/sparql/anything/model/IRIArgument.java
+D  sparql.anything.model/src/main/java/com/github/spiceh2020/sparql/anything/model/TripleFilteringFacadeXBuilder.java
+D  sparql.anything.model/src/main/java/com/github/spiceh2020/sparql/anything/model/Triplifier.java
+D  sparql.anything.model/src/main/resources/config.properties
+D  sparql.anything.model/src/main/resources/log4j.properties
+D  sparql.anything.model/src/test/java/com/github/spiceh2020/sparql/anything/model/test/TestTriplifierEscaper.java
+D  sparql.anything.model/src/test/java/com/github/spiceh2020/sparql/anything/model/test/TripleFilteringFacadeXBuilderTest.java
+UD sparql.anything.parser/pom.xml
+D  sparql.anything.parser/src/main/java/com/github/spiceh2020/sparql/anything/facadeiri/ParameterListener.java
+D  sparql.anything.parser/src/main/resources/config.properties
+D  sparql.anything.parser/src/main/resources/log4j.properties
+D  sparql.anything.parser/src/test/java/com/github/spiceh2020/sparql/anything/parser/test/AppTest.java
+UD sparql.anything.rdf/pom.xml
+D  sparql.anything.rdf/src/main/java/com/github/spiceh2020/sparql/anything/spreadsheet/RDFTriplifier.java
+D  sparql.anything.rdf/src/main/resources/log4j.properties
+UD sparql.anything.spreadsheet/pom.xml
+D  sparql.anything.spreadsheet/src/main/java/com/github/spiceh2020/sparql/anything/spreadsheet/SpreadsheetTriplifier.java
+D  sparql.anything.spreadsheet/src/main/resources/log4j.properties
+D  sparql.anything.spreadsheet/src/test/java/com/github/spiceh2020/sparql/anything/spreadsheet/test/TestTriplifier.java
+UD sparql.anything.text/pom.xml
+D  sparql.anything.text/src/main/java/com/github/spiceh2020/sparql/anything/text/TextTriplifier.java
+D  sparql.anything.text/src/main/resources/log4j.properties
+D  sparql.anything.text/src/test/java/com/github/spiceh2020/sparql/anything/text/test/TextTriplifierTest.java
+UD sparql.anything.xml/pom.xml
+D  sparql.anything.xml/src/main/java/com/github/spiceh2020/sparql/anything/xml/XMLTriplifier.java
+D  sparql.anything.xml/src/main/resources/config.properties
+D  sparql.anything.xml/src/main/resources/log4j.properties
+D  sparql.anything.xml/src/test/java/com/github/spiceh2020/sparql/anything/xml/XMLTriplifierTest.java
+A  update-docs.sh
+?? RELEASE-RC1.md
+?? info.git.txt
+?? regen.sh
+ README.md                                          | Unmerged
+ README.md                                          | 924 +++++++++++++++++----
+ pom.xml                                            | Unmerged
+ pom.xml                                            | 918 ++++++++++++++------
+ sparql.anything.binary/pom.xml                     | Unmerged
+ sparql.anything.cli/pom.xml                        | Unmerged
+ sparql.anything.csv/pom.xml                        | Unmerged
+ .../sparql/anything/csv/CSVTriplifier.java         | Unmerged
+ sparql.anything.engine/pom.xml                     | Unmerged
+ sparql.anything.experiment/pom.xml                 | Unmerged
+ sparql.anything.fuseki/pom.xml                     | Unmerged
+ sparql.anything.html/pom.xml                       | Unmerged
+ sparql.anything.it/pom.xml                         | Unmerged
+ sparql.anything.json/pom.xml                       | Unmerged
+ sparql.anything.metadata/pom.xml                   | Unmerged
+ sparql.anything.model/pom.xml                      | Unmerged
+ sparql.anything.parser/pom.xml                     | Unmerged
+ sparql.anything.rdf/pom.xml                        | Unmerged
+ sparql.anything.spreadsheet/pom.xml                | Unmerged
+ sparql.anything.text/pom.xml                       | Unmerged
+ sparql.anything.xml/pom.xml                        | Unmerged
+ 2 files changed, 1424 insertions(+), 418 deletions(-)
