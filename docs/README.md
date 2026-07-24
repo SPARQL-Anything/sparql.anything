@@ -433,7 +433,7 @@ WHERE {
 | [s3.secret-key](Configuration.md#s3)                                                | The secret key for accessing the s3 bucket  (password)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Any valid secret key                                                                                                                                                                  | No value                                                                                                                                                                                                                                                                    |
 | [s3.region](Configuration.md#s3)                                                    | The region of the s3 bucket                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Any valid region name                                                                                                                                                                 | No value                                                                                                                                                                                                                                                                    |
 
-\* It is mandatory to provide either `location`, `content`, `command`, `read-from-std-in`, or `query`.
+\* It is mandatory to provide either `location`, `content`, `command`, `read-from-std-in`, or `query`. If `media-type` is not specified, the system will attempt to guess the format from the file extension. For all other cases, you need to provide `media-type` so Sparql Anything can interpret the content appropriately.
 
 [More details on configuration](Configuration.md)
 
@@ -644,18 +644,12 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
  -nc,--no-clobber                        OPTIONAL - Do not execute if the
                                          specified output file already
                                          exists.
- -ad,--allow-duplicates                  OPTIONAL - Allow duplicate
-                                         triples in CONSTRUCT output.
-                                         Streams the result
+ -st,--stream                            OPTIONAL - Stream CONSTRUCT output
                                          triple-by-triple for line-based
-                                         formats (NT, NQ, TTL, TriG)
-                                         instead of building the whole
-                                         result Model in memory, giving
-                                         near-constant memory for bulk
-                                         conversions at the cost of the
-                                         de-duplication guarantee. Only
-                                         affects CONSTRUCT queries with -f
-                                         NT or NQ; ignored otherwise.
+                                         formats (NT, NQ, TTL, TriG) instead
+                                         of building the whole result in
+                                         memory. Side effect: duplicate
+                                         triples are not removed.
  -t,--profile <filepath>                 OPTIONAL - It runs the execution
                                          through a profiler. It saves the
                                          results to [filepath] (by default
