@@ -35,6 +35,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +47,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * End-to-end test for {@link S3InputService} against a real S3-compatible
- * service (MinIO), started via Testcontainers. Unlike the mock-based unit
+ * service (S3Mock), started via Testcontainers. Unlike the mock-based unit
  * tests in {@link S3InputServiceMockTest}, this exercises the real AWS SDK
  * client, the real HTTP connection, and the real builder configuration
  * (endpoint override, path-style access, credentials), which a mock cannot
@@ -56,14 +57,19 @@ import static org.junit.Assert.assertEquals;
  */
 public class S3InputServiceIntegrationTest {
 
-	private static final String ACCESS_KEY = "minioadmin";
-	private static final String SECRET_KEY = "minioadmin";
+	// S3Mock replaces MinIO, whose public images were withdrawn.
+	// See https://github.com/SPARQL-Anything/sparql.anything/issues/663
+	private static final String S3MOCK_IMAGE = "adobe/s3mock:5.2.3";
+	private static final int S3MOCK_PORT = 9090;
+	// S3Mock accepts any credentials.
+	private static final String ACCESS_KEY = "test";
+	private static final String SECRET_KEY = "test";
 	private static final String BUCKET_NAME = "test-bucket";
 	private static final String FILE_KEY = "test.txt";
-	private static final String FILE_CONTENT = "Hello from MinIO test!";
+	private static final String FILE_CONTENT = "Hello from S3 test!";
 	private static final String REGION = Region.US_EAST_1.toString();
 
-	private static GenericContainer<?> minioContainer;
+	private static GenericContainer<?> s3Container;
 	private static S3Client s3Client;
 	private static URI endpoint;
 
@@ -83,20 +89,20 @@ public class S3InputServiceIntegrationTest {
 
 		Assume.assumeTrue("Docker not available", dockerAvailable);
 
-		// Start a real MinIO container to stand in for S3.
-		minioContainer = new GenericContainer<>(DockerImageName.parse("minio/minio:latest"))
-			.withExposedPorts(9000)
-			.withCommand("server /data");
-		minioContainer.start();
+		// Start S3Mock (https://github.com/adobe/S3Mock) to stand in for S3.
+		s3Container = new GenericContainer<>(DockerImageName.parse(S3MOCK_IMAGE))
+			.withExposedPorts(S3MOCK_PORT)
+			.waitingFor(Wait.forHttp("/").forPort(S3MOCK_PORT).forStatusCodeMatching(code -> code < 500));
+		s3Container.start();
 
-		// MinIO's container port is mapped to a random free host port, so the
+		// The container port is mapped to a random free host port, so the
 		// endpoint URL has to be built after the container has started.
-		Integer mappedPort = minioContainer.getMappedPort(9000);
+		Integer mappedPort = s3Container.getMappedPort(S3MOCK_PORT);
 		endpoint = new URI("http://localhost:" + mappedPort);
 
 		// A plain AWS SDK client used only to seed test data (create the
 		// bucket and upload the file) before S3InputService is exercised.
-		// pathStyleAccessEnabled(true) is required for MinIO, which doesn't
+		// pathStyleAccessEnabled(true) is required: S3Mock only supports path-style access.
 		// support virtual-hosted-style bucket addressing by default.
 		s3Client = S3Client.builder()
 			.endpointOverride(endpoint)
@@ -118,7 +124,7 @@ public class S3InputServiceIntegrationTest {
 		// Release the seeding client and stop the container; guarded with
 		// null checks in case setUpClass() was skipped (Docker unavailable).
 		if (s3Client != null) s3Client.close();
-		if (minioContainer != null) minioContainer.stop();
+		if (s3Container != null) s3Container.stop();
 	}
 
 
@@ -142,7 +148,7 @@ public class S3InputServiceIntegrationTest {
 		properties.setProperty(IRIArgument.S3_REGION.toString(), REGION);
 
 		// Read the object back through S3InputService end-to-end: real
-		// client, real connection, real bytes off the wire from MinIO.
+		// client, real connection, real bytes off the wire from the S3 service.
 		String content;
 		try (InputStream is = new S3InputService().getInputStream(properties)) {
 			content = new String(is.readAllBytes(), StandardCharsets.UTF_8);

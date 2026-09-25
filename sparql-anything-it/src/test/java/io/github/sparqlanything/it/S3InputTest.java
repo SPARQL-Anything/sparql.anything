@@ -40,7 +40,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-
+import org.testcontainers.containers.wait.strategy.Wait;
 import java.net.URI;
 
 import static org.junit.Assert.assertEquals;
@@ -49,24 +49,29 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration test that runs a real SPARQL Anything query against a JSON
  * resource stored in an S3 bucket. The bucket is not AWS itself but a real
- * S3-compatible service (MinIO) started via Testcontainers, so this covers
+ * S3-compatible service (S3Mock) started via Testcontainers, so this covers
  * the full path: the SPARQL {@code SERVICE <x-sparql-anything:...>} clause,
  * the {@code s3-support} module's {@link io.github.sparqlanything.s3.S3InputService}
  * (discovered automatically via {@code ServiceLoader} once the module is on
- * the classpath), the real AWS SDK client, and a real MinIO container.
+ * the classpath), the real AWS SDK client, and a real S3Mock container.
  * <p>
  * Skipped automatically if Docker is not available.
  */
 public class S3InputTest {
 
-	private static final String ACCESS_KEY = "minioadmin";
-	private static final String SECRET_KEY = "minioadmin";
+	// S3Mock replaces MinIO, whose public images were withdrawn.
+	// See https://github.com/SPARQL-Anything/sparql.anything/issues/663
+	private static final String S3MOCK_IMAGE = "adobe/s3mock:5.2.3";
+	private static final int S3MOCK_PORT = 9090;
+	// S3Mock accepts any credentials.
+	private static final String ACCESS_KEY = "test";
+	private static final String SECRET_KEY = "test";
 	private static final String BUCKET_NAME = "it-test-bucket";
 	private static final String FILE_KEY = "people.json";
 	private static final String FILE_CONTENT = "{ \"people\": [ { \"name\": \"Vincent\" }, { \"name\": \"Jules\" }, { \"name\": \"Beatrix\" } ] }";
 	private static final String REGION = Region.US_EAST_1.toString();
 
-	private static GenericContainer<?> minioContainer;
+	private static GenericContainer<?> s3Container;
 	private static S3Client s3Client;
 	private static URI endpoint;
 
@@ -86,20 +91,20 @@ public class S3InputTest {
 
 		Assume.assumeTrue("Docker not available", dockerAvailable);
 
-		// Start a real MinIO container to stand in for S3.
-		minioContainer = new GenericContainer<>(DockerImageName.parse("minio/minio:latest"))
-			.withExposedPorts(9000)
-			.withCommand("server /data");
-		minioContainer.start();
+		// Start S3Mock (https://github.com/adobe/S3Mock) to stand in for S3.
+		s3Container = new GenericContainer<>(DockerImageName.parse(S3MOCK_IMAGE))
+			.withExposedPorts(S3MOCK_PORT)
+			.waitingFor(Wait.forHttp("/").forPort(S3MOCK_PORT).forStatusCodeMatching(code -> code < 500));
+		s3Container.start();
 
-		// MinIO's container port is mapped to a random free host port, so the
+		// The container port is mapped to a random free host port, so the
 		// endpoint URL has to be built after the container has started.
-		Integer mappedPort = minioContainer.getMappedPort(9000);
+		Integer mappedPort = s3Container.getMappedPort(S3MOCK_PORT);
 		endpoint = new URI("http://localhost:" + mappedPort);
 
 		// A plain AWS SDK client used only to seed test data (create the
 		// bucket and upload the file) before running the SPARQL query.
-		// pathStyleAccessEnabled(true) is required for MinIO, which doesn't
+		// pathStyleAccessEnabled(true) is required: S3Mock only supports path-style access.
 		// support virtual-hosted-style bucket addressing by default.
 		s3Client = S3Client.builder()
 			.endpointOverride(endpoint)
@@ -121,7 +126,7 @@ public class S3InputTest {
 		// Release the seeding client and stop the container; guarded with
 		// null checks in case setUpClass() was skipped (Docker unavailable).
 		if (s3Client != null) s3Client.close();
-		if (minioContainer != null) minioContainer.stop();
+		if (s3Container != null) s3Container.stop();
 	}
 
 	@Test
@@ -132,7 +137,7 @@ public class S3InputTest {
 		// A real SPARQL Anything query: the SERVICE clause routes the
 		// request through S3InputService (discovered via ServiceLoader
 		// because sparql-anything-s3-support is on the classpath), using
-		// the fx:s3.* properties to configure the MinIO endpoint,
+		// the fx:s3.* properties to configure the S3 endpoint,
 		// credentials, bucket, and key.
 		String queryStr =
 			"PREFIX fx:  <http://sparql.xyz/facade-x/ns/> "
