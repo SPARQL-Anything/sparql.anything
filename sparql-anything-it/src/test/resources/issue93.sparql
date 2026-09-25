@@ -3,7 +3,7 @@ PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 ASK {
     service <x-sparql-anything:blank-nodes=true,media-type=text/html,location=%%location%%> {
-        ?root a fx:root .
+        ?root a fx:Root .
         ?higher ?slotp ?root .
     }
 }

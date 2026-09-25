@@ -73,7 +73,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  xyz:Document , fx:root;
+[ rdf:type  xyz:Document , fx:Root;
   rdf:_1    [ rdf:type   xyz:Heading;
               rdf:_1     "Title";
               xyz:level  "1"^^xsd:int

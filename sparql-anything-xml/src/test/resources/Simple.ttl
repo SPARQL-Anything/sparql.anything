@@ -5,7 +5,7 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
 
 <http://www.example.org/document>
-        a       <http://sparql.xyz/facade-x/data/simple> , <http://sparql.xyz/facade-x/ns/root> ;
+        a       <http://sparql.xyz/facade-x/data/simple> , <http://sparql.xyz/facade-x/ns/Root> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 <http://www.example.org/document/simple/1:element> .
 

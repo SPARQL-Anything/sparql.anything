@@ -3,7 +3,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 
-[ a fx:root ;
+[ a fx:Root ;
     xyz:foo "bar"^^xsd:string ;
     xyz:pleh "help"^^xsd:string ;
     xyz:stuff [

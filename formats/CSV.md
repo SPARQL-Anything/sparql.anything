@@ -75,7 +75,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root;
+[ rdf:type  fx:Root;
   rdf:_1    [ rdf:_1  "email";
               rdf:_2  "name";
               rdf:_3  "surname"
@@ -306,7 +306,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root;
+[ rdf:type  fx:Root;
   rdf:_1    [ rdf:_1  "Sepal_length\tSepal_width\tPetal_length\tPetal_width\tSpecies" ];
   rdf:_2    [ rdf:_1  "5.1\t3.5\t1.4\t0.2\tI. setosa" ];
   rdf:_3    [ rdf:_1  "4.9\t3.0\t1.4\t0.2\tI. setosa" ];
@@ -448,7 +448,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root;
+[ rdf:type  fx:Root;
   rdf:_1    [ xyz:email    "laura@example.com";
               xyz:name     "Laura, Nancy";
               xyz:surname  "Grey"
@@ -574,7 +574,7 @@ WHERE
                   fx:content            ",state\nfred,CO\nsally,FL" ;
                   fx:media-type         "text/csv" ;
                   fx:csv.ignore-columns-with-no-header  true .
-        ?root     rdf:type              fx:root ;
+        ?root     rdf:type              fx:Root ;
                   rdf:_1                _:b0 .
         _:b0      rdf:_1                ?fred .
         ?root     rdf:_2                _:b1 .

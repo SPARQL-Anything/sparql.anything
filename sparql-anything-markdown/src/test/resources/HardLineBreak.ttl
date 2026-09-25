@@ -3,7 +3,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 
-<http://www.example.org/document> a fx:root .
+<http://www.example.org/document> a fx:Root .
 <http://www.example.org/document> a xyz:Document .
 <http://www.example.org/document> rdf:_1 <http://www.example.org/document/paragraph/1> .
 <http://www.example.org/document/paragraph/1> a xyz:Paragraph .

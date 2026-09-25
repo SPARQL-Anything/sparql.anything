@@ -64,7 +64,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root , xyz:Presentation;
+[ rdf:type  fx:Root , xyz:Presentation;
   rdf:_1    [ rdf:type  xyz:Slide;
               rdf:_1    [ rdf:type  xyz:CENTERED_TITLE;
                           rdf:_1    [ rdf:type  xyz:Paragraph;
@@ -215,7 +215,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  xyz:Presentation , fx:root;
+[ rdf:type  xyz:Presentation , fx:Root;
   rdf:_1    [ rdf:type  xyz:Section;
               rdf:_1    [ rdf:type  xyz:Slide;
                           rdf:_1    [ rdf:type  xyz:CENTERED_TITLE;

@@ -53,7 +53,7 @@ public class CLITest {
 		}
 		Set<String> expectedSet = new HashSet<>();
 		expectedSet.add("c");
-		expectedSet.add("http://sparql.xyz/facade-x/ns/root");
+		expectedSet.add("http://sparql.xyz/facade-x/ns/Root");
 		expectedSet.add("http://sparql.xyz/facade-x/data/catalog");
 		expectedSet.add("http://sparql.xyz/facade-x/data/book");
 		expectedSet.add("http://sparql.xyz/facade-x/data/author");

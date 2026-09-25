@@ -78,7 +78,7 @@ public class OptionsViaCommandLineTest {
 		}
 		Set<String> expectedSet = new HashSet<>();
 		expectedSet.add("c");
-		expectedSet.add("http://sparql.xyz/facade-x/ns/root");
+		expectedSet.add("http://sparql.xyz/facade-x/ns/Root");
 		expectedSet.add("http://sparql.xyz/facade-x/data/catalog");
 		expectedSet.add("http://sparql.xyz/facade-x/data/book");
 		expectedSet.add("http://sparql.xyz/facade-x/data/author");
@@ -92,7 +92,7 @@ public class OptionsViaCommandLineTest {
 	@Ignore
 	@Test
 	public void test() throws Exception {
-		String q = "SELECT ?v { SERVICE <x-sparql-anything:> { ?root a <http://sparql.xyz/facade-x/ns/root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } }";
+		String q = "SELECT ?v { SERVICE <x-sparql-anything:> { ?root a <http://sparql.xyz/facade-x/ns/Root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } }";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc"});
 		Assert.assertTrue(out.contains("abc"));
 	}
@@ -100,14 +100,14 @@ public class OptionsViaCommandLineTest {
 	@Ignore
 	@Test
 	public void testOverride() throws Exception {
-		String q = "SELECT ?v { SERVICE <x-sparql-anything:content=cde> { ?root a <http://sparql.xyz/facade-x/ns/root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } }";
+		String q = "SELECT ?v { SERVICE <x-sparql-anything:content=cde> { ?root a <http://sparql.xyz/facade-x/ns/Root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } }";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc"});
 		Assert.assertTrue(out.contains("cde"));
 	}
 
 	@Test
 	public void testWithoutService() throws Exception {
-		String q = "SELECT ?v {  ?root a <http://sparql.xyz/facade-x/ns/root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } ";
+		String q = "SELECT ?v {  ?root a <http://sparql.xyz/facade-x/ns/Root> ;  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v } ";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc"});
 		Assert.assertTrue(out.contains("abc"));
 	}
@@ -115,7 +115,7 @@ public class OptionsViaCommandLineTest {
 	@Ignore
 	@Test
 	public void testOverrideConfigurationWithBGP() throws Exception {
-		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v {  ?root a fx:root ;   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v  . fx:properties fx:content \"cde\" } ";
+		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v {  ?root a fx:Root ;   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v  . fx:properties fx:content \"cde\" } ";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc"});
 		System.out.println(out);
 		Assert.assertTrue(out.contains("cde"));
@@ -123,7 +123,7 @@ public class OptionsViaCommandLineTest {
 
 	@Test
 	public void testWithMagicProperties() throws Exception {
-		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v {  ?root a fx:root ;   fx:anySlot ?v  . } ";
+		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v {  ?root a fx:Root ;   fx:anySlot ?v  . } ";
 		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-c", "content=abc"});
 //		System.out.println(out);
 		Assert.assertTrue(out.contains("abc"));

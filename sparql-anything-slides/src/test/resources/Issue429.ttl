@@ -289,7 +289,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
         rdf:_4    <http://www.example.org/document/Slide_1/TextBox_4_4>;
         rdf:_5    <http://www.example.org/document/Slide_1/TextBox_3_5> .
 
-eg:document  rdf:type  xyz:Presentation , fx:root;
+eg:document  rdf:type  xyz:Presentation , fx:Root;
         rdf:_1    <http://www.example.org/document/Slide_1>;
         rdf:_2    <http://www.example.org/document/Slide_2> .
 

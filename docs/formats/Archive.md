@@ -64,7 +64,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root;
+[ rdf:type  fx:Root;
   rdf:_1    "example/";
   rdf:_2    "example/test.csv";
   rdf:_3    "example/test.json";
@@ -151,7 +151,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root;
+[ rdf:type  fx:Root;
   rdf:_1    "this is a test";
   rdf:_1    [ rdf:_1  "Year";
               rdf:_2  "Make";

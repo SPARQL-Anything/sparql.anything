@@ -24,7 +24,7 @@ eg:documentSheet1_Row_4
                 xyz:Header21  "A13" ;
                 xyz:Header22  "B13" .
 
-eg:documentSheet1  rdf:type  fx:root ;
+eg:documentSheet1  rdf:type  fx:Root ;
         rdf:_1    eg:documentSheet1_Row_1 ;
         rdf:_2    eg:documentSheet1_Row_2 ;
         rdf:_3    eg:documentSheet1_Row_3 ;
@@ -44,7 +44,7 @@ eg:documentSheet1 {
             xyz:Header22  "Header21" .
 
     eg:documentSheet1
-            rdf:type  fx:root ;
+            rdf:type  fx:Root ;
             rdf:_1    eg:documentSheet1_Row_1 ;
             rdf:_2    eg:documentSheet1_Row_2 ;
             rdf:_3    eg:documentSheet1_Row_3 ;

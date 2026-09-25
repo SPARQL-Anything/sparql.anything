@@ -9,7 +9,7 @@ WHERE {
       fx:properties fx:spreadsheet.ignore-columns-with-no-header true .
 
       GRAPH <%%%LOCATION%%%#Sheet1> {
-          ?root a fx:root ;
+          ?root a fx:Root ;
             rdf:_1 [rdf:_1 ?fred] ;
             rdf:_2 [rdf:_1 ?sally] .
       }

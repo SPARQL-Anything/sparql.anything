@@ -3,7 +3,7 @@
 @prefix fx:   <http://sparql.xyz/facade-x/ns/>.
 @prefix xyz:  <http://sparql.xyz/facade-x/data/>.
 
-[] a fx:root ;
+[] a fx:Root ;
     rdfs:member [
         rdfs:member "A" ;
         rdfs:member "B" ;

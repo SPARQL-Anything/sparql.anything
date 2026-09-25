@@ -3,7 +3,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ rdf:type  fx:root ;
+[ rdf:type  fx:Root ;
   rdf:_1    [ rdf:_1  "Jennifer Aniston" ;
               rdf:_2  "Courteney Cox" ;
               rdf:_3  "Lisa Kudrow" ;

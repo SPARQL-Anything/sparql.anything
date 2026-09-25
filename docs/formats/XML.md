@@ -84,7 +84,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root , <http://www.example.org#Element>;
+[ rdf:type  fx:Root , <http://www.example.org#Element>;
   rdf:_1    [ rdf:type  <http://www.example.org#someThing>;
               rdf:_1    "Hallo world"
             ];
@@ -231,7 +231,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
         rdf:_4    <https://sparql-anything.cc/examples/simple-menu.xml/1:food/4:calories> .
 
 <https://sparql-anything.cc/examples/simple-menu.xml>
-        rdf:type  fx:root;
+        rdf:type  fx:Root;
         rdf:_1    <https://sparql-anything.cc/examples/simple-menu.xml/1:food>;
         rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml/2:food> .
 

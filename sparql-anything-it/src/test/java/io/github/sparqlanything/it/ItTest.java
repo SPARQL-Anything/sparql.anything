@@ -307,7 +307,7 @@ public class ItTest {
 	@Test
 	public void testNoLocation() throws IOException, URISyntaxException {
 		Query query = QueryFactory.create(
-				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ASK {    SERVICE <x-sparql-anything:content=abcd,txt.regex=b> { ?r a <http://sparql.xyz/facade-x/ns/root>.  ?r <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> \"b\" }}");
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> ASK {    SERVICE <x-sparql-anything:content=abcd,txt.regex=b> { ?r a <http://sparql.xyz/facade-x/ns/Root>.  ?r <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> \"b\" }}");
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 		Assert.assertTrue(QueryExecutionFactory.create(query, kb).execAsk());
@@ -316,7 +316,7 @@ public class ItTest {
 	@Test
 	public void testPropertiesAsBGP() throws IOException, URISyntaxException {
 		Query query = QueryFactory.create(
-				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX xyz: <http://sparql.xyz/facade-x/ns/> ASK {    SERVICE <x-sparql-anything:> {   xyz:properties xyz:txt.regex \"b\" ; xyz:content \"abcd\" .  ?r a <http://sparql.xyz/facade-x/ns/root> .  ?r <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> \"b\" }}");
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX xyz: <http://sparql.xyz/facade-x/ns/> ASK {    SERVICE <x-sparql-anything:> {   xyz:properties xyz:txt.regex \"b\" ; xyz:content \"abcd\" .  ?r a <http://sparql.xyz/facade-x/ns/Root> .  ?r <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> \"b\" }}");
 		Dataset kb = DatasetFactory.createGeneral();
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
 //		System.out.println(QueryExecutionFactory.create(query, kb).execAsk());

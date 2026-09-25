@@ -75,7 +75,7 @@ WHERE
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ rdf:type  fx:root ;
+[ rdf:type  fx:Root ;
   rdf:_1    [ rdf:type       xyz:article ;
               xyz:author     "Donald E. Knuth" ;
               xyz:journal    "The Computer Journal" ;

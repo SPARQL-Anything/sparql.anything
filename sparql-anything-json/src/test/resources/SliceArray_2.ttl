@@ -4,7 +4,7 @@
 @prefix xyz:  <http://sparql.xyz/facade-x/data/>.
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
 
-<http://www.example.org/document> a fx:root ;
+<http://www.example.org/document> a fx:Root ;
     rdf:_1 <http://www.example.org/document/_1> ;
     rdf:_2 <http://www.example.org/document/_2> ;
     rdf:_3 <http://www.example.org/document/_3> ;

@@ -1,4 +1,4 @@
-[ a       <http://sparql.xyz/facade-x/ns/root> , <http://sparql.xyz/facade-x/data/test>;
+[ a       <http://sparql.xyz/facade-x/ns/Root> , <http://sparql.xyz/facade-x/data/test>;
   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
           "\n    Floating string before (first)\n    ";
   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>

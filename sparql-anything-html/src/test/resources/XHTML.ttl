@@ -12,7 +12,7 @@
 @prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
-[ rdf:type          fx:root , xhtml:html ;
+[ rdf:type          fx:Root , xhtml:html ;
   rdf:_1            [ rdf:type          <http://www.example.org/#head> ;
                       rdf:_1            [ rdf:type          xhtml:title ;
                                           rdf:_1            "Hello World" ;

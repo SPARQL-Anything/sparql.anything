@@ -34,7 +34,7 @@ WHERE {
 
 		        fx:properties fx:location ?location ;
 		                      fx:media-type "application/xml".
-		        ?score a fx:root .
+		        ?score a fx:Root .
 				# Part
 		        ?score ?mProperty ?part .
 				?part a xyz:part .

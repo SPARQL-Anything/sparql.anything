@@ -44,7 +44,7 @@ public interface Triplifier {
 	String AUDIT_GRAPH_IRI = XYZ_NS + "audit";
 	String XYZ_NULL = XYZ_NS + "null";
 	String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
-	String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "root";
+	String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "Root";
 	String FACADE_X_SLOT_KEY = FACADE_X_CONST_NAMESPACE_IRI + "slot-key";
 	String FACADE_X_TYPE_PROPERTIES = FACADE_X_CONST_NAMESPACE_IRI + "properties";
 	String FACADE_X_CACHED_GRAPH = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraph";

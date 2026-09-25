@@ -9,7 +9,7 @@
         xyz:a   "1"^^xsd:decimal;
         xyz:b   xyz:null .
 
-eg:document  rdf:type  fx:root;
+eg:document  rdf:type  fx:Root;
         rdf:_1    "A";
         rdf:_2    "1"^^xsd:decimal;
         rdf:_3    true;

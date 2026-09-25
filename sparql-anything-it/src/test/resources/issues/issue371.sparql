@@ -5,7 +5,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT * WHERE {
   SERVICE <x-sparql-anything:spreadsheet.evaluate-formulas=true> {
     fx:properties fx:location "%%%LOCATION%%%" .
-          [] rdf:type fx:root ;
+          [] rdf:type fx:Root ;
              fx:anySlot ?row .
           ?row rdf:_1 ?n .
           ?row rdf:_2 ?now

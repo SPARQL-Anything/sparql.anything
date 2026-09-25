@@ -60,7 +60,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root , xyz:Document;
+[ rdf:type  fx:Root , xyz:Document;
   rdf:_1    [ rdf:type  xyz:Heading1;
               rdf:_1    "Title 1"
             ];
@@ -187,7 +187,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
             ]
 ] .
 
-[ rdf:type  xyz:Document , fx:root;
+[ rdf:type  xyz:Document , fx:Root;
   rdf:_1    "Title 1\nParagraph1\nParagraph2\nTitle 2\nParagraph3\n\n";
   rdf:_2    [ rdf:_1  [ rdf:_1  "A";
                         rdf:_2  "B";
@@ -263,7 +263,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  xyz:Document , fx:root;
+[ rdf:type  xyz:Document , fx:Root;
   rdf:_1    [ rdf:type  xyz:Heading1;
               rdf:_1    "Title 1"
             ];

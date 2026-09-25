@@ -40,7 +40,7 @@
         rdf:type  xyz:TextRun ;
         rdf:_1    <http://www.example.org/document/Slide_2/CONTENT_2/Paragraph_2/TextRun_1/Text> .
 
-eg:document  rdf:type  xyz:Presentation , fx:root ;
+eg:document  rdf:type  xyz:Presentation , fx:Root ;
         rdf:_1    <http://www.example.org/document/Slide_1> ;
         rdf:_2    <http://www.example.org/document/Slide_2> ;
         rdf:_3    <http://www.example.org/document/Slide_3> .

@@ -113,7 +113,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
         rdf:type  xyz:Heading1;
         rdf:_1    "Title 1" .
 
-eg:document  rdf:type  xyz:Document , fx:root;
+eg:document  rdf:type  xyz:Document , fx:Root;
         rdf:_1    <http://www.example.org/document/Heading1/1>;
         rdf:_2    <http://www.example.org/document/paragraph/2>;
         rdf:_3    <http://www.example.org/document/paragraph/3>;

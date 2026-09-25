@@ -470,7 +470,7 @@ Result
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ rdf:type  fx:root ;
+[ rdf:type  fx:Root ;
   rdf:_1    [ rdf:_1  "Year" ;
               rdf:_2  "Make" ;
               rdf:_3  "Model" ;
@@ -503,7 +503,7 @@ Result
             ]
 ] .
 
-[ rdf:type  fx:root ;
+[ rdf:type  fx:Root ;
   rdf:_1    "this is a test"
 ] .
 
@@ -550,7 +550,7 @@ Result
 @prefix fx: <http://sparql.xyz/facade-x/ns/> .
 
 <http://example.org/myRoot>
-        a       fx:root ;
+        a       fx:Root ;
         <http://sparql.xyz/facade-x/data/name>
                 "Vincent" ;
         <http://sparql.xyz/facade-x/data/surname>
@@ -582,7 +582,7 @@ Result
 ```turtle
 @prefix fx: <http://sparql.xyz/facade-x/ns/> .
 
-<http://example.org/myRoot> a fx:root ;
+<http://example.org/myRoot> a fx:Root ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello World!" .
 ```
 
@@ -670,7 +670,7 @@ Result
 ```turtle
 @prefix fx: <http://sparql.xyz/facade-x/ns/> .
 
-[ a       fx:root ;
+[ a       fx:Root ;
   <http://example.org/myNamespace/name>
           "Vincent" ;
   <http://example.org/myNamespace/surname>
@@ -719,7 +719,7 @@ Result
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
 <http://sparql.xyz/facade-x/data/8e6a66944bcc9366cad8377556ea2302#>
-        a              fx:root ;
+        a              fx:Root ;
         xyz:name       "Vincent" ;
         xyz:performer  <http://sparql.xyz/facade-x/data/8e6a66944bcc9366cad8377556ea2302#/performer> ;
         xyz:surname    "Vega" .
@@ -768,7 +768,7 @@ WHERE
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ a              fx:root ;
+[ a              fx:Root ;
   xyz:name       "Vincent" ;
   xyz:performer  [ xyz:name     "John" ;
                    xyz:surname  "Travolta"
@@ -817,7 +817,7 @@ Result
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ a              fx:root ;
+[ a              fx:Root ;
   xyz:name       "Vincent" ;
   xyz:performer  [ xyz:name     "John" ;
                    xyz:surname  "Travolta"
@@ -865,7 +865,7 @@ Result
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ a            fx:root ;
+[ a            fx:Root ;
   xyz:name     "Vincent" ;
   xyz:surname  "Vega"
 ] .
@@ -910,7 +910,7 @@ Result
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ a       fx:root ;
+[ a       fx:Root ;
   <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
           "UTF-16 test file"
 ] .
@@ -957,7 +957,7 @@ Result
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ a            fx:root ;
+[ a            fx:Root ;
   xyz:name     "Vincent" ;
   xyz:surname  "Vega"
 ] .
@@ -1005,7 +1005,7 @@ Result
 @prefix fx:  <http://sparql.xyz/facade-x/ns/> .
 @prefix xyz: <http://sparql.xyz/facade-x/data/> .
 
-[ a            fx:root ;
+[ a            fx:Root ;
   xyz:name     "Vincent" ;
   xyz:surname  "Vega"
 ] .
@@ -1207,7 +1207,7 @@ Result
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz:  <http://sparql.xyz/facade-x/data/> .
 
-[ rdf:type     fx:root ;
+[ rdf:type     fx:Root ;
   rdfs:member  "3"^^xsd:int , "2"^^xsd:int , "1"^^xsd:int
 ] .
 ```
@@ -1262,7 +1262,7 @@ Result
 << _:b0 rdfs:member "1"^^xsd:int >>
         fx:slot-key  1 .
 
-_:b0    rdf:type     fx:root ;
+_:b0    rdf:type     fx:Root ;
         rdfs:member  "3"^^xsd:int , "2"^^xsd:int , "1"^^xsd:int .
 
 << _:b0 rdfs:member "2"^^xsd:int >>
@@ -1313,7 +1313,7 @@ PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  xyz:Element1 , fx:root;
+[ rdf:type  xyz:Element1 , fx:Root;
   xyz:attr  "value"
 ] .
 
@@ -1343,7 +1343,7 @@ Therefore, the input from the STDIN is processed as inline content (and the inli
 ```sparql
 SELECT ?v { 
     SERVICE <x-sparql-anything:read-from-std-in=true> { 
-        ?root a <http://sparql.xyz/facade-x/ns/root> ;  
+        ?root a <http://sparql.xyz/facade-x/ns/Root> ;  
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> ?v 
     }
 }
@@ -1404,7 +1404,7 @@ Result
 ```turtle
 
 <http://sparql.xyz/facade-x/data/900150983cd24fb0d6963f7d28e17f72#> {
-    [ a       <http://sparql.xyz/facade-x/ns/root>;
+    [ a       <http://sparql.xyz/facade-x/ns/Root>;
       <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
               "abc"
     ] .

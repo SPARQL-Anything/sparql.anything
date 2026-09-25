@@ -4,5 +4,5 @@ SELECT ?s ?p ?o {
     SERVICE<x-sparql-anything:> {
         fx:properties fx:query "queryReuse/subQuerySelect.rq" .
     }
-    FILTER(?o = fx:root)
+    FILTER(?o = fx:Root)
 }

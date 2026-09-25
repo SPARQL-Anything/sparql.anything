@@ -5,7 +5,7 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#>.
 
 <http://www.example.org/document>
-        a       <http://sparql.xyz/facade-x/ns/root> ;
+        a       <http://sparql.xyz/facade-x/ns/Root> ;
         xyz:child    <http://www.example.org/document/child> ;
         xyz:literal  "{\"first\" : 1, \"second\" : \"second\"}" ;
         xyz:literal_string <http://www.example.org/document/literal_string> ;

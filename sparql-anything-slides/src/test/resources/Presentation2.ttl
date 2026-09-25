@@ -222,7 +222,7 @@
         rdf:type  xyz:TextRun ;
         rdf:_1    <http://www.example.org/document/Section_2/Slide_1/TITLE_1/Paragraph_1/TextRun_1/Text> .
 
-eg:document  rdf:type  xyz:Presentation , fx:root ;
+eg:document  rdf:type  xyz:Presentation , fx:Root ;
         rdf:_1    <http://www.example.org/document/Section_1> ;
         rdf:_2    <http://www.example.org/document/Section_2> ;
         rdf:_3    <http://www.example.org/document/Section_3> .

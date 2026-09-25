@@ -83,7 +83,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type        fx:root;
+[ rdf:type        fx:Root;
   xyz:arr         [ rdf:_1  "0"^^xsd:decimal;
                     rdf:_2  "1"^^xsd:decimal
                   ];
@@ -210,7 +210,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root;
+[ rdf:type  fx:Root;
   rdf:_1    [ rdf:_1  "Jennifer Aniston";
               rdf:_2  "Courteney Cox";
               rdf:_3  "Lisa Kudrow";
@@ -397,7 +397,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root;
+[ rdf:type  fx:Root;
   rdf:_1    [ xyz:genres     [ rdf:_1  "Comedy";
                                rdf:_2  "Romance"
                              ];

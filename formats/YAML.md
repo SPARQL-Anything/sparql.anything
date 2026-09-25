@@ -82,7 +82,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type          fx:root;
+[ rdf:type          fx:Root;
   xyz:another-key   [ rdf:_1  [ xyz:name     "john";
                                 xyz:surname  "smith"
                               ]

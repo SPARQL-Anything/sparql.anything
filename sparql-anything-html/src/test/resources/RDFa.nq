@@ -9,7 +9,7 @@
 <http://www.example.org/document/html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div/p> .
 <http://www.example.org/document/html/body/div> <https://html.spec.whatwg.org/#innerHTML> "<p><span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a></p>" .
 <http://www.example.org/document/html/body/div> <http://www.w3.org/1999/xhtml#vocab> "http://xmlns.com/foaf/0.1/" .
-<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/Root> .
 <http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> .
 <http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/document/html/body> .
 <http://www.example.org/document> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" .
@@ -56,7 +56,7 @@ _:Bedd7d40151074328111a4249b727f22a <http://xmlns.com/foaf/0.1/name> "Alice Birp
 <http://www.example.org/document/html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div/p> <http://www.example.org/document> .
 <http://www.example.org/document/html/body/div> <https://html.spec.whatwg.org/#innerHTML> "<p><span property=\"name\">Alice Birpemswick</span>, Email: <a property=\"mbox\" href=\"mailto:alice@example.com\">alice@example.com</a>, Phone: <a property=\"phone\" href=\"tel:+1-617-555-7332\">+1 617.555.7332</a></p>" <http://www.example.org/document> .
 <http://www.example.org/document/html/body/div> <http://www.w3.org/1999/xhtml#vocab> "http://xmlns.com/foaf/0.1/" <http://www.example.org/document> .
-<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/Root> <http://www.example.org/document> .
 <http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <http://www.example.org/document> .
 <http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/document/html/body> <http://www.example.org/document> .
 <http://www.example.org/document> <https://html.spec.whatwg.org/#innerText> "Alice Birpemswick, Email: alice@example.com, Phone: +1 617.555.7332" <http://www.example.org/document> .

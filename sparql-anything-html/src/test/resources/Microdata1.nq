@@ -9,7 +9,7 @@
 <http://www.example.org/document/html/body/div> <http://www.w3.org/1999/xhtml#itemtype> "https://schema.org/Movie" .
 <http://www.example.org/document/html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> <http://www.example.org/document/html/body/div/h1> .
 <http://www.example.org/document/html/body/div> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2> <http://www.example.org/document/html/body/div/span> .
-<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/Root> .
 <http://www.example.org/document> <https://html.spec.whatwg.org/#innerHTML> "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1>\n  <span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>" .
 <http://www.example.org/document> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954)" .
 <http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> .
@@ -44,7 +44,7 @@ _:Bnode1hn5vtssbx2 <https://schema.org/name> "Avatar" .
 <http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <http://www.example.org/document> .
 <http://www.example.org/document> <https://html.spec.whatwg.org/#innerText> "Avatar Director: James Cameron (born August 16, 1954)" <http://www.example.org/document> .
 <http://www.example.org/document> <https://html.spec.whatwg.org/#innerHTML> "<head></head>\n<body>\n <div itemscope itemtype=\"https://schema.org/Movie\">\n  <h1 itemprop=\"name\">Avatar</h1>\n  <span>Director: James Cameron (born August 16, 1954)</span>\n </div>\n</body>" <http://www.example.org/document> .
-<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <http://www.example.org/document> .
+<http://www.example.org/document> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/Root> <http://www.example.org/document> .
 _:Bnode1hn5vtssbx2 <https://schema.org/name> "Avatar" <http://www.example.org/document> .
 _:Bnode1hn5vtssbx2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/Movie> <http://www.example.org/document> .
 <http://www.example.org/document/html/body/div/h1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Avatar" <http://www.example.org/document> .

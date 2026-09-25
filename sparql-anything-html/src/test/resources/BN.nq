@@ -23,7 +23,7 @@
 <html/body/p.paragraph:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#p> .
 <html/body/p.paragraph:2> <http://www.w3.org/1999/xhtml#class> "paragraph" .
 <html/body/p.paragraph:2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world" .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/Root> .
 <html> <https://html.spec.whatwg.org/#innerHTML> "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <div id=\"notUnique\"></div>\n <p class=\"paragraph\">Hello world</p>\n <p class=\"paragraph\">Hello world 2</p>\n <p class=\"paragraph\">Hello world 3</p>\n <div id=\"notUnique\"></div>\n</body>" .
 <html> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world Hello world 2 Hello world 3" .
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> .
@@ -69,7 +69,7 @@
 <html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#html> <location> .
 <html> <https://html.spec.whatwg.org/#innerText> "Hello world! Hello world Hello world 2 Hello world 3" <location> .
 <html> <https://html.spec.whatwg.org/#innerHTML> "<head>\n <title>Hello world!</title>\n</head>\n<body>\n <div id=\"notUnique\"></div>\n <p class=\"paragraph\">Hello world</p>\n <p class=\"paragraph\">Hello world 2</p>\n <p class=\"paragraph\">Hello world 3</p>\n <div id=\"notUnique\"></div>\n</body>" <location> .
-<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/root> <location> .
+<html> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://sparql.xyz/facade-x/ns/Root> <location> .
 <html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> "Hello world!" <location> .
 <html/head/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/xhtml#title> <location> .
 <html/head/title> <https://html.spec.whatwg.org/#innerText> "Hello world!" <location> .

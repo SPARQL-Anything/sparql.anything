@@ -77,7 +77,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type          fx:root , xhtml:html;
+[ rdf:type          fx:Root , xhtml:html;
   rdf:_1            [ rdf:type          xhtml:head;
                       rdf:_1            [ rdf:type          xhtml:title;
                                           rdf:_1            "Hello world!";
@@ -273,7 +273,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
                   <https://schema.org/name>  "Avatar"
                 ] .
 
-[ rdf:type          fx:root , xhtml:html;
+[ rdf:type          fx:Root , xhtml:html;
   rdf:_1            [ rdf:type  xhtml:head ];
   rdf:_2            [ rdf:type          xhtml:body;
                       rdf:_1            [ rdf:type          xhtml:div;
@@ -386,7 +386,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type          <http://www.example.org#Element> , fx:root;
+[ rdf:type          <http://www.example.org#Element> , fx:Root;
   rdf:_1            [ rdf:type          <http://www.example.org#someThing>;
                       rdf:_1            "Hallo world";
                       whatwg:innerHTML  "Hallo world";

@@ -88,7 +88,7 @@ SPARQL Anything creates a blank node for the outer container. Let’s call it _:
 SPARQL Anything also marks the outer container as root so you can distinguish it from the other containers.
 
 ```
-    _:players rdf:type fx:root .
+    _:players rdf:type fx:Root .
 ```
 
 In particular cases a container can also have other types, but we will see such examples later on.
@@ -113,7 +113,7 @@ Here you can see a simple example.
 
 ```
 [
-    rdf:type fx:root ;
+    rdf:type fx:Root ;
     rdf:_1  [
         rdf:_1 "Year" ;
         rdf:_2 "Make" ;
@@ -136,7 +136,7 @@ It is quite usual to interpret the first row of a CSV as headers for the followi
 
 ```
 [
-    rdf:type fx:root ;
+    rdf:type fx:Root ;
     rdf:_1  [
         xyz:Year "1997" ;
         xyz:Make "Ford" ;
@@ -166,7 +166,7 @@ Here you can see a simple example.
 
 ```
 [ 
-    a       fx:root , xyz:PLAYERS ;
+    a       fx:Root , xyz:PLAYERS ;
     rdf:_1  [ a            xyz:PLAYER ;
         xyz:name     "Micheal" ;
         xyz:surname  "Jordan"

@@ -3,6 +3,6 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 
-<http://www.example.org/document> a fx:root .
+<http://www.example.org/document> a fx:Root .
 <http://www.example.org/document> <http://sparql.xyz/facade-x/data/second%20key> "second value"^^xsd:string .
 <http://www.example.org/document> <http://sparql.xyz/facade-x/data/first%20key> "first value"^^xsd:string .

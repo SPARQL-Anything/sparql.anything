@@ -163,7 +163,7 @@ public class IssuesTest {
 	public void testIssue356CLI() throws Exception {
 		String query = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue356.sparql")).toURI(), StandardCharsets.UTF_8);
 		String output = SPARQLAnything.callMain(new String[]{"-q", query});
-		Assert.assertTrue(output.contains("http://www.w3.org/1999/02/22-rdf-syntax-ns#type,http://sparql.xyz/facade-x/ns/root"));
+		Assert.assertTrue(output.contains("http://www.w3.org/1999/02/22-rdf-syntax-ns#type,http://sparql.xyz/facade-x/ns/Root"));
 	}
 
 	@Test

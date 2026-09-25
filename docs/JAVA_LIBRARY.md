@@ -134,7 +134,7 @@ public class SPARQLAnythingClientViaTriplifier {
 which prints
 
 ```
-_:b0    a       <http://sparql.xyz/facade-x/ns/root> ;
+_:b0    a       <http://sparql.xyz/facade-x/ns/Root> ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                 _:b1 ;
         <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -164,7 +164,7 @@ _:b1    <http://sparql.xyz/facade-x/data/movie>
                 "Vega" .
 
 <https://sparql-anything.cc/examples/simpleArray.json#> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/root> ;
+    _:b0    a       <http://sparql.xyz/facade-x/ns/Root> ;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1 ;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>

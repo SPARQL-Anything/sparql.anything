@@ -12,7 +12,7 @@
 @prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz:    <http://sparql.xyz/facade-x/data/> .
 
-[ rdf:type             fx:root , <http://www.opengis.net/gml/3.2#FeatureCollection> ;
+[ rdf:type             fx:Root , <http://www.opengis.net/gml/3.2#FeatureCollection> ;
   rdf:_1               [ rdf:type          <http://www.opengis.net/gml/3.2#featureMember> ;
                          rdf:_1            [ rdf:type          <http://inspire.ec.europa.eu/schemas/plu/4.0#SupplementaryRegulation> ;
                                              rdf:_1            [ rdf:type          <http://www.opengis.net/gml/3.2#identifier> ;

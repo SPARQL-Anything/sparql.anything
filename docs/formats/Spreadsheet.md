@@ -64,7 +64,7 @@ PREFIX xhtml:  <http://www.w3.org/1999/xhtml#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
-[ rdf:type  fx:root;
+[ rdf:type  fx:Root;
   rdf:_1    [ rdf:_1  "A1" , "A";
               rdf:_2  "B1" , "B";
               rdf:_3  "C1" , "C"
@@ -139,7 +139,7 @@ WHERE
 
 ```turtle
 <https://sparql-anything.cc/examples/Book1.xlsxSheet1> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
+    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -161,7 +161,7 @@ WHERE
 }
 
 <https://sparql-anything.cc/examples/Book1.xlsxSheet2> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
+    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -231,7 +231,7 @@ WHERE
 
 ```turtle
 <https://sparql-anything.cc/examples/Book2.xlsxSheet1> {
-    [ a       <http://sparql.xyz/facade-x/ns/root>;
+    [ a       <http://sparql.xyz/facade-x/ns/Root>;
       <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
               [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                         "A";
@@ -308,7 +308,7 @@ WHERE
 
 ```turtle
 <https://sparql-anything.cc/examples/Book3.xlsxSheet1> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
+    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -375,7 +375,7 @@ WHERE
 }
 
 <https://sparql-anything.cc/examples/Book3.xlsxSheet2> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
+    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -498,7 +498,7 @@ WHERE
 
 ```turtle
 <https://sparql-anything.cc/examples/Book1.xlsxSheet1> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
+    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -520,7 +520,7 @@ WHERE
 }
 
 <https://sparql-anything.cc/examples/Book1.xlsxSheet2> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/root>;
+    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
                     _:b1;
             <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
@@ -582,7 +582,7 @@ WHERE
                   fx:spreadsheet.headers  true ;
                   fx:spreadsheet.ignore-columns-with-no-header  true
         GRAPH <https://sparql-anything.cc/examples/spreadsheet.xls#Sheet1>
-          { ?root  rdf:type  fx:root ;
+          { ?root  rdf:type  fx:Root ;
                    rdf:_1    _:b0 .
             _:b0   rdf:_1    ?fred .
             ?root  rdf:_2    _:b1 .

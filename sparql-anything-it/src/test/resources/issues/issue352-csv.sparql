@@ -5,7 +5,7 @@ WHERE {
    SERVICE <x-sparql-anything:location=%%%LOCATION%%%>
    {
       fx:properties fx:csv.headers true .
-      ?root a fx:root ;
+      ?root a fx:Root ;
                   rdf:_1 [rdf:_1 ?fred] ;
                   rdf:_2 [rdf:_1 ?sally] .
    }
