@@ -173,7 +173,8 @@ public class JSONTriplifierTest {
 		Resource r = m.createResource();
 		m.add(r, RDF.type, m.createResource(Triplifier.FACADE_X_TYPE_ROOT));
 		m.add(r, m.createProperty(ontologyPrefix + "a"), m.createTypedLiteral(new BigDecimal(1)));
-		m.add(r, m.createProperty(ontologyPrefix + "enot"), m.createTypedLiteral("0.1e1", XSDDatatype.XSDdecimal));
+		//m.add(r, m.createProperty(ontologyPrefix + "enot"), m.createTypedLiteral("0.1e1", XSDDatatype.XSDdecimal));
+		m.add(r, m.createProperty(ontologyPrefix + "enot"), m.createTypedLiteral("0.1e1", XSDDatatype.XSDdouble));
 		m.add(r, m.createProperty(ontologyPrefix + "string"), m.createTypedLiteral("string"));
 		m.add(r, m.createProperty(ontologyPrefix + "bool"), m.createTypedLiteral(true));
 		m.add(r, m.createProperty(ontologyPrefix + "boolf"), m.createTypedLiteral(false));

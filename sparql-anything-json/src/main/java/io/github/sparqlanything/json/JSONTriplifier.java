@@ -112,8 +112,12 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 			}
 			case VALUE_FALSE, VALUE_TRUE ->
 				builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsBoolean());
-			case VALUE_NUMBER_FLOAT -> builder.addValue(dataSourceId, containerId, i + 1, parser.getDecimalValue());
-			case VALUE_NUMBER_INT -> builder.addValue(dataSourceId, containerId, i + 1, parser.getDecimalValue());
+//			case VALUE_NUMBER_FLOAT -> builder.addValue(dataSourceId, containerId, i + 1, parser.getDecimalValue());
+//			case VALUE_NUMBER_INT -> builder.addValue(dataSourceId, containerId, i + 1, parser.getDecimalValue());
+			case VALUE_NUMBER_FLOAT, VALUE_NUMBER_INT -> {
+				String numeral = parser.getText();
+				builder.addValue(dataSourceId, containerId, i + 1, numeral, numberDatatype(numeral));
+			}
 			case VALUE_STRING -> builder.addValue(dataSourceId, containerId, i + 1, parser.getValueAsString());
 			case VALUE_NULL -> {
 				if(includeNullValues)
@@ -137,18 +141,27 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 			transformMap((Map) o, dataSourceId, childContainerId, builder);
 		} else if (o instanceof Boolean) {
 			builder.addValue(dataSourceId, containerId, i + 1, o);
-		} else if (o instanceof Double) {
-			builder.addValue(dataSourceId, containerId, i + 1, o.toString(), XSDDatatype.XSDdecimal);
-		} else if (o instanceof Long) {
-			builder.addValue(dataSourceId, containerId, i + 1, o.toString(), XSDDatatype.XSDdecimal);
-		} else if (o instanceof Integer) {
-			builder.addValue(dataSourceId, containerId, i + 1, o.toString(), XSDDatatype.XSDdecimal);
-//			builder.addValue(dataSourceId, containerId, i + 1, o);
+//		} else if (o instanceof Double) {
+//			builder.addValue(dataSourceId, containerId, i + 1, o.toString(), XSDDatatype.XSDdecimal);
+//		} else if (o instanceof Long) {
+//			builder.addValue(dataSourceId, containerId, i + 1, o.toString(), XSDDatatype.XSDdecimal);
+//		} else if (o instanceof Integer) {
+//			builder.addValue(dataSourceId, containerId, i + 1, o.toString(), XSDDatatype.XSDdecimal);
+////			builder.addValue(dataSourceId, containerId, i + 1, o);
+		} else if (o instanceof Number) {
+			String numeral = o.toString();
+			builder.addValue(dataSourceId, containerId, i + 1, numeral, numberDatatype(numeral));
 		} else if (o instanceof String) {
 			builder.addValue(dataSourceId, containerId, i + 1, o);
 		} else {
 			throw new RuntimeException("Unsupported value type: " + o.getClass());
 		}
+	}
+
+	// See https://github.com/SPARQL-Anything/sparql.anything/issues/662
+	// The lexical form is the numeral as written; a numeral with an exponent is xsd:double, all others xsd:decimal.
+	static XSDDatatype numberDatatype(String numeral) {
+		return (numeral.indexOf('e') >= 0 || numeral.indexOf('E') >= 0) ? XSDDatatype.XSDdouble : XSDDatatype.XSDdecimal;
 	}
 
 	private void transformArray(List<Object> o, String dataSourceId, String containerId, FacadeXGraphBuilder builder) {
@@ -172,8 +185,8 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 	private void transformObject(JsonParser parser, String dataSourceId, String containerId, FacadeXGraphBuilder builder, boolean includeNullValues) throws IOException {
 
 		JsonToken token;
-		Integer coercedInt;
-		String coercedStr;
+		//Integer coercedInt;
+		//String coercedStr;
 
 		while ((token = parser.nextToken()) != END_OBJECT) {
 			if (token == JsonToken.FIELD_NAME) {
@@ -195,31 +208,36 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 						builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
 						transformObject(parser, dataSourceId, childContainerId, builder, includeNullValues);
 					}
-					case VALUE_NUMBER_FLOAT -> {
-						logger.trace("{} float", k);
-//						builder.addValue(dataSourceId, containerId, k, parser.getValueAsDouble());
-						builder.addValue(dataSourceId, containerId, k, parser.getText(), XSDDatatype.XSDdecimal);
-					}
-					case VALUE_NUMBER_INT -> {
-						logger.trace("{} int", k);
-						coercedInt = null;
-						coercedStr = null;
-						boolean kIsInteger = true; // assume it is
-						try {
-							coercedInt = parser.getValueAsInt();
-						} catch (Exception e) { // could tighten this to
-							// com.fasterxml.jackson.core.exc.InputCoercionException
-							logger.warn("{} can not be parsed as an integer -- treating it as a string", k);
-							kIsInteger = false;
-							coercedStr = parser.getValueAsString();
-						}
-						String value = null;
-						if (kIsInteger) {
-							value = Integer.toString(coercedInt);
-						}else{
-							value = coercedStr;
-						}
-						builder.addValue(dataSourceId, containerId, k, value, XSDDatatype.XSDdecimal);
+//					case VALUE_NUMBER_FLOAT -> {
+//						logger.trace("{} float", k);
+////						builder.addValue(dataSourceId, containerId, k, parser.getValueAsDouble());
+//						builder.addValue(dataSourceId, containerId, k, parser.getText(), XSDDatatype.XSDdecimal);
+//					}
+//					case VALUE_NUMBER_INT -> {
+//						logger.trace("{} int", k);
+//						coercedInt = null;
+//						coercedStr = null;
+//						boolean kIsInteger = true; // assume it is
+//						try {
+//							coercedInt = parser.getValueAsInt();
+//						} catch (Exception e) { // could tighten this to
+//							// com.fasterxml.jackson.core.exc.InputCoercionException
+//							logger.warn("{} can not be parsed as an integer -- treating it as a string", k);
+//							kIsInteger = false;
+//							coercedStr = parser.getValueAsString();
+//						}
+//						String value = null;
+//						if (kIsInteger) {
+//							value = Integer.toString(coercedInt);
+//						}else{
+//							value = coercedStr;
+//						}
+//						builder.addValue(dataSourceId, containerId, k, value, XSDDatatype.XSDdecimal);
+//					}
+					case VALUE_NUMBER_FLOAT, VALUE_NUMBER_INT -> {
+						String numeral = parser.getText();
+						logger.trace("{} number {}", k, numeral);
+						builder.addValue(dataSourceId, containerId, k, numeral, numberDatatype(numeral));
 					}
 					case VALUE_STRING -> builder.addValue(dataSourceId, containerId, k, parser.getValueAsString());
 					case VALUE_FALSE, VALUE_TRUE ->
@@ -290,15 +308,18 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 				String childContainerId = StringUtils.join(containerId, "/", Triplifier.toSafeURIString(k));
 				builder.addContainer(dataSourceId, containerId, Triplifier.toSafeURIString(k), childContainerId);
 				transformMap((Map) val, dataSourceId, childContainerId, builder);
-			} else if (val instanceof Double) {
-				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), Double.toString((Double)val), XSDDatatype.XSDdecimal);
-			} else if (val instanceof Long) {
-				// What datatype is supposed to be long. If cast to int has the same form, keep
-				// integer, otherwise double
-				String asString = ((Long) val).toString();
-				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), asString, XSDDatatype.XSDdecimal);
-			} else if (val instanceof Integer) {
-				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), val.toString(), XSDDatatype.XSDdecimal);
+//			} else if (val instanceof Double) {
+//				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), Double.toString((Double)val), XSDDatatype.XSDdecimal);
+//			} else if (val instanceof Long) {
+//				// What datatype is supposed to be long. If cast to int has the same form, keep
+//				// integer, otherwise double
+//				String asString = ((Long) val).toString();
+//				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), asString, XSDDatatype.XSDdecimal);
+//			} else if (val instanceof Integer) {
+//				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), val.toString(), XSDDatatype.XSDdecimal);
+			} else if (val instanceof Number) {
+				String numeral = val.toString();
+				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), numeral, numberDatatype(numeral));
 			} else if (val instanceof Boolean) {
 				builder.addValue(dataSourceId, containerId, Triplifier.toSafeURIString(k), val);
 			} else if (val instanceof String) {
