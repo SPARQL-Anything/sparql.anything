@@ -30,10 +30,16 @@ public class TSVTest extends AbstractTriplifierTester {
 	}
 
 	public void properties(Properties properties) {
-		properties.setProperty("csv.delimiter", "\t");
+		if (name.getMethodName().equals("testTsv")) {
+			properties.setProperty("csv.delimiter", "\t");
+		}
 		properties.setProperty("csv.headers", "true");
 	}
 
+	@Test
+	public void testTsv$DefaultDelimiter() {
+		this.assertResultIsIsomorphicWithExpected();
+	}
 
 	@Test
 	public void testTsv() {

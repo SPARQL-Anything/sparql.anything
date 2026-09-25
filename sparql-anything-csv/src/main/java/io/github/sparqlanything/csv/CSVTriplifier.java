@@ -25,6 +25,7 @@ import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 	public final static IRIArgument PROPERTY_FORMAT = new IRIArgument("csv.format", CSVFormat.Predefined.Default.name());
 
 	@Example(resource = "https://sparql-anything.cc/examples/simple.tsv", description = "Compute the maximum petal length of the species having sepal length less than 4.9", query = "PREFIX xyz: <http://sparql.xyz/facade-x/data/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT (MAX(xsd:float(?petalLength)) AS ?maxPetalLength) WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true> { fx:properties fx:csv.delimiter \"\\t\" . ?s xyz:Sepal_length ?length ; xyz:Petal_length ?petalLength FILTER ( xsd:float(?length) < 4.9 ) } }")
-	@Option(description = "It sets the column delimiter, usually ,;\\t etc.", validValues = "Any single character")
+	@Option(description = "It sets the column delimiter, usually ,;\\t etc. If not set, it is the delimiter of `csv.format` when given; otherwise tab for the media type `text/tab-separated-values` and the extensions `tsv` and `tab`; otherwise comma.", validValues = "Any single character")
 	public final static IRIArgument PROPERTY_DELIMITER = new IRIArgument("csv.delimiter", ",");
 
 	@Example(resource = "https://sparql-anything.cc/examples/csv_with_commas.csv", description = "Constructing a Facade-X RDF graph out of the CSV available at https://sparql-anything.cc/examples/csv_with_commas.csv", query = "CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/csv_with_commas.csv,csv.headers=true,csv.quote-char='> { ?s ?p ?o } }")
@@ -134,11 +135,30 @@ public class CSVTriplifier implements Triplifier, Slicer<CSVRecord> {
 			format = format.withQuote(quoteChar.charAt(0));
 		}
 
-		String delimiter = PropertyUtils.getStringProperty(properties, PROPERTY_DELIMITER);
-		ensureLength1(delimiter, PROPERTY_DELIMITER);
-		format = format.withDelimiter(delimiter.charAt(0));
-
+		// See https://github.com/SPARQL-Anything/sparql.anything/issues/657
+		// csv.delimiter > csv.format > media type / extension (tab) > default (comma)
+		String delimiter = properties.getProperty(PROPERTY_DELIMITER.toString());
+		if (delimiter == null && !properties.containsKey(PROPERTY_FORMAT.toString())) {
+			delimiter = isTabSeparated(properties) ? "\t" : PROPERTY_DELIMITER.getDefaultValue();
+		}
+		if (delimiter != null) {
+			ensureLength1(delimiter, PROPERTY_DELIMITER);
+			format = format.withDelimiter(delimiter.charAt(0));
+		}
 		return format;
+	}
+
+	static boolean isTabSeparated(Properties properties) {
+		String mediaType = properties.getProperty(IRIArgument.MEDIA_TYPE.toString());
+		if (mediaType != null) {
+			return mediaType.split(";")[0].trim().equalsIgnoreCase("text/tab-separated-values");
+		}
+		String location = properties.getProperty(IRIArgument.LOCATION.toString());
+		if (location == null) {
+			return false;
+		}
+		String extension = FilenameUtils.getExtension(location.replaceAll("[?#].*$", "")).toLowerCase(Locale.ROOT);
+		return extension.equals("tsv") || extension.equals("tab");
 	}
 
 	public LinkedHashMap<Integer, String> makeHeadersMapFromOpenIterator(Iterator<CSVRecord> recordIterator, Properties properties, CSVFormat format, Charset charset) throws TriplifierHTTPException, IOException {
