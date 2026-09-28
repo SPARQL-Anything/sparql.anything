@@ -91,7 +91,7 @@ public class DocumentationGenerator {
 		// Create your Configuration instance, and specify if up to what FreeMarker
 		// version (here 2.3.27) do you want to apply the fixes that are not 100%
 		// backward-compatible. See the Configuration JavaDoc for details.
-		Configuration freemarkerCfg = new Configuration(Configuration.VERSION_2_3_28);
+		Configuration freemarkerCfg = new Configuration(Configuration.VERSION_2_3_35);
 
 		// Specify the source where the template files come from. Here I set a
 		// plain directory for it, but non-file-system sources are possible too:

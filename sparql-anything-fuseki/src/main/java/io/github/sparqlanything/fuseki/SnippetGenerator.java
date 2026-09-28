@@ -406,7 +406,7 @@ public class SnippetGenerator {
 	 * Configures FreeMarker for template processing.
 	 */
 	private Configuration getFreemarkerConfiguration() {
-		Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
+		Configuration cfg = new Configuration(Configuration.VERSION_2_3_35);
 		cfg.setClassLoaderForTemplateLoading(getClass().getClassLoader(), "io/github/sparqlanything/fuseki");
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
