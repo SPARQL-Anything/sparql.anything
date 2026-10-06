@@ -1,0 +1,34 @@
+@prefix fx: <http://sparql.xyz/facade-x/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xmlns: <http://www.w3.org/XML/1998/namespace#> .
+@prefix xyz: <http://sparql.xyz/facade-x/data/> .
+
+[] a xyz:doc,
+        fx:Root ;
+    xyz:title "Languages"@en ;
+    rdf:_1 [ a xyz:p ;
+            rdf:_1 "Inherited"@en ] ;
+    rdf:_2 [ a xyz:p ;
+            xyz:note "nota"@it ;
+            rdf:_1 "Sovrascritto "@it ;
+            rdf:_2 [ a xyz:b ;
+                    rdf:_1 "grassetto"@it ] ;
+            rdf:_3 " fine"@it ;
+            xmlns:lang "it" ] ;
+    rdf:_3 [ a xyz:p ;
+            rdf:_1 "No language " ;
+            rdf:_2 [ a xyz:q ;
+                    rdf:_1 "Rétabli"@fr ;
+                    xmlns:lang "fr" ] ;
+            xmlns:lang "" ] ;
+    rdf:_4 [ a xyz:p ;
+            rdf:_1 "Colour"@en-GB ;
+            xmlns:lang "en-GB" ;
+            xmlns:space "preserve" ] ;
+    rdf:_5 [ a xyz:p ;
+            rdf:_1 "Malformed" ;
+            xmlns:lang "not a tag" ] ;
+    rdf:_6 [ a xyz:p ;
+            xyz:label "inherited attribute"@en ;
+            rdf:_1 "Child attribute"@en ] ;
+    xmlns:lang "en" .

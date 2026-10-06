@@ -50,14 +50,22 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 		} else if (name.getMethodName().equals("testBooks_2$1")) {
 			properties.put("blank-nodes", "false");
 			properties.put("xml.path", "//book");
-		} else if(name.getMethodName().equals("testXPathAndSlice")){
+		} else if (name.getMethodName().equals("testXPathAndSlice")) {
 			properties.put("blank-nodes", "true");
 			properties.put("xml.path", "//Record");
 			properties.put("slice", "true");
-		} else if(name.getMethodName().startsWith("testXPathAndSliceIssue531")){
+		} else if (name.getMethodName().startsWith("testXPathAndSliceIssue531")) {
 			properties.put("blank-nodes", "true");
 			properties.put("xml.path", "//root");
 			properties.put("slice", "true");
+		} else if (name.getMethodName().equals("testLang")) {
+			properties.put("blank-nodes", "true");
+		} else if (name.getMethodName().equals("testLangTags")) {
+			properties.put("blank-nodes", "true");
+			properties.put("xml.lang-tags", "true");
+		} else if (name.getMethodName().equals("testLangNoTags")) {
+			properties.put("blank-nodes", "true");
+			properties.put("xml.lang-tags", "false");
 		}
 	}
 
@@ -114,6 +122,24 @@ public class MoreXMLTriplifierTest extends AbstractTriplifierTester {
 	public void testXPathAndSliceIssue531_2() {
 		L.debug("Another test for bug in issue 531 (XPath //root, with slicing)");
 		//RDFDataMgr.write(System.err, result, Lang.TTL);
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testLang() {
+		L.debug("Test xml:lang without options: language tags (default)");
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testLangTags() {
+		L.debug("Test xml:lang with xml.lang-tags=true: language tags");
+		assertResultIsIsomorphicWithExpected();
+	}
+
+	@Test
+	public void testLangNoTags() {
+		L.debug("Test xml:lang with xml.lang-tags=false: plain strings");
 		assertResultIsIsomorphicWithExpected();
 	}
 }

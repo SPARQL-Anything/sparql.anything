@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc xml:lang="en" title="Languages">
+    <p>Inherited</p>
+    <p xml:lang="it" note="nota">Sovrascritto <b>grassetto</b> fine</p>
+    <p xml:lang="">No language <q xml:lang="fr">Rétabli</q></p>
+    <p xml:lang="en-GB" xml:space="preserve">Colour</p>
+    <p xml:lang="not a tag">Malformed</p>
+    <p label="inherited attribute">Child attribute</p>
+</doc>

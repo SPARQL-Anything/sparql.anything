@@ -26,9 +26,10 @@ import io.github.sparqlanything.model.annotations.Option;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jena.graph.NodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -48,6 +49,11 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 	@Example(resource = "https://sparql-anything.cc/examples/simple-menu.xml", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"https://sparql-anything.cc/examples/simple-menu.xml\" ; fx:xml.path \"//food\" ; fx:blank-nodes false . ?s ?p ?o } }")
 	@Option(description = "One or more XPath expressions as filters. E.g. `xml.path=value` or `xml.path.1`, `xml.path.2`,`...` to add multiple expressions.", validValues = "Any valid XPath")
 	public static final IRIArgument PROPERTY_XPATH = new IRIArgument("xml.path");
+
+	@Option(description = "It tells the XML triplifier to language-tag text nodes and attribute values in the scope of `xml:lang` (see the Façade-X XML mapping). Values of attributes in the XML namespace are not tagged. `xml:lang=\"\"`, or a value that is not a well-formed language tag, removes the language. With `false`, values are plain strings. In all cases, `xml:lang` is also kept as an attribute. Currently not applied together with `xml.path`.", validValues = "true/false")
+	public static final IRIArgument PROPERTY_LANG_TAGS = new IRIArgument("xml.lang-tags", "true");
+
+	private static final QName XML_LANG = new QName(XMLConstants.XML_NS_URI, "lang");
 	private static final Logger log = LoggerFactory.getLogger(XMLTriplifier.class);
 
 	private static String normaliseNamespace(QName qname) {
@@ -65,15 +71,42 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 		}
 	}
 
-	private static void addNamespacedValue(FacadeXGraphBuilder builder, String dataSourceId, String resourceId, QName qname, String attribute1) throws URISyntaxException {
+	/**
+	 * The language given by a value of xml:lang: the value itself if it is a well-formed
+	 * language tag (BCP 47), otherwise no language (the empty string).
+	 */
+	private static String languageOf(String xmlLang) {
+		if (xmlLang.isEmpty()) {
+			return "";
+		}
+		try {
+			new Locale.Builder().setLanguageTag(xmlLang);
+			return xmlLang;
+		} catch (IllformedLocaleException e) {
+			log.debug("Ignoring malformed xml:lang: {}", xmlLang);
+			return "";
+		}
+	}
+
+	/**
+	 * A string value, language-tagged when lang is not empty.
+	 */
+	private static Object stringValue(String value, String lang, boolean trim) {
+		if (lang == null || lang.isEmpty()) {
+			return value;
+		}
+		return NodeFactory.createLiteralLang(trim ? value.trim() : value, lang);
+	}
+
+	private static void addNamespacedValue(FacadeXGraphBuilder builder, String dataSourceId, String resourceId, QName qname, Object attribute1) throws URISyntaxException {
 		if (qname.getNamespaceURI().equals("")) {
 			builder.addValue(dataSourceId, resourceId, qname.getLocalPart(), attribute1);
 		} else {
 			builder.addValue(dataSourceId, resourceId, new URI(normaliseNamespace(qname).concat(qname.getLocalPart())), attribute1);
 		}
-
-
 	}
+
+
 
 	public void transformWithXPath(List<String> xpaths, Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 
@@ -187,6 +220,8 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 //		String namespace = PropertyUtils.getStringProperty(properties, IRIArgument.NAMESPACE);
 		String dataSourceId = SPARQLAnythingConstants.DATA_SOURCE_ID;
 		String root = SPARQLAnythingConstants.ROOT_ID;
+		boolean langTags = PropertyUtils.getBooleanProperty(properties, PROPERTY_LANG_TAGS);
+		boolean trimStrings = PropertyUtils.getBooleanProperty(properties, IRIArgument.TRIM_STRINGS);
 
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		// TODO allow users to configure XML parser via properties
@@ -197,6 +232,8 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 		XMLEventReader eventReader;
 		//
 		Deque<String> stack = new ArrayDeque<>();
+		// The language of each element in the stack ("" for none), used when langTags is true
+		Deque<String> langStack = new ArrayDeque<>();
 		Map<String, Integer> members = new HashMap<>();
 		String path = "";
 		StringBuilder charBuilder = null;
@@ -225,13 +262,15 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 							members.put(resourceId, 0);
 						}
 						int member = members.get(resourceId) + 1;
-						builder.addValue(dataSourceId, resourceId, member, value);
+						//builder.addValue(dataSourceId, resourceId, member, value);
+						builder.addValue(dataSourceId, resourceId, member, langTags ? stringValue(value, langStack.peekLast(), trimStrings) : value);
 					}
 					charBuilder = null;
 				}
 
 				// reset current resource
 				stack.removeLast();
+				langStack.removeLast();
 			}
 			try {
 				event = eventReader.nextEvent();
@@ -251,7 +290,8 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 							members.put(resourceId, 0);
 						}
 						int member = members.get(resourceId) + 1;
-						builder.addValue(dataSourceId, resourceId, member, value);
+						builder.addValue(dataSourceId, resourceId, member, langTags ? stringValue(value, langStack.peekLast(), trimStrings) : value);
+						// builder.addValue(dataSourceId, resourceId, member, value);
 						members.put(resourceId, member);
 					}
 					charBuilder = null;
@@ -301,18 +341,31 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 					String parent = stack.peekLast();
 					builder.addContainer(dataSourceId, parent, member, resourceId);
 				}
+				// Language: the element's own xml:lang, otherwise the parent's
+				String lang;
+				Attribute xmlLang = se.getAttributeByName(XML_LANG);
+				if (xmlLang != null) {
+					lang = languageOf(xmlLang.getValue());
+				} else {
+					lang = langStack.isEmpty() ? "" : langStack.peekLast();
+				}
 				// Attributes
 				Iterator<Attribute> attributes = se.getAttributes();
 				while (attributes.hasNext()) {
 					Attribute attribute = attributes.next();
 					log.trace("attribute: {}", attribute);
 					try {
-						addNamespacedValue(builder, dataSourceId, resourceId, attribute.getName(), attribute.getValue());
+						Object value = attribute.getValue();
+						if (langTags && !XMLConstants.XML_NS_URI.equals(attribute.getName().getNamespaceURI())) {
+							value = stringValue(attribute.getValue(), lang, trimStrings);
+						}
+						addNamespacedValue(builder, dataSourceId, resourceId, attribute.getName(), value);
 					} catch (URISyntaxException e) {
 						throw new IOException(e);
 					}
 				}
 				stack.add(resourceId);
+				langStack.add(lang);
 			} else if (event.isCharacters()) {
 				// Characters
 				log.trace("character: {}", event);
@@ -328,6 +381,7 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 	public void triplify(Properties properties, FacadeXGraphBuilder builder) throws IOException, TriplifierHTTPException {
 		List<String> xpaths = PropertyUtils.getPropertyValues(properties, PROPERTY_XPATH);
 		if (!xpaths.isEmpty()) {
+			log.debug("{} is not applied together with {}: values are not language-tagged", PROPERTY_LANG_TAGS, PROPERTY_XPATH);
 			transformWithXPath(xpaths, properties, builder);
 		} else {
 			transformSAX(properties, builder);
