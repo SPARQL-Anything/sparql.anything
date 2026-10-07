@@ -376,8 +376,7 @@ Note that
 1. The SERVICE IRI scheme must be ``x-sparql-anything:``.
 2. Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the
    SERVICE clause.
-3. Such triples must have ``fx:properties`` as subject, ``fx:[OPTION-NAME]`` as predicate, and a literal or a variable
-   as object.
+3. Such triples must have ``fxe:properties`` as subject, ``fxe:[OPTION-NAME]`` as predicate, and a literal or a variable as object (the ``fx:`` forms are deprecated, see [Configuration](Configuration.md)).
 
 You can also mix the two modalities as follows.
 

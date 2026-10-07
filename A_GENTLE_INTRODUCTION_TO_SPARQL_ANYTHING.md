@@ -278,10 +278,9 @@ WHERE {
 }
 ```
 
-Note that
-The SERVICE URI scheme must be `x-sparql-anything:`.
+Note that the SERVICE URI scheme must be `x-sparql-anything:`.
 Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the SERVICE clause.
-Such triples must have fx:properties as subject, fx:[OPTION-NAME] as predicate, and a literal or a variable as object.
+Such triples must have fxe:properties as subject, fxe:[OPTION-NAME] as predicate, and a literal or a variable as object.
 
 ## Constructing Knowledge Graphs
 Now, I’m going to show you how to construct RDF knowledge graphs using SPARQL Anything. Suppose that you want to structure a TV Series Knowledge Graph by extracting data from the JSON we have seen before and this KG has to comply with schema.org ontology. With SPARQL Anything you can address this task in a single construct query.

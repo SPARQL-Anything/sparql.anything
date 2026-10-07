@@ -28,49 +28,47 @@ Alternatively, options can be provided as basic graph pattern inside the SERVICE
 
 ```sparql
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
 PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT ?seriesName
 WHERE {
-
     SERVICE <x-sparql-anything:> {
         fxe:properties fxe:location "https://sparql-anything.cc/example1.json" .
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star fx:anySlot "Courteney Cox" .
     }
-
 }
 ```
 
 Note that
 
 1. The SERVICE IRI scheme must be ``x-sparql-anything:``.
-2. Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the SERVICE clause.
-3. Such triples must have ``fx:properties`` as subject, ``fx:[OPTION-NAME]`` as predicate, and a literal or a variable as object.
+2. Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the SERVICE clause.
+3. Such triples must have ``fxe:properties`` as subject, ``fxe:[OPTION-NAME]`` as predicate, and a literal or a variable as object.
+4. The ``fxe:`` namespace (``http://sparql.xyz/facade-x/engine/``) is the [Façade-X Engine vocabulary](https://w3c-facade-x.github.io/facade-x-specs/engine.html) defined by the W3C Data Façades Community Group. The Façade-X functions and the terms of the generated data (e.g. ``fx:Root``) remain in the ``fx:`` namespace.
+5. If the same option is given as an ``fxe:`` triple, as an ``fx:`` triple and in the SERVICE IRI, the ``fxe:`` triple takes precedence, then the ``fx:`` triple, then the IRI.
 
 You can also mix the two modalities as follows.
 
 ```sparql
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
 PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT ?seriesName
 WHERE {
-
     SERVICE <x-sparql-anything:blank-nodes=false> {
         fxe:properties fxe:location "https://sparql-anything.cc/example1.json" .
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star fx:anySlot "Courteney Cox" .
     }
-
 }
 ```
+
+> **Deprecated.** Since version X.Y.Z, ``fx:properties`` and options in the ``fx:`` namespace (e.g. ``fx:properties fx:location "…"``) are deprecated. Such queries still work, and the engine logs a warning the first time each deprecated term is used. Support will be removed in a future major release. To migrate, add ``PREFIX fxe: <http://sparql.xyz/facade-x/engine/>`` and replace ``fx:`` with ``fxe:`` in both the subject and the predicate of every option triple: ``fxe:properties fxe:location "…"``. Options in the SERVICE IRI (``x-sparql-anything:location=…``) are not affected.
 
 ## General purpose options
 
