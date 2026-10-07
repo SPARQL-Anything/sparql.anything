@@ -161,8 +161,8 @@ public class CLI {
 			.longOpt(STREAM_LONG).build());
 
 		options.addOption(Option.builder(PROFILE).argName("filepath").hasArg(true).optionalArg(true).desc(
-				"OPTIONAL - It runs the execution through a profiler. It saves the results to [filepath] (by default profile.tsv) in TSV format. The traced event is reported in the first column. The second column contains the timestamp in milliseconds from Unix epoch. The third column contains the amount of milliseconds from the first event (LOAD_MAIN_CLASS). the  Warning: This may increase execution time.")
-			.build());
+				"OPTIONAL - It runs the execution through a profiler. It saves the results to [filepath] (by default profile.tsv) in TSV format. The traced event is reported in the first column. The second column contains the timestamp in milliseconds from Unix epoch. The third column contains the amount of milliseconds from the first event (LOAD_MAIN_CLASS). Warning: This may increase execution time.")
+			.longOpt(PROFILE).build());
 
 	}
 

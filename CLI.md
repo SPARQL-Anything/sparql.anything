@@ -73,3 +73,47 @@ Keeps duplicate triples in CONSTRUCT output.
 
 > [!NOTE]
 > Only affects CONSTRUCT (and DESCRIBE over loaded data); other formats (RDF/XML, JSON-LD, TRIX, CSV) require the whole graph and are unaffected. See [#635](https://github.com/SPARQL-Anything/sparql.anything/issues/635).
+
+### -profile,--profile [<filepath>]
+OPTIONAL - Records the time of the main execution phases and writes them to `<filepath>` (default: `profile.tsv` in the working directory; an existing file is overwritten).
+
+The output is a tab-separated file, with no header, one event per line, ordered by time:
+
+| Column | Content |
+|--------|---------|
+| 1 | Event name |
+| 2 | Timestamp (milliseconds since Unix epoch) |
+| 3 | Milliseconds since `LOAD_MAIN_CLASS` |
+
+Events:
+
+| Event | When |
+|-------|------|
+| `LOAD_MAIN_CLASS` | The CLI class is loaded (reference point for column 3) |
+| `PROCESS_STARTS` / `PROCESS_ENDS` | Start and end of the process |
+| `BEFORE_INIT` / `AFTER_INIT` | Initialisation of the SPARQL Anything engine |
+| `BEFORE_LOAD` / `AFTER_LOAD` | Loading of RDF data with `-l` (only when `-l` is used) |
+| `BEFORE_QUERY_EXECUTION` / `AFTER_QUERY_EXECUTION` | Execution of the query and serialisation of the results |
+| `BEFORE_TRIPLIFICATION` / `AFTER_TRIPLIFICATION` | Triplification of a source (not recorded when the result comes from the cache, or when `slice=true`) |
+
+Example:
+
+```bash
+java -jar sparql-anything-<version>.jar -q query.sparql -o out.ttl --profile run1.tsv
+```
+
+```
+LOAD_MAIN_CLASS          1759830000000  0
+PROCESS_STARTS           1759830000012  12
+BEFORE_INIT              1759830000140  140
+AFTER_INIT               1759830000610  610
+BEFORE_QUERY_EXECUTION   1759830000615  615
+BEFORE_TRIPLIFICATION    1759830000702  702
+AFTER_TRIPLIFICATION     1759830003950  3950
+AFTER_QUERY_EXECUTION    1759830004420  4420
+PROCESS_ENDS             1759830004425  4425
+```
+
+> [!NOTE]
+> Each event is recorded once: if it happens more than once (e.g. several `SERVICE` clauses, or a query executed for each set of `-v` values), only the last occurrence is kept.
+
