@@ -2,12 +2,12 @@
 
 ## Download
 
+Download the latest `sparql-anything-<version>.jar` from the [releases page](https://github.com/SPARQL-Anything/sparql.anything/releases). It requires Java 21 or later.
+
 ## Usage
 
 ```bash
-java -jar sparql.anything-<version>.jar  -q <query> [-f <output
-format>] [-v <filepath | name=value> ... ] [-c <option=value>]
-[-l <path>] [-o <filepath>]
+java -jar sparql-anything-<version>.jar -q <query> [-f <output format>] [-v <filepath | name=value> ...] [-c <option=value>] [-l <path>] [-o <filepath>]
 ```
 
 ### -q,--query <query>                    
