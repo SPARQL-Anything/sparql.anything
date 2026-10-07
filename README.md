@@ -1,7 +1,6 @@
 [![DOI](https://zenodo.org/badge/303967701.svg)](https://zenodo.org/badge/latestdoi/303967701)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Java 21](https://github.com/sparql-anything/sparql.anything/actions/workflows/build_on_maven_java21.yml/badge.svg?branch=v1.3-DEV)](https://github.com/sparql-anything/sparql.anything/actions/workflows/build_on_maven_java21.yml)
-[![Docs](https://readthedocs.org/projects/sparql-anything/badge/?version=latest)](https://sparql-anything.readthedocs.io/)
 [![Documentation Status](https://readthedocs.org/projects/sparql-anything/badge/?version=latest)](https://sparql-anything.readthedocs.io/en/latest/)
 
 # SPARQL Anything
