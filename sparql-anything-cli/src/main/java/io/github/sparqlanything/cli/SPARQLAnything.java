@@ -555,7 +555,11 @@ public class SPARQLAnything {
 				outputFile = prepareOutputFromPattern(outputPattern, qs);
 			} else {
 				if (outputFileName != null) {
-					outputFile = FilenameUtils.removeExtension(outputFileName) + (parameters.getRowNumber() == 1 && parameters.hasNext() ? "-" + parameters.getRowNumber() : "") + "." + FilenameUtils.getExtension(outputFileName);
+					if (outputFileName != null) {
+						// Number the output files whenever there is more than one binding set (#<issue>)
+						boolean multiple = parameters.getRowNumber() > 1 || parameters.hasNext();
+						outputFile = FilenameUtils.removeExtension(outputFileName) + (multiple ? "-" + parameters.getRowNumber() : "") + "." + FilenameUtils.getExtension(outputFileName);
+					}
 				}
 				// else stays null and output goes to STDOUT
 			}
