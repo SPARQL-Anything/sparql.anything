@@ -50,8 +50,8 @@ Supported values: see below. [Default: CSV or TTL]
 ### -s,--strategy <strategy>              
 OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.
 
-### -p,--output-pattern <outputPattern>   
-OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables should start with '?' and refer to bindings from the input file (`-v`). This option can only be used in combination with 'values' (`-v` or `--values`) and is ignored otherwise. This option overrides 'output'.
+### -p,--output-pattern <outputPattern>
+OPTIONAL - Output filename pattern, e.g. `my-file-?friendName.json`. Variables start with `?` (or `$`) and refer to the input bindings (`-v`), named without the `_` prefix and type suffix. A variable must be followed by a character that is not a letter, digit or `_` (e.g. the extension). The bound value is used as is, so values containing `/` produce subfolders. This option can only be used in combination with `-v` and is ignored otherwise. It overrides `-o`.
 
 ### -v,--values <values>
 

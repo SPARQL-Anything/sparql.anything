@@ -16,10 +16,14 @@ The path to the file storing the query to execute or the query itself.
 ### -o,--output <file>
 OPTIONAL - The path to the output file. [Default: STDOUT]
 
-### -a,--append
-OPTIONAL - Should output to file be appended? 
+When the query is executed for more than one set of bindings (`-v`), one file is written per binding set, numbered in iteration order: `out.ttl` becomes `out-1.ttl`, `out-2.ttl`, … With a single binding set, the file name is used as given. To name files after the bound values, use `-p` instead.
 
-> [!WARNING] 
+### -a,--append
+OPTIONAL - Should output to file be appended?
+
+With multiple binding sets (`-v`), each numbered output file is appended to separately (see `-o`). Whether `-a` should instead collect all iterations into a single file is under discussion in [#676](https://github.com/SPARQL-Anything/sparql.anything/issues/676).
+
+> [!WARNING]
 > This option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using blank nodes)
 
 ### -e,--explain                          
@@ -46,8 +50,8 @@ Supported values: see below. [Default: CSV or TTL]
 ### -s,--strategy <strategy>              
 OPTIONAL - Strategy for query evaluation. Possible values: '1' - triple filtering (default), '0' - triplify all data. The system fallbacks to '0' when the strategy is not implemented yet for the given resource type.
 
-### -p,--output-pattern <outputPattern>   
-OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables should start with '?' and refer to bindings from the input file (`-v`). This option can only be used in combination with 'values' (`-v` or `--values`) and is ignored otherwise. This option overrides 'output'.
+### -p,--output-pattern <outputPattern>
+OPTIONAL - Output filename pattern, e.g. `my-file-?friendName.json`. Variables start with `?` (or `$`) and refer to the input bindings (`-v`), named without the `_` prefix and type suffix. A variable must be followed by a character that is not a letter, digit or `_` (e.g. the extension). The bound value is used as is, so values containing `/` produce subfolders. This option can only be used in combination with `-v` and is ignored otherwise. It overrides `-o`.
 
 ### -v,--values <values>
 
