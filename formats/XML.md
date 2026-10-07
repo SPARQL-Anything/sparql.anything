@@ -73,6 +73,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -101,6 +102,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 | Option name | Description | Valid Values | Default Value |
 |-------------|-------------|--------------|---------------|
 | [xml.path](#xmlpath) | One or more XPath expressions as filters. E.g. `xml.path=value` or `xml.path.1`, `xml.path.2`,`...` to add multiple expressions. | Any valid XPath | Not set |
+| [xml.lang-tags](#xmllang-tags) | It tells the XML triplifier to language-tag text nodes and attribute values in the scope of `xml:lang` (see the Façade-X XML mapping). Values of attributes in the XML namespace are not tagged. `xml:lang=&quot;&quot;`, or a value that is not a well-formed language tag, removes the language. With `false`, values are plain strings. In all cases, `xml:lang` is also kept as an attribute. Currently not applied together with `xml.path`. | true/false | `true` |
 
 ---
 ### `xml.path`
@@ -150,6 +152,7 @@ https://sparql-anything.cc/examples/simple-menu.xml
 
 ```
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -157,11 +160,11 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:location     "https://sparql-anything.cc/examples/simple-menu.xml" ;
-                  fx:xml.path     "//food" ;
-                  fx:blank-nodes  false .
-        ?s        ?p              ?o
+      { fxe:properties
+                  fxe:location     "https://sparql-anything.cc/examples/simple-menu.xml" ;
+                  fxe:xml.path     "//food" ;
+                  fxe:blank-nodes  false .
+        ?s        ?p               ?o
       }
   }
 
@@ -173,6 +176,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -236,6 +240,22 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
         rdf:_2    <https://sparql-anything.cc/examples/simple-menu.xml/2:food> .
 
 ```
+
+---
+### `xml.lang-tags`
+
+#### Description
+
+It tells the XML triplifier to language-tag text nodes and attribute values in the scope of `xml:lang` (see the Façade-X XML mapping). Values of attributes in the XML namespace are not tagged. `xml:lang=&quot;&quot;`, or a value that is not a well-formed language tag, removes the language. With `false`, values are plain strings. In all cases, `xml:lang` is also kept as an attribute. Currently not applied together with `xml.path`.
+
+#### Valid Values
+
+true/false
+
+#### Default Value
+
+`true`
+
 
 
 

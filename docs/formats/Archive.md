@@ -53,6 +53,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -111,8 +112,9 @@ https://sparql-anything.cc/examples/example.tar
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 CONSTRUCT 
   { 
@@ -120,14 +122,14 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/example.tar>
-      { fx:properties
-                  fx:archive.matches  ".*txt|.*csv" .
-        ?s        fx:anySlot          ?file1
+      { fxe:properties
+                  fxe:archive.matches  ".*txt|.*csv" .
+        ?s        fx:anySlot           ?file1
         SERVICE <x-sparql-anything:>
-          { fx:properties
-                      fx:location      ?file1 ;
-                      fx:from-archive  "https://sparql-anything.cc/examples/example.tar" .
-            ?s1       ?p1              ?o1
+          { fxe:properties
+                      fxe:location      ?file1 ;
+                      fxe:from-archive  "https://sparql-anything.cc/examples/example.tar" .
+            ?s1       ?p1               ?o1
           }
       }
   }
@@ -140,6 +142,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>

@@ -54,6 +54,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -115,13 +116,14 @@ https://sparql-anything.cc/examples/simple.txt
 
 ```
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
 
 SELECT  ?line
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt>
-      { fx:properties
-                  fx:txt.regex  ".*\\n" .
-        ?s        fx:anySlot    ?line
+      { fxe:properties
+                  fxe:txt.regex  ".*\\n" .
+        ?s        fx:anySlot     ?line
       }
   }
 
@@ -174,14 +176,15 @@ https://sparql-anything.cc/examples/simple.txt
 
 ```
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
 
 SELECT  ?line
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt>
-      { fx:properties
-                  fx:txt.regex  "(.*)\\n" ;
-                  fx:txt.group  1 .
-        ?s        fx:anySlot    ?line
+      { fxe:properties
+                  fxe:txt.regex  "(.*)\\n" ;
+                  fxe:txt.group  1 .
+        ?s        fx:anySlot     ?line
       }
   }
 
@@ -234,13 +237,14 @@ https://sparql-anything.cc/examples/simple.txt
 
 ```
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
 
 SELECT  ?line
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt>
-      { fx:properties
-                  fx:txt.split  "\\n" .
-        ?s        fx:anySlot    ?line
+      { fxe:properties
+                  fxe:txt.split  "\\n" .
+        ?s        fx:anySlot     ?line
       }
   }
 

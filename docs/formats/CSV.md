@@ -64,6 +64,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -108,7 +109,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 | [csv.headers](#csvheaders) | It tells the CSV triplifier to use the headers of the CSV file for minting the properties of the generated triples. | true/false | `false` |
 | [csv.headers-row](#csvheaders-row) | It specifies the number of the row to use for extracting column headers. Note this option affects the performance as it requires to pass through input twice. -- see [#179](https://github.com/SPARQL-Anything/sparql.anything/issues/179) | Any integer | `1` |
 | [csv.format](#csvformat) | The format of the input CSV file. | Any predefined [CSVFormat](https://commons.apache.org/proper/commons-csv/apidocs/org/apache/commons/csv/CSVFormat.html) of the Apache&#39;s commons CSV library. | `Default` |
-| [csv.delimiter](#csvdelimiter) | It sets the column delimiter, usually ,;\t etc. | Any single character | `,` |
+| [csv.delimiter](#csvdelimiter) | It sets the column delimiter, usually ,;\t etc. If not set, it is the delimiter of `csv.format` when given; otherwise tab for the media type `text/tab-separated-values` and the extensions `tsv` and `tab`; otherwise comma. | Any single character | `,` |
 | [csv.quote-char](#csvquote-char) | It sets the quoting character. Use &quot;true&quot; for the default quote character (&quot;), &quot;false&quot; or an empty string to disable quoting entirely (for TSV/CSV sources with no quoting convention), or any single character to use as the quote character. | true, false, empty string, or any single character | `&quot;` |
 | [csv.null-string](#csvnull-string) | It tells the CSV triplifier to not produce triples where the specified string would be in the object position of the triple | Any String | Not set |
 | [csv.ignore-columns-with-no-header](#csvignore-columns-with-no-header) | It tells the csv triplifier to ignore from the cells of columns having no headers. Note that if the property is set as true when csv.headers is false, the triplifier does not generate any slot (as no headers are collected). -- see [#180](https://github.com/SPARQL-Anything/sparql.anything/issues/180) | true/false | `false` |
@@ -169,11 +170,11 @@ WHERE
 ###### Result
 
 ```turtle
-------------------
-| avgPetalLength |
-==================
-| 0              |
-------------------
+---------------------------------------------------
+| avgPetalLength                                  |
+===================================================
+| "1.4"^^<http://www.w3.org/2001/XMLSchema#float> |
+---------------------------------------------------
 
 ```
 
@@ -295,6 +296,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -307,12 +309,42 @@ PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 [ rdf:type  fx:Root;
-  rdf:_1    [ rdf:_1  "Sepal_length\tSepal_width\tPetal_length\tPetal_width\tSpecies" ];
-  rdf:_2    [ rdf:_1  "5.1\t3.5\t1.4\t0.2\tI. setosa" ];
-  rdf:_3    [ rdf:_1  "4.9\t3.0\t1.4\t0.2\tI. setosa" ];
-  rdf:_4    [ rdf:_1  "4.7\t3.2\t1.3\t0.2\tI. setosa" ];
-  rdf:_5    [ rdf:_1  "4.6\t3.1\t1.5\t0.2\tI. setosa" ];
-  rdf:_6    [ rdf:_1  "5.0\t3.6\t1.4\t0.2\tI. setosa" ]
+  rdf:_1    [ rdf:_1  "Sepal_length";
+              rdf:_2  "Sepal_width";
+              rdf:_3  "Petal_length";
+              rdf:_4  "Petal_width";
+              rdf:_5  "Species"
+            ];
+  rdf:_2    [ rdf:_1  "5.1";
+              rdf:_2  "3.5";
+              rdf:_3  "1.4";
+              rdf:_4  "0.2";
+              rdf:_5  "I. setosa"
+            ];
+  rdf:_3    [ rdf:_1  "4.9";
+              rdf:_2  "3.0";
+              rdf:_3  "1.4";
+              rdf:_4  "0.2";
+              rdf:_5  "I. setosa"
+            ];
+  rdf:_4    [ rdf:_1  "4.7";
+              rdf:_2  "3.2";
+              rdf:_3  "1.3";
+              rdf:_4  "0.2";
+              rdf:_5  "I. setosa"
+            ];
+  rdf:_5    [ rdf:_1  "4.6";
+              rdf:_2  "3.1";
+              rdf:_3  "1.5";
+              rdf:_4  "0.2";
+              rdf:_5  "I. setosa"
+            ];
+  rdf:_6    [ rdf:_1  "5.0";
+              rdf:_2  "3.6";
+              rdf:_3  "1.4";
+              rdf:_4  "0.2";
+              rdf:_5  "I. setosa"
+            ]
 ] .
 
 ```
@@ -322,7 +354,7 @@ PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 #### Description
 
-It sets the column delimiter, usually ,;\t etc.
+It sets the column delimiter, usually ,;\t etc. If not set, it is the delimiter of `csv.format` when given; otherwise tab for the media type `text/tab-separated-values` and the extensions `tsv` and `tab`; otherwise comma.
 
 #### Valid Values
 
@@ -358,14 +390,15 @@ https://sparql-anything.cc/examples/simple.tsv
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
 
 SELECT  (MAX(xsd:float(?petalLength)) AS ?maxPetalLength)
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.tsv,csv.headers=true>
-      { fx:properties
-                  fx:csv.delimiter  "\t" .
-        ?s        xyz:Sepal_length  ?length ;
-                  xyz:Petal_length  ?petalLength
+      { fxe:properties
+                  fxe:csv.delimiter  "\t" .
+        ?s        xyz:Sepal_length   ?length ;
+                  xyz:Petal_length   ?petalLength
         FILTER ( xsd:float(?length) < 4.9 )
       }
   }
@@ -437,6 +470,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -508,14 +542,15 @@ https://sparql-anything.cc/examples/simple_with_null.csv
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
 
 SELECT  ?name ?surname
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple_with_null.csv,csv.headers=true>
-      { fx:properties
-                  fx:csv.null-string  "" .
-        ?c        xyz:name            ?name ;
-                  xyz:surname         ?surname
+      { fxe:properties
+                  fxe:csv.null-string  "" .
+        ?c        xyz:name             ?name ;
+                  xyz:surname          ?surname
         FILTER NOT EXISTS { ?c  xyz:email  ?email }
       }
   }
@@ -563,17 +598,18 @@ Inline content
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT DISTINCT  ?fred ?sally
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:csv.headers        true ;
-                  fx:content            ",state\nfred,CO\nsally,FL" ;
-                  fx:media-type         "text/csv" ;
-                  fx:csv.ignore-columns-with-no-header  true .
+      { fxe:properties
+                  fxe:csv.headers       true ;
+                  fxe:content           ",state\nfred,CO\nsally,FL" ;
+                  fxe:media-type        "text/csv" ;
+                  fxe:csv.ignore-columns-with-no-header  true .
         ?root     rdf:type              fx:Root ;
                   rdf:_1                _:b0 .
         _:b0      rdf:_1                ?fred .
@@ -649,11 +685,11 @@ WHERE
 ###### Result
 
 ```turtle
-------------------
-| avgPetalLength |
-==================
-| 0              |
-------------------
+---------------------------------------------------
+| avgPetalLength                                  |
+===================================================
+| "1.4"^^<http://www.w3.org/2001/XMLSchema#float> |
+---------------------------------------------------
 
 ```
 

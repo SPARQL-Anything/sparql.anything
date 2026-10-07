@@ -72,6 +72,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -175,8 +176,9 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 CONSTRUCT 
   { 
@@ -184,10 +186,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json>
-      { fx:properties
-                  fx:json.path.1  "$[?(@.name==\"Friends\")].stars" ;
-                  fx:json.path.2  "$[?(@.name==\"Cougar Town\")].stars" .
-        ?s        ?p              ?o
+      { fxe:properties
+                  fxe:json.path.1  "$[?(@.name==\"Friends\")].stars" ;
+                  fxe:json.path.2  "$[?(@.name==\"Cougar Town\")].stars" .
+        ?s        ?p               ?o
       }
   }
 
@@ -199,6 +201,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -283,15 +286,16 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?language
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json>
-      { fx:properties
-                  fx:json.path  "$[?(@.name==\"Friends\")]" .
-        _:b0      xyz:language  ?language
+      { fxe:properties
+                  fxe:json.path  "$[?(@.name==\"Friends\")]" .
+        _:b0      xyz:language   ?language
       }
   }
 
@@ -363,8 +367,9 @@ https://sparql-anything.cc/example1.json
 
 ```
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
-PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX  fxe:  <http://sparql.xyz/facade-x/engine/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 CONSTRUCT 
   { 
@@ -372,9 +377,9 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/example1.json>
-      { fx:properties
-                  fx:json.path  "$[?(@.name==\"Friends\")]" .
-        ?s        ?p            ?o
+      { fxe:properties
+                  fxe:json.path  "$[?(@.name==\"Friends\")]" .
+        ?s        ?p             ?o
       }
   }
 
@@ -386,6 +391,7 @@ WHERE
 PREFIX dc:     <http://purl.org/dc/elements/1.1/>
 PREFIX eg:     <http://www.example.org/>
 PREFIX fx:     <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe:    <http://sparql.xyz/facade-x/engine/>
 PREFIX ja:     <http://jena.hpl.hp.com/2005/11/Assembler#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
