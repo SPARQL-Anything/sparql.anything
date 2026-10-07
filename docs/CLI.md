@@ -61,8 +61,15 @@ The argument can be used in two ways:
 - (1) Provide a single SPARQL ResultSet file (in [CSV, TSV](https://www.w3.org/TR/2013/REC-sparql11-results-csv-tsv-20130321), [JSON](https://www.w3.org/TR/2013/REC-sparql11-results-json-20130321) or [XML](https://www.w3.org/TR/2013/REC-rdf-sparql-XMLres-20130321) format. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed.
 - (2) Named variable bindings: the argument value must follow the syntax: `var_name=var_value`. The argument can be passed multiple times and the query repeated for each set of values. 
 
+See also [parametrised queries](PARAMETRISED_QUERIES.md)
+
 > [!WARNING] 
 > The var name given on the command-line must not include the prefix and suffix. Eg to pass the IRI mentioned as example above, use `-v my=https://example.org/`
+
+Numeric ranges can be given inline: `-v n=1...10` binds `n` to 1, 2, …, 10. Repeated values are counted once.
+
+> [!NOTE]
+> With inline values, the order of iterations is not the order given on the command line. With a result-set file, rows are processed in file order. To link outputs to values, use `-p`.
 
 ### -c,--configuration <option=value>     
 OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be
