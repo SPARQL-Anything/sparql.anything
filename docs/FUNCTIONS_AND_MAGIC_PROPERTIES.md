@@ -1165,6 +1165,217 @@ Result
 --------------------
 ```
 
+### fx:LevenshteinDistance
+
+The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Distance between ?n1 and ?n2 (see #182).
+
+#### Input
+
+String, String
+
+#### Output
+
+Integer
+
+#### Example
+
+```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:LevenshteinDistance("abc", "cbe") AS ?result) 
+} 
+```
+
+Result
+
+| result |
+|--------|
+| 2      |
+
+
+
+### fx:CosineDistance
+
+The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance between ?n1 and ?n2 (see #182).
+
+#### Input
+
+String, String
+
+#### Output
+
+Double
+
+#### Example
+
+```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:CosineDistance("abc", "cbe") AS ?result) 
+} 
+```
+
+Result
+
+| result |
+|--------|
+| 1.0    |
+
+
+
+### fx:JaccardDistance
+
+The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).
+
+#### Input
+
+String, String
+
+#### Output
+
+Double
+
+#### Example
+
+```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:JaccardDistance("abc", "cbe") AS ?result) 
+} 
+```
+
+Result
+
+| result |
+|--------|
+| 0.5    |
+
+
+
+### fx:JaroWinklerDistance
+
+The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).
+
+#### Input
+
+String, String
+
+#### Output
+
+Double
+
+#### Example
+
+```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:JaroWinklerDistance("abc", "cbe") AS ?result) 
+} 
+```
+
+Result
+
+| result              |
+|---------------------|
+| 0.44444444444444453 |
+
+
+
+### fx:LongestCommonSubsequenceDistance
+
+The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Longest Common Subsequence Distance between ?n1 and ?n2 (see #182).
+
+#### Input
+
+String, String
+
+#### Output
+
+Integer
+
+#### Example
+
+```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:HammingDistance("abc", "abe") AS ?result) 
+} 
+```
+
+Result
+
+| result |
+|--------|
+| 2      |
+
+
+
+
+
+### fx:HammingDistance
+
+The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).
+
+#### Input
+
+String, String
+
+#### Output
+
+Integer
+
+#### Example
+
+```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:HammingDistance("abc", "abe") AS ?result) 
+} 
+```
+
+Result
+
+| result |
+|--------|
+| 1      |
+
+
+### fx:QGramDistance
+
+The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).
+
+#### Input
+
+
+String, String
+
+
+#### Output
+
+Double
+
+#### Example
+
+```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
+
+SELECT ?result WHERE { 
+    BIND (fx:QGramDistance("abcd", "abce") AS ?result) 
+} 
+```
+
+Result
+
+| result |
+|--------|
+| 2.0    |
+
 ## Hash functions
 The system supports the following functions for computing hash digest from strings (See issues [104](https://github.com/SPARQL-Anything/sparql.anything/issues/104) and [121](https://github.com/SPARQL-Anything/sparql.anything/issues/121)):
 
@@ -1784,219 +1995,6 @@ Result
 [ ex:p    "B" ] .
 ```
 
-
-
-### fx:LevenshteinDistance
-
-The function `fx:LevenshteinDistance(?n1, ?n2) `  computes the Levenshtein Distance between ?n1 and ?n2 (see #182).
-
-#### Input
-
-String, String
-
-#### Output
-
-Integer
-
-#### Example
-
-```sparql
-PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
-
-SELECT ?result WHERE { 
-    BIND (fx:LevenshteinDistance("abc", "cbe") AS ?result) 
-} 
-```
-
-Result
-
-| result |
-|--------|
-| 2      |
-
-
-
-### fx:CosineDistance
-
-The function `fx:CosineDistance(?n1, ?n2) `  computes the Cosine Distance between ?n1 and ?n2 (see #182).
-
-#### Input
-
-String, String
-
-#### Output
-
-Double
-
-#### Example
-
-```sparql
-PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
-
-SELECT ?result WHERE { 
-    BIND (fx:CosineDistance("abc", "cbe") AS ?result) 
-} 
-```
-
-Result
-
-| result |
-|--------|
-| 1.0    |
-
-
-
-### fx:JaccardDistance
-
-The function `fx:JaccardDistance(?n1, ?n2) `  computes the Jaccard Distance between ?n1 and ?n2 (see #182).
-
-#### Input
-
-String, String
-
-#### Output
-
-Double
-
-#### Example
-
-```sparql
-PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
-
-SELECT ?result WHERE { 
-    BIND (fx:JaccardDistance("abc", "cbe") AS ?result) 
-} 
-```
-
-Result
-
-| result |
-|--------|
-| 0.5    |
-
-
-
-### fx:JaroWinklerDistance
-
-The function `fx:JaroWinklerDistance(?n1, ?n2) `  computes the Jaro-Winkler Distance between ?n1 and ?n2 (see #182).
-
-#### Input
-
-String, String
-
-#### Output
-
-Double
-
-#### Example
-
-```sparql
-PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
-
-SELECT ?result WHERE { 
-    BIND (fx:JaroWinklerDistance("abc", "cbe") AS ?result) 
-} 
-```
-
-Result
-
-| result              |
-|---------------------|
-| 0.44444444444444453 |
-
-
-
-### fx:LongestCommonSubsequenceDistance
-
-The function `fx:LongestCommonSubsequenceDistance(?n1, ?n2) `  computes the Longest Common Subsequence Distance between ?n1 and ?n2 (see #182).
-
-#### Input
-
-String, String
-
-#### Output
-
-Integer
-
-#### Example
-
-```sparql
-PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
-
-SELECT ?result WHERE { 
-    BIND (fx:HammingDistance("abc", "abe") AS ?result) 
-} 
-```
-
-Result
-
-| result |
-|--------|
-| 2      |
-
-
-
-
-
-### fx:HammingDistance
-
-The function `fx:HammingDistance(?n1, ?n2) `  computes the Hamming Distance between ?n1 and ?n2 (see #182).
-
-#### Input
-
-String, String
-
-#### Output
-
-Integer
-
-#### Example
-
-```sparql
-PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
-
-SELECT ?result WHERE { 
-    BIND (fx:HammingDistance("abc", "abe") AS ?result) 
-} 
-```
-
-Result
-
-| result |
-|--------|
-| 1      |
-
-
-### fx:QGramDistance
-
-The function `fx:QGramDistance(?n1, ?n2) `  computes the QGram Distance between ?n1 and ?n2 (see #394).
-
-#### Input
-
-
-String, String
-
-
-#### Output
-
-Double
-
-#### Example
-
-```sparql
-PREFIX fx:  <http://sparql.xyz/facade-x/ns/> 
-
-SELECT ?result WHERE { 
-    BIND (fx:QGramDistance("abcd", "abce") AS ?result) 
-} 
-```
-
-Result
-
-| result |
-|--------|
-| 2.0    |
-
 <!--
 ###
 
@@ -2014,3 +2012,5 @@ Result
 ```
 ```
 -->
+
+
