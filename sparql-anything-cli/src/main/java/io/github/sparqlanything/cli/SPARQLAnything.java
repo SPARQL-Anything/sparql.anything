@@ -47,15 +47,12 @@ import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.mgt.Explain;
 import org.apache.jena.sys.JenaSystem;
-import org.apache.jena.graph.Triple;
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.riot.system.StreamRDFWriter;
-import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.riot.RDFLanguages;
-import org.apache.jena.riot.system.StreamRDF;
-import org.apache.jena.riot.system.StreamRDFWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.io.output.CloseShieldOutputStream;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -230,7 +227,9 @@ public class SPARQLAnything {
 			return new PrintStream(new FileOutputStream(fileName, append));
 		}
 
-		return System.out;
+		// #677 Callers close the returned stream (try-with-resources): never close System.out,
+		// as several iterations (-v) may write to it
+		return new PrintStream(CloseShieldOutputStream.wrap(System.out), true);
 	}
 
 	public static Query bindParameters(Specification specification, QuerySolution qs) throws Exception {

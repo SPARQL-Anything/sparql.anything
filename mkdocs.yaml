@@ -11,11 +11,12 @@ nav:
   - Reference:
     - Introduction: 'README.md'
     - Configuration: 'Configuration.md'
-    - Slicing: 'SLICING.md'
     - Functions: 'FUNCTIONS_AND_MAGIC_PROPERTIES.md'
     - Command line interface: 'CLI.md'
     - Docker: 'BROWSER.md'
     - S3: 'S3.md'
+    - Slicing: 'SLICING.md'
+    - Parametrised queries: 'PARAMETRISED_QUERIES.md'
     - Tutorials: 'TUTORIALS.md'
   - 'Guide on formats':
       - CSV: 'formats/CSV.md'

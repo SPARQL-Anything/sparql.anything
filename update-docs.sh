@@ -44,6 +44,7 @@ cp -f Configuration.md docs/
 cp -f FUNCTIONS_AND_MAGIC_PROPERTIES.md docs/
 cp -f TUTORIALS.md docs/
 cp -f A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md docs/
+cp -f PARAMETRISED_QUERIES.md docs/
 cp -f LICENSE docs/
 cp -r formats docs/
 cp -r imgs docs/

@@ -446,7 +446,7 @@ WHERE {
 The SPARQL Anything CLI supports parametrised queries.
 SPARQL Anything uses
 the [BASIL convention for variable names in queries](https://github.com/basilapi/basil/wiki/SPARQL-variable-name-convention-for-WEB-API-parameters-mapping)
-.
+. See [parametrised queries](PARAMETRISED_QUERIES.md)
 
 The syntax is based on the underscore character: '_', and can be easily learned by examples:
 
