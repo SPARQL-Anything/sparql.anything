@@ -39,7 +39,8 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
-
+hooks:
+  - hooks/gh_issue_links.py
 plugins:
   - search
   - callouts
