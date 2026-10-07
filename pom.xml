@@ -347,7 +347,7 @@
                 <artifactId>jsoup</artifactId>
                 <!--				<version>1.14.2</version>-->
                 <!--                <version>1.15.3</version>-->
-                <version>1.23.1</version>
+                <version>1.23.2</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
