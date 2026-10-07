@@ -16,10 +16,14 @@ The path to the file storing the query to execute or the query itself.
 ### -o,--output <file>
 OPTIONAL - The path to the output file. [Default: STDOUT]
 
-### -a,--append
-OPTIONAL - Should output to file be appended? 
+When the query is executed for more than one set of bindings (`-v`), one file is written per binding set, numbered in iteration order: `out.ttl` becomes `out-1.ttl`, `out-2.ttl`, … With a single binding set, the file name is used as given. To name files after the bound values, use `-p` instead.
 
-> [!WARNING] 
+### -a,--append
+OPTIONAL - Should output to file be appended?
+
+With multiple binding sets (`-v`), each numbered output file is appended to separately (see `-o`). Whether `-a` should instead collect all iterations into a single file is under discussion in [#676](https://github.com/SPARQL-Anything/sparql.anything/issues/676).
+
+> [!WARNING]
 > This option does not ensure that the whole file is valid -- that is up to the user to set up the conditions (such as using NQ serialization and not using blank nodes)
 
 ### -e,--explain                          
