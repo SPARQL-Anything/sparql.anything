@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Objects;
 
 /**
@@ -142,35 +143,51 @@ public class NoClobberTest {
 		overwritten(false);
 	}
 
+	private File numbered(int i) {
+		String p = tempFile.getAbsolutePath();
+		return new File(p.substring(0, p.length() - ".ttl".length()) + "-" + i + ".ttl");
+	}
+
+	private long[] prepareNumbered() throws Exception {
+		long[] t = new long[2];
+		for (int i = 1; i <= 2; i++) {
+			File f = numbered(i);
+			Files.writeString(f.toPath(), "");
+			t[i - 1] = f.lastModified();
+			f.deleteOnExit();
+		}
+		Thread.sleep(100);
+		return t;
+	}
+
 	@Test
 	public void overwriteWithParams() throws Exception {
+		long[] before = prepareNumbered();
 		SPARQLAnything.callMain(new String[]{
-			"-q",
-			queryFile,
-			"-v",
-			paramFile,
-			"-c",
-			"location=" + csvFile,
-			"-o",
-			tempFile.getAbsolutePath()
+			"-q", queryFile,
+			"-v", paramFile,
+			"-c", "location=" + csvFile,
+			"-o", tempFile.getAbsolutePath()
 		});
-		overwritten(true);
+		for (int i = 1; i <= 2; i++) {
+			Assert.assertTrue(numbered(i).getName() + " not overwritten", numbered(i).lastModified() > before[i - 1]);
+		}
+		overwritten(false); // base file untouched with multiple binding sets (#675)
 	}
 
 	@Test
 	public void dontoverwriteWithParams() throws Exception {
+		long[] before = prepareNumbered();
 		SPARQLAnything.callMain(new String[]{
-			"-q",
-			queryFile,
-			"-v",
-			paramFile,
-			"-c",
-			"location=" + csvFile,
-			"-o",
-			tempFile.getAbsolutePath(),
+			"-q", queryFile,
+			"-v", paramFile,
+			"-c", "location=" + csvFile,
+			"-o", tempFile.getAbsolutePath(),
 			"-nc"
 		});
-		overwritten(false);
+		for (int i = 1; i <= 2; i++) {
+			Assert.assertEquals(numbered(i).getName() + " overwritten", before[i - 1], numbered(i).lastModified());
+		}
 	}
 
 	private void overwritten(boolean expect)  {

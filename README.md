@@ -470,6 +470,8 @@ for each one of the resulting set of bindings.
 
 In the second case, the query is executed for each set of bindings in the result set.
 
+With `-o`, one numbered file is written per binding set (`out-1.ttl`, `out-2.ttl`, …); with `-p`, file names are built from the bound values. See [CLI](CLI.md#-o--output-file).
+
 The following is an example of how parameter can be used in a query:
 
 ```sparql
@@ -575,9 +577,12 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
  -q,--query <query or URL or filepath>   The path or the URL to the file
                                          storing the query to execute or
                                          the query itself.
- -o,--output <filepath>                  OPTIONAL - The path to the output
-                                         file. [Default: STDOUT]
- -a,--append                             OPTIONAL - Should output to file
+  -o,--output <filepath>                 OPTIONAL - The path to the output
+                                         file. With multiple binding sets
+                                         (-v), files are numbered
+                                         (file-1.ext, file-2.ext, ...).
+                                         [Default: STDOUT]
+-a,--append                              OPTIONAL - Should output to file
                                          be appended? WARNING: this option
                                          does not ensure that the whole
                                          file is valid -- that is up to

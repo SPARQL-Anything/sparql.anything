@@ -64,6 +64,11 @@ The argument can be used in two ways:
 > [!WARNING] 
 > The var name given on the command-line must not include the prefix and suffix. Eg to pass the IRI mentioned as example above, use `-v my=https://example.org/`
 
+Numeric ranges can be given inline: `-v n=1...10` binds `n` to 1, 2, …, 10. Repeated values are counted once.
+
+> [!NOTE]
+> With inline values, the order of iterations is not the order given on the command line. With a result-set file, rows are processed in file order. To link outputs to values, use `-p`.
+
 ### -c,--configuration <option=value>     
 OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be
 set). Options passed in this way can be overwritten in the SERVICE IRI or in the Basic Graph Pattern.
