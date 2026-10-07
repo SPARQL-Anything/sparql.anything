@@ -25,11 +25,12 @@ cd sparql-anything-documentation-generator/
 mvn exec:java  -Dexec.mainClass="io.github.sparqlanything.documentationgenerator.DocumentationGenerator"  -Dexec.args="../formats/"
 cd ..
 
-git add README.md SystemOverview.md CLI.md EXTENSION_MECHANISMS.md JAVA_LIBRARY.md Facade-X.md facade-x-ER.png .readthedocs.yaml mkdocs.yaml Configuration.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
+git add README.md SystemOverview.md CLI.md EXTENSION_MECHANISMS.md JAVA_LIBRARY.md Facade-X.md facade-x-ER.png .readthedocs.yaml mkdocs.yaml Configuration.md SLICING.md TUTORIALS.md A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md FUNCTIONS_AND_MAGIC_PROPERTIES.md sparql-anything-it/src/test/java/io/github/sparqlanything/it/DocumentationExampleSandbox.java
 git add formats/*
 git add imgs/*
 cp -f README.md docs/
 cp -f S3.md docs/
+cp -f SLICING.md docs/
 cp -f DEVELOPER_GUIDE.md docs/
 cp -f SystemOverview.md docs/
 cp -f EXTENSION_MECHANISMS.md docs/
