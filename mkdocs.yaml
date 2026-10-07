@@ -6,6 +6,7 @@ edit_uri: edit/v1.3-DEV/docs/
 site_description: SPARQL Anything online documentation
 theme:
   name: readthedocs
+  sticky_navigation: true
 nav:
   - Reference:
     - Introduction: 'README.md'
@@ -31,7 +32,6 @@ nav:
       - Word: 'formats/Word_Processing_Document.md'
       - Slides: 'formats/Slides.md'
 extra_css: [styles.css]
-sticky_navigation: true
 markdown_extensions:
   - tables
   - admonition
