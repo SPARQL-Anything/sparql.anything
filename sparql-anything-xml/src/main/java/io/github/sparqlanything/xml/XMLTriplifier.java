@@ -46,7 +46,7 @@ import java.util.*;
 @io.github.sparqlanything.model.annotations.Triplifier
 public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 
-	@Example(resource = "https://sparql-anything.cc/examples/simple-menu.xml", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"https://sparql-anything.cc/examples/simple-menu.xml\" ; fx:xml.path \"//food\" ; fx:blank-nodes false . ?s ?p ?o } }")
+	@Example(resource = "https://sparql-anything.cc/examples/simple-menu.xml", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX fxe: <http://sparql.xyz/facade-x/engine/> CONSTRUCT { ?s ?p ?o . } WHERE { SERVICE <x-sparql-anything:> { fxe:properties fxe:location \"https://sparql-anything.cc/examples/simple-menu.xml\" ; fxe:xml.path \"//food\" ; fxe:blank-nodes false . ?s ?p ?o } }")
 	@Option(description = "One or more XPath expressions as filters. E.g. `xml.path=value` or `xml.path.1`, `xml.path.2`,`...` to add multiple expressions.", validValues = "Any valid XPath")
 	public static final IRIArgument PROPERTY_XPATH = new IRIArgument("xml.path");
 

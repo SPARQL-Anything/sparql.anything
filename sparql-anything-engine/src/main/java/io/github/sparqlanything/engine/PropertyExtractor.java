@@ -32,6 +32,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 class PropertyExtractor {
 
@@ -97,20 +100,71 @@ class PropertyExtractor {
 		return t;
 	}
 
-	static void extractPropertiesFromBGP(Properties properties, OpBGP bgp) throws UnboundVariableException {
-		for (Triple t : bgp.getPattern().getList()) {
-			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
-				if (t.getObject().isURI()) {
-					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""), t.getObject().getURI());
-				} else if (t.getObject().isLiteral()) {
-					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""), t.getObject().getLiteral().getValue().toString());
-				} else if (t.getObject().isVariable()) {
-					throw new UnboundVariableException(t.getObject().getName(), bgp);
-				}
-			}
+//	static void extractPropertiesFromBGP(Properties properties, OpBGP bgp) throws UnboundVariableException {
+//		for (Triple t : bgp.getPattern().getList()) {
+//			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
+//				if (t.getObject().isURI()) {
+//					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""), t.getObject().getURI());
+//				} else if (t.getObject().isLiteral()) {
+//					properties.put(t.getPredicate().getURI().replace(Triplifier.FACADE_X_CONST_NAMESPACE_IRI, ""), t.getObject().getLiteral().getValue().toString());
+//				} else if (t.getObject().isVariable()) {
+//					throw new UnboundVariableException(t.getObject().getName(), bgp);
+//				}
+//			}
+//		}
+//	}
+
+	// Deprecated fx: terms already reported (warn once per JVM)
+	private static final Set<String> DEPRECATED_REPORTED = ConcurrentHashMap.newKeySet();
+
+	private static void warnDeprecated(String name) {
+		if (DEPRECATED_REPORTED.add(name)) {
+			logger.warn("fx:{} is deprecated on configuration properties: use fxe:{} (PREFIX fxe: <{}>). "
+					+ "Support for fx:properties and fx: options will be removed in a future release.",
+				name, name, Triplifier.FACADE_X_ENGINE_NAMESPACE_IRI);
 		}
 	}
 
+	static void extractPropertiesFromBGP(Properties properties, OpBGP bgp) throws UnboundVariableException {
+		Properties legacy = new Properties();          // options given as fx:<name>  (deprecated)
+		Set<String> fromEngineNs = new HashSet<>();     // options given as fxe:<name>
+		for (Triple t : bgp.getPattern().getList()) {
+			if (!Utils.isPropertyOp(t.getSubject()) || !t.getPredicate().isURI()) continue;
+			if (t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
+				warnDeprecated("properties");
+			}
+			String value;
+			if (t.getObject().isURI()) {
+				value = t.getObject().getURI();
+			} else if (t.getObject().isLiteral()) {
+				value = t.getObject().getLiteral().getValue().toString();
+			} else if (t.getObject().isVariable()) {
+				throw new UnboundVariableException(t.getObject().getName(), bgp);
+			} else {
+				continue;
+			}
+			String predicate = t.getPredicate().getURI();
+			if (predicate.startsWith(Triplifier.FACADE_X_ENGINE_NAMESPACE_IRI)) {
+				String name = predicate.substring(Triplifier.FACADE_X_ENGINE_NAMESPACE_IRI.length());
+				properties.put(name, value);
+				fromEngineNs.add(name);
+			} else if (predicate.startsWith(Triplifier.FACADE_X_CONST_NAMESPACE_IRI)) {
+				String name = predicate.substring(Triplifier.FACADE_X_CONST_NAMESPACE_IRI.length());
+				warnDeprecated(name);
+				legacy.put(name, value);
+			} else {
+				properties.put(predicate, value); // unchanged behaviour for non-Façade-X predicates
+			}
+		}
+		// Precedence: fxe:<name> > fx:<name> > option in the SERVICE IRI
+		for (String name : legacy.stringPropertyNames()) {
+			if (fromEngineNs.contains(name)) {
+				logger.warn("Option given as both fxe:{} and fx:{}; using fxe:{}", name, name, name);
+			} else {
+				properties.put(name, legacy.getProperty(name));
+			}
+		}
+	}
 
 //	static void extractPropertiesFromOp(Op op, Properties properties) throws UnboundVariableException {
 //		if (op instanceof OpBGP) {

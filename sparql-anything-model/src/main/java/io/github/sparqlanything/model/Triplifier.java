@@ -43,10 +43,17 @@ public interface Triplifier {
 	String METADATA_GRAPH_IRI = XYZ_NS + "metadata";
 	String AUDIT_GRAPH_IRI = XYZ_NS + "audit";
 	String XYZ_NULL = XYZ_NS + "null";
+	/** Façade-X Schema vocabulary. Using it for engine options and for fx:properties is deprecated: see FACADE_X_ENGINE_NAMESPACE_IRI. */
 	String FACADE_X_CONST_NAMESPACE_IRI = "http://sparql.xyz/facade-x/ns/";
+	/** Façade-X Engine vocabulary: namespace of fxe:properties and of engine options (fxe:location, …). */
+	String FACADE_X_ENGINE_NAMESPACE_IRI = "http://sparql.xyz/facade-x/engine/";
+	/** The singleton resource that is the subject of option triples. */
+	String FACADE_X_ENGINE_PROPERTIES = FACADE_X_ENGINE_NAMESPACE_IRI + "properties";
+	/** @deprecated use {@link #FACADE_X_ENGINE_PROPERTIES}; still accepted for backward compatibility. */
+	@Deprecated
+	String FACADE_X_TYPE_PROPERTIES = FACADE_X_CONST_NAMESPACE_IRI + "properties";
 	String FACADE_X_TYPE_ROOT = FACADE_X_CONST_NAMESPACE_IRI + "Root";
 	String FACADE_X_SLOT_KEY = FACADE_X_CONST_NAMESPACE_IRI + "slot-key";
-	String FACADE_X_TYPE_PROPERTIES = FACADE_X_CONST_NAMESPACE_IRI + "properties";
 	String FACADE_X_CACHED_GRAPH = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraph";
 	String FACADE_X_CACHED_GRAPH_CREATION = FACADE_X_CONST_NAMESPACE_IRI + "cachedGraphCreation";
 	String FACADE_X_SPARQL_ALGEBRA = FACADE_X_CONST_NAMESPACE_IRI + "sparqlAlgebra";

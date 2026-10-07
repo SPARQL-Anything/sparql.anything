@@ -30,12 +30,13 @@ Alternatively, options can be provided as basic graph pattern inside the SERVICE
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT ?seriesName
 WHERE {
 
     SERVICE <x-sparql-anything:> {
-        fx:properties fx:location "https://sparql-anything.cc/example1.json" .
+        fxe:properties fxe:location "https://sparql-anything.cc/example1.json" .
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star fx:anySlot "Courteney Cox" .
@@ -56,12 +57,13 @@ You can also mix the two modalities as follows.
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT ?seriesName
 WHERE {
 
     SERVICE <x-sparql-anything:blank-nodes=false> {
-        fx:properties fx:location "https://sparql-anything.cc/example1.json" .
+        fxe:properties fxe:location "https://sparql-anything.cc/example1.json" .
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star fx:anySlot "Courteney Cox" .
@@ -217,13 +219,14 @@ It is mandatory to provide either `location`, `content`, `command`, `read-from-s
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT  (count(*) AS ?c)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content    "one,two,tree" ;
-                  fx:txt.split  "," .
+      { fxe:properties
+                  fxe:content    "one,two,tree" ;
+                  fxe:txt.split  "," .
         ?s        fx:anySlot    ?o
       }
   }
@@ -244,13 +247,14 @@ Result
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT  (count(*) AS ?c)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
+                  fxe:media-type  "application/json" .
         ?s        fx:anySlot     ?o
       }
   }
@@ -291,13 +295,14 @@ It is mandatory to provide either `location`, `content`, `command`, `read-from-s
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT  (COUNT(?o) AS ?nOfItems)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:command     "echo [\"one\",\"two\",\"three\", \"four\"]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:command     "echo [\"one\",\"two\",\"three\", \"four\"]" ;
+                  fxe:media-type  "application/json" .
         ?s        fx:anySlot     ?o
       }
   }
@@ -346,13 +351,14 @@ Sub query (select.rq)
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT  *
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
+                  fxe:media-type  "application/json" .
         ?s        fx:anySlot     ?o
       }
   }
@@ -390,15 +396,16 @@ Sub query (construct.rq)
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT {
     ?s ?p ?o   
 }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p     ?o
       }
   }
@@ -439,6 +446,7 @@ See also [Archive](formats/Archive.md)
 ```sparql
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 CONSTRUCT 
@@ -447,13 +455,13 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/example.tar>
-      { fx:properties
-                  fx:archive.matches  ".*txt|.*csv" .
+      { fxe:properties
+                  fxe:archive.matches  ".*txt|.*csv" .
         ?s        fx:anySlot          ?file1
         SERVICE <x-sparql-anything:>
-          { fx:properties
-                      fx:location      ?file1 ;
-                      fx:from-archive  "https://sparql-anything.cc/examples/example.tar" .
+          { fxe:properties
+                      fxe:location      ?file1 ;
+                      fxe:from-archive  "https://sparql-anything.cc/examples/example.tar" .
             ?s1       ?p1              ?o1
           }
       }
@@ -528,17 +536,19 @@ location + '#' (in the case of location argument  set) <br/> **or** <br/> 'http:
 ##### UC1: Set the root of the Facade-X model generated from the JSON Object {"name":"Vincent", "surname": "Vega"} as http://example.org/myRoot
 
 ```sparql
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 CONSTRUCT 
   { 
     ?s ?p ?o .
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\"}" ;
-                  fx:media-type   "application/json" ;
-                  fx:root         "http://example.org/myRoot" ;
-                  fx:blank-nodes  false .
+      { fxe:properties
+                  fxe:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\"}" ;
+                  fxe:media-type   "application/json" ;
+                  fxe:root         "http://example.org/myRoot" ;
+                  fxe:blank-nodes  false .
         ?s        ?p              ?o
       }
   }
@@ -561,6 +571,7 @@ Result
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -568,10 +579,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content      "Hello World!" ;
-                  fx:root         "http://example.org/myRoot" ;
-                  fx:blank-nodes  false .
+      { fxe:properties
+                  fxe:content      "Hello World!" ;
+                  fxe:root         "http://example.org/myRoot" ;
+                  fxe:blank-nodes  false .
         ?s        ?p              ?o
       }
   }
@@ -607,13 +618,14 @@ No value (the media-type will be guessed from the file extension).
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT  (count(*) AS ?c)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[\"one\",\"two\",\"three\", \"four\"]" ;
+                  fxe:media-type  "application/json" .
         ?s        fx:anySlot     ?o
       }
   }
@@ -648,6 +660,7 @@ http://sparql.xyz/facade-x/data/
 ```sparql
 
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -655,10 +668,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\"}" ;
-                  fx:media-type  "application/json" ;
-                  fx:namespace   "http://example.org/myNamespace/" .
+      { fxe:properties
+                  fxe:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\"}" ;
+                  fxe:media-type  "application/json" ;
+                  fxe:namespace   "http://example.org/myNamespace/" .
         ?s        ?p             ?o
       }
   }
@@ -696,6 +709,7 @@ true
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -703,10 +717,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"}}" ;
-                  fx:media-type   "application/json" ;
-                  fx:blank-nodes  false .
+      { fxe:properties
+                  fxe:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"}}" ;
+                  fxe:media-type   "application/json" ;
+                  fxe:blank-nodes  false .
         ?s        ?p              ?o
       }
   }
@@ -747,6 +761,7 @@ false
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -754,10 +769,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content       "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John \", \"surname\": \" Travolta\"} }" ;
-                  fx:media-type    "application/json" ;
-                  fx:trim-strings  true .
+      { fxe:properties
+                  fxe:content       "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"performer\" : {\"name\": \"John \", \"surname\": \" Travolta\"} }" ;
+                  fxe:media-type    "application/json" ;
+                  fxe:trim-strings  true .
         ?s        ?p               ?o
       }
   }
@@ -795,6 +810,7 @@ No value
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -802,10 +818,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"ID\": \"myNull\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"} }" ;
-                  fx:media-type   "application/json" ;
-                  fx:null-string  "myNull" .
+      { fxe:properties
+                  fxe:content      "{\"name\":\"Vincent\", \"surname\": \"Vega\", \"ID\": \"myNull\", \"performer\" : {\"name\": \"John\", \"surname\": \"Travolta\"} }" ;
+                  fxe:media-type   "application/json" ;
+                  fxe:null-string  "myNull" .
         ?s        ?p              ?o
       }
   }
@@ -844,6 +860,7 @@ No value
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -851,9 +868,9 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\" }" ;
-                  fx:triplifier  "io.github.sparqlanything.json.JSONTriplifier" .
+      { fxe:properties
+                  fxe:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\" }" ;
+                  fxe:triplifier  "io.github.sparqlanything.json.JSONTriplifier" .
         ?s        ?p             ?o
       }
   }
@@ -889,6 +906,7 @@ UTF-8
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -896,9 +914,9 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:location  "https://sparql-anything.cc/examples/utf16.txt" ;
-                  fx:charset   "UTF16" .
+      { fxe:properties
+                  fxe:location  "https://sparql-anything.cc/examples/utf16.txt" ;
+                  fxe:charset   "UTF16" .
         ?s        ?p           ?o
       }
   }
@@ -935,6 +953,7 @@ No value
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -942,10 +961,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\" }" ;
-                  fx:ondisk      "/tmp" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "{\"name\":\"Vincent\", \"surname\": \"Vega\" }" ;
+                  fxe:ondisk      "/tmp" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p             ?o
       }
   }
@@ -981,6 +1000,7 @@ true
 
 ```sparql
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 CONSTRUCT 
   { 
@@ -988,11 +1008,11 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content       "{\"name\":\"Vincent\", \"surname\": \"Vega\" }" ;
-                  fx:ondisk        "/tmp/" ;
-                  fx:ondisk.reuse  true ;
-                  fx:media-type    "application/json" .
+      { fxe:properties
+                  fxe:content       "{\"name\":\"Vincent\", \"surname\": \"Vega\" }" ;
+                  fxe:ondisk        "/tmp/" ;
+                  fxe:ondisk.reuse  true ;
+                  fxe:media-type    "application/json" .
         ?s        ?p               ?o
       }
   }
@@ -1181,6 +1201,7 @@ false
 ```sparql
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 CONSTRUCT 
@@ -1189,10 +1210,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:use-rdfs-member  true ;
-                  fx:content          "[1,2,3]" ;
-                  fx:media-type       "application/json" .
+      { fxe:properties
+                  fxe:use-rdfs-member  true ;
+                  fxe:content          "[1,2,3]" ;
+                  fxe:media-type       "application/json" .
         ?s        ?p                  ?o
       }
   }
@@ -1232,6 +1253,7 @@ false
 ```sparql
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 CONSTRUCT 
@@ -1240,11 +1262,11 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:use-rdfs-member    true ;
-                  fx:content            "[1,2,3]" ;
-                  fx:annotate-triples-with-slot-keys  true ;
-                  fx:media-type         "application/json" .
+      { fxe:properties
+                  fxe:use-rdfs-member    true ;
+                  fxe:content            "[1,2,3]" ;
+                  fxe:annotate-triples-with-slot-keys  true ;
+                  fxe:media-type         "application/json" .
         ?s        ?p                    ?o
       }
   }
@@ -1289,6 +1311,7 @@ false
 ```sparql
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 CONSTRUCT 
@@ -1297,10 +1320,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content            "<Element1 attr=\"value\"/> " ;
-                  fx:generate-predicate-labels  true ;
-                  fx:media-type         "application/xml" .
+      { fxe:properties
+                  fxe:content            "<Element1 attr=\"value\"/> " ;
+                  fxe:generate-predicate-labels  true ;
+                  fxe:media-type         "application/xml" .
         ?s        ?p                    ?o
       }
   }

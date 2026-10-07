@@ -37,15 +37,15 @@ import java.util.regex.Pattern;
 public class TextTriplifier implements Triplifier {
 
 
-	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving lines of the file.", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fx:properties fx:txt.regex \".*\\\\n\" . ?s fx:anySlot ?line } }")
+	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving lines of the file.", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX fxe: <http://sparql.xyz/facade-x/engine/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fxe:properties fxe:txt.regex \".*\\\\n\" . ?s fx:anySlot ?line } }")
 	@Option(description = "It tells SPARQL Anything to evaluate a regular expression on the data source. In this case the slots will be filled with the bindings of the regex.", validValues = "Any valid regular expression according to the [Pattern class](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)")
 	public static final IRIArgument REGEX = new IRIArgument("txt.regex");
 
-	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving the lines of the file and strips `\\n` out.", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fx:properties fx:txt.regex \"(.*)\\\\n\" ; fx:txt.group 1 . ?s fx:anySlot ?line } }")
+	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving the lines of the file and strips `\\n` out.", query = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX fxe: <http://sparql.xyz/facade-x/engine/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fxe:properties fxe:txt.regex \"(.*)\\\\n\" ; fxe:txt.group 1 . ?s fx:anySlot ?line } }")
 	@Option(description = "It tells SPARQL Anything to generate slots by using a specific group of the regular expression.", validValues = "Any valid regular expression according to the [Pattern class](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)")
 	public static final IRIArgument GROUP = new IRIArgument("txt.group", "-1");
 
-	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving the lines of the file by splitting by `\\n`", query = " PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fx:properties fx:txt.split \"\\\\n\" . ?s fx:anySlot ?line } } ")
+	@Example(resource = "https://sparql-anything.cc/examples/simple.txt", description = "Retrieving the lines of the file by splitting by `\\n`", query = " PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX fxe: <http://sparql.xyz/facade-x/engine/> SELECT ?line WHERE { SERVICE <x-sparql-anything:location=https://sparql-anything.cc/examples/simple.txt> { fxe:properties fxe:txt.split \"\\\\n\" . ?s fx:anySlot ?line } } ")
 	@Option(description = "It tells SPARQL Anything to split the input around the matches of the give regular expression.", validValues = "Any valid regular expression according to the [Pattern class](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)")
 	public static final IRIArgument SPLIT = new IRIArgument("txt.split");
 	private static final Logger logger = LoggerFactory.getLogger(TextTriplifier.class);

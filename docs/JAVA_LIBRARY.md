@@ -53,12 +53,12 @@ public class SPARQLAnythingClientViaSPARQL {
         Dataset kb = DatasetFactory.createGeneral();
 
         Query query = QueryFactory.create(
-                "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> " +
+                "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> PREFIX fxe: <http://sparql.xyz/facade-x/engine/> " +
                         "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
                         "SELECT ?o { " +
                         "SERVICE <x-sparql-anything:> { " +
-                        "fx:properties fx:content '[1,2,3]' ; " +
-                        "fx:media-type 'application/json' . " +
+                        "fxe:properties fxe:content '[1,2,3]' ; " +
+                        "fxe:media-type 'application/json' . " +
                         "?s fx:anySlot ?o" +
                         "}}");
 

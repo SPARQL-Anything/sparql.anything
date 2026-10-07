@@ -192,12 +192,14 @@ public class SnippetGenerator {
 	private String generateDefaultQuery(FormatSection formatSection) {
 		StringBuilder query = new StringBuilder();
 		query.append("PREFIX xyz: <http://sparql.xyz/facade-x/data/>\n");
-		query.append("PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n\n");
+		query.append("PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n");
+		query.append("PREFIX fxe: <http://sparql.xyz/facade-x/engine/>\n\n");
 		query.append("SELECT * WHERE {\n");
 		query.append("  SERVICE <x-sparql-anything:> {\n");
-		query.append("    fx:properties\n");
-		query.append("      fx:location \"").append(formatSection.getResourceExample()).append("\" ;\n");
-		
+		query.append("    fxe:properties\n");
+		query.append("      fxe:location \"").append(formatSection.getResourceExample()).append("\" ;\n");
+
+
 		// Add first option as example if available
 		List<OptionSection> options = formatSection.getOptionSections();
 		if (!options.isEmpty()) {

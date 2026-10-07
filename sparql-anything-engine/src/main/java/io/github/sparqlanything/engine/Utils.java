@@ -52,11 +52,13 @@ public class Utils {
 	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
 	static boolean isPropertyOp(OpGraph opTripleNext) {
-		return opTripleNext.getNode().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES);
+		return isPropertyOp(opTripleNext.getNode());
 	}
 
+	/** True for fxe:properties and for the deprecated fx:properties. */
 	static boolean isPropertyOp(Node node) {
-		return node.isURI() && node.getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES);
+		return node.isURI() && (node.getURI().equals(Triplifier.FACADE_X_ENGINE_PROPERTIES)
+			|| node.getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES));
 	}
 
 	public static String queryIteratorToString(QueryIterator q) {
@@ -125,7 +127,7 @@ public class Utils {
 	static OpBGP extractFakePattern(OpBGP bgp) {
 		BasicPattern pattern = new BasicPattern();
 		for (Triple t : bgp.getPattern().getList()) {
-			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {
+			if (isPropertyOp(t.getSubject())) {
 				if (t.getObject().isVariable()) {
 					Var s = Var.alloc("s" + System.currentTimeMillis());
 					Var p = Var.alloc("p" + System.currentTimeMillis());
@@ -156,7 +158,7 @@ public class Utils {
 	static OpBGP excludeFXProperties(OpBGP bgp) {
 		BasicPattern result = new BasicPattern();
 		for (Triple t : bgp.getPattern().getList()) {
-			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) continue;
+			if (isPropertyOp(t.getSubject())) continue;
 			result.add(t);
 		}
 		return new OpBGP(result);

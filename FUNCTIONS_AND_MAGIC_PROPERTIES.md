@@ -71,14 +71,15 @@ Query
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?slot
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,3]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,3]" ;
+                  fxe:media-type  "application/json" .
         ?s        fx:anySlot     ?slot
       }
   }
@@ -117,14 +118,15 @@ Integer
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?slot (fx:cardinal(?p) AS ?cardinal)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,3]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,3]" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p             ?slot
         FILTER ( ?p != rdf:type )
       }
@@ -197,14 +199,15 @@ Boolean
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:before(?p1, ?p2) AS ?p1_before_p2) (fx:before(?p2, ?p1) AS ?p2_before_p1) (fx:before(?p1, ?p1) AS ?p1_before_p1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,3]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,3]" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p1            1 ;
                   ?p2            2
       }
@@ -239,14 +242,15 @@ Boolean
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:after(?p1, ?p2) AS ?p1_after_p2) (fx:after(?p2, ?p1) AS ?p2_after_p1) (fx:after(?p1, ?p1) AS ?p1_after_p1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,3]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,3]" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p1            1 ;
                   ?p2            2
       }
@@ -281,14 +285,15 @@ Container membership property
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?slot ?p (fx:previous(?p) AS ?previous)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,3]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,3]" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p             ?slot
         FILTER ( ?p != rdf:type )
       }
@@ -326,14 +331,15 @@ Container membership property
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?slot ?p (fx:next(?p) AS ?next)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,3]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,3]" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p             ?slot
         FILTER ( ?p != rdf:type )
       }
@@ -371,14 +377,15 @@ Container membership property
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?slot ?p (fx:forward(?p, 3) AS ?forward)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,3]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,3]" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p             ?slot
         FILTER ( ?p != rdf:type )
       }
@@ -417,14 +424,15 @@ Container membership property
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?slot ?p (fx:backward(?p, 2) AS ?backward)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,3]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,3]" ;
+                  fxe:media-type  "application/json" .
         ?s        ?p             ?slot
         FILTER ( ?p != rdf:type )
       }
@@ -464,13 +472,14 @@ Boolean
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.startsWith(?string, "this") AS ?result1) (fx:String.startsWith(?string, "This") AS ?result2)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "this is a test" .
+      { fxe:properties
+                  fxe:content  "this is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -504,13 +513,14 @@ Boolean
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.endsWith(?string, "test") AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "this is a test" .
+      { fxe:properties
+                  fxe:content  "this is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -544,13 +554,14 @@ Integer
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.indexOf(?string, "i") AS ?result1) (fx:String.indexOf(?string, "test") AS ?result2)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "this is a test" .
+      { fxe:properties
+                  fxe:content  "this is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -584,13 +595,14 @@ Integer
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.lastIndexOf(?string, "b") AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "bob" .
+      { fxe:properties
+                  fxe:content  "bob" .
         ?s        rdf:_1      ?string
       }
   }
@@ -624,13 +636,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.substring(?string, 10) AS ?result1) (fx:String.substring(?string, 5, 7) AS ?result2)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "this is a test" .
+      { fxe:properties
+                  fxe:content  "this is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -664,13 +677,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.toLowerCase(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "THIS IS A TEST" .
+      { fxe:properties
+                  fxe:content  "THIS IS A TEST" .
         ?s        rdf:_1      ?string
       }
   }
@@ -704,13 +718,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.toUpperCase(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "this is a test" .
+      { fxe:properties
+                  fxe:content  "this is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -744,13 +759,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.trim(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "  this is a test  " .
+      { fxe:properties
+                  fxe:content  "  this is a test  " .
         ?s        rdf:_1      ?string
       }
   }
@@ -784,13 +800,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.replace(?string, "f", "d") AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "fog" .
+      { fxe:properties
+                  fxe:content  "fog" .
         ?s        rdf:_1      ?string
       }
   }
@@ -802,13 +819,14 @@ Result
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.replace(?string, "f", "d") AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "fog" .
+      { fxe:properties
+                  fxe:content  "fog" .
         ?s        rdf:_1      ?string
       }
   }
@@ -832,13 +850,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.stripLeading(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "  this is a test  " .
+      { fxe:properties
+                  fxe:content  "  this is a test  " .
         ?s        rdf:_1      ?string
       }
   }
@@ -872,13 +891,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.stripTrailing(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "  this is a test  " .
+      { fxe:properties
+                  fxe:content  "  this is a test  " .
         ?s        rdf:_1      ?string
       }
   }
@@ -912,13 +932,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:String.removeTags(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "<p>This is a test</p>" .
+      { fxe:properties
+                  fxe:content  "<p>This is a test</p>" .
         ?s        rdf:_1      ?string
       }
   }
@@ -956,13 +977,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:WordUtils.capitalize(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a TEST" .
+      { fxe:properties
+                  fxe:content  "This is a TEST" .
         ?s        rdf:_1      ?string
       }
   }
@@ -996,13 +1018,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:WordUtils.capitalizeFully(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a TEST" .
+      { fxe:properties
+                  fxe:content  "This is a TEST" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1036,13 +1059,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:WordUtils.initials(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a TEST" .
+      { fxe:properties
+                  fxe:content  "This is a TEST" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1077,13 +1101,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:WordUtils.swapCase(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a TEST" .
+      { fxe:properties
+                  fxe:content  "This is a TEST" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1117,13 +1142,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:WordUtils.uncapitalize(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a TEST" .
+      { fxe:properties
+                  fxe:content  "This is a TEST" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1160,13 +1186,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:DigestUtils.md2Hex(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a test" .
+      { fxe:properties
+                  fxe:content  "This is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1200,13 +1227,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:DigestUtils.md5Hex(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a test" .
+      { fxe:properties
+                  fxe:content  "This is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1240,13 +1268,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:DigestUtils.sha1Hex(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a test" .
+      { fxe:properties
+                  fxe:content  "This is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1280,13 +1309,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:DigestUtils.sha256Hex(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a test" .
+      { fxe:properties
+                  fxe:content  "This is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1321,13 +1351,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:DigestUtils.sha384Hex(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a test" .
+      { fxe:properties
+                  fxe:content  "This is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1361,13 +1392,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:DigestUtils.sha512Hex(?string) AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This is a test" .
+      { fxe:properties
+                  fxe:content  "This is a test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1406,13 +1438,14 @@ String
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:URLEncoder.encode(?string, "UTF-8") AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "/This is a test/" .
+      { fxe:properties
+                  fxe:content  "/This is a test/" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1445,13 +1478,14 @@ String, The name of a supported character [encoding](https://docs.oracle.com/en/
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:URLDecoder.decode(?string, "UTF-8") AS ?result1)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "This+is+a+test" .
+      { fxe:properties
+                  fxe:content  "This+is+a+test" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1489,14 +1523,15 @@ Integer
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?s (fx:serial(?s) AS ?serial)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[1,2,1,2,4]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[1,2,1,2,4]" ;
+                  fxe:media-type  "application/json" .
         ?c        fx:anySlot     ?s
       }
   }
@@ -1523,14 +1558,15 @@ Result
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?wins ?team (fx:serial(?wins, ?team) AS ?serial)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[{\"team\":\"Golden State Warriors\", \"year\":2015, \"wins\": 67}, {\"team\":\"Golden State Warriors\", \"year\":2016, \"wins\": 73}, {\"team\":\"Golden State Warriors\", \"year\":2017, \"wins\": 67}]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[{\"team\":\"Golden State Warriors\", \"year\":2015, \"wins\": 67}, {\"team\":\"Golden State Warriors\", \"year\":2016, \"wins\": 73}, {\"team\":\"Golden State Warriors\", \"year\":2017, \"wins\": 67}]" ;
+                  fxe:media-type  "application/json" .
         ?c        xyz:wins       ?wins ;
                   xyz:team       ?team
       }
@@ -1575,14 +1611,15 @@ URI Node
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  ?team ?year (fx:entity("http://example.org/", fx:URLEncoder.encode(?team, "UTF-8"), ?year) AS ?entity)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content     "[{\"team\":\"Golden State Warriors\", \"year\":2015, \"wins\": 67}, {\"team\":\"Golden State Warriors\", \"year\":2016, \"wins\": 73}, {\"team\":\"Golden State Warriors\", \"year\":2017, \"wins\": 67}]" ;
-                  fx:media-type  "application/json" .
+      { fxe:properties
+                  fxe:content     "[{\"team\":\"Golden State Warriors\", \"year\":2015, \"wins\": 67}, {\"team\":\"Golden State Warriors\", \"year\":2016, \"wins\": 73}, {\"team\":\"Golden State Warriors\", \"year\":2017, \"wins\": 67}]" ;
+                  fxe:media-type  "application/json" .
         ?c        xyz:year       ?year ;
                   xyz:team       ?team
       }
@@ -1619,13 +1656,14 @@ Literal node
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:literal(?string, xsd:int) AS ?result)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "1" .
+      { fxe:properties
+                  fxe:content  "1" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1648,13 +1686,14 @@ Result
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT  (fx:literal(?string, "it") AS ?result)
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content  "uno" .
+      { fxe:properties
+                  fxe:content  "uno" .
         ?s        rdf:_1      ?string
       }
   }
@@ -1687,6 +1726,7 @@ Blank node
 ```sparql
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  ex:   <http://example/>
 
 CONSTRUCT 
@@ -1695,10 +1735,10 @@ CONSTRUCT
   }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:content      "c1,c2\nb0,A\nb0,B\nb0,C\nb0,D\nb0,E\nb1,A\nb2,B\nb3,C\nb4,D\nb5,E" ;
-                  fx:media-type   "text/csv" ;
-                  fx:csv.headers  true .
+      { fxe:properties
+                  fxe:content      "c1,c2\nb0,A\nb0,B\nb0,C\nb0,D\nb0,E\nb1,A\nb2,B\nb3,C\nb4,D\nb5,E" ;
+                  fxe:media-type   "text/csv" ;
+                  fxe:csv.headers  true .
         _:b0      xyz:c1          ?b0 ;
                   xyz:c2          ?A
       }

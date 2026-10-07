@@ -177,12 +177,12 @@ public class SPARQLAnythingClientViaSPARQL {
         Dataset kb = DatasetFactory.createGeneral();
 
         Query query = QueryFactory.create(
-                "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> " +
+                "PREFIX fx:  <http://sparql.xyz/facade-x/ns/> PREFIX fxe: <http://sparql.xyz/facade-x/engine/> " +
                         "PREFIX xyz: <http://sparql.xyz/facade-x/data/> " +
                         "SELECT ?slotNumber ?o ?assignment ?answer{ " +
                         "SERVICE <x-sparql-anything:> { " +
-                        "fx:properties fx:content 'abc' ; " +
-                        "fx:media-type 'my-mime-type' . " +
+                        "fxe:properties fxe:content 'abc' ; " +
+                        "fxe:media-type 'my-mime-type' . " +
                         "?s ?p ?o ." +
                         "?s <http://example.org/assign42> ?assignment " +
                         "BIND(fx:cardinal(?p) AS ?slotNumber) " +

@@ -23,11 +23,12 @@ curl 'http://localhost:3000/sparql.anything'  \
 -H 'Accept: text/turtle' \
 --data-urlencode 'query=
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 construct {?s ?p ?o}
 WHERE {
 service <x-sparql-anything:> {
-        fx:properties fx:location "https://www.google.com" .
-        fx:properties fx:media-type "text/html" .
+        fxe:properties fxe:location "https://www.google.com" .
+        fxe:properties fxe:media-type "text/html" .
         ?s ?p ?o .
     }
 }'

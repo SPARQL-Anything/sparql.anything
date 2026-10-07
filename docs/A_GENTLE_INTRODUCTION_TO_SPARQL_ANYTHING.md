@@ -265,11 +265,12 @@ In a completely equivalent way, SPARQL Anything options can be also provided as 
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT ?seriesName
 WHERE {
     SERVICE <x-sparql-anything:> {
-        fx:properties fx:location "https://sparql-anything.cc/example1.json"
+        fxe:properties fxe:location "https://sparql-anything.cc/example1.json"
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star ?li "Courteney Cox" .

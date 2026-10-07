@@ -32,12 +32,13 @@ id,name,height_inches
 $ cat some.rq 
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 CONSTRUCT { ?s ?p ?o  }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:location     "some.csv" ;
-                  fx:csv.headers  "true" .
+      { fxe:properties
+                  fxe:location     "some.csv" ;
+                  fxe:csv.headers  "true" .
         ?s        ?p              ?o
       }
   }
@@ -74,6 +75,7 @@ $ java -jar sparql-anything-v1.1.0.jar --query some.rq
 $ cat some.rq
 PREFIX  xyz:  <http://sparql.xyz/facade-x/data/>
 PREFIX  fx:   <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 PREFIX  ex:   <http://example.com/>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
 PREFIX  gist: <https://w3id.org/semanticarts/ns/ontology/gist/>
@@ -87,9 +89,9 @@ CONSTRUCT {
 }
 WHERE
   { SERVICE <x-sparql-anything:>
-      { fx:properties
-                  fx:location     "some.csv" ;
-                  fx:csv.headers  "true" .
+      { fxe:properties
+                  fxe:location     "some.csv" ;
+                  fxe:csv.headers  "true" .
         ?row xyz:height_inches ?height_string .
         ?row xyz:id ?id_string .
         ?row xyz:name ?name .
@@ -354,12 +356,13 @@ Alternatively, options can be provided as basic graph pattern inside the SERVICE
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT ?seriesName
 WHERE {
 
     SERVICE <x-sparql-anything:> {
-        fx:properties fx:location "https://sparql-anything.cc/example1.json" .
+        fxe:properties fxe:location "https://sparql-anything.cc/example1.json" .
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star fx:anySlot "Courteney Cox" .
@@ -382,12 +385,13 @@ You can also mix the two modalities as follows.
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 
 SELECT ?seriesName
 WHERE {
 
     SERVICE <x-sparql-anything:blank-nodes=false> {
-        fx:properties fx:location "https://sparql-anything.cc/example1.json" .
+        fxe:properties fxe:location "https://sparql-anything.cc/example1.json" .
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star fx:anySlot "Courteney Cox" .

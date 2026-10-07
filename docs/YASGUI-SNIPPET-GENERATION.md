@@ -404,11 +404,11 @@ public class JSONTriplifier implements Triplifier {
         defaultValue = "false"
     )
     @Example(
-        "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n" +
+        "PREFIX fx: <http://sparql.xyz/facade-x/ns/> PREFIX fxe: <http://sparql.xyz/facade-x/engine/>\n" +
         "SELECT * WHERE {\n" +
         "  SERVICE <x-sparql-anything:> {\n" +
-        "    fx:properties fx:location 'data.json' ;\n" +
-        "                  fx:json.arrays-as-containers true .\n" +
+        "    fxe:properties fxe:location 'data.json' ;\n" +
+        "                  fxe:json.arrays-as-containers true .\n" +
         "    ?s ?p ?o .\n" +
         "  }\n" +
         "}"
