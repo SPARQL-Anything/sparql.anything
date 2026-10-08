@@ -90,3 +90,12 @@ IRIArgument[] options = {IRIArgument.S3_ENDPOINT, IRIArgument.COMMAND, IRIArgume
 - S3 (`s3.endpoint`): the root is the concatenation of `s3.endpoint`, `s3.bucket-name`, and `s3.key` (e.g. `http://localhost:9000/my-bucket/people.json`), so that two different objects served from the same endpoint are always minted with distinct roots.
 
 Any new non-`location` `ResourceService` should extend `getRootArgument` similarly, ensuring the chosen root is unique for the combination of properties that identifies the resource.
+
+## Documentation
+
+All documentation lives in `docs/`, which is the only place to edit it. The root `README.md` is just a welcome page that links here.
+
+- Edit pages directly in `docs/`. New pages need an entry in `mkdocs.yaml` (`nav`).
+- Format pages in `docs/formats/` are generated from the `@Format`/`@Option`/`@Example` annotations of each triplifier. Don't edit them by hand: change the annotations, then run `./update-docs.sh`.
+- Preview locally: `pip install -r docs/requirements.txt && mkdocs serve`.
+- Read the Docs builds from `mkdocs.yaml` on every push.

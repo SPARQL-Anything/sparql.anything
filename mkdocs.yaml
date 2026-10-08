@@ -9,15 +9,18 @@ theme:
   sticky_navigation: true
 nav:
   - Reference:
-    - Introduction: 'README.md'
-    - Configuration: 'Configuration.md'
-    - Functions: 'FUNCTIONS_AND_MAGIC_PROPERTIES.md'
-    - Command line interface: 'CLI.md'
-    - Docker: 'BROWSER.md'
-    - S3: 'S3.md'
-    - Slicing: 'SLICING.md'
-    - Parametrised queries: 'PARAMETRISED_QUERIES.md'
-    - Tutorials: 'TUTORIALS.md'
+      - Introduction: 'README.md'
+      - A gentle introduction: 'A_GENTLE_INTRODUCTION_TO_SPARQL_ANYTHING.md'
+      - Façade-X: 'Facade-X.md'
+      - Configuration: 'Configuration.md'
+      - Functions: 'FUNCTIONS_AND_MAGIC_PROPERTIES.md'
+      - Command line interface: 'CLI.md'
+      - Java library: 'JAVA_LIBRARY.md'
+      - Docker: 'BROWSER.md'
+      - S3: 'S3.md'
+      - Slicing: 'SLICING.md'
+      - Parametrised queries: 'PARAMETRISED_QUERIES.md'
+      - Tutorials: 'TUTORIALS.md'
   - 'Guide on formats':
       - CSV: 'formats/CSV.md'
       - JSON: 'formats/JSON.md'
@@ -25,22 +28,27 @@ nav:
       - HTML: 'formats/HTML.md'
       - YAML: 'formats/YAML.md'
       - Markdown: 'formats/Markdown.md'
-      - Bibtex: 'formats/Bibtex.md'
+      - Bibliography: 'formats/Bibliography.md'
       - Binary: 'formats/Binary.md'
       - Archive: 'formats/Archive.md'
       - Text: 'formats/Text.md'
       - RDF: 'formats/RDF.md'
       - Spreadsheet: 'formats/Spreadsheet.md'
-      - Word: 'formats/Word_Processing_Document.md'
+      - Word: 'formats/Docs.md'
       - Slides: 'formats/Slides.md'
-extra_css: [styles.css]
+      - Metadata: 'formats/Metadata.md'
+  - Developers:
+      - Developer guide: 'DEVELOPER_GUIDE.md'
+      - Extension mechanisms: 'EXTENSION_MECHANISMS.md'
+      - System overview: 'SystemOverview.md'
+      - YASGUI snippet generation: 'YASGUI-SNIPPET-GENERATION.md'
 markdown_extensions:
   - tables
   - admonition
   - nl2br
-  - admonition
   - pymdownx.details
   - pymdownx.superfences
+extra_css: [styles.css]
 hooks:
   - hooks/gh_issue_links.py
 plugins:
