@@ -50,6 +50,23 @@ public class LegacyRootTypeTest {
 		assertEquals(EXPECTED, run("", "?root a ?t . FILTER(?t = fx:root)"));
 	}
 
+	/** fx:root as the deprecated form of the root option (predicate) must not be rewritten (see #386). */
+	@Test
+	public void legacyRootOptionAndLegacyRootType() {
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> "
+			+ "SELECT ?root { SERVICE <x-sparql-anything:> { "
+			+ "fx:properties fx:content \"<root><child>child1</child></root>\" ; fx:media-type \"application/xml\" ; "
+			+ "fx:blank-nodes false ; fx:root \"http://example.org/document\" . "
+			+ "?root a fx:root } }";
+		Set<String> roots = new HashSet<>();
+		try (QueryExecution qe = QueryExecutionFactory.create(QueryFactory.create(q), DatasetFactory.createGeneral())) {
+			ResultSet rs = qe.execSelect();
+			while (rs.hasNext()) roots.add(rs.next().get("root").asResource().getURI());
+		}
+		assertEquals(Set.of("http://example.org/document"), roots);
+	}
+
 	@Test
 	public void legacyTermWithTripleFiltering() {
 		assertEquals(EXPECTED, run("; fxe:strategy \"1\"", "?root a fx:root ."));
