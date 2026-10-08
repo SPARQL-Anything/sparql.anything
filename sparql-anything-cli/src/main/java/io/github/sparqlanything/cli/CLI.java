@@ -80,6 +80,10 @@ public class CLI {
 
 	public static final String PROFILE = "profile";
 
+	public static final String BASE = "b";
+	public static final String BASE_LONG = "base";
+	public static final String NO_WRITE_BASE_LONG = "no-write-base";
+
 	private Options options;
 	private CommandLine commandLine = null;
 
@@ -160,6 +164,13 @@ public class CLI {
 				"OPTIONAL - Allow duplicate triples in CONSTRUCT output. Streams the result triple-by-triple for line-based formats (NT, NQ, TTL, TriG) instead of building the whole result Model in memory, giving near-constant memory for bulk conversions at the cost of the de-duplication guarantee. Only affects CONSTRUCT queries with -f NT or NQ; ignored otherwise.")
 			.longOpt(STREAM_LONG).build());
 
+		options.addOption(Option.builder(BASE).argName("IRI").hasArg().desc(
+				"OPTIONAL - Base IRI to write in RDF output (TTL, TriG, RDF/XML). Overrides BASE declared in the query.")
+			.longOpt(BASE_LONG).build());
+
+		options.addOption(Option.builder().longOpt(NO_WRITE_BASE_LONG).hasArg(false).desc(
+			"OPTIONAL - Do not write the query's BASE in RDF output.").build());
+
 		options.addOption(Option.builder(PROFILE).argName("filepath").hasArg(true).optionalArg(true).desc(
 				"OPTIONAL - It runs the execution through a profiler. It saves the results to [filepath] (by default profile.tsv) in TSV format. The traced event is reported in the first column. The second column contains the timestamp in milliseconds from Unix epoch. The third column contains the amount of milliseconds from the first event (LOAD_MAIN_CLASS). Warning: This may increase execution time.")
 			.longOpt(PROFILE).build());
@@ -189,6 +200,13 @@ public class CLI {
 //	public String getInputFile() {
 //		return commandLine.getOptionValue(CLI.INPUT);
 //	}
+
+	public String getBase(Query q) {
+		if (commandLine.hasOption(NO_WRITE_BASE_LONG)) return null;
+		if (commandLine.hasOption(BASE)) return commandLine.getOptionValue(BASE);
+		// only if BASE was declared; otherwise Jena defaults to the CWD file: IRI
+		return q.explicitlySetBaseURI() ? q.getBaseURI() : null;
+	}
 
 	public String getOutputFile() {
 		return commandLine.getOptionValue(CLI.OUTPUT);

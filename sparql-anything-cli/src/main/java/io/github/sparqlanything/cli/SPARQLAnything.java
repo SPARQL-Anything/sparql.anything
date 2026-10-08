@@ -39,7 +39,9 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFParserRegistry;
+import org.apache.jena.riot.RDFWriter;
 import org.apache.jena.riot.ReaderRIOTFactory;
+import org.apache.jena.riot.SysRIOT;
 import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.core.ResultBinding;
 import org.apache.jena.sparql.core.Var;
@@ -104,10 +106,10 @@ public class SPARQLAnything {
 		setConfigurationsToContext(configurations, qExec);
 		return qExec;
 	}
-
-	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw, String[] configurations, boolean stream)
+	private static void executeQuery(String outputFormat, Dataset kb, Query query, PrintStream pw, String[] configurations, boolean stream, String base)
 		throws FileNotFoundException {
 		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_QUERY_EXECUTION);
+
 		try (QueryExecution qe = createQueryExecution(query, kb, configurations)) {
 			if (query.isSelectType()) {
 				ResultSet rs = qe.execSelect();
@@ -153,6 +155,7 @@ public class SPARQLAnything {
 					// so memory is ~constant and duplicates are preserved.
 					StreamRDF out = StreamRDFWriter.getWriterStream(pw, streamLang);
 					out.start();
+					if (base != null) out.base(base);
 					try {
 						if (RDFLanguages.isQuads(streamLang) && query.isConstructType()) {
 							qe.execConstructQuads().forEachRemaining(out::quad);
@@ -180,21 +183,20 @@ public class SPARQLAnything {
 						RDFDataMgr.write(pw, m, Lang.JSONLD);
 					} else if (outputFormat.equals(Lang.JSONLD11.getName())) {
 						RDFDataMgr.write(pw, m, Lang.JSONLD11);
-					} else if (outputFormat.equals("XML")) {
-						// RDF/XML
-						RDFDataMgr.write(pw, m, Lang.RDFXML);
 					} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
-						// TURTLE
-						RDFDataMgr.write(pw, m, Lang.TTL);
+						RDFWriter.create().source(m).lang(Lang.TTL).base(base).output(pw);
+					} else if (outputFormat.equals("XML")) {
+						RDFWriter.create().source(m).lang(Lang.RDFXML).base(base)
+							.set(SysRIOT.sysRdfWriterProperties, base == null ? Map.of() : Map.of("xmlbase", base))
+							.output(pw);
+					} else if (outputFormat.equals("TRIG") || outputFormat.equals(Lang.TRIG.getName())) {
+						RDFWriter.create().source(Objects.requireNonNull(d)).lang(Lang.TRIG).base(base).output(pw);
 					} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
 						// N-Triples
 						RDFDataMgr.write(pw, m, Lang.NT);
 					} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
 						// NQ
 						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
-					} else if (outputFormat.equals("TRIG") || outputFormat.equals(Lang.TRIG.getName())) {
-						// TRIG
-						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIG);
 					} else if (outputFormat.equals("TRIX") || outputFormat.equals(Lang.TRIX.getName())) {
 						// TRIG
 						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
@@ -537,6 +539,7 @@ public class SPARQLAnything {
 		}
 		// Specifications
 		Specification specification = SpecificationFactory.create("", query);
+		String base = cli.getBase(QueryFactory.create(query));
 		// Iterate over parameters
 		while (parameters.hasNext()) {
 			QuerySolution qs = parameters.nextSolution();
@@ -571,7 +574,7 @@ public class SPARQLAnything {
 			boolean newFile = outputFile != null && !new File(outputFile).exists();
 			try (PrintStream ps = getPrintStream(outputFile, cli.getOutputAppend())) {
 				logger.trace("Executing Query: {}", q);
-				executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getStream());
+				executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getStream(), base);
 			} catch (Exception e1) {
 				logger.error(
 					"Iteration " + parameters.getRowNumber() + " failed with error: " + e1.getMessage());
@@ -726,7 +729,7 @@ public class SPARQLAnything {
 				}
 				Query q = QueryFactory.create(query);
 				try (PrintStream ps = getPrintStream(outputFileName, cli.getOutputAppend())) {
-					executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getStream());
+					executeQuery(cli.getFormat(q), kb, q, ps, configurations, cli.getStream(), cli.getBase(q));
 				}
 			} else {
 				executeQueryWithValues(cli, query, kb, outputFileName, outputPattern, values, configurations);
