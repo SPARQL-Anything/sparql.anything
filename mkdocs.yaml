@@ -37,11 +37,12 @@ nav:
       - Word: 'formats/Docs.md'
       - Slides: 'formats/Slides.md'
       - Metadata: 'formats/Metadata.md'
-  - Developers:
-      - Developer guide: 'DEVELOPER_GUIDE.md'
-      - Extension mechanisms: 'EXTENSION_MECHANISMS.md'
-      - System overview: 'SystemOverview.md'
-      - YASGUI snippet generation: 'YASGUI-SNIPPET-GENERATION.md'
+      - Developers:
+          - Developer guide: 'DEVELOPER_GUIDE.md'
+          - Releasing: 'RELEASING.md'
+          - Extension mechanisms: 'EXTENSION_MECHANISMS.md'
+          - System overview: 'SystemOverview.md'
+          - YASGUI snippet generation: 'YASGUI-SNIPPET-GENERATION.md'
 markdown_extensions:
   - tables
   - admonition
