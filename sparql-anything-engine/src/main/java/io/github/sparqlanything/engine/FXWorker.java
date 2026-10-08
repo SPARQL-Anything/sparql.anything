@@ -53,6 +53,9 @@ public class FXWorker {
 
 	public QueryIterator execute(Op op, QueryIterator input, ExecutionContext executionContext) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, TriplifierHTTPException, IOException, UnboundVariableException, URISyntaxException {
 
+		// accept deprecated Façade-X terms (e.g. fx:root), with a warning (#681)
+		op = LegacyTerms.rewrite(op);
+
 		// extract properties from service URI
 		Properties p = new Properties();
 

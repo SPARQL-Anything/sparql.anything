@@ -49,6 +49,7 @@ Note that
 3. Such triples must have ``fxe:properties`` as subject, ``fxe:[OPTION-NAME]`` as predicate, and a literal or a variable as object.
 4. The ``fxe:`` namespace (``http://sparql.xyz/facade-x/engine/``) is the [Façade-X Engine vocabulary](https://w3c-facade-x.github.io/facade-x-specs/engine.html) defined by the W3C Data Façades Community Group. The Façade-X functions and the terms of the generated data (e.g. ``fx:Root``) remain in the ``fx:`` namespace.
 5. If the same option is given as an ``fxe:`` triple, as an ``fx:`` triple and in the SERVICE IRI, the ``fxe:`` triple takes precedence, then the ``fx:`` triple, then the IRI.
+6. The root container is typed ``fx:Root`` (``fx:root`` before v1.3.0). Queries that still use ``fx:root`` are rewritten to ``fx:Root`` with a deprecation warning (#681); this will be removed in a future release.
 
 You can also mix the two modalities as follows.
 
