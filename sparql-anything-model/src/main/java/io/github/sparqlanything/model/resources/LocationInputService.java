@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Locale;
 
 import java.io.*;
 import java.net.URL;
@@ -72,16 +73,34 @@ public class LocationInputService implements ResourceService {
 
 	}
 
-	private String getArchiverNameFromArchiverFormat(String location, String archiverFormat) {
-		String extension = FilenameUtils.getExtension(location);
-
-		if (extension != null && !extension.isEmpty())
-			return extension;
-
-
-		return archiverFormat;
+	/**
+	 * Opens the archive with the archiver given by the archive-format option, or else the one named
+	 * by the file extension, or else the one detected from the content (#554).
+	 */
+	private static ArchiveInputStream openArchive(URL archiveLocation, String archiverFormat, Charset charset) throws IOException, ArchiveException {
+		ArchiveStreamFactory factory = new ArchiveStreamFactory(charset.toString());
+		// Buffered: content detection needs mark/reset
+		InputStream in = new BufferedInputStream(archiveLocation.openStream());
+		String archiverName = getArchiverName(archiveLocation.toString(), archiverFormat, factory);
+		if (archiverName == null) {
+			archiverName = ArchiveStreamFactory.detect(in);
+		}
+		log.trace("Archiver {} for {}", archiverName, archiveLocation);
+		return factory.createArchiveInputStream(archiverName, in);
 	}
 
+	private static String getArchiverName(String location, String archiverFormat, ArchiveStreamFactory factory) {
+		if (archiverFormat != null && !archiverFormat.isBlank()) {
+			return archiverFormat.trim().toLowerCase(Locale.ROOT);
+		}
+		String extension = FilenameUtils.getExtension(location);
+		for (String name : factory.getInputStreamArchiveNames()) {
+			if (name.equalsIgnoreCase(extension)) {
+				return name;
+			}
+		}
+		return null;
+	}
 
 	public InputStream getInputStreamFromArchive(URL archiveLocation, String entryName, Charset charset, String archiverFormat) throws IOException {
 
@@ -103,13 +122,15 @@ public class LocationInputService implements ResourceService {
 			new File(folder).mkdirs();
 
 
-			String archiverName = getArchiverNameFromArchiverFormat(archiveLocation.toString(), archiverFormat);
-			ArchiveInputStream i;
-			if (archiverName == null || archiverName.isEmpty()) {
-				i = new ArchiveStreamFactory().createArchiveInputStream(archiveLocation.openStream());
-			} else {
-				i = new ArchiveStreamFactory().createArchiveInputStream(archiverName, archiveLocation.openStream(), charset.toString());
-			}
+//			String archiverName = getArchiverNameFromArchiverFormat(archiveLocation.toString(), archiverFormat);
+//			ArchiveInputStream i;
+//			if (archiverName == null || archiverName.isEmpty()) {
+//				i = new ArchiveStreamFactory().createArchiveInputStream(archiveLocation.openStream());
+//			} else {
+//				i = new ArchiveStreamFactory().createArchiveInputStream(archiverName, archiveLocation.openStream(), charset.toString());
+//			}
+
+			ArchiveInputStream i = openArchive(archiveLocation, archiverFormat, charset);
 
 			ArchiveEntry entry = null;
 			while ((entry = i.getNextEntry()) != null) {
