@@ -47,6 +47,7 @@ Note that
 1. The SERVICE IRI scheme must be ``x-sparql-anything:``.
 2. Each triplification option to pass to the engine corresponds to a triple of the Basic Graph Pattern inside the SERVICE clause.
 3. Such triples must have ``fxe:properties`` as subject, ``fxe:[OPTION-NAME]`` as predicate, and a literal or a variable as object.
+   A variable must be bound by a `BIND` inside the same SERVICE clause, before the option triple (e.g. `BIND("data.json" AS ?f) fxe:properties fxe:location ?f .`). Variables bound outside the SERVICE clause (by `BIND` or `VALUES` in the outer query) are not passed to the engine yet, and the SERVICE returns no results.
 4. The ``fxe:`` namespace (``http://sparql.xyz/facade-x/engine/``) is the [Façade-X Engine vocabulary](https://w3c-facade-x.github.io/facade-x-specs/engine.html) defined by the W3C Data Façades Community Group. The Façade-X functions and the terms of the generated data (e.g. ``fx:Root``) remain in the ``fx:`` namespace.
 5. If the same option is given as an ``fxe:`` triple, as an ``fx:`` triple and in the SERVICE IRI, the ``fxe:`` triple takes precedence, then the ``fx:`` triple, then the IRI.
 6. The root container is typed ``fx:Root`` (``fx:root`` before v1.3.0). Queries that still use ``fx:root`` are rewritten to ``fx:Root`` with a deprecation warning (#681); this will be removed in a future release.
@@ -331,6 +332,8 @@ The value is resolved, in this order, as:
 3. a resource on the Java classpath.
 
 If none of these resolves, the query fails with an error naming the value.
+
+On Windows, a path in the SERVICE IRI must use forward slashes, because IRIs cannot contain backslashes: `x-sparql-anything:query=C:/data/q.rq`. In the Basic Graph Pattern, a native path is a SPARQL string, so each backslash must be escaped: `fxe:properties fxe:query "C:\\data\\q.rq"`. An unescaped `\t` or `\n` is read as a tab or a newline.
 
 #### Default Value
 
@@ -1528,16 +1531,55 @@ SPARQL Anything relies on Apache Commons HTTP for HTTP connections.
 | http.client.*                   | Calls methods on the HTTPClient Java object. E.g. `http.client.useSystemProperties=false` means to avoid inheriting Java system properties (Default 'yes') |
 | http.client.useSystemProperties | Use Java System Properties to configure the HTTP Client.                                                                                                   | true/false   | true          |
 | http.header.*                   | To add headers to the HTTP request. E.g. `http.header.accept=application/json`                                                                             |              ||
-| http.query.*                    | To add parameters to the query string. E.g. `http.query.var=value` or `http.query.var.1=value` to add more variable of the same name                       |              ||
-| http.form.*                     | To add parameters to the POST content. E.g. `http.form.var=value` or `http.form.var.1=value` to add more variable of the same name                         |              ||
+| http.query.*                    | To add parameters to the query string. E.g. `http.query.var=value`. To repeat a parameter, add a numeric suffix: `http.query.var.1=a`, `http.query.var.2=b` sends `var=a&var=b` (see [below](#repeated-parameters)) |              ||
+| http.form.*                     | To add form parameters to the request body (`application/x-www-form-urlencoded`). E.g. `http.form.var=value`. Numeric suffixes work as for `http.query.*` |              ||
 | http.method                     | HTTP Method                                                                                                                                                | GET,POST,... | GET           |
-| http.payload                    | Sets the payload of the request                                                                                                                            |              ||
+| http.payload                    | Sets the body of the request. Sent only with methods that have a body (POST, PUT, PATCH), with a `Content-Length` header. Set the content type with `http.header.Content-Type` |              ||
 | http.protocol                   | Protocol                                                                                                                                                   | 0.9,1.0,1.1  | 1.1           |
 | http.auth.user                  | Authentication: user name                                                                                                                                  |              ||
 | http.auth.password              | Authentication: password                                                                                                                                   |              ||
-| http.redirect                   | Follow redirect?                                                                                                                                           | true,false   | true          |
+| http.redirect                   | Follow redirects? With `false`, a 3xx response is not followed and the query fails like for any other non-2xx status | true,false   | true          |
 | http.sleep                      | Wait the given milliseconds before sending the request                                                                                                     |              |           |
 
+
+### Repeated parameters
+
+Options are a map, so the same option name cannot be given twice. To send a query string (or form) parameter more than once, append `.N` to the name, where `N` is a number. The suffix is removed from the parameter name, and the values are sent in numeric order (`.2` before `.10`); a parameter without a suffix comes first.
+
+```sparql
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
+
+SELECT * WHERE {
+  SERVICE <x-sparql-anything:> {
+    fxe:properties fxe:location "https://example.org/data" ;
+                   fxe:http.query.tag.1 "a" ;
+                   fxe:http.query.tag.2 "b" ;
+                   fxe:http.query.tag.10 "j" .
+    ?s ?p ?o
+  }
+}
+```
+
+The request is `GET https://example.org/data?tag=a&tag=b&tag=j`.
+
+### Request body
+
+`http.payload` is sent as the request body for POST, PUT and PATCH; with other methods it is ignored and a warning is logged. No content type is added by default:
+
+```sparql
+PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
+
+SELECT * WHERE {
+  SERVICE <x-sparql-anything:> {
+    fxe:properties fxe:location "https://example.org/api" ;
+                   fxe:media-type "application/json" ;
+                   fxe:http.method "POST" ;
+                   fxe:http.header.Content-Type "application/json" ;
+                   fxe:http.payload """{"q":1}""" .
+    ?s ?p ?o
+  }
+}
+```
 
 ## S3
 

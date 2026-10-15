@@ -10,6 +10,11 @@ Download the latest `sparql-anything-<version>.jar` from the [releases page](htt
 java -jar sparql-anything-<version>.jar -q <query> [-f <output format>] [-v <filepath | name=value> ...] [-c <option=value>] [-l <path>] [-o <filepath>]
 ```
 
+Run `java -jar sparql-anything-<version>.jar -h` to print the list of options.
+
+### -h,--help
+Prints the usage and the list of options, and exits with status `0`. No query is executed, and `-q` is not required.
+
 ### -q,--query <query>                    
 The path to the file storing the query to execute or the query itself. A value that is neither a URL nor an existing file, and contains no whitespace and no `{`, is reported as a missing query file.
 
@@ -77,6 +82,15 @@ Numeric ranges can be given inline: `-v n=1...10` binds `n` to 1, 2, …, 10. Re
 OPTIONAL - Configuration to be passed to the SPARQL Anything engine (this is equivalent to define them in the SERVICE IRI). The argument can be passed multiple times (one for each option to be
 set). Options passed in this way can be overwritten in the SERVICE IRI or in the Basic Graph Pattern.
 
+### -j,--load-jar <filepath>
+OPTIONAL - Path to a JAR file to load at startup, e.g. one providing additional triplifiers or functions. The argument can be passed multiple times (one for each JAR file).
+
+### -b,--base <IRI>
+OPTIONAL - Base IRI written in the RDF output (TTL, TriG, RDF/XML). It overrides the `BASE` declared in the query.
+
+### --no-write-base
+OPTIONAL - Do not write the query's `BASE` in the RDF output.
+
 ### -nc,--no-clobber
 OPTIONAL - Do not execute if the specified output file already exists.
 
@@ -134,6 +148,6 @@ PROCESS_ENDS             1759830004425  4425
 
 | Status | Meaning |
 |--------|---------|
-| `0` | Success (also when `-nc` skips an existing output file) |
+| `0` | Success (also when `-nc` skips an existing output file, and with `-h`) |
 | `1` | Error: SPARQL syntax error, missing query or input file, or an error during execution (including a failed slice, unless the SERVICE is `SILENT`) |
 | `2` | Invalid command line: unknown option or missing option argument; the usage is printed |

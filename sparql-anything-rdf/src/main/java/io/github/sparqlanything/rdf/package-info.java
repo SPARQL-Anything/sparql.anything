@@ -17,6 +17,8 @@
 
 
 @Format(description = "RDF files can be targeted like any other format by the option `location`. The content is queried as-is (no facade-x interpretation needed, obviously). " + "\n\n" + 
+		"RDF can also be given with the options `content`, `command` or `read-from-std-in`. In this case there is no file extension, so the `media-type` option is required (e.g. `media-type=text/turtle`); without it, the input is not recognised as RDF.\n\n" +
+		"The triples are loaded in a named graph: its name is the `location`, or, for `content`, `command` and `read-from-std-in`, the root identifier of the source (`http://sparql.xyz/facade-x/data/` followed by an MD5 hash). Use `GRAPH ?g { ... }` to match them.\n" +
 		"\n" +
 		"In addition, the [Command Line Interface (CLI)](../CLI.md) can load static RDF files.\n" +
 		"\n" +
