@@ -539,7 +539,9 @@ public class SPARQLAnything {
 	 * (.srj/.json, .srx/.xml, .tsv, .csv) or, for other extensions, from the first character.
 	 */
 	static ResultSet loadResultSet(String fileName) throws IOException {
-		Path path = Paths.get(fileName);
+		// Same resolution as the File.exists() check in executeQueryWithValues;
+		// File accepts "/D:/..." (URL.getFile() form) on Windows, Paths.get does not (#687 regression)
+		Path path = new File(fileName).toPath();
 		Lang lang = resultSetLang(path);
 		try (InputStream in = new BufferedInputStream(java.nio.file.Files.newInputStream(path))) {
 			// Materialise: the reader streams from 'in', which is closed when this method returns
