@@ -1293,16 +1293,16 @@ Result
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix xyz:  <http://sparql.xyz/facade-x/data/> .
 
-<< _:b0 rdfs:member "1"^^xsd:int >>
+<< _:b0 rdfs:member "1"^^xsd:decimal >>
         fx:slot-key  1 .
 
 _:b0    rdf:type     fx:Root ;
-        rdfs:member  "3"^^xsd:int , "2"^^xsd:int , "1"^^xsd:int .
+        rdfs:member  "3"^^xsd:decimal , "2"^^xsd:decimal , "1"^^xsd:decimal .
 
-<< _:b0 rdfs:member "2"^^xsd:int >>
+<< _:b0 rdfs:member "2"^^xsd:decimal >>
         fx:slot-key  2 .
 
-<< _:b0 rdfs:member "3"^^xsd:int >>
+<< _:b0 rdfs:member "3"^^xsd:decimal >>
         fx:slot-key  3 .
 ```
 

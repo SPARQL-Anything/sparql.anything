@@ -72,13 +72,13 @@ public class SPARQLAnythingClientViaSPARQL {
 which prints
 
 ```
------------------------------------------------
-| o                                           |
-===============================================
-| "1"^^<http://www.w3.org/2001/XMLSchema#int> |
-| "2"^^<http://www.w3.org/2001/XMLSchema#int> |
-| "3"^^<http://www.w3.org/2001/XMLSchema#int> |
------------------------------------------------
+---------------------------------------------------
+| o                                               |
+===================================================
+| "1"^^<http://www.w3.org/2001/XMLSchema#decimal> |
+| "2"^^<http://www.w3.org/2001/XMLSchema#decimal> |
+| "3"^^<http://www.w3.org/2001/XMLSchema#decimal> |
+---------------------------------------------------
 ```
 
 A maven project showing how to SPARQL Anything as a Java library is available [here](https://github.com/SPARQL-Anything/JavaClientExample).
