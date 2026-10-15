@@ -26,9 +26,9 @@
 		"Examples of this can be found in the [tutorials](../TUTORIALS.md).\n\n" +
 		"This feature is enabled with the command line argument `-l|--load` that accepts a file or a directory.\n" +
 		"The files are loaded in a Dataset, which becomes the target for the query execution.\n" +
-		"A single file will be loaded in the default Graph. \n" +
-		"If pointing to a folder, all RDF files in the folder are loaded, each one on a Named Graph.\n" +
-		"\n" +
+	"Each source (the file, the URL, or each file of the folder) is loaded in a named graph, named after its URI; named graphs in TriG or N-Quads files keep their names.\n" +
+	"The default graph is the union of all the loaded graphs, so queries without GRAPH match all the loaded data.\n" +
+	"\n" +
 		"See also the documentation of the [Command Line Interface (CLI)](../CLI.md).\n",
 name="RDF",
 resourceExample = "https://sparql-anything.cc/examples/simple.ttl")
