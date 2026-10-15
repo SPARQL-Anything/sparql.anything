@@ -40,6 +40,8 @@ OPTIONAL - The path to one RDF file or a folder including a set of files to be l
 > [!NOTE]  
 > This is useful to combine existing RDF with newly incoming data to be converted, and build small workflows with subsequent queries. See examples in [IMMA # step-3-generate-the-list-of-artworks](https://github.com/SPARQL-Anything/showcase-imma#step-3-generate-the-list-of-artworks)
 
+Each file (or URL) is loaded in a named graph named after its URI, and the default graph is the union of all the loaded graphs.
+
 ### -f,--format <string>                  
 OPTIONAL -  Format of the output file, case-insensitive (`-f ttl` and `-f TURTLE` are the same).
 Supported values: see below. [Default: guessed from the extension of the `-o` file, otherwise CSV or TTL]

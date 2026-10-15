@@ -649,72 +649,142 @@ public class SPARQLAnything {
 		}
 	}
 
+//	private static Dataset createDataset(String load) {
+//		Dataset kb = DatasetFactory.createGeneral();
+//		if (load != null) {
+//
+//			logger.info("Loading data from: {}", load);
+//			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_LOAD);
+//			// XXX Check if load is a URI first
+//			File loadSource;
+//			try {
+//				loadSource = new File(new URL(load).toURI());
+//			} catch (MalformedURLException | URISyntaxException e) {
+//				loadSource = new File(load);
+//			} catch (IllegalArgumentException e) {
+//				// Not a file: URL (e.g. http, https): load it like a single file, in the default graph
+//				RDFDataMgr.read(kb, load);
+//				Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_LOAD);
+//				return kb;
+//			}
+//			if (loadSource.isDirectory()) {
+//
+//				logger.info("Loading files from directory: {}", loadSource);
+//				// If directory, load all files
+//				Collection<File> files = FileUtils.listFiles(loadSource, null, true);
+//				for (File f : files) {
+//					logger.info("Adding file to be loaded: {}", f);
+//					try {
+//						Model m = ModelFactory.createDefaultModel();
+//						// read into the model.
+//						m.read(f.getAbsolutePath());
+//						kb.addNamedModel(f.toURI().toString(), m);
+//					} catch (Exception e) {
+//						logger.error("An error occurred while loading {}", f);
+//						logger.error(" - Problem was: {}", e.getMessage());
+//						if (logger.isDebugEnabled()) {
+//							logger.error("", e);
+//						}
+//					}
+//				}
+//
+//				logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
+//			} else if (loadSource.isFile()) {
+//				// If it is a file, load it
+//				logger.info("Load file: {}", loadSource);
+//				Path base = Paths.get(".");
+//				try {
+//					Path p = loadSource.toPath();
+//					if (!p.isAbsolute()) {
+//						p = base.relativize(loadSource.toPath());
+//					}
+//					kb = DatasetFactory.create(p.toFile().toURI().toString());
+//				} catch (Exception e) {
+//					logger.error("An error occurred while loading {}", loadSource);
+//					logger.error(" - Problem was: ", e);
+//				}
+//			} else {
+//				if (!loadSource.exists()) {
+//					logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
+//				} else {
+//					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+//				}
+//				return kb;
+//			}
+//			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_LOAD);
+//		}
+//
+//		return kb;
+//	}
+
+	/**
+	 * Loads the RDF given with -l. Each source (a file, a URL, or each file of a folder) is loaded in a named graph,
+	 * named after its URI. Named graphs in quad formats (TriG, N-Quads) keep their names.
+	 * The default graph is the union of all the loaded graphs.
+	 */
 	private static Dataset createDataset(String load) {
 		Dataset kb = DatasetFactory.createGeneral();
-		if (load != null) {
-
-			logger.info("Loading data from: {}", load);
-			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_LOAD);
-			// XXX Check if load is a URI first
-			File loadSource;
-			try {
-				loadSource = new File(new URL(load).toURI());
-			} catch (MalformedURLException | URISyntaxException e) {
-				loadSource = new File(load);
-			} catch (IllegalArgumentException e) {
-				// Not a file: URL (e.g. http, https): load it like a single file, in the default graph
-				RDFDataMgr.read(kb, load);
-				Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_LOAD);
-				return kb;
-			}
-			if (loadSource.isDirectory()) {
-
-				logger.info("Loading files from directory: {}", loadSource);
-				// If directory, load all files
-				Collection<File> files = FileUtils.listFiles(loadSource, null, true);
-				for (File f : files) {
-					logger.info("Adding file to be loaded: {}", f);
-					try {
-						Model m = ModelFactory.createDefaultModel();
-						// read into the model.
-						m.read(f.getAbsolutePath());
-						kb.addNamedModel(f.toURI().toString(), m);
-					} catch (Exception e) {
-						logger.error("An error occurred while loading {}", f);
-						logger.error(" - Problem was: {}", e.getMessage());
-						if (logger.isDebugEnabled()) {
-							logger.error("", e);
-						}
-					}
-				}
-
-				logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
-			} else if (loadSource.isFile()) {
-				// If it is a file, load it
-				logger.info("Load file: {}", loadSource);
-				Path base = Paths.get(".");
-				try {
-					Path p = loadSource.toPath();
-					if (!p.isAbsolute()) {
-						p = base.relativize(loadSource.toPath());
-					}
-					kb = DatasetFactory.create(p.toFile().toURI().toString());
-				} catch (Exception e) {
-					logger.error("An error occurred while loading {}", loadSource);
-					logger.error(" - Problem was: ", e);
-				}
-			} else {
-				if (!loadSource.exists()) {
-					logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
-				} else {
-					logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
-				}
-				return kb;
-			}
-			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_LOAD);
+		if (load == null) {
+			return kb;
 		}
+		logger.info("Loading data from: {}", load);
+		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.BEFORE_LOAD);
+		File loadSource;
+		try {
+			loadSource = new File(new URL(load).toURI());
+		} catch (MalformedURLException | URISyntaxException e) {
+			loadSource = new File(load);
+		} catch (IllegalArgumentException e) {
+			// Not a file: URL (e.g. http, https)
+			loadSource = null;
+		}
+		if (loadSource == null) {
+			addSource(kb, load, load);
+		} else if (loadSource.isDirectory()) {
+			logger.info("Loading files from directory: {}", loadSource);
+			for (File f : FileUtils.listFiles(loadSource, null, true)) {
+				logger.info("Adding file to be loaded: {}", f);
+				try {
+					addSource(kb, f.toURI().toString(), f.getAbsolutePath());
+				} catch (Exception e) {
+					logger.error("An error occurred while loading {}", f);
+					logger.error(" - Problem was: {}", e.getMessage());
+					if (logger.isDebugEnabled()) {
+						logger.error("", e);
+					}
+				}
+			}
+		} else if (loadSource.isFile()) {
+			logger.info("Load file: {}", loadSource);
+			try {
+				addSource(kb, loadSource.toURI().toString(), loadSource.getAbsolutePath());
+			} catch (Exception e) {
+				logger.error("An error occurred while loading {}", loadSource);
+				logger.error(" - Problem was: ", e);
+			}
+		} else {
+			if (!loadSource.exists()) {
+				logger.error("Option 'load' failed (resource does not exist): {}", loadSource);
+			} else {
+				logger.error("Option 'load' failed (not a file or directory): {}", loadSource);
+			}
+			return kb;
+		}
+		logger.info("Loaded {} triples", kb.asDatasetGraph().getUnionGraph().size());
+		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_LOAD);
+		// The default graph is the union of the named graphs (the graphs are linked, not copied)
+		org.apache.jena.sparql.core.DatasetGraph loaded = kb.asDatasetGraph();
+		org.apache.jena.sparql.core.DatasetGraph union = org.apache.jena.sparql.core.DatasetGraphFactory.createGeneral(loaded.getUnionGraph());
+		loaded.listGraphNodes().forEachRemaining(name -> union.addGraph(name, loaded.getGraph(name)));
+		return DatasetFactory.wrap(union);
+	}
 
-		return kb;
+	private static void addSource(Dataset kb, String graphName, String location) {
+		Dataset source = RDFDataMgr.loadDataset(location);
+		if (!source.getDefaultModel().isEmpty()) {
+			kb.addNamedModel(graphName, source.getDefaultModel());
+		}
+		source.listNames().forEachRemaining(name -> kb.addNamedModel(name, source.getNamedModel(name)));
 	}
 
 	public static String callMain(String[] args) throws Exception {
