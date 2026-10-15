@@ -182,29 +182,29 @@ public class SPARQLAnything {
 						m = qe.execDescribe();
 						// d = new DatasetImpl(m);
 					}
-					if (outputFormat.equals("JSON") || outputFormat.equals(Lang.JSONLD.getName())) {
+					if (outputFormat.equals("JSON") || outputFormat.equals("JSONLD")) {
 						// JSON-LD format.equals(Lang.JSONLD11.getName())
 						RDFDataMgr.write(pw, m, Lang.JSONLD);
-					} else if (outputFormat.equals(Lang.JSONLD11.getName())) {
+					} else if (outputFormat.equals("JSONLD11")) {
 						RDFDataMgr.write(pw, m, Lang.JSONLD11);
-					} else if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) {
+					} else if (outputFormat.equals("TTL")) {
 						RDFWriter.create().source(m).lang(Lang.TTL).base(base).output(pw);
 					} else if (outputFormat.equals("XML")) {
 						RDFWriter.create().source(m).lang(Lang.RDFXML).base(base)
 							.set(SysRIOT.sysRdfWriterProperties, base == null ? Map.of() : Map.of("xmlbase", base))
 							.output(pw);
-					} else if (outputFormat.equals("TRIG") || outputFormat.equals(Lang.TRIG.getName())) {
+					} else if (outputFormat.equals("TRIG")) {
 						RDFWriter.create().source(Objects.requireNonNull(d)).lang(Lang.TRIG).base(base).output(pw);
-					} else if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) {
+					} else if (outputFormat.equals("NT")) {
 						// N-Triples
 						RDFDataMgr.write(pw, m, Lang.NT);
-					} else if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) {
+					} else if (outputFormat.equals("NQ")) {
 						// NQ
 						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.NQ);
-					} else if (outputFormat.equals("TRIX") || outputFormat.equals(Lang.TRIX.getName())) {
+					} else if (outputFormat.equals("TRIX")) {
 						// TRIG
 						RDFDataMgr.write(pw, Objects.requireNonNull(d), Lang.TRIX);
-					} else if (outputFormat.equals(Lang.CSV.getName())) {
+					} else if (outputFormat.equals("CSV")) {
 						// CSV
 						ResultSet rs = RiotUtils.asResultSet(Objects.requireNonNull(d.asDatasetGraph()));
 						ResultSetFormatter.outputAsCSV(pw, rs);
@@ -219,10 +219,11 @@ public class SPARQLAnything {
 
 	// #635 Line/block RDF formats that StreamRDFWriter can serialise incrementally.
 	private static Lang streamableLang(String outputFormat) {
-		if (outputFormat.equals("NT") || outputFormat.equals(Lang.NTRIPLES.getName())) return Lang.NT;
-		if (outputFormat.equals("NQ") || outputFormat.equals(Lang.NQUADS.getName())) return Lang.NQ;
-		if (outputFormat.equals("TTL") || outputFormat.equals(Lang.TURTLE.getName())) return Lang.TTL;
-		if (outputFormat.equals("TRIG") || outputFormat.equals(Lang.TRIG.getName())) return Lang.TRIG;
+		// outputFormat is normalised by CLI.normaliseFormat
+		if (outputFormat.equals("NT")) return Lang.NT;
+		if (outputFormat.equals("NQ")) return Lang.NQ;
+		if (outputFormat.equals("TTL")) return Lang.TTL;
+		if (outputFormat.equals("TRIG")) return Lang.TRIG;
 		return null;
 	}
 
