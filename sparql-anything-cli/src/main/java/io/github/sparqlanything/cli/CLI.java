@@ -51,9 +51,9 @@ public class CLI {
 
 	public static final String FORMAT = "f";
 	public static final String FORMAT_LONG = "format";
-//
-//	public static final String INPUT = "i";
-//	public static final String INPUT_LONG = "input";
+
+	public static final String HELP = "h";
+	public static final String HELP_LONG = "help";
 
 	public static final String LOAD = "l";
 	public static final String LOAD_LONG = "load";
@@ -180,6 +180,10 @@ public class CLI {
 				"OPTIONAL - It runs the execution through a profiler. It saves the results to [filepath] (by default profile.tsv) in TSV format. The traced event is reported in the first column. The second column contains the timestamp in milliseconds from Unix epoch. The third column contains the amount of milliseconds from the first event (LOAD_MAIN_CLASS). Warning: This may increase execution time.")
 			.longOpt(PROFILE).build());
 
+		options.addOption(Option.builder(HELP).argName("display command line help").required(false)
+			.desc("When present, display command line help (any other option is ignored).").longOpt(HELP_LONG)
+			.build());
+
 	}
 
 	public void printHelp() {
@@ -242,6 +246,10 @@ public class CLI {
 
 	public boolean getStream(){
 		return commandLine.hasOption(CLI.STREAM);
+	}
+
+	public boolean getHelp(){
+		return commandLine.hasOption(CLI.HELP);
 	}
 
 	public String[] getConfigurations() {

@@ -774,6 +774,13 @@ public class SPARQLAnything {
 
 		try {
 			cli.parse(args);
+
+			// If the arguments include --help just print and exit
+			if(cli.getHelp()){
+				cli.printHelp();
+				return EXIT_USAGE;
+			}
+
 			Utils.loadJARs(cli.getLoadJar());
 			String query = cli.getQuery();
 			explain(cli);
