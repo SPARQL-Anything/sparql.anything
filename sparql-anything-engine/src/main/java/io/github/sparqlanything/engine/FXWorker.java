@@ -27,6 +27,7 @@ import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.shared.NotFoundException;
 import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpService;
@@ -40,9 +41,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Scanner;
@@ -146,8 +151,9 @@ public class FXWorker {
 	}
 
 	public QueryIterator executeReusedQuery(OpService opService, Properties properties, QueryIterator input, ExecutionContext executionContext) throws URISyntaxException, IOException {
-		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY))).toURI(), StandardCharsets.UTF_8);
-		Query query = QueryFactory.create(queryStr);
+//		String queryStr = IOUtils.toString(Objects.requireNonNull(getClass().getClassLoader().getResource(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY))).toURI(), StandardCharsets.UTF_8);
+//		Query query = QueryFactory.create(queryStr);
+		Query query = loadReusedQuery(PropertyUtils.getStringProperty(properties, IRIArgument.QUERY));
 		Op op = Algebra.optimize(Algebra.compile(query));
 		if (query.isSelectType()) {
 			return QC.execute(op, input, executionContext);
@@ -161,5 +167,38 @@ public class FXWorker {
 			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.createForGraph(result.getGraph()));
 		}
 		return QueryIterNullIterator.create(executionContext);
+	}
+
+	/**
+	 * Loads the query referenced by the 'query' option. The reference is resolved, in order, as:
+	 * a URL with a scheme (file:, http:, https:), a file path (relative paths are resolved against
+	 * the working directory), a classpath resource.
+	 */
+	public static Query loadReusedQuery(String ref) throws IOException {
+		if (ref == null || ref.isBlank()) {
+			throw new IOException("The 'query' option is empty");
+		}
+		// 1. URL with a scheme of two or more characters (so Windows paths such as C:\ are treated as files)
+		if (ref.matches("^[A-Za-z][A-Za-z0-9+.-]+:.*")) {
+			try {
+				return QueryFactory.read(ref);
+			} catch (NotFoundException e) {
+				throw new IOException("Cannot find the query referenced by the 'query' option: " + ref, e);
+			}
+		}
+		// 2. File path
+		Path path = Paths.get(ref);
+		if (Files.isRegularFile(path)) {
+			return QueryFactory.create(Files.readString(path, StandardCharsets.UTF_8));
+		}
+		// 3. Classpath resource
+		String resource = ref.startsWith("/") ? ref.substring(1) : ref;
+		try (InputStream is = FXWorker.class.getClassLoader().getResourceAsStream(resource)) {
+			if (is != null) {
+				return QueryFactory.create(IOUtils.toString(is, StandardCharsets.UTF_8));
+			}
+		}
+		throw new IOException("Cannot find the query referenced by the 'query' option: " + ref
+			+ " (resolved as " + path.toAbsolutePath() + ")");
 	}
 }
