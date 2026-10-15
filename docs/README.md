@@ -687,8 +687,9 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
                                          of milliseconds from the first
                                          event (LOAD_MAIN_CLASS). Warning:
                                          This may increase execution time.
- -h,--help                               Print this help message and exit.
-
+ -h,--help                               When present, display command
+                                         line help (any other option is
+                                         ignored).
 ```
 
 Logging can be configured adding the following option (SLF4J).

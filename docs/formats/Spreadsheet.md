@@ -66,17 +66,32 @@ PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 [ rdf:type  fx:Root;
-  rdf:_1    [ rdf:_1  "A1" , "A";
-              rdf:_2  "B1" , "B";
-              rdf:_3  "C1" , "C"
+  rdf:_1    [ rdf:_1  "A1";
+              rdf:_2  "B1";
+              rdf:_3  "C1"
             ];
-  rdf:_2    [ rdf:_1  "A11" , "A1";
-              rdf:_2  "B11" , "B1";
-              rdf:_3  "C11" , "C1"
+  rdf:_2    [ rdf:_1  "A11";
+              rdf:_2  "B11";
+              rdf:_3  "C11"
             ];
-  rdf:_3    [ rdf:_1  "A12" , "A2";
-              rdf:_2  "B12" , "B2";
-              rdf:_3  "C12" , "C2"
+  rdf:_3    [ rdf:_1  "A12";
+              rdf:_2  "B12";
+              rdf:_3  "C12"
+            ]
+] .
+
+[ rdf:type  fx:Root;
+  rdf:_1    [ rdf:_1  "A";
+              rdf:_2  "B";
+              rdf:_3  "C"
+            ];
+  rdf:_2    [ rdf:_1  "A1";
+              rdf:_2  "B1";
+              rdf:_3  "C1"
+            ];
+  rdf:_3    [ rdf:_1  "A2";
+              rdf:_2  "B2";
+              rdf:_3  "C2"
             ]
 ] .
 
@@ -140,47 +155,45 @@ WHERE
 
 ```turtle
 <https://sparql-anything.cc/examples/Book1.xlsxSheet1> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    _:b1;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    _:b2 .
-    
-    _:b1    <http://sparql.xyz/facade-x/data/A>
-                    "A1";
-            <http://sparql.xyz/facade-x/data/B>
-                    "B1";
-            <http://sparql.xyz/facade-x/data/C>
-                    "C1" .
-    
-    _:b2    <http://sparql.xyz/facade-x/data/A>
-                    "A2";
-            <http://sparql.xyz/facade-x/data/B>
-                    "B2";
-            <http://sparql.xyz/facade-x/data/C>
-                    "C2" .
+    [ a       <http://sparql.xyz/facade-x/ns/Root>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              [ <http://sparql.xyz/facade-x/data/A>
+                        "A1";
+                <http://sparql.xyz/facade-x/data/B>
+                        "B1";
+                <http://sparql.xyz/facade-x/data/C>
+                        "C1"
+              ];
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+              [ <http://sparql.xyz/facade-x/data/A>
+                        "A2";
+                <http://sparql.xyz/facade-x/data/B>
+                        "B2";
+                <http://sparql.xyz/facade-x/data/C>
+                        "C2"
+              ]
+    ] .
 }
 
 <https://sparql-anything.cc/examples/Book1.xlsxSheet2> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    _:b1;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    _:b2 .
-    
-    _:b1    <http://sparql.xyz/facade-x/data/A1>
-                    "A11";
-            <http://sparql.xyz/facade-x/data/B1>
-                    "B11";
-            <http://sparql.xyz/facade-x/data/C1>
-                    "C11" .
-    
-    _:b2    <http://sparql.xyz/facade-x/data/A1>
-                    "A12";
-            <http://sparql.xyz/facade-x/data/B1>
-                    "B12";
-            <http://sparql.xyz/facade-x/data/C1>
-                    "C12" .
+    [ a       <http://sparql.xyz/facade-x/ns/Root>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              [ <http://sparql.xyz/facade-x/data/A1>
+                        "A11";
+                <http://sparql.xyz/facade-x/data/B1>
+                        "B11";
+                <http://sparql.xyz/facade-x/data/C1>
+                        "C11"
+              ];
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+              [ <http://sparql.xyz/facade-x/data/A1>
+                        "A12";
+                <http://sparql.xyz/facade-x/data/B1>
+                        "B12";
+                <http://sparql.xyz/facade-x/data/C1>
+                        "C12"
+              ]
+    ] .
 }
 
 ```
@@ -309,145 +322,159 @@ WHERE
 
 ```turtle
 <https://sparql-anything.cc/examples/Book3.xlsxSheet1> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    _:b1;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    _:b2;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                    _:b3 .
+    [ a       <http://sparql.xyz/facade-x/ns/Root>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "_Row_1_0";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "_Row_1_1";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "_Row_1_2"
+              ];
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "_Row_2_0";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "_Row_2_1";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "_Row_2_2"
+              ];
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "_Row_3_0";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "_Row_3_1";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "_Row_3_2"
+              ]
+    ] .
     
-    _:b4    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "A" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "A"
+    ] .
     
-    _:b1    <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "_Row_1_0";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    "_Row_1_1";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                    "_Row_1_2" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "B"
+    ] .
     
-    _:b5    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "B" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "C"
+    ] .
     
-    _:b6    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "C" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "A1"
+    ] .
     
-    _:b7    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "A1" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "B1"
+    ] .
     
-    _:b2    <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "_Row_2_0";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    "_Row_2_1";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                    "_Row_2_2" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "C1"
+    ] .
     
-    _:b8    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "B1" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "A2"
+    ] .
     
-    _:b9    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "C1" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "B2"
+    ] .
     
-    _:b10   a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "A2" .
-    
-    _:b3    <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "_Row_3_0";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    "_Row_3_1";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                    "_Row_3_2" .
-    
-    _:b11   a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "B2" .
-    
-    _:b12   a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "C2" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "C2"
+    ] .
 }
 
 <https://sparql-anything.cc/examples/Book3.xlsxSheet2> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    _:b1;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    _:b2;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                    _:b3 .
+    [ a       <http://sparql.xyz/facade-x/ns/Root>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "_Row_1_0";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "_Row_1_1";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "_Row_1_2"
+              ];
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "_Row_2_0";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "_Row_2_1";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "_Row_2_2"
+              ];
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+              [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                        "_Row_3_0";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                        "_Row_3_1";
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                        "_Row_3_2"
+              ]
+    ] .
     
-    _:b4    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "A1" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "A1"
+    ] .
     
-    _:b1    <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "_Row_1_0";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    "_Row_1_1";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                    "_Row_1_2" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "B1"
+    ] .
     
-    _:b5    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "B1" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "C1"
+    ] .
     
-    _:b6    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "C1" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "A11"
+    ] .
     
-    _:b7    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "A11" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "B11"
+    ] .
     
-    _:b2    <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "_Row_2_0";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    "_Row_2_1";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                    "_Row_2_2" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "C11"
+    ] .
     
-    _:b8    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "B11" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "A12"
+    ] .
     
-    _:b9    a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "C11" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "B12";
+      <http://sparql.xyz/facade-x/data/author>
+              "tc={EE8AE53B-0251-A642-8227-573C96F44050}";
+      <http://sparql.xyz/facade-x/data/threadedComment>
+              "[Threaded comment]\n\nYour version of Excel allows you to read this threaded comment; however, any edits to it will get removed if the file is opened in a newer version of Excel. Learn more: https://go.microsoft.com/fwlink/?linkid=870924\n\nComment:\n    This is a comment\nReply:\n    This is a reply\nReply:\n    This is a second reply"
+    ] .
     
-    _:b10   a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "A12" .
-    
-    _:b3    <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "_Row_3_0";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    "_Row_3_1";
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
-                    "_Row_3_2" .
-    
-    _:b11   a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "B12";
-            <http://sparql.xyz/facade-x/data/author>
-                    "tc={EE8AE53B-0251-A642-8227-573C96F44050}";
-            <http://sparql.xyz/facade-x/data/threadedComment>
-                    "[Threaded comment]\n\nYour version of Excel allows you to read this threaded comment; however, any edits to it will get removed if the file is opened in a newer version of Excel. Learn more: https://go.microsoft.com/fwlink/?linkid=870924\n\nComment:\n    This is a comment\nReply:\n    This is a reply\nReply:\n    This is a second reply" .
-    
-    _:b12   a       <http://sparql.xyz/facade-x/data/STRING>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    "C12";
-            <http://sparql.xyz/facade-x/data/address>
-                    "http://www.example.org/C12";
-            <http://sparql.xyz/facade-x/data/label>
-                    "C12" .
+    [ a       <http://sparql.xyz/facade-x/data/STRING>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              "C12";
+      <http://sparql.xyz/facade-x/data/address>
+              "http://www.example.org/C12";
+      <http://sparql.xyz/facade-x/data/label>
+              "C12"
+    ] .
 }
 
 ```
@@ -499,47 +526,45 @@ WHERE
 
 ```turtle
 <https://sparql-anything.cc/examples/Book1.xlsxSheet1> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    _:b1;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    _:b2 .
-    
-    _:b1    <http://sparql.xyz/facade-x/data/A1>
-                    "A";
-            <http://sparql.xyz/facade-x/data/B1>
-                    "B";
-            <http://sparql.xyz/facade-x/data/C1>
-                    "C" .
-    
-    _:b2    <http://sparql.xyz/facade-x/data/A1>
-                    "A2";
-            <http://sparql.xyz/facade-x/data/B1>
-                    "B2";
-            <http://sparql.xyz/facade-x/data/C1>
-                    "C2" .
+    [ a       <http://sparql.xyz/facade-x/ns/Root>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              [ <http://sparql.xyz/facade-x/data/A1>
+                        "A";
+                <http://sparql.xyz/facade-x/data/B1>
+                        "B";
+                <http://sparql.xyz/facade-x/data/C1>
+                        "C"
+              ];
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+              [ <http://sparql.xyz/facade-x/data/A1>
+                        "A2";
+                <http://sparql.xyz/facade-x/data/B1>
+                        "B2";
+                <http://sparql.xyz/facade-x/data/C1>
+                        "C2"
+              ]
+    ] .
 }
 
 <https://sparql-anything.cc/examples/Book1.xlsxSheet2> {
-    _:b0    a       <http://sparql.xyz/facade-x/ns/Root>;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
-                    _:b1;
-            <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
-                    _:b2 .
-    
-    _:b1    <http://sparql.xyz/facade-x/data/A11>
-                    "A1";
-            <http://sparql.xyz/facade-x/data/B11>
-                    "B1";
-            <http://sparql.xyz/facade-x/data/C11>
-                    "C1" .
-    
-    _:b2    <http://sparql.xyz/facade-x/data/A11>
-                    "A12";
-            <http://sparql.xyz/facade-x/data/B11>
-                    "B12";
-            <http://sparql.xyz/facade-x/data/C11>
-                    "C12" .
+    [ a       <http://sparql.xyz/facade-x/ns/Root>;
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+              [ <http://sparql.xyz/facade-x/data/A11>
+                        "A1";
+                <http://sparql.xyz/facade-x/data/B11>
+                        "B1";
+                <http://sparql.xyz/facade-x/data/C11>
+                        "C1"
+              ];
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+              [ <http://sparql.xyz/facade-x/data/A11>
+                        "A12";
+                <http://sparql.xyz/facade-x/data/B11>
+                        "B12";
+                <http://sparql.xyz/facade-x/data/C11>
+                        "C12"
+              ]
+    ] .
 }
 
 ```

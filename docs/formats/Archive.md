@@ -155,7 +155,10 @@ PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:    <http://sparql.xyz/facade-x/data/>
 
 [ rdf:type  fx:Root;
-  rdf:_1    "this is a test";
+  rdf:_1    "this is a test"
+] .
+
+[ rdf:type  fx:Root;
   rdf:_1    [ rdf:_1  "Year";
               rdf:_2  "Make";
               rdf:_3  "Model";

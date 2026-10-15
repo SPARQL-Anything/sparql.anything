@@ -4,6 +4,9 @@
 
 RDF files can be targeted like any other format by the option `location`. The content is queried as-is (no facade-x interpretation needed, obviously). 
 
+RDF can also be given with the options `content`, `command` or `read-from-std-in`. In this case there is no file extension, so the `media-type` option is required (e.g. `media-type=text/turtle`); without it, the input is not recognised as RDF.
+
+The triples are loaded in a named graph: its name is the `location`, or, for `content`, `command` and `read-from-std-in`, the root identifier of the source (`http://sparql.xyz/facade-x/data/` followed by an MD5 hash). Use `GRAPH ?g { ... }` to match them.
 
 In addition, the [Command Line Interface (CLI)](../CLI.md) can load static RDF files.
 
@@ -12,8 +15,8 @@ Examples of this can be found in the [tutorials](../TUTORIALS.md).
 
 This feature is enabled with the command line argument `-l|--load` that accepts a file or a directory.
 The files are loaded in a Dataset, which becomes the target for the query execution.
-Each source (the file, the URL, or each file of the folder) is loaded in a named graph, named after its URI; named graphs in TriG or N-Quads files keep their names.
-The default graph is the union of all the loaded graphs, so queries without GRAPH match all the loaded data.
+A single file will be loaded in the default Graph. 
+If pointing to a folder, all RDF files in the folder are loaded, each one on a Named Graph.
 
 See also the documentation of the [Command Line Interface (CLI)](../CLI.md).
 
