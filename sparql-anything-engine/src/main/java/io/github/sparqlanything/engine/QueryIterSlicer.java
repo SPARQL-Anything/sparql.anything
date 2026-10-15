@@ -50,6 +50,8 @@ public class QueryIterSlicer extends QueryIter {
 	final private Slicer slicer;
 	private final QueryIterator input;
 	private QueryIterator current = null;
+	/* The builder of the batch being assembled by nextBatch(); null until its first slice. */
+	private FacadeXGraphBuilder batchBuilder = null;
 	private final Properties p;
 	private final int sliceSize;
 	/*
@@ -105,11 +107,16 @@ public class QueryIterSlicer extends QueryIter {
 	}
 
 	/**
-	 * Pulls up to sliceSize slices off the underlying iterator. Calls iterator.hasNext() at
-	 * most once per slot, and never again once it has returned false (see iteratorExhausted).
+	 * Pulls up to sliceSize slices off the underlying iterator and triplifies each one into
+	 * {@link #batchBuilder} as soon as it is pulled. Slices may be lazy views over a shared stream
+	 * (e.g. JSONTokenSlice holds the start token and the live JsonParser): calling
+	 * iterator.hasNext() advances that stream, so a slice must be triplified before the next
+	 * one is requested. Calls iterator.hasNext() at most once per slot, and never again once
+	 * it has returned false (see iteratorExhausted).
 	 */
 	private List<Slice> nextBatch() {
 		List<Slice> batch = new ArrayList<>(sliceSize);
+		batchBuilder = null;
 		while (batch.size() < sliceSize) {
 			if (iteratorExhausted) {
 				break;
@@ -118,9 +125,24 @@ public class QueryIterSlicer extends QueryIter {
 				iteratorExhausted = true;
 				break;
 			}
-			batch.add(iterator.next());
+			Slice slice = iterator.next();
+			if (batchBuilder == null) {
+				batchBuilder = newBuilder();
+			}
+			logger.debug("Executing on slice: {}", slice.iteration());
+			slicer.triplify(slice, p, batchBuilder);
+			batch.add(slice);
 		}
 		return batch;
+	}
+
+	private FacadeXGraphBuilder newBuilder() {
+		Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
+		logger.trace("Executing: {} [strategy={}]", p, strategy);
+		if (strategy == 1) {
+			return new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
+		}
+		return new BaseFacadeXGraphBuilder(p);
 	}
 
 	@Override
@@ -149,22 +171,23 @@ public class QueryIterSlicer extends QueryIter {
 			}
 
 			// Execute and set current
-			FacadeXGraphBuilder builder;
-			Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
-			if (strategy == 1) {
-				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
-			} else {
-				logger.trace("Executing: {} [strategy={}]", p, strategy);
-				builder = new BaseFacadeXGraphBuilder(p);
-			}
-			//FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
-
-			for (Slice slice : batch) {
-				logger.debug("Executing on slice: {}", slice.iteration());
-				slicer.triplify(slice, p, builder);
-			}
-			DatasetGraph dg = builder.getDatasetGraph();
+//			FacadeXGraphBuilder builder;
+//			Integer strategy = PropertyExtractor.detectStrategy(p, execCxt);
+//			if (strategy == 1) {
+//				logger.trace("Executing: {} [strategy={}]", p, strategy);
+//				builder = new TripleFilteringFacadeXGraphBuilder(resourceId, op, p);
+//			} else {
+//				logger.trace("Executing: {} [strategy={}]", p, strategy);
+//				builder = new BaseFacadeXGraphBuilder(p);
+//			}
+//			//FacadeXGraphBuilder builder = new TripleFilteringFacadeXGraphBuilder(resourceId, opService.getSubOp(), p);
+//
+//			for (Slice slice : batch) {
+//				logger.debug("Executing on slice: {}", slice.iteration());
+//				slicer.triplify(slice, p, builder);
+//			}
+//			DatasetGraph dg = builder.getDatasetGraph();
+			DatasetGraph dg = batchBuilder.getDatasetGraph();
 			dg.commit();
 			dg.end();
 
@@ -196,14 +219,17 @@ public class QueryIterSlicer extends QueryIter {
 		logger.trace("moveToNextBinding");
 		return current.nextBinding();
 	}
-
 	@Override
 	protected void closeIterator() {
-		current.close();
+		if (current != null) {
+			current.close();
+		}
 	}
 
 	@Override
 	protected void requestCancel() {
-		current.cancel();
+		if (current != null) {
+			current.cancel();
+		}
 	}
 }
