@@ -69,6 +69,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
+import org.apache.jena.riot.ResultSetMgr;
+import org.apache.jena.riot.resultset.ResultSetLang;
+import java.nio.charset.StandardCharsets;
+
 public class SPARQLAnything {
 
 
@@ -529,11 +533,61 @@ public class SPARQLAnything {
 		}
 	}
 
+	/**
+	 * Loads a SPARQL result set file given with -v. The format is chosen from the file extension
+	 * (.srj/.json, .srx/.xml, .tsv, .csv) or, for other extensions, from the first character.
+	 */
+	static ResultSet loadResultSet(String fileName) throws IOException {
+		Path path = Paths.get(fileName);
+		Lang lang = resultSetLang(path);
+		try (InputStream in = new BufferedInputStream(java.nio.file.Files.newInputStream(path))) {
+			// Materialise: the reader streams from 'in', which is closed when this method returns
+			return ResultSetFactory.copyResults(ResultSetMgr.read(in, lang));
+		}
+	}
+
+	private static Lang resultSetLang(Path path) throws IOException {
+		String name = path.getFileName().toString().toLowerCase(Locale.ROOT);
+		if (name.endsWith(".srj") || name.endsWith(".json")) {
+			return ResultSetLang.RS_JSON;
+		}
+		if (name.endsWith(".srx") || name.endsWith(".xml")) {
+			return ResultSetLang.RS_XML;
+		}
+		if (name.endsWith(".tsv")) {
+			return ResultSetLang.RS_TSV;
+		}
+		if (name.endsWith(".csv")) {
+			return ResultSetLang.RS_CSV;
+		}
+		// Unknown extension: look at the first non-blank character
+		try (Reader r = java.nio.file.Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+			int c;
+			do {
+				c = r.read();
+			} while (c != -1 && Character.isWhitespace(c));
+			if (c == '{') {
+				return ResultSetLang.RS_JSON;
+			}
+			if (c == '<') {
+				return ResultSetLang.RS_XML;
+			}
+			if (c == '?') {
+				return ResultSetLang.RS_TSV;
+			}
+		}
+		return ResultSetLang.RS_CSV;
+	}
+	
 	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException {
 		ResultSet parameters;
 		if (values.length == 1 && new File(values[0]).exists()) {
 			logger.debug("Input file name given");
-			parameters = ResultSetFactory.load(values[0]);
+			try {
+				parameters = loadResultSet(values[0]);
+			} catch (IOException e) {
+				throw new RuntimeException("Cannot read the result set file given with -v: " + values[0], e);
+			}
 		} else {
 			parameters = new ArgValuesAsResultSet(values);
 		}
