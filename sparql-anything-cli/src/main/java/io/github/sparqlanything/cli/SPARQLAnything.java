@@ -578,7 +578,7 @@ public class SPARQLAnything {
 		}
 		return ResultSetLang.RS_CSV;
 	}
-	
+
 	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException {
 		ResultSet parameters;
 		if (values.length == 1 && new File(values[0]).exists()) {
