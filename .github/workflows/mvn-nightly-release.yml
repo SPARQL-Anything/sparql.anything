@@ -9,7 +9,9 @@ on:
       - closed
   # Allow manual trigger
   workflow_dispatch:
-
+concurrency:
+  group: maven-nightly
+  cancel-in-progress: true
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
