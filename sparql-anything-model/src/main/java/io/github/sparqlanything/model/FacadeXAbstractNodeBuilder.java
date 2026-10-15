@@ -33,7 +33,9 @@ public class FacadeXAbstractNodeBuilder implements FacadeXNodeBuilder {
 
 	public Node container2node(String containerId, String dataSourceId) {
 		if (p_blank_nodes) {
-			return container2BlankNode(containerId);
+			// The label includes the root, as the IRI does when blank-nodes=false: containers of
+			// different data sources (e.g. two files read in the same query) must not share a node
+			return container2BlankNode(getRootURI(dataSourceId).concat(containerId));
 		} else {
 			return container2URI(containerId, dataSourceId);
 		}
