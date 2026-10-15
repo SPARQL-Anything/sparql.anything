@@ -662,9 +662,9 @@ public class SPARQLAnything {
 			} catch (MalformedURLException | URISyntaxException e) {
 				loadSource = new File(load);
 			} catch (IllegalArgumentException e) {
-				Model m = ModelFactory.createDefaultModel();
-				RDFDataMgr.read(m, load);
-				kb.addNamedModel(load, m);
+				// Not a file: URL (e.g. http, https): load it like a single file, in the default graph
+				RDFDataMgr.read(kb, load);
+				Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.AFTER_LOAD);
 				return kb;
 			}
 			if (loadSource.isDirectory()) {
