@@ -40,20 +40,38 @@ public class ReuseQueryCLITest {
 		assertOneRootRow(out);
 	}
 
-	/** query= as filesystem path, as a CLI user would. Expected: FAIL (NPE). */
-	@Test
-	public void reuseSelectFilesystemPath() throws Exception {
+	private static final String OUTER_BGP = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> " +
+		"PREFIX fxe: <http://sparql.xyz/facade-x/engine/> " +
+		"SELECT ?s ?p ?o { SERVICE <x-sparql-anything:> { fxe:properties fxe:query \"%s\" . } FILTER(?o = fx:Root) }";
+
+	private File innerQueryFile() throws Exception {
 		File inner = Files.createTempFile("subQuerySelect", ".rq").toFile();
 		inner.deleteOnExit();
 		FileUtils.writeStringToFile(inner, IOUtils.toString(Objects.requireNonNull(
 				getClass().getClassLoader().getResource("queryReuse/subQuerySelect.rq")), StandardCharsets.UTF_8),
 			StandardCharsets.UTF_8);
-		L.info("reused query path: {}", inner.getAbsolutePath());
-		String q = String.format(OUTER, inner.getAbsolutePath());
-		L.info("query: {}", q);
-		String out = SPARQLAnything.callMain(new String[]{
-			"-q", q, "-f", "CSV"});
-		assertOneRootRow(out);
+		return inner;
+	}
+
+	/** Path in the SERVICE IRI, with forward slashes (C:/Users/... on Windows): IRIs cannot contain '\'. */
+	@Test
+	public void reuseSelectFilesystemPathInIRI() throws Exception {
+		String path = innerQueryFile().getAbsolutePath().replace('\\', '/');
+		assertOneRootRow(SPARQLAnything.callMain(new String[]{"-q", String.format(OUTER, path), "-f", "CSV"}));
+	}
+
+	/** file: URL in the SERVICE IRI (file:/C:/Users/... on Windows). */
+	@Test
+	public void reuseSelectFileURLInIRI() throws Exception {
+		String url = innerQueryFile().toURI().toString();
+		assertOneRootRow(SPARQLAnything.callMain(new String[]{"-q", String.format(OUTER, url), "-f", "CSV"}));
+	}
+
+	/** Native path (C:\Users\... on Windows) as a BGP option: backslashes escaped as in any SPARQL string. */
+	@Test
+	public void reuseSelectNativePathInBGP() throws Exception {
+		String literal = innerQueryFile().getAbsolutePath().replace("\\", "\\\\");
+		assertOneRootRow(SPARQLAnything.callMain(new String[]{"-q", String.format(OUTER_BGP, literal), "-f", "CSV"}));
 	}
 
 	@Test
