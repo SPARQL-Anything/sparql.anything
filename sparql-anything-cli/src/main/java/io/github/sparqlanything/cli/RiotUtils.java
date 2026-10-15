@@ -55,11 +55,13 @@ public class RiotUtils {
 	/**
 	 * We add a lang JSON to attempt to load JSON files as JSON-LD
 	 * See #339
+	 * Its content type must not be application/ld+json: registering it would replace the
+	 * JSON-LD language for that content type and drop JSON-LD's extension (.jsonld) and name.
 	 */
 	public static Lang JSON;
 
 	static {
-		JSON = LangBuilder.create("JSON", "application/ld+json")
+		JSON = LangBuilder.create("JSON", "application/json")
 				.addAltNames("JSON")
 				.addFileExtensions("json")
 				.build();
