@@ -18,7 +18,6 @@
 
 package io.github.sparqlanything.model;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -26,7 +25,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.*;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
@@ -165,6 +164,9 @@ public class HTTPHelper {
         log.debug("Following redirect responses: {}", followRedirect);
         if(followRedirect){
             builder.setRedirectStrategy(new LaxRedirectStrategy());
+        } else {
+            // Without this, HttpClient's default strategy still follows redirects for GET and HEAD
+            builder.disableRedirectHandling();
         }
 
         // Authentication
@@ -176,6 +178,26 @@ public class HTTPHelper {
             builder.setDefaultCredentialsProvider(credsProvider);
         }
         return builder;
+    }
+
+    private static final java.util.regex.Pattern INDEX_SUFFIX = java.util.regex.Pattern.compile("^(.*)\\.([0-9]+)$");
+
+    /** "name.2" -> "name"; other names are returned unchanged. */
+    static String stripIndex(String parameter) {
+        java.util.regex.Matcher m = INDEX_SUFFIX.matcher(parameter);
+        return m.matches() ? m.group(1) : parameter;
+    }
+
+    /** Orders keys by name, then by numeric index: name, name.1, name.2, ..., name.10. */
+    static int compareParameterKeys(String a, String b) {
+        java.util.regex.Matcher ma = INDEX_SUFFIX.matcher(a), mb = INDEX_SUFFIX.matcher(b);
+        String na = ma.matches() ? ma.group(1) : a, nb = mb.matches() ? mb.group(1) : b;
+        int c = na.compareTo(nb);
+        if (c != 0) {
+            return c;
+        }
+        long ia = ma.matches() ? Long.parseLong(ma.group(2)) : -1, ib = mb.matches() ? Long.parseLong(mb.group(2)) : -1;
+        return Long.compare(ia, ib);
     }
 
     public static HttpUriRequest buildRequest(URL url, Properties properties) {
@@ -204,25 +226,22 @@ public class HTTPHelper {
         List<NameValuePair> query = new ArrayList<NameValuePair>();
         List<NameValuePair> form = new ArrayList<NameValuePair>();
         List<Header> headers = new ArrayList<Header>();
-        for (Object key : properties.keySet()) {
+        // Sorted, so that repeated parameters (name.1, name.2, ...) are sent in order
+        List<String> keys = new ArrayList<>(properties.stringPropertyNames());
+        keys.sort(HTTPHelper::compareParameterKeys);
+        for (String key : keys) {
             // Headers
             if (isProperty(HTTPHEADER_PREFIX, (String) key)) {
                 headers.add(new BasicHeader(getProperty(HTTPHEADER_PREFIX, key), (String) properties.get(key)));
             } else if (isProperty(HTTPQUERY_PREFIX, (String) key)){
                 // Querystring
-                String p = getProperty(HTTPQUERY_PREFIX, key);
-                if(p.matches("\\.[0-9]+$")){
-                    // There are many of these, remove number
-                    p = p.substring(0, p.indexOf('.') + 1);
-                }
+                // name.N: there are many of these, remove the number
+                String p = stripIndex(getProperty(HTTPQUERY_PREFIX, key));
                 query.add(new BasicNameValuePair(p, (String) properties.get(key)));
             }else if (isProperty(HTTPFORM_PREFIX, (String) key)){
                 // Querystring
-                String p = getProperty(HTTPFORM_PREFIX, key);
-                if(p.matches("\\.[0-9]+$")){
-                    // There are many of these, remove number
-                    p = p.substring(0, p.indexOf('.') + 1);
-                }
+                // name.N: there are many of these, remove the number
+                String p = stripIndex(getProperty(HTTPFORM_PREFIX, key));
                 form.add(new BasicNameValuePair(p, (String) properties.get(key)));
             }
         }
@@ -283,12 +302,14 @@ public class HTTPHelper {
                 log.warn("Cannot send 'form' and 'payload' at the same time! Content from 'payload' will be used and content from 'form' will be ignored");
             }
             String payload = ((String) properties.get(HTTPPAYLOAD));
-            BasicHttpEntity entity = new BasicHttpEntity();
-            entity.setContent(IOUtils.toInputStream(payload, StandardCharsets.UTF_8)); // TODO get charset from config?
-            if(request instanceof HttpPost post){
-				post.setEntity(entity);
-            }else if(request instanceof HttpPut put){
-				put.setEntity(entity);
+            // Known length: sent with Content-Length rather than chunked. No Content-Type is set
+            // here: use http.header.Content-Type. TODO get charset from config?
+            ByteArrayEntity entity = new ByteArrayEntity(payload.getBytes(StandardCharsets.UTF_8));
+            if(request instanceof HttpEntityEnclosingRequest enclosing){
+				// POST, PUT, PATCH
+				enclosing.setEntity(entity);
+            }else{
+                log.warn("The payload is ignored: method {} does not send a request body", method);
             }
         } else {
             // Only if Method is POST, forces content-type to be form urlencoded
