@@ -239,7 +239,7 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 		StringBuilder charBuilder = null;
 		//
 		try {
-			InputStream is = Triplifier.getInputStream(properties);
+			InputStream is = openInput(properties);
 			eventReader = inputFactory.createXMLEventReader(is);
 		} catch (XMLStreamException e) {
 			throw new IOException(e);
@@ -437,9 +437,24 @@ public class XMLTriplifier implements Triplifier, Slicer<Pair<VTDNav,Integer>> {
 		}
 	}
 
+	/**
+	 * Opens the input, decompressing it when it is gzipped (e.g. .svgz files).
+	 */
+	static InputStream openInput(Properties properties) throws IOException, TriplifierHTTPException {
+		InputStream is = new java.io.BufferedInputStream(Triplifier.getInputStream(properties));
+		is.mark(2);
+		int b1 = is.read();
+		int b2 = is.read();
+		is.reset();
+		if (b1 == 0x1f && b2 == 0x8b) {
+			return new java.util.zip.GZIPInputStream(is);
+		}
+		return is;
+	}
+
 	private VTDNav buildVTDNav(Properties properties) throws TriplifierHTTPException, IOException, ParseException {
 		VTDGen vg = new VTDGen();
-		InputStream is = Triplifier.getInputStream(properties);
+		InputStream is = openInput(properties);
 		byte[] bytes = IOUtils.toByteArray(is);
 		is.close();
 		vg.setDoc(bytes);
