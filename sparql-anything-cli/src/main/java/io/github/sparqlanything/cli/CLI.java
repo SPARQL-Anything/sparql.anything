@@ -272,10 +272,53 @@ public class CLI {
 				return suffix.equals("owl") ? Lang.RDFXML.getName() : null;
 		}
 	}
+	/**
+	 * Maps an output format name (from -f, case-insensitive, or guessed from the -o extension) to
+	 * the canonical name used by SPARQLAnything.executeQuery: JSON, XML, CSV, TEXT, TTL, NT, NQ,
+	 * TRIG, TRIX, JSONLD, JSONLD11. Unknown names are returned upper-cased, so the error message
+	 * shows what the user typed.
+	 */
+	public static String normaliseFormat(String format) {
+		if (format == null) {
+			return null;
+		}
+		String f = format.trim().toUpperCase(Locale.ROOT);
+		switch (f) {
+			case "TTL":
+			case "TURTLE":
+			case "N3": // N3 output is written as Turtle
+				return "TTL";
+			case "NT":
+			case "NTRIPLES":
+			case "N-TRIPLES":
+				return "NT";
+			case "NQ":
+			case "NQUADS":
+			case "N-QUADS":
+				return "NQ";
+			case "XML":
+			case "RDF/XML":
+			case "RDFXML":
+				return "XML";
+			case "JSONLD":
+			case "JSON-LD":
+				return "JSONLD";
+			case "JSONLD11":
+			case "JSON-LD-11":
+			case "JSON-LD11":
+				return "JSONLD11";
+			default:
+				return f;
+		}
+	}
 
 	public String getFormat(Query q) {
+		return normaliseFormat(getFormatName(q));
+	}
+
+	private String getFormatName(Query q) {
 		if (commandLine.hasOption(CLI.FORMAT)) {
-			return commandLine.getOptionValue(CLI.FORMAT).toUpperCase();
+			return commandLine.getOptionValue(CLI.FORMAT);
 		}
 		String format = null;
 
