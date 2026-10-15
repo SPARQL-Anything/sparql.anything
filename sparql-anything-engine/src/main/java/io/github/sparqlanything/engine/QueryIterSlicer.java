@@ -54,6 +54,7 @@ public class QueryIterSlicer extends QueryIter {
 	private FacadeXGraphBuilder batchBuilder = null;
 	private final Properties p;
 	private final int sliceSize;
+	private final boolean silent;
 	/*
 	 * Some Slicer implementations (e.g. CSVTriplifier) close their underlying stream as a
 	 * side effect of iterator.hasNext() returning false, without going through a mechanism
@@ -71,6 +72,8 @@ public class QueryIterSlicer extends QueryIter {
 		this.it = slicer.slice(p);
 		this.input = input;
 		this.sliceSize = resolveSliceSize(properties);
+		// SERVICE SILENT: skip slices that fail instead of failing the query
+		this.silent = "true".equals(properties.getProperty(IRIArgument.OP_SERVICE_SILENT.toString()));
 
 		elements = new ArrayList<>();
 		while (input.hasNext()) {
@@ -121,16 +124,34 @@ public class QueryIterSlicer extends QueryIter {
 			if (iteratorExhausted) {
 				break;
 			}
-			if (!iterator.hasNext()) {
+			Slice slice;
+			try {
+				if (!iterator.hasNext()) {
+					iteratorExhausted = true;
+					break;
+				}
+				slice = iterator.next();
+			} catch (RuntimeException e) {
+				if (!silent) {
+					throw e;
+				}
+				// The input cannot be read any further: stop, keeping the slices read so far
+				logger.warn("Error reading the next slice, SERVICE SILENT: stopping. {}", e.getMessage());
 				iteratorExhausted = true;
 				break;
 			}
-			Slice slice = iterator.next();
 			if (batchBuilder == null) {
 				batchBuilder = newBuilder();
 			}
 			logger.debug("Executing on slice: {}", slice.iteration());
-			slicer.triplify(slice, p, batchBuilder);
+			try {
+				slicer.triplify(slice, p, batchBuilder);
+			} catch (RuntimeException e) {
+				if (!silent) {
+					throw e;
+				}
+				logger.warn("Error in slice {}, SERVICE SILENT: skipping it. {}", slice.iteration(), e.getMessage());
+			}
 			batch.add(slice);
 		}
 		return batch;

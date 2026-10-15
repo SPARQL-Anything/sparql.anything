@@ -725,7 +725,7 @@ public class SPARQLAnything {
 		// Tell Java to use your special stream
 		System.setOut(ps);
 		// Print some output: goes to your special stream
-		main(args);
+		run(args);
 		// Put things back
 		System.out.flush();
 		System.setOut(old);
@@ -743,9 +743,23 @@ public class SPARQLAnything {
 		}
 	}
 
-
 	public static void main(String[] args) throws Exception {
+		int status = run(args);
+		if (status != 0) {
+			System.exit(status);
+		}
+	}
 
+	/** Exit status for an invalid command line (unknown option, missing argument). */
+	static final int EXIT_USAGE = 2;
+	/** Exit status for a query that cannot be read or parsed, or a missing input file. */
+	static final int EXIT_ERROR = 1;
+
+	/**
+	 * Runs the CLI and returns the exit status, without calling System.exit, so it can be used
+	 * from tests (see callMain). Errors not handled here propagate as exceptions.
+	 */
+	static int run(String[] args) throws Exception {
 		Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.PROCESS_STARTS);
 		if(logger.isDebugEnabled()){
 			logger.debug("SPARQL anything");
@@ -755,7 +769,7 @@ public class SPARQLAnything {
 		CLI cli = new CLI();
 		if (args.length == 0) {
 			cli.printHelp();
-			return;
+			return EXIT_USAGE;
 		}
 
 		try {
@@ -780,7 +794,7 @@ public class SPARQLAnything {
 				// #528 Check no-clobber if output file already exists.
 				if (outputFileName != null && cli.getOutputNoClobber() && new File(outputFileName).exists()) {
 					logger.info("skipping: no-clobber is on and file exists");
-					return;
+					return 0;
 				}
 				Query q = QueryFactory.create(query);
 				try (PrintStream ps = getPrintStream(outputFileName, cli.getOutputAppend())) {
@@ -793,13 +807,19 @@ public class SPARQLAnything {
 			Utils.profile(SPARQLAnythingConstants.PROFILE_EVENT.PROCESS_ENDS);
 			printProfileIfEnabled(cli);
 
+		} catch (ParseException e) {
+			// commons-cli: unknown option, missing argument, ...
+			logger.error("Invalid command line: {}", e.getMessage());
+			cli.printHelp();
+			return EXIT_USAGE;
 		} catch (FileNotFoundException e) {
 			logger.error("File not found: {}", e.getMessage());
-		} catch (QueryParseException | ParseException e1) {
-			logger.error("SPARQL syntax error (or query file does not exist): {}", e1.getMessage());
+			return EXIT_ERROR;
+		} catch (QueryParseException e) {
+			logger.error("SPARQL syntax error: {}", e.getMessage());
+			return EXIT_ERROR;
 		}
+		return 0;
 
 	}
-
-
 }

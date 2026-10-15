@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.*;
 
 import static com.fasterxml.jackson.core.JsonToken.*;
@@ -506,8 +507,7 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 								next = parser.nextToken();
 							}
 						} catch (IOException e) {
-							next = null;
-							return false;
+							throw new UncheckedIOException("An error occurred while reading the next slice", e);
 						}
 						return next != null;
 
@@ -542,6 +542,7 @@ public class JSONTriplifier implements Triplifier, Slicer<Object> {
 			}
 		} catch (IOException e) {
 			log.error("An error occurred while transforming slice {}: {}", slice.iteration(), e);
+			throw new UncheckedIOException("An error occurred while transforming slice " + slice.iteration(), e);
 		}
 	}
 

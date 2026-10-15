@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -107,6 +108,10 @@ public class CLI {
 			logger.trace("Trying interpreting as a file path...");
 			if (new File(queryArgument).exists())
 				return IOUtils.toString(new File(queryArgument).toURI(), Charset.defaultCharset());
+		}
+		// Every inline query contains whitespace or a group pattern: a bare token is a file name
+		if (!queryArgument.contains("{") && queryArgument.chars().noneMatch(Character::isWhitespace)) {
+			throw new FileNotFoundException("Query file not found: " + queryArgument);
 		}
 		logger.trace("Trying interpreting as a inline query...");
 		return queryArgument;
