@@ -46,8 +46,13 @@ If a query needs to relate items, either do not slice, or move the join outside 
 By default (`slice.size=1`) each slice is evaluated on its own. `slice.size` groups several slices into one evaluation:
 
 ```
-SERVICE <x-sparql-anything:location=allCountries.txt,csv.headers=true,csv.delimiter=%09,slice=true,slice.size=100000> { ... }
+SERVICE <x-sparql-anything:location=allCountries.txt,media-type=text/tab-separated-values,csv.headers=true,slice=true,slice.size=100000> {
+  fxe:properties fxe:csv.delimiter "\t" .
+  ...
+}
 ```
+
+`allCountries.txt` is tab-separated but has a `.txt` extension, so `media-type` is needed to select the CSV triplifier. The tab delimiter goes in the basic graph pattern: escapes such as `%09` are not decoded in the SERVICE IRI.
 
 Larger batches reduce the per-execution overhead, at the cost of memory. Joins across items in the same batch do match. As `slice.size` grows, the behaviour approaches `slice=false`.
 
@@ -55,6 +60,10 @@ Larger batches reduce the per-execution overhead, at the cost of memory. Joins a
 
 - **CSV and top-level JSON arrays** are read as a stream: memory is bounded by the batch.
 - **`json.path` and `xml.path`** select their matches over the whole document first (XML is indexed in memory as a whole). Slicing then bounds the size of the RDF graph, not the parsing of the input.
+
+## Errors
+
+If a slice cannot be read or triplified (for example, an item of a JSON array is malformed), the query fails, as it would without slicing. With `SERVICE SILENT`, the failing slice is skipped with a warning and the remaining slices are evaluated; if the input cannot be read any further, the slices read so far are kept. Results of slices evaluated before the error may already have been written to the output.
 
 ## Examples
 

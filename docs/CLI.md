@@ -11,7 +11,7 @@ java -jar sparql-anything-<version>.jar -q <query> [-f <output format>] [-v <fil
 ```
 
 ### -q,--query <query>                    
-The path to the file storing the query to execute or the query itself.
+The path to the file storing the query to execute or the query itself. A value that is neither a URL nor an existing file, and contains no whitespace and no `{`, is reported as a missing query file.
 
 ### -o,--output <file>
 OPTIONAL - The path to the output file. [Default: STDOUT]
@@ -30,19 +30,21 @@ With multiple binding sets (`-v`), each numbered output file is appended to sepa
 OPTIONAL - Explain query execution
 
 ### -l,--load <load>                      
-OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it.
+OPTIONAL - The path to one RDF file or a folder including a set of files to be loaded. When present, the data is loaded in memory and the query executed against it. The RDF syntax is chosen from the file extension (e.g. `.ttl`, `.nt`, `.rdf`, `.jsonld`); `.json` files are loaded as JSON-LD.
 
 > [!NOTE]  
 > This is useful to combine existing RDF with newly incoming data to be converted, and build small workflows with subsequent queries. See examples in [IMMA # step-3-generate-the-list-of-artworks](https://github.com/SPARQL-Anything/showcase-imma#step-3-generate-the-list-of-artworks)
 
 ### -f,--format <string>                  
-OPTIONAL -  Format of the output file. 
-Supported values: see below. [Default: CSV or TTL]
+OPTIONAL -  Format of the output file, case-insensitive (`-f ttl` and `-f TURTLE` are the same).
+Supported values: see below. [Default: guessed from the extension of the `-o` file, otherwise CSV or TTL]
 
 | Query type               | Default |                                                                              Supported |
 |:-------------------------|:-------:|---------------------------------------------------------------------------------------:|
 | SELECT / ASK             |   CSV   |                                                                   JSON, XML, TEXT, CSV |
 | CONSTRUCT / DESCRIBE     |   TTL   | JSON, JSONLD, JSONLD11, XML, TTL / TURTLE, NT / NTRIPLES, NQ / NQUADS, TRIG, TRIX, CSV |
+
+For CONSTRUCT and DESCRIBE, `JSON` and `JSONLD` both produce JSON-LD (not RDF/JSON); `JSONLD11` produces JSON-LD 1.1. For SELECT and ASK, `JSON` produces SPARQL JSON results.
 
 > [!NOTE]
 > For CONSTRUCT, the line-based formats (NT, NQ, TTL, TriG) can be written incrementally with [`-st,--stream`](#-st--stream), keeping memory near-constant for large bulk conversions. The trade-off is that duplicate triples are no longer removed.
@@ -58,7 +60,7 @@ OPTIONAL - Output filename pattern, e.g. `my-file-?friendName.json`. Variables s
 OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. Variable names must start with `_` and follow the Basil convention, [see README for details](README.md#query-templates-and-variable-bindings-cli-only). You can pass IRIs if the var has suffix `_iri` (e.g. `?_my_iri` or `$_my_iri`) , and you can use relative IRIs if the query specifies `BASE`.
 The argument can be used in two ways:
 
-- (1) Provide a single SPARQL ResultSet file (in [CSV, TSV](https://www.w3.org/TR/2013/REC-sparql11-results-csv-tsv-20130321), [JSON](https://www.w3.org/TR/2013/REC-sparql11-results-json-20130321) or [XML](https://www.w3.org/TR/2013/REC-rdf-sparql-XMLres-20130321) format. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed.
+- (1) Provide a single SPARQL ResultSet file (in [CSV, TSV](https://www.w3.org/TR/2013/REC-sparql11-results-csv-tsv-20130321), [JSON](https://www.w3.org/TR/2013/REC-sparql11-results-json-20130321) or [XML](https://www.w3.org/TR/2013/REC-rdf-sparql-XMLres-20130321) format. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed. The format is chosen from the extension (`.csv`, `.tsv`, `.json` or `.srj`, `.xml` or `.srx`), or detected from the content for other extensions. The output of `-f JSON` or `-f XML` can be used directly.
 - (2) Named variable bindings: the argument value must follow the syntax: `var_name=var_value`. The argument can be passed multiple times and the query repeated for each set of values. 
 
 See also [parametrised queries](PARAMETRISED_QUERIES.md)
@@ -85,7 +87,7 @@ Keeps duplicate triples in CONSTRUCT output.
 > [!NOTE]
 > Only affects CONSTRUCT (and DESCRIBE over loaded data); other formats (RDF/XML, JSON-LD, TRIX, CSV) require the whole graph and are unaffected. See [#635](https://github.com/SPARQL-Anything/sparql.anything/issues/635).
 
-### -profile,--profile [<filepath>]
+### --profile [<filepath>]
 OPTIONAL - Records the time of the main execution phases and writes them to `<filepath>` (default: `profile.tsv` in the working directory; an existing file is overwritten).
 
 The output is a tab-separated file, with no header, one event per line, ordered by time:
@@ -128,3 +130,10 @@ PROCESS_ENDS             1759830004425  4425
 > [!NOTE]
 > Each event is recorded once: if it happens more than once (e.g. several `SERVICE` clauses, or a query executed for each set of `-v` values), only the last occurrence is kept.
 
+## Exit status
+
+| Status | Meaning |
+|--------|---------|
+| `0` | Success (also when `-nc` skips an existing output file) |
+| `1` | Error: SPARQL syntax error, missing query or input file, or an error during execution (including a failed slice, unless the SERVICE is `SILENT`) |
+| `2` | Invalid command line: unknown option or missing option argument; the usage is printed |

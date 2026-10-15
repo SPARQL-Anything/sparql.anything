@@ -51,8 +51,28 @@ The URI of the default named graph is ``urn:x-arq:DefaultGraph``.
 ### Blank nodes = false
 
 When the option `blank-nodes` is set as `false`, containers are represented as URI resources.
-In this case, the URI of the container is `uri-root-container` + `\` + `path-to-the-container-in-the-data-source`.
+In this case, the URI of the container is `uri-root-container` + `/` + `path-to-the-container-in-the-data-source`.
 The notion of path is format-specific (for example, is the JSONPath leading to the object for the JSON format or the row number for the CSV format).
+
+## Typed values and matching
+
+Values are generated as literals with the datatype that fits the source: for example, JSON numbers are `xsd:decimal` and booleans are `xsd:boolean`; values without a type (such as CSV cells) are plain strings.
+
+Triple patterns match literals by RDF term equality, as in standard SPARQL. A number written in a query, such as `30`, is the term `"30"^^xsd:integer`, which is a different term from `"30"^^xsd:decimal`. To match numbers from the data, compare values in a `FILTER`, or write the literal with its datatype:
+
+```sparql
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?name WHERE {
+  SERVICE <x-sparql-anything:location=people.json> {
+    # ?person xyz:age 30   -- does not match "30"^^xsd:decimal
+    ?person xyz:name ?name ; xyz:age ?age .
+    FILTER ( ?age = 30 )
+    # or: ?person xyz:age "30"^^xsd:decimal
+  }
+}
+```
 
 ## Terminology
 - *Resource*: We consider a resource anything accessible from a URL (e.g. a spreadsheet file) and distinguish it from its content, that we name data source (e.g. a sheet of a spreadsheet).

@@ -270,7 +270,7 @@ PREFIX fxe: <http://sparql.xyz/facade-x/engine/>
 SELECT ?seriesName
 WHERE {
     SERVICE <x-sparql-anything:> {
-        fxe:properties fxe:location "https://sparql-anything.cc/example1.json"
+        fxe:properties fxe:location "https://sparql-anything.cc/example1.json" .
         ?tvSeries xyz:name ?seriesName .
         ?tvSeries xyz:stars ?star .
         ?star ?li "Courteney Cox" .
@@ -288,7 +288,7 @@ Now, I’m going to show you how to construct RDF knowledge graphs using SPARQL 
 Let us assume that the target KG should look like the following one
 
 ```
-@prefix schema: <https://schema.org/> .
+@prefix schema: <http://schema.org/> .
 @prefix myns: <http://example.org/myns/> .
 
 myns:Friends a schema:TVSeries ;
@@ -297,8 +297,8 @@ schema:genre myns:Comedy, myns:Romance ;
 schema:inLanguage "English" ;
 schema:creativeWorkStatus "Ended";
 schema:startDate "1994-09-22" ;
-schema:description "Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan ;" ;
-schema:actor myns:Jennifer_Aniston , myns:Courtney_Cox, myns:Lisa_Kudrow, myns:Matt_LeBlanc, myns:Matthew_Perry, myns:David_Schwimmer .
+schema:description "Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan." ;
+schema:actor myns:Jennifer_Aniston , myns:Courteney_Cox, myns:Lisa_Kudrow, myns:Matt_LeBlanc, myns:Matthew_Perry, myns:David_Schwimmer .
 
 myns:Cougar_Town a schema:TVSeries ;
 schema:name "Cougar Town" ;
@@ -307,7 +307,7 @@ schema:inLanguage "English" ;
 schema:creativeWorkStatus "Ended";
 schema:startDate "2009-09-23" ;
 schema:description "Jules is a recently divorced mother who has to face the unkind realities of dating in a world obsessed with beauty and youth. As she becomes older, she starts discovering herself." ;
-schema:actor  myns:Courtney_Cox, myns:David_Arquette, myns:Bill_Lawrence, myns:Linda_Videtti_Figueiredo, myns:Blake_McCormick .
+schema:actor  myns:Courteney_Cox, myns:David_Arquette, myns:Bill_Lawrence, myns:Linda_Videtti_Figueiredo, myns:Blake_McCormick .
 
 myns:David_Arquette a schema:Person ;
 schema:name "David Arquette" .
@@ -324,8 +324,8 @@ schema:name "Blake McCormick" .
 myns:Jennifer_Aniston a schema:Person ;
 schema:name "Jennifer Aniston" .
 
-myns:Courtney_Cox a schema:Person ;
-schema:name "Courtney Cox" .
+myns:Courteney_Cox a schema:Person ;
+schema:name "Courteney Cox" .
 
 myns:Lisa_Kudrow a schema:Person ;
 schema:name "Lisa Kudrow" .

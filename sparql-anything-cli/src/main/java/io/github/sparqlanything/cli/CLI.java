@@ -138,7 +138,7 @@ public class CLI {
 			.longOpt(LOAD_LONG).build());
 
 		options.addOption(Option.builder(FORMAT).argName("string").hasArg().desc(
-				"OPTIONAL -  Format of the output file. Supported values: JSON, XML, CSV, TEXT, TTL, NT, NQ. [Default: CSV (for SELECT queries) or TEXT (for ASK queries) or TTL (for CONSTRUCT queries)]")
+				"OPTIONAL - Format of the output, case-insensitive. SELECT and ASK: JSON, XML, CSV, TEXT. CONSTRUCT and DESCRIBE: JSON (JSON-LD), JSONLD, JSONLD11, XML (RDF/XML), TTL or TURTLE, NT or NTRIPLES, NQ or NQUADS, TRIG, TRIX, CSV. [Default: guessed from the extension of the output file, otherwise CSV (SELECT and ASK) or TTL (CONSTRUCT and DESCRIBE)]")
 			.longOpt(FORMAT_LONG).build());
 
 		options.addOption(Option.builder(STRATEGY).argName("strategy").hasArg().optionalArg(true).desc(
@@ -176,7 +176,7 @@ public class CLI {
 		options.addOption(Option.builder().longOpt(NO_WRITE_BASE_LONG).hasArg(false).desc(
 			"OPTIONAL - Do not write the query's BASE in RDF output.").build());
 
-		options.addOption(Option.builder(PROFILE).argName("filepath").hasArg(true).optionalArg(true).desc(
+		options.addOption(Option.builder().argName("filepath").hasArg(true).optionalArg(true).desc(
 				"OPTIONAL - It runs the execution through a profiler. It saves the results to [filepath] (by default profile.tsv) in TSV format. The traced event is reported in the first column. The second column contains the timestamp in milliseconds from Unix epoch. The third column contains the amount of milliseconds from the first event (LOAD_MAIN_CLASS). Warning: This may increase execution time.")
 			.longOpt(PROFILE).build());
 

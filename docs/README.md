@@ -577,12 +577,12 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
  -q,--query <query or URL or filepath>   The path or the URL to the file
                                          storing the query to execute or
                                          the query itself.
-  -o,--output <filepath>                 OPTIONAL - The path to the output
+ -o,--output <filepath>                  OPTIONAL - The path to the output
                                          file. With multiple binding sets
                                          (-v), files are numbered
                                          (file-1.ext, file-2.ext, ...).
                                          [Default: STDOUT]
--a,--append                              OPTIONAL - Should output to file
+ -a,--append                             OPTIONAL - Should output to file
                                          be appended? WARNING: this option
                                          does not ensure that the whole
                                          file is valid -- that is up to
@@ -597,13 +597,17 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
                                          to be loaded. When present, the
                                          data is loaded in memory and the
                                          query executed against it.
- -f,--format <string>                    OPTIONAL -  Format of the output
-                                         file. Supported values: JSON,
-                                         XML, CSV, TEXT, TTL, NT, NQ.
-                                         [Default: CSV (for SELECT
-                                         queries) or TEXT (for ASK
-                                         queries) or TTL (for CONSTRUCT
-                                         queries)]
+ -f,--format <string>                    OPTIONAL - Format of the output,
+                                         case-insensitive. SELECT and ASK:
+                                         JSON, XML, CSV, TEXT. CONSTRUCT
+                                         and DESCRIBE: JSON (JSON-LD),
+                                         JSONLD, JSONLD11, XML (RDF/XML),
+                                         TTL or TURTLE, NT or NTRIPLES, NQ
+                                         or NQUADS, TRIG, TRIX, CSV.
+                                         [Default: guessed from the
+                                         extension of the output file,
+                                         otherwise CSV (SELECT and ASK) or
+                                         TTL (CONSTRUCT and DESCRIBE)]
  -s,--strategy <strategy>                OPTIONAL - Strategy for query
                                          evaluation. Possible values: '1'
                                          - triple filtering (default), '0'
@@ -653,13 +657,25 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
  -nc,--no-clobber                        OPTIONAL - Do not execute if the
                                          specified output file already
                                          exists.
- -st,--stream                            OPTIONAL - Stream CONSTRUCT output
+ -st,--stream                            OPTIONAL - Allow duplicate
+                                         triples in CONSTRUCT output.
+                                         Streams the result
                                          triple-by-triple for line-based
-                                         formats (NT, NQ, TTL, TriG) instead
-                                         of building the whole result in
-                                         memory. Side effect: duplicate
-                                         triples are not removed.
- -t,--profile <filepath>                 OPTIONAL - It runs the execution
+                                         formats (NT, NQ, TTL, TriG)
+                                         instead of building the whole
+                                         result Model in memory, giving
+                                         near-constant memory for bulk
+                                         conversions at the cost of the
+                                         de-duplication guarantee. Only
+                                         affects CONSTRUCT queries with -f
+                                         NT or NQ; ignored otherwise.
+ -b,--base <IRI>                         OPTIONAL - Base IRI to write in
+                                         RDF output (TTL, TriG, RDF/XML).
+                                         Overrides BASE declared in the
+                                         query.
+    --no-write-base                      OPTIONAL - Do not write the
+                                         query's BASE in RDF output.
+    --profile <filepath>                 OPTIONAL - It runs the execution
                                          through a profiler. It saves the
                                          results to [filepath] (by default
                                          profile.tsv) in TSV format. The
@@ -669,9 +685,8 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
                                          milliseconds from Unix epoch. The
                                          third column contains the amount
                                          of milliseconds from the first
-                                         event (LOAD_MAIN_CLASS). the
-                                         Warning: This may increase
-                                         execution time.
+                                         event (LOAD_MAIN_CLASS). Warning:
+                                         This may increase execution time.
 
 ```
 

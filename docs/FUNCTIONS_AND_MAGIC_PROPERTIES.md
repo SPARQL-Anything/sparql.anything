@@ -208,8 +208,10 @@ WHERE
       { fxe:properties
                   fxe:content     "[1,2,3]" ;
                   fxe:media-type  "application/json" .
-        ?s        ?p1            1 ;
-                  ?p2            2
+        ?s        ?p1            ?o1 ;
+                  ?p2            ?o2 .
+        # JSON numbers are xsd:decimal: match them by value, not with the literals 1 and 2
+        FILTER ( ?o1 = 1 && ?o2 = 2 )
       }
   }
 ```
@@ -251,8 +253,10 @@ WHERE
       { fxe:properties
                   fxe:content     "[1,2,3]" ;
                   fxe:media-type  "application/json" .
-        ?s        ?p1            1 ;
-                  ?p2            2
+        ?s        ?p1            ?o1 ;
+                  ?p2            ?o2 .
+        # JSON numbers are xsd:decimal: match them by value, not with the literals 1 and 2
+        FILTER ( ?o1 = 1 && ?o2 = 2 )
       }
   }
 ```
