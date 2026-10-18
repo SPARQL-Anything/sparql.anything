@@ -58,21 +58,20 @@ jobs:
           SNAPSHOT_VERSION="${CLEAN_VERSION}-NIGHTLY-SNAPSHOT"
           echo "snapshot_version=${SNAPSHOT_VERSION}" >> $GITHUB_OUTPUT
           echo "Maven snapshot version: ${SNAPSHOT_VERSION}"
-
       - name: Install gpg key and publish package
         run: |
+          set -euxo pipefail
           echo -e "Releasing ${{ steps.version.outputs.snapshot_version }}"
           echo -e "$(tty)"
           gpg --version
           mvn -version
-          # This avoids gpg: signing failed: Inappropriate ioctl for device error
-          # See https://github.com/keybase/keybase-issues/issues/2798
           export GPG_TTY=$(tty)
-          # export GPG_TTY=`tty`
-          # https://gist.github.com/sualeh/ae78dc16123899d7942bc38baba5203c
-          echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}" | gpg --batch --import 
+          echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}" | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
-          mvn --batch-mode clean deploy  -Drevision=${{ steps.version.outputs.snapshot_version }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
+          mvn -B -e -X --batch-mode clean deploy \
+            -Drevision="${{ steps.version.outputs.snapshot_version }}" \
+            -Dgpg.passphrase="${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}" \
+            -DperformRelease=true
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
