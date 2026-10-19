@@ -34,7 +34,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          server-id: 'central'
+          server-id: 'sonatype-central'
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
       
