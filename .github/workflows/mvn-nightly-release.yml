@@ -48,7 +48,6 @@ jobs:
           BRANCH=${GITHUB_REF#refs/heads/}
           echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
           echo "branch_safe=${BRANCH//\//-}" >> $GITHUB_OUTPUT
-      
       - name: Get base version from pom
         id: version
         run: |
@@ -58,21 +57,51 @@ jobs:
           SNAPSHOT_VERSION="${CLEAN_VERSION}-NIGHTLY-SNAPSHOT"
           echo "snapshot_version=${SNAPSHOT_VERSION}" >> $GITHUB_OUTPUT
           echo "Maven snapshot version: ${SNAPSHOT_VERSION}"
-
+      - name: Verify Sonatype / Maven Central connectivity
+        id: verify-sonatype
+        run: |
+          set -euxo pipefail
+          echo "Checking presence of OSSRH secrets (lengths only)"
+          echo "OSSRH_USERNAME length: ${#OSSRH_USERNAME}"
+          echo "OSSRH_TOKEN length: ${#OSSRH_TOKEN}"
+          echo "OSSRH_GPG_SECRET_KEY length: ${#OSSRH_GPG_SECRET_KEY}"
+          echo "OSSRH_GPG_SECRET_KEY_PASSWORD length: ${#OSSRH_GPG_SECRET_KEY_PASSWORD}"
+          echo "Token SHA256 (masked) — compare with your local hash if needed:"
+          echo -n "${OSSRH_TOKEN}" | sha256sum | awk '{print $1}'
+          echo "Testing HTTP auth to Sonatype Central UI..."
+          curl -s -o /dev/null -w "central UI: %{http_code}\n" -u "${OSSRH_USERNAME}:${OSSRH_TOKEN}" https://central.sonatype.com/ || true
+          echo "Testing Sonatype snapshots repository endpoint (central):"
+          curl -s -o /dev/null -w "central snapshots: %{http_code}\n" -u "${OSSRH_USERNAME}:${OSSRH_TOKEN}" https://central.sonatype.com/repository/maven-snapshots/ || true
+          echo "Testing legacy OSS Sonatype snapshots endpoint (if used):"
+          curl -s -o /dev/null -w "oss snapshots: %{http_code}\n" -u "${OSSRH_USERNAME}:${OSSRH_TOKEN}" https://oss.sonatype.org/content/repositories/snapshots/ || true
+          echo "Testing public Maven Central reachability:"
+          curl -s -o /dev/null -w "maven central: %{http_code}\n" https://repo.maven.apache.org/maven2/ || true
+          echo "Attempting GPG import and listing secret keys (will not print secret content)..."
+          if [ -n "${OSSRH_GPG_SECRET_KEY}" ]; then
+            echo "${OSSRH_GPG_SECRET_KEY}" | gpg --batch --import || true
+            gpg --list-secret-keys --keyid-format LONG || true
+          else
+            echo "No GPG secret provided"
+          fi
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          OSSRH_GPG_SECRET_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
       - name: Install gpg key and publish package
         run: |
+          set -euxo pipefail
           echo -e "Releasing ${{ steps.version.outputs.snapshot_version }}"
           echo -e "$(tty)"
           gpg --version
           mvn -version
-          # This avoids gpg: signing failed: Inappropriate ioctl for device error
-          # See https://github.com/keybase/keybase-issues/issues/2798
           export GPG_TTY=$(tty)
-          # export GPG_TTY=`tty`
-          # https://gist.github.com/sualeh/ae78dc16123899d7942bc38baba5203c
-          echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}" | gpg --batch --import 
+          echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}" | gpg --batch --import
           gpg --list-secret-keys --keyid-format LONG
-          mvn --batch-mode clean deploy  -Drevision=${{ steps.version.outputs.snapshot_version }} -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}  -DperformRelease=true
+          mvn -B -e -X --batch-mode clean deploy \
+            -Drevision="${{ steps.version.outputs.snapshot_version }}" \
+            -Dgpg.passphrase="${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}" \
+            -DperformRelease=true
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
