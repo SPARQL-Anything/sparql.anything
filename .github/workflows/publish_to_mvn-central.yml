@@ -24,8 +24,13 @@ jobs:
       - name: Write release version
         run: |
           TAG=${{ github.ref_name }}
-          echo "VERSION=${TAG#v}" >> $GITHUB_ENV
-          echo "VERSION=$VERSION"
+          VERSION=${TAG#v}
+          # Pre-releases (and any RC/alpha/beta tag) go to the snapshots repo, never to Central
+          if [[ "${{ github.event.release.prerelease }}" == "true" || "$VERSION" =~ -(RC|rc|alpha|beta) ]]; then
+            VERSION="${VERSION}-SNAPSHOT"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Publishing version: $VERSION"
       - name: Install gpg key and publish package
         run: |
           echo -e "Releasing ${VERSION}"
