@@ -226,7 +226,7 @@
                             <publishingServerId>sonatype-central</publishingServerId>
                             <autoPublish>true</autoPublish>
                             <checksums>required</checksums>
-                            <excludeArtifacts>sparql-anything-documentation-generator</excludeArtifacts>
+                            <excludeArtifacts>sparql-anything-documentation-generator,sparql-anything-it</excludeArtifacts>
                             <centralSnapshotsUrl>https://central.sonatype.com/repository/maven-snapshots/</centralSnapshotsUrl>
                         </configuration>
                     </plugin>
