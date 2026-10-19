@@ -37,7 +37,10 @@ jobs:
           server-id: 'sonatype-central'
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
-      
+      - name: Pin Maven 3.9 (3.10 breaks Central bundles)
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.9.11
       - name: Get current date for snapshot naming
         id: date
         run: echo "date=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
