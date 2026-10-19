@@ -45,7 +45,7 @@ The runnable jars are built only on request, through Maven profiles activated by
 
 ### Versioning
 
-The project uses Maven [CI-friendly versions](https://maven.apache.org/maven-ci-friendly.html): every module declares `${revision}`, set once in the root `pom.xml` (for example `1.3.0-SNAPSHOT`). The `flatten-maven-plugin` resolves it in the published POMs. To build a different version without editing the POM, pass `-Drevision=<version>`. This is what the release workflows do.
+The project uses Maven [CI-friendly versions](https://maven.apache.org/maven-ci-friendly.html): every module declares `${revision}`, set once in the root `pom.xml` (for example `1.4.0-SNAPSHOT`). The `flatten-maven-plugin` resolves it in the published POMs. To build a different version without editing the POM, pass `-Drevision=<version>`. This is what the release workflows do.
 
 ## Module layout
 
@@ -186,7 +186,7 @@ Any new non-`location` `ResourceService` should extend `getRootArgument` similar
 
 ## Branches and continuous integration
 
-- Development happens on `vX.Y-DEV` (currently `v1.3-DEV`), which is the default branch on GitHub. Older `vX.Y-DEV` branches are kept for reference.
+- Development happens on `vX.Y-DEV` (currently `v1.4-DEV`), which is the default branch on GitHub. Older `vX.Y-DEV` branches are kept for reference.
 - Larger changes go on a feature branch (for example `docs/604-profile`) and are merged through a pull request into `vX.Y-DEV`.
 - GitHub Actions (`.github/workflows/`):
 
