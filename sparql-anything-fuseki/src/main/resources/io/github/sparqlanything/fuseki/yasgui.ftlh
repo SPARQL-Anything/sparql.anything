@@ -9,7 +9,7 @@
 	<title>SPARQL Anything</title>
 
 	<!-- YASGUI CSS -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@matdata/yasgui@5.14.0/build/yasgui.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@matdata/yasgui@6.11.0/build/yasgui.min.css">
 	
 	<!-- Font Awesome for icons -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -53,7 +53,7 @@
 	<div id="yasgui"></div>
 
 	<!-- YASGUI JavaScript -->
-	<script src="https://cdn.jsdelivr.net/npm/@matdata/yasgui@5.14.0/build/yasgui.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@matdata/yasgui@6.11.0/build/yasgui.min.js"></script>
 
 	<script>
 	// Function to sync theme with body
