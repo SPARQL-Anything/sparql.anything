@@ -1,0 +1,2 @@
+<http://www.example.org/document>
+        a       <http://sparql.xyz/facade-x/ns/Root> .

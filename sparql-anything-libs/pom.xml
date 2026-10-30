@@ -68,6 +68,11 @@
             <artifactId>sparql-anything-csv</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.sparql-anything</groupId>
+            <artifactId>sparql-anything-parquet</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>io.github.sparql-anything</groupId>

@@ -1,0 +1,82 @@
+<http://www.example.org/document#row2>
+        <http://sparql.xyz/facade-x/data/binary>
+                "aGk="^^<http://www.w3.org/2001/XMLSchema#base64Binary>;
+        <http://sparql.xyz/facade-x/data/boolean>
+                false;
+        <http://sparql.xyz/facade-x/data/date>
+                "1970-01-01"^^<http://www.w3.org/2001/XMLSchema#date>;
+        <http://sparql.xyz/facade-x/data/decimal>
+                -0.01;
+        <http://sparql.xyz/facade-x/data/double>
+                1.0E-10;
+        <http://sparql.xyz/facade-x/data/float>
+                "-0.25"^^<http://www.w3.org/2001/XMLSchema#float>;
+        <http://sparql.xyz/facade-x/data/int16>
+                "16"^^<http://www.w3.org/2001/XMLSchema#short>;
+        <http://sparql.xyz/facade-x/data/int64>
+                "64"^^<http://www.w3.org/2001/XMLSchema#long>;
+        <http://sparql.xyz/facade-x/data/int8>
+                "8"^^<http://www.w3.org/2001/XMLSchema#byte>;
+        <http://sparql.xyz/facade-x/data/time>
+                "00:00:00"^^<http://www.w3.org/2001/XMLSchema#time>;
+        <http://sparql.xyz/facade-x/data/timestamp_local>
+                "2000-01-01T00:00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+        <http://sparql.xyz/facade-x/data/timestamp_utc>
+                "2000-01-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+        <http://sparql.xyz/facade-x/data/uint16>
+                "1"^^<http://www.w3.org/2001/XMLSchema#unsignedShort>;
+        <http://sparql.xyz/facade-x/data/uint32>
+                "1"^^<http://www.w3.org/2001/XMLSchema#unsignedInt>;
+        <http://sparql.xyz/facade-x/data/uint64>
+                "1"^^<http://www.w3.org/2001/XMLSchema#unsignedLong>;
+        <http://sparql.xyz/facade-x/data/uint8>
+                "1"^^<http://www.w3.org/2001/XMLSchema#unsignedByte>;
+        <http://sparql.xyz/facade-x/data/uuid>
+                "00000000-0000-0000-0000-000000000001" .
+
+<http://www.example.org/document#row1>
+        <http://sparql.xyz/facade-x/data/binary>
+                "AAEC"^^<http://www.w3.org/2001/XMLSchema#base64Binary>;
+        <http://sparql.xyz/facade-x/data/boolean>
+                true;
+        <http://sparql.xyz/facade-x/data/date>
+                "2026-10-30"^^<http://www.w3.org/2001/XMLSchema#date>;
+        <http://sparql.xyz/facade-x/data/decimal>
+                12.50;
+        <http://sparql.xyz/facade-x/data/double>
+                "2.5"^^<http://www.w3.org/2001/XMLSchema#double>;
+        <http://sparql.xyz/facade-x/data/float>
+                "1.5"^^<http://www.w3.org/2001/XMLSchema#float>;
+        <http://sparql.xyz/facade-x/data/int16>
+                "-16"^^<http://www.w3.org/2001/XMLSchema#short>;
+        <http://sparql.xyz/facade-x/data/int32>
+                "-32"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/int64>
+                "-64"^^<http://www.w3.org/2001/XMLSchema#long>;
+        <http://sparql.xyz/facade-x/data/int8>
+                "-8"^^<http://www.w3.org/2001/XMLSchema#byte>;
+        <http://sparql.xyz/facade-x/data/string>
+                "Ghent";
+        <http://sparql.xyz/facade-x/data/time>
+                "10:15:30.123"^^<http://www.w3.org/2001/XMLSchema#time>;
+        <http://sparql.xyz/facade-x/data/timestamp_local>
+                "2026-10-30T11:12:02"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+        <http://sparql.xyz/facade-x/data/timestamp_utc>
+                "2026-10-30T11:12:02.500Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+        <http://sparql.xyz/facade-x/data/uint16>
+                "65535"^^<http://www.w3.org/2001/XMLSchema#unsignedShort>;
+        <http://sparql.xyz/facade-x/data/uint32>
+                "4294967295"^^<http://www.w3.org/2001/XMLSchema#unsignedInt>;
+        <http://sparql.xyz/facade-x/data/uint64>
+                "18446744073709551615"^^<http://www.w3.org/2001/XMLSchema#unsignedLong>;
+        <http://sparql.xyz/facade-x/data/uint8>
+                "255"^^<http://www.w3.org/2001/XMLSchema#unsignedByte>;
+        <http://sparql.xyz/facade-x/data/uuid>
+                "12345678-1234-5678-1234-567812345678" .
+
+<http://www.example.org/document>
+        a       <http://sparql.xyz/facade-x/ns/Root>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row1>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document#row2> .
