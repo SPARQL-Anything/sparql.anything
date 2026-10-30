@@ -5,7 +5,7 @@
 
 # SPARQL Anything
 
-SPARQL Anything is a system for Semantic Web re-engineering that allows users to query anything with SPARQL: CSV, JSON, XML, spreadsheets, HTML, Markdown, archives and more, without converting them first. It implements [Façade-X](docs/Facade-X.md), a minimal meta-model that represents any data source as RDF.
+SPARQL Anything is a system for Semantic Web re-engineering that allows users to query anything with SPARQL: CSV, JSON, XML, Parquet, spreadsheets, HTML, Markdown, archives and more, without converting them first. It implements [Façade-X](docs/Facade-X.md), a minimal meta-model that represents any data source as RDF.
 
 ## Quickstart
 
