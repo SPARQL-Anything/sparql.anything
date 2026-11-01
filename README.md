@@ -27,7 +27,7 @@ SPARQL Anything is also available as a [server](docs/README.md#using-the-server)
 
 ## Community
 
-Questions and ideas in [Discussions](https://github.com/SPARQL-Anything/sparql.anything/discussions), bugs and feature requests in [Issues](https://github.com/SPARQL-Anything/sparql.anything/issues). The approach is being standardised in the [W3C Data Façades Community Group](https://www.w3.org/community/data-facades/).
+Questions and ideas in [Discussions](https://github.com/SPARQL-Anything/sparql.anything/discussions), bugs and feature requests in [Issues](https://github.com/SPARQL-Anything/sparql.anything/issues). The approach is being standardised in the [W3C Data Façades Community Group](https://www.w3.org/community/facade-x/).
 
 ## How to cite
 
