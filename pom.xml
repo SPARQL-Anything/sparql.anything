@@ -110,6 +110,7 @@
         <module>sparql-anything-testutils</module>
         <module>sparql-anything-xml</module>
         <module>sparql-anything-csv</module>
+        <module>sparql-anything-parquet</module>
         <module>sparql-anything-cli</module>
         <module>sparql-anything-metadata</module>
         <module>sparql-anything-binary</module>
@@ -356,6 +357,23 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.16.0</version>
+            </dependency>
+
+            <!-- Hardwood: Apache Parquet reader for the JVM without Hadoop. Snappy and Zstd are its optional codecs -->
+            <dependency>
+                <groupId>dev.hardwood</groupId>
+                <artifactId>hardwood-core</artifactId>
+                <version>1.0.1.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>1.1.10.8</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.luben</groupId>
+                <artifactId>zstd-jni</artifactId>
+                <version>1.5.7-9</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->

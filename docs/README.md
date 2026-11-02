@@ -140,7 +140,7 @@ $ java -jar sparql-anything-v1.3.0.jar --query some.rq
 - Provides a homogeneous view over heterogeneous  data sources, thanks to the Facade-X meta-model (see [Facade-X specification](Facade-X.md) and [System overview](SystemOverview.md) )
 - Query files in plain SPARQL 1.1, via the `SERVICE <x-sparql-anything:>` (see [configuration](#Configuration)) and
   build knowledge graphs with `CONSTRUCT` queries
-- [Supported formats](#supported-formats): XML, JSON, CSV, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar,
+- [Supported formats](#supported-formats): XML, JSON, CSV, Parquet, HTML, Excel, Text, Binary, EXIF, File System, Zip/Tar,
   Markdown, YAML, Bibtex, DOCx, PPTX (see [pages dedicated to single formats](#supported-formats))
 - Transforms [files, inline content, or the output of an external command](#general-purpose-options)
 - Generates RDF, RDF-Star, and tabular data (thanks to SPARQL)
