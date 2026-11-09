@@ -1,0 +1,146 @@
+<http://www.example.org/document#row3/matrix>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row3/matrix/_1> .
+
+<http://www.example.org/document#row3/people/_2>
+        <http://sparql.xyz/facade-x/data/age>
+                "4"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/name>
+                "Cy" .
+
+<http://www.example.org/document#row3/people/_1>
+        <http://sparql.xyz/facade-x/data/name>
+                "Bob" .
+
+<http://www.example.org/document#row3/people>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row3/people/_1>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document#row3/people/_2> .
+
+<http://www.example.org/document#row3/point>
+        <http://sparql.xyz/facade-x/data/x>
+                "3.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+
+<http://www.example.org/document#row3>
+        <http://sparql.xyz/facade-x/data/codes>
+                <http://www.example.org/document#row3/codes>;
+        <http://sparql.xyz/facade-x/data/id>
+                "3"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/matrix>
+                <http://www.example.org/document#row3/matrix>;
+        <http://sparql.xyz/facade-x/data/people>
+                <http://www.example.org/document#row3/people>;
+        <http://sparql.xyz/facade-x/data/point>
+                <http://www.example.org/document#row3/point> .
+
+<http://www.example.org/document#row2/codes/_2>
+        <http://sparql.xyz/facade-x/data/key>
+                "3"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/value>
+                "three" .
+
+<http://www.example.org/document#row2/codes/_1>
+        <http://sparql.xyz/facade-x/data/key>
+                "2"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/value>
+                "two" .
+
+<http://www.example.org/document#row2/codes>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row2/codes/_1>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document#row2/codes/_2> .
+
+<http://www.example.org/document#row2>
+        <http://sparql.xyz/facade-x/data/codes>
+                <http://www.example.org/document#row2/codes>;
+        <http://sparql.xyz/facade-x/data/id>
+                "2"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/labels>
+                <http://www.example.org/document#row2/labels>;
+        <http://sparql.xyz/facade-x/data/matrix>
+                <http://www.example.org/document#row2/matrix>;
+        <http://sparql.xyz/facade-x/data/people>
+                <http://www.example.org/document#row2/people>;
+        <http://sparql.xyz/facade-x/data/tags>
+                <http://www.example.org/document#row2/tags> .
+
+<http://www.example.org/document#row1/matrix/_2>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "3"^^<http://www.w3.org/2001/XMLSchema#long> .
+
+<http://www.example.org/document#row1/matrix/_1>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "1"^^<http://www.w3.org/2001/XMLSchema#long>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                "2"^^<http://www.w3.org/2001/XMLSchema#long> .
+
+<http://www.example.org/document#row1/matrix>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row1/matrix/_1>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document#row1/matrix/_2> .
+
+<http://www.example.org/document#row1/codes/_1>
+        <http://sparql.xyz/facade-x/data/key>
+                "1"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/value>
+                "one" .
+
+<http://www.example.org/document#row1/codes>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row1/codes/_1> .
+
+<http://www.example.org/document#row1/labels>
+        <http://sparql.xyz/facade-x/data/en>
+                "house";
+        <http://sparql.xyz/facade-x/data/nl>
+                "huis" .
+
+<http://www.example.org/document#row1/people/_1>
+        <http://sparql.xyz/facade-x/data/age>
+                "30"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/name>
+                "Ann" .
+
+<http://www.example.org/document#row1/people>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row1/people/_1> .
+
+<http://www.example.org/document#row1/point>
+        <http://sparql.xyz/facade-x/data/x>
+                "1.0"^^<http://www.w3.org/2001/XMLSchema#double>;
+        <http://sparql.xyz/facade-x/data/y>
+                "2.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+
+<http://www.example.org/document#row1/tags>
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                "a";
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                "b" .
+
+<http://www.example.org/document#row1>
+        <http://sparql.xyz/facade-x/data/codes>
+                <http://www.example.org/document#row1/codes>;
+        <http://sparql.xyz/facade-x/data/id>
+                "1"^^<http://www.w3.org/2001/XMLSchema#int>;
+        <http://sparql.xyz/facade-x/data/labels>
+                <http://www.example.org/document#row1/labels>;
+        <http://sparql.xyz/facade-x/data/matrix>
+                <http://www.example.org/document#row1/matrix>;
+        <http://sparql.xyz/facade-x/data/people>
+                <http://www.example.org/document#row1/people>;
+        <http://sparql.xyz/facade-x/data/point>
+                <http://www.example.org/document#row1/point>;
+        <http://sparql.xyz/facade-x/data/tags>
+                <http://www.example.org/document#row1/tags> .
+
+<http://www.example.org/document>
+        a       <http://sparql.xyz/facade-x/ns/Root>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row1>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document#row2>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                <http://www.example.org/document#row3> .

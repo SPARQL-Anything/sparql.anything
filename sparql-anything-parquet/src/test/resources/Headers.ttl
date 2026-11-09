@@ -1,0 +1,10 @@
+<http://www.example.org/document#row1>
+        <http://sparql.xyz/facade-x/data/e-mail%20%28work%29>
+                "ann@example.org";
+        <http://sparql.xyz/facade-x/data/first%20name>
+                "Ann" .
+
+<http://www.example.org/document>
+        a       <http://sparql.xyz/facade-x/ns/Root>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row1> .

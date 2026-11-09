@@ -1,0 +1,44 @@
+<http://www.example.org/document#row7>
+        <http://sparql.xyz/facade-x/data/n>
+                "7"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+<http://www.example.org/document#row6>
+        <http://sparql.xyz/facade-x/data/n>
+                "6"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+<http://www.example.org/document#row5>
+        <http://sparql.xyz/facade-x/data/n>
+                "5"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+<http://www.example.org/document#row4>
+        <http://sparql.xyz/facade-x/data/n>
+                "4"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+<http://www.example.org/document#row3>
+        <http://sparql.xyz/facade-x/data/n>
+                "3"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+<http://www.example.org/document#row2>
+        <http://sparql.xyz/facade-x/data/n>
+                "2"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+<http://www.example.org/document#row1>
+        <http://sparql.xyz/facade-x/data/n>
+                "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+<http://www.example.org/document>
+        a       <http://sparql.xyz/facade-x/ns/Root>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                <http://www.example.org/document#row1>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_2>
+                <http://www.example.org/document#row2>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_3>
+                <http://www.example.org/document#row3>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_4>
+                <http://www.example.org/document#row4>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_5>
+                <http://www.example.org/document#row5>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_6>
+                <http://www.example.org/document#row6>;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#_7>
+                <http://www.example.org/document#row7> .

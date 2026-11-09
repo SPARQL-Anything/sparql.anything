@@ -22,6 +22,7 @@ import io.github.sparqlanything.metadata.MetadataTriplifier;
 import io.github.sparqlanything.model.*;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.datatypes.xsd.XSDDateTime;
+import org.apache.jena.graph.GraphUtil;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.DatasetFactory;
@@ -189,7 +190,13 @@ public class DatasetGraphCreator {
 		if (triplifyMetadata(p)) {
 			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
 			metadataTriplifier.triplify(p, builder);
-			dg.addGraph(NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI), builder.getDatasetGraph().getDefaultGraph());
+			Node metadataGraph = NodeFactory.createURI(Triplifier.METADATA_GRAPH_IRI);
+			if (dg.containsGraph(metadataGraph)) {
+				// The format triplifier already wrote metadata (e.g. the Parquet schema): merge, don't replace
+				GraphUtil.addInto(dg.getGraph(metadataGraph), builder.getDatasetGraph().getDefaultGraph());
+			} else {
+				dg.addGraph(metadataGraph, builder.getDatasetGraph().getDefaultGraph());
+			}
 		}
 	}
 
