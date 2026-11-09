@@ -136,7 +136,7 @@ public class TarTriplifierTest {
 	}
 	@Test
 	public void testGzipped() throws Exception {
-		for (String resource : new String[]{"test.tar.gz", "test.tgz"}) {
+		for (String resource : new String[]{"test.tar.gz", "test.tgz", "test.tar.bz2", "test.tbz2"}) {
 			URL url = getClass().getClassLoader().getResource(resource).toURI().toURL();
 			Properties p = new Properties();
 			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());

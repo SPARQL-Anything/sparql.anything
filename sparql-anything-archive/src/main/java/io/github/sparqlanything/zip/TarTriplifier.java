@@ -80,11 +80,12 @@ public class TarTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/x-tar", "application/x-gtar", "application/x-compressed-tar");
+		return Sets.newHashSet("application/x-tar", "application/x-gtar", "application/x-compressed-tar", "application/x-bzip-compressed-tar");
 	}
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("tar", "tar.gz", "tgz");
+		return Sets.newHashSet("tar", "tar.gz", "tgz", "tar.bz2", "tbz2");
 	}
+
 }
