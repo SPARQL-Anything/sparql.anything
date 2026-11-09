@@ -20,7 +20,6 @@ package io.github.sparqlanything.engine.functions;
 
 import io.github.sparqlanything.engine.FacadeX;
 import io.github.sparqlanything.model.annotations.FXFunctionDoc;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.slf4j.Logger;
@@ -38,8 +37,9 @@ public class IsFacadeXExtension extends FunctionBase1 implements FXFunction {
 
 	public static boolean isFacadeXExtension(String v) {
 		logger.trace("isFacadeXExtension({})",v);
-		return FilenameUtils.isExtension(v, FacadeX.Registry.getRegisteredExtensions());
+		return FacadeX.Registry.getRegisteredExtension(v) != null;
 	}
+
 
 	@Override
 	public NodeValue exec(NodeValue v) {

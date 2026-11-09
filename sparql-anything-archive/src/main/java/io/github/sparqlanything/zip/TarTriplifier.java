@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 package io.github.sparqlanything.zip;
 
 import com.google.common.collect.Sets;
+import io.github.sparqlanything.model.CompressedStreams;
 import io.github.sparqlanything.model.FacadeXGraphBuilder;
 import io.github.sparqlanything.model.PropertyUtils;
 import io.github.sparqlanything.model.SPARQLAnythingConstants;
@@ -59,8 +57,9 @@ public class TarTriplifier implements Triplifier {
 		builder.addRoot(dataSourceId);
 
 		try {
+			// .tar.gz / .tgz: decompress before reading the tar entries (#710)
 			TarArchiveInputStream debInputStream = new ArchiveStreamFactory()
-					.createArchiveInputStream("tar", location.openStream(), charset.toString());
+				.createArchiveInputStream("tar", CompressedStreams.decompressIfCompressed(location.openStream()), charset.toString());
 			int i = 1;
 			TarArchiveEntry entry = null;
 			while ((entry = debInputStream.getNextEntry()) != null) {
@@ -81,11 +80,11 @@ public class TarTriplifier implements Triplifier {
 
 	@Override
 	public Set<String> getMimeTypes() {
-		return Sets.newHashSet("application/x-tar");
+		return Sets.newHashSet("application/x-tar", "application/x-gtar", "application/x-compressed-tar");
 	}
 
 	@Override
 	public Set<String> getExtensions() {
-		return Sets.newHashSet("tar");
+		return Sets.newHashSet("tar", "tar.gz", "tgz");
 	}
 }

@@ -1030,5 +1030,34 @@ public class IssuesTest {
 
 	}
 
+	private List<String> issue710Members(String query) throws URISyntaxException {
+		String location = Objects.requireNonNull(getClass().getClassLoader().getResource("issues/issue710.tar.gz")).toURI().toString();
+		Dataset ds = DatasetFactory.createGeneral();
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		List<String> values = new ArrayList<>();
+		try (QueryExecution qe = QueryExecutionFactory.create(QueryFactory.create(query.replace("%%%LOCATION%%%", location)), ds)) {
+			qe.execSelect().forEachRemaining(qs -> values.add(qs.get("v").toString()));
+		}
+		return values;
+	}
 
+	@Test
+	public void testIssue710TarGzByExtension() throws URISyntaxException {
+		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v WHERE { SERVICE <x-sparql-anything:location=%%%LOCATION%%%> { ?s fx:anySlot ?v } }";
+		assertEquals(List.of("notice.xml"), issue710Members(q));
+	}
+
+	@Test
+	public void testIssue710TarGzByMediaType() throws URISyntaxException {
+		String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"%%%LOCATION%%%\" ; fx:media-type \"application/x-tar\" . ?s fx:anySlot ?v } }";
+		assertEquals(List.of("notice.xml"), issue710Members(q));
+	}
+
+	@Test
+	public void testIssue710FromTarGzArchive() throws URISyntaxException {
+		for (String format : new String[]{"", "fx:archive-format \"tar\" ;"}) {
+			String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"notice.xml\" ; " + format + " fx:from-archive \"%%%LOCATION%%%\" . ?s ?p ?v FILTER(isLiteral(?v)) } }";
+			assertEquals(List.of("1"), issue710Members(q));
+		}
+	}
 }

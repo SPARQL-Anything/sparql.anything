@@ -68,7 +68,7 @@ public final class FacadeX {
 			Registry.registerTriplifier("io.github.sparqlanything.text.TextTriplifier", new String[]{"txt"}, new String[]{"text/plain"});
 			Registry.registerTriplifier("io.github.sparqlanything.markdown.MARKDOWNTriplifier", new String[]{"md"}, new String[]{"text/markdown", "text/x-markdown"});
 			Registry.registerTriplifier("io.github.sparqlanything.docs.DocxTriplifier", new String[]{"docx"}, new String[]{"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
-			Registry.registerTriplifier("io.github.sparqlanything.zip.TarTriplifier", new String[]{"tar"}, new String[]{"application/x-tar"});
+			Registry.registerTriplifier("io.github.sparqlanything.zip.TarTriplifier", new String[]{"tar", "tar.gz", "tgz"}, new String[]{"application/x-tar", "application/x-gtar", "application/x-compressed-tar"});
 			Registry.registerTriplifier("io.github.sparqlanything.zip.ZipTriplifier", new String[]{"zip"}, new String[]{"application/zip"});
 			Registry.registerTriplifier("io.github.sparqlanything.binary.BinaryTriplifier", new String[]{"bin", "dat"}, new String[]{"application/octet-stream"});
 			Registry.registerTriplifier("io.github.sparqlanything.json.JSONTriplifier", new String[]{"json"}, new String[]{"application/json", "application/problem+json"}, "json");

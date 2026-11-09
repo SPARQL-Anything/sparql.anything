@@ -22,7 +22,6 @@ import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
 import io.github.sparqlanything.model.TriplifierRegister;
 import io.github.sparqlanything.zip.FolderTriplifier;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -86,8 +85,9 @@ class PropertyExtractor {
 				t = new FolderTriplifier();
 			} else if (IsFacadeXExtension.isFacadeXExtension(p.get(IRIArgument.LOCATION.toString()).toString())) {
 				logger.trace("Guessing triplifier using file extension ");
-				String tt = triplifierRegister.getTriplifierForExtension(FilenameUtils.getExtension(urlLocation));
-				logger.trace("Guessed extension: {} :: {} ", FilenameUtils.getExtension(urlLocation), tt);
+				String ext = triplifierRegister.getRegisteredExtension(urlLocation);
+				String tt = triplifierRegister.getTriplifierForExtension(ext);
+				logger.trace("Guessed extension: {} :: {} ", ext, tt);
 				t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
 			} else {
 				return null;

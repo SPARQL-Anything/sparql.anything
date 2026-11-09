@@ -79,8 +79,9 @@ public class LocationInputService implements ResourceService {
 	 */
 	private static ArchiveInputStream openArchive(URL archiveLocation, String archiverFormat, Charset charset) throws IOException, ArchiveException {
 		ArchiveStreamFactory factory = new ArchiveStreamFactory(charset.toString());
-		// Buffered: content detection needs mark/reset
-		InputStream in = new BufferedInputStream(archiveLocation.openStream());
+		// Buffered: content detection needs mark/reset.
+		// A compressed archive (e.g. .tar.gz, #710) is decompressed first, then the archiver is detected on the content.
+		InputStream in = CompressedStreams.decompressIfCompressed(new BufferedInputStream(archiveLocation.openStream()));
 		String archiverName = getArchiverName(archiveLocation.toString(), archiverFormat, factory);
 		if (archiverName == null) {
 			archiverName = ArchiveStreamFactory.detect(in);

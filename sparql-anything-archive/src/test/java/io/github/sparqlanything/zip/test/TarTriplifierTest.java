@@ -31,6 +31,7 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.graph.GraphFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,5 +134,19 @@ public class TarTriplifierTest {
 			L.error("",e);
 		}
 	}
-
+	@Test
+	public void testGzipped() throws Exception {
+		for (String resource : new String[]{"test.tar.gz", "test.tgz"}) {
+			URL url = getClass().getClassLoader().getResource(resource).toURI().toURL();
+			Properties p = new Properties();
+			p.setProperty(IRIArgument.LOCATION.toString(), url.toString());
+			FacadeXGraphBuilder builder = new BaseFacadeXGraphBuilder(p);
+			new TarTriplifier().triplify(p, builder);
+			java.util.Set<String> members = new java.util.HashSet<>();
+			builder.getDatasetGraph().getDefaultGraph().find(Node.ANY, Node.ANY, Node.ANY).forEachRemaining(t -> {
+				if (t.getObject().isLiteral()) members.add(t.getObject().getLiteralLexicalForm());
+			});
+			Assert.assertEquals(resource, java.util.Set.of("test/", "test/test.csv", "test/test.json", "test/test.xml", "test/test.txt"), members);
+		}
+	}
 }

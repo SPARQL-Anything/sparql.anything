@@ -18,11 +18,13 @@
 
 package io.github.sparqlanything.model;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,7 +62,7 @@ public final class TriplifierRegister {
 						"A triplifier for " + ext + " extension has been already registered!");
 			}
 			log.trace("Registering triplifier for extension {} : {}", ext, t);
-			extension.put(ext.toLowerCase(), t);
+			extension.put(ext.toLowerCase(Locale.ROOT), t);
 		}
 
 		for (String mimeType : mimeTypes) {
@@ -121,7 +123,27 @@ public final class TriplifierRegister {
 	}
 
 	public String getTriplifierForExtension(String f) {
-		return this.extension.get(f.toLowerCase());
+		return this.extension.get(f.toLowerCase(Locale.ROOT));
+	}
+
+	/**
+	 * Returns the registered extension of the location, preferring a compound extension
+	 * (e.g. "tar.gz" for notices.tar.gz) over the last one ("gz") (#710). Null if none is registered.
+	 */
+	public String getRegisteredExtension(String location) {
+		if (location == null) {
+			return null;
+		}
+		String name = FilenameUtils.getName(location).toLowerCase(Locale.ROOT);
+		String last = FilenameUtils.getExtension(name);
+		String previous = FilenameUtils.getExtension(FilenameUtils.removeExtension(name));
+		if (!previous.isEmpty() && extension.containsKey(previous + "." + last)) {
+			return previous + "." + last;
+		}
+		if (!last.isEmpty() && extension.containsKey(last)) {
+			return last;
+		}
+		return null;
 	}
 
 	public void printMediaTypes() {
