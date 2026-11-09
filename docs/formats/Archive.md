@@ -2,19 +2,26 @@
 
 # Archive
 
-Archives and directories can be seen as files with the purpose of collecting other files. According to the Facade-X metamodel archives and directories can be seen as lists of filenames.
+Archives and directories can be seen as files with the purpose of collecting other files. According to the Facade-X metamodel archives and directories can be seen as lists of filenames. Tar archives compressed with gzip or bzip2 (e.g. .tar.gz, .tgz) are decompressed transparently (see [#710](https://github.com/SPARQL-Anything/sparql.anything/issues/710)).
 
 ## Extensions
 
 SPARQL Anything selects this transformer for the following file extensions:
 
 - tar
+- tar.bz2
+- tar.gz
+- tbz2
+- tgz
 - zip
 
 ## Media types
 
 SPARQL Anything selects this transformer for the following media types:
 
+- application/x-bzip-compressed-tar
+- application/x-compressed-tar
+- application/x-gtar
 - application/x-tar
 - application/zip
 
