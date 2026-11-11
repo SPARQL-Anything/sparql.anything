@@ -1093,9 +1093,10 @@ public class IssuesTest {
 	@Test
 	public void testIssue721OnDiskKeepsQueryContext() throws IOException {
 		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
-		File onDisk = java.nio.file.Files.createTempDirectory("fx-issue721").toFile();
+		File onDisk = new File("tmp/testIssue721");
+		if (onDisk.exists()) FileUtils.deleteDirectory(onDisk);
 		try {
-			String service = "SERVICE <x-sparql-anything:media-type=text/plain,content=abc,ondisk=" + onDisk.getAbsolutePath();
+			String service = "SERVICE <x-sparql-anything:media-type=text/plain,content=abc,ondisk=tmp/testIssue721";
 			String prefix = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n";
 
 			// The query BASE is used to resolve relative IRIs
