@@ -184,10 +184,8 @@ public class Utils {
 
 	public static ExecutionContext getNewExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
 		if (p.containsKey(IRIArgument.ONDISK.toString())) {
-			//return new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor());
-			return ExecutionContext.createForGraph(dg.getUnionGraph());
+			return ExecutionContext.create(dg, dg.getUnionGraph(), serviceContext(execCxt, p));
 		} else {
-			//return new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
 			return new FacadeXExecutionContext(ExecutionContext.create(dg, dg.getDefaultGraph(), serviceContext(execCxt, p)));
 		}
 	}

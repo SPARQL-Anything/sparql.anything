@@ -1087,4 +1087,38 @@ public class IssuesTest {
 			while (rs.hasNext()) assertNull(rs.next().get("r"));
 		}
 	}
+	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/721">Issue 721</a>
+	 */
+	@Test
+	public void testIssue721OnDiskKeepsQueryContext() throws IOException {
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		File onDisk = java.nio.file.Files.createTempDirectory("fx-issue721").toFile();
+		try {
+			String service = "SERVICE <x-sparql-anything:media-type=text/plain,content=abc,ondisk=" + onDisk.getAbsolutePath();
+			String prefix = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n";
+
+			// The query BASE is used to resolve relative IRIs
+			String base = prefix + "BASE <http://example.org/>\nSELECT DISTINCT ?r WHERE { " + service + "> { ?s ?p ?o . BIND(fx:entity(\"a/b\") AS ?r) } }";
+			try (QueryExecution qe = QueryExecutionFactory.create(QueryFactory.create(base), DatasetFactory.createGeneral())) {
+				ResultSet rs = qe.execSelect();
+				assertTrue(rs.hasNext());
+				assertEquals("http://example.org/a/b", rs.next().get("r").asResource().getURI());
+			}
+
+			// Options reach the functions
+			String onError = prefix + "SELECT ?r WHERE { " + service + ",fx.onerror=fail> { ?s ?p ?o . BIND(fx:entity(\"some space\") AS ?r) } }";
+			assertThrows(FXBuilderFunction.FXFunctionException.class, () -> {
+				try (QueryExecution qe = QueryExecutionFactory.create(QueryFactory.create(onError), DatasetFactory.createGeneral())) {
+					ResultSetFormatter.consume(qe.execSelect());
+				}
+			});
+		} finally {
+			try {
+				FileUtils.deleteDirectory(onDisk);
+			} catch (IOException e) {
+				log.warn("Unable to delete {}", onDisk.getAbsolutePath());
+			}
+		}
+	}
 }
