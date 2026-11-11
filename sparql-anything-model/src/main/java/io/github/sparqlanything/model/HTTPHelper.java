@@ -30,6 +30,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
+import java.util.Locale;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -382,6 +383,50 @@ public class HTTPHelper {
         log.debug("Downloaded {} :: {}", url, response.getStatusLine().getStatusCode());
         return response;
     }
+
+	/**
+	 * Media type declared by the server for the resource (the Content-Type header, without parameters),
+	 * or null if it cannot be determined (#708). The request uses the same options (headers, query, auth)
+	 * of the actual one: HEAD first, then a GET whose body is not read. Only GET requests are probed,
+	 * so that a request with side effects is not sent twice.
+	 */
+	public static String getContentType(URL url, Properties properties) {
+		String method = properties.getProperty(HTTPMETHOD, "GET").toUpperCase(Locale.ROOT);
+		if (!method.equals("GET")) {
+			log.debug("Not probing the content type of {}: method is {}", url, method);
+			return null;
+		}
+		Properties probe = new Properties();
+		probe.putAll(properties);
+		probe.remove(HTTPPAYLOAD);
+		for (String m : new String[]{"HEAD", "GET"}) {
+			probe.setProperty(HTTPMETHOD, m);
+			HttpUriRequest request = buildRequest(url, probe);
+			try (CloseableHttpClient client = setupClientBuilder(url, probe).build();
+			     CloseableHttpResponse response = client.execute(request)) {
+				// Do not download the body
+				request.abort();
+				Header h = response.getFirstHeader(HttpHeaders.CONTENT_TYPE);
+				log.debug("{} {} :: {} :: Content-Type {}", m, url, response.getStatusLine().getStatusCode(), h);
+				if (isSuccessful(response) && h != null) {
+					String mediaType = mediaType(h.getValue());
+					if (mediaType != null) return mediaType;
+				}
+			} catch (IOException e) {
+				log.debug("Unable to get the content type of {} with {}: {}", url, m, e.getMessage());
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * The media type of a Content-Type value, lower case and without parameters (e.g. charset), or null.
+	 */
+	static String mediaType(String contentType) {
+		if (contentType == null) return null;
+		String t = contentType.split(";", 2)[0].trim().toLowerCase(Locale.ROOT);
+		return t.isEmpty() ? null : t;
+	}
 
 	public static boolean checkHostIsReachable(String url){
 		String host = null;

@@ -27,9 +27,11 @@ import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import io.github.sparqlanything.model.HTTPHelper;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 import java.util.HashSet;
 import java.util.Set;
@@ -90,7 +92,12 @@ class PropertyExtractor {
 				logger.trace("Guessed extension: {} :: {} ", ext, tt);
 				t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
 			} else {
-				return null;
+				// Remote resource without a known extension: use the media type declared by the server (#708)
+				String tt = getTriplifierForContentType(urlLocation, p, triplifierRegister);
+				if (tt == null) {
+					return null;
+				}
+				t = (Triplifier) Class.forName(tt).getConstructor().newInstance();
 			}
 
 		} else {
@@ -99,7 +106,32 @@ class PropertyExtractor {
 		}
 		return t;
 	}
-
+	/**
+	 * The triplifier registered for the Content-Type of an HTTP(S) location, or null (#708).
+	 */
+	static String getTriplifierForContentType(String location, Properties p, TriplifierRegister triplifierRegister) {
+		URL url;
+		try {
+			url = new URL(location);
+		} catch (MalformedURLException e) {
+			return null;
+		}
+		if (!url.getProtocol().equals("http") && !url.getProtocol().equals("https")) {
+			return null;
+		}
+		String mediaType = HTTPHelper.getContentType(url, p);
+		if (mediaType == null) {
+			logger.warn("Unable to determine the content type of {}: set the media-type option", location);
+			return null;
+		}
+		String tt = triplifierRegister.getTriplifierForMimeType(mediaType);
+		if (tt == null) {
+			logger.warn("No triplifier for content type {} of {}: set the media-type option", mediaType, location);
+			return null;
+		}
+		logger.trace("Triplifier from content type {} :: {}", mediaType, tt);
+		return tt;
+	}
 //	static void extractPropertiesFromBGP(Properties properties, OpBGP bgp) throws UnboundVariableException {
 //		for (Triple t : bgp.getPattern().getList()) {
 //			if (t.getSubject().isURI() && t.getSubject().getURI().equals(Triplifier.FACADE_X_TYPE_PROPERTIES)) {

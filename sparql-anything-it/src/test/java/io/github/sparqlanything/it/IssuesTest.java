@@ -1122,4 +1122,42 @@ public class IssuesTest {
 			}
 		}
 	}
+	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/708">Issue 708</a>
+	 */
+	@Test
+	public void testIssue708ContentTypeSelectsTriplifier() throws IOException {
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		byte[] body = "{\"prizes\":[{\"awardYear\":\"2020\"}]}".getBytes(StandardCharsets.UTF_8);
+		com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer.create(new java.net.InetSocketAddress("127.0.0.1", 0), 0);
+		// No file extension in the path: only the Content-Type tells the format
+		server.createContext("/nobelPrizes", exchange -> {
+			exchange.getResponseHeaders().add("Content-Type", "application/json; charset=utf-8");
+			if (exchange.getRequestMethod().equals("HEAD")) {
+				exchange.sendResponseHeaders(200, -1);
+			} else {
+				exchange.sendResponseHeaders(200, body.length);
+				try (java.io.OutputStream os = exchange.getResponseBody()) {
+					os.write(body);
+				}
+			}
+			exchange.close();
+		});
+		server.start();
+		try {
+			String location = "http://127.0.0.1:" + server.getAddress().getPort() + "/nobelPrizes";
+			String q = "PREFIX fxe: <http://sparql.xyz/facade-x/engine/>\n" +
+				"PREFIX xyz: <http://sparql.xyz/facade-x/data/>\n" +
+				"SELECT ?year WHERE { SERVICE <x-sparql-anything:> { " +
+				"fxe:properties fxe:location \"" + location + "\" ; fxe:http.query.nobelPrizeYear \"2020\" . " +
+				"?p xyz:awardYear ?year } }";
+			try (QueryExecution qe = QueryExecutionFactory.create(QueryFactory.create(q), DatasetFactory.createGeneral())) {
+				ResultSet rs = qe.execSelect();
+				assertTrue(rs.hasNext());
+				assertEquals("2020", rs.next().get("year").asLiteral().getString());
+			}
+		} finally {
+			server.stop(0);
+		}
+	}
 }
