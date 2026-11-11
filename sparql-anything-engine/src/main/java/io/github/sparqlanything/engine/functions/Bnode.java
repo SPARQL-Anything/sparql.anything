@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 package io.github.sparqlanything.engine.functions;
 
 import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.query.QueryBuildException;
+import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.function.FunctionBase1;
+import org.apache.jena.sparql.function.FunctionEnv;
+
+import java.util.List;
 
 @FXFunctionDoc(
 	description = "The function fx:bnode( ?a) builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph.",
@@ -29,11 +30,17 @@ import org.apache.jena.sparql.function.FunctionBase1;
 	group = "FUNCTIONS",
 	label = "fx:bnode"
 )
-public class Bnode extends FunctionBase1 implements FXFunction {
+public class Bnode extends FXBuilderFunction {
 
 	@Override
-	public NodeValue exec(NodeValue nodeValue) {
-		return NodeValue.makeNode(NodeFactory.createBlankNode(nodeValue.toString()));
-//		throw new ExprEvalException("Not a container membership property: " + FmtUtils.stringForNode(nodeValue.asNode())) ;
+	public void checkBuild(String uri, ExprList args) {
+		if (args.size() != 1) {
+			throw new QueryBuildException("fx:bnode takes exactly one argument");
+		}
+	}
+
+	@Override
+	protected NodeValue build(List<NodeValue> a, OnError mode, FunctionEnv env) {
+		return NodeValue.makeNode(NodeFactory.createBlankNode(a.get(0).toString()));
 	}
 }

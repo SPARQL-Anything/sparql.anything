@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 package io.github.sparqlanything.engine.functions;
 
 import io.github.sparqlanything.model.annotations.FXFunctionDoc;
 import org.apache.jena.datatypes.BaseDatatype;
-import org.apache.jena.sparql.expr.ExprEvalTypeException;
+import org.apache.jena.query.QueryBuildException;
+import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.function.FunctionBase2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.jena.sparql.function.FunctionEnv;
+
+import java.util.List;
 
 @FXFunctionDoc(
 	description = "The function fx:literal( ?a , ?b ) builds a literal from the string representation of ?a, using ?b either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).",
@@ -32,17 +30,25 @@ import org.slf4j.LoggerFactory;
 	group = "FUNCTIONS",
 	label = "fx:literal"
 )
-public class Literal extends FunctionBase2 {
-	private static final Logger L = LoggerFactory.getLogger(Literal.class);
+public class Literal extends FXBuilderFunction {
+
 	@Override
-	public NodeValue exec(NodeValue v1, NodeValue v2) {
-		if(v2.isIRI()){
+	public void checkBuild(String uri, ExprList args) {
+		if (args.size() != 2) {
+			throw new QueryBuildException("fx:literal takes exactly two arguments");
+		}
+	}
+
+	@Override
+	protected NodeValue build(List<NodeValue> a, OnError mode, FunctionEnv env) {
+		NodeValue v1 = a.get(0), v2 = a.get(1);
+		if (v2.isIRI()) {
 			return NodeValue.makeNode(v1.asString(), new BaseDatatype(v2.getNode().getURI()));
-		}else if(v2.isString() && !v2.getString().isEmpty()){
+		}
+		if (v2.isString() && !v2.getString().isEmpty()) {
 			return NodeValue.makeLangString(v1.asString(), v2.getString());
 		}
-		L.error("Invalid value for lang or datatype: {}", v2);
-		throw new ExprEvalTypeException("Invalid value. Expected (string,iri) or (string,string). Given: " + v2); // # NodeValue.NONE.getConstant();
+		throw new FXBuildException("Expected a datatype IRI or a non-empty language tag as second argument. Given: " + v2);
 	}
 }
 

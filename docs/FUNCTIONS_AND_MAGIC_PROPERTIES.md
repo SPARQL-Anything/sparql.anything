@@ -1810,7 +1810,10 @@ BIND ( fx:entity ( myns:, "dummy-entity", 1) AS ?myentity)
 # is equivalent to
 BIND ( IRI( CONCAT ( STR (myns:), "dummy-entity", STR(1) ) AS ?myentity )
 ```
-See also [issue 106](https://github.com/SPARQL-Anything/sparql.anything/issues/106)
+
+Errors are handled according to the option [`fx.onerror`](Configuration.md#fxonerror).
+
+See also [issue 106](https://github.com/SPARQL-Anything/sparql.anything/issues/106) and [issue 712](https://github.com/SPARQL-Anything/sparql.anything/issues/712)
 
 #### Input
 
@@ -1856,6 +1859,10 @@ Result
 ### fx:literal
 
 The function `fx:literal( ?a , ?b )` builds a literal from the string representation of `?a`, using `?b` either as a typed literal (if a IRI is given) or a lang code (if a string of length of two is given).
+
+Errors are handled according to the option [`fx.onerror`](Configuration.md#fxonerror).
+
+See also [issue 465](https://github.com/SPARQL-Anything/sparql.anything/issues/465) and [issue 712](https://github.com/SPARQL-Anything/sparql.anything/issues/712)
 
 #### Input
 
@@ -1927,6 +1934,10 @@ Result
 ### fx:bnode
 
 The function `fx:bnode(?a) ` builds a blank node enforcing the node value as local identifier. This is useful when multiple construct templates are populated with bnode generated on different query solutions but we want them to be joined in the output RDF graph. Apparently, the standard function `BNODE` does generate a new node for each query solution (see issue [#273](https://github.com/SPARQL-Anything/sparql.anything/issues/273) for an explanatory case).
+
+Errors are handled according to the option [`fx.onerror`](Configuration.md#fxonerror).
+
+See also [issue 712](https://github.com/SPARQL-Anything/sparql.anything/issues/712)
 
 #### Input
 

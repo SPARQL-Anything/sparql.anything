@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 package io.github.sparqlanything.engine.functions;
 
-import io.github.sparqlanything.model.annotations.FXFunctionDoc;
+import io.github.sparqlanything.model.annotations.FXFunctionDoc; // keep your existing import path
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.query.Query;
+import org.apache.jena.sparql.ARQConstants;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.function.FunctionBase;
+import org.apache.jena.sparql.expr.nodevalue.NodeFunctions;
+import org.apache.jena.sparql.function.FunctionEnv;
 
 import java.util.List;
 
@@ -32,36 +33,48 @@ import java.util.List;
 	group = "FUNCTIONS",
 	label = "fx:entity"
 )
-public class Entity extends FunctionBase implements FXFunction {
+public class Entity extends FXBuilderFunction {
 
 	@Override
-	public NodeValue exec(List<NodeValue> list) {
+	protected NodeValue build(List<NodeValue> list, OnError mode, FunctionEnv env) {
 		StringBuilder sb = new StringBuilder();
-		for(NodeValue node: list){
-			if(node.isString()){
+		for (NodeValue node : list) {
+			if (node.isString()) {
 				sb.append(node.getString());
-			}else if(node.isInteger()){
-				sb.append(node.getInteger().intValue());
-			}else if(node.isLiteral()){
+			} else if (node.isInteger()) {
+				sb.append(node.getInteger().toString());
+			} else if (node.isLiteral()) {
 				sb.append(node.asString());
-			}else if(node.isBlank()){
+			} else if (node.isBlank()) {
 				sb.append(node.getNode().getBlankNodeLabel());
-			}else if(node.isIRI()){
-				if(isContainerMembershipProperty(node)){
+			} else if (node.isIRI()) {
+				if (isContainerMembershipProperty(node)) {
 					sb.append(getInt(node));
-				}else{
-					String uri = node.asNode().getURI();
-					sb.append(uri);
+				} else {
+					sb.append(node.asNode().getURI());
 				}
-			}else{
-				throw new RuntimeException("Unsupported node value: " + node);
+			} else {
+				throw new FXBuildException("Unsupported node value: " + node);
 			}
 		}
-		return NodeValue.makeNode(NodeFactory.createURI(sb.toString()));
+		String str = sb.toString();
+		if (mode == OnError.LENIENT) {
+			return NodeValue.makeNode(NodeFactory.createURI(str));
+		}
+		try {
+			return NodeFunctions.iri(NodeValue.makeString(str), baseIRI(env));
+		} catch (ExprEvalException ex) {
+			throw new FXBuildException(ex.getMessage());
+		}
+	}
+
+	private static String baseIRI(FunctionEnv env) {
+		if (env == null || env.getContext() == null) return null;
+		Query q = (Query) env.getContext().get(ARQConstants.sysCurrentQuery);
+		return q == null ? null : q.getBaseURI();
 	}
 
 	@Override
 	public void checkBuild(String s, ExprList exprList) {
-
 	}
 }
