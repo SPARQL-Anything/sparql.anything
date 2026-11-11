@@ -617,15 +617,16 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
                                          fallbacks to '0' when the
                                          strategy is not implemented yet
                                          for the given resource type.
- -p,--output-pattern <outputPattern>     OPTIONAL - Output filename
+  -p,--output-pattern <outputPattern>     OPTIONAL - Output filename
                                          pattern, e.g.
                                          'my-file-?friendName.json'.
-                                         Variables should start with '?'
-                                         and refer to bindings from the
-                                         input file. This option can only
-                                         be used in combination with
-                                         'input' and is ignored otherwise.
-                                         This option overrides 'output'.
+                                         Variables start with '?' and
+                                         refer to the bindings given with
+                                         -v (a result set file or
+                                         var_name=var_value), named
+                                         without the '_' prefix. This
+                                         option is ignored without -v and
+                                         overrides 'output'.
  -v,--values <values>                    OPTIONAL - Values passed as input
                                          parameter to a query template.
                                          When present, the query is
@@ -643,7 +644,11 @@ usage: java -jar sparql.anything-<version>  -q query [-f <output format>]
                                          var_name=var_value. The argument
                                          can be passed multiple times and
                                          the query repeated for each set
-                                         of values.
+                                         of values. Query parameters are
+                                         variables starting with '?_'
+                                         (e.g. -v file=data.json binds
+                                         ?_file, not ?file): see the
+                                         README for the full convention.
  -c,--configuration <option=value>       OPTIONAL - Configuration to be
                                          passed to the SPARQL Anything
                                          engine (this is equivalent to

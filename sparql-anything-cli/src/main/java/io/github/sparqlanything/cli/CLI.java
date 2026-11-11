@@ -146,11 +146,11 @@ public class CLI {
 			.longOpt(STRATEGY_LONG).build());
 
 		options.addOption(Option.builder(OUTPUT_PATTERN).argName("outputPattern").hasArg().desc(
-				"OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables should start with '?' and refer to bindings from the input file. This option can only be used in combination with 'input' and is ignored otherwise. This option overrides 'output'.")
+				"OPTIONAL - Output filename pattern, e.g. 'my-file-?friendName.json'. Variables start with '?' and refer to the bindings given with -v (a result set file or var_name=var_value), named without the '_' prefix. This option is ignored without -v and overrides 'output'.")
 			.longOpt(OUTPUT_PATTERN_LONG).build());
 
 		options.addOption(Option.builder(VALUES).argName("values").hasArg(true).optionalArg(true).desc(
-				"OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The argument can be used in two ways. (1) Providing a single SPARQL ResultSet file. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed. (2) Named variable bindings: the argument value must follow the syntax: var_name=var_value. The argument can be passed multiple times and the query repeated for each set of values.")
+				"OPTIONAL - Values passed as input parameter to a query template. When present, the query is pre-processed by substituting variable names with the values provided. The argument can be used in two ways. (1) Providing a single SPARQL ResultSet file. In this case, the query is executed for each set of bindings in the input result set. Only 1 file is allowed. (2) Named variable bindings: the argument value must follow the syntax: var_name=var_value. The argument can be passed multiple times and the query repeated for each set of values. Query parameters are variables starting with '?_' (e.g. -v file=data.json binds ?_file, not ?file): see the README for the full convention.")
 			.longOpt(VALUES_LONG).build());
 
 		options.addOption(Option.builder(CONFIGURATION).argName("option=value").hasArg(true).optionalArg(true).desc(
