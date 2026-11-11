@@ -20,6 +20,7 @@ package io.github.sparqlanything.it;
 
 import io.github.sparqlanything.cli.SPARQLAnything;
 import io.github.sparqlanything.engine.FacadeX;
+import io.github.sparqlanything.engine.functions.FXBuilderFunction;
 import io.github.sparqlanything.model.HTTPHelper;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.FileUtils;
@@ -1058,6 +1059,32 @@ public class IssuesTest {
 		for (String format : new String[]{"", "fx:archive-format \"tar\" ;"}) {
 			String q = "PREFIX fx: <http://sparql.xyz/facade-x/ns/> SELECT ?v WHERE { SERVICE <x-sparql-anything:> { fx:properties fx:location \"notice.xml\" ; " + format + " fx:from-archive \"%%%LOCATION%%%\" . ?s ?p ?v FILTER(isLiteral(?v)) } }";
 			assertEquals(List.of("1"), issue710Members(q));
+		}
+	}
+
+	/**
+	 * See <a href="https://github.com/SPARQL-Anything/sparql.anything/issues/712">Issue 712</a>
+	 */
+	@Test
+	public void testIssue712ServiceScopedOnError() {
+		QC.setFactory(ARQ.getContext(), FacadeX.ExecutorFactory);
+		String service = "SERVICE <x-sparql-anything:media-type=text/plain,content=abc,fx.onerror=fail>";
+		String prefix = "PREFIX fx: <http://sparql.xyz/facade-x/ns/>\n";
+
+		// Inside the SERVICE: fail applies
+		String inside = prefix + "SELECT ?r WHERE { " + service + " { ?s ?p ?o . BIND(fx:entity(\"some space\") AS ?r) } }";
+		assertThrows(FXBuilderFunction.FXFunctionException.class, () -> {
+			try (QueryExecution qe = QueryExecutionFactory.create(QueryFactory.create(inside), DatasetFactory.createGeneral())) {
+				ResultSetFormatter.consume(qe.execSelect());
+			}
+		});
+
+		// Outside the SERVICE: default (unbound) applies
+		String outside = prefix + "SELECT ?r WHERE { " + service + " { ?s ?p ?o } BIND(fx:entity(\"some space\") AS ?r) }";
+		try (QueryExecution qe = QueryExecutionFactory.create(QueryFactory.create(outside), DatasetFactory.createGeneral())) {
+			ResultSet rs = qe.execSelect();
+			assertTrue(rs.hasNext());
+			while (rs.hasNext()) assertNull(rs.next().get("r"));
 		}
 	}
 }

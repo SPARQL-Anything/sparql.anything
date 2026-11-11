@@ -1496,6 +1496,48 @@ You can check out whether a query has been evaluated over a cached graph via the
 `false`
 
 
+## Error handling in entity-building functions
+
+### fx.onerror
+
+Controls how the functions `fx:entity`, `fx:literal` and `fx:bnode` behave when they cannot build a valid term (see issue [#712](https://github.com/SPARQL-Anything/sparql.anything/issues/712)).
+The option can be set in the SERVICE IRI, in which case it applies to the functions evaluated inside that SERVICE clause, or at query level with `-c fx.onerror=<value>` (or in the ARQ context when SPARQL Anything is used as a library), in which case it applies to the whole query, including expressions outside any SERVICE clause. The value in the SERVICE IRI takes precedence.
+The SPARQL built-in functions (`IRI()`, `STRLANG()`, `STRDT()`, ...) are not affected.
+
+#### Valid Values
+
+| Value     | Behaviour                                                                                                                                       |
+|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `unbound` | SPARQL semantics: an evaluation error is raised and the variable is left unbound. Nothing is logged.                                            |
+| `warn`    | As `unbound`, plus a warning in the log naming the function, its arguments and the solution being evaluated.                                    |
+| `fail`    | The query is aborted with the same message as `warn`.                                                                                           |
+| `lenient` | No validation (behaviour before version X.Y). For example, `fx:entity("some space")` produces the IRI `<some space>`.                           |
+
+#### Default value
+
+`unbound`
+
+#### What counts as an error
+
+- `fx:entity`: the concatenated string is not a valid IRI. Relative IRIs are resolved against the query's `BASE` (or the system base if none is declared), as with `IRI()`. With `lenient`, relative IRIs are not resolved.
+- `fx:literal(?a, ?b)`: `?b` is neither an IRI nor a non-empty string. As with `STRDT()` and `STRLANG()`, the lexical form and the language tag are not validated.
+- All three functions: one or more arguments are unbound or fail to evaluate. The function call is reported once, listing all its arguments.
+
+#### Notes
+
+The solution printed by `warn` and `fail` includes the bindings of the query, for example `?slot`. Binding `fx:cardinal(?slot)` gives the position of the record in a CSV file. Note that this is not the line number when quoted cells contain newlines.
+
+With `fail`, an error inside `fx:entity` cannot be caught by an enclosing `COALESCE`. To provide a fallback for an optional value, wrap the argument instead:
+
+```sparql
+BIND(fx:entity(ex:, COALESCE(?id, "unknown")) AS ?s)
+```
+
+#### Examples
+
+```bash
+java -jar sparql-anything-<version>.jar -q mapping.sparql -c fx.onerror=fail
+```
 
 <!--
 ### 

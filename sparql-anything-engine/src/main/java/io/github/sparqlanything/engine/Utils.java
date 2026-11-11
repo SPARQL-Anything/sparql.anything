@@ -18,6 +18,7 @@
 
 package io.github.sparqlanything.engine;
 
+import io.github.sparqlanything.engine.functions.FXBuilderFunction;
 import io.github.sparqlanything.facadeiri.FacadeIRIParser;
 import io.github.sparqlanything.model.IRIArgument;
 import io.github.sparqlanything.model.Triplifier;
@@ -39,6 +40,7 @@ import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
+import org.apache.jena.sparql.util.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -180,13 +182,26 @@ public class Utils {
 		return new FacadeXExecutionContext(getNewExecutionContext(execCxt, p, dg));
 	}
 
-	public static  ExecutionContext getNewExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
+	public static ExecutionContext getNewExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
 		if (p.containsKey(IRIArgument.ONDISK.toString())) {
 			//return new ExecutionContext(execCxt.getContext(), dg.getUnionGraph(), dg, execCxt.getExecutor());
 			return ExecutionContext.createForGraph(dg.getUnionGraph());
 		} else {
 			//return new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-			return new FacadeXExecutionContext(ExecutionContext.create(dg, dg.getDefaultGraph(), execCxt.getContext()));
+			return new FacadeXExecutionContext(ExecutionContext.create(dg, dg.getDefaultGraph(), serviceContext(execCxt, p)));
 		}
+	}
+
+	/**
+	 * Query context for the evaluation of a SERVICE clause. Options that affect the functions
+	 * (currently fx.onerror) are scoped to the clause: the context is copied only when needed,
+	 * so that the value does not leak into the rest of the query.
+	 */
+	static Context serviceContext(ExecutionContext execCxt, Properties p) {
+		String onError = p.getProperty(FXBuilderFunction.ONERROR.getSymbol());
+		if (onError == null) return execCxt.getContext();
+		Context cxt = execCxt.getContext().copy();
+		cxt.set(FXBuilderFunction.ONERROR, onError);
+		return cxt;
 	}
 }
