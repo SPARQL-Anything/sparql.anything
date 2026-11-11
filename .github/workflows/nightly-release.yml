@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # Get the default development branch (can change based on the milestone as needed)
           ref: ${{ github.event.repository.default_branch }}
