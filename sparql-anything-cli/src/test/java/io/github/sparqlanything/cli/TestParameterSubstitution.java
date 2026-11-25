@@ -22,6 +22,7 @@ import io.github.basilapi.basil.sparql.QueryParameter;
 import io.github.basilapi.basil.sparql.Specification;
 import io.github.basilapi.basil.sparql.SpecificationFactory;
 import io.github.basilapi.basil.sparql.UnknownQueryTypeException;
+import io.github.basilapi.basil.sparql.ParameterParsingException;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
@@ -55,5 +56,24 @@ public class TestParameterSubstitution {
 //			QuerySolution qs = parameters.nextSolution();
 //		}
 	}
+	private static final String PREFIX_EX = "PREFIX ex: <http://example.org/dt#>\n";
 
+	@Test
+	public void issue702_prefixedDatatype() throws Exception {
+		String q = PREFIX_EX + "SELECT (DATATYPE(?v) AS ?dt) WHERE { BIND($_x_ex_money AS ?v) }";
+		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-v", "x=12.50", "-f", "JSON"});
+		Assert.assertTrue(out, out.contains("http://example.org/dt#money"));
+	}
+
+	@Test
+	public void issue691_xsdDatatype() throws Exception {
+		String q = "SELECT (DATATYPE(?v) AS ?dt) WHERE { BIND($_x_decimal AS ?v) }";
+		String out = SPARQLAnything.callMain(new String[]{"-q", q, "-v", "x=12", "-f", "JSON"});
+		Assert.assertTrue(out, out.contains("http://www.w3.org/2001/XMLSchema#decimal"));
+	}
+
+	@Test(expected = ParameterParsingException.class)
+	public void issue702_undeclaredPrefix() throws Exception {
+		SpecificationFactory.create("", "SELECT ?v WHERE { BIND($_x_ex_money AS ?v) }", true);
+	}
 }

@@ -56,11 +56,15 @@ By default a value is substituted as a plain literal. A suffix on the variable n
 |----------|----------------|
 | `$_name` | plain literal |
 | `$_name_iri` | IRI |
-| `$_name_en` | literal with language tag `en` (any tag) |
+| `$_name_en` | literal with language tag `en` (any two-letter tag) |
 | `$_name_integer` | literal typed `xsd:integer` (any XSD type) |
-| `$_name_prefix_type` | literal typed `prefix:type` (the prefix must be declared in the query) |
+| `$_name_prefix_type` | literal typed `prefix:type` (the prefix must be declared in the query; `xsd` is always available) |
 
 On the command line, the name never includes the suffix.
+
+The underscore is reserved as separator, so a parameter name cannot contain it: `$_first_name` is the parameter `first` with an unknown suffix (substituted as plain literal), and `$_first_name_en` is read as `first` typed `name:en`. After a prefix, the local name may contain underscores: `$_amount_ex_due_date` is typed `ex:due_date`.
+
+If the prefix of a `$_name_prefix_type` parameter is not declared in the query, the CLI stops with an error.
 
 An integer, in `since.sparql`:
 
@@ -274,5 +278,7 @@ sa -q by-artist.sparql -v artists.csv -o res.csv -nc   # rewrites res-2.csv only
 ## 7. Notes
 
 - **Missing values:** a run with a missing mandatory parameter is skipped with an error in the log; the other runs continue.
-- **Substitution is textual:** it happens on the query text before parsing. Values are inserted as given, so check them if they come from untrusted sources.
+- **Substitution is safe against injection:** each value is serialised as an RDF term (escaped literal, IRI, or number) before the query is parsed, so a value cannot change the structure of the query. An IRI containing `>` is rejected, and a non-numeric value for an `_number` parameter is an error.
+- **Parameters that select the source:** if the query uses a parameter to set the location (for example `fx:properties fx:location $_file`), the value decides which file or URL is read. Take this into account when values come from untrusted sources.
 - **Examples in practice:** see the [IMMA showcase](https://github.com/SPARQL-Anything/showcase-imma) for a full pipeline built with parametrised queries.
+- **Datatype prefixes:** since 1.4.0, `$_name_prefix_type` uses the prefixes declared in the query, and any XSD datatype is recognised in `$_name_type`. Before, only `xsd` and a few XSD types were supported, and other values were silently substituted as plain literals.

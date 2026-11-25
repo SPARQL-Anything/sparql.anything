@@ -582,7 +582,7 @@ public class SPARQLAnything {
 		return ResultSetLang.RS_CSV;
 	}
 
-	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException {
+	private static void executeQueryWithValues(CLI cli, String query, Dataset kb, String outputFileName, String outputPattern, String[] values, String[] configurations) throws UnknownQueryTypeException, ParameterParsingException {
 		ResultSet parameters;
 		if (values.length == 1 && new File(values[0]).exists()) {
 			logger.debug("Input file name given");
@@ -595,7 +595,7 @@ public class SPARQLAnything {
 			parameters = new ArgValuesAsResultSet(values);
 		}
 		// Specifications
-		Specification specification = SpecificationFactory.create("", query);
+		Specification specification = SpecificationFactory.create("", query, true);
 		String base = cli.getBase(QueryFactory.create(query));
 		// Iterate over parameters
 		while (parameters.hasNext()) {
@@ -896,6 +896,10 @@ public class SPARQLAnything {
 			return EXIT_ERROR;
 		} catch (QueryParseException e) {
 			logger.error("SPARQL syntax error: {}", e.getMessage());
+			return EXIT_ERROR;
+		} catch (ParameterParsingException e) {
+			// #691, #702: $_name_prefix_type with a prefix not declared in the query
+			logger.error("Invalid query parameter: {}", e.getMessage());
 			return EXIT_ERROR;
 		}
 		return 0;
