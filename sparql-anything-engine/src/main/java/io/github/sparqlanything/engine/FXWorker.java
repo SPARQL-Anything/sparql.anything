@@ -160,11 +160,14 @@ public class FXWorker {
 		} else if (query.isConstructQuad()){
 			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
 			Dataset dataset = queryExecution.execConstructDataset();
-			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.create(dataset.asDatasetGraph()));
+			// Plain (non Facade-X) execution context, as before Jena 6.3: FacadeXExecutionContext.create(dg)
+			// resolved to the static ExecutionContext.create(dg)
+			return QC.execute(opService.getSubOp(), input, ExecutionContext.create(dataset.asDatasetGraph()));
 		} else if (query.isConstructType()) {
 			QueryExecution queryExecution = QueryExecutionFactory.create(query, executionContext.getDataset());
 			Model result = queryExecution.execConstruct();
-			return QC.execute(opService.getSubOp(), input, FacadeXExecutionContext.createForGraph(result.getGraph()));
+			// Plain (non Facade-X) execution context, as before (see above)
+			return QC.execute(opService.getSubOp(), input, ExecutionContext.createForGraph(result.getGraph()));
 		}
 		return QueryIterNullIterator.create(executionContext);
 	}

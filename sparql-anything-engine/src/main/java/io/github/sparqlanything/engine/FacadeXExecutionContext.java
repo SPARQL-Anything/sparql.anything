@@ -13,52 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 package io.github.sparqlanything.engine;
 
-import org.apache.jena.sparql.algebra.Op;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.ExecutionContext;
+import org.apache.jena.sparql.util.Context;
 import org.apache.jena.sparql.util.Symbol;
 
-import java.util.HashSet;
-import java.util.Set;
+/**
+ * Facade-X execution contexts.
+ * <p>
+ * Since Jena 6.3, {@link ExecutionContext} is final and cannot be extended. A Facade-X execution
+ * context (i.e. one used to evaluate the body of a SPARQL Anything SERVICE clause) is therefore a plain
+ * {@link ExecutionContext} whose {@link Context} contains the symbol {@link #FACADEX} set to {@code true}.
+ * The symbol is set on a copy of the context, so that it does not leak into the rest of the query.
+ * <p>
+ * <b>To check whether an execution context is a Facade-X one, use {@link #isFacadeX(ExecutionContext)}.</b>
+ * Do not rely on the Java type: it is always {@link ExecutionContext}.
+ */
+public final class FacadeXExecutionContext {
 
-public class FacadeXExecutionContext extends ExecutionContext {
+	/** Marks a Facade-X execution context. Test it with {@link #isFacadeX(ExecutionContext)}. */
+	public static final Symbol FACADEX = Symbol.create("http://sparql.xyz/facade-x/ns/executionContext");
 
-	private boolean silent = false;
-	public static final Symbol processed = Symbol.create("processed");
-
-	public FacadeXExecutionContext(ExecutionContext other) {
-		super(other);
+	private FacadeXExecutionContext() {
 	}
 
-	public static boolean isAlreadyProcessed(ExecutionContext ex, Op op){
-		if(!ex.getContext().isDefined(processed)){
-			return false;
-		}
-		HashSet<Op> processedOps = ex.getContext().get(processed);
-		return processedOps.contains(op);
+	/**
+	 * Creates a Facade-X execution context on the given dataset and active graph.
+	 * The context is copied and marked with {@link #FACADEX}.
+	 */
+	public static ExecutionContext create(DatasetGraph dg, Graph activeGraph, Context context) {
+		Context cxt = context.copy();
+		cxt.set(FACADEX, true);
+		return ExecutionContext.create(dg, activeGraph, cxt);
 	}
 
-	public static void addProcessedOp(ExecutionContext ex, Op op){
-		if(!ex.getContext().isDefined(processed)){
-			ex.getContext().set(processed, new HashSet<Op>());
-		}
-		Set<Op> executedOps = ex.getContext().get(processed);
-		executedOps.add(op);
+	/** Creates a Facade-X copy of an existing execution context. */
+	public static ExecutionContext create(ExecutionContext other) {
+		return create(other.getDataset(), other.getActiveGraph(), other.getContext());
 	}
 
-
-
-
-
-	public boolean isSilent() {
-		return silent;
-	}
-
-	public void setSilent(boolean silent) {
-		this.silent = silent;
+	/**
+	 * True if the execution context is a Facade-X one, i.e. if its {@link Context} has
+	 * {@link #FACADEX} set to {@code true}.
+	 */
+	public static boolean isFacadeX(ExecutionContext ex) {
+		return ex.getContext().isTrue(FACADEX);
 	}
 }

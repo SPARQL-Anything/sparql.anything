@@ -74,7 +74,7 @@ public class FacadeXOpExecutor extends OpExecutor {
 //		logger.trace("Execute OpBGP {}", opBGP.getPattern().toString());
 
 		// check that the BGP is within a FacadeX-SERVICE clause
-		if (this.execCxt.getClass() == FacadeXExecutionContext.class) {
+		if (FacadeXExecutionContext.isFacadeX(this.execCxt)) {
 			// check that the BGP contains FacadeX Magic properties
 			logger.trace("FacadeX Execution context");
 			List<Triple> magicPropertyTriples = Utils.getFacadeXMagicPropertyTriples(opBGP.getPattern());
@@ -87,7 +87,6 @@ public class FacadeXOpExecutor extends OpExecutor {
 				return QC.execute(Utils.excludeFXProperties(opBGP), input, ExecutionContext.create(execCxt.getDataset(), execCxt.getActiveGraph(), ARQ.getContext()));
 			}
 		}
-
 		Op opTransformed = TransformPropertyFunction.transform(opBGP, this.execCxt.getContext());
 		if (!opTransformed.equals(opBGP)) {
 			return super.executeOp(opTransformed, input);

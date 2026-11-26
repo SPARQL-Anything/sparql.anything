@@ -177,16 +177,17 @@ public class Utils {
 		}
 	}
 
-
-	public static  FacadeXExecutionContext getFacadeXExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
-		return new FacadeXExecutionContext(getNewExecutionContext(execCxt, p, dg));
+	/** A Facade-X execution context (see {@link FacadeXExecutionContext#isFacadeX(ExecutionContext)}). */
+	public static ExecutionContext getFacadeXExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
+		return FacadeXExecutionContext.create(getNewExecutionContext(execCxt, p, dg));
 	}
 
+	/** On disk: a plain execution context on the union graph; in memory: a Facade-X one on the default graph. */
 	public static ExecutionContext getNewExecutionContext(ExecutionContext execCxt, Properties p, DatasetGraph dg) {
 		if (p.containsKey(IRIArgument.ONDISK.toString())) {
 			return ExecutionContext.create(dg, dg.getUnionGraph(), serviceContext(execCxt, p));
 		} else {
-			return new FacadeXExecutionContext(ExecutionContext.create(dg, dg.getDefaultGraph(), serviceContext(execCxt, p)));
+			return FacadeXExecutionContext.create(dg, dg.getDefaultGraph(), serviceContext(execCxt, p));
 		}
 	}
 

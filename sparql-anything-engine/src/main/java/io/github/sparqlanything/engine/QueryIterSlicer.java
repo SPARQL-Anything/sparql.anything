@@ -215,7 +215,7 @@ public class QueryIterSlicer extends QueryIter {
 			Utils.ensureReadingTxn(dg);
 			logger.debug("Executing on batch [{}-{}] ({} slice(s), {} triples)", batch.get(0).iteration(), batch.get(batch.size() - 1).iteration(), batch.size(), dg.size());
 //				FacadeXExecutionContext ec = new FacadeXExecutionContext(new ExecutionContext(execCxt.getContext(), dg.getDefaultGraph(), dg, execCxt.getExecutor()));
-			FacadeXExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
+			ExecutionContext ec = Utils.getFacadeXExecutionContext(execCxt, p, dg);
 			logger.trace("Op {}", op);
 			logger.trace("OpName {}", op.getName());
 			/*
